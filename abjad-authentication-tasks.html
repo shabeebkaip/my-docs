@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abjad – Authentication Flow Tasks</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0a0c14;
+    --surface: #111420;
+    --surface2: #181c2e;
+    --border: #252a42;
+    --accent: #4f6ef7;
+    --accent2: #7c3aed;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --cyan: #06b6d4;
+    --pink: #ec4899;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .header-sep { color: var(--border); font-size: 1.4rem; }
+  .header-title { font-size: 1rem; font-weight: 600; color: var(--text); }
+  .header-sub { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); margin-left: auto; }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 32px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .stat-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--muted); }
+  .stat-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .progress-label { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+  .progress-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.4s ease; }
+  .progress-pct { font-size: 0.75rem; font-family: var(--mono); color: var(--accent); white-space: nowrap; }
+
+  /* ── LAYOUT ── */
+  .layout { display: flex; height: calc(100vh - 113px); }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 16px 0;
+  }
+  .sidebar-group-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px 5px;
+  }
+  .sidebar-item {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+    color: var(--muted);
+  }
+  .sidebar-item:hover { background: var(--surface2); color: var(--text); }
+  .sidebar-item.active { border-left-color: var(--accent); background: rgba(79,110,247,0.08); color: var(--accent); }
+  .sidebar-icon { font-size: 0.9rem; }
+  .sidebar-count {
+    margin-left: auto;
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 0.65rem;
+    font-family: var(--mono);
+    padding: 2px 6px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .sidebar-item.active .sidebar-count { background: rgba(79,110,247,0.2); color: var(--accent); border-color: rgba(79,110,247,0.3); }
+
+  /* ── MAIN CONTENT ── */
+  .main { flex: 1; overflow-y: auto; padding: 28px 32px; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    font-size: 1.6rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+  .section-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; max-width: 680px; }
+  .section-meta { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+  .section-badge {
+    font-size: 0.68rem;
+    font-family: var(--mono);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── PHASE CARD ── */
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .phase-header {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .phase-header:hover { background: var(--surface2); }
+  .phase-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    flex-shrink: 0;
+  }
+  .phase-name { font-size: 0.92rem; font-weight: 700; }
+  .phase-desc { font-size: 0.75rem; color: var(--muted); margin-top: 1px; }
+  .phase-stats { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .phase-count { font-size: 0.72rem; font-family: var(--mono); color: var(--muted); }
+  .phase-chevron { color: var(--muted); font-size: 0.8rem; transition: transform 0.2s; }
+  .phase-card.open .phase-chevron { transform: rotate(180deg); }
+  .phase-body { display: none; border-top: 1px solid var(--border); }
+  .phase-card.open .phase-body { display: block; }
+
+  /* ── TASK ITEM ── */
+  .task-item {
+    padding: 12px 18px 12px 56px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: start;
+    position: relative;
+    transition: background 0.15s;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-item:hover { background: rgba(255,255,255,0.015); }
+  .task-checkbox {
+    position: absolute;
+    left: 18px;
+    top: 14px;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .task-checkbox:hover { border-color: var(--accent); }
+  .task-checkbox.done { background: var(--accent); border-color: var(--accent); }
+  .task-checkbox.done::after { content: '✓'; color: #fff; font-size: 0.65rem; font-weight: 700; }
+  .task-item.done-item .task-title { text-decoration: line-through; color: var(--muted); }
+
+  .task-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+  .task-body { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+  .task-body code {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    color: var(--cyan);
+  }
+  .task-body ul { padding-left: 16px; margin-top: 5px; }
+  .task-body ul li { margin-bottom: 3px; }
+  .task-meta { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+
+  /* ── TAGS ── */
+  .tag {
+    font-size: 0.65rem;
+    font-family: var(--mono);
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .tag-model    { background: rgba(79,110,247,0.12);  color: #93a8fc;        border-color: rgba(79,110,247,0.2); }
+  .tag-api      { background: rgba(16,185,129,0.12);  color: var(--green);   border-color: rgba(16,185,129,0.2); }
+  .tag-service  { background: rgba(6,182,212,0.12);   color: var(--cyan);    border-color: rgba(6,182,212,0.2); }
+  .tag-middleware { background: rgba(245,158,11,0.12); color: var(--amber);  border-color: rgba(245,158,11,0.2); }
+  .tag-security { background: rgba(239,68,68,0.12);   color: #fca5a5;        border-color: rgba(239,68,68,0.2); }
+  .tag-test     { background: rgba(124,58,237,0.12);  color: #c4b5fd;        border-color: rgba(124,58,237,0.2); }
+  .tag-config   { background: rgba(236,72,153,0.12);  color: var(--pink);    border-color: rgba(236,72,153,0.2); }
+  .tag-util     { background: rgba(245,158,11,0.08);  color: #fcd34d;        border-color: rgba(245,158,11,0.15); }
+
+  .priority-badge {
+    font-size: 0.62rem;
+    font-family: var(--mono);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .p-critical { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  .p-high     { background: rgba(245,158,11,0.2); color: var(--amber); }
+  .p-medium   { background: rgba(79,110,247,0.2); color: #93a8fc; }
+  .p-low      { background: rgba(100,116,139,0.2); color: var(--muted); }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 10px 0 0;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: #93a8fc;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-block .c  { color: var(--muted); }
+  .code-block .k  { color: var(--pink); }
+  .code-block .s  { color: var(--green); }
+  .code-block .t  { color: var(--amber); }
+  .code-block .fn { color: var(--cyan); }
+  .code-block .p  { color: var(--text); }
+
+  /* ── NOTE BOX ── */
+  .note-box {
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 0.77rem;
+    line-height: 1.6;
+    border-left: 3px solid;
+  }
+  .note-info    { background: rgba(79,110,247,0.08);  border-color: var(--accent);  color: #93a8fc; }
+  .note-warn    { background: rgba(245,158,11,0.08);  border-color: var(--amber);   color: var(--amber); }
+  .note-danger  { background: rgba(239,68,68,0.08);   border-color: var(--red);     color: #fca5a5; }
+  .note-success { background: rgba(16,185,129,0.08);  border-color: var(--green);   color: var(--green); }
+
+  /* ── DIVIDER ── */
+  .task-divider {
+    padding: 8px 18px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-wrap {
+    padding: 18px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .flow-title { font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .flow-steps { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .flow-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .flow-step.hl { border-color: var(--accent); color: var(--accent); background: rgba(79,110,247,0.08); }
+  .flow-step.err { border-color: var(--red); color: #fca5a5; background: rgba(239,68,68,0.08); }
+  .flow-arrow { color: var(--muted); font-size: 0.8rem; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── SECTION HIDDEN ── */
+  .section { display: none; }
+  .section.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">Abjad</div>
+  <div class="header-sep">/</div>
+  <div class="header-title">Authentication Flow — Task List</div>
+  <div class="header-sub">Node.js · Express · MongoDB · JWT + OTP · v1.0</div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-dot" style="background:var(--accent)"></div><span id="stat-total">0 tasks</span></div>
+  <div class="stat-item"><div class="stat-dot" style="background:var(--green)"></div><span id="stat-done">0 done</span></div>
+  <div class="stat-item"><div class="stat-dot" style="background:var(--amber)"></div><span id="stat-pending">0 pending</span></div>
+  <div class="stat-item"><div class="stat-dot" style="background:var(--red)"></div>6 phases</div>
+  <div class="stat-item"><div class="stat-dot" style="background:var(--cyan)"></div>Mobile-first OTP auth</div>
+  <div class="stat-item"><div class="stat-dot" style="background:var(--pink)"></div>Access + Refresh JWT</div>
+  <div class="stat-item"><div class="stat-dot" style="background:var(--accent2)"></div>Role-based (teacher / school / admin)</div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <div class="progress-label">Overall Progress</div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="progress-pct" id="progress-pct">0%</div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-group-label">Sections</div>
+  <div class="sidebar-item active" onclick="showSection('schema')" id="nav-schema">
+    <span class="sidebar-icon">🗄️</span> Schema Design
+    <span class="sidebar-count">3</span>
+  </div>
+  <div class="sidebar-item" onclick="showSection('setup')" id="nav-setup">
+    <span class="sidebar-icon">⚙️</span> Project Setup
+    <span class="sidebar-count">5</span>
+  </div>
+  <div class="sidebar-item" onclick="showSection('signup')" id="nav-signup">
+    <span class="sidebar-icon">📲</span> Signup / OTP
+    <span class="sidebar-count">6</span>
+  </div>
+  <div class="sidebar-item" onclick="showSection('login')" id="nav-login">
+    <span class="sidebar-icon">🔐</span> Login & Session
+    <span class="sidebar-count">7</span>
+  </div>
+  <div class="sidebar-item" onclick="showSection('token')" id="nav-token">
+    <span class="sidebar-icon">🔄</span> Token Management
+    <span class="sidebar-count">5</span>
+  </div>
+  <div class="sidebar-item" onclick="showSection('profile')" id="nav-profile">
+    <span class="sidebar-icon">👤</span> Profile & Role Setup
+    <span class="sidebar-count">4</span>
+  </div>
+  <div class="sidebar-item" onclick="showSection('security')" id="nav-security">
+    <span class="sidebar-icon">🛡️</span> Security & Rate Limiting
+    <span class="sidebar-count">5</span>
+  </div>
+  <div class="sidebar-item" onclick="showSection('tests')" id="nav-tests">
+    <span class="sidebar-icon">🧪</span> Testing
+    <span class="sidebar-count">4</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- ===================== SCHEMA ===================== -->
+<div class="section active" id="section-schema">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(79,110,247,0.12)">🗄️</div>
+    <div>
+      <div class="section-title">Schema Design</div>
+      <div class="section-desc">Define the MongoDB Mongoose models for <code>users</code>, <code>otp_codes</code>, and <code>sessions</code>. These are the foundation of the entire auth system — get the indexes and validation right first.</div>
+    </div>
+    <div class="section-meta">
+      <span class="section-badge">3 models</span>
+      <span class="section-badge">Phase 1 of 6</span>
+    </div>
+  </div>
+
+  <!-- Phase 1: Users Model -->
+  <div class="phase-card open" id="phase-users-model">
+    <div class="phase-header" onclick="togglePhase('users-model')">
+      <div class="phase-num" style="background:rgba(79,110,247,0.2);color:var(--accent)">1</div>
+      <div>
+        <div class="phase-name">User Model</div>
+        <div class="phase-desc">Core identity document — all platform users share this</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-users-model">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-item" data-phase="users-model">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Define User Mongoose schema with all fields</div>
+          <div class="task-body">
+            Create <code>src/models/User.js</code>. Fields:
+            <ul>
+              <li><code>mobile_number</code> — String, required, unique, trimmed. Validate Saudi format: <code>/^\+9665[0-9]{8}$/</code></li>
+              <li><code>email</code> — String, optional, lowercase, sparse unique index</li>
+              <li><code>role</code> — Enum: <code>'teacher' | 'school' | 'admin'</code>, required</li>
+              <li><code>status</code> — Enum: <code>'active' | 'suspended' | 'blocked' | 'pending'</code>, default <code>'pending'</code></li>
+              <li><code>preferred_language</code> — Enum: <code>'ar' | 'en'</code>, default <code>'ar'</code></li>
+              <li><code>email_verified</code> / <code>mobile_verified</code> — Boolean, default false</li>
+              <li><code>last_login_at</code>, <code>login_count</code> (default 0), <code>failed_login_attempts</code> (default 0), <code>locked_until</code></li>
+              <li><code>device_tokens</code> — Array of Strings (FCM push tokens)</li>
+              <li><code>suspension_reason</code> — String, optional</li>
+              <li><code>notification_preferences</code> — Mixed subdocument with defaults</li>
+              <li><code>created_at</code> / <code>updated_at</code> — via <code>timestamps: true</code></li>
+            </ul>
+            <div class="code-block"><span class="c">// src/models/User.js</span>
+<span class="k">const</span> userSchema = <span class="k">new</span> <span class="fn">Schema</span>({
+  mobile_number: { type: <span class="t">String</span>, required: <span class="k">true</span>, unique: <span class="k">true</span>,
+    validate: { validator: <span class="p">(v)</span> => <span class="s">/^\+9665[0-9]{8}$/.test(v)</span>,
+                message: <span class="s">'Invalid Saudi mobile number'</span> }},
+  email: { type: <span class="t">String</span>, lowercase: <span class="k">true</span>, sparse: <span class="k">true</span>, unique: <span class="k">true</span> },
+  role: { type: <span class="t">String</span>, enum: [<span class="s">'teacher','school','admin'</span>], required: <span class="k">true</span> },
+  status: { type: <span class="t">String</span>, enum: [<span class="s">'active','suspended','blocked','pending'</span>], default: <span class="s">'pending'</span> },
+  <span class="c">// ... rest of fields</span>
+}, { timestamps: <span class="k">true</span> });</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-model">Model</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="users-model">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Add compound + sparse indexes to User schema</div>
+          <div class="task-body">
+            After schema definition, add explicit index declarations:
+            <div class="code-block">userSchema.<span class="fn">index</span>({ mobile_number: <span class="p">1</span> }, { unique: <span class="k">true</span> });
+userSchema.<span class="fn">index</span>({ email: <span class="p">1</span> }, { unique: <span class="k">true</span>, sparse: <span class="k">true</span> });
+userSchema.<span class="fn">index</span>({ role: <span class="p">1</span>, status: <span class="p">1</span> });
+userSchema.<span class="fn">index</span>({ created_at: <span class="p">-1</span> });</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-model">Model</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="users-model">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Add User schema instance methods</div>
+          <div class="task-body">
+            <ul>
+              <li><code>isLocked()</code> — returns true if <code>locked_until > Date.now()</code></li>
+              <li><code>incrementFailedAttempts()</code> — increment counter; lock account after 5 failures for 15 min</li>
+              <li><code>resetFailedAttempts()</code> — zero out counter and clear <code>locked_until</code></li>
+              <li><code>toSafeObject()</code> — strip sensitive fields before sending to client</li>
+            </ul>
+            <div class="note-box note-warn">⚠️ No passwords in this system — OTP only. Do NOT add password fields to avoid future misuse.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-model">Model</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Phase 2: OTP Model -->
+  <div class="phase-card open" id="phase-otp-model">
+    <div class="phase-header" onclick="togglePhase('otp-model')">
+      <div class="phase-num" style="background:rgba(16,185,129,0.2);color:var(--green)">2</div>
+      <div>
+        <div class="phase-name">OTP Code Model</div>
+        <div class="phase-desc">Short-lived verification codes — auto-expire via TTL index</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-otp-model">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-item" data-phase="otp-model">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Define OtpCode Mongoose schema with TTL index</div>
+          <div class="task-body">
+            Create <code>src/models/OtpCode.js</code>:
+            <ul>
+              <li><code>user_id</code> — ObjectId ref to User, optional (null for unregistered numbers)</li>
+              <li><code>mobile_number</code> — String, required, indexed</li>
+              <li><code>code_hash</code> — String, required (bcrypt hashed 6-digit code)</li>
+              <li><code>purpose</code> — Enum: <code>'registration' | 'login' | 'verify_email'</code></li>
+              <li><code>expires_at</code> — Date, required — <strong>this is the TTL field</strong></li>
+              <li><code>used_at</code> — Date, optional (null = unused)</li>
+              <li><code>attempts</code> — Number, default 0 (wrong code entry attempts)</li>
+            </ul>
+            <div class="code-block">otpSchema.<span class="fn">index</span>({ expires_at: <span class="p">1</span> }, { expireAfterSeconds: <span class="p">0</span> }); <span class="c">// TTL</span>
+otpSchema.<span class="fn">index</span>({ mobile_number: <span class="p">1</span>, purpose: <span class="p">1</span>, used_at: <span class="p">1</span> });
+otpSchema.<span class="fn">index</span>({ user_id: <span class="p">1</span> });</div>
+            <div class="note-box note-danger">🔒 Store hashed OTP code only — never the raw 6 digits. Use bcrypt with rounds=10.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-model">Model</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Phase 3: Session Model -->
+  <div class="phase-card open" id="phase-session-model">
+    <div class="phase-header" onclick="togglePhase('session-model')">
+      <div class="phase-num" style="background:rgba(6,182,212,0.2);color:var(--cyan)">3</div>
+      <div>
+        <div class="phase-name">Session Model</div>
+        <div class="phase-desc">Refresh token store — enables multi-device logout and token rotation</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-session-model">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-item" data-phase="session-model">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Define Session Mongoose schema with TTL index</div>
+          <div class="task-body">
+            Create <code>src/models/Session.js</code>:
+            <ul>
+              <li><code>user_id</code> — ObjectId ref to User, required, indexed</li>
+              <li><code>refresh_token_hash</code> — String, required (SHA-256 hash of the actual JWT)</li>
+              <li><code>device_fingerprint</code> — String, optional (for remember-device flow)</li>
+              <li><code>ip_address</code> — String, optional</li>
+              <li><code>user_agent</code> — String, optional</li>
+              <li><code>remember_device</code> — Boolean, default false</li>
+              <li><code>expires_at</code> — Date, required — TTL field (24h default, 30d if remember_device)</li>
+              <li><code>created_at</code> — via timestamps</li>
+            </ul>
+            <div class="code-block">sessionSchema.<span class="fn">index</span>({ expires_at: <span class="p">1</span> }, { expireAfterSeconds: <span class="p">0</span> }); <span class="c">// TTL</span>
+sessionSchema.<span class="fn">index</span>({ user_id: <span class="p">1</span> });
+sessionSchema.<span class="fn">index</span>({ refresh_token_hash: <span class="p">1</span> }, { unique: <span class="k">true</span> });</div>
+            <div class="note-box note-info">💡 Store only a SHA-256 hash of the refresh token — never the raw JWT string. The actual JWT is only ever in the HTTP-only cookie.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-model">Model</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== SETUP ===================== -->
+<div class="section" id="section-setup">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(236,72,153,0.12)">⚙️</div>
+    <div>
+      <div class="section-title">Project Setup & Configuration</div>
+      <div class="section-desc">Install packages, set up environment config, JWT helpers, OTP service, SMS gateway integration, and the Express router scaffolding before writing any auth logic.</div>
+    </div>
+    <div class="section-meta">
+      <span class="section-badge">5 tasks</span>
+      <span class="section-badge">Phase 2 of 6</span>
+    </div>
+  </div>
+
+  <div class="phase-card open" id="phase-setup">
+    <div class="phase-header" onclick="togglePhase('setup')">
+      <div class="phase-num" style="background:rgba(236,72,153,0.2);color:var(--pink)">1</div>
+      <div>
+        <div class="phase-name">Dependencies, Config & Utilities</div>
+        <div class="phase-desc">Everything needed before writing a single route</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-setup">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-item" data-phase="setup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Install required npm packages</div>
+          <div class="task-body">
+            <div class="code-block">npm install express mongoose jsonwebtoken bcryptjs \
+  cookie-parser express-rate-limit helmet cors \
+  express-validator dotenv crypto
+
+npm install --save-dev jest supertest @types/jest</div>
+            <ul>
+              <li><code>jsonwebtoken</code> — JWT sign/verify</li>
+              <li><code>bcryptjs</code> — hash OTP codes and refresh token fingerprints</li>
+              <li><code>cookie-parser</code> — parse HTTP-only cookies for refresh tokens</li>
+              <li><code>express-rate-limit</code> — rate limit OTP and login endpoints</li>
+              <li><code>helmet</code> — secure HTTP headers</li>
+              <li><code>express-validator</code> — request body validation</li>
+              <li><code>crypto</code> — SHA-256 token hashing (built-in Node, no install needed)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-config">Config</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="setup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Set up .env variables for auth config</div>
+          <div class="task-body">
+            <div class="code-block"><span class="c"># .env</span>
+JWT_ACCESS_SECRET=<span class="s">your-256bit-secret-here</span>
+JWT_REFRESH_SECRET=<span class="s">your-different-256bit-secret-here</span>
+JWT_ACCESS_EXPIRES=<span class="s">15m</span>
+JWT_REFRESH_EXPIRES=<span class="s">7d</span>
+JWT_REFRESH_REMEMBER_EXPIRES=<span class="s">30d</span>
+
+OTP_EXPIRES_MINUTES=<span class="s">5</span>
+OTP_MAX_ATTEMPTS=<span class="s">3</span>
+OTP_RESEND_COOLDOWN_SECONDS=<span class="s">60</span>
+MAX_ACTIVE_SESSIONS=<span class="s">5</span>
+
+SMS_PROVIDER=<span class="s">unifonic</span>          <span class="c"># or twilio / msegat</span>
+SMS_API_KEY=<span class="s">xxx</span>
+SMS_SENDER_ID=<span class="s">Abjad</span>
+
+COOKIE_DOMAIN=<span class="s">.abjad.sa</span>
+NODE_ENV=<span class="s">development</span></div>
+            <div class="note-box note-danger">🔒 NEVER commit .env to git. Use separate access and refresh secrets — a compromised access secret won't affect refresh tokens.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-config">Config</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="setup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Create JWT utility: signTokens(), verifyAccessToken(), verifyRefreshToken()</div>
+          <div class="task-body">
+            Create <code>src/utils/jwt.js</code>:
+            <div class="code-block"><span class="c">// src/utils/jwt.js</span>
+<span class="k">const</span> <span class="fn">signAccessToken</span> = (payload) =>
+  jwt.<span class="fn">sign</span>(payload, process.env.JWT_ACCESS_SECRET,
+    { expiresIn: process.env.JWT_ACCESS_EXPIRES || <span class="s">'15m'</span> });
+
+<span class="k">const</span> <span class="fn">signRefreshToken</span> = (payload, rememberDevice = <span class="k">false</span>) =>
+  jwt.<span class="fn">sign</span>(payload, process.env.JWT_REFRESH_SECRET,
+    { expiresIn: rememberDevice
+        ? process.env.JWT_REFRESH_REMEMBER_EXPIRES
+        : process.env.JWT_REFRESH_EXPIRES });</div>
+            <ul>
+              <li>Access token payload: <code>{ sub: userId, role, sessionId }</code></li>
+              <li>Refresh token payload: <code>{ sub: userId, sessionId }</code> — minimal, no role</li>
+              <li>Export <code>hashToken(token)</code> — SHA-256 via <code>crypto.createHash('sha256')</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-util">Util</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="setup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Create OTP service: generateOtp(), sendOtp(), verifyOtp()</div>
+          <div class="task-body">
+            Create <code>src/services/otpService.js</code>:
+            <ul>
+              <li><code>generateOtp(mobileNumber, purpose)</code> — generate cryptographically random 6-digit code using <code>crypto.randomInt(100000, 999999)</code>, hash with bcrypt, save to <code>OtpCode</code> collection, invalidate previous unused OTPs for same mobile+purpose</li>
+              <li><code>sendOtp(mobileNumber, code)</code> — call SMS provider API (Unifonic/Twilio). In dev mode, log to console instead</li>
+              <li><code>verifyOtp(mobileNumber, rawCode, purpose)</code> — find most recent unused, non-expired OTP → bcrypt compare → increment attempts → mark <code>used_at</code></li>
+            </ul>
+            <div class="note-box note-warn">⚠️ Enforce max 3 wrong attempts per OTP doc. After 3 failures, invalidate the OTP regardless of expiry to prevent brute force.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-service">Service</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="setup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Scaffold auth router and attach to Express app</div>
+          <div class="task-body">
+            Create <code>src/routes/auth.routes.js</code> with placeholder routes — fill logic in next phases:
+            <div class="code-block">router.<span class="fn">post</span>(<span class="s">'/send-otp'</span>, ...);          <span class="c">// Step 1: request OTP</span>
+router.<span class="fn">post</span>(<span class="s">'/verify-otp'</span>, ...);       <span class="c">// Step 2: verify OTP → issue tokens</span>
+router.<span class="fn">post</span>(<span class="s">'/refresh'</span>, ...);          <span class="c">// Refresh access token</span>
+router.<span class="fn">post</span>(<span class="s">'/logout'</span>, ...);           <span class="c">// Invalidate session</span>
+router.<span class="fn">post</span>(<span class="s">'/logout-all'</span>, ...);       <span class="c">// Invalidate all sessions</span>
+router.<span class="fn">get</span>(<span class="s">'/me'</span>, authenticate, ...); <span class="c">// Get current user</span></div>
+            In <code>app.js</code>: <code>app.use('/api/v1/auth', authRouter)</code>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SIGNUP ===================== -->
+<div class="section" id="section-signup">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(16,185,129,0.12)">📲</div>
+    <div>
+      <div class="section-title">Signup / Registration via OTP</div>
+      <div class="section-desc">Two-step flow: <strong>POST /send-otp</strong> → SMS → <strong>POST /verify-otp</strong> → create user + issue tokens. No passwords, no email — mobile-first Saudi UX.</div>
+    </div>
+    <div class="section-meta">
+      <span class="section-badge">POST /send-otp</span>
+      <span class="section-badge">POST /verify-otp</span>
+    </div>
+  </div>
+
+  <div class="flow-wrap">
+    <div class="flow-title">Registration Flow</div>
+    <div class="flow-steps">
+      <div class="flow-step">Client sends mobile + role</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Validate mobile format</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step hl">Check not already registered</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Generate OTP + hash + save</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Send SMS</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Client submits mobile + code</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step hl">Verify OTP hash</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Create user doc</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Create session</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step hl">Issue Access + Refresh tokens</div>
+    </div>
+  </div>
+
+  <div class="phase-card open" id="phase-signup">
+    <div class="phase-header" onclick="togglePhase('signup')">
+      <div class="phase-num" style="background:rgba(16,185,129,0.2);color:var(--green)">1</div>
+      <div>
+        <div class="phase-name">Registration API Tasks</div>
+        <div class="phase-desc">POST /send-otp + POST /verify-otp (registration mode)</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-signup">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-divider">POST /api/v1/auth/send-otp</div>
+
+      <div class="task-item" data-phase="signup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement input validation middleware for /send-otp</div>
+          <div class="task-body">
+            Using <code>express-validator</code>:
+            <ul>
+              <li><code>mobile_number</code> — required, matches <code>/^\+9665[0-9]{8}$/</code></li>
+              <li><code>purpose</code> — required, enum: <code>'registration' | 'login'</code></li>
+              <li><code>role</code> — required only when purpose = <code>'registration'</code>, enum: <code>'teacher' | 'school'</code></li>
+            </ul>
+            Return <code>422</code> with structured errors if validation fails. Use a shared <code>validate()</code> middleware that calls <code>validationResult()</code>.
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-middleware">Middleware</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="signup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement /send-otp controller logic</div>
+          <div class="task-body">
+            In <code>src/controllers/auth.controller.js</code> → <code>sendOtp()</code>:
+            <ol style="padding-left:16px;margin-top:5px">
+              <li style="margin-bottom:4px">Check rate limit: max 3 OTP sends per mobile per 10 min (use <code>express-rate-limit</code> keyed on <code>req.body.mobile_number</code>)</li>
+              <li style="margin-bottom:4px">If purpose = <code>'registration'</code>: verify mobile is NOT already registered → 409 if exists</li>
+              <li style="margin-bottom:4px">If purpose = <code>'login'</code>: verify mobile IS registered and user is <code>active</code> → 404 / 403 if not</li>
+              <li style="margin-bottom:4px">Check resend cooldown: if an unused, unexpired OTP already exists and was created &lt;60s ago → return 429 with <code>retry_after_seconds</code></li>
+              <li style="margin-bottom:4px">Call <code>otpService.generateOtp()</code> and <code>otpService.sendOtp()</code></li>
+              <li>Return <code>200 { message: 'OTP sent', expires_in: 300 }</code> — do NOT confirm whether number is registered (prevents user enumeration)</li>
+            </ol>
+            <div class="note-box note-danger">🔒 Never return different messages for "not registered" vs "already registered" in the same endpoint — this leaks user existence. Always return the same success message.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-divider">POST /api/v1/auth/verify-otp</div>
+
+      <div class="task-item" data-phase="signup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement /verify-otp controller — registration branch</div>
+          <div class="task-body">
+            <code>verifyOtp()</code> with <code>purpose = 'registration'</code>:
+            <ol style="padding-left:16px;margin-top:5px">
+              <li style="margin-bottom:4px">Validate: <code>mobile_number</code>, <code>code</code> (6 digits), <code>purpose</code>, <code>role</code></li>
+              <li style="margin-bottom:4px">Call <code>otpService.verifyOtp()</code> — returns verified or throws with reason</li>
+              <li style="margin-bottom:4px">Double-check mobile not already registered (race condition guard)</li>
+              <li style="margin-bottom:4px">Create <code>User</code> doc: <code>{ mobile_number, role, status: 'pending', mobile_verified: true }</code></li>
+              <li style="margin-bottom:4px">Call <code>createSession(userId, req)</code> — creates Session doc, returns <code>{ accessToken, refreshToken }</code></li>
+              <li style="margin-bottom:4px">Set <code>refreshToken</code> as HTTP-only cookie (see cookie config task)</li>
+              <li>Return <code>201 { user: user.toSafeObject(), access_token, is_new_user: true }</code></li>
+            </ol>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="signup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement createSession() service function</div>
+          <div class="task-body">
+            Create <code>src/services/sessionService.js</code> → <code>createSession(userId, req, rememberDevice)</code>:
+            <ol style="padding-left:16px;margin-top:5px">
+              <li style="margin-bottom:4px">Check if user already has <code>MAX_ACTIVE_SESSIONS</code> (default 5) active sessions → delete the oldest one (sliding window)</li>
+              <li style="margin-bottom:4px">Sign access token: <code>signAccessToken({ sub: userId, role, sessionId })</code></li>
+              <li style="margin-bottom:4px">Sign refresh token: <code>signRefreshToken({ sub: userId, sessionId })</code></li>
+              <li style="margin-bottom:4px">Hash refresh token with SHA-256</li>
+              <li style="margin-bottom:4px">Save <code>Session</code> doc with hashed refresh token, ip, user_agent, expires_at</li>
+              <li>Return <code>{ accessToken, refreshToken, sessionId }</code></li>
+            </ol>
+            <div class="code-block"><span class="k">const</span> expiresAt = rememberDevice
+  ? <span class="k">new</span> <span class="fn">Date</span>(Date.now() + <span class="p">30</span> * <span class="p">24</span> * <span class="p">60</span> * <span class="p">60</span> * <span class="p">1000</span>) <span class="c">// 30 days</span>
+  : <span class="k">new</span> <span class="fn">Date</span>(Date.now() + <span class="p">24</span> * <span class="p">60</span> * <span class="p">60</span> * <span class="p">1000</span>);  <span class="c">// 24 hours</span></div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-service">Service</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="signup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Configure secure HTTP-only refresh token cookie</div>
+          <div class="task-body">
+            Create <code>src/utils/cookie.js</code> → <code>setRefreshCookie(res, token, rememberDevice)</code>:
+            <div class="code-block">res.<span class="fn">cookie</span>(<span class="s">'refresh_token'</span>, token, {
+  httpOnly: <span class="k">true</span>,       <span class="c">// not accessible from JS</span>
+  secure: process.env.NODE_ENV === <span class="s">'production'</span>,
+  sameSite: <span class="s">'strict'</span>,   <span class="c">// CSRF protection</span>
+  domain: process.env.COOKIE_DOMAIN,
+  path: <span class="s">'/api/v1/auth'</span>, <span class="c">// only sent to auth endpoints</span>
+  maxAge: rememberDevice
+    ? <span class="p">30</span> * <span class="p">24</span> * <span class="p">60</span> * <span class="p">60</span> * <span class="p">1000</span>
+    : <span class="p">24</span> * <span class="p">60</span> * <span class="p">60</span> * <span class="p">1000</span>,
+});</div>
+            <div class="note-box note-info">💡 Restrict <code>path</code> to <code>/api/v1/auth</code> so the refresh token cookie is only sent to auth routes — not every API call.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-security">Security</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="signup">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Handle OTP verification edge cases</div>
+          <div class="task-body">
+            In <code>otpService.verifyOtp()</code> handle:
+            <ul>
+              <li><strong>No OTP found</strong> → 404: <code>'No active OTP found for this number'</code></li>
+              <li><strong>OTP expired</strong> → 410: <code>'OTP has expired. Please request a new one.'</code></li>
+              <li><strong>Already used</strong> → 409: <code>'OTP already used'</code></li>
+              <li><strong>Wrong code</strong> → 400: increment <code>attempts</code>; if attempts ≥ 3, set <code>used_at = now</code> to invalidate; return <code>'Invalid OTP'</code> with <code>attempts_remaining</code></li>
+              <li><strong>Too many attempts</strong> → 429: <code>'OTP invalidated due to too many wrong attempts'</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-service">Service</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LOGIN ===================== -->
+<div class="section" id="section-login">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(79,110,247,0.12)">🔐</div>
+    <div>
+      <div class="section-title">Login & Session Management</div>
+      <div class="section-desc">Same OTP flow as signup but for existing users. Handles locked accounts, multi-device support, and the <code>authenticate</code> middleware used to protect all private routes.</div>
+    </div>
+    <div class="section-meta">
+      <span class="section-badge">POST /send-otp (login)</span>
+      <span class="section-badge">POST /verify-otp (login)</span>
+      <span class="section-badge">POST /logout</span>
+      <span class="section-badge">GET /me</span>
+    </div>
+  </div>
+
+  <div class="flow-wrap">
+    <div class="flow-title">Login Flow</div>
+    <div class="flow-steps">
+      <div class="flow-step">POST /send-otp { purpose: 'login' }</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step hl">Check user exists + active</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step err">Check not locked</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Generate OTP + SMS</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">POST /verify-otp { purpose: 'login' }</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step hl">Verify OTP</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Reset failed_attempts</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Update last_login_at</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step hl">Issue tokens + set cookie</div>
+    </div>
+  </div>
+
+  <div class="phase-card open" id="phase-login">
+    <div class="phase-header" onclick="togglePhase('login')">
+      <div class="phase-num" style="background:rgba(79,110,247,0.2);color:var(--accent)">1</div>
+      <div>
+        <div class="phase-name">Login API & Auth Middleware</div>
+        <div class="phase-desc">Login OTP branch + authenticate middleware + logout</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-login">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-divider">POST /api/v1/auth/verify-otp (login branch)</div>
+
+      <div class="task-item" data-phase="login">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement /verify-otp controller — login branch</div>
+          <div class="task-body">
+            In same <code>verifyOtp()</code> controller, branch on <code>purpose = 'login'</code>:
+            <ol style="padding-left:16px;margin-top:5px">
+              <li style="margin-bottom:4px">Verify OTP via <code>otpService.verifyOtp()</code></li>
+              <li style="margin-bottom:4px">Fetch user by mobile_number, check status = <code>'active'</code></li>
+              <li style="margin-bottom:4px">Check <code>user.isLocked()</code> → 423 if locked with <code>locked_until</code> timestamp</li>
+              <li style="margin-bottom:4px">Call <code>user.resetFailedAttempts()</code></li>
+              <li style="margin-bottom:4px">Update <code>last_login_at = new Date()</code>, increment <code>login_count</code></li>
+              <li style="margin-bottom:4px">Call <code>createSession(user._id, req, rememberDevice)</code></li>
+              <li style="margin-bottom:4px">Set refresh cookie</li>
+              <li>Return <code>200 { user: user.toSafeObject(), access_token, is_new_user: false }</code></li>
+            </ol>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-divider">authenticate() Middleware</div>
+
+      <div class="task-item" data-phase="login">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement authenticate() middleware — Bearer token validation</div>
+          <div class="task-body">
+            Create <code>src/middleware/authenticate.js</code>:
+            <ol style="padding-left:16px;margin-top:5px">
+              <li style="margin-bottom:4px">Extract token from <code>Authorization: Bearer &lt;token&gt;</code> header</li>
+              <li style="margin-bottom:4px">If no token → 401: <code>'Authentication required'</code></li>
+              <li style="margin-bottom:4px">Verify with <code>jwt.verify(token, JWT_ACCESS_SECRET)</code></li>
+              <li style="margin-bottom:4px">If expired → 401: <code>'Access token expired'</code> (client should refresh)</li>
+              <li style="margin-bottom:4px">Fetch user from DB by <code>payload.sub</code> — attach to <code>req.user</code></li>
+              <li style="margin-bottom:4px">Check <code>req.user.status === 'active'</code> — 403 if suspended/blocked</li>
+              <li>Attach <code>req.sessionId = payload.sessionId</code></li>
+            </ol>
+            <div class="note-box note-info">💡 Optionally cache user in Redis by <code>userId</code> for 5 minutes to avoid a DB hit on every request once you scale.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-middleware">Middleware</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="login">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement authorize() middleware — role-based access control</div>
+          <div class="task-body">
+            Create <code>src/middleware/authorize.js</code>:
+            <div class="code-block"><span class="k">const</span> <span class="fn">authorize</span> = (...roles) => (req, res, next) => {
+  <span class="k">if</span> (!roles.<span class="fn">includes</span>(req.user.role)) {
+    <span class="k">return</span> res.<span class="fn">status</span>(<span class="p">403</span>).<span class="fn">json</span>({
+      error: <span class="s">'Forbidden'</span>,
+      message: <span class="s">`Requires role: ${roles.join(' or ')}`</span>
+    });
+  }
+  <span class="fn">next</span>();
+};</div>
+            Usage: <code>router.get('/admin/users', authenticate, authorize('admin'), ...)</code>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-middleware">Middleware</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-divider">GET /api/v1/auth/me</div>
+
+      <div class="task-item" data-phase="login">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement GET /me endpoint</div>
+          <div class="task-body">
+            Protected by <code>authenticate</code> middleware. Returns current user profile:
+            <div class="code-block">router.<span class="fn">get</span>(<span class="s">'/me'</span>, authenticate, (req, res) => {
+  res.<span class="fn">json</span>({ user: req.user.<span class="fn">toSafeObject</span>() });
+});</div>
+            <code>toSafeObject()</code> must strip: <code>failed_login_attempts</code>, <code>locked_until</code>, <code>device_tokens</code>, <code>__v</code>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-medium">MEDIUM</span>
+        </div>
+      </div>
+
+      <div class="task-divider">POST /api/v1/auth/logout</div>
+
+      <div class="task-item" data-phase="login">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement POST /logout — single session invalidation</div>
+          <div class="task-body">
+            Protected by <code>authenticate</code>:
+            <ol style="padding-left:16px;margin-top:5px">
+              <li style="margin-bottom:4px">Read refresh token from cookie: <code>req.cookies.refresh_token</code></li>
+              <li style="margin-bottom:4px">Hash it and delete matching <code>Session</code> doc</li>
+              <li style="margin-bottom:4px">Clear the cookie: <code>res.clearCookie('refresh_token', { path: '/api/v1/auth' })</code></li>
+              <li>Return <code>200 { message: 'Logged out successfully' }</code></li>
+            </ol>
+            <div class="note-box note-warn">⚠️ If no cookie found, still return 200 — idempotent logout is better UX than an error.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="login">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement POST /logout-all — revoke all sessions</div>
+          <div class="task-body">
+            Protected by <code>authenticate</code>:
+            <ol style="padding-left:16px;margin-top:5px">
+              <li style="margin-bottom:4px"><code>await Session.deleteMany({ user_id: req.user._id })</code></li>
+              <li style="margin-bottom:4px">Clear the refresh token cookie</li>
+              <li>Return <code>200 { message: 'All sessions terminated' }</code></li>
+            </ol>
+            Use case: user reports account compromise, or changes mobile number.
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="login">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement GET /sessions — list active sessions</div>
+          <div class="task-body">
+            Protected by <code>authenticate</code>. Returns all active sessions for the current user (for a "manage devices" screen):
+            <div class="code-block"><span class="k">const</span> sessions = <span class="k">await</span> Session.<span class="fn">find</span>(
+  { user_id: req.user._id },
+  { refresh_token_hash: <span class="p">0</span> }   <span class="c">// never expose hash</span>
+).<span class="fn">sort</span>({ created_at: -<span class="p">1</span> });</div>
+            Mark the current session (matching <code>req.sessionId</code>) with <code>is_current: true</code> in the response.
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-medium">MEDIUM</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TOKEN ===================== -->
+<div class="section" id="section-token">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(6,182,212,0.12)">🔄</div>
+    <div>
+      <div class="section-title">Token Management — Refresh & Rotation</div>
+      <div class="section-desc">Access tokens expire in 15 minutes. The client silently refreshes using the HTTP-only refresh token cookie. Implement token rotation (each refresh issues a new refresh token) to detect token theft.</div>
+    </div>
+    <div class="section-meta">
+      <span class="section-badge">POST /refresh</span>
+      <span class="section-badge">Access: 15m · Refresh: 7d / 30d</span>
+    </div>
+  </div>
+
+  <div class="flow-wrap">
+    <div class="flow-title">Silent Refresh Flow (Token Rotation)</div>
+    <div class="flow-steps">
+      <div class="flow-step err">Access token expires (401)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Client sends POST /refresh (cookie auto-sent)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step hl">Extract + verify refresh token from cookie</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Hash + find Session doc</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step err">Session not found → 401 (reuse detected)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Delete old session</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step hl">Issue new access + refresh tokens</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Save new session + set new cookie</div>
+    </div>
+  </div>
+
+  <div class="phase-card open" id="phase-token">
+    <div class="phase-header" onclick="togglePhase('token')">
+      <div class="phase-num" style="background:rgba(6,182,212,0.2);color:var(--cyan)">1</div>
+      <div>
+        <div class="phase-name">Token Refresh & Rotation</div>
+        <div class="phase-desc">POST /refresh with automatic token rotation for security</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-token">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-item" data-phase="token">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement POST /refresh — silent token rotation</div>
+          <div class="task-body">
+            <code>src/controllers/auth.controller.js</code> → <code>refreshToken()</code>:
+            <ol style="padding-left:16px;margin-top:5px">
+              <li style="margin-bottom:4px">Read <code>req.cookies.refresh_token</code> — 401 if missing</li>
+              <li style="margin-bottom:4px">Verify JWT: <code>jwt.verify(token, JWT_REFRESH_SECRET)</code> — 401 if invalid/expired</li>
+              <li style="margin-bottom:4px">Hash the token and find matching <code>Session</code> doc</li>
+              <li style="margin-bottom:4px">If session not found: <strong>possible token reuse attack</strong> → <code>Session.deleteMany({ user_id: payload.sub })</code> (revoke ALL sessions) → 401: <code>'Security event: all sessions revoked'</code></li>
+              <li style="margin-bottom:4px">Verify session not expired (belt-and-suspenders check)</li>
+              <li style="margin-bottom:4px">Delete old session doc</li>
+              <li style="margin-bottom:4px">Create new session: <code>createSession(userId, req, session.remember_device)</code></li>
+              <li>Return <code>200 { access_token }</code> + set new refresh cookie</li>
+            </ol>
+            <div class="note-box note-danger">🔒 Token rotation means each refresh token can only be used ONCE. If a valid refresh token is presented but no session exists — an attacker stole and used it first. Revoke everything immediately.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="token">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement axios interceptor on frontend for silent refresh</div>
+          <div class="task-body">
+            In the frontend app (<code>src/lib/api.js</code>):
+            <div class="code-block">axiosInstance.interceptors.response.<span class="fn">use</span>(
+  response => response,
+  <span class="k">async</span> error => {
+    <span class="k">const</span> original = error.config;
+    <span class="k">if</span> (error.response?.status === <span class="p">401</span> && !original._retry) {
+      original._retry = <span class="k">true</span>;
+      <span class="k">await</span> axiosInstance.<span class="fn">post</span>(<span class="s">'/auth/refresh'</span>);   <span class="c">// cookie sent auto</span>
+      <span class="k">const</span> { access_token } = response.data;
+      original.headers[<span class="s">'Authorization'</span>] = <span class="s">`Bearer ${access_token}`</span>;
+      <span class="k">return</span> axiosInstance(original);
+    }
+    <span class="k">return</span> Promise.<span class="fn">reject</span>(error);
+  }
+);</div>
+            <div class="note-box note-info">💡 Use a queue to prevent multiple simultaneous refresh calls when multiple requests 401 at once — hold them while one refresh is in-flight, then retry all.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-util">Frontend</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="token">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Handle token expiry edge cases</div>
+          <div class="task-body">
+            <ul>
+              <li><strong>Both tokens expired</strong> — refresh returns 401 → client redirects to login</li>
+              <li><strong>User status changed to blocked mid-session</strong> — <code>authenticate()</code> checks <code>req.user.status</code> on every request → 403 immediately</li>
+              <li><strong>Role changed mid-session</strong> — access token payload has stale role → force re-issue on next refresh by checking DB role vs token role in <code>authenticate()</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-security">Security</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="token">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement POST /auth/verify-email (optional email verification)</div>
+          <div class="task-body">
+            After signup, if user provides email, send a verification link (JWT-signed link, not OTP):
+            <ol style="padding-left:16px;margin-top:5px">
+              <li style="margin-bottom:4px">Generate a short-lived (24h) JWT with payload <code>{ sub: userId, purpose: 'verify_email', email }</code></li>
+              <li style="margin-bottom:4px">Send link: <code>https://abjad.sa/verify-email?token=xxx</code></li>
+              <li style="margin-bottom:4px">On GET /verify-email?token=xxx: verify JWT → set <code>email_verified: true</code> + save email → redirect to app</li>
+            </ol>
+            Signed with <code>JWT_ACCESS_SECRET</code> but short-lived and single-purpose.
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-low">LOW</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="token">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Document token payload structure and lifetime table</div>
+          <div class="task-body">
+            <table style="font-size:0.75rem;border-collapse:collapse;width:100%;margin-top:8px">
+              <thead>
+                <tr style="color:var(--muted);text-align:left">
+                  <th style="padding:5px 10px;border-bottom:1px solid var(--border)">Token</th>
+                  <th style="padding:5px 10px;border-bottom:1px solid var(--border)">Stored</th>
+                  <th style="padding:5px 10px;border-bottom:1px solid var(--border)">Payload</th>
+                  <th style="padding:5px 10px;border-bottom:1px solid var(--border)">Lifetime</th>
+                  <th style="padding:5px 10px;border-bottom:1px solid var(--border)">Secret</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:5px 10px;font-family:var(--mono);color:var(--cyan)">Access Token</td>
+                  <td style="padding:5px 10px;color:var(--muted)">Memory only (client)</td>
+                  <td style="padding:5px 10px;color:var(--muted);font-family:var(--mono);font-size:0.68rem">{ sub, role, sessionId }</td>
+                  <td style="padding:5px 10px;color:var(--amber)">15 minutes</td>
+                  <td style="padding:5px 10px;font-family:var(--mono);color:var(--muted)">JWT_ACCESS_SECRET</td>
+                </tr>
+                <tr>
+                  <td style="padding:5px 10px;font-family:var(--mono);color:var(--green)">Refresh Token</td>
+                  <td style="padding:5px 10px;color:var(--muted)">HTTP-only cookie</td>
+                  <td style="padding:5px 10px;color:var(--muted);font-family:var(--mono);font-size:0.68rem">{ sub, sessionId }</td>
+                  <td style="padding:5px 10px;color:var(--amber)">7d / 30d</td>
+                  <td style="padding:5px 10px;font-family:var(--mono);color:var(--muted)">JWT_REFRESH_SECRET</td>
+                </tr>
+                <tr>
+                  <td style="padding:5px 10px;font-family:var(--mono);color:var(--pink)">Email Verify</td>
+                  <td style="padding:5px 10px;color:var(--muted)">Link query param</td>
+                  <td style="padding:5px 10px;color:var(--muted);font-family:var(--mono);font-size:0.68rem">{ sub, purpose, email }</td>
+                  <td style="padding:5px 10px;color:var(--amber)">24 hours</td>
+                  <td style="padding:5px 10px;font-family:var(--mono);color:var(--muted)">JWT_ACCESS_SECRET</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-util">Docs</span>
+          <span class="priority-badge p-medium">MEDIUM</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PROFILE ===================== -->
+<div class="section" id="section-profile">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(245,158,11,0.12)">👤</div>
+    <div>
+      <div class="section-title">Post-Auth: Profile Setup & Role Routing</div>
+      <div class="section-desc">After OTP verification, new users (teachers/schools) have a bare <code>users</code> doc with no profile. The app must detect <code>is_new_user: true</code> and route them through profile creation before they can access the platform.</div>
+    </div>
+    <div class="section-meta">
+      <span class="section-badge">Onboarding gate</span>
+      <span class="section-badge">4 tasks</span>
+    </div>
+  </div>
+
+  <div class="phase-card open" id="phase-profile">
+    <div class="phase-header" onclick="togglePhase('profile')">
+      <div class="phase-num" style="background:rgba(245,158,11,0.2);color:var(--amber)">1</div>
+      <div>
+        <div class="phase-name">Profile Routing After Auth</div>
+        <div class="phase-desc">Middleware and logic to gate profile completion</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-profile">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-item" data-phase="profile">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Add requireProfileComplete() middleware for protected routes</div>
+          <div class="task-body">
+            Create <code>src/middleware/requireProfile.js</code>. After <code>authenticate</code>, check if the teacher/school profile document exists:
+            <div class="code-block"><span class="k">const</span> <span class="fn">requireProfileComplete</span> = <span class="k">async</span> (req, res, next) => {
+  <span class="k">if</span> (req.user.role === <span class="s">'admin'</span>) <span class="k">return</span> <span class="fn">next</span>();
+  <span class="k">const</span> Model = req.user.role === <span class="s">'teacher'</span> ? Teacher : School;
+  <span class="k">const</span> profile = <span class="k">await</span> Model.<span class="fn">findOne</span>({ user_id: req.user._id });
+  <span class="k">if</span> (!profile) <span class="k">return</span> res.<span class="fn">status</span>(<span class="p">403</span>).<span class="fn">json</span>({
+    code: <span class="s">'PROFILE_INCOMPLETE'</span>,
+    message: <span class="s">'Complete your profile to continue'</span>,
+    redirect: <span class="s">'/onboarding'</span>
+  });
+  req.profile = profile;
+  <span class="fn">next</span>();
+};</div>
+            Use on all non-auth routes: <code>router.use(authenticate, requireProfileComplete)</code>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-middleware">Middleware</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="profile">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Return profile_exists flag in /verify-otp response</div>
+          <div class="task-body">
+            Extend the <code>verifyOtp</code> login response to help the client route correctly:
+            <div class="code-block"><span class="k">const</span> Model = user.role === <span class="s">'teacher'</span> ? Teacher : School;
+<span class="k">const</span> profileExists = <span class="k">await</span> Model.<span class="fn">exists</span>({ user_id: user._id });
+
+res.<span class="fn">json</span>({
+  user: user.<span class="fn">toSafeObject</span>(),
+  access_token,
+  is_new_user: !profileExists,
+  next_step: profileExists ? <span class="s">'dashboard'</span> : <span class="s">'onboarding'</span>
+});</div>
+            Client logic: if <code>next_step === 'onboarding'</code> → redirect to role-specific profile creation flow.
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="profile">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement PATCH /auth/language — update preferred language</div>
+          <div class="task-body">
+            Simple protected endpoint used immediately after signup to set the UI language:
+            <div class="code-block">router.<span class="fn">patch</span>(<span class="s">'/language'</span>, authenticate, <span class="k">async</span> (req, res) => {
+  <span class="k">const</span> { language } = req.body;  <span class="c">// 'ar' | 'en'</span>
+  <span class="k">await</span> User.<span class="fn">findByIdAndUpdate</span>(req.user._id,
+    { preferred_language: language });
+  res.<span class="fn">json</span>({ preferred_language: language });
+});</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-low">LOW</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="profile">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement PATCH /auth/device-token — register FCM push token</div>
+          <div class="task-body">
+            Protected. Adds device FCM token for push notifications without duplicates:
+            <div class="code-block"><span class="k">await</span> User.<span class="fn">findByIdAndUpdate</span>(req.user._id, {
+  <span class="s">$addToSet</span>: { device_tokens: req.body.token }
+});
+<span class="c">// addToSet prevents duplicate tokens in the array</span></div>
+            Also implement <code>DELETE /auth/device-token</code> to remove a token (on logout from a specific device).
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-api">API</span>
+          <span class="priority-badge p-medium">MEDIUM</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECURITY ===================== -->
+<div class="section" id="section-security">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(239,68,68,0.12)">🛡️</div>
+    <div>
+      <div class="section-title">Security Hardening & Rate Limiting</div>
+      <div class="section-desc">Layer in production-grade security: rate limiting per endpoint, brute force protection, Helmet headers, and CORS. These must be in place before going live.</div>
+    </div>
+    <div class="section-meta">
+      <span class="section-badge">5 tasks</span>
+      <span class="section-badge">Must-have for production</span>
+    </div>
+  </div>
+
+  <div class="phase-card open" id="phase-security">
+    <div class="phase-header" onclick="togglePhase('security')">
+      <div class="phase-num" style="background:rgba(239,68,68,0.2);color:#fca5a5">1</div>
+      <div>
+        <div class="phase-name">Security Tasks</div>
+        <div class="phase-desc">Rate limits, Helmet, CORS, account lockout, audit logging</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-security">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-item" data-phase="security">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Configure Helmet + CORS in app.js</div>
+          <div class="task-body">
+            <div class="code-block"><span class="c">// app.js</span>
+app.<span class="fn">use</span>(<span class="fn">helmet</span>());
+app.<span class="fn">use</span>(<span class="fn">cors</span>({
+  origin: [<span class="s">'https://abjad.sa'</span>, <span class="s">'https://app.abjad.sa'</span>],
+  credentials: <span class="k">true</span>,           <span class="c">// required for cookies</span>
+  allowedHeaders: [<span class="s">'Content-Type'</span>, <span class="s">'Authorization'</span>],
+  methods: [<span class="s">'GET'</span>,<span class="s">'POST'</span>,<span class="s">'PUT'</span>,<span class="s">'PATCH'</span>,<span class="s">'DELETE'</span>]
+}));
+app.<span class="fn">use</span>(<span class="fn">cookieParser</span>());
+app.<span class="fn">use</span>(express.<span class="fn">json</span>({ limit: <span class="s">'10kb'</span> }));  <span class="c">// limit body size</span></div>
+            <div class="note-box note-danger">🔒 <code>credentials: true</code> is required for the browser to send the refresh token cookie cross-origin. Without it, the cookie is silently dropped.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-security">Security</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="security">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Apply tiered rate limiters to auth endpoints</div>
+          <div class="task-body">
+            Use <code>express-rate-limit</code> with different limits per endpoint:
+            <table style="font-size:0.74rem;border-collapse:collapse;width:100%;margin-top:8px">
+              <thead>
+                <tr style="color:var(--muted);text-align:left">
+                  <th style="padding:4px 10px;border-bottom:1px solid var(--border)">Endpoint</th>
+                  <th style="padding:4px 10px;border-bottom:1px solid var(--border)">Key</th>
+                  <th style="padding:4px 10px;border-bottom:1px solid var(--border)">Limit</th>
+                  <th style="padding:4px 10px;border-bottom:1px solid var(--border)">Window</th>
+                </tr>
+              </thead>
+              <tbody style="color:var(--text)">
+                <tr><td style="padding:4px 10px;font-family:var(--mono);font-size:0.7rem">POST /send-otp</td><td style="padding:4px 10px;font-family:var(--mono);font-size:0.7rem">IP + mobile_number</td><td style="padding:4px 10px;color:var(--amber)">3 requests</td><td style="padding:4px 10px">10 minutes</td></tr>
+                <tr><td style="padding:4px 10px;font-family:var(--mono);font-size:0.7rem">POST /verify-otp</td><td style="padding:4px 10px;font-family:var(--mono);font-size:0.7rem">IP + mobile_number</td><td style="padding:4px 10px;color:var(--amber)">5 requests</td><td style="padding:4px 10px">10 minutes</td></tr>
+                <tr><td style="padding:4px 10px;font-family:var(--mono);font-size:0.7rem">POST /refresh</td><td style="padding:4px 10px;font-family:var(--mono);font-size:0.7rem">IP</td><td style="padding:4px 10px;color:var(--amber)">30 requests</td><td style="padding:4px 10px">15 minutes</td></tr>
+                <tr><td style="padding:4px 10px;font-family:var(--mono);font-size:0.7rem">All /auth/*</td><td style="padding:4px 10px;font-family:var(--mono);font-size:0.7rem">IP</td><td style="padding:4px 10px;color:var(--amber)">100 requests</td><td style="padding:4px 10px">15 minutes</td></tr>
+              </tbody>
+            </table>
+            Return <code>429 { error: 'Too Many Requests', retry_after: N }</code> on breach.
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-security">Security</span>
+          <span class="priority-badge p-critical">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="security">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Implement account lockout on repeated wrong OTPs</div>
+          <div class="task-body">
+            In <code>otpService.verifyOtp()</code>, after incrementing <code>attempts</code>:
+            <div class="code-block"><span class="k">if</span> (otp.attempts >= <span class="p">3</span>) {
+  <span class="c">// Invalidate this OTP</span>
+  otp.used_at = <span class="k">new</span> <span class="fn">Date</span>();
+  <span class="k">await</span> otp.<span class="fn">save</span>();
+
+  <span class="c">// Optionally lock the user account too</span>
+  <span class="k">await</span> User.<span class="fn">findOneAndUpdate</span>(
+    { mobile_number },
+    { $inc: { failed_login_attempts: <span class="p">1</span> },
+      $set: { locked_until: <span class="k">new</span> <span class="fn">Date</span>(Date.now() + <span class="p">15</span> * <span class="p">60</span> * <span class="p">1000</span>) } }
+  );
+}</div>
+            Also lock after 5 consecutive failed OTP sessions (tracked via <code>failed_login_attempts</code> on user doc).
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-security">Security</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="security">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Write centralized error handler middleware</div>
+          <div class="task-body">
+            Create <code>src/middleware/errorHandler.js</code>. Catches all errors thrown in controllers:
+            <div class="code-block"><span class="k">const</span> errorHandler = (err, req, res, next) => {
+  <span class="k">const</span> status = err.statusCode || <span class="p">500</span>;
+  <span class="k">const</span> message = err.message || <span class="s">'Internal server error'</span>;
+  <span class="c">// Never leak stack traces in production</span>
+  res.<span class="fn">status</span>(status).<span class="fn">json</span>({
+    error: err.code || <span class="s">'SERVER_ERROR'</span>,
+    message,
+    ...(process.env.NODE_ENV !== <span class="s">'production'</span> && { stack: err.stack })
+  });
+};</div>
+            Create <code>src/utils/AppError.js</code> class: <code>new AppError('message', statusCode, 'ERROR_CODE')</code>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-middleware">Middleware</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="security">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Log auth events to audit_logs collection</div>
+          <div class="task-body">
+            In auth controller, after key events, write to <code>audit_logs</code>:
+            <ul>
+              <li>Successful login: <code>action: 'user_login'</code></li>
+              <li>Failed OTP: <code>action: 'otp_failed'</code></li>
+              <li>Account locked: <code>action: 'account_locked'</code></li>
+              <li>Logout: <code>action: 'user_logout'</code></li>
+              <li>Logout all: <code>action: 'all_sessions_revoked'</code></li>
+              <li>Token reuse detected: <code>action: 'refresh_token_reuse_detected'</code></li>
+            </ul>
+            Always include: <code>actor_user_id</code>, <code>ip_address</code>, <code>user_agent</code>, <code>entity_type: 'users'</code>, <code>entity_id: userId</code>, <code>metadata</code>.
+            <div class="note-box note-info">💡 Do this fire-and-forget — use <code>AuditLog.create({...}).catch(console.error)</code> so a logging failure never blocks the auth response.</div>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-security">Security</span>
+          <span class="priority-badge p-medium">MEDIUM</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TESTS ===================== -->
+<div class="section" id="section-tests">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(124,58,237,0.12)">🧪</div>
+    <div>
+      <div class="section-title">Testing — Auth Flow Coverage</div>
+      <div class="section-desc">Jest + Supertest integration tests for the complete auth flow. Use an in-memory MongoDB instance (<code>mongodb-memory-server</code>) so tests are isolated and fast.</div>
+    </div>
+    <div class="section-meta">
+      <span class="section-badge">4 test suites</span>
+      <span class="section-badge">Jest + Supertest</span>
+    </div>
+  </div>
+
+  <div class="phase-card open" id="phase-tests">
+    <div class="phase-header" onclick="togglePhase('tests')">
+      <div class="phase-num" style="background:rgba(124,58,237,0.2);color:#c4b5fd">1</div>
+      <div>
+        <div class="phase-name">Test Suites</div>
+        <div class="phase-desc">Integration tests covering all auth paths including attack scenarios</div>
+      </div>
+      <div class="phase-stats">
+        <span class="phase-count" id="count-tests">0/0</span>
+        <span class="phase-chevron">▾</span>
+      </div>
+    </div>
+    <div class="phase-body">
+
+      <div class="task-item" data-phase="tests">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Test suite: /send-otp + /verify-otp (registration)</div>
+          <div class="task-body">
+            <code>tests/auth/signup.test.js</code> — test cases:
+            <ul>
+              <li>✅ Valid mobile + role → OTP created, 200 returned</li>
+              <li>✅ Second request within 60s → 429 with retry_after</li>
+              <li>✅ Invalid mobile format → 422 validation error</li>
+              <li>✅ Already registered mobile with purpose=registration → 200 (no info leak)</li>
+              <li>✅ Correct OTP → user created, access_token returned, cookie set</li>
+              <li>✅ Wrong OTP → 400, attempts_remaining decremented</li>
+              <li>✅ 3 wrong OTPs → OTP invalidated, further attempts → 429</li>
+              <li>✅ Expired OTP → 410</li>
+              <li>✅ Duplicate registration race condition → second verify-otp → 409</li>
+            </ul>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-test">Test</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="tests">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Test suite: Login + authenticate middleware</div>
+          <div class="task-body">
+            <code>tests/auth/login.test.js</code> — test cases:
+            <ul>
+              <li>✅ Valid login OTP → access token + refresh cookie</li>
+              <li>✅ login_count incremented, last_login_at updated</li>
+              <li>✅ Suspended user → 403</li>
+              <li>✅ Locked user → 423 with locked_until</li>
+              <li>✅ Protected route without token → 401</li>
+              <li>✅ Protected route with expired access token → 401 with <code>'Access token expired'</code></li>
+              <li>✅ Protected route with valid token → 200</li>
+              <li>✅ Role mismatch on authorize() → 403</li>
+            </ul>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-test">Test</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="tests">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Test suite: Token refresh + rotation + reuse attack</div>
+          <div class="task-body">
+            <code>tests/auth/tokens.test.js</code> — test cases:
+            <ul>
+              <li>✅ POST /refresh with valid cookie → new access_token + new cookie</li>
+              <li>✅ POST /refresh with expired refresh token → 401</li>
+              <li>✅ POST /refresh with no cookie → 401</li>
+              <li>✅ Token reuse: use same refresh token twice → second use → all sessions deleted → 401</li>
+              <li>✅ POST /logout → session deleted, cookie cleared</li>
+              <li>✅ POST /logout-all → all sessions deleted</li>
+              <li>✅ Max sessions (5): 6th login → oldest session deleted</li>
+            </ul>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-test">Test</span>
+          <span class="priority-badge p-high">HIGH</span>
+        </div>
+      </div>
+
+      <div class="task-item" data-phase="tests">
+        <div class="task-checkbox" onclick="toggleTask(this)"></div>
+        <div>
+          <div class="task-title">Test suite: Rate limiting + security edge cases</div>
+          <div class="task-body">
+            <code>tests/auth/security.test.js</code> — test cases:
+            <ul>
+              <li>✅ 4th OTP request in 10 min → 429</li>
+              <li>✅ Account lockout after 5 failed OTP sessions</li>
+              <li>✅ OTP timing: verify after expiry window → 410</li>
+              <li>✅ CORS: request from disallowed origin → blocked</li>
+              <li>✅ Body size limit: > 10kb body → 413</li>
+              <li>✅ Audit log entries created for login/logout/failed-otp events</li>
+            </ul>
+          </div>
+        </div>
+        <div class="task-meta">
+          <span class="tag tag-test">Test</span>
+          <span class="priority-badge p-medium">MEDIUM</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+</div><!-- end layout -->
+
+<script>
+  // ── Section navigation ──
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    document.getElementById('nav-' + id).classList.add('active');
+  }
+
+  // ── Phase accordion ──
+  function togglePhase(id) {
+    const card = document.getElementById('phase-' + id);
+    card.classList.toggle('open');
+  }
+
+  // ── Task checkbox ──
+  function toggleTask(el) {
+    el.classList.toggle('done');
+    el.closest('.task-item').classList.toggle('done-item');
+    updateProgress();
+  }
+
+  // ── Progress tracking ──
+  function updateProgress() {
+    const all = document.querySelectorAll('.task-item');
+    const done = document.querySelectorAll('.task-item .task-checkbox.done');
+    const total = all.length;
+    const doneCount = done.length;
+    const pct = total ? Math.round((doneCount / total) * 100) : 0;
+
+    document.getElementById('stat-total').textContent = total + ' tasks';
+    document.getElementById('stat-done').textContent = doneCount + ' done';
+    document.getElementById('stat-pending').textContent = (total - doneCount) + ' pending';
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '%';
+
+    // Per-phase counts
+    const phases = {};
+    document.querySelectorAll('.task-item[data-phase]').forEach(item => {
+      const p = item.dataset.phase;
+      if (!phases[p]) phases[p] = { total: 0, done: 0 };
+      phases[p].total++;
+      if (item.querySelector('.task-checkbox.done')) phases[p].done++;
+    });
+    Object.entries(phases).forEach(([p, c]) => {
+      const el = document.getElementById('count-' + p);
+      if (el) el.textContent = c.done + '/' + c.total;
+    });
+
+    // Sidebar counts (done/total per section)
+    const sectionMap = {
+      schema:   ['users-model','otp-model','session-model'],
+      setup:    ['setup'],
+      signup:   ['signup'],
+      login:    ['login'],
+      token:    ['token'],
+      profile:  ['profile'],
+      security: ['security'],
+      tests:    ['tests'],
+    };
+    Object.entries(sectionMap).forEach(([sec, phaseIds]) => {
+      let t = 0, d = 0;
+      phaseIds.forEach(pid => {
+        if (phases[pid]) { t += phases[pid].total; d += phases[pid].done; }
+      });
+      const navEl = document.getElementById('nav-' + sec);
+      if (navEl) {
+        const badge = navEl.querySelector('.sidebar-count');
+        if (badge) badge.textContent = d > 0 ? d + '/' + t : t;
+      }
+    });
+  }
+
+  // ── Init ──
+  updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shab.co — Docs</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0a0c14;
+    --surface: #111420;
+    --surface2: #181c2e;
+    --border: #252a42;
+    --accent: #4f6ef7;
+    --accent2: #7c3aed;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --cyan: #06b6d4;
+    --pink: #ec4899;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 28px 48px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+  }
+  .header-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .logo {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .tagline {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .header-meta {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-badge {
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    padding: 48px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── DOC GRID ── */
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .doc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--card-color, var(--accent)), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .doc-card:hover {
+    border-color: var(--card-color, var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .doc-card:hover::before { opacity: 0.04; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .card-subtitle {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  .card-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .card-tag {
+    font-size: 0.63rem;
+    font-family: var(--mono);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface2);
+  }
+  .card-arrow {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 0.85rem;
+    transition: transform 0.15s, color 0.15s;
+  }
+  .doc-card:hover .card-arrow {
+    transform: translateX(3px);
+    color: var(--card-color, var(--accent));
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 20px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    background: var(--surface);
+  }
+  .footer-dot { color: var(--border); }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 0.9rem;
+    pointer-events: none;
+  }
+  .search-input {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px 10px 38px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted); }
+
+  /* hidden via search */
+  .doc-card.hidden { display: none; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    display: none;
+    text-align: center;
+    padding: 48px;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .empty-state.visible { display: block; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-brand">
+    <div class="logo">Shab.co</div>
+    <div class="tagline">internal docs &amp; references</div>
+  </div>
+  <div class="header-meta">
+    <span class="header-badge">📁 my-docs</span>
+    <span class="header-badge" id="doc-count">— docs</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" placeholder="Search documents…" oninput="filterDocs(this.value)" />
+  </div>
+
+  <!-- Abjad -->
+  <div class="section-label" id="label-abjad">Abjad Platform</div>
+  <div class="doc-grid" id="grid-abjad">
+
+    <a class="doc-card" href="abjad-db.html" style="--card-color:#4f6ef7">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(79,110,247,0.12)">🗄️</div>
+        <div>
+          <div class="card-title">MongoDB Schema Reference</div>
+          <div class="card-subtitle">abjad-db.html · v2.0</div>
+        </div>
+      </div>
+      <div class="card-desc">
+        Interactive database schema for the Abjad teacher recruitment platform. 16 MongoDB collections with full field tables, indexes, embedded arrays, and a collection references view.
+      </div>
+      <div class="card-footer">
+        <span class="card-tag">MongoDB</span>
+        <span class="card-tag">16 collections</span>
+        <span class="card-tag">200+ fields</span>
+        <span class="card-tag">Schema</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card" href="abjad-authentication-tasks.html" style="--card-color:#10b981">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(16,185,129,0.12)">🔐</div>
+        <div>
+          <div class="card-title">Authentication Flow — Task List</div>
+          <div class="card-subtitle">abjad-authentication-tasks.html · v1.0</div>
+        </div>
+      </div>
+      <div class="card-desc">
+        Complete implementation task list for mobile OTP auth — Mongoose models, JWT access + refresh token rotation, session management, rate limiting, and test suites.
+      </div>
+      <div class="card-footer">
+        <span class="card-tag">Node.js</span>
+        <span class="card-tag">JWT + OTP</span>
+        <span class="card-tag">39 tasks</span>
+        <span class="card-tag">Task List</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Alamco -->
+  <div class="section-label" id="label-alamco">Alamco</div>
+  <div class="doc-grid" id="grid-alamco">
+
+    <a class="doc-card" href="alamco-procurement.html" style="--card-color:#f59e0b">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(245,158,11,0.12)">🤖</div>
+        <div>
+          <div class="card-title">AI Procurement Automation</div>
+          <div class="card-subtitle">alamco-procurement.html · Client Presentation</div>
+        </div>
+      </div>
+      <div class="card-desc">
+        Client-facing presentation on AI-driven procurement automation — capabilities, workflow, and implementation roadmap for Alamco.
+      </div>
+      <div class="card-footer">
+        <span class="card-tag">AI</span>
+        <span class="card-tag">Procurement</span>
+        <span class="card-tag">Presentation</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="empty-state" id="empty-state">No documents match your search.</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>Shab.co</span>
+  <span class="footer-dot">·</span>
+  <span>Internal Docs</span>
+  <span class="footer-dot">·</span>
+  <span id="footer-date"></span>
+  <span class="footer-dot" style="margin-left:auto"></span>
+  <span>my-docs / main</span>
+</div>
+
+<script>
+  // Set date
+  document.getElementById('footer-date').textContent =
+    new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Count docs
+  const cards = document.querySelectorAll('.doc-card');
+  document.getElementById('doc-count').textContent = cards.length + ' docs';
+
+  // Search
+  function filterDocs(query) {
+    const q = query.toLowerCase().trim();
+    let visible = 0;
+
+    cards.forEach(card => {
+      const text = card.textContent.toLowerCase();
+      const match = !q || text.includes(q);
+      card.classList.toggle('hidden', !match);
+      if (match) visible++;
+    });
+
+    // Hide section labels if all cards in their grid are hidden
+    ['abjad', 'alamco'].forEach(group => {
+      const grid = document.getElementById('grid-' + group);
+      const label = document.getElementById('label-' + group);
+      const anyVisible = [...grid.querySelectorAll('.doc-card')].some(c => !c.classList.contains('hidden'));
+      grid.style.display = anyVisible ? '' : 'none';
+      label.style.display = anyVisible ? '' : 'none';
+    });
+
+    document.getElementById('empty-state').classList.toggle('visible', visible === 0);
+  }
+</script>
+</body>
+</html>
