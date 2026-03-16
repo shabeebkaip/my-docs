@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Procurement Intelligence — WeCare Tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* WeCare Tech Brand — dark tech / ICT feel */
+  --bg:      #050A14;
+  --bg2:     #080F1F;
+  --panel:   #0C1528;
+  --panel2:  #101D35;
+  --border:  #162038;
+  --border2: #1E2F4A;
+  --text:    #E8F0FC;
+  --muted:   #6B84A8;
+  --dim:     #374F6E;
+
+  /* Accent — electric cyan / WeCare blue */
+  --cyan:    #00C8FF;
+  --cyan2:   #0096CC;
+  --cyan3:   rgba(0,200,255,0.08);
+  --blue:    #1A6BFF;
+  --blue2:   rgba(26,107,255,0.12);
+
+  /* Semantic */
+  --green:   #00E5A0;
+  --green2:  rgba(0,229,160,0.10);
+  --amber:   #FFB340;
+  --amber2:  rgba(255,179,64,0.10);
+  --red:     #FF4D6A;
+  --red2:    rgba(255,77,106,0.10);
+
+  --serif:   'DM Serif Display', serif;
+  --sans:    'Inter', sans-serif;
+  --r:       8px;
+  --r2:      12px;
+  --r3:      16px;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ─── NAV ─────────────────────────────────────── */
+.topnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(5,10,20,0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  height: 58px;
+  display: flex; align-items: center; gap: 0;
+}
+.nav-logo {
+  font-size: 1rem; font-weight: 800; letter-spacing: -0.3px;
+  color: var(--text);
+  display: flex; align-items: center; gap: 10px;
+  margin-right: auto;
+}
+.nav-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.nav-links { display: flex; gap: 4px; }
+.nav-link {
+  font-size: 0.72rem; font-weight: 500; color: var(--muted);
+  text-decoration: none; padding: 6px 12px; border-radius: 6px;
+  transition: all 0.15s; cursor: pointer;
+  background: none; border: none;
+}
+.nav-link:hover { color: var(--text); background: var(--panel); }
+.nav-link.active { color: var(--cyan); }
+.nav-badge {
+  font-size: 0.65rem; font-weight: 600; color: var(--cyan);
+  border: 1px solid rgba(0,200,255,0.3); border-radius: 4px;
+  padding: 3px 8px; margin-left: 16px;
+}
+
+/* ─── SLIDE SYSTEM ────────────────────────────── */
+.deck { padding-top: 58px; }
+.slide { min-height: 100vh; width: 100%; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ─── SLIDE NAV ───────────────────────────────── */
+.slide-nav {
+  position: fixed; bottom: 32px; right: 40px;
+  display: flex; gap: 8px; z-index: 100;
+}
+.slide-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--border2); background: var(--panel);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--muted); transition: all 0.2s;
+}
+.slide-btn:hover { background: var(--cyan); color: var(--bg); border-color: var(--cyan); }
+
+.slide-counter {
+  position: fixed; bottom: 42px; left: 40px;
+  font-size: 0.7rem; font-family: var(--sans); color: var(--dim); letter-spacing: 1px;
+  z-index: 100;
+}
+
+/* ─── SLIDE HEADER COMPONENT ─────────────────── */
+.slide-header {
+  padding: 52px 64px 36px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.sh-eyebrow {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--cyan); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sh-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--cyan); }
+.sh-title {
+  font-family: var(--serif);
+  font-size: 2.6rem; line-height: 1.15; color: var(--text);
+  margin-bottom: 12px;
+}
+.sh-title em { font-style: italic; color: var(--cyan); }
+.sh-subtitle { font-size: 0.9rem; color: var(--muted); max-width: 640px; line-height: 1.7; }
+.sh-slide-num {
+  position: absolute; right: 64px; top: 52px;
+  font-family: var(--serif); font-size: 5rem; font-weight: 400;
+  color: rgba(0,200,255,0.04); line-height: 1; user-select: none;
+}
+
+/* ─── SLIDE BODY ──────────────────────────────── */
+.slide-body { flex: 1; padding: 40px 64px 60px; }
+
+/* ─── GRID HELPERS ────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+.grid-12 { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; }
+
+/* ─── CARDS ───────────────────────────────────── */
+.card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 22px 24px;
+}
+.card-cyan { border-color: rgba(0,200,255,0.2); background: var(--panel); }
+.card-glow {
+  background: linear-gradient(135deg, rgba(0,200,255,0.05), var(--panel));
+  border-color: rgba(0,200,255,0.18);
+}
+
+/* ─── STAT BLOCKS ─────────────────────────────── */
+.stat-block {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 20px 22px;
+  transition: border-color 0.2s;
+}
+.stat-block:hover { border-color: rgba(0,200,255,0.3); }
+.stat-num {
+  font-family: var(--serif); font-size: 2.4rem; line-height: 1;
+  color: var(--cyan); margin-bottom: 6px;
+}
+.stat-label { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+.stat-unit { font-size: 1rem; color: var(--muted); vertical-align: super; margin-left: 2px; }
+
+/* ─── BADGES ──────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 4px; border: 1px solid;
+}
+.badge-cyan   { color: var(--cyan);  border-color: rgba(0,200,255,0.35);  background: rgba(0,200,255,0.07); }
+.badge-green  { color: var(--green); border-color: rgba(0,229,160,0.35);  background: rgba(0,229,160,0.07); }
+.badge-amber  { color: var(--amber); border-color: rgba(255,179,64,0.35); background: rgba(255,179,64,0.07); }
+.badge-red    { color: var(--red);   border-color: rgba(255,77,106,0.35); background: rgba(255,77,106,0.07); }
+.badge-blue   { color: #7EB5FF;      border-color: rgba(26,107,255,0.35); background: rgba(26,107,255,0.07); }
+.badge-dim    { color: var(--muted); border-color: var(--border2);        background: var(--panel2); }
+
+/* ─── SECTION LABELS ──────────────────────────── */
+.section-label {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ─── PIPELINE / STEP COMPONENTS ─────────────── */
+.pipeline {
+  display: flex; align-items: stretch; gap: 0;
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--r2);
+  overflow: hidden;
+}
+.pipeline-step {
+  flex: 1; padding: 18px 16px;
+  border-right: 1px solid var(--border);
+  position: relative; display: flex; flex-direction: column; gap: 6px;
+}
+.pipeline-step:last-child { border-right: none; }
+.pipeline-step::after {
+  content: '›';
+  position: absolute; right: -8px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--dim); font-size: 1rem; z-index: 2;
+}
+.pipeline-step:last-child::after { display: none; }
+.ps-num { font-size: 0.6rem; font-weight: 700; color: var(--dim); font-family: var(--sans); }
+.ps-icon { font-size: 1.1rem; }
+.ps-title { font-size: 0.75rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+.ps-desc { font-size: 0.68rem; color: var(--muted); line-height: 1.4; }
+
+/* ─── TABLE ───────────────────────────────────── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.data-table thead tr { background: var(--panel2); border-bottom: 1px solid var(--border2); }
+.data-table th {
+  text-align: left; padding: 10px 14px;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--muted);
+}
+.data-table td { padding: 10px 14px; border-bottom: 1px solid rgba(22,32,56,0.7); vertical-align: top; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(0,200,255,0.03); }
+
+/* ─── CALLOUT BOXES ───────────────────────────── */
+.callout {
+  padding: 14px 18px; border-radius: var(--r); border-left: 3px solid;
+  font-size: 0.8rem; line-height: 1.65;
+}
+.callout-cyan  { background: var(--cyan3);  border-color: var(--cyan);  color: #9BE8FF; }
+.callout-amber { background: var(--amber2); border-color: var(--amber); color: #FFD98A; }
+.callout-green { background: var(--green2); border-color: var(--green); color: #80F5CE; }
+.callout-red   { background: var(--red2);   border-color: var(--red);   color: #FFB0BE; }
+
+/* ─── TIMELINE ────────────────────────────────── */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.timeline-item { display: flex; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+.timeline-item:last-child { border-bottom: none; }
+.tl-marker { display: flex; flex-direction: column; align-items: center; gap: 0; flex-shrink: 0; }
+.tl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); flex-shrink: 0; margin-top: 5px; box-shadow: 0 0 8px rgba(0,200,255,0.5); }
+.tl-line { flex: 1; width: 1px; background: var(--border); min-height: 20px; }
+.tl-content { flex: 1; padding-bottom: 4px; }
+.tl-phase { font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--cyan); margin-bottom: 4px; }
+.tl-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.tl-items { font-size: 0.76rem; color: var(--muted); line-height: 1.65; }
+
+/* ─── ICON FEATURE ROW ────────────────────────── */
+.feature-row { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.feature-row:last-child { border-bottom: none; }
+.feature-icon { width: 36px; height: 36px; border-radius: var(--r); background: var(--cyan3); border: 1px solid rgba(0,200,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
+.feature-title { font-size: 0.84rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.feature-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.6; }
+
+/* ─── FLOW DIAGRAM ────────────────────────────── */
+.flow-wrap { display: flex; flex-direction: column; gap: 2px; }
+.flow-row { display: flex; align-items: center; gap: 8px; }
+.flow-node {
+  background: var(--panel2); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 10px 16px; font-size: 0.78rem; font-weight: 500;
+  white-space: nowrap; flex-shrink: 0;
+}
+.flow-node.ai   { border-color: rgba(0,200,255,0.35); color: var(--cyan);  background: rgba(0,200,255,0.06); }
+.flow-node.core { border-color: rgba(0,229,160,0.35); color: var(--green); background: rgba(0,229,160,0.06); }
+.flow-node.out  { border-color: rgba(255,179,64,0.35); color: var(--amber); background: rgba(255,179,64,0.06); }
+.flow-arrow { color: var(--dim); font-size: 0.9rem; flex-shrink: 0; }
+.flow-label { font-size: 0.65rem; color: var(--muted); }
+
+/* ─── TAG LIST ────────────────────────────────── */
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 0.68rem; font-weight: 500; padding: 4px 10px; border-radius: 5px;
+  background: var(--panel2); border: 1px solid var(--border2); color: var(--muted);
+}
+.tag-cyan  { color: var(--cyan);  background: rgba(0,200,255,0.06);  border-color: rgba(0,200,255,0.2); }
+.tag-green { color: var(--green); background: rgba(0,229,160,0.06);  border-color: rgba(0,229,160,0.2); }
+.tag-amber { color: var(--amber); background: rgba(255,179,64,0.06); border-color: rgba(255,179,64,0.2); }
+
+/* ─── DASHBOARD MOCKUP ────────────────────────── */
+.dash-bar-group { display: flex; flex-direction: column; gap: 8px; }
+.dash-bar-row { display: flex; align-items: center; gap: 10px; font-size: 0.73rem; }
+.dash-bar-label { width: 130px; color: var(--muted); flex-shrink: 0; }
+.dash-bar-track { flex: 1; height: 6px; background: var(--panel2); border-radius: 99px; overflow: hidden; }
+.dash-bar-fill  { height: 100%; border-radius: 99px; }
+.dash-bar-val   { width: 40px; text-align: right; color: var(--text); font-weight: 500; }
+
+/* ─── COVER SLIDE ─────────────────────────────── */
+#slide-1 {
+  background: var(--bg2);
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  min-height: 100vh;
+  position: relative;
+}
+.cover-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black, transparent);
+}
+.cover-glow {
+  position: absolute;
+  width: 700px; height: 400px;
+  background: radial-gradient(ellipse, rgba(0,200,255,0.08) 0%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.cover-inner { position: relative; z-index: 2; max-width: 760px; padding: 60px; }
+.cover-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--cyan);
+  border: 1px solid rgba(0,200,255,0.25); border-radius: 99px;
+  padding: 6px 16px; margin-bottom: 28px;
+}
+.cover-eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+.cover-title {
+  font-family: var(--serif); font-size: 3.8rem; line-height: 1.1;
+  color: var(--text); margin-bottom: 18px; letter-spacing: -0.5px;
+}
+.cover-title em { font-style: italic; color: var(--cyan); }
+.cover-subtitle { font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 36px; }
+.cover-meta {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; border-top: 1px solid var(--border); padding-top: 28px;
+}
+.cover-meta-item { padding: 0 28px; text-align: center; border-right: 1px solid var(--border); }
+.cover-meta-item:last-child { border-right: none; }
+.cover-meta-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+.cover-meta-val { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+.cover-stats { display: flex; justify-content: center; gap: 48px; margin-bottom: 36px; }
+.cover-stat { text-align: center; }
+.cover-stat-num { font-family: var(--serif); font-size: 2.6rem; color: var(--cyan); line-height: 1; margin-bottom: 4px; }
+.cover-stat-label { font-size: 0.7rem; color: var(--muted); }
+
+/* ─── SCROLLBAR ───────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+/* ─── MISC ────────────────────────────────────── */
+.divider { height: 1px; background: var(--border); margin: 20px 0; }
+.mt-4 { margin-top: 4px; }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-28 { margin-top: 28px; }
+.mt-32 { margin-top: 32px; }
+.mb-4  { margin-bottom: 4px; }
+.mb-8  { margin-bottom: 8px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-20 { margin-bottom: 20px; }
+strong { font-weight: 700; color: var(--text); }
+.text-cyan  { color: var(--cyan);  }
+.text-green { color: var(--green); }
+.text-amber { color: var(--amber); }
+.text-muted { color: var(--muted); }
+.text-sm    { font-size: 0.78rem;  }
+.text-xs    { font-size: 0.7rem;   }
+.flex       { display: flex; }
+.flex-col   { flex-direction: column; }
+.gap-8      { gap: 8px; }
+.gap-12     { gap: 12px; }
+.gap-16     { gap: 16px; }
+.gap-20     { gap: 20px; }
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<!-- ─── TOP NAV ──────────────────────────────────── -->
+<nav class="topnav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    WeCare Tech
+  </div>
+  <div class="nav-links">
+    <button class="nav-link" onclick="goSlide(1)">Overview</button>
+    <button class="nav-link" onclick="goSlide(2)">Problem</button>
+    <button class="nav-link" onclick="goSlide(3)">Solution</button>
+    <button class="nav-link" onclick="goSlide(4)">Architecture</button>
+    <button class="nav-link" onclick="goSlide(5)">AI Engine</button>
+    <button class="nav-link" onclick="goSlide(6)">Email Trigger</button>
+    <button class="nav-link" onclick="goSlide(7)">Dashboard</button>
+    <button class="nav-link" onclick="goSlide(8)">Roadmap</button>
+    <button class="nav-link" onclick="goSlide(9)">Next Steps</button>
+  </div>
+  <div class="nav-badge">CONFIDENTIAL</div>
+</nav>
+
+<!-- ─── SLIDE NAVIGATION ─────────────────────────── -->
+<div class="slide-nav">
+  <button class="slide-btn" onclick="prevSlide()">&#8592;</button>
+  <button class="slide-btn" onclick="nextSlide()">&#8594;</button>
+</div>
+<div class="slide-counter" id="counter">1 / 9</div>
+
+<div class="deck" id="deck">
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 1 — COVER
+═══════════════════════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <div class="cover-grid"></div>
+  <div class="cover-glow"></div>
+  <div class="cover-inner">
+    <div class="cover-eyebrow">
+      <div class="cover-eyebrow-dot"></div>
+      Solution Architecture · Prepared by Codeox Technologies
+    </div>
+    <div class="cover-title">
+      AI-Powered<br><em>Procurement Intelligence</em>
+    </div>
+    <div class="cover-subtitle">
+      An autonomous procurement system for WeCare Tech — from email-triggered BOQ ingestion to intelligent requisition, vendor scoring, and real-time operations dashboard.
+    </div>
+    <div class="cover-stats">
+      <div class="cover-stat">
+        <div class="cover-stat-num">20+</div>
+        <div class="cover-stat-label">Years ICT Excellence</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num">0</div>
+        <div class="cover-stat-label">Manual BOQ Processing</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num">&lt;2m</div>
+        <div class="cover-stat-label">Email-to-Requisition</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num">∞</div>
+        <div class="cover-stat-label">Concurrent Projects</div>
+      </div>
+    </div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Client</div>
+        <div class="cover-meta-val">WeCare Tech — Saudi Arabia</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Prepared by</div>
+        <div class="cover-meta-val">Codeox Technologies</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Version</div>
+        <div class="cover-meta-val">1.0 — March 2026</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 2 — CURRENT STATE / PROBLEM
+═══════════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <div class="slide-header">
+    <div class="sh-eyebrow">Current State</div>
+    <div class="sh-title">The Problem WeCare Tech Faces <em>Today</em></div>
+    <div class="sh-subtitle">Procurement for Data Center, ICT, CCTV, and Structured Cabling projects is fragmented, manual, and invisible — costing time, money, and project confidence.</div>
+    <div class="sh-slide-num">02</div>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2" style="gap:28px">
+      <!-- LEFT: workflow breakdown -->
+      <div>
+        <div class="section-label">Current Manual Workflow</div>
+        <div style="border:1px solid var(--border); border-radius:var(--r2); overflow:hidden;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Step</th>
+                <th>Current Method</th>
+                <th>Time</th>
+                <th>Risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. BOQ / RFP Received</strong></td>
+                <td class="text-muted">Email read manually</td>
+                <td>Hours</td>
+                <td><span class="badge badge-red">HIGH</span></td>
+              </tr>
+              <tr>
+                <td><strong>2. Material List</strong></td>
+                <td class="text-muted">Manually authored per project scope (UTP, switches, cameras…)</td>
+                <td>Days</td>
+                <td><span class="badge badge-red">HIGH</span></td>
+              </tr>
+              <tr>
+                <td><strong>3. Vendor Comparison</strong></td>
+                <td class="text-muted">Calls / WhatsApp to distributors</td>
+                <td>Days</td>
+                <td><span class="badge badge-red">HIGH</span></td>
+              </tr>
+              <tr>
+                <td><strong>4. Purchase Requisition</strong></td>
+                <td class="text-muted">WhatsApp to manager for approval</td>
+                <td>Variable</td>
+                <td><span class="badge badge-red">CRITICAL</span></td>
+              </tr>
+              <tr>
+                <td><strong>5. Order Tracking</strong></td>
+                <td class="text-muted">Excel tracker — no live status</td>
+                <td>Ongoing</td>
+                <td><span class="badge badge-red">HIGH</span></td>
+              </tr>
+              <tr>
+                <td><strong>6. Delivery Confirm</strong></td>
+                <td class="text-muted">Phone calls / site visits</td>
+                <td>Ad-hoc</td>
+                <td><span class="badge badge-red">CRITICAL</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- RIGHT: pain points -->
+      <div>
+        <div class="section-label">Key Pain Points — ICT Procurement Context</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="card">
+            <div class="flex items-center gap-12 mb-8">
+              <span style="font-size:1.2rem">📧</span>
+              <strong>Email BOQ Arrives — Nothing Happens Automatically</strong>
+            </div>
+            <div class="text-sm text-muted">Clients send BOQ or project requirements via email. A procurement officer must manually read, interpret, and re-enter data into spreadsheets. Items like <em>Cat6A UTP Cables, Cisco Catalyst switches, Hikvision PTZ cameras</em> require different vendor channels — none mapped automatically.</div>
+          </div>
+          <div class="card">
+            <div class="flex items-center gap-12 mb-8">
+              <span style="font-size:1.2rem">🔌</span>
+              <strong>Multi-Category Complexity: No Unified System</strong>
+            </div>
+            <div class="text-sm text-muted">A single data center project can require structured cabling (R&M, Panduit), active networking (Cisco, Juniper), UPS/PDU (Eaton, APC, Schneider), surveillance (Hikvision, Hanwha), and access control (Nitgen) — each with separate vendors, lead times, and approval paths.</div>
+          </div>
+          <div class="card">
+            <div class="flex items-center gap-12 mb-8">
+              <span style="font-size:1.2rem">📊</span>
+              <strong>Zero Visibility Across Concurrent Projects</strong>
+            </div>
+            <div class="text-sm text-muted">Management has no real-time view of procurement status across active projects. Items stuck at approval, long-lead hardware not yet ordered, and budget overruns are discovered after the fact.</div>
+          </div>
+          <div class="callout callout-red mt-4">
+            <strong>Critical Risk:</strong> In ICT and data center projects, missing procurement windows for long-lead items — server hardware, UPS systems, fiber optic trunk cables — can delay project delivery by 4–12 weeks, threatening client SLAs and contract penalties.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 3 — SOLUTION OVERVIEW
+═══════════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <div class="slide-header">
+    <div class="sh-eyebrow">Proposed Solution</div>
+    <div class="sh-title">Autonomous Procurement <em>Intelligence Platform</em></div>
+    <div class="sh-subtitle">A standalone AI system — no ERP dependency — that transforms an inbound email into a fully structured procurement workflow within minutes.</div>
+    <div class="sh-slide-num">03</div>
+  </div>
+  <div class="slide-body">
+    <div class="callout callout-cyan mb-20">
+      <strong>Core Philosophy:</strong> The system starts working the moment a BOQ or project brief arrives in WeCare Tech's inbox. No human needs to touch the data until the AI has structured, classified, matched to vendors, and drafted the requisitions — ready for one-click approval.
+    </div>
+
+    <div class="grid-3 mb-28">
+      <div class="card card-glow" style="border-top:2px solid var(--cyan)">
+        <div style="font-size:1.6rem;margin-bottom:12px">🤖</div>
+        <div style="font-size:0.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:8px">Layer 1</div>
+        <div style="font-size:1rem;font-weight:700;margin-bottom:8px">AI Ingestion Engine</div>
+        <div class="text-sm text-muted">Monitors email inbox. Detects BOQ attachments (Excel, PDF, Word). Extracts every line item — SKU codes, quantities, specs, scope categories — with zero manual entry.</div>
+        <div class="mt-12 tag-list">
+          <span class="tag tag-cyan">Email Parser</span>
+          <span class="tag tag-cyan">Claude AI</span>
+          <span class="tag tag-cyan">GPT-4o</span>
+        </div>
+      </div>
+      <div class="card" style="border-top:2px solid var(--green)">
+        <div style="font-size:1.6rem;margin-bottom:12px">⚡</div>
+        <div style="font-size:0.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px">Layer 2</div>
+        <div style="font-size:1rem;font-weight:700;margin-bottom:8px">Procurement Brain</div>
+        <div class="text-sm text-muted">Maps extracted items to WeCare Tech's product catalogue and preferred vendors. Auto-generates requisitions, assigns approval workflows, flags long-lead items, computes budgets.</div>
+        <div class="mt-12 tag-list">
+          <span class="tag tag-green">Vendor Match</span>
+          <span class="tag tag-green">Auto-Requisition</span>
+          <span class="tag tag-green">Lead Time DB</span>
+        </div>
+      </div>
+      <div class="card" style="border-top:2px solid var(--amber)">
+        <div style="font-size:1.6rem;margin-bottom:12px">📡</div>
+        <div style="font-size:0.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:8px">Layer 3</div>
+        <div style="font-size:1rem;font-weight:700;margin-bottom:8px">Operations Dashboard</div>
+        <div class="text-sm text-muted">Real-time command center for management. Every project, every procurement package, every vendor delivery — visible in a single screen. Alerts, analytics, approvals.</div>
+        <div class="mt-12 tag-list">
+          <span class="tag tag-amber">Live Dashboard</span>
+          <span class="tag tag-amber">Approvals</span>
+          <span class="tag tag-amber">Analytics</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">End-to-End Transformation</div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="ps-num">01</div>
+        <div class="ps-icon">📩</div>
+        <div class="ps-title">Email Arrives</div>
+        <div class="ps-desc">Client sends BOQ or project brief as attachment</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="ps-num">02</div>
+        <div class="ps-icon">🤖</div>
+        <div class="ps-title">AI Reads & Extracts</div>
+        <div class="ps-desc">Claude / GPT-4o parses every line item with confidence scoring</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="ps-num">03</div>
+        <div class="ps-icon">🗂️</div>
+        <div class="ps-title">Auto-Classify</div>
+        <div class="ps-desc">Items mapped to categories: Cabling, Networking, UPS, CCTV, Access Control…</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="ps-num">04</div>
+        <div class="ps-icon">🏪</div>
+        <div class="ps-title">Vendor Match</div>
+        <div class="ps-desc">Preferred vendors shortlisted; historical prices surfaced; quotes requested</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="ps-num">05</div>
+        <div class="ps-icon">📋</div>
+        <div class="ps-title">PR Auto-Draft</div>
+        <div class="ps-desc">Purchase requisitions generated per package and routed for approval</div>
+      </div>
+      <div class="pipeline-step">
+        <div class="ps-num">06</div>
+        <div class="ps-icon">✅</div>
+        <div class="ps-title">One-Click Approve</div>
+        <div class="ps-desc">Manager reviews on dashboard or mobile — approve, edit, or escalate</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 4 — SYSTEM ARCHITECTURE
+═══════════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <div class="slide-header">
+    <div class="sh-eyebrow">Technical Architecture</div>
+    <div class="sh-title">System <em>Architecture</em> — Standalone AI Platform</div>
+    <div class="sh-subtitle">A purpose-built procurement intelligence platform. No ERP. No legacy middleware. Clean microservice architecture owned entirely by WeCare Tech.</div>
+    <div class="sh-slide-num">04</div>
+  </div>
+  <div class="slide-body">
+    <div class="grid-12">
+      <!-- LEFT: architecture layers -->
+      <div>
+        <div class="section-label">Platform Layers</div>
+
+        <!-- Entry -->
+        <div class="card mb-12" style="border-left:3px solid var(--cyan)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span class="badge badge-cyan">Entry</span>
+            <strong>Email Intelligence Gateway</strong>
+          </div>
+          <div class="text-sm text-muted mb-8">Monitors dedicated procurement mailbox (e.g. procurement@wecaretech.com). Detects and classifies inbound messages — BOQ, RFP, project brief, vendor quote.</div>
+          <div class="tag-list">
+            <span class="tag">Microsoft Graph API / Gmail API</span>
+            <span class="tag">Attachment detection (PDF, XLSX, DOCX)</span>
+            <span class="tag">Sender classification</span>
+          </div>
+        </div>
+
+        <!-- AI Core -->
+        <div class="card mb-12" style="border-left:3px solid var(--blue)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span class="badge badge-blue">AI Core</span>
+            <strong>Document Understanding Engine</strong>
+          </div>
+          <div class="text-sm text-muted mb-8">Dual-model approach — structured extraction for Excel BOQs, LLM extraction for PDF/Word. Confidence scoring ensures human review for ambiguous items.</div>
+          <div class="tag-list">
+            <span class="tag tag-cyan">Claude 3.5 Sonnet — Primary LLM</span>
+            <span class="tag tag-cyan">GPT-4o — Vision / PDF</span>
+            <span class="tag">Python openpyxl — Excel parser</span>
+            <span class="tag">pdfplumber — PDF extraction</span>
+          </div>
+        </div>
+
+        <!-- Business Logic -->
+        <div class="card mb-12" style="border-left:3px solid var(--green)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span class="badge badge-green">Business Logic</span>
+            <strong>Procurement Automation Engine</strong>
+          </div>
+          <div class="text-sm text-muted mb-8">Rules + AI hybrid. Category classification, vendor matching, lead time flagging, requisition generation, approval routing.</div>
+          <div class="tag-list">
+            <span class="tag tag-green">FastAPI backend (Python)</span>
+            <span class="tag tag-green">PostgreSQL — operational data</span>
+            <span class="tag">Celery — async task queue</span>
+            <span class="tag">Redis — caching / queues</span>
+          </div>
+        </div>
+
+        <!-- Frontend -->
+        <div class="card" style="border-left:3px solid var(--amber)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span class="badge badge-amber">Interface</span>
+            <strong>Operations Dashboard &amp; Approval App</strong>
+          </div>
+          <div class="text-sm text-muted mb-8">Web-based dashboard — management and procurement team. Mobile-responsive for approval on the go. Real-time updates via WebSocket.</div>
+          <div class="tag-list">
+            <span class="tag tag-amber">Next.js + React</span>
+            <span class="tag tag-amber">WebSocket real-time</span>
+            <span class="tag">Recharts / D3 analytics</span>
+            <span class="tag">PWA — mobile approvals</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: modules & tech stack -->
+      <div>
+        <div class="section-label">Core Modules</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px;">
+          <div class="feature-row">
+            <div class="feature-icon">📥</div>
+            <div>
+              <div class="feature-title">Email Watcher Service</div>
+              <div class="feature-desc">Polls / webhooks on procurement inbox. Triggers pipeline on BOQ/RFP detection. Logs every inbound project request with timestamp and sender metadata.</div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon">🧠</div>
+            <div>
+              <div class="feature-title">BOQ Parser &amp; Classifier</div>
+              <div class="feature-desc">Extracts line items, quantities, specs, codes. Classifies into WeCare Tech scope categories: Structured Cabling, Networking, UPS &amp; Power, CCTV &amp; Surveillance, Access Control, Data Center Infra.</div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon">🏪</div>
+            <div>
+              <div class="feature-title">Vendor Intelligence Engine</div>
+              <div class="feature-desc">Maintains WeCare Tech's approved vendor database (Panduit, R&M, Cisco, Eaton, Schneider, Hikvision, Hanwha, APC…). Auto-shortlists vendors per category. Tracks historical prices, lead times, and performance scores.</div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon">📋</div>
+            <div>
+              <div class="feature-title">Requisition Generator</div>
+              <div class="feature-desc">Auto-drafts purchase requisitions grouped by vendor category and project scope. Sets priority flags (standard / long-lead / critical). Routes to correct approver based on value thresholds.</div>
+            </div>
+          </div>
+          <div class="feature-row" style="border:none">
+            <div class="feature-icon">🔔</div>
+            <div>
+              <div class="feature-title">Notification &amp; Approval Engine</div>
+              <div class="feature-desc">Sends approval requests via email or WhatsApp. Manager approves, edits, or escalates from dashboard or mobile. Full audit trail maintained.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Technology Recommendation</div>
+        <div style="border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;">
+          <table class="data-table">
+            <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Primary LLM</strong></td><td class="text-cyan">Anthropic Claude 3.5 Sonnet</td></tr>
+              <tr><td><strong>Vision / PDF</strong></td><td class="text-cyan">OpenAI GPT-4o</td></tr>
+              <tr><td><strong>Backend API</strong></td><td>FastAPI (Python 3.12)</td></tr>
+              <tr><td><strong>Database</strong></td><td>PostgreSQL + Pgvector</td></tr>
+              <tr><td><strong>Task Queue</strong></td><td>Celery + Redis</td></tr>
+              <tr><td><strong>Frontend</strong></td><td>Next.js 14 + TailwindCSS</td></tr>
+              <tr><td><strong>Hosting</strong></td><td>AWS / DigitalOcean (Saudi region)</td></tr>
+              <tr><td><strong>Email Integration</strong></td><td>Microsoft Graph API / Gmail API</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 5 — AI ENGINE DEEP DIVE
+═══════════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="slide-header">
+    <div class="sh-eyebrow">AI Engine</div>
+    <div class="sh-title">The AI Brain — <em>How It Works</em></div>
+    <div class="sh-subtitle">Five specialized AI components, each responsible for one step of the procurement intelligence pipeline. All powered by Claude 3.5 Sonnet and GPT-4o.</div>
+    <div class="sh-slide-num">05</div>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2" style="gap:20px">
+
+      <!-- Component 1 -->
+      <div class="card card-glow">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,200,255,0.1);border:1px solid rgba(0,200,255,0.2);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0">1</div>
+          <div>
+            <div style="font-size:0.85rem;font-weight:700">BOQ Document Parser</div>
+            <div class="text-xs text-muted">Claude 3.5 Sonnet + Python openpyxl</div>
+          </div>
+          <span class="badge badge-cyan" style="margin-left:auto">Core</span>
+        </div>
+        <div class="text-sm text-muted mb-12">Accepts Excel (.xlsx), PDF, and Word BOQ documents. For Excel: structured Python parser with hierarchical pattern recognition. For PDF/Word: Claude API processes the document with a custom extraction prompt tuned to ICT BOQ formats.</div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:0.7rem;color:var(--muted);font-family:monospace;line-height:1.8">
+          Input: "Cat6A UTP Cable — 4PR 23AWG — 305m box — Qty: 50 boxes"<br>
+          → Category: <span style="color:var(--cyan)">Structured Cabling / Copper</span><br>
+          → Product: <span style="color:var(--green)">UTP Cat6A</span> · Qty: <span style="color:var(--amber)">50 × 305m</span><br>
+          → Preferred Brands: <span style="color:var(--cyan)">R&M, Panduit, Datwyler</span><br>
+          → Lead Time Flag: <span style="color:var(--green)">Standard (7–14 days)</span>
+        </div>
+      </div>
+
+      <!-- Component 2 -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;color:var(--green)">2</div>
+          <div>
+            <div style="font-size:0.85rem;font-weight:700">Material Requirements Expander</div>
+            <div class="text-xs text-muted">Claude 3.5 + ICT Material Template Library</div>
+          </div>
+          <span class="badge badge-green" style="margin-left:auto">Core</span>
+        </div>
+        <div class="text-sm text-muted mb-12">For each BOQ line item, AI expands to full material breakdown — primaries, accessories, consumables. Uses pre-built templates for 60+ ICT scope categories (data center racks, fiber optic runs, camera installations, UPS systems…). LLM fallback for novel items.</div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:0.7rem;color:var(--muted);font-family:monospace;line-height:1.8">
+          BOQ Item: "Install 48-port data cabinet"<br>
+          → 1× 42U Open Frame Rack<br>
+          → 2× 1U Patch Panel 24-port Cat6A<br>
+          → 1× Horizontal Cable Manager<br>
+          → 4× D-Ring Cable Guides<br>
+          → 1× PDU 16A 8-outlet<br>
+          → Cable ties, labels, earthing kit
+        </div>
+      </div>
+
+      <!-- Component 3 -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(26,107,255,0.1);border:1px solid rgba(26,107,255,0.2);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;color:#7EB5FF">3</div>
+          <div>
+            <div style="font-size:0.85rem;font-weight:700">Intelligent Vendor Matcher</div>
+            <div class="text-xs text-muted">PostgreSQL + Pgvector semantic search</div>
+          </div>
+          <span class="badge badge-blue" style="margin-left:auto">Core</span>
+        </div>
+        <div class="text-sm text-muted mb-12">Maintains WeCare Tech's full vendor database with vector embeddings of product descriptions. Semantic search matches extracted items to the best 3 vendors per category. Ranks by price history, lead time, and vendor performance score.</div>
+        <div class="tag-list">
+          <span class="tag">Cisco · Juniper · HPE</span>
+          <span class="tag">Eaton · APC · Schneider · Vertiv</span>
+          <span class="tag">Hikvision · Hanwha · Bosch</span>
+          <span class="tag">R&M · Panduit · Datwyler · Legrand</span>
+          <span class="tag">Nitgen · HID · Honeywell</span>
+        </div>
+      </div>
+
+      <!-- Component 4 -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(255,179,64,0.08);border:1px solid rgba(255,179,64,0.2);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;color:var(--amber)">4</div>
+          <div>
+            <div style="font-size:0.85rem;font-weight:700">Smart Procurement Packager</div>
+            <div class="text-xs text-muted">Rule Engine + Claude reasoning</div>
+          </div>
+          <span class="badge badge-amber" style="margin-left:auto">Core</span>
+        </div>
+        <div class="text-sm text-muted mb-12">Groups extracted materials into logical procurement packages by scope and vendor category. Auto-assigns release priority based on lead time and project timeline. Generates prerequisite checklist (client approvals, shop drawings, technical submittals) before PO can be raised.</div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:0.71rem;color:var(--muted);line-height:1.7">
+          <span style="color:var(--cyan)">PKG-CAB-01</span> Structured Cabling · 12 line items · Panduit / R&M<br>
+          <span style="color:var(--cyan)">PKG-NET-01</span> Active Networking · 8 items · Cisco · <span style="color:var(--red)">Long-Lead 6wk</span><br>
+          <span style="color:var(--cyan)">PKG-UPS-01</span> Power Systems · 4 items · Eaton · <span style="color:var(--amber)">Approval Required</span><br>
+          <span style="color:var(--cyan)">PKG-CAM-01</span> CCTV &amp; Surveillance · 9 items · Hikvision
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Component 5: Learning loop -->
+    <div class="card mt-20" style="border:1px solid rgba(0,200,255,0.15);background:linear-gradient(135deg,rgba(0,200,255,0.04),var(--panel))">
+      <div style="display:flex;align-items:flex-start;gap:20px;">
+        <div style="font-size:1.8rem;flex-shrink:0">🔄</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <strong style="font-size:0.95rem">AI Learning Loop — The System Gets Smarter With Every Project</strong>
+            <span class="badge badge-cyan">Future Intelligence</span>
+          </div>
+          <div class="text-sm text-muted">When a procurement officer edits an AI-generated material list or chooses a different vendor, the system records this feedback and updates its templates. Over time, the AI learns WeCare Tech's exact preferences — specific cable grades preferred, which UPS brand performs best on which project type, fastest vendors for critical deliveries. This is a continuously improving system, not a static tool.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 6 — EMAIL TRIGGER WORKFLOW
+═══════════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="slide-header">
+    <div class="sh-eyebrow">Automation Core</div>
+    <div class="sh-title">Email-Triggered <em>Autonomous Workflow</em></div>
+    <div class="sh-subtitle">The entire procurement pipeline fires automatically the moment an email lands in the inbox. Zero human intervention required until the approval step.</div>
+    <div class="sh-slide-num">06</div>
+  </div>
+  <div class="slide-body">
+    <div class="grid-12">
+      <div>
+        <div class="section-label">Step-by-Step Automated Flow</div>
+        <div style="border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Step</th><th>System Action</th><th>Output</th><th>Time</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-cyan">1</span></td>
+                <td><strong>Email Arrives</strong></td>
+                <td class="text-muted">Email watcher detects new message to procurement inbox. Identifies sender type (client, consultant, vendor).</td>
+                <td class="text-muted">Trigger fired</td>
+                <td class="text-cyan">Instant</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">2</span></td>
+                <td><strong>Attachment Classification</strong></td>
+                <td class="text-muted">AI classifies attachment: BOQ, RFP, quotation request, or general enquiry. Non-procurement emails ignored or routed to CRM.</td>
+                <td class="text-muted">Document type confirmed</td>
+                <td class="text-cyan">&lt;10s</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">3</span></td>
+                <td><strong>BOQ Extraction</strong></td>
+                <td class="text-muted">Claude 3.5 Sonnet extracts all line items: item codes, descriptions, quantities, units, scope categories. Confidence score assigned per item.</td>
+                <td class="text-muted">Structured item list</td>
+                <td class="text-cyan">&lt;45s</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">4</span></td>
+                <td><strong>Project Auto-Created</strong></td>
+                <td class="text-muted">New project record created with client name, reference number, BOQ total, and extracted scope summary.</td>
+                <td class="text-muted">Project in system</td>
+                <td class="text-cyan">&lt;5s</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">5</span></td>
+                <td><strong>Material Expansion</strong></td>
+                <td class="text-muted">Each BOQ line expanded to full material breakdown using template library + LLM. Full Bill of Materials generated per project scope.</td>
+                <td class="text-muted">Complete BOM</td>
+                <td class="text-cyan">&lt;90s</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">6</span></td>
+                <td><strong>Vendor Matching</strong></td>
+                <td class="text-muted">Each material matched to top-3 preferred vendors from WeCare Tech's approved supplier list. Historical prices and lead times attached.</td>
+                <td class="text-muted">Vendor shortlist per item</td>
+                <td class="text-cyan">&lt;20s</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">7</span></td>
+                <td><strong>Procurement Packages</strong></td>
+                <td class="text-muted">Materials grouped into procurement packages by scope and vendor. Long-lead items flagged. Release priority set based on project timeline.</td>
+                <td class="text-muted">Packages with priorities</td>
+                <td class="text-cyan">&lt;10s</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">8</span></td>
+                <td><strong>PR Auto-Draft</strong></td>
+                <td class="text-muted">Purchase requisitions auto-drafted per package. Budget estimate computed from historical prices. Approval workflow assigned based on value thresholds.</td>
+                <td class="text-muted">Draft PRs ready</td>
+                <td class="text-cyan">&lt;15s</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-green">9</span></td>
+                <td><strong>Manager Notified</strong></td>
+                <td class="text-muted">Email + WhatsApp notification sent to procurement manager with summary. Dashboard alert triggered.</td>
+                <td class="text-muted">Approval workflow starts</td>
+                <td class="text-cyan">Instant</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-green">10</span></td>
+                <td><strong>One-Click Approve</strong></td>
+                <td class="text-muted">Manager reviews AI-structured PRs in dashboard. Approves, edits, or escalates. Audit trail recorded for all actions.</td>
+                <td class="text-muted">Approved PRs → PO</td>
+                <td class="text-amber">Human step</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Total Processing Time</div>
+        <div class="card card-glow mb-16">
+          <div style="font-family:var(--serif);font-size:3rem;color:var(--cyan);line-height:1;margin-bottom:8px">&lt;3 min</div>
+          <div class="text-sm text-muted">From email arrival to fully structured PRs ready for approval. Previously this took 2–3 days of manual work.</div>
+        </div>
+
+        <div class="section-label mt-16">Low-Confidence Handling</div>
+        <div class="card mb-16">
+          <div class="feature-row" style="padding:10px 0;border-bottom:1px solid var(--border)">
+            <div class="feature-icon" style="width:28px;height:28px;font-size:0.75rem">🟢</div>
+            <div>
+              <div class="feature-title text-sm">High Confidence ≥ 90%</div>
+              <div class="feature-desc" style="font-size:0.7rem">Auto-proceed. No human review needed at extraction stage.</div>
+            </div>
+          </div>
+          <div class="feature-row" style="padding:10px 0;border-bottom:1px solid var(--border)">
+            <div class="feature-icon" style="width:28px;height:28px;font-size:0.75rem">🟡</div>
+            <div>
+              <div class="feature-title text-sm">Medium Confidence 70–89%</div>
+              <div class="feature-desc" style="font-size:0.7rem">Flagged in dashboard for quick review. Highlighted in orange. One-click confirm or correct.</div>
+            </div>
+          </div>
+          <div class="feature-row" style="padding:10px 0;border:none">
+            <div class="feature-icon" style="width:28px;height:28px;font-size:0.75rem">🔴</div>
+            <div>
+              <div class="feature-title text-sm">Low Confidence &lt; 70%</div>
+              <div class="feature-desc" style="font-size:0.7rem">Held for mandatory human review before proceeding. Alert sent immediately.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Email Types Supported</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="card" style="padding:10px 14px;display:flex;align-items:center;gap:10px">
+            <span style="font-size:0.8rem">📄</span>
+            <div>
+              <div class="text-sm" style="font-weight:600">BOQ Excel / PDF</div>
+              <div class="text-xs text-muted">Bill of Quantities from client or consultant</div>
+            </div>
+            <span class="badge badge-cyan" style="margin-left:auto">Full Auto</span>
+          </div>
+          <div class="card" style="padding:10px 14px;display:flex;align-items:center;gap:10px">
+            <span style="font-size:0.8rem">📋</span>
+            <div>
+              <div class="text-sm" style="font-weight:600">RFP / Scope of Work</div>
+              <div class="text-xs text-muted">Project brief with requirements description</div>
+            </div>
+            <span class="badge badge-green" style="margin-left:auto">AI Extract</span>
+          </div>
+          <div class="card" style="padding:10px 14px;display:flex;align-items:center;gap:10px">
+            <span style="font-size:0.8rem">💬</span>
+            <div>
+              <div class="text-sm" style="font-weight:600">Plain Text Requirements</div>
+              <div class="text-xs text-muted">Informal email listing project needs</div>
+            </div>
+            <span class="badge badge-green" style="margin-left:auto">NLP Parse</span>
+          </div>
+          <div class="card" style="padding:10px 14px;display:flex;align-items:center;gap:10px">
+            <span style="font-size:0.8rem">💰</span>
+            <div>
+              <div class="text-sm" style="font-weight:600">Vendor Quotation</div>
+              <div class="text-xs text-muted">Incoming quotes auto-matched to open PRs</div>
+            </div>
+            <span class="badge badge-amber" style="margin-left:auto">Quote Match</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 7 — DASHBOARD
+═══════════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="slide-header">
+    <div class="sh-eyebrow">Operations Dashboard</div>
+    <div class="sh-title">Real-Time <em>Command Center</em></div>
+    <div class="sh-subtitle">A single operations dashboard giving WeCare Tech management complete visibility across every project, every procurement package, every vendor delivery — live.</div>
+    <div class="sh-slide-num">07</div>
+  </div>
+  <div class="slide-body">
+    <div class="grid-12">
+      <div>
+        <div class="section-label">Dashboard Levels</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+          <div class="card" style="border-left:3px solid var(--cyan);padding:14px 18px">
+            <div class="flex items-center gap-12 mb-8">
+              <span class="badge badge-cyan">CEO / Management</span>
+              <strong style="font-size:0.85rem">Executive Dashboard</strong>
+            </div>
+            <div class="text-xs text-muted">Active projects count · Total committed value · Procurement spend vs budget · Overdue deliveries · Project health (Green / Amber / Red)</div>
+          </div>
+          <div class="card" style="border-left:3px solid var(--blue);padding:14px 18px">
+            <div class="flex items-center gap-12 mb-8">
+              <span class="badge badge-blue">Project Manager</span>
+              <strong style="font-size:0.85rem">Project Dashboard</strong>
+            </div>
+            <div class="text-xs text-muted">BOQ completion % · Materials ordered vs pending · Approvals awaiting action · Long-lead items status · Open risks</div>
+          </div>
+          <div class="card" style="border-left:3px solid var(--green);padding:14px 18px">
+            <div class="flex items-center gap-12 mb-8">
+              <span class="badge badge-green">Procurement Manager</span>
+              <strong style="font-size:0.85rem">Procurement Dashboard</strong>
+            </div>
+            <div class="text-xs text-muted">PRs by status · POs by vendor · Long-lead alerts · RFQs pending response · Items on delivery · AI confidence flags for review</div>
+          </div>
+          <div class="card" style="border-left:3px solid var(--amber);padding:14px 18px">
+            <div class="flex items-center gap-12 mb-8">
+              <span class="badge badge-amber">Finance</span>
+              <strong style="font-size:0.85rem">Finance Dashboard</strong>
+            </div>
+            <div class="text-xs text-muted">Budget vs actual by project · Vendor payment status · Outstanding POs value · Project P&amp;L · Cash flow forecast</div>
+          </div>
+        </div>
+
+        <div class="section-label">Key Dashboard Widgets</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.78rem;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--cyan)">●</span>
+            <strong>Project Status Board</strong>
+            <span class="text-muted text-xs">— Traffic light: Green / Amber / Red per project procurement health</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.78rem;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--green)">●</span>
+            <strong>Material Pipeline View</strong>
+            <span class="text-muted text-xs">— On order / In transit / At customs / Delivered / Pending release</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.78rem;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--red)">●</span>
+            <strong>Long-Lead Alerts</strong>
+            <span class="text-muted text-xs">— Server hardware, UPS, fiber optic not yet ordered flagged with countdown</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.78rem;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--amber)">●</span>
+            <strong>Approval Queue</strong>
+            <span class="text-muted text-xs">— PRs awaiting action, with AI summary and one-click approve / reject</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.78rem;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--blue)">●</span>
+            <strong>Vendor Performance Scores</strong>
+            <span class="text-muted text-xs">— Delivery on time %, quote response time, price competitiveness per vendor</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.78rem;padding:8px 0">
+            <span style="color:var(--cyan)">●</span>
+            <strong>Spend Analytics</strong>
+            <span class="text-muted text-xs">— Monthly spend by project / vendor / category with trend charts</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard visual mockup -->
+      <div>
+        <div class="section-label">Dashboard Mockup — Procurement Overview</div>
+
+        <!-- Stats row -->
+        <div class="grid-4 mb-16" style="gap:10px">
+          <div class="stat-block" style="border-top:2px solid var(--cyan)">
+            <div class="stat-num">12</div>
+            <div class="stat-label">Active Projects</div>
+          </div>
+          <div class="stat-block" style="border-top:2px solid var(--green)">
+            <div class="stat-num">43</div>
+            <div class="stat-label">PRs Awaiting Approval</div>
+          </div>
+          <div class="stat-block" style="border-top:2px solid var(--amber)">
+            <div class="stat-num">7</div>
+            <div class="stat-label">Long-Lead Alerts</div>
+          </div>
+          <div class="stat-block" style="border-top:2px solid var(--red)">
+            <div class="stat-num">3</div>
+            <div class="stat-label">Critical Items Overdue</div>
+          </div>
+        </div>
+
+        <!-- Bar chart mockup -->
+        <div class="card mb-16">
+          <div class="section-label" style="margin-bottom:14px">Spend by Category (SAR) — Current Month</div>
+          <div class="dash-bar-group">
+            <div class="dash-bar-row">
+              <div class="dash-bar-label">Structured Cabling</div>
+              <div class="dash-bar-track"><div class="dash-bar-fill" style="width:82%;background:var(--cyan)"></div></div>
+              <div class="dash-bar-val">82%</div>
+            </div>
+            <div class="dash-bar-row">
+              <div class="dash-bar-label">Active Networking</div>
+              <div class="dash-bar-track"><div class="dash-bar-fill" style="width:64%;background:#7EB5FF"></div></div>
+              <div class="dash-bar-val">64%</div>
+            </div>
+            <div class="dash-bar-row">
+              <div class="dash-bar-label">UPS &amp; Power</div>
+              <div class="dash-bar-track"><div class="dash-bar-fill" style="width:51%;background:var(--amber)"></div></div>
+              <div class="dash-bar-val">51%</div>
+            </div>
+            <div class="dash-bar-row">
+              <div class="dash-bar-label">CCTV &amp; Surveillance</div>
+              <div class="dash-bar-track"><div class="dash-bar-fill" style="width:38%;background:var(--green)"></div></div>
+              <div class="dash-bar-val">38%</div>
+            </div>
+            <div class="dash-bar-row">
+              <div class="dash-bar-label">Access Control</div>
+              <div class="dash-bar-track"><div class="dash-bar-fill" style="width:22%;background:#AA80FF"></div></div>
+              <div class="dash-bar-val">22%</div>
+            </div>
+            <div class="dash-bar-row">
+              <div class="dash-bar-label">Data Center Infra</div>
+              <div class="dash-bar-track"><div class="dash-bar-fill" style="width:71%;background:var(--red)"></div></div>
+              <div class="dash-bar-val">71%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project status -->
+        <div class="card">
+          <div class="section-label" style="margin-bottom:12px">Project Status — Procurement Health</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:0.76rem">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,229,160,0.06);border-radius:6px;border:1px solid rgba(0,229,160,0.15)">
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);flex-shrink:0"></div>
+              <span style="flex:1">Aramco HQ — Network Infra Upgrade</span>
+              <span class="text-xs text-muted">On Track</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(255,179,64,0.06);border-radius:6px;border:1px solid rgba(255,179,64,0.15)">
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 6px var(--amber);flex-shrink:0"></div>
+              <span style="flex:1">NTT Data Center — Cabling Phase 2</span>
+              <span class="text-xs text-muted">UPS delayed — 6wk lead</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(255,77,106,0.06);border-radius:6px;border:1px solid rgba(255,77,106,0.15)">
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);flex-shrink:0"></div>
+              <span style="flex:1">Mall CCTV — 680 Camera Deployment</span>
+              <span class="text-xs text-muted">3 PRs awaiting approval 4d+</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,229,160,0.06);border-radius:6px;border:1px solid rgba(0,229,160,0.15)">
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);flex-shrink:0"></div>
+              <span style="flex:1">Ericsson Office — Structured Cabling</span>
+              <span class="text-xs text-muted">On Track</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 8 — IMPLEMENTATION ROADMAP
+═══════════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <div class="slide-header">
+    <div class="sh-eyebrow">Implementation Roadmap</div>
+    <div class="sh-title">Phased <em>Delivery Plan</em></div>
+    <div class="sh-subtitle">Four phases from foundation to full AI intelligence — designed to deliver working value at every phase, not just at the end.</div>
+    <div class="sh-slide-num">08</div>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2" style="gap:28px">
+      <div>
+        <div class="section-label">Delivery Timeline</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="tl-marker"><div class="tl-dot"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-phase">Phase 1 — Weeks 1–3</div>
+              <div class="tl-title">Foundation &amp; Email Gateway</div>
+              <div class="tl-items">
+                ✓ Secure dedicated procurement mailbox setup<br>
+                ✓ Email watcher service deployment<br>
+                ✓ BOQ document parser (Excel — Claude API integration)<br>
+                ✓ Product catalogue and vendor database seeding<br>
+                ✓ PostgreSQL schema design and setup<br>
+                ✓ Basic dashboard scaffolding and user authentication
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-marker"><div class="tl-dot" style="background:var(--green);box-shadow:0 0 8px rgba(0,229,160,0.5)"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-phase" style="color:var(--green)">Phase 2 — Weeks 4–7</div>
+              <div class="tl-title">AI Extraction &amp; Procurement Automation</div>
+              <div class="tl-items">
+                ✓ Material Template Library (60+ ICT scope categories)<br>
+                ✓ Material Requirements Expander with LLM fallback<br>
+                ✓ Vendor Intelligence Engine + pgvector semantic search<br>
+                ✓ Smart Procurement Package Generator<br>
+                ✓ Auto-Requisition generation and approval routing<br>
+                ✓ Email + WhatsApp notification engine<br>
+                ✓ Testing with 3 live WeCare Tech projects as pilots
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-marker"><div class="tl-dot" style="background:var(--amber);box-shadow:0 0 8px rgba(255,179,64,0.5)"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-phase" style="color:var(--amber)">Phase 3 — Weeks 8–11</div>
+              <div class="tl-title">Dashboard &amp; Operations Interface</div>
+              <div class="tl-items">
+                ✓ Executive, Project, Procurement, and Finance dashboards<br>
+                ✓ Real-time WebSocket updates<br>
+                ✓ One-click approval interface (web + mobile PWA)<br>
+                ✓ Vendor performance scoring and analytics<br>
+                ✓ Spend analytics with chart visualizations<br>
+                ✓ KPI reports and weekly digest email automation
+              </div>
+            </div>
+          </div>
+          <div class="timeline-item" style="border:none">
+            <div class="tl-marker"><div class="tl-dot" style="background:#AA80FF;box-shadow:0 0 8px rgba(170,128,255,0.5)"></div></div>
+            <div class="tl-content">
+              <div class="tl-phase" style="color:#AA80FF">Phase 4 — Weeks 12–14</div>
+              <div class="tl-title">AI Intelligence &amp; Learning Loop</div>
+              <div class="tl-items">
+                ✓ PDF BOQ extraction with GPT-4o Vision<br>
+                ✓ AI learning loop — template auto-update from edits<br>
+                ✓ Confidence scoring calibration<br>
+                ✓ Historical data migration (existing projects)<br>
+                ✓ Full system go-live and team training<br>
+                ✓ Hypercare support period (30 days)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Technology Stack</div>
+        <div style="border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:24px">
+          <table class="data-table">
+            <thead><tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Primary AI</strong></td>
+                <td class="text-cyan">Claude 3.5 Sonnet</td>
+                <td class="text-muted">BOQ extraction, reasoning, vendor matching</td>
+              </tr>
+              <tr>
+                <td><strong>Vision AI</strong></td>
+                <td class="text-cyan">GPT-4o</td>
+                <td class="text-muted">PDF / image-based BOQ parsing</td>
+              </tr>
+              <tr>
+                <td><strong>Backend</strong></td>
+                <td>FastAPI · Python 3.12</td>
+                <td class="text-muted">Core API, task orchestration</td>
+              </tr>
+              <tr>
+                <td><strong>AI Embeddings</strong></td>
+                <td>text-embedding-3-large</td>
+                <td class="text-muted">Semantic vendor &amp; product matching</td>
+              </tr>
+              <tr>
+                <td><strong>Database</strong></td>
+                <td>PostgreSQL + Pgvector</td>
+                <td class="text-muted">Operational data + vector similarity</td>
+              </tr>
+              <tr>
+                <td><strong>Task Queue</strong></td>
+                <td>Celery + Redis</td>
+                <td class="text-muted">Async pipeline, email monitoring</td>
+              </tr>
+              <tr>
+                <td><strong>Frontend</strong></td>
+                <td>Next.js 14 + TailwindCSS</td>
+                <td class="text-muted">Dashboard, approvals, analytics</td>
+              </tr>
+              <tr>
+                <td><strong>Email Integration</strong></td>
+                <td>Microsoft Graph API</td>
+                <td class="text-muted">Office 365 inbox monitoring</td>
+              </tr>
+              <tr>
+                <td><strong>Notifications</strong></td>
+                <td>WhatsApp API + Email</td>
+                <td class="text-muted">Approval alerts, team updates</td>
+              </tr>
+              <tr>
+                <td><strong>Hosting</strong></td>
+                <td>AWS (Bahrain Region)</td>
+                <td class="text-muted">Low latency, Saudi data residency</td>
+              </tr>
+              <tr>
+                <td><strong>Auth</strong></td>
+                <td>OAuth2 + JWT</td>
+                <td class="text-muted">Role-based access per user type</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-label">Why Claude 3.5 Sonnet?</div>
+        <div class="card card-glow">
+          <div class="flex items-start gap-12">
+            <div style="font-size:1.4rem;flex-shrink:0">🧠</div>
+            <div>
+              <div class="text-sm mb-8"><strong>Best-in-class for structured document extraction</strong> — Claude 3.5 Sonnet consistently outperforms GPT-4 on complex, long-form document comprehension with hierarchical structure (exactly what ICT BOQs require).</div>
+              <div class="text-xs text-muted mb-8">200K context window handles the largest BOQs in a single call. Anthropic's constitutional AI ensures consistent, predictable output formatting — critical for automated pipelines. GPT-4o is retained for visual PDFs and image-based documents where vision capability is paramount.</div>
+              <div class="tag-list">
+                <span class="tag tag-cyan">200K context</span>
+                <span class="tag tag-cyan">Structured output</span>
+                <span class="tag tag-cyan">Tool use / function calling</span>
+                <span class="tag">JSON mode</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 9 — NEXT STEPS
+═══════════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <div class="slide-header">
+    <div class="sh-eyebrow">Next Steps</div>
+    <div class="sh-title">From Architecture to <em>Reality</em></div>
+    <div class="sh-subtitle">Five clear steps to begin. WeCare Tech starts receiving automated procurement intelligence within 3 weeks of project kick-off.</div>
+    <div class="sh-slide-num">09</div>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2" style="gap:32px">
+      <div>
+        <div class="section-label">Action Items</div>
+        <div style="border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:24px">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Action</th><th>Owner</th><th>Timeline</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-cyan">1</span></td>
+                <td><strong>Share sample BOQ files (Excel + PDF)</strong><br><span class="text-xs text-muted">2–3 real BOQs for system calibration and pilot testing. Anonymized acceptable.</span></td>
+                <td>WeCare Tech</td>
+                <td class="text-cyan">Day 1</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">2</span></td>
+                <td><strong>Share approved vendor list + product catalogue</strong><br><span class="text-xs text-muted">Current supplier database, preferred brands per category, historical prices if available.</span></td>
+                <td>WeCare Tech</td>
+                <td class="text-cyan">Day 1–2</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">3</span></td>
+                <td><strong>Confirm email infrastructure</strong><br><span class="text-xs text-muted">Microsoft 365 or Google Workspace? Dedicated procurement inbox to create.</span></td>
+                <td>WeCare Tech IT</td>
+                <td class="text-cyan">Day 2</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">4</span></td>
+                <td><strong>Codeox prepares detailed SoW + cost proposal</strong><br><span class="text-xs text-muted">Fixed-price or T&M. Phase 1 deliverables, timelines, and acceptance criteria defined.</span></td>
+                <td>Codeox</td>
+                <td class="text-cyan">Day 3–5</td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-cyan">5</span></td>
+                <td><strong>Sign-off &amp; Project Kick-Off</strong><br><span class="text-xs text-muted">Week 1 begins: procurement mailbox setup, API keys provisioned, database schema agreed.</span></td>
+                <td>Both</td>
+                <td class="text-green">Week 1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-green">
+          <strong>Our Commitment:</strong> By the end of Phase 1 (Week 3), WeCare Tech's procurement inbox will be live — the next BOQ that arrives via email will be automatically parsed and structured within minutes. You will see it working with your own real project data.
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Why Codeox Technologies</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+          <div class="card card-glow">
+            <div class="flex items-start gap-12">
+              <span style="font-size:1.1rem;flex-shrink:0">🤝</span>
+              <div>
+                <strong style="font-size:0.85rem">Built for the Saudi ICT Context</strong>
+                <div class="text-xs text-muted mt-4">We understand ICT and data center procurement — cable specs, tier ratings, brand preferences, Saudi import lead times. This isn't a generic AI solution; it's tuned for WeCare Tech's exact business.</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="flex items-start gap-12">
+              <span style="font-size:1.1rem;flex-shrink:0">🔒</span>
+              <div>
+                <strong style="font-size:0.85rem">You Own the System</strong>
+                <div class="text-xs text-muted mt-4">This is a custom-built platform — not a SaaS subscription. WeCare Tech owns the codebase, the data, and the vendor intelligence. No per-seat fees, no vendor lock-in.</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="flex items-start gap-12">
+              <span style="font-size:1.1rem;flex-shrink:0">⚡</span>
+              <div>
+                <strong style="font-size:0.85rem">Working Product in 3 Weeks</strong>
+                <div class="text-xs text-muted mt-4">Phase 1 delivers a working email-triggered BOQ parser against real WeCare Tech data in 3 weeks. Not a prototype — production-ready, running on your actual procurement inbox.</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="flex items-start gap-12">
+              <span style="font-size:1.1rem;flex-shrink:0">📈</span>
+              <div>
+                <strong style="font-size:0.85rem">Gets Smarter Over Time</strong>
+                <div class="text-xs text-muted mt-4">The AI learning loop means the system continuously improves from WeCare Tech's own procurement decisions. After 6 months, the accuracy and automation rate will be significantly higher than Day 1.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Projected Impact</div>
+        <div class="grid-2" style="gap:10px">
+          <div class="stat-block" style="text-align:center">
+            <div class="stat-num" style="font-size:2rem">95%</div>
+            <div class="stat-label">Reduction in manual BOQ processing time</div>
+          </div>
+          <div class="stat-block" style="text-align:center">
+            <div class="stat-num" style="font-size:2rem">&lt;2m</div>
+            <div class="stat-label">Email to structured requisition</div>
+          </div>
+          <div class="stat-block" style="text-align:center">
+            <div class="stat-num" style="font-size:2rem">100%</div>
+            <div class="stat-label">Procurement visibility across all projects</div>
+          </div>
+          <div class="stat-block" style="text-align:center">
+            <div class="stat-num" style="font-size:2rem">0</div>
+            <div class="stat-label">Missed long-lead procurement windows</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top:32px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:0.72rem;color:var(--muted)">
+        Prepared by <strong style="color:var(--text)">Codeox Technologies</strong> · Confidential · March 2026
+      </div>
+      <div style="font-size:0.72rem;color:var(--muted)">
+        For <strong style="color:var(--text)">WeCare Tech</strong> · wecaretech.com · Saudi Arabia
+      </div>
+      <div style="font-size:0.72rem;color:var(--muted)">
+        Document Version <strong style="color:var(--text)">1.0</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+  const TOTAL = 9;
+  let current = 1;
+
+  const slides = () => document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  function showSlide(n) {
+    if (n < 1 || n > TOTAL) return;
+    current = n;
+    slides().forEach((s, i) => {
+      s.style.display = (i + 1 === current) ? 'flex' : 'none';
+    });
+    counter.textContent = current + ' / ' + TOTAL;
+    navLinks.forEach((l, i) => {
+      l.classList.toggle('active', i === current - 1);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function goSlide(n) { showSlide(n); }
+  function nextSlide() { showSlide(current + 1); }
+  function prevSlide() { showSlide(current - 1); }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevSlide();
+  });
+
+  // Init — hide all but first
+  showSlide(1);
+</script>
+</body>
+</html>
