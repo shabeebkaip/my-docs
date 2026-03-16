@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Procurement Automation — Client Presentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink:     #0D1117;
+  --ink2:    #1C2635;
+  --slate:   #2E3F55;
+  --steel:   #4A5E74;
+  --mist:    #8FA3B8;
+  --cloud:   #C8D6E3;
+  --fog:     #EDF2F7;
+  --white:   #FFFFFF;
+  --gold:    #C9A84C;
+  --gold2:   #E8C96A;
+  --gold3:   #F5E4A8;
+  --teal:    #1A6B7C;
+  --teal2:   #22889E;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--white);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ── SLIDE SYSTEM ── */
+.deck { position: relative; }
+
+.slide {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── NAV DOTS ── */
+.nav-dots {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+.nav-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--cloud);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+.nav-dot.active { background: var(--gold); transform: scale(1.4); }
+.nav-dot:hover { background: var(--gold2); }
+
+/* ── SLIDE NAV ARROWS ── */
+.slide-nav {
+  position: fixed;
+  bottom: 32px;
+  right: 40px;
+  display: flex;
+  gap: 10px;
+  z-index: 100;
+}
+.slide-btn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--cloud);
+  background: var(--white);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  color: var(--slate);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.slide-btn:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+/* ── SLIDE COUNTER ── */
+.slide-counter {
+  position: fixed;
+  bottom: 42px;
+  left: 40px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--mist);
+  z-index: 100;
+}
+
+/* ══════════════════════════════
+   SLIDE 1 — COVER
+══════════════════════════════ */
+#slide-1 {
+  background: var(--ink);
+  color: var(--white);
+  justify-content: center;
+}
+
+.cover-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(26,107,124,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(201,168,76,0.08) 0%, transparent 60%);
+}
+
+/* Fine grid lines */
+.cover-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.cover-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 100vh;
+  align-items: stretch;
+}
+
+.cover-left {
+  padding: 80px 64px 80px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+
+.cover-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0;
+}
+.cover-logo-mark {
+  width: 36px; height: 36px;
+  background: var(--gold);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.cover-logo-name {
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+
+.cover-headline {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 0 40px;
+}
+
+.cover-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+.cover-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(44px, 5.5vw, 72px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  margin-bottom: 28px;
+}
+.cover-title strong {
+  font-weight: 600;
+  display: block;
+}
+
+.cover-divider {
+  width: 48px; height: 1px;
+  background: var(--gold);
+  margin-bottom: 24px;
+}
+
+.cover-subtitle {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.75;
+  max-width: 380px;
+}
+
+.cover-products {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.7);
+  max-width: 260px;
+  background: rgba(255,255,255,0.03);
+}
+.product-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cover-right {
+  padding: 80px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+}
+
+.cover-stat-block {
+  padding: 32px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.cover-stat-block:hover { border-color: rgba(201,168,76,0.3); }
+.cover-stat-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--gold);
+  opacity: 0.6;
+}
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 8px;
+}
+.stat-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════
+   SLIDE HEADER (reusable)
+══════════════════════════════ */
+.slide-header {
+  padding: 64px 80px 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.sh-left {}
+.sh-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.sh-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(34px, 3.5vw, 48px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.sh-title em { font-style: italic; color: var(--teal); }
+.sh-rule {
+  width: 40px; height: 2px;
+  background: var(--gold);
+  margin-top: 16px;
+}
+.sh-slide-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  font-weight: 300;
+  color: var(--fog);
+  line-height: 1;
+  user-select: none;
+}
+
+/* Light slide body */
+.slide-body {
+  padding: 40px 80px 64px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Dark slide variant */
+.slide-dark {
+  background: var(--ink);
+  color: var(--white);
+}
+.slide-dark .sh-title { color: var(--white); }
+.slide-dark .sh-slide-num { color: rgba(255,255,255,0.04); }
+
+/* ══════════════════════════════
+   SLIDE 2 — THE PROBLEM
+══════════════════════════════ */
+#slide-2 { background: var(--fog); }
+
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.pain-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 32px 28px;
+  border: 1px solid var(--cloud);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.pain-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(13,17,23,0.1);
+  border-color: var(--cloud);
+}
+.pain-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.pain-card:hover::after { opacity: 1; }
+
+.pain-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--fog);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+  color: var(--gold);
+}
+.pain-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
+}
+
+.pain-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.pain-body {
+  font-size: 13.5px;
+  font-weight: 300;
+  color: var(--steel);
+  line-height: 1.7;
+}
+
+/* ══════════════════════════════
+   SLIDE 3 — THE SOLUTION
+══════════════════════════════ */
+#slide-3 { background: var(--white); }
+
+.workflow-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 20px 0;
+}
+
+.workflow-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* Connecting line between steps */
+.wf-step::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cloud) 0%, var(--cloud) 50%, transparent 100%);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+.wf-step:last-child::before {
+  display: none;
+}
+
+/* Arrow on connecting line */
+.wf-step::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -6px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid var(--cloud);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+.wf-step:last-child::after {
+  display: none;
+}
+
+.wf-step {
+  background: var(--fog);
+  border-radius: 12px;
+  padding: 24px 16px;
+  border: 1px solid var(--cloud);
+  position: relative;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: default;
+  margin: 0 12px;
+  z-index: 2;
+}
+.wf-step:hover {
+  background: var(--ink);
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(13,17,23,0.15);
+}
+.wf-step:hover .wf-num { color: var(--gold2); }
+.wf-step:hover .wf-label { color: var(--white); }
+.wf-step:hover .wf-icon-wrap { 
+  background: rgba(201,168,76,0.15);
+  border-color: var(--gold);
+}
+.wf-step:hover .wf-icon-wrap svg {
+  color: var(--gold2);
+}
+
+.wf-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--mist);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.wf-icon-wrap {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  background: var(--white);
+  border: 1px solid var(--cloud);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+  transition: all 0.3s;
+  color: var(--teal);
+}
+.wf-icon-wrap svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
+}
+.wf-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+  transition: color 0.3s;
+}
+
+/* Flow connector between rows */
+.workflow-flow-return {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 12px 20px 0;
+  position: relative;
+}
+.workflow-flow-return::before {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: -10px;
+  width: 2px;
+  height: calc(100% + 20px);
+  background: linear-gradient(180deg, var(--cloud) 0%, var(--cloud) 50%, var(--cloud) 100%);
+}
+.workflow-flow-return svg {
+  width: 24px;
+  height: 24px;
+  color: var(--mist);
+  position: relative;
+  z-index: 1;
+}
+
+/* ══════════════════════════════
+   SLIDE 3.5 — SCENARIO WALKTHROUGH
+══════════════════════════════ */
+#slide-3-5 { background: var(--fog); }
+
+.scenario-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.scenario-intro {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.scenario-intro-text {
+  font-size: 15px;
+  color: var(--steel);
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto 32px;
+}
+
+.scenario-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto 48px;
+}
+
+.comparison-box {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  border: 2px solid var(--cloud);
+  transition: all 0.3s ease;
+}
+.comparison-box.old {
+  opacity: 0.7;
+}
+.comparison-box.new {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, #fffef7 0%, #ffffff 100%);
+}
+.comparison-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.comparison-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 12px;
+}
+
+.comparison-time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.comparison-box.new .comparison-time {
+  color: var(--gold);
+}
+
+.scenario-story {
+  position: relative;
+  padding-left: 80px;
+}
+
+/* Timeline line */
+.scenario-story::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 40px;
+  bottom: 40px;
+  width: 3px;
+  background: linear-gradient(180deg, var(--teal) 0%, var(--teal2) 50%, var(--gold) 100%);
+  border-radius: 2px;
+}
+
+.story-chapter {
+  position: relative;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeSlideIn 0.6s ease forwards;
+}
+
+.story-chapter:nth-child(1) { animation-delay: 0.1s; }
+.story-chapter:nth-child(2) { animation-delay: 0.2s; }
+.story-chapter:nth-child(3) { animation-delay: 0.3s; }
+.story-chapter:nth-child(4) { animation-delay: 0.4s; }
+.story-chapter:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.story-marker {
+  position: absolute;
+  left: -52px;
+  top: 8px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 4px solid var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--teal);
+  box-shadow: 0 4px 16px rgba(26,107,124,0.2);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.story-chapter:hover .story-marker {
+  background: var(--teal);
+  color: var(--white);
+  transform: scale(1.1);
+}
+
+.story-chapter:last-child .story-marker {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--white);
+  box-shadow: 0 8px 24px rgba(201,168,76,0.4);
+}
+
+.story-content {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 24px 28px;
+  border: 1px solid var(--cloud);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.story-chapter:hover .story-content {
+  border-color: var(--teal);
+  box-shadow: 0 8px 24px rgba(13,17,23,0.08);
+  transform: translateX(4px);
+}
+
+.story-chapter:last-child .story-content {
+  background: linear-gradient(135deg, var(--ink) 0%, #1a2835 100%);
+  border-color: var(--gold);
+}
+
+.story-time {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.story-chapter:last-child .story-time {
+  color: var(--gold2);
+}
+
+.story-time i {
+  width: 12px;
+  height: 12px;
+}
+
+.story-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.story-chapter:last-child .story-title {
+  color: var(--white);
+}
+
+.story-description {
+  font-size: 13px;
+  color: var(--steel);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.story-chapter:last-child .story-description {
+  color: rgba(255,255,255,0.8);
+}
+
+.story-result {
+  background: var(--fog);
+  border-radius: 8px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--teal);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.story-chapter:last-child .story-result {
+  background: rgba(201,168,76,0.15);
+  border-left-color: var(--gold);
+}
+
+.story-result-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--teal);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.story-chapter:last-child .story-result-icon {
+  color: var(--gold);
+}
+
+.story-result-content {
+  flex: 1;
+}
+
+.story-result-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 4px;
+}
+.story-chapter:last-child .story-result-label {
+  color: var(--gold);
+}
+
+.story-result-text {
+  font-size: 12.5px;
+  color: var(--ink);
+  line-height: 1.6;
+  font-weight: 500;
+}
+.story-chapter:last-child .story-result-text {
+  color: var(--white);
+}
+
+.story-result-text strong {
+  color: var(--teal);
+  font-weight: 600;
+}
+.story-chapter:last-child .story-result-text strong {
+  color: var(--gold2);
+}
+
+/* ══════════════════════════════
+   SLIDE 4 — OUTREACH
+══════════════════════════════ */
+#slide-4 { background: var(--ink); }
+
+.agents-container {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.agents-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  position: relative;
+}
+
+/* Central Hub */
+.agents-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(135deg, var(--ink-dark), var(--ink));
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 12px rgba(201,168,76,0.08), 0 20px 50px rgba(0,0,0,0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+.agents-hub-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--gold2);
+  margin-bottom: 6px;
+}
+.agents-hub-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Connection Lines */
+.agents-grid::before,
+.agents-grid::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px dashed rgba(201,168,76,0.2);
+  pointer-events: none;
+  z-index: 5;
+}
+.agents-grid::before {
+  width: 60%;
+  height: 0;
+}
+.agents-grid::after {
+  width: 0;
+  height: 40%;
+}
+
+.agent-card {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+.agent-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.3), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.agent-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(201,168,76,0.3);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  background: rgba(255,255,255,0.05);
+}
+.agent-card:hover::before {
+  opacity: 1;
+}
+
+.agent-head {
+  padding: 32px 28px 28px;
+  position: relative;
+  background: rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.agent-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 20px;
+  background: rgba(255,255,255,0.03);
+}
+.agent-badge-yours {
+  background: rgba(201,168,76,0.15);
+  border-color: rgba(201,168,76,0.4);
+  color: var(--gold2);
+}
+.agent-badge-yours::before {
+  content: '★';
+  font-size: 10px;
+}
+
+.agent-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+}
+.agent-card:hover .agent-icon-wrap {
+  transform: scale(1.1) rotate(5deg);
+  border-color: rgba(201,168,76,0.4);
+}
+.agent-icon-wrap i {
+  width: 26px;
+  height: 26px;
+  stroke-width: 1.8;
+}
+.agent-icon-wrap-aika {
+  background: linear-gradient(135deg, rgba(232,112,80,0.2), rgba(168,52,32,0.3));
+  color: #FF9A7D;
+}
+.agent-icon-wrap-aiwa {
+  background: linear-gradient(135deg, rgba(61,191,106,0.2), rgba(17,122,58,0.3));
+  color: #5FE88E;
+}
+.agent-icon-wrap-email {
+  background: linear-gradient(135deg, rgba(67,186,184,0.2), rgba(26,64,112,0.3));
+  color: var(--teal2);
+}
+
+.agent-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.agent-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.03em;
+}
+
+.agent-body {
+  padding: 26px 28px 30px;
+}
+.agent-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 13px;
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+}
+.agent-card:hover .agent-feature {
+  opacity: 1;
+}
+.agent-feature:last-child { margin-bottom: 0; }
+.af-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  stroke-width: 2;
+  opacity: 0.6;
+}
+.af-icon-aika { color: #FF9A7D; }
+.af-icon-aiwa { color: #5FE88E; }
+.af-icon-email { color: var(--teal2); }
+.af-text {
+  font-size: 13.5px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════
+   SLIDE 5 — BENEFITS
+══════════════════════════════ */
+#slide-5 { background: var(--white); }
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--cloud);
+  border: 1px solid var(--cloud);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.benefit-cell {
+  background: var(--white);
+  padding: 36px 28px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.benefit-cell:hover {
+  background: var(--ink);
+  z-index: 2;
+}
+.benefit-cell:hover .bc-num { color: var(--gold); }
+.benefit-cell:hover .bc-label { color: rgba(255,255,255,0.5); }
+.benefit-cell:hover .bc-title { color: var(--white); }
+.benefit-cell:hover .bc-body { color: rgba(255,255,255,0.4); }
+
+.bc-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+  transition: color 0.3s;
+}
+.bc-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 16px;
+  transition: color 0.3s;
+}
+.bc-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+  transition: color 0.3s;
+}
+.bc-body {
+  font-size: 12.5px;
+  font-weight: 300;
+  color: var(--steel);
+  line-height: 1.65;
+  transition: color 0.3s;
+}
+
+/* ══════════════════════════════
+   SLIDE 6 — QUESTIONNAIRE (1-5)
+══════════════════════════════ */
+#slide-6 { background: var(--fog); }
+
+.q-list { display: flex; flex-direction: column; gap: 14px; }
+
+.q-item {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 20px 24px;
+  border: 1px solid var(--cloud);
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.q-item:hover {
+  border-color: var(--gold);
+  box-shadow: 0 4px 20px rgba(201,168,76,0.1);
+}
+
+.q-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1;
+  text-align: center;
+}
+
+.q-content {}
+.q-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.q-opts {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--mist);
+  letter-spacing: 0.01em;
+}
+
+.q-answer {
+  width: 180px;
+  height: 32px;
+  border: none;
+  border-bottom: 1px solid var(--cloud);
+  background: transparent;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  text-align: right;
+  transition: border-color 0.2s;
+  padding-right: 4px;
+}
+.q-answer:focus { border-bottom-color: var(--gold); }
+.q-answer::placeholder { color: var(--cloud); }
+
+/* ══════════════════════════════
+   SLIDE 7 — QUESTIONNAIRE (6-10)
+══════════════════════════════ */
+#slide-7 { background: var(--fog); }
+
+/* ══════════════════════════════
+   SLIDE 8 — NEXT STEPS
+══════════════════════════════ */
+#slide-8 {
+  background: var(--ink);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  flex: 1;
+}
+
+.step-card {
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: rgba(255,255,255,0.02);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.step-card:hover::before { opacity: 1; }
+.step-card:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(201,168,76,0.2);
+  transform: translateY(-3px);
+}
+
+.step-num-big {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.05);
+  line-height: 1;
+  position: absolute;
+  top: 16px; right: 20px;
+}
+.step-icon { font-size: 24px; }
+.step-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.step-body {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.7;
+  flex: 1;
+}
+.step-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 5px 10px;
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+.cta-bar {
+  background: var(--gold);
+  border-radius: 10px;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+  margin-top: 20px;
+}
+.cta-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.cta-action {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: rgba(0,0,0,0.12);
+  padding: 10px 20px;
+  border-radius: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  font-family: 'Manrope', sans-serif;
+}
+
+/* ══════════════════════════════
+   ANIMATIONS
+══════════════════════════════ */
+.slide-section { opacity: 1; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.anim { animation: fadeUp 0.6s ease both; }
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.15s; }
+.d3 { animation-delay: 0.25s; }
+.d4 { animation-delay: 0.35s; }
+.d5 { animation-delay: 0.45s; }
+.d6 { animation-delay: 0.55s; }
+
+/* ══════════════════════════════
+   PRINT / RESPONSIVE
+══════════════════════════════ */
+@media print {
+  .nav-dots, .slide-nav, .slide-counter { display: none; }
+  .slide { page-break-after: always; min-height: 100vh; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="nav-dots" id="navDots"></div>
+<div class="slide-counter" id="slideCounter">01 / 08</div>
+<div class="slide-nav">
+  <button class="slide-btn" id="prevBtn" onclick="navigate(-1)">↑</button>
+  <button class="slide-btn" id="nextBtn" onclick="navigate(1)">↓</button>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- ═══════════════════════════════════════════════
+     SLIDE 1 — COVER
+═══════════════════════════════════════════════ -->
+<section class="slide" id="slide-1">
+  <div class="cover-bg"></div>
+  <div class="cover-inner">
+
+    <div class="cover-left">
+      <div class="cover-headline">
+        <div class="cover-eyebrow anim d2">Intelligent Procurement Automation</div>
+        <h1 class="cover-title anim d3">
+          The Smarter Way<br>
+          <strong>to Source &amp;<br>Purchase</strong>
+        </h1>
+        <div class="cover-divider anim d4"></div>
+        <p class="cover-subtitle anim d4">
+          An end-to-end AI platform that discovers vendors,
+          collects quotes, and generates purchase orders —
+          automatically.
+        </p>
+      </div>
+
+      <div class="cover-products anim d5">
+        <div class="product-tag">
+          <div class="product-dot" style="background:#E87050;"></div>
+          AIKA — AI Voice Calling Agent
+        </div>
+        <div class="product-tag">
+          <div class="product-dot" style="background:#3DBF6A;"></div>
+          AIWA — AI WhatsApp Agent
+        </div>
+        <div class="product-tag">
+          <div class="product-dot" style="background:#22889E;"></div>
+          AI Email Outreach Engine
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-right">
+      <div class="cover-stat-block anim d3">
+        <div class="stat-num">80%</div>
+        <div class="stat-label">Reduction in Manual Work</div>
+        <div class="stat-desc">Automate vendor outreach, quote chasing, and data entry — freeing your team for decisions that matter.</div>
+      </div>
+      <div class="cover-stat-block anim d4">
+        <div class="stat-num">3×</div>
+        <div class="stat-label">More Competitive Quotes</div>
+        <div class="stat-desc">Reach more suppliers simultaneously across voice, WhatsApp, and email channels in parallel.</div>
+      </div>
+      <div class="cover-stat-block anim d5">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Process Transparency</div>
+        <div class="stat-desc">Every interaction logged, every quote traceable — a complete audit trail for compliance and governance.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SLIDE 2 — THE CHALLENGE
+═══════════════════════════════════════════════ -->
+<section class="slide" id="slide-2">
+  <div class="slide-header">
+    <div class="sh-left">
+      <div class="sh-eyebrow">The Challenge</div>
+      <h2 class="sh-title">Why Procurement Teams<br>Are <em>Stretched Thin</em></h2>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="sh-slide-num">02</div>
+  </div>
+  <div class="slide-body">
+    <div class="pain-grid">
+      <div class="pain-card anim d1">
+        <div class="pain-icon"><i data-lucide="clock"></i></div>
+        <div class="pain-title">Time-Consuming Process</div>
+        <div class="pain-body">Procurement teams spend days manually contacting suppliers, chasing quotes, and reconciling pricing across spreadsheets — before any real work begins.</div>
+      </div>
+      <div class="pain-card anim d2">
+        <div class="pain-icon"><i data-lucide="file-text"></i></div>
+        <div class="pain-title">BOQ Processing Bottleneck</div>
+        <div class="pain-body">Extracting and standardizing items from complex Bills of Quantities is error-prone and introduces delays that ripple through the entire procurement cycle.</div>
+      </div>
+      <div class="pain-card anim d3">
+        <div class="pain-icon"><i data-lucide="search"></i></div>
+        <div class="pain-title">Limited Supplier Visibility</div>
+        <div class="pain-body">Teams rely on familiar vendors, missing better-priced or higher-quality alternatives that exist in the market but are never discovered.</div>
+      </div>
+      <div class="pain-card anim d4">
+        <div class="pain-icon"><i data-lucide="bar-chart-3"></i></div>
+        <div class="pain-title">No Structured Comparison</div>
+        <div class="pain-body">Quotes arrive in different formats — email, WhatsApp, phone calls — making fair, consistent, and defensible comparison nearly impossible.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SLIDE 3 — THE SOLUTION
+═══════════════════════════════════════════════ -->
+<section class="slide" id="slide-3">
+  <div class="slide-header">
+    <div class="sh-left">
+      <div class="sh-eyebrow">The Solution</div>
+      <h2 class="sh-title">End-to-End <em>AI Procurement</em><br>Workflow</h2>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="sh-slide-num">03</div>
+  </div>
+  <div class="slide-body">
+    <div class="workflow-container">
+
+      <div class="workflow-row anim d1">
+        <div class="wf-step">
+          <div class="wf-num">Step 01</div>
+          <div class="wf-icon-wrap"><i data-lucide="file-text"></i></div>
+          <div class="wf-label">Upload BOQ</div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">Step 02</div>
+          <div class="wf-icon-wrap"><i data-lucide="cpu"></i></div>
+          <div class="wf-label">AI Parser &amp; Extraction</div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">Step 03</div>
+          <div class="wf-icon-wrap"><i data-lucide="check-circle"></i></div>
+          <div class="wf-label">Item Standardization</div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">Step 04</div>
+          <div class="wf-icon-wrap"><i data-lucide="globe"></i></div>
+          <div class="wf-label">Supplier Discovery</div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">Step 05</div>
+          <div class="wf-icon-wrap"><i data-lucide="target"></i></div>
+          <div class="wf-label">AI Vendor Shortlisting</div>
+        </div>
+      </div>
+
+      <div class="workflow-flow-return anim d2">
+        <i data-lucide="corner-down-left"></i>
+      </div>
+
+      <div class="workflow-row anim d3">
+        <div class="wf-step">
+          <div class="wf-num">Step 06</div>
+          <div class="wf-icon-wrap"><i data-lucide="phone"></i></div>
+          <div class="wf-label">Outreach<br><small style="font-size:9px;color:var(--mist);font-weight:400;">AIKA · AIWA · Email</small></div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">Step 07</div>
+          <div class="wf-icon-wrap"><i data-lucide="coins"></i></div>
+          <div class="wf-label">Quote Collection</div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">Step 08</div>
+          <div class="wf-icon-wrap"><i data-lucide="bar-chart-3"></i></div>
+          <div class="wf-label">AI Quote Comparison</div>
+        </div>
+        <div class="wf-step">
+          <div class="wf-num">Step 09</div>
+          <div class="wf-icon-wrap"><i data-lucide="layout-dashboard"></i></div>
+          <div class="wf-label">Dashboard &amp; Approval</div>
+        </div>
+        <div class="wf-step" style="background:var(--ink);border-color:var(--gold);">
+          <div class="wf-num" style="color:var(--gold2);">Step 10</div>
+          <div class="wf-icon-wrap" style="background:rgba(201,168,76,0.15);border-color:var(--gold);"><i data-lucide="file-check" style="color:var(--gold2);"></i></div>
+          <div class="wf-label" style="color:var(--white);">Auto Purchase Order</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SLIDE 3.5 — SCENARIO WALKTHROUGH
+═══════════════════════════════════════════════ -->
+<section class="slide" id="slide-3-5">
+  <div class="slide-header">
+    <div class="sh-left">
+      <div class="sh-eyebrow">Real-World Scenario</div>
+      <h2 class="sh-title">From BOQ Upload to<br><em>Purchase Order</em> in Hours</h2>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="sh-slide-num">03.5</div>
+  </div>
+  <div class="slide-body">
+    <div class="scenario-container">
+      
+      <!-- Introduction -->
+      <div class="scenario-intro anim d1">
+        <p class="scenario-intro-text">
+          Meet <strong>Ahmed</strong>, a procurement engineer at a Riyadh construction firm. He just received a <strong>Bill of Quantities</strong> for a new office building project—120 items ranging from furniture to lighting. Traditionally, this would take him 2-3 days of manual work. <em>Watch what happens when he uses the AI Procurement System—complete procurement in just 2-4 hours...</em>
+        </p>
+        
+        <div class="scenario-comparison" style="position: relative;">
+          <div class="comparison-box old">
+            <div class="comparison-label">Traditional Method</div>
+            <div class="comparison-time">2-3 Days</div>
+            <div style="font-size: 11px; color: var(--mist);">Manual, exhausting</div>
+          </div>
+          <div class="comparison-box new">
+            <div class="comparison-label">With AI System</div>
+            <div class="comparison-time">2-4 Hours</div>
+            <div style="font-size: 11px; color: var(--gold); font-weight: 600;">Automated, effortless</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Story Timeline -->
+      <div class="scenario-story">
+        
+        <!-- Chapter 1 -->
+        <div class="story-chapter">
+          <div class="story-marker">1</div>
+          <div class="story-content">
+            <div class="story-time"><i data-lucide="clock"></i>9:00 AM · Monday</div>
+            <div class="story-title">Ahmed uploads the BOQ file</div>
+            <div class="story-description">
+              He drags and drops the Excel file containing 120 line items. Within seconds, the <strong>AI BOQ Parser</strong> springs into action—reading every row, extracting descriptions, quantities, specifications.
+            </div>
+            <div class="story-result">
+              <i data-lucide="check-circle-2" class="story-result-icon"></i>
+              <div class="story-result-content">
+                <div class="story-result-label">What happened</div>
+                <div class="story-result-text"><strong>120 items parsed</strong> • Categorized into Furniture, Lighting, HVAC • Specifications standardized • Ready for matching</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter 2 -->
+        <div class="story-chapter">
+          <div class="story-marker">2</div>
+          <div class="story-content">
+            <div class="story-time"><i data-lucide="clock"></i>9:01 AM · 60 seconds later</div>
+            <div class="story-title">AI discovers suppliers across Saudi Arabia</div>
+            <div class="story-description">
+              While Ahmed grabs his coffee, the <strong>Supplier Discovery Engine</strong> is already working—scanning the database, scraping the web, finding distributors, wholesalers, and manufacturers who carry these exact products.
+            </div>
+            <div class="story-result">
+              <i data-lucide="users" class="story-result-icon"></i>
+              <div class="story-result-content">
+                <div class="story-result-label">Suppliers found</div>
+                <div class="story-result-text"><strong>47 qualified vendors</strong> • 18 in Riyadh • 12 in Jeddah • 17 in Dammam • All verified and rated</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="story-chapter">
+          <div class="story-marker">3</div>
+          <div class="story-content">
+            <div class="story-time"><i data-lucide="clock"></i>9:02-9:30 AM · The outreach begins</div>
+            <div class="story-title">AI agents start contacting suppliers</div>
+            <div class="story-description">
+              This is where the magic happens. <strong>AIKA</strong> (AI voice agent) starts calling suppliers. <strong>AIWA</strong> (WhatsApp agent) sends messages. Emails go out automatically. All personalized, all simultaneous, all professional. The system handles 32 outreach attempts in just 30 minutes.
+            </div>
+            <div class="story-result">
+              <i data-lucide="phone-outgoing" class="story-result-icon"></i>
+              <div class="story-result-content">
+                <div class="story-result-label">Outreach complete</div>
+                <div class="story-result-text"><strong>32 suppliers contacted</strong> • 18 via phone calls • 10 via WhatsApp • 4 via email • Now waiting for responses</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter 4 -->
+        <div class="story-chapter">
+          <div class="story-marker">4</div>
+          <div class="story-content">
+            <div class="story-time"><i data-lucide="clock"></i>11:30 AM · Quotes are pouring in</div>
+            <div class="story-title">AI collects and compares all quotes</div>
+            <div class="story-description">
+              Over the next 2 hours, suppliers respond via calls, WhatsApp, and emails. The <strong>Quote Comparison Engine</strong> automatically extracts prices, delivery times, and terms as they arrive. Everything is standardized and compared in real-time on Ahmed's dashboard.
+            </div>
+            <div class="story-result">
+              <i data-lucide="bar-chart-3" class="story-result-icon"></i>
+              <div class="story-result-content">
+                <div class="story-result-label">Analysis complete</div>
+                <div class="story-result-text"><strong>25 quotes received</strong> • Best prices identified • <strong>22% below budget</strong> • 3-day delivery available • Savings: 47,800 SAR</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter 5 - Final -->
+        <div class="story-chapter">
+          <div class="story-marker">✓</div>
+          <div class="story-content">
+            <div class="story-time"><i data-lucide="clock"></i>1:00 PM · Mission accomplished</div>
+            <div class="story-title">Ahmed approves. Purchase orders generated.</div>
+            <div class="story-description">
+              After lunch, Ahmed reviews the comparison dashboard with all 25 quotes organized and analyzed. He clicks "Approve Best Quotes," and the system automatically generates purchase orders for each supplier. POs are sent via email and WhatsApp. Job done—all before end of business.
+            </div>
+            <div class="story-result">
+              <i data-lucide="sparkles" class="story-result-icon"></i>
+              <div class="story-result-content">
+                <div class="story-result-label">Final result</div>
+                <div class="story-result-text"><strong>Total time: 4 hours</strong> • 120 items sourced • 25 suppliers compared • 47,800 SAR saved • What used to take 2-3 days done in one morning</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SLIDE 4 — OUTREACH AGENTS
+═══════════════════════════════════════════════ -->
+<section class="slide slide-dark" id="slide-4">
+  <div class="slide-header">
+    <div class="sh-left">
+      <div class="sh-eyebrow">AI Outreach Agents</div>
+      <h2 class="sh-title">Three Channels.<br><em>One Intelligence.</em></h2>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="sh-slide-num">04</div>
+  </div>
+  <div class="slide-body">
+    <div class="agents-container">
+      <div class="agents-grid">
+
+        <div class="agent-card anim d1">
+          <div class="agent-head">
+            <div class="agent-badge agent-badge-yours">Code-OX Product</div>
+            <div class="agent-icon-wrap agent-icon-wrap-aika">
+              <i data-lucide="phone"></i>
+            </div>
+            <div class="agent-name">AIKA</div>
+            <div class="agent-sub">AI Voice Calling Agent</div>
+          </div>
+          <div class="agent-body">
+            <div class="agent-feature">
+              <i data-lucide="phone-call" class="af-icon af-icon-aika"></i>
+              <div class="af-text">Calls vendors directly and introduces the RFQ professionally</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="check-circle-2" class="af-icon af-icon-aika"></i>
+              <div class="af-text">Confirms product availability and pricing in real-time</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="calendar-clock" class="af-icon af-icon-aika"></i>
+              <div class="af-text">Schedules follow-up calls and tracks commitments</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="mic" class="af-icon af-icon-aika"></i>
+              <div class="af-text">Transcribes and logs every conversation automatically</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="message-square" class="af-icon af-icon-aika"></i>
+              <div class="af-text">Handles objections and answers basic vendor queries</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="agent-card anim d2">
+          <div class="agent-head">
+            <div class="agent-badge agent-badge-yours">Code-OX Product</div>
+            <div class="agent-icon-wrap agent-icon-wrap-aiwa">
+              <i data-lucide="message-circle"></i>
+            </div>
+            <div class="agent-name">AIWA</div>
+            <div class="agent-sub">AI WhatsApp Agent</div>
+          </div>
+          <div class="agent-body">
+            <div class="agent-feature">
+              <i data-lucide="send" class="af-icon af-icon-aiwa"></i>
+              <div class="af-text">Sends structured RFQ messages via WhatsApp Business</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="zap" class="af-icon af-icon-aiwa"></i>
+              <div class="af-text">Answers vendor product queries instantly and accurately</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="scan-text" class="af-icon af-icon-aiwa"></i>
+              <div class="af-text">Parses incoming price quotes from conversation context</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="clock" class="af-icon af-icon-aiwa"></i>
+              <div class="af-text">Sends automated follow-ups after no-reply periods</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="database" class="af-icon af-icon-aiwa"></i>
+              <div class="af-text">Logs all conversations to the central procurement system</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="agent-card anim d3">
+          <div class="agent-head">
+            <div class="agent-badge">Built-In</div>
+            <div class="agent-icon-wrap agent-icon-wrap-email">
+              <i data-lucide="mail"></i>
+            </div>
+            <div class="agent-name">EMAIL</div>
+            <div class="agent-sub">AI Email Outreach Engine</div>
+          </div>
+          <div class="agent-body">
+            <div class="agent-feature">
+              <i data-lucide="file-edit" class="af-icon af-icon-email"></i>
+              <div class="af-text">Composes personalized RFQ emails with full item specs</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="paperclip" class="af-icon af-icon-email"></i>
+              <div class="af-text">Attaches BOQ line items, quantities, and deadlines</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="activity" class="af-icon af-icon-email"></i>
+              <div class="af-text">Tracks open rates, replies, and engagement signals</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="bell" class="af-icon af-icon-email"></i>
+              <div class="af-text">Sends automated reminder sequences until response</div>
+            </div>
+            <div class="agent-feature">
+              <i data-lucide="package" class="af-icon af-icon-email"></i>
+              <div class="af-text">Extracts and structures quotes from email replies</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Central Integration Hub -->
+      <div class="agents-hub anim d4">
+        <i data-lucide="network" class="agents-hub-icon"></i>
+        <div class="agents-hub-label">AI Core</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SLIDE 5 — KEY BENEFITS
+═══════════════════════════════════════════════ -->
+<section class="slide" id="slide-5">
+  <div class="slide-header">
+    <div class="sh-left">
+      <div class="sh-eyebrow">Key Benefits</div>
+      <h2 class="sh-title">What Your<br>Organization <em>Gains</em></h2>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="sh-slide-num">05</div>
+  </div>
+  <div class="slide-body">
+    <div class="benefits-grid anim d1">
+      <div class="benefit-cell">
+        <div class="bc-num">80%</div>
+        <div class="bc-label">Less Manual Work</div>
+        <div class="bc-title">Automate the Routine</div>
+        <div class="bc-body">Vendor outreach, quote chasing, and data entry are handled automatically — your team focuses on strategy.</div>
+      </div>
+      <div class="benefit-cell">
+        <div class="bc-num">3×</div>
+        <div class="bc-label">More Quotes Received</div>
+        <div class="bc-title">Broader Market Coverage</div>
+        <div class="bc-body">Contact more vendors simultaneously across voice, WhatsApp, and email — never miss a better offer.</div>
+      </div>
+      <div class="benefit-cell">
+        <div class="bc-num">10×</div>
+        <div class="bc-label">Faster Cycle Time</div>
+        <div class="bc-title">Hours, Not Weeks</div>
+        <div class="bc-body">From BOQ upload to issued purchase order in a fraction of the time your current process requires.</div>
+      </div>
+      <div class="benefit-cell">
+        <div class="bc-num">100%</div>
+        <div class="bc-label">Audit Transparency</div>
+        <div class="bc-title">Full Compliance Trail</div>
+        <div class="bc-body">Every interaction logged, every decision traceable — ready for internal review or external audit at any time.</div>
+      </div>
+      <div class="benefit-cell">
+        <div class="bc-num">0</div>
+        <div class="bc-label">Vendor Bias Risk</div>
+        <div class="bc-title">Objective Ranking</div>
+        <div class="bc-body">AI scores all vendors on data alone — price, delivery, quality, risk — with no favoritism or blind spots.</div>
+      </div>
+      <div class="benefit-cell">
+        <div class="bc-num">∞</div>
+        <div class="bc-label">Scalability</div>
+        <div class="bc-title">Grow Without Headcount</div>
+        <div class="bc-body">Handle 10 BOQs or 10,000. The platform scales to your pipeline without adding procurement staff.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SLIDE 6 — DISCOVERY Q (1–5)
+═══════════════════════════════════════════════ -->
+<section class="slide" id="slide-6">
+  <div class="slide-header">
+    <div class="sh-left">
+      <div class="sh-eyebrow">Discovery — 1 of 2</div>
+      <h2 class="sh-title">Understanding Your<br><em>Current Environment</em></h2>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="sh-slide-num">06</div>
+  </div>
+  <div class="slide-body">
+    <div class="q-list">
+      <div class="q-item anim d1">
+        <div class="q-num">01</div>
+        <div class="q-content">
+          <div class="q-text">What system or ERP are you currently using for procurement?</div>
+          <div class="q-opts">SAP &nbsp;·&nbsp; Oracle &nbsp;·&nbsp; Odoo &nbsp;·&nbsp; Excel &nbsp;·&nbsp; Other</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+      <div class="q-item anim d2">
+        <div class="q-num">02</div>
+        <div class="q-content">
+          <div class="q-text">How many BOQs does your team process per month, approximately?</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+      <div class="q-item anim d3">
+        <div class="q-num">03</div>
+        <div class="q-content">
+          <div class="q-text">What format are your BOQs typically in?</div>
+          <div class="q-opts">Excel &nbsp;·&nbsp; PDF &nbsp;·&nbsp; Scanned &nbsp;·&nbsp; Mixed</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+      <div class="q-item anim d4">
+        <div class="q-num">04</div>
+        <div class="q-content">
+          <div class="q-text">How many active suppliers does your company currently work with?</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+      <div class="q-item anim d5">
+        <div class="q-num">05</div>
+        <div class="q-content">
+          <div class="q-text">Where are your suppliers primarily based?</div>
+          <div class="q-opts">Saudi Arabia &nbsp;·&nbsp; GCC Region &nbsp;·&nbsp; International &nbsp;·&nbsp; Mixed</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SLIDE 7 — DISCOVERY Q (6–10)
+═══════════════════════════════════════════════ -->
+<section class="slide" id="slide-7">
+  <div class="slide-header">
+    <div class="sh-left">
+      <div class="sh-eyebrow">Discovery — 2 of 2</div>
+      <h2 class="sh-title">Technical &amp;<br><em>Operational Requirements</em></h2>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="sh-slide-num">07</div>
+  </div>
+  <div class="slide-body">
+    <div class="q-list">
+      <div class="q-item anim d1">
+        <div class="q-num">06</div>
+        <div class="q-content">
+          <div class="q-text">What is your preferred channel for contacting suppliers?</div>
+          <div class="q-opts">WhatsApp &nbsp;·&nbsp; Email &nbsp;·&nbsp; Phone &nbsp;·&nbsp; All Channels</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+      <div class="q-item anim d2">
+        <div class="q-num">07</div>
+        <div class="q-content">
+          <div class="q-text">Would you need a custom ERP built alongside this solution for manual management?</div>
+          <div class="q-opts">Yes — Full ERP &nbsp;·&nbsp; Yes — Light Module &nbsp;·&nbsp; No, existing system is sufficient</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+      <div class="q-item anim d3">
+        <div class="q-num">08</div>
+        <div class="q-content">
+          <div class="q-text">Do you require a multi-level approval workflow?</div>
+          <div class="q-opts">e.g.&nbsp; Engineer → Manager → Finance → Director &nbsp;·&nbsp; If yes — how many levels?</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+      <div class="q-item anim d4">
+        <div class="q-num">09</div>
+        <div class="q-content">
+          <div class="q-text">How many users or logins would need access to the system?</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+      <div class="q-item anim d5">
+        <div class="q-num">10</div>
+        <div class="q-content">
+          <div class="q-text">Are there any integrations needed with your existing systems?</div>
+          <div class="q-opts">SAP &nbsp;·&nbsp; Oracle &nbsp;·&nbsp; Odoo &nbsp;·&nbsp; Custom ERP &nbsp;·&nbsp; Accounting Software &nbsp;·&nbsp; Other</div>
+        </div>
+        <input class="q-answer" type="text" placeholder="Answer...">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SLIDE 8 — NEXT STEPS
+═══════════════════════════════════════════════ -->
+<section class="slide slide-dark" id="slide-8">
+  <div class="slide-header">
+    <div class="sh-left">
+      <div class="sh-eyebrow">Next Steps</div>
+      <h2 class="sh-title">How We Move<br><em>Forward Together</em></h2>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="sh-slide-num">08</div>
+  </div>
+  <div class="slide-body" style="gap:20px;">
+    <div class="steps-grid">
+      <div class="step-card anim d1">
+        <div class="step-num-big">1</div>
+        <div class="step-icon">🔍</div>
+        <div class="step-title">Discovery Call</div>
+        <div class="step-body">We review your completed questionnaire and map exact requirements, data flows, integration points, and user access needs.</div>
+        <div class="step-tag">Week 1</div>
+      </div>
+      <div class="step-card anim d2">
+        <div class="step-num-big">2</div>
+        <div class="step-icon">🎨</div>
+        <div class="step-title">Solution Design</div>
+        <div class="step-body">We present a tailored architecture and live demo — showing AIKA, AIWA, and the full procurement dashboard in action.</div>
+        <div class="step-tag">Week 2</div>
+      </div>
+      <div class="step-card anim d3">
+        <div class="step-num-big">3</div>
+        <div class="step-icon">🚀</div>
+        <div class="step-title">Pilot Project</div>
+        <div class="step-body">Run one complete BOQ cycle end-to-end. Measure time saved, quotes collected, and PO accuracy before committing to full rollout.</div>
+        <div class="step-tag">Week 3–4</div>
+      </div>
+      <div class="step-card anim d4">
+        <div class="step-num-big">4</div>
+        <div class="step-icon">🏢</div>
+        <div class="step-title">Full Deployment</div>
+        <div class="step-body">System-wide rollout with ERP integration, team onboarding, and ongoing dedicated support from our implementation team.</div>
+        <div class="step-tag">Week 5+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<script>
+const TOTAL = 9;
+let current = 1;
+
+// Build nav dots
+const dotsEl = document.getElementById('navDots');
+for (let i = 1; i <= TOTAL; i++) {
+  const btn = document.createElement('button');
+  btn.className = 'nav-dot' + (i === 1 ? ' active' : '');
+  btn.title = 'Slide ' + i;
+  btn.onclick = () => goTo(i);
+  dotsEl.appendChild(btn);
+}
+
+function goTo(n) {
+  current = Math.max(1, Math.min(TOTAL, n));
+  const slide = document.getElementById('slide-' + current);
+  slide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  updateNav();
+}
+
+function navigate(dir) { goTo(current + dir); }
+
+function updateNav() {
+  document.querySelectorAll('.nav-dot').forEach((d, i) => {
+    d.classList.toggle('active', i + 1 === current);
+  });
+  const c = String(current).padStart(2, '0');
+  document.getElementById('slideCounter').textContent = c + ' / ' + String(TOTAL).padStart(2, '0');
+}
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(1);
+  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') navigate(-1);
+});
+
+// Intersection observer to sync active slide
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+      const id = entry.target.id;
+      current = parseInt(id.split('-')[1]);
+      updateNav();
+    }
+  });
+}, { threshold: 0.5 });
+
+for (let i = 1; i <= TOTAL; i++) {
+  const el = document.getElementById('slide-' + i);
+  if (el) observer.observe(el);
+}
+
+// Scroll wheel per-slide
+let isScrolling = false;
+document.addEventListener('wheel', e => {
+  if (isScrolling) return;
+  isScrolling = true;
+  navigate(e.deltaY > 0 ? 1 : -1);
+  setTimeout(() => isScrolling = false, 900);
+}, { passive: true });
+
+updateNav();
+
+// Initialize Lucide icons
+lucide.createIcons();
+</script>
+</body>
+</html>
