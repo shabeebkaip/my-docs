@@ -420,125 +420,301 @@ h2.section-title {
 
 /* ─── ARCHITECTURE ──────────────────────────────────────── */
 #architecture { background:#fff; }
-.arch-wrap {
-  margin-top:56px; border:1px solid var(--ink-10); border-radius:var(--r-lg);
-  overflow:hidden;
-}
-.arch-diagram-area {
-  padding:60px 60px 40px;
-  background:var(--bg);
-  position:relative;
-}
-/* Blueprint grid */
-.arch-diagram-area::before {
-  content:'';
-  position:absolute; inset:0;
-  background-image:
-    linear-gradient(rgba(27,94,110,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(27,94,110,0.04) 1px, transparent 1px);
-  background-size:40px 40px;
-  pointer-events:none;
-}
-.arch-diagram-inner { position:relative; z-index:1; }
-.arch-row { display:flex; align-items:center; justify-content:center; gap:0; }
-.arch-node {
-  padding:20px 24px; border-radius:var(--r-lg);
-  text-align:center; min-width:148px;
-  position:relative; cursor:default;
-  transition:all 0.3s;
-}
-.arch-node:hover { transform:translateY(-4px); }
-.arch-node-primary {
-  background:var(--bg-white); border:1px solid var(--teal-line);
-  box-shadow:0 4px 24px rgba(27,94,110,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
-}
-.arch-node-center {
-  background:var(--bg-dark); border:1px solid rgba(42,143,168,0.4);
-  box-shadow:0 8px 48px rgba(27,94,110,0.2);
-  padding:24px 32px; min-width:180px;
-}
-.arch-node-secondary {
-  background:var(--bg-white); border:1px solid var(--gold-line);
-  box-shadow:0 4px 24px rgba(184,134,11,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-}
-.arch-node-green {
-  background:var(--bg-white); border:1px solid rgba(22,163,74,0.2);
-  box-shadow:0 4px 24px rgba(22,163,74,0.06);
-}
-.arch-icon { font-size:1.6rem; margin-bottom:8px; }
-.arch-label { font-family:var(--font-serif); font-size:0.82rem; font-weight:600; color:var(--ink); line-height:1.3; }
-.arch-label.light { color:#fff; }
-.arch-sub { font-size:0.65rem; color:var(--ink-30); margin-top:3px; font-family:var(--font-mono); }
-.arch-sub.light { color:rgba(255,255,255,0.4); }
-.arch-pulse-dot {
-  position:absolute; top:-4px; right:-4px;
-  width:10px; height:10px; border-radius:50%; background:var(--teal);
-}
-.arch-pulse-dot::after {
-  content:''; position:absolute; inset:-3px; border-radius:50%;
-  border:1.5px solid var(--teal); opacity:0;
-  animation:archPulse 2s ease-out infinite;
-}
-.arch-pulse-dot.gold { background:var(--gold); }
-.arch-pulse-dot.gold::after { border-color:var(--gold); animation-delay:0.7s; }
-@keyframes archPulse { 0%{opacity:0.7;transform:scale(0.8)} 100%{opacity:0;transform:scale(2.4)} }
 
-.arch-conn {
-  display:flex; align-items:center; gap:0;
+/* ── Full-width diagram canvas ── */
+.arch-canvas {
+  margin-top:56px;
+  border:1px solid var(--ink-10); border-radius:var(--r-lg);
+  background:var(--bg); overflow:hidden; position:relative;
+}
+.arch-canvas::before {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(27,94,110,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27,94,110,0.035) 1px, transparent 1px);
+  background-size:32px 32px; pointer-events:none;
+}
+
+/* ── Main grid layout ── */
+.arch-grid {
+  display:grid;
+  grid-template-columns: 1fr 80px 1fr 80px 1fr;
+  grid-template-rows: auto auto auto;
+  gap:0;
+  padding:48px 48px 0;
+  position:relative; z-index:1;
+}
+
+/* ── Node cards ── */
+.anode {
+  border-radius:var(--r-lg);
+  text-align:left;
   position:relative;
+  background:#fff;
 }
-.arch-conn-h { display:flex; align-items:center; width:60px; }
-.arch-conn-line {
-  flex:1; height:1.5px; position:relative; overflow:hidden;
+.anode-boq {
+  border:1.5px solid var(--teal-line);
+  box-shadow:0 4px 24px rgba(27,94,110,0.07);
+  grid-column:1; grid-row:1;
 }
-.arch-conn-line::after {
+.anode-agent {
+  background:var(--bg-dark);
+  border:1.5px solid rgba(42,143,168,0.35);
+  box-shadow:0 8px 40px rgba(0,0,0,0.25);
+  grid-column:3; grid-row:1;
+}
+.anode-odoo {
+  border:1.5px solid var(--gold-line);
+  box-shadow:0 4px 24px rgba(184,134,11,0.07);
+  grid-column:5; grid-row:1;
+}
+
+/* ── Node header ── */
+.anode-head {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:16px 18px 12px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+.anode-agent .anode-head { border-bottom-color:rgba(255,255,255,0.08); }
+.anode-icon { font-size:1.5rem; line-height:1; flex-shrink:0; margin-top:2px; }
+.anode-name {
+  font-family:var(--font-serif); font-size:0.92rem; font-weight:700;
+  color:var(--ink); line-height:1.25;
+}
+.anode-agent .anode-name { color:#fff; }
+.anode-role {
+  font-size:0.6rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+  margin-top:3px;
+}
+.anode-boq  .anode-role { color:var(--teal); }
+.anode-agent .anode-role { color:#2a8fa8; }
+.anode-odoo  .anode-role { color:var(--gold); }
+
+/* Node step list */
+.anode-steps { padding:10px 18px 14px; display:flex; flex-direction:column; gap:7px; }
+.astep {
+  display:flex; align-items:flex-start; gap:8px;
+  font-size:0.73rem; line-height:1.55; color:var(--ink-60);
+}
+.anode-agent .astep { color:rgba(255,255,255,0.55); }
+.astep-num {
+  width:16px; height:16px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.55rem; font-weight:700; margin-top:2px;
+}
+.anode-boq  .astep-num { background:var(--teal-pale); color:var(--teal); }
+.anode-agent .astep-num { background:rgba(42,143,168,0.2); color:#2a8fa8; }
+.anode-odoo  .astep-num { background:var(--gold-pale); color:var(--gold); }
+.astep-text strong { font-weight:600; display:block; margin-bottom:1px; }
+.anode-agent .astep-text strong { color:rgba(255,255,255,0.85); }
+.anode-boq   .astep-text strong,
+.anode-odoo  .astep-text strong { color:var(--ink); }
+
+/* Node footer output strip */
+.anode-out {
+  display:flex; align-items:flex-start; gap:8px;
+  padding:9px 18px 12px;
+  border-top:1px solid rgba(0,0,0,0.06);
+  font-size:0.68rem; line-height:1.5;
+}
+.anode-agent .anode-out { border-top-color:rgba(255,255,255,0.08); }
+.anode-out-label {
+  font-size:0.58rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+  flex-shrink:0; margin-top:2px; white-space:nowrap;
+}
+.anode-boq  .anode-out-label { color:var(--teal); }
+.anode-agent .anode-out-label { color:#2a8fa8; }
+.anode-odoo  .anode-out-label { color:var(--gold); }
+.anode-out-text { color:var(--ink-30); }
+.anode-agent .anode-out-text { color:rgba(255,255,255,0.3); }
+
+/* Pulse dot */
+.apulse {
+  position:absolute; top:-5px; right:-5px;
+  width:10px; height:10px; border-radius:50%;
+}
+.apulse::after {
+  content:''; position:absolute; inset:-3px; border-radius:50%;
+  border:1.5px solid; opacity:0; animation:archPulse 2s ease-out infinite;
+}
+.apulse.teal { background:var(--teal); }
+.apulse.teal::after { border-color:var(--teal); }
+.apulse.gold { background:var(--gold); }
+.apulse.gold::after { border-color:var(--gold); animation-delay:0.7s; }
+.apulse.cyan { background:#2a8fa8; }
+.apulse.cyan::after { border-color:#2a8fa8; animation-delay:1s; }
+@keyframes archPulse { 0%{opacity:0.7;transform:scale(0.8)} 100%{opacity:0;transform:scale(2.5)} }
+
+/* ── Connector cells (columns 2 and 4) ── */
+.arch-conn-cell {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding-top:8px; position:relative;
+}
+.arch-conn-cell-1 { grid-column:2; grid-row:1; }
+.arch-conn-cell-2 { grid-column:4; grid-row:1; }
+
+.aconn-wrap { display:flex; flex-direction:column; align-items:center; gap:4px; width:100%; }
+.aconn-label {
+  font-size:0.56rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+  white-space:nowrap; text-align:center; margin-bottom:2px;
+}
+.aconn-teal  .aconn-label { color:var(--teal); }
+.aconn-gold  .aconn-label { color:var(--gold); }
+.aconn-green .aconn-label { color:#16a34a; }
+.aconn-line {
+  width:100%; height:1.5px; position:relative; overflow:hidden; border-radius:1px;
+}
+.aconn-teal  .aconn-line { background:var(--teal); }
+.aconn-gold  .aconn-line { background:var(--gold); }
+.aconn-green .aconn-line { background:#16a34a; }
+.aconn-line::after {
   content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-  animation:flowH 2s ease-in-out infinite;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+  animation:flowH 1.8s ease-in-out infinite;
 }
 @keyframes flowH { 0%{left:-100%} 100%{left:100%} }
-.arch-conn-arrow {
-  width:0; height:0;
-  border-top:5px solid transparent;
-  border-bottom:5px solid transparent;
-  border-left:8px solid;
-  flex-shrink:0;
+.aconn-arrow {
+  width:0; height:0; border-top:5px solid transparent;
+  border-bottom:5px solid transparent; border-left:8px solid;
 }
-.conn-teal .arch-conn-line { background:var(--teal); }
-.conn-teal .arch-conn-arrow { border-left-color:var(--teal); }
-.conn-gold .arch-conn-line { background:var(--gold); }
-.conn-gold .arch-conn-arrow { border-left-color:var(--gold); }
-.conn-green .arch-conn-line { background:#16a34a; }
-.conn-green .arch-conn-arrow { border-left-color:#16a34a; }
+.aconn-teal  .aconn-arrow { border-left-color:var(--teal); }
+.aconn-gold  .aconn-arrow { border-left-color:var(--gold); }
+.aconn-green .aconn-arrow { border-left-color:#16a34a; }
+.aconn-sublabel {
+  font-size:0.58rem; color:var(--ink-30); text-align:center; margin-top:4px;
+  line-height:1.4; font-family:var(--font-mono);
+}
 
-.arch-vert { display:flex; flex-direction:column; align-items:center; }
-.arch-vert-line { width:1.5px; height:56px; position:relative; overflow:hidden; }
-.arch-vert-line::after {
+/* ── Bottom row: Library + Tracker ── */
+.arch-bottom {
+  display:grid;
+  grid-template-columns: 1fr 80px 1fr 80px 1fr;
+  padding:0 48px;
+  position:relative; z-index:1;
+}
+.arch-vert-cell {
+  display:flex; justify-content:center; padding:0;
+}
+.arch-vert-cell-lib    { grid-column:3; }
+.arch-vert-cell-track  { grid-column:5; }
+
+.avert-wrap {
+  display:flex; flex-direction:column; align-items:center; gap:0;
+}
+.avert-label {
+  font-size:0.56rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+  writing-mode:horizontal-tb; margin-bottom:0; white-space:nowrap;
+}
+.avert-gold  .avert-label { color:var(--gold); }
+.avert-green .avert-label { color:#16a34a; }
+.avert-line {
+  width:1.5px; flex:1; min-height:40px; position:relative; overflow:hidden;
+}
+.avert-gold  .avert-line { background:var(--gold); }
+.avert-green .avert-line { background:#16a34a; }
+.avert-line::after {
   content:''; position:absolute; top:-100%; left:0; width:100%; height:100%;
-  background:linear-gradient(180deg, transparent, rgba(255,255,255,0.6), transparent);
-  animation:flowV 2s ease-in-out infinite;
+  background:linear-gradient(180deg, transparent, rgba(255,255,255,0.7), transparent);
+  animation:flowV 1.8s ease-in-out infinite;
 }
 @keyframes flowV { 0%{top:-100%} 100%{top:100%} }
-.arch-vert-arrow {
+.avert-arrow {
   width:0; height:0;
   border-left:5px solid transparent; border-right:5px solid transparent;
   border-top:8px solid;
 }
-.vert-gold .arch-vert-line { background:var(--gold); }
-.vert-gold .arch-vert-arrow { border-top-color:var(--gold); }
-.vert-green .arch-vert-line { background:#16a34a; }
-.vert-green .arch-vert-arrow { border-top-color:#16a34a; }
+.avert-gold  .avert-arrow { border-top-color:var(--gold); }
+.avert-green .avert-arrow { border-top-color:#16a34a; }
 
-.arch-lower { display:flex; align-items:flex-start; justify-content:center; gap:0; margin-top:0; }
-.arch-lower-col { display:flex; flex-direction:column; align-items:center; }
-.arch-lower-spacer { width:60px; }
-
-.arch-legend {
-  display:flex; gap:28px; padding:20px 60px;
-  background:var(--bg-white); border-top:1px solid var(--ink-10); flex-wrap:wrap;
+/* Bottom node cards */
+.arch-bottom-nodes {
+  display:grid;
+  grid-template-columns: 1fr 80px 1fr 80px 1fr;
+  padding:0 48px 48px;
+  gap:0;
+  position:relative; z-index:1;
 }
-.arch-legend-item { display:flex; align-items:center; gap:8px; font-size:0.72rem; color:var(--ink-60); }
-.arch-legend-line { width:20px; height:1.5px; }
+.anode-lib {
+  grid-column:3;
+  border:1.5px solid var(--gold-line);
+  box-shadow:0 4px 24px rgba(184,134,11,0.07);
+  background:#fff; border-radius:var(--r-lg); position:relative;
+}
+.anode-tracker {
+  grid-column:5;
+  border:1.5px solid rgba(22,163,74,0.2);
+  box-shadow:0 4px 24px rgba(22,163,74,0.07);
+  background:#fff; border-radius:var(--r-lg); position:relative;
+}
+.anode-lib  .anode-head  { border-bottom-color:rgba(184,134,11,0.1); }
+.anode-tracker .anode-head { border-bottom-color:rgba(22,163,74,0.1); }
+.anode-lib  .anode-role  { color:var(--gold); }
+.anode-tracker .anode-role { color:#16a34a; }
+.anode-lib  .astep-num   { background:var(--gold-pale); color:var(--gold); }
+.anode-tracker .astep-num { background:#f0fdf4; color:#16a34a; }
+.anode-lib  .astep-text strong  { color:var(--ink); }
+.anode-tracker .astep-text strong { color:var(--ink); }
+.anode-lib  .astep         { color:var(--ink-60); }
+.anode-tracker .astep       { color:var(--ink-60); }
+.anode-lib  .anode-out-label  { color:var(--gold); }
+.anode-tracker .anode-out-label { color:#16a34a; }
+.anode-lib  .anode-out { border-top-color:rgba(184,134,11,0.1); }
+.anode-tracker .anode-out { border-top-color:rgba(22,163,74,0.1); }
+.anode-tracker .anode-out-text,
+.anode-lib  .anode-out-text { color:var(--ink-30); }
+
+/* ── Legend bar ── */
+.arch-legend-bar {
+  display:flex; gap:24px; padding:16px 48px;
+  background:#fff; border-top:1px solid var(--ink-10); flex-wrap:wrap;
+}
+.arch-legend-item { display:flex; align-items:center; gap:7px; font-size:0.7rem; color:var(--ink-60); }
+.arch-legend-line { width:18px; height:1.5px; border-radius:1px; }
+.arch-legend-dot  { width:8px; height:8px; border-radius:50%; }
+
+/* ── Tech tag chips inside nodes ── */
+.anode-tags { display:flex; flex-wrap:wrap; gap:4px; padding:0 18px 12px; }
+.atag {
+  font-size:0.6rem; padding:2px 7px; border-radius:3px;
+  border:1px solid; font-family:var(--font-mono);
+}
+.anode-boq   .atag { background:var(--teal-pale); border-color:var(--teal-line); color:var(--teal); }
+.anode-agent .atag { background:rgba(42,143,168,0.12); border-color:rgba(42,143,168,0.25); color:#2a8fa8; }
+.anode-odoo  .atag { background:var(--gold-pale); border-color:var(--gold-line); color:var(--gold); }
+.anode-lib   .atag { background:var(--gold-pale); border-color:var(--gold-line); color:var(--gold); }
+.anode-tracker .atag { background:#f0fdf4; border-color:rgba(22,163,74,0.2); color:#16a34a; }
+
+/* ── Feedback arrow (tracker → library) ── */
+.arch-feedback {
+  grid-column:3 / 6; grid-row:2;
+  display:flex; align-items:center; justify-content:flex-end;
+  padding:6px 0 0;
+  position:relative;
+}
+.arch-feedback-label {
+  font-size:0.58rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+  color:#16a34a; margin-right:6px; white-space:nowrap;
+}
+.arch-feedback-line {
+  position:absolute; bottom:0; right:0;
+  width:100%; height:1px; background:rgba(22,163,74,0.2);
+}
+
+/* Responsive */
+@media(max-width:900px){
+  .arch-grid,
+  .arch-bottom,
+  .arch-bottom-nodes { padding:28px 20px 0; }
+  .arch-bottom-nodes { padding-bottom:28px; }
+  .arch-grid { grid-template-columns:1fr; }
+  .arch-conn-cell-1, .arch-conn-cell-2 { display:none; }
+  .anode-boq,.anode-agent,.anode-odoo { grid-column:1; }
+  .arch-bottom { grid-template-columns:1fr; }
+  .arch-vert-cell-lib,.arch-vert-cell-track { grid-column:1; }
+  .arch-bottom-nodes { grid-template-columns:1fr; }
+  .anode-lib,.anode-tracker { grid-column:1; }
+  .arch-legend-bar { padding:16px 20px; }
+}
 
 /* ─── COMPARISON ────────────────────────────────────────── */
 #comparison { background:var(--bg); }
@@ -573,7 +749,6 @@ h2.section-title {
   background:var(--bg-dark); color:#fff; padding:100px 0 60px;
 }
 .footer-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
-.footer-left {}
 .footer-label { font-size:0.68rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.3); display:inline-flex; align-items:center; gap:8px; margin-bottom:20px; }
 .footer-label::before { content:''; width:20px; height:1px; background:rgba(255,255,255,0.3); }
 .footer-title {
@@ -606,7 +781,6 @@ h2.section-title {
 .contact-row { display:flex; align-items:flex-start; gap:12px; margin-bottom:16px; }
 .contact-row:last-child { margin-bottom:0; }
 .contact-icon { width:32px; height:32px; border-radius:var(--r); background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0; }
-.contact-info {}
 .contact-key { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.3); margin-bottom:2px; }
 .contact-val { font-size:0.82rem; color:rgba(255,255,255,0.65); font-family:var(--font-mono); }
 .scope-card {
@@ -992,512 +1166,315 @@ h2.section-title {
   <div class="container">
     <span class="label reveal">System Design</span>
     <h2 class="section-title reveal d1">Architecture <span class="teal">Overview</span></h2>
-    <p class="subtitle reveal d2">Click any node to see exactly what happens at that step — from file upload to live Odoo records.</p>
+    <p class="subtitle reveal d2">The complete procurement pipeline — every node, every step, every data flow — visible at a glance.</p>
 
-    <style>
-      /* ── Interactive diagram wrapper ──────────────────── */
-      .arch-interactive { position:relative; }
+    <div class="arch-canvas reveal d3">
 
-      /* Make nodes clickable */
-      .arch-node { cursor:pointer; transition:transform 0.18s, box-shadow 0.18s; }
-      .arch-node:hover { transform:translateY(-4px) scale(1.03); box-shadow:0 8px 28px rgba(0,0,0,0.12); }
-      .arch-node.active { box-shadow:0 0 0 2.5px var(--teal), 0 8px 32px rgba(27,94,110,0.18); }
-      .arch-node-center.active { box-shadow:0 0 0 2.5px #2a8fa8, 0 8px 32px rgba(42,143,168,0.25); }
-      .arch-node-secondary.active { box-shadow:0 0 0 2.5px var(--gold), 0 8px 32px rgba(184,134,11,0.18); }
-      .arch-node-green.active { box-shadow:0 0 0 2.5px #16a34a, 0 8px 32px rgba(22,163,74,0.18); }
+      <!-- ── TOP ROW: 3 main nodes + 2 connector cells ── -->
+      <div class="arch-grid">
 
-      /* Click hint badge */
-      .arch-node::after {
-        content:'Click to expand';
-        position:absolute; bottom:-22px; left:50%; transform:translateX(-50%);
-        font-size:0.58rem; color:var(--ink-30); letter-spacing:0.06em; white-space:nowrap;
-        opacity:0; transition:opacity 0.2s;
-        font-family:var(--font-sans);
-      }
-      .arch-node:hover::after { opacity:1; }
-
-      /* ── Detail panel ──────────────────────────────────── */
-      .node-detail-panel {
-        display:none;
-        margin-top:28px;
-        border-radius:var(--r-lg);
-        border:1px solid var(--ink-10);
-        background:#fff;
-        overflow:hidden;
-        animation: panelIn 0.28s cubic-bezier(0.4,0,0.2,1);
-      }
-      .node-detail-panel.open { display:block; }
-      @keyframes panelIn {
-        from { opacity:0; transform:translateY(10px); }
-        to   { opacity:1; transform:translateY(0); }
-      }
-      .ndp-header {
-        display:flex; align-items:center; justify-content:space-between;
-        padding:18px 24px 16px;
-        border-bottom:1px solid var(--ink-10);
-      }
-      .ndp-header-left { display:flex; align-items:center; gap:14px; }
-      .ndp-icon { font-size:1.6rem; line-height:1; }
-      .ndp-title { font-family:var(--font-serif); font-size:1.1rem; font-weight:700; color:var(--ink); }
-      .ndp-tag {
-        font-size:0.6rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase;
-        padding:2px 8px; border-radius:3px; margin-top:4px; display:inline-block;
-      }
-      .ndp-tag.teal  { background:var(--teal-pale); color:var(--teal); }
-      .ndp-tag.gold  { background:var(--gold-pale); color:var(--gold); }
-      .ndp-tag.green { background:#f0fdf4; color:#16a34a; }
-      .ndp-close {
-        width:28px; height:28px; border-radius:50%; border:1px solid var(--ink-10);
-        background:var(--bg); cursor:pointer; display:flex; align-items:center; justify-content:center;
-        font-size:0.75rem; color:var(--ink-60); transition:background 0.15s;
-        flex-shrink:0;
-      }
-      .ndp-close:hover { background:var(--ink-10); }
-
-      .ndp-body { display:grid; grid-template-columns:1fr 1fr; }
-      @media(max-width:700px){ .ndp-body { grid-template-columns:1fr; } }
-
-      .ndp-steps { padding:20px 24px; border-right:1px solid var(--ink-10); }
-      .ndp-steps:last-child { border-right:none; }
-      .ndp-steps-title {
-        font-size:0.62rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase;
-        color:var(--ink-30); margin-bottom:12px;
-      }
-      .ndp-step {
-        display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--ink-10);
-      }
-      .ndp-step:last-child { border-bottom:none; padding-bottom:0; }
-      .ndp-step-num {
-        width:20px; height:20px; border-radius:50%; flex-shrink:0;
-        display:flex; align-items:center; justify-content:center;
-        font-size:0.6rem; font-weight:700; margin-top:2px;
-      }
-      .ndp-step-num.teal  { background:var(--teal-pale);  color:var(--teal);  }
-      .ndp-step-num.gold  { background:var(--gold-pale);  color:var(--gold);  }
-      .ndp-step-num.green { background:#f0fdf4;            color:#16a34a;      }
-      .ndp-step-label { font-size:0.8rem; font-weight:600; color:var(--ink); margin-bottom:3px; }
-      .ndp-step-desc  { font-size:0.75rem; color:var(--ink-60); line-height:1.6; }
-
-      .ndp-output {
-        padding:14px 24px;
-        background:var(--bg); border-top:1px solid var(--ink-10);
-        font-size:0.78rem; line-height:1.65;
-        display:flex; align-items:flex-start; gap:10px;
-      }
-      .ndp-output-label {
-        font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
-        flex-shrink:0; margin-top:3px;
-      }
-      .ndp-output-label.teal  { color:var(--teal); }
-      .ndp-output-label.gold  { color:var(--gold); }
-      .ndp-output-label.green { color:#16a34a; }
-      .ndp-output-text { color:var(--ink-60); }
-
-      .ndp-tags { display:flex; flex-wrap:wrap; gap:5px; padding:12px 24px 16px; border-top:1px solid var(--ink-10); }
-      .ndp-tag-item {
-        font-size:0.65rem; padding:3px 8px; border-radius:3px;
-        background:var(--bg); border:1px solid var(--ink-10); color:var(--ink-60);
-      }
-    </style>
-
-    <div class="arch-wrap reveal d3 arch-interactive">
-      <div class="arch-diagram-area">
-        <div class="arch-diagram-inner">
-
-          <!-- Main horizontal row -->
-          <div class="arch-row">
-            <div class="arch-node arch-node-primary" style="position:relative;" onclick="toggleNode('boq')" id="node-boq">
-              <div class="arch-pulse-dot"></div>
-              <div class="arch-icon">📁</div>
-              <div class="arch-label">BOQ File Upload</div>
-              <div class="arch-sub">Excel / PDF / Any Format</div>
-            </div>
-
-            <div class="arch-conn arch-conn-h conn-teal" style="width:72px;">
-              <div class="arch-conn-line"></div>
-              <div class="arch-conn-arrow"></div>
-            </div>
-
-            <div class="arch-node arch-node-center" style="position:relative;" onclick="toggleNode('agent')" id="node-agent">
-              <div class="arch-pulse-dot" style="background:#2a8fa8;"></div>
-              <div class="arch-pulse-dot" style="background:#2a8fa8;animation-delay:1s;top:auto;bottom:-4px;right:-4px;"></div>
-              <div class="arch-icon">🤖</div>
-              <div class="arch-label light">AI Procurement<br>Agent</div>
-              <div class="arch-sub light">Claude-powered · Codeox</div>
-            </div>
-
-            <div class="arch-conn arch-conn-h conn-teal" style="width:72px;">
-              <div class="arch-conn-line"></div>
-              <div class="arch-conn-arrow"></div>
-            </div>
-
-            <div class="arch-node arch-node-primary" style="position:relative;" onclick="toggleNode('odoo')" id="node-odoo">
-              <div class="arch-pulse-dot gold"></div>
-              <div class="arch-icon">🏭</div>
-              <div class="arch-label">Odoo 19 ERP</div>
-              <div class="arch-sub">Purchase Module</div>
+        <!-- NODE 1: BOQ Upload -->
+        <div class="anode anode-boq">
+          <div class="apulse teal"></div>
+          <div class="anode-head">
+            <div class="anode-icon">📁</div>
+            <div>
+              <div class="anode-name">BOQ File Upload</div>
+              <div class="anode-role">Step 1 · Entry Point</div>
             </div>
           </div>
-
-          <!-- Lower verticals -->
-          <div class="arch-lower">
-            <div style="width:148px; flex-shrink:0;"></div>
-            <div style="width:72px; flex-shrink:0;"></div>
-
-            <!-- From Agent downward -->
-            <div class="arch-lower-col" style="min-width:180px;">
-              <div class="arch-vert vert-gold">
-                <div class="arch-vert-line"></div>
-                <div class="arch-vert-arrow"></div>
-              </div>
-              <div class="arch-node arch-node-secondary" style="width:100%;" onclick="toggleNode('library')" id="node-library">
-                <div class="arch-icon">📚</div>
-                <div class="arch-label">Material Template<br>Library</div>
-                <div class="arch-sub">Verified Product Catalogue</div>
-              </div>
+          <div class="anode-steps">
+            <div class="astep">
+              <div class="astep-num">1</div>
+              <div class="astep-text"><strong>Ingest &amp; Validate</strong>Accepts .xlsx, .pdf, .csv, .docx — rejects corrupted files before processing starts</div>
             </div>
-
-            <div style="width:72px; flex-shrink:0;"></div>
-
-            <!-- From Odoo downward -->
-            <div class="arch-lower-col" style="min-width:148px;">
-              <div class="arch-vert vert-green">
-                <div class="arch-vert-line"></div>
-                <div class="arch-vert-arrow"></div>
-              </div>
-              <div class="arch-node arch-node-green" style="width:100%;" onclick="toggleNode('tracker')" id="node-tracker">
-                <div class="arch-icon">📡</div>
-                <div class="arch-label">Status &amp; Delivery<br>Tracker</div>
-                <div class="arch-sub">Real-time monitoring</div>
-              </div>
+            <div class="astep">
+              <div class="astep-num">2</div>
+              <div class="astep-text"><strong>Auto-detect Format</strong>Routes to Excel parser, PDF/OCR extractor, or AI pipeline for non-standard layouts</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">3</div>
+              <div class="astep-text"><strong>Attach Project Context</strong>Project name, ref, client, site &amp; delivery date tagged to every downstream record</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">4</div>
+              <div class="astep-text"><strong>Queue &amp; Job ID</strong>Encrypted dispatch to AI Agent — unique job ID created, no third-party storage</div>
             </div>
           </div>
-
+          <div class="anode-tags">
+            <span class="atag">.xlsx .pdf .csv .docx</span>
+            <span class="atag">OCR support</span>
+            <span class="atag">Encrypted</span>
+          </div>
+          <div class="anode-out">
+            <div class="anode-out-label">Out →</div>
+            <div class="anode-out-text">Validated file + project metadata + job ID, queued for AI extraction</div>
+          </div>
         </div>
-      </div>
 
-      <div class="arch-legend">
-        <div class="arch-legend-item"><div class="arch-legend-line" style="background:var(--teal);"></div>Primary data flow</div>
-        <div class="arch-legend-item"><div class="arch-legend-line" style="background:var(--gold);"></div>Reference &amp; catalogue lookup</div>
-        <div class="arch-legend-item"><div class="arch-legend-line" style="background:#16a34a;"></div>Status feedback loop</div>
+        <!-- CONNECTOR 1 -->
+        <div class="arch-conn-cell arch-conn-cell-1">
+          <div class="aconn-wrap aconn-teal">
+            <div class="aconn-label">Raw BOQ</div>
+            <div style="display:flex;align-items:center;width:100%;gap:0;">
+              <div class="aconn-line" style="flex:1;"></div>
+              <div class="aconn-arrow"></div>
+            </div>
+            <div class="aconn-sublabel">Encrypted · Validated</div>
+          </div>
+        </div>
+
+        <!-- NODE 2: AI Agent -->
+        <div class="anode anode-agent">
+          <div class="apulse cyan"></div>
+          <div class="apulse cyan" style="top:auto;bottom:-5px;right:-5px;animation-delay:1s;"></div>
+          <div class="anode-head">
+            <div class="anode-icon">🤖</div>
+            <div>
+              <div class="anode-name">AI Procurement Agent</div>
+              <div class="anode-role">Step 2 · Intelligence Core · Claude Opus 4</div>
+            </div>
+          </div>
+          <div class="anode-steps">
+            <div class="astep">
+              <div class="astep-num">1</div>
+              <div class="astep-text"><strong>Division Recognition</strong>Maps BOQ hierarchy: Division → Section → Line Item. Handles irregular layouts &amp; mixed languages</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">2</div>
+              <div class="astep-text"><strong>Line Item Extraction</strong>Extracts description, qty, unit (m², nr, kg…). Merges continuation rows; excludes subtotals</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">3</div>
+              <div class="astep-text"><strong>Catalogue Lookup</strong>Semantic vector search against Material Library — runs in parallel, not after extraction</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">4</div>
+              <div class="astep-text"><strong>Confidence Scoring</strong>≥90% auto-proceed · 70–89% amber flag · &lt;70% held, officer alerted</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">5</div>
+              <div class="astep-text"><strong>Qty Validation</strong>Arithmetic check vs BOQ subtotals. Units normalised (SQM→m², LM→m). Outliers alerted</div>
+            </div>
+          </div>
+          <div class="anode-tags">
+            <span class="atag">Claude Opus 4</span>
+            <span class="atag">Semantic matching</span>
+            <span class="atag">Confidence 0–100%</span>
+          </div>
+          <div class="anode-out">
+            <div class="anode-out-label">Out →</div>
+            <div class="anode-out-text">Structured, scored procurement list — items extracted, classified, catalogue-matched, validated</div>
+          </div>
+        </div>
+
+        <!-- CONNECTOR 2 -->
+        <div class="arch-conn-cell arch-conn-cell-2">
+          <div class="aconn-wrap aconn-teal">
+            <div class="aconn-label">Structured PRs</div>
+            <div style="display:flex;align-items:center;width:100%;gap:0;">
+              <div class="aconn-line" style="flex:1;"></div>
+              <div class="aconn-arrow"></div>
+            </div>
+            <div class="aconn-sublabel">JSON · API Push</div>
+          </div>
+        </div>
+
+        <!-- NODE 3: Odoo ERP -->
+        <div class="anode anode-odoo">
+          <div class="apulse gold"></div>
+          <div class="anode-head">
+            <div class="anode-icon">🏭</div>
+            <div>
+              <div class="anode-name">Odoo 19 ERP</div>
+              <div class="anode-role">Step 3 · Purchase Module</div>
+            </div>
+          </div>
+          <div class="anode-steps">
+            <div class="astep">
+              <div class="astep-num">1</div>
+              <div class="astep-text"><strong>API Auth</strong>JSON-RPC + OAuth2, scoped to Purchase write + Products/Vendors read only</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">2</div>
+              <div class="astep-text"><strong>Create Purchase Requisitions</strong>Product, qty, UoM, delivery date, vendor, price, project ref — all fields populated, no partial records</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">3</div>
+              <div class="astep-text"><strong>Product Verification</strong>Matched to Odoo master. New products auto-created as draft + flagged — no orphan PRs</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">4</div>
+              <div class="astep-text"><strong>Vendor Assignment</strong>Library vendor cross-checked vs Odoo list. Configurable per-category fallback logic</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">5</div>
+              <div class="astep-text"><strong>Full Audit Trail</strong>Original BOQ attached. Every PR chatter: AI timestamp, confidence score, job ID</div>
+            </div>
+          </div>
+          <div class="anode-tags">
+            <span class="atag">JSON-RPC API</span>
+            <span class="atag">OAuth2</span>
+            <span class="atag">Zero manual entry</span>
+          </div>
+          <div class="anode-out">
+            <div class="anode-out-label">Out →</div>
+            <div class="anode-out-text">Live Purchase Requisitions in Odoo — vendor-assigned, project-tagged, audit-trailed</div>
+          </div>
+        </div>
+
+      </div><!-- /arch-grid -->
+
+      <!-- ── VERTICAL CONNECTORS ── -->
+      <div class="arch-bottom">
+
+        <!-- spacer col 1 (BOQ column) -->
+        <div></div>
+        <!-- spacer col 2 (connector) -->
+        <div></div>
+
+        <!-- From Agent → Library -->
+        <div class="arch-vert-cell arch-vert-cell-lib">
+          <div class="avert-wrap avert-gold">
+            <div class="avert-label">Catalogue lookup</div>
+            <div class="avert-line"></div>
+            <div class="avert-arrow"></div>
+          </div>
+        </div>
+
+        <!-- spacer col 4 (connector) -->
+        <div></div>
+
+        <!-- From Odoo → Tracker -->
+        <div class="arch-vert-cell arch-vert-cell-track">
+          <div class="avert-wrap avert-green">
+            <div class="avert-label">PR status sync</div>
+            <div class="avert-line"></div>
+            <div class="avert-arrow"></div>
+          </div>
+        </div>
+
+      </div><!-- /arch-bottom -->
+
+      <!-- ── BOTTOM NODES ── -->
+      <div class="arch-bottom-nodes">
+
+        <!-- empty col 1 -->
+        <div></div>
+        <!-- empty col 2 -->
+        <div></div>
+
+        <!-- NODE 4: Material Library -->
+        <div class="anode anode-lib">
+          <div class="apulse gold"></div>
+          <div class="anode-head">
+            <div class="anode-icon">📚</div>
+            <div>
+              <div class="anode-name">Material Template Library</div>
+              <div class="anode-role">Reference Node · Catalogue Intelligence</div>
+            </div>
+          </div>
+          <div class="anode-steps">
+            <div class="astep">
+              <div class="astep-num">·</div>
+              <div class="astep-text"><strong>Stores per product:</strong> Internal SKU, brand, approved suppliers, unit cost (last PO), lead time (days), min order qty, BS/EN spec references</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">·</div>
+              <div class="astep-text"><strong>Vector semantic search:</strong> "Ceramic tile 600×600 anti-slip" = "anti-skid tile 60cm" = "porcelain floor 600mm" → same SKU</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">·</div>
+              <div class="astep-text"><strong>Self-learning:</strong> Manual corrections saved → match rate improves project by project. After 3–5 projects it knows Alamco's vocabulary</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">·</div>
+              <div class="astep-text"><strong>Version-controlled:</strong> Every change timestamped &amp; attributed. Bulk price list upload supported with conflict detection</div>
+            </div>
+          </div>
+          <div class="anode-tags">
+            <span class="atag">Vector search</span>
+            <span class="atag">Self-improving</span>
+            <span class="atag">Version controlled</span>
+          </div>
+          <div class="anode-out">
+            <div class="anode-out-label">Out →</div>
+            <div class="anode-out-text">Each BOQ line enriched: SKU + supplier + unit cost + lead time → feeds AI Agent &amp; Odoo PR</div>
+          </div>
+        </div>
+
+        <!-- empty col 4 -->
+        <div></div>
+
+        <!-- NODE 5: Status Tracker -->
+        <div class="anode anode-tracker">
+          <div class="apulse cyan" style="background:#16a34a;"></div>
+          <div class="anode-head">
+            <div class="anode-icon">📡</div>
+            <div>
+              <div class="anode-name">Status &amp; Delivery Tracker</div>
+              <div class="anode-role">Step 4 · Real-time Monitoring</div>
+            </div>
+          </div>
+          <div class="anode-steps">
+            <div class="astep">
+              <div class="astep-num">1</div>
+              <div class="astep-text"><strong>15-min Odoo Sync</strong>Polls Purchase module — detects Draft→Confirmed→Order→Transit→Received transitions automatically</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">2</div>
+              <div class="astep-text"><strong>Delivery Intelligence</strong>Expected date = order date + library lead time. Overdue → auto-escalates: officer (0h) → PM (24h)</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">3</div>
+              <div class="astep-text"><strong>5-Tier Alerts</strong>PR Draft &gt;48h · PO delayed &gt;3d · Delivery in 5d unshipped · Overdue · Qty variance on receipt</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">4</div>
+              <div class="astep-text"><strong>Live Dashboard</strong>Project procurement health (Green/Amber/Red), vendor on-time rate, spend vs BOQ, weekly PDF to PMs</div>
+            </div>
+            <div class="astep">
+              <div class="astep-num">5</div>
+              <div class="astep-text"><strong>Feedback Loop →</strong>Vendor delays update library lead times. Invoice variances flag cost updates. System accuracy improves each cycle</div>
+            </div>
+          </div>
+          <div class="anode-tags">
+            <span class="atag">15-min sync</span>
+            <span class="atag">Email + WhatsApp</span>
+            <span class="atag">Self-improving</span>
+          </div>
+          <div class="anode-out">
+            <div class="anode-out-label">Out →</div>
+            <div class="anode-out-text">Delays surfaced before site impact · vendor performance captured · library auto-updated</div>
+          </div>
+        </div>
+
+      </div><!-- /arch-bottom-nodes -->
+
+      <!-- ── LEGEND ── -->
+      <div class="arch-legend-bar">
         <div class="arch-legend-item">
-          <div style="width:8px;height:8px;border-radius:50%;background:var(--teal);"></div>
+          <div class="arch-legend-line" style="background:var(--teal);"></div>
+          Primary data flow (BOQ → Agent → Odoo)
+        </div>
+        <div class="arch-legend-item">
+          <div class="arch-legend-line" style="background:var(--gold);"></div>
+          Catalogue reference lookup (Agent ↔ Library)
+        </div>
+        <div class="arch-legend-item">
+          <div class="arch-legend-line" style="background:#16a34a;"></div>
+          Status &amp; feedback loop (Odoo → Tracker → Library)
+        </div>
+        <div class="arch-legend-item">
+          <div class="arch-legend-dot" style="background:var(--teal);"></div>
           Live connected node
         </div>
       </div>
 
-      <!-- ── DETAIL PANELS (appear below diagram on click) ── -->
-
-      <!-- BOQ Upload -->
-      <div class="node-detail-panel" id="panel-boq">
-        <div class="ndp-header">
-          <div class="ndp-header-left">
-            <div class="ndp-icon">📁</div>
-            <div>
-              <div class="ndp-title">BOQ File Upload</div>
-              <div class="ndp-tag teal">Entry Point · Step 1</div>
-            </div>
-          </div>
-          <button class="ndp-close" onclick="closePanel('boq')">✕</button>
-        </div>
-        <div class="ndp-body">
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">What happens inside</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">1</div>
-              <div><div class="ndp-step-label">File Ingestion &amp; Validation</div><div class="ndp-step-desc">System accepts .xlsx, .xls, .pdf, .csv, .docx. Validates readability and structure before any processing — corrupted files rejected immediately.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">2</div>
-              <div><div class="ndp-step-label">Format Detection &amp; Routing</div><div class="ndp-step-desc">Auto-detects file type. Routes to structured Excel parser, PDF/OCR extractor, or AI pipeline for non-standard legacy layouts.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">3</div>
-              <div><div class="ndp-step-label">Project Metadata Capture</div><div class="ndp-step-desc">User attaches project name, reference, client, site location, target delivery date — this context travels with every record downstream.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">4</div>
-              <div><div class="ndp-step-label">Encrypted Transfer &amp; Job Queue</div><div class="ndp-step-desc">File + metadata dispatched over encrypted connection to AI Agent. A unique job ID is created. No data stored in third-party systems.</div></div>
-            </div>
-          </div>
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">Supported formats</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">✓</div>
-              <div><div class="ndp-step-label">Excel (.xlsx / .xls)</div><div class="ndp-step-desc">Merged cells, multi-sheet workbooks, hidden rows — all handled.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">✓</div>
-              <div><div class="ndp-step-label">PDF (native &amp; scanned)</div><div class="ndp-step-desc">Native text extraction + OCR for scanned BOQs.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">✓</div>
-              <div><div class="ndp-step-label">Word / CSV</div><div class="ndp-step-desc">Unstructured Word specs and flat CSV exports both supported.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">✓</div>
-              <div><div class="ndp-step-label">Non-standard layouts</div><div class="ndp-step-desc">AI pipeline handles irregular column structures and mixed-language BOQs.</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="ndp-output">
-          <div class="ndp-output-label teal">Output →</div>
-          <div class="ndp-output-text">Validated, format-detected file securely queued for AI processing — with project context and unique job ID attached.</div>
-        </div>
-        <div class="ndp-tags">
-          <span class="ndp-tag-item">Auto format detection</span>
-          <span class="ndp-tag-item">Encrypted transfer</span>
-          <span class="ndp-tag-item">Audit job ID created</span>
-          <span class="ndp-tag-item">No third-party storage</span>
-        </div>
-      </div>
-
-      <!-- AI Agent -->
-      <div class="node-detail-panel" id="panel-agent">
-        <div class="ndp-header">
-          <div class="ndp-header-left">
-            <div class="ndp-icon">🤖</div>
-            <div>
-              <div class="ndp-title">AI Procurement Agent</div>
-              <div class="ndp-tag teal">Intelligence Core · Step 2</div>
-            </div>
-          </div>
-          <button class="ndp-close" onclick="closePanel('agent')">✕</button>
-        </div>
-        <div class="ndp-body">
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">Extraction &amp; reasoning</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">1</div>
-              <div><div class="ndp-step-label">Division &amp; Section Recognition</div><div class="ndp-step-desc">AI maps the BOQ hierarchy: Division → Section → Line Item. Handles irregular layouts, mixed languages, and missing headers through contextual reasoning.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">2</div>
-              <div><div class="ndp-step-label">Line Item Extraction</div><div class="ndp-step-desc">Extracts description, quantity, unit (m², m, nr, kg…), division tag, and spec codes. Continuation rows merged; subtotals excluded automatically.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">3</div>
-              <div><div class="ndp-step-label">Quantity Validation &amp; Unit Normalisation</div><div class="ndp-step-desc">Checks arithmetic vs BOQ subtotals. Normalises units (SQM → m², LM → m). Outlier quantities trigger automatic alerts regardless of confidence score.</div></div>
-            </div>
-          </div>
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">Quality control</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">4</div>
-              <div><div class="ndp-step-label">Catalogue Lookup (Gold flow)</div><div class="ndp-step-desc">Each item matched to Material Template Library in parallel with extraction — not after. Semantic matching, not keyword search.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">5</div>
-              <div><div class="ndp-step-label">Confidence Scoring</div><div class="ndp-step-desc">≥90% → auto-proceed · 70–89% → flagged amber for review · &lt;70% → held, officer notified. Prevents incorrect PRs entering Odoo.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">6</div>
-              <div><div class="ndp-step-label">Structured Output Generation</div><div class="ndp-step-desc">Final validated procurement list in structured JSON — ready for Odoo push. Every item has SKU, vendor, qty, unit, project tag, and confidence score.</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="ndp-output">
-          <div class="ndp-output-label teal">Output →</div>
-          <div class="ndp-output-text">Fully structured, confidence-scored procurement list — every line item extracted, classified, catalogue-matched, quantities validated, units normalised.</div>
-        </div>
-        <div class="ndp-tags">
-          <span class="ndp-tag-item">Claude Opus 4 — AI engine</span>
-          <span class="ndp-tag-item">Semantic catalogue matching</span>
-          <span class="ndp-tag-item">Confidence scoring 0–100%</span>
-          <span class="ndp-tag-item">Division hierarchy mapping</span>
-        </div>
-      </div>
-
-      <!-- Material Library -->
-      <div class="node-detail-panel" id="panel-library">
-        <div class="ndp-header">
-          <div class="ndp-header-left">
-            <div class="ndp-icon">📚</div>
-            <div>
-              <div class="ndp-title">Material Template Library</div>
-              <div class="ndp-tag gold">Catalogue Intelligence · Reference Node</div>
-            </div>
-          </div>
-          <button class="ndp-close" onclick="closePanel('library')">✕</button>
-        </div>
-        <div class="ndp-body">
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">What the library holds</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num gold">·</div>
-              <div><div class="ndp-step-label">Per-product data</div><div class="ndp-step-desc">Internal SKU, category, preferred brand(s), approved suppliers, current unit cost (from last PO), lead time (days), minimum order qty, and applicable BS/EN specifications.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num gold">·</div>
-              <div><div class="ndp-step-label">Version control</div><div class="ndp-step-desc">Every change is timestamped and attributed. Full history of cost and spec changes queryable at any time.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num gold">·</div>
-              <div><div class="ndp-step-label">Bulk import</div><div class="ndp-step-desc">Upload a new price list or product catalogue — AI merges it, flags conflicts, never blind-overwrites existing entries.</div></div>
-            </div>
-          </div>
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">How matching works</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num gold">1</div>
-              <div><div class="ndp-step-label">Vector semantic search</div><div class="ndp-step-desc">"Ceramic floor tile 600×600 anti-slip", "anti-skid tile 60cm sq.", "porcelain floor 600mm" → all resolve to the same SKU despite different phrasing.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num gold">2</div>
-              <div><div class="ndp-step-label">Unmatched item handling</div><div class="ndp-step-desc">No match found → structured entry created, flagged for manual review. Correction is saved — library learns for future projects.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num gold">3</div>
-              <div><div class="ndp-step-label">Self-improvement loop</div><div class="ndp-step-desc">Every manual correction improves future match rates. After 3–5 projects the library knows Alamco's exact procurement vocabulary.</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="ndp-output">
-          <div class="ndp-output-label gold">Output →</div>
-          <div class="ndp-output-text">Each BOQ line enriched with: matched SKU, preferred supplier, unit cost, lead time, and min order qty — feeding directly into the PR created in Odoo.</div>
-        </div>
-        <div class="ndp-tags">
-          <span class="ndp-tag-item">Vector semantic search</span>
-          <span class="ndp-tag-item">Version-controlled catalogue</span>
-          <span class="ndp-tag-item">Learns from corrections</span>
-          <span class="ndp-tag-item">Bulk import supported</span>
-        </div>
-      </div>
-
-      <!-- Odoo ERP -->
-      <div class="node-detail-panel" id="panel-odoo">
-        <div class="ndp-header">
-          <div class="ndp-header-left">
-            <div class="ndp-icon">🏭</div>
-            <div>
-              <div class="ndp-title">Odoo 19 ERP — Purchase Module</div>
-              <div class="ndp-tag teal">ERP Integration · Step 3</div>
-            </div>
-          </div>
-          <button class="ndp-close" onclick="closePanel('odoo')">✕</button>
-        </div>
-        <div class="ndp-body">
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">How records are created</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">1</div>
-              <div><div class="ndp-step-label">API Connection &amp; Auth</div><div class="ndp-step-desc">Connects via Odoo JSON-RPC API with OAuth2. Persistent connection — no re-auth per job. Scoped to Purchase Requisitions write + Products/Vendors read only.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">2</div>
-              <div><div class="ndp-step-label">Purchase Requisition Creation</div><div class="ndp-step-desc">For every approved item: product, qty, UoM, delivery date (timeline + lead time), preferred vendor, estimated price, project ref, division tag. All fields populated — no partial records.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">3</div>
-              <div><div class="ndp-step-label">Product Verification</div><div class="ndp-step-desc">Product verified against Odoo master before creating the PR. New products → draft record created and flagged, not blocked. Prevents orphan requisitions.</div></div>
-            </div>
-          </div>
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">Audit &amp; vendor logic</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">4</div>
-              <div><div class="ndp-step-label">Vendor Assignment</div><div class="ndp-step-desc">Preferred vendor from library cross-checked against Odoo vendor list. Falls back gracefully — never blocks record creation. Configurable per-category logic (e.g. always Vendor A for tiles above SAR 50K).</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num teal">5</div>
-              <div><div class="ndp-step-label">Full Audit Trail in Odoo</div><div class="ndp-step-desc">Original BOQ attached to the project record. Each PR chatter note contains: AI timestamp, confidence score, matched library entry, Codeox job ID. Full traceability from BOQ line to PO — inside Odoo.</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="ndp-output">
-          <div class="ndp-output-label teal">Output →</div>
-          <div class="ndp-output-text">Live Purchase Requisition records in Odoo 19 — product-matched, vendor-assigned, quantity-correct, project-tagged. Ready to convert to RFQs or POs.</div>
-        </div>
-        <div class="ndp-tags">
-          <span class="ndp-tag-item">Odoo 19 JSON-RPC API</span>
-          <span class="ndp-tag-item">OAuth2 scoped auth</span>
-          <span class="ndp-tag-item">Zero manual entry</span>
-          <span class="ndp-tag-item">Full audit trail in Odoo</span>
-        </div>
-      </div>
-
-      <!-- Status Tracker -->
-      <div class="node-detail-panel" id="panel-tracker">
-        <div class="ndp-header">
-          <div class="ndp-header-left">
-            <div class="ndp-icon">📡</div>
-            <div>
-              <div class="ndp-title">Status &amp; Delivery Tracker</div>
-              <div class="ndp-tag green">Real-time Monitoring · Step 4</div>
-            </div>
-          </div>
-          <button class="ndp-close" onclick="closePanel('tracker')">✕</button>
-        </div>
-        <div class="ndp-body">
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">Monitoring pipeline</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num green">1</div>
-              <div><div class="ndp-step-label">Continuous Odoo Sync</div><div class="ndp-step-desc">Polls Odoo Purchase module every 15 minutes. Status changes (Draft → Confirmed → Order Placed → In Transit → Received) auto-detected and recorded in the tracker timeline.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num green">2</div>
-              <div><div class="ndp-step-label">Delivery Date Intelligence</div><div class="ndp-step-desc">Expected delivery = order date + vendor lead time (from library). Missed dates auto-flag the item at-risk → notifies procurement officer → escalates to PM after 24h.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num green">3</div>
-              <div><div class="ndp-step-label">5-Tier Alert System</div><div class="ndp-step-desc">Fires on: (1) PR in Draft >48h · (2) PO not placed within 3 days of approval · (3) Delivery due in 5 days, not shipped · (4) Delivery overdue · (5) Quantity variance on receipt. Email + WhatsApp.</div></div>
-            </div>
-          </div>
-          <div class="ndp-steps">
-            <div class="ndp-steps-title">Visibility &amp; feedback</div>
-            <div class="ndp-step">
-              <div class="ndp-step-num green">4</div>
-              <div><div class="ndp-step-label">Live Dashboard</div><div class="ndp-step-desc">All active projects with procurement health (Green/Amber/Red), per-project item status, vendor on-time rate, spend vs BOQ estimate, outstanding PRs by age. Auto weekly PDF report to PMs.</div></div>
-            </div>
-            <div class="ndp-step">
-              <div class="ndp-step-num green">5</div>
-              <div><div class="ndp-step-label">Feedback Loop → Library</div><div class="ndp-step-desc">Vendor delivery performance feeds back into the Material Library — lead times auto-adjusted, cost estimates flagged for update. System gets more accurate every project cycle.</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="ndp-output">
-          <div class="ndp-output-label green">Output →</div>
-          <div class="ndp-output-text">Continuous procurement visibility — delays surfaced before they hit site, vendor performance captured, feedback loop improves every future BOQ cycle.</div>
-        </div>
-        <div class="ndp-tags">
-          <span class="ndp-tag-item">15-min sync cycle</span>
-          <span class="ndp-tag-item">5-tier alert system</span>
-          <span class="ndp-tag-item">Email + WhatsApp alerts</span>
-          <span class="ndp-tag-item">Self-improving lead times</span>
-        </div>
-      </div>
-
-    </div><!-- /arch-wrap -->
+    </div><!-- /arch-canvas -->
 
   </div>
 </section>
-
-<script>
-  function toggleNode(id) {
-    const allPanels = document.querySelectorAll('.node-detail-panel');
-    const allNodes  = document.querySelectorAll('.arch-node');
-    const panel = document.getElementById('panel-' + id);
-    const node  = document.getElementById('node-' + id);
-    const isOpen = panel.classList.contains('open');
-
-    // Close all
-    allPanels.forEach(p => p.classList.remove('open'));
-    allNodes.forEach(n => n.classList.remove('active'));
-
-    // Open this one if it was closed
-    if (!isOpen) {
-      panel.classList.add('open');
-      node.classList.add('active');
-      // Scroll panel into view smoothly
-      setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
-    }
-  }
-  function closePanel(id) {
-    document.getElementById('panel-' + id).classList.remove('open');
-    document.getElementById('node-' + id).classList.remove('active');
-  }
-</script>
 
 <!-- COMPARISON -->
 <section id="comparison">
