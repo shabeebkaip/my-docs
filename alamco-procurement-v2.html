@@ -992,15 +992,121 @@ h2.section-title {
   <div class="container">
     <span class="label reveal">System Design</span>
     <h2 class="section-title reveal d1">Architecture <span class="teal">Overview</span></h2>
-    <p class="subtitle reveal d2">A clean, modular system built on proven infrastructure — designed to integrate with your existing Odoo environment and scale with your operations.</p>
+    <p class="subtitle reveal d2">Click any node to see exactly what happens at that step — from file upload to live Odoo records.</p>
 
-    <div class="arch-wrap reveal d3">
+    <style>
+      /* ── Interactive diagram wrapper ──────────────────── */
+      .arch-interactive { position:relative; }
+
+      /* Make nodes clickable */
+      .arch-node { cursor:pointer; transition:transform 0.18s, box-shadow 0.18s; }
+      .arch-node:hover { transform:translateY(-4px) scale(1.03); box-shadow:0 8px 28px rgba(0,0,0,0.12); }
+      .arch-node.active { box-shadow:0 0 0 2.5px var(--teal), 0 8px 32px rgba(27,94,110,0.18); }
+      .arch-node-center.active { box-shadow:0 0 0 2.5px #2a8fa8, 0 8px 32px rgba(42,143,168,0.25); }
+      .arch-node-secondary.active { box-shadow:0 0 0 2.5px var(--gold), 0 8px 32px rgba(184,134,11,0.18); }
+      .arch-node-green.active { box-shadow:0 0 0 2.5px #16a34a, 0 8px 32px rgba(22,163,74,0.18); }
+
+      /* Click hint badge */
+      .arch-node::after {
+        content:'Click to expand';
+        position:absolute; bottom:-22px; left:50%; transform:translateX(-50%);
+        font-size:0.58rem; color:var(--ink-30); letter-spacing:0.06em; white-space:nowrap;
+        opacity:0; transition:opacity 0.2s;
+        font-family:var(--font-sans);
+      }
+      .arch-node:hover::after { opacity:1; }
+
+      /* ── Detail panel ──────────────────────────────────── */
+      .node-detail-panel {
+        display:none;
+        margin-top:28px;
+        border-radius:var(--r-lg);
+        border:1px solid var(--ink-10);
+        background:#fff;
+        overflow:hidden;
+        animation: panelIn 0.28s cubic-bezier(0.4,0,0.2,1);
+      }
+      .node-detail-panel.open { display:block; }
+      @keyframes panelIn {
+        from { opacity:0; transform:translateY(10px); }
+        to   { opacity:1; transform:translateY(0); }
+      }
+      .ndp-header {
+        display:flex; align-items:center; justify-content:space-between;
+        padding:18px 24px 16px;
+        border-bottom:1px solid var(--ink-10);
+      }
+      .ndp-header-left { display:flex; align-items:center; gap:14px; }
+      .ndp-icon { font-size:1.6rem; line-height:1; }
+      .ndp-title { font-family:var(--font-serif); font-size:1.1rem; font-weight:700; color:var(--ink); }
+      .ndp-tag {
+        font-size:0.6rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase;
+        padding:2px 8px; border-radius:3px; margin-top:4px; display:inline-block;
+      }
+      .ndp-tag.teal  { background:var(--teal-pale); color:var(--teal); }
+      .ndp-tag.gold  { background:var(--gold-pale); color:var(--gold); }
+      .ndp-tag.green { background:#f0fdf4; color:#16a34a; }
+      .ndp-close {
+        width:28px; height:28px; border-radius:50%; border:1px solid var(--ink-10);
+        background:var(--bg); cursor:pointer; display:flex; align-items:center; justify-content:center;
+        font-size:0.75rem; color:var(--ink-60); transition:background 0.15s;
+        flex-shrink:0;
+      }
+      .ndp-close:hover { background:var(--ink-10); }
+
+      .ndp-body { display:grid; grid-template-columns:1fr 1fr; }
+      @media(max-width:700px){ .ndp-body { grid-template-columns:1fr; } }
+
+      .ndp-steps { padding:20px 24px; border-right:1px solid var(--ink-10); }
+      .ndp-steps:last-child { border-right:none; }
+      .ndp-steps-title {
+        font-size:0.62rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase;
+        color:var(--ink-30); margin-bottom:12px;
+      }
+      .ndp-step {
+        display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--ink-10);
+      }
+      .ndp-step:last-child { border-bottom:none; padding-bottom:0; }
+      .ndp-step-num {
+        width:20px; height:20px; border-radius:50%; flex-shrink:0;
+        display:flex; align-items:center; justify-content:center;
+        font-size:0.6rem; font-weight:700; margin-top:2px;
+      }
+      .ndp-step-num.teal  { background:var(--teal-pale);  color:var(--teal);  }
+      .ndp-step-num.gold  { background:var(--gold-pale);  color:var(--gold);  }
+      .ndp-step-num.green { background:#f0fdf4;            color:#16a34a;      }
+      .ndp-step-label { font-size:0.8rem; font-weight:600; color:var(--ink); margin-bottom:3px; }
+      .ndp-step-desc  { font-size:0.75rem; color:var(--ink-60); line-height:1.6; }
+
+      .ndp-output {
+        padding:14px 24px;
+        background:var(--bg); border-top:1px solid var(--ink-10);
+        font-size:0.78rem; line-height:1.65;
+        display:flex; align-items:flex-start; gap:10px;
+      }
+      .ndp-output-label {
+        font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+        flex-shrink:0; margin-top:3px;
+      }
+      .ndp-output-label.teal  { color:var(--teal); }
+      .ndp-output-label.gold  { color:var(--gold); }
+      .ndp-output-label.green { color:#16a34a; }
+      .ndp-output-text { color:var(--ink-60); }
+
+      .ndp-tags { display:flex; flex-wrap:wrap; gap:5px; padding:12px 24px 16px; border-top:1px solid var(--ink-10); }
+      .ndp-tag-item {
+        font-size:0.65rem; padding:3px 8px; border-radius:3px;
+        background:var(--bg); border:1px solid var(--ink-10); color:var(--ink-60);
+      }
+    </style>
+
+    <div class="arch-wrap reveal d3 arch-interactive">
       <div class="arch-diagram-area">
         <div class="arch-diagram-inner">
 
           <!-- Main horizontal row -->
           <div class="arch-row">
-            <div class="arch-node arch-node-primary" style="position:relative;">
+            <div class="arch-node arch-node-primary" style="position:relative;" onclick="toggleNode('boq')" id="node-boq">
               <div class="arch-pulse-dot"></div>
               <div class="arch-icon">📁</div>
               <div class="arch-label">BOQ File Upload</div>
@@ -1012,7 +1118,7 @@ h2.section-title {
               <div class="arch-conn-arrow"></div>
             </div>
 
-            <div class="arch-node arch-node-center" style="position:relative;">
+            <div class="arch-node arch-node-center" style="position:relative;" onclick="toggleNode('agent')" id="node-agent">
               <div class="arch-pulse-dot" style="background:#2a8fa8;"></div>
               <div class="arch-pulse-dot" style="background:#2a8fa8;animation-delay:1s;top:auto;bottom:-4px;right:-4px;"></div>
               <div class="arch-icon">🤖</div>
@@ -1025,7 +1131,7 @@ h2.section-title {
               <div class="arch-conn-arrow"></div>
             </div>
 
-            <div class="arch-node arch-node-primary" style="position:relative;">
+            <div class="arch-node arch-node-primary" style="position:relative;" onclick="toggleNode('odoo')" id="node-odoo">
               <div class="arch-pulse-dot gold"></div>
               <div class="arch-icon">🏭</div>
               <div class="arch-label">Odoo 19 ERP</div>
@@ -1044,7 +1150,7 @@ h2.section-title {
                 <div class="arch-vert-line"></div>
                 <div class="arch-vert-arrow"></div>
               </div>
-              <div class="arch-node arch-node-secondary" style="width:100%;">
+              <div class="arch-node arch-node-secondary" style="width:100%;" onclick="toggleNode('library')" id="node-library">
                 <div class="arch-icon">📚</div>
                 <div class="arch-label">Material Template<br>Library</div>
                 <div class="arch-sub">Verified Product Catalogue</div>
@@ -1059,7 +1165,7 @@ h2.section-title {
                 <div class="arch-vert-line"></div>
                 <div class="arch-vert-arrow"></div>
               </div>
-              <div class="arch-node arch-node-green" style="width:100%;">
+              <div class="arch-node arch-node-green" style="width:100%;" onclick="toggleNode('tracker')" id="node-tracker">
                 <div class="arch-icon">📡</div>
                 <div class="arch-label">Status &amp; Delivery<br>Tracker</div>
                 <div class="arch-sub">Real-time monitoring</div>
@@ -1079,325 +1185,319 @@ h2.section-title {
           Live connected node
         </div>
       </div>
-    </div>
 
-    <!-- ── DETAILED STEPS ── -->
-    <div style="margin-top:72px;">
-      <span class="label reveal">Step-by-Step Flow</span>
-      <h3 class="reveal d1" style="font-family:var(--font-serif);font-size:clamp(1.7rem,2.8vw,2.3rem);font-weight:700;letter-spacing:-0.02em;color:var(--ink);margin-bottom:10px;">
-        What Happens — <span class="teal">Inside Every Step</span>
-      </h3>
-      <p class="subtitle reveal d2" style="margin-bottom:48px;">A granular breakdown of exactly what the system does at each node of the architecture — from the moment a file is uploaded to the moment a status alert fires.</p>
+      <!-- ── DETAIL PANELS (appear below diagram on click) ── -->
 
-      <style>
-        .detailed-steps { display:flex; flex-direction:column; gap:0; }
-        .ds-item {
-          display:grid; grid-template-columns:56px 1fr;
-          gap:0 28px; padding:36px 0; border-bottom:1px solid var(--ink-10);
-          position:relative;
-        }
-        .ds-item:last-child { border-bottom:none; }
-        .ds-item::before {
-          content:''; position:absolute; left:27px; top:0; bottom:0; width:1px;
-          background: linear-gradient(to bottom, transparent 0%, var(--ink-10) 12%, var(--ink-10) 88%, transparent 100%);
-          z-index:0;
-        }
-        .ds-item:first-child::before { top:50%; }
-        .ds-item:last-child::before  { bottom:50%; }
-        .ds-num-col { display:flex; flex-direction:column; align-items:center; gap:0; position:relative; z-index:1; padding-top:2px; }
-        .ds-circle {
-          width:56px; height:56px; border-radius:50%; flex-shrink:0;
-          display:flex; align-items:center; justify-content:center;
-          font-size:1.3rem; border:2px solid; background:#fff;
-          box-shadow:0 2px 12px rgba(0,0,0,0.06);
-        }
-        .ds-circle.teal  { border-color:var(--teal-light);  }
-        .ds-circle.gold  { border-color:var(--gold);        }
-        .ds-circle.green { border-color:#16a34a;             }
-        .ds-body { padding-top:4px; }
-        .ds-node-tag {
-          display:inline-flex; align-items:center; gap:6px;
-          font-size:0.62rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase;
-          padding:3px 10px; border-radius:3px; margin-bottom:10px;
-        }
-        .ds-node-tag.teal  { color:var(--teal);  background:var(--teal-pale);  }
-        .ds-node-tag.gold  { color:var(--gold);  background:var(--gold-pale);  }
-        .ds-node-tag.green { color:#16a34a;       background:#f0fdf4;           }
-        .ds-title {
-          font-family:var(--font-serif); font-size:1.2rem; font-weight:700;
-          color:var(--ink); margin-bottom:8px; line-height:1.3;
-        }
-        .ds-lead { font-size:0.92rem; color:var(--ink-60); line-height:1.75; margin-bottom:18px; }
-        .ds-substeps { display:flex; flex-direction:column; gap:0; }
-        .ds-sub {
-          display:flex; align-items:flex-start; gap:14px;
-          padding:12px 0; border-top:1px solid var(--ink-10);
-          font-size:0.83rem; line-height:1.65;
-        }
-        .ds-sub-icon {
-          width:28px; height:28px; border-radius:6px; flex-shrink:0;
-          display:flex; align-items:center; justify-content:center; font-size:0.85rem;
-          background:var(--bg); border:1px solid var(--ink-10);
-          margin-top:1px;
-        }
-        .ds-sub-label { font-weight:600; color:var(--ink); margin-bottom:2px; font-size:0.82rem; }
-        .ds-sub-desc  { color:var(--ink-60); }
-        .ds-callout {
-          margin-top:16px; padding:12px 16px;
-          border-left:3px solid; border-radius:0 var(--r) var(--r) 0;
-          font-size:0.8rem; line-height:1.65;
-        }
-        .ds-callout.teal  { border-color:var(--teal);  background:var(--teal-pale);  color:var(--teal); }
-        .ds-callout.gold  { border-color:var(--gold);  background:var(--gold-pale);  color:#7a5c00; }
-        .ds-callout.green { border-color:#16a34a;       background:#f0fdf4;           color:#166534; }
-        .ds-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
-        .ds-tag {
-          font-size:0.67rem; font-weight:500; padding:3px 9px; border-radius:3px;
-          background:var(--bg); border:1px solid var(--ink-10); color:var(--ink-60);
-        }
-      </style>
-
-      <div class="detailed-steps reveal d3">
-
-        <!-- STEP 1 -->
-        <div class="ds-item">
-          <div class="ds-num-col">
-            <div class="ds-circle teal">📁</div>
-          </div>
-          <div class="ds-body">
-            <div class="ds-node-tag teal">Node 1 · Entry Point</div>
-            <div class="ds-title">BOQ File Upload</div>
-            <div class="ds-lead">The process begins the moment Alamco's procurement team uploads a Bill of Quantities file. The system accepts any structured format — no special template required.</div>
-            <div class="ds-substeps">
-              <div class="ds-sub">
-                <div class="ds-sub-icon">📤</div>
-                <div>
-                  <div class="ds-sub-label">File Ingestion &amp; Validation</div>
-                  <div class="ds-sub-desc">The upload interface accepts Excel (.xlsx, .xls), PDF, CSV, or Word documents. The system immediately validates the file — checking for readability, format integrity, and minimum required structure (at least one data sheet or page with line items). Corrupted or empty files are rejected with a clear error before any processing begins.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🔍</div>
-                <div>
-                  <div class="ds-sub-label">Format Detection</div>
-                  <div class="ds-sub-desc">The system auto-detects the file type and routes it to the correct parser: structured Excel parser for spreadsheets (handles merged cells, multi-sheet workbooks, hidden rows), PDF/OCR extractor for scanned documents, or the AI extraction pipeline for non-standard or legacy layouts that don't follow predictable column structures.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🏷️</div>
-                <div>
-                  <div class="ds-sub-label">Project Metadata Capture</div>
-                  <div class="ds-sub-desc">Alongside the file, the user optionally provides project metadata: project name, reference number, client, site location, and target delivery date. This context is attached to every procurement record generated downstream, creating a full audit trail from file to purchase order.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🔐</div>
-                <div>
-                  <div class="ds-sub-label">Secure Transfer to AI Agent</div>
-                  <div class="ds-sub-desc">Once validated, the file and metadata are packaged and dispatched over an encrypted connection to the AI Procurement Agent. A job is created in the processing queue and the user sees a real-time status indicator. No data is stored in third-party systems — processing happens within Codeox's private infrastructure.</div>
-                </div>
-              </div>
+      <!-- BOQ Upload -->
+      <div class="node-detail-panel" id="panel-boq">
+        <div class="ndp-header">
+          <div class="ndp-header-left">
+            <div class="ndp-icon">📁</div>
+            <div>
+              <div class="ndp-title">BOQ File Upload</div>
+              <div class="ndp-tag teal">Entry Point · Step 1</div>
             </div>
-            <div class="ds-callout teal"><strong>Output of this step:</strong> A validated, format-detected file securely queued for AI processing — with project context attached and a unique job ID for tracking.</div>
-            <div class="ds-tags"><span class="ds-tag">Supported: .xlsx .xls .pdf .csv .docx</span><span class="ds-tag">Auto format detection</span><span class="ds-tag">Encrypted transfer</span><span class="ds-tag">Audit job ID created</span></div>
+          </div>
+          <button class="ndp-close" onclick="closePanel('boq')">✕</button>
+        </div>
+        <div class="ndp-body">
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">What happens inside</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">1</div>
+              <div><div class="ndp-step-label">File Ingestion &amp; Validation</div><div class="ndp-step-desc">System accepts .xlsx, .xls, .pdf, .csv, .docx. Validates readability and structure before any processing — corrupted files rejected immediately.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">2</div>
+              <div><div class="ndp-step-label">Format Detection &amp; Routing</div><div class="ndp-step-desc">Auto-detects file type. Routes to structured Excel parser, PDF/OCR extractor, or AI pipeline for non-standard legacy layouts.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">3</div>
+              <div><div class="ndp-step-label">Project Metadata Capture</div><div class="ndp-step-desc">User attaches project name, reference, client, site location, target delivery date — this context travels with every record downstream.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">4</div>
+              <div><div class="ndp-step-label">Encrypted Transfer &amp; Job Queue</div><div class="ndp-step-desc">File + metadata dispatched over encrypted connection to AI Agent. A unique job ID is created. No data stored in third-party systems.</div></div>
+            </div>
+          </div>
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">Supported formats</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">✓</div>
+              <div><div class="ndp-step-label">Excel (.xlsx / .xls)</div><div class="ndp-step-desc">Merged cells, multi-sheet workbooks, hidden rows — all handled.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">✓</div>
+              <div><div class="ndp-step-label">PDF (native &amp; scanned)</div><div class="ndp-step-desc">Native text extraction + OCR for scanned BOQs.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">✓</div>
+              <div><div class="ndp-step-label">Word / CSV</div><div class="ndp-step-desc">Unstructured Word specs and flat CSV exports both supported.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">✓</div>
+              <div><div class="ndp-step-label">Non-standard layouts</div><div class="ndp-step-desc">AI pipeline handles irregular column structures and mixed-language BOQs.</div></div>
+            </div>
           </div>
         </div>
+        <div class="ndp-output">
+          <div class="ndp-output-label teal">Output →</div>
+          <div class="ndp-output-text">Validated, format-detected file securely queued for AI processing — with project context and unique job ID attached.</div>
+        </div>
+        <div class="ndp-tags">
+          <span class="ndp-tag-item">Auto format detection</span>
+          <span class="ndp-tag-item">Encrypted transfer</span>
+          <span class="ndp-tag-item">Audit job ID created</span>
+          <span class="ndp-tag-item">No third-party storage</span>
+        </div>
+      </div>
 
-        <!-- STEP 2 -->
-        <div class="ds-item">
-          <div class="ds-num-col">
-            <div class="ds-circle teal">🧠</div>
-          </div>
-          <div class="ds-body">
-            <div class="ds-node-tag teal">Node 2 · AI Core · Primary data flow</div>
-            <div class="ds-title">AI Procurement Agent — Reading &amp; Parsing</div>
-            <div class="ds-lead">This is the intelligence core of the system. The AI agent reads the BOQ file as a senior procurement engineer would — understanding context, inferring division scope, and extracting every actionable procurement item.</div>
-            <div class="ds-substeps">
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🗂️</div>
-                <div>
-                  <div class="ds-sub-label">Division &amp; Section Recognition</div>
-                  <div class="ds-sub-desc">The AI identifies the BOQ's division structure — Civil, MEP, Finishing, Fit-out, Furniture, FF&amp;E, and others. It maps the hierarchy: Division → Section → Line Item. Even irregular or non-standard BOQ layouts (no consistent column headers, mixed languages, numerical codes without descriptions) are handled through the AI's contextual reasoning rather than rigid pattern matching.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">📋</div>
-                <div>
-                  <div class="ds-sub-label">Line Item Extraction</div>
-                  <div class="ds-sub-desc">For each line item the agent extracts: item description (raw text), quantity (numeric), unit of measure (m², m, nr, kg, set, lot…), division/section assignment, and any specification codes or notes referenced. Items that span multiple rows (continuation lines) are merged. Subtotal and total rows are identified and excluded from the procurement list.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">📚</div>
-                <div>
-                  <div class="ds-sub-label">Material Template Library Lookup (Gold flow)</div>
-                  <div class="ds-sub-desc">Each extracted line item is matched against the Material Template Library — Alamco's verified product catalogue. The AI performs semantic matching: "gypsum ceiling tiles 600×600" maps to the catalogue SKU, brand, unit cost, and preferred supplier. For items with no direct match, the AI generates a structured procurement entry flagged for manual review. This lookup happens in parallel with extraction, not after.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">⚖️</div>
-                <div>
-                  <div class="ds-sub-label">Confidence Scoring &amp; Flagging</div>
-                  <div class="ds-sub-desc">Every extracted item receives a confidence score (0–100%). Items above 90% proceed automatically. Items between 70–90% are processed but flagged amber for human review. Items below 70% are held and the procurement officer is notified to validate before the record is pushed to Odoo. This prevents incorrect purchase requisitions from entering the ERP system.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">📐</div>
-                <div>
-                  <div class="ds-sub-label">Quantity Validation &amp; Unit Harmonisation</div>
-                  <div class="ds-sub-desc">The agent checks quantities for arithmetic consistency against BOQ subtotals where available. Units of measure are normalised to Alamco's standard set (e.g., "SQM" → "m²", "LM" → "m"). Quantities are also cross-checked against typical project scope ranges — an entry of 500,000 m² of floor tiles triggers an automatic outlier alert regardless of confidence score.</div>
-                </div>
-              </div>
+      <!-- AI Agent -->
+      <div class="node-detail-panel" id="panel-agent">
+        <div class="ndp-header">
+          <div class="ndp-header-left">
+            <div class="ndp-icon">🤖</div>
+            <div>
+              <div class="ndp-title">AI Procurement Agent</div>
+              <div class="ndp-tag teal">Intelligence Core · Step 2</div>
             </div>
-            <div class="ds-callout teal"><strong>Output of this step:</strong> A fully structured, confidence-scored procurement list — every line item extracted, classified by division, matched to the catalogue where possible, with quantities validated and units normalised.</div>
-            <div class="ds-tags"><span class="ds-tag">Claude Opus 4 — AI engine</span><span class="ds-tag">Semantic catalogue matching</span><span class="ds-tag">Confidence scoring</span><span class="ds-tag">Division mapping</span><span class="ds-tag">Quantity validation</span></div>
+          </div>
+          <button class="ndp-close" onclick="closePanel('agent')">✕</button>
+        </div>
+        <div class="ndp-body">
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">Extraction &amp; reasoning</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">1</div>
+              <div><div class="ndp-step-label">Division &amp; Section Recognition</div><div class="ndp-step-desc">AI maps the BOQ hierarchy: Division → Section → Line Item. Handles irregular layouts, mixed languages, and missing headers through contextual reasoning.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">2</div>
+              <div><div class="ndp-step-label">Line Item Extraction</div><div class="ndp-step-desc">Extracts description, quantity, unit (m², m, nr, kg…), division tag, and spec codes. Continuation rows merged; subtotals excluded automatically.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">3</div>
+              <div><div class="ndp-step-label">Quantity Validation &amp; Unit Normalisation</div><div class="ndp-step-desc">Checks arithmetic vs BOQ subtotals. Normalises units (SQM → m², LM → m). Outlier quantities trigger automatic alerts regardless of confidence score.</div></div>
+            </div>
+          </div>
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">Quality control</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">4</div>
+              <div><div class="ndp-step-label">Catalogue Lookup (Gold flow)</div><div class="ndp-step-desc">Each item matched to Material Template Library in parallel with extraction — not after. Semantic matching, not keyword search.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">5</div>
+              <div><div class="ndp-step-label">Confidence Scoring</div><div class="ndp-step-desc">≥90% → auto-proceed · 70–89% → flagged amber for review · &lt;70% → held, officer notified. Prevents incorrect PRs entering Odoo.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">6</div>
+              <div><div class="ndp-step-label">Structured Output Generation</div><div class="ndp-step-desc">Final validated procurement list in structured JSON — ready for Odoo push. Every item has SKU, vendor, qty, unit, project tag, and confidence score.</div></div>
+            </div>
           </div>
         </div>
+        <div class="ndp-output">
+          <div class="ndp-output-label teal">Output →</div>
+          <div class="ndp-output-text">Fully structured, confidence-scored procurement list — every line item extracted, classified, catalogue-matched, quantities validated, units normalised.</div>
+        </div>
+        <div class="ndp-tags">
+          <span class="ndp-tag-item">Claude Opus 4 — AI engine</span>
+          <span class="ndp-tag-item">Semantic catalogue matching</span>
+          <span class="ndp-tag-item">Confidence scoring 0–100%</span>
+          <span class="ndp-tag-item">Division hierarchy mapping</span>
+        </div>
+      </div>
 
-        <!-- STEP 3 -->
-        <div class="ds-item">
-          <div class="ds-num-col">
-            <div class="ds-circle gold">📚</div>
-          </div>
-          <div class="ds-body">
-            <div class="ds-node-tag gold">Node 3 · Reference · Gold flow</div>
-            <div class="ds-title">Material Template Library — Catalogue Intelligence</div>
-            <div class="ds-lead">The Material Template Library is Alamco's living product and specification database — maintained and curated by the procurement team. The AI queries it in real-time during extraction to enrich every BOQ line item with verified procurement data.</div>
-            <div class="ds-substeps">
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🗃️</div>
-                <div>
-                  <div class="ds-sub-label">What the Library Contains</div>
-                  <div class="ds-sub-desc">Every entry in the library includes: product name and description, internal SKU, category and subcategory, unit of measure, preferred brand(s), approved supplier list with contact details, current unit cost (updated from last PO), lead time (days), minimum order quantity, and applicable specifications or standards (e.g. BS/EN references). The library is version-controlled — every change is timestamped and attributed.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🔗</div>
-                <div>
-                  <div class="ds-sub-label">Semantic Matching Process</div>
-                  <div class="ds-sub-desc">The AI uses vector embeddings to perform semantic similarity search across the library — not just keyword matching. "Ceramic floor tile 600×600 anti-slip", "anti-skid ceramic tile 60×60 cm", and "porcelain floor tile 600mm sq." all resolve to the same catalogue product despite different phrasing. This handles the real-world inconsistency of how materials are described across different BOQ sources and consultants.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">✏️</div>
-                <div>
-                  <div class="ds-sub-label">Library Maintenance &amp; Growth</div>
-                  <div class="ds-sub-desc">When the procurement team manually maps or corrects a previously unmatched item, the library learns — the new mapping is saved. Over time, the match rate improves project by project. The team can also bulk-update the library by uploading a new product catalogue or price list; the AI merges it against existing entries, flagging conflicts for review rather than overwriting blindly.</div>
-                </div>
-              </div>
+      <!-- Material Library -->
+      <div class="node-detail-panel" id="panel-library">
+        <div class="ndp-header">
+          <div class="ndp-header-left">
+            <div class="ndp-icon">📚</div>
+            <div>
+              <div class="ndp-title">Material Template Library</div>
+              <div class="ndp-tag gold">Catalogue Intelligence · Reference Node</div>
             </div>
-            <div class="ds-callout gold"><strong>Output of this step:</strong> Each BOQ line item enriched with: matched SKU, preferred supplier, unit cost, lead time, and minimum order quantity — directly feeding into the purchase requisition generated in the next step.</div>
-            <div class="ds-tags"><span class="ds-tag">Vector semantic search</span><span class="ds-tag">Version-controlled catalogue</span><span class="ds-tag">Auto-enrichment</span><span class="ds-tag">Learns from corrections</span></div>
+          </div>
+          <button class="ndp-close" onclick="closePanel('library')">✕</button>
+        </div>
+        <div class="ndp-body">
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">What the library holds</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num gold">·</div>
+              <div><div class="ndp-step-label">Per-product data</div><div class="ndp-step-desc">Internal SKU, category, preferred brand(s), approved suppliers, current unit cost (from last PO), lead time (days), minimum order qty, and applicable BS/EN specifications.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num gold">·</div>
+              <div><div class="ndp-step-label">Version control</div><div class="ndp-step-desc">Every change is timestamped and attributed. Full history of cost and spec changes queryable at any time.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num gold">·</div>
+              <div><div class="ndp-step-label">Bulk import</div><div class="ndp-step-desc">Upload a new price list or product catalogue — AI merges it, flags conflicts, never blind-overwrites existing entries.</div></div>
+            </div>
+          </div>
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">How matching works</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num gold">1</div>
+              <div><div class="ndp-step-label">Vector semantic search</div><div class="ndp-step-desc">"Ceramic floor tile 600×600 anti-slip", "anti-skid tile 60cm sq.", "porcelain floor 600mm" → all resolve to the same SKU despite different phrasing.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num gold">2</div>
+              <div><div class="ndp-step-label">Unmatched item handling</div><div class="ndp-step-desc">No match found → structured entry created, flagged for manual review. Correction is saved — library learns for future projects.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num gold">3</div>
+              <div><div class="ndp-step-label">Self-improvement loop</div><div class="ndp-step-desc">Every manual correction improves future match rates. After 3–5 projects the library knows Alamco's exact procurement vocabulary.</div></div>
+            </div>
           </div>
         </div>
+        <div class="ndp-output">
+          <div class="ndp-output-label gold">Output →</div>
+          <div class="ndp-output-text">Each BOQ line enriched with: matched SKU, preferred supplier, unit cost, lead time, and min order qty — feeding directly into the PR created in Odoo.</div>
+        </div>
+        <div class="ndp-tags">
+          <span class="ndp-tag-item">Vector semantic search</span>
+          <span class="ndp-tag-item">Version-controlled catalogue</span>
+          <span class="ndp-tag-item">Learns from corrections</span>
+          <span class="ndp-tag-item">Bulk import supported</span>
+        </div>
+      </div>
 
-        <!-- STEP 4 -->
-        <div class="ds-item">
-          <div class="ds-num-col">
-            <div class="ds-circle teal">🏭</div>
-          </div>
-          <div class="ds-body">
-            <div class="ds-node-tag teal">Node 4 · ERP Integration · Primary data flow</div>
-            <div class="ds-title">Odoo 19 ERP — Purchase Requisition Creation</div>
-            <div class="ds-lead">Every validated procurement item is automatically pushed into Odoo 19's Purchase module as live records. No copy-paste. No re-entry. The ERP receives structured, verified data directly from the AI agent via API.</div>
-            <div class="ds-substeps">
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🔌</div>
-                <div>
-                  <div class="ds-sub-label">API Connection &amp; Authentication</div>
-                  <div class="ds-sub-desc">The system connects to Alamco's Odoo 19 instance via the official Odoo JSON-RPC API with OAuth2 authentication. The connection is persistent — no re-authentication per job. The AI agent operates under a dedicated service account with precisely scoped permissions: write access to Purchase Requisitions and read access to Products, Vendors, and UoM — nothing else.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🛒</div>
-                <div>
-                  <div class="ds-sub-label">Purchase Requisition Record Creation</div>
-                  <div class="ds-sub-desc">For each approved procurement item, the agent creates a Purchase Requisition record in Odoo with: product (matched to Odoo's internal product catalogue), quantity, unit of measure, requested delivery date (calculated from project timeline and lead time), preferred vendor (from the approved list), estimated unit price (from library), project reference, and BOQ division tag. All fields are populated — no partial records.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🧩</div>
-                <div>
-                  <div class="ds-sub-label">Product Verification Against Odoo Catalogue</div>
-                  <div class="ds-sub-desc">Before creating each record, the agent verifies the product exists in Odoo's product master. If the product is found, the Odoo internal ID is used directly. If not found (new product from the BOQ), the agent creates a draft product record and flags it for the procurement team to verify and activate — preventing orphan requisitions that reference non-existent products.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">👤</div>
-                <div>
-                  <div class="ds-sub-label">Vendor Assignment</div>
-                  <div class="ds-sub-desc">Each requisition is assigned to the preferred vendor from the Material Template Library, cross-checked against Odoo's vendor list. If the preferred vendor is not in Odoo, the system selects the next approved supplier or leaves the field as "To be assigned" — never blocks the record creation. Vendor selection logic can be configured per category (e.g., always use Vendor A for tiles above SAR 50,000).</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">📎</div>
-                <div>
-                  <div class="ds-sub-label">Original BOQ Attachment &amp; Audit Trail</div>
-                  <div class="ds-sub-desc">The original BOQ file is attached to the Odoo project record. Each Purchase Requisition includes a chatter note with: AI extraction timestamp, confidence score for this item, matched library entry, and the Codeox job ID. This creates a complete, queryable audit trail — from raw BOQ line to approved PO — entirely within Odoo.</div>
-                </div>
-              </div>
+      <!-- Odoo ERP -->
+      <div class="node-detail-panel" id="panel-odoo">
+        <div class="ndp-header">
+          <div class="ndp-header-left">
+            <div class="ndp-icon">🏭</div>
+            <div>
+              <div class="ndp-title">Odoo 19 ERP — Purchase Module</div>
+              <div class="ndp-tag teal">ERP Integration · Step 3</div>
             </div>
-            <div class="ds-callout teal"><strong>Output of this step:</strong> Live Purchase Requisition records in Odoo 19 — product-matched, vendor-assigned, quantity-correct, and project-tagged. Ready for the procurement team to review and convert to RFQs or Purchase Orders.</div>
-            <div class="ds-tags"><span class="ds-tag">Odoo 19 JSON-RPC API</span><span class="ds-tag">OAuth2 auth</span><span class="ds-tag">Zero manual entry</span><span class="ds-tag">Full audit trail in Odoo</span><span class="ds-tag">Product auto-create (draft)</span></div>
+          </div>
+          <button class="ndp-close" onclick="closePanel('odoo')">✕</button>
+        </div>
+        <div class="ndp-body">
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">How records are created</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">1</div>
+              <div><div class="ndp-step-label">API Connection &amp; Auth</div><div class="ndp-step-desc">Connects via Odoo JSON-RPC API with OAuth2. Persistent connection — no re-auth per job. Scoped to Purchase Requisitions write + Products/Vendors read only.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">2</div>
+              <div><div class="ndp-step-label">Purchase Requisition Creation</div><div class="ndp-step-desc">For every approved item: product, qty, UoM, delivery date (timeline + lead time), preferred vendor, estimated price, project ref, division tag. All fields populated — no partial records.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">3</div>
+              <div><div class="ndp-step-label">Product Verification</div><div class="ndp-step-desc">Product verified against Odoo master before creating the PR. New products → draft record created and flagged, not blocked. Prevents orphan requisitions.</div></div>
+            </div>
+          </div>
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">Audit &amp; vendor logic</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">4</div>
+              <div><div class="ndp-step-label">Vendor Assignment</div><div class="ndp-step-desc">Preferred vendor from library cross-checked against Odoo vendor list. Falls back gracefully — never blocks record creation. Configurable per-category logic (e.g. always Vendor A for tiles above SAR 50K).</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num teal">5</div>
+              <div><div class="ndp-step-label">Full Audit Trail in Odoo</div><div class="ndp-step-desc">Original BOQ attached to the project record. Each PR chatter note contains: AI timestamp, confidence score, matched library entry, Codeox job ID. Full traceability from BOQ line to PO — inside Odoo.</div></div>
+            </div>
           </div>
         </div>
+        <div class="ndp-output">
+          <div class="ndp-output-label teal">Output →</div>
+          <div class="ndp-output-text">Live Purchase Requisition records in Odoo 19 — product-matched, vendor-assigned, quantity-correct, project-tagged. Ready to convert to RFQs or POs.</div>
+        </div>
+        <div class="ndp-tags">
+          <span class="ndp-tag-item">Odoo 19 JSON-RPC API</span>
+          <span class="ndp-tag-item">OAuth2 scoped auth</span>
+          <span class="ndp-tag-item">Zero manual entry</span>
+          <span class="ndp-tag-item">Full audit trail in Odoo</span>
+        </div>
+      </div>
 
-        <!-- STEP 5 -->
-        <div class="ds-item">
-          <div class="ds-num-col">
-            <div class="ds-circle green">📡</div>
-          </div>
-          <div class="ds-body">
-            <div class="ds-node-tag green">Node 5 · Monitoring · Status feedback loop</div>
-            <div class="ds-title">Status &amp; Delivery Tracker — Real-Time Monitoring</div>
-            <div class="ds-lead">The AI agent's job doesn't end at requisition creation. It continuously monitors the lifecycle of every procurement record in Odoo — surfacing delays, escalating risks, and keeping the project team informed without manual chasing.</div>
-            <div class="ds-substeps">
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🔄</div>
-                <div>
-                  <div class="ds-sub-label">Continuous Odoo Sync</div>
-                  <div class="ds-sub-desc">The tracker polls Odoo's Purchase module at configurable intervals (default: every 15 minutes) to read the current state of all active requisitions and purchase orders associated with projects managed through the system. Status changes — from Draft → Confirmed → Order Placed → In Transit → Received — are detected automatically and recorded in the tracker's timeline.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">⏰</div>
-                <div>
-                  <div class="ds-sub-label">Delivery Date Intelligence</div>
-                  <div class="ds-sub-desc">For each purchase order, the tracker calculates the expected delivery date from: order confirmation date + vendor lead time (from the library). If the scheduled delivery date passes without a received confirmation in Odoo, the item is automatically flagged as at-risk. The system escalates — first a notification to the procurement officer, then (if unresolved after 24h) an escalation to the project manager.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🔔</div>
-                <div>
-                  <div class="ds-sub-label">Automated Alerts &amp; Escalations</div>
-                  <div class="ds-sub-desc">Configurable alert rules fire based on procurement events: (1) Requisition sitting in Draft &gt;48h — reminder to confirm; (2) PO not placed within 3 days of requisition approval; (3) Delivery expected within 5 days and not yet confirmed shipped; (4) Delivery overdue by any amount; (5) Item received with quantity variance vs PO. Alerts are sent via email and optionally via WhatsApp or SMS. Each alert links directly to the relevant Odoo record.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">📊</div>
-                <div>
-                  <div class="ds-sub-label">Dashboard &amp; Reporting</div>
-                  <div class="ds-sub-desc">A live procurement dashboard (accessible inside the Codeox platform and embeddable in Odoo's portal) shows: all active projects and their procurement health (Green / Amber / Red), per-project item status breakdown, vendor performance (on-time delivery rate, avg. lead time by vendor), spend tracking vs BOQ estimate, and outstanding requisitions by age. Weekly PDF reports can be auto-generated and emailed to project managers.</div>
-                </div>
-              </div>
-              <div class="ds-sub">
-                <div class="ds-sub-icon">🔁</div>
-                <div>
-                  <div class="ds-sub-label">Feedback Loop to AI Agent</div>
-                  <div class="ds-sub-desc">Delivery performance data feeds back into the Material Template Library: if a vendor consistently delivers late, their lead time in the library is automatically adjusted upward for future BOQ processing. If a product's actual price on invoices consistently differs from the library estimate, the library unit cost is flagged for update. The system improves its own accuracy with each completed project cycle.</div>
-                </div>
-              </div>
+      <!-- Status Tracker -->
+      <div class="node-detail-panel" id="panel-tracker">
+        <div class="ndp-header">
+          <div class="ndp-header-left">
+            <div class="ndp-icon">📡</div>
+            <div>
+              <div class="ndp-title">Status &amp; Delivery Tracker</div>
+              <div class="ndp-tag green">Real-time Monitoring · Step 4</div>
             </div>
-            <div class="ds-callout green"><strong>Output of this step:</strong> Continuous procurement visibility across every active project — delays surfaced before they impact site delivery, vendor performance data captured, and a self-improving feedback loop that makes every future BOQ processing cycle more accurate.</div>
-            <div class="ds-tags"><span class="ds-tag">15-min sync cycle</span><span class="ds-tag">5-tier alert system</span><span class="ds-tag">Email + WhatsApp alerts</span><span class="ds-tag">Live dashboard</span><span class="ds-tag">Self-improving lead times</span></div>
+          </div>
+          <button class="ndp-close" onclick="closePanel('tracker')">✕</button>
+        </div>
+        <div class="ndp-body">
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">Monitoring pipeline</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num green">1</div>
+              <div><div class="ndp-step-label">Continuous Odoo Sync</div><div class="ndp-step-desc">Polls Odoo Purchase module every 15 minutes. Status changes (Draft → Confirmed → Order Placed → In Transit → Received) auto-detected and recorded in the tracker timeline.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num green">2</div>
+              <div><div class="ndp-step-label">Delivery Date Intelligence</div><div class="ndp-step-desc">Expected delivery = order date + vendor lead time (from library). Missed dates auto-flag the item at-risk → notifies procurement officer → escalates to PM after 24h.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num green">3</div>
+              <div><div class="ndp-step-label">5-Tier Alert System</div><div class="ndp-step-desc">Fires on: (1) PR in Draft >48h · (2) PO not placed within 3 days of approval · (3) Delivery due in 5 days, not shipped · (4) Delivery overdue · (5) Quantity variance on receipt. Email + WhatsApp.</div></div>
+            </div>
+          </div>
+          <div class="ndp-steps">
+            <div class="ndp-steps-title">Visibility &amp; feedback</div>
+            <div class="ndp-step">
+              <div class="ndp-step-num green">4</div>
+              <div><div class="ndp-step-label">Live Dashboard</div><div class="ndp-step-desc">All active projects with procurement health (Green/Amber/Red), per-project item status, vendor on-time rate, spend vs BOQ estimate, outstanding PRs by age. Auto weekly PDF report to PMs.</div></div>
+            </div>
+            <div class="ndp-step">
+              <div class="ndp-step-num green">5</div>
+              <div><div class="ndp-step-label">Feedback Loop → Library</div><div class="ndp-step-desc">Vendor delivery performance feeds back into the Material Library — lead times auto-adjusted, cost estimates flagged for update. System gets more accurate every project cycle.</div></div>
+            </div>
           </div>
         </div>
+        <div class="ndp-output">
+          <div class="ndp-output-label green">Output →</div>
+          <div class="ndp-output-text">Continuous procurement visibility — delays surfaced before they hit site, vendor performance captured, feedback loop improves every future BOQ cycle.</div>
+        </div>
+        <div class="ndp-tags">
+          <span class="ndp-tag-item">15-min sync cycle</span>
+          <span class="ndp-tag-item">5-tier alert system</span>
+          <span class="ndp-tag-item">Email + WhatsApp alerts</span>
+          <span class="ndp-tag-item">Self-improving lead times</span>
+        </div>
+      </div>
 
-      </div><!-- /detailed-steps -->
-    </div><!-- /step-by-step block -->
+    </div><!-- /arch-wrap -->
 
   </div>
 </section>
+
+<script>
+  function toggleNode(id) {
+    const allPanels = document.querySelectorAll('.node-detail-panel');
+    const allNodes  = document.querySelectorAll('.arch-node');
+    const panel = document.getElementById('panel-' + id);
+    const node  = document.getElementById('node-' + id);
+    const isOpen = panel.classList.contains('open');
+
+    // Close all
+    allPanels.forEach(p => p.classList.remove('open'));
+    allNodes.forEach(n => n.classList.remove('active'));
+
+    // Open this one if it was closed
+    if (!isOpen) {
+      panel.classList.add('open');
+      node.classList.add('active');
+      // Scroll panel into view smoothly
+      setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+    }
+  }
+  function closePanel(id) {
+    document.getElementById('panel-' + id).classList.remove('open');
+    document.getElementById('node-' + id).classList.remove('active');
+  }
+</script>
 
 <!-- COMPARISON -->
 <section id="comparison">
