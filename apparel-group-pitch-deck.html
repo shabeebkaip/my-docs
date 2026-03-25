@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apparel Group × AI — The Retail Future | Codeox</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:       #8DB30A;
+  --green-dark:  #5C7A00;
+  --green-mid:   rgba(141,179,10,0.10);
+  --green-light: #F0F6D8;
+  --navy:        #1A2540;
+  --white:       #FFFFFF;
+  --off-white:   #FAFAF7;
+  --light-gray:  #F4F4F1;
+  --border:      #E5E5DF;
+  --text:        #1A1C18;
+  --text-muted:  #696960;
+  --text-light:  #9A9A92;
+  --teal:        #0093B0;
+  --rose:        #D64F68;
+  --shadow-sm:   0 1px 5px rgba(0,0,0,0.05);
+  --shadow:      0 2px 14px rgba(0,0,0,0.06);
+  --shadow-md:   0 6px 28px rgba(0,0,0,0.09);
+  --shadow-lg:   0 14px 48px rgba(0,0,0,0.12);
+  --r:           8px;
+  --r-lg:        14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--light-gray);}
+::-webkit-scrollbar-thumb{background:var(--green);border-radius:2px;}
+
+/* ── NAV ─────────────────────────────────── */
+nav{
+  position:fixed;top:0;width:100%;z-index:999;
+  padding:15px 64px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,0.93);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 1px 0 rgba(0,0,0,0.04);
+}
+.nav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;}
+.nav-brand-logo{height:30px;width:auto;display:block;filter:brightness(0);}
+.nav-brand-sep{font-size:1.1rem;color:var(--border);font-weight:300;line-height:1;user-select:none;}
+.nav-sub{font-size:0.56rem;letter-spacing:0.2em;color:var(--text-light);text-transform:uppercase;margin-top:2px;}
+.nav-links{display:flex;gap:30px;align-items:center;}
+.nav-links a{font-size:0.67rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;font-weight:500;transition:color 0.2s;}
+.nav-links a:hover{color:var(--green-dark);}
+.nav-cta{color:var(--white)!important;background:var(--green);padding:9px 22px;border-radius:var(--r);font-weight:700!important;transition:background 0.2s!important;}
+.nav-cta:hover{background:var(--green-dark)!important;}
+
+/* ── HERO ────────────────────────────────── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;
+  position:relative;overflow:hidden;padding:130px 40px 90px;
+  background:var(--off-white);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;opacity:0.55;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+}
+.hero-inner{position:relative;z-index:2;width:100%;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:24px;padding:6px 18px;
+  font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--text-muted);font-weight:600;margin-bottom:32px;
+  box-shadow:var(--shadow-sm);
+  opacity:0;animation:fu 0.7s 0.2s forwards;
+}
+.badge-dot{width:7px;height:7px;background:var(--green);border-radius:50%;flex-shrink:0;}
+h1.hero-title{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:clamp(2.8rem,6.2vw,6rem);
+  line-height:1.03;font-weight:800;color:var(--text);
+  opacity:0;animation:fu 0.7s 0.35s forwards;
+}
+.hero-title em{color:var(--green-dark);font-style:normal;font-weight:800;}
+.hero-tagline{
+  font-size:clamp(0.93rem,1.5vw,1.1rem);color:var(--text-muted);
+  max-width:590px;margin:24px auto 48px;line-height:1.85;
+  opacity:0;animation:fu 0.7s 0.5s forwards;
+}
+.hero-brands{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-bottom:52px;
+  opacity:0;animation:fu 0.7s 0.65s forwards;
+}
+.brand-tag{
+  font-size:0.58rem;letter-spacing:0.09em;text-transform:uppercase;
+  padding:5px 13px;border:1px solid var(--border);border-radius:4px;
+  color:var(--text-muted);font-weight:500;background:var(--white);
+  box-shadow:var(--shadow-sm);transition:all 0.2s;
+}
+.brand-tag:hover{border-color:var(--green);color:var(--green-dark);}
+.hero-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  width:100%;max-width:820px;margin:0 auto;
+  border:1px solid var(--border);border-radius:var(--r-lg);
+  overflow:hidden;box-shadow:var(--shadow);
+  opacity:0;animation:fu 0.7s 0.8s forwards;
+}
+.h-stat{background:var(--white);padding:28px 20px;text-align:center;border-right:1px solid var(--border);}
+.h-stat:last-child{border-right:none;}
+.h-stat-n{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.4rem;font-weight:800;color:var(--green-dark);line-height:1;}
+.h-stat-l{font-size:0.57rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);margin-top:8px;font-weight:500;}
+.scroll-ind{
+  position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2;
+  opacity:0;animation:fu 0.7s 1.2s forwards;
+}
+.scroll-ind span{font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-light);}
+.scroll-dot{width:1px;height:42px;background:linear-gradient(to bottom,var(--green),transparent);animation:sd 2s ease-in-out infinite;}
+@keyframes fu{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@keyframes sd{0%,100%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}}
+
+/* ── LAYOUT HELPERS ─────────────────────── */
+.sec{padding:96px 64px;max-width:1280px;margin:0 auto;}
+.divider{height:1px;background:var(--border);margin:0 64px;}
+.area-sep{border:none;border-top:1px solid var(--border);margin:0 64px;}
+.eyebrow{display:inline-block;font-family:'DM Mono',monospace;font-size:0.54rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--green-dark);font-weight:500;margin-bottom:14px;padding:5px 12px;border-radius:40px;background:var(--green-light);border:1px solid rgba(141,179,10,0.22);}
+h2.stitle{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.9rem,3.4vw,3rem);font-weight:800;line-height:1.08;color:var(--text);margin-bottom:18px;}
+.sdesc{font-size:0.92rem;color:var(--text-muted);max-width:580px;line-height:1.88;}
+.bg-off{background:var(--off-white);}
+.bg-gray{background:var(--light-gray);}
+.bg-green{background:var(--green-light);}
+.bg-navy{background:var(--navy);}
+.full-bg{padding:96px 0;}
+.full-bg .sec{padding-top:0;padding-bottom:0;}
+
+/* ── STAT BAND ──────────────────────────── */
+.stat-band{
+  background:var(--green-light);
+  border-top:1px solid rgba(141,179,10,0.2);
+  border-bottom:1px solid rgba(141,179,10,0.2);
+  padding:52px 64px;
+}
+.stat-band-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);text-align:center;}
+.sband-item{padding:0 20px;border-right:1px solid rgba(141,179,10,0.2);}
+.sband-item:last-child{border-right:none;}
+.sband-n{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.2rem;font-weight:800;color:var(--green-dark);}
+.sband-l{font-size:0.6rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--text-muted);margin-top:6px;font-weight:500;}
+
+/* ── OPPORTUNITY ────────────────────────── */
+.opp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:52px;}
+.opp-card{
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r);
+  padding:40px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow-sm);transition:box-shadow 0.25s,transform 0.25s;
+}
+.opp-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);}
+.opp-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--green);}
+.opp-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:3.6rem;font-weight:800;color:var(--green-dark);line-height:1;margin-bottom:14px;}
+.opp-title{font-size:1rem;color:var(--text);font-weight:600;margin-bottom:8px;}
+.opp-src{font-size:0.67rem;color:var(--text-light);}
+
+/* ── CLUB APPAREL SPOTLIGHT ─────────────── */
+.spotlight-pill{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--white);border:1px solid rgba(141,179,10,0.3);
+  border-radius:24px;padding:7px 18px;
+  font-size:0.59rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--green-dark);font-weight:700;margin-bottom:22px;
+  box-shadow:var(--shadow-sm);
+}
+.spotlight-layout{display:grid;grid-template-columns:1fr 1.55fr;gap:64px;align-items:start;margin-top:52px;}
+
+.phone-wrap{display:flex;justify-content:center;}
+.phone-outer{
+  background:#111;border-radius:36px;padding:13px;
+  box-shadow:0 28px 72px rgba(0,0,0,0.3),inset 0 0 0 1px rgba(255,255,255,0.06);
+  max-width:255px;width:100%;
+}
+.phone-screen{background:linear-gradient(165deg,#1B2A4A,#0D1829);border-radius:25px;overflow:hidden;}
+.p-statusbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 0;}
+.p-time{font-size:0.63rem;color:rgba(255,255,255,0.8);font-weight:700;font-family:'Inter',sans-serif;}
+.p-icons{font-size:0.5rem;color:rgba(255,255,255,0.5);}
+.p-appbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.p-appname{font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.95);font-weight:700;font-family:'Inter',sans-serif;}
+.p-pts{font-size:0.6rem;background:rgba(141,179,10,0.18);border:1px solid rgba(141,179,10,0.3);border-radius:10px;padding:3px 9px;color:#AACC0A;font-family:'Inter',sans-serif;font-weight:600;}
+.p-chat{padding:13px 14px;}
+.p-bubble{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:11px 11px 11px 3px;padding:10px 12px;margin-bottom:9px;}
+.p-bubble p{font-size:0.65rem;color:rgba(255,255,255,0.8);line-height:1.5;font-family:'Inter',sans-serif;}
+.p-bubble p strong{color:#AACC0A;}
+.p-reply{background:rgba(141,179,10,0.82);border-radius:11px 11px 3px 11px;padding:10px 12px;margin-bottom:9px;margin-left:24px;}
+.p-reply p{font-size:0.65rem;color:#0E1829;font-weight:600;font-family:'Inter',sans-serif;}
+.p-reco{padding:2px 14px 16px;display:flex;gap:7px;overflow:hidden;}
+.p-reco-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:7px;padding:8px 10px;flex-shrink:0;}
+.p-reco-brand{font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:#AACC0A;font-family:'Inter',sans-serif;}
+.p-reco-name{font-size:0.6rem;color:rgba(255,255,255,0.75);margin-top:2px;font-weight:500;font-family:'Inter',sans-serif;}
+.p-reco-price{font-size:0.55rem;color:rgba(255,255,255,0.4);font-family:'Inter',sans-serif;}
+
+.ai-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;}
+.ai-feat{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:20px 18px;transition:all 0.22s;box-shadow:var(--shadow-sm);}
+.ai-feat:hover{border-color:rgba(141,179,10,0.4);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.ai-feat-icon{font-size:1.45rem;margin-bottom:9px;}
+.ai-feat-title{font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3;}
+.ai-feat-desc{font-size:0.74rem;color:var(--text-muted);line-height:1.6;}
+
+.aba-wrap{margin-top:44px;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);}
+.aba-head{display:grid;grid-template-columns:1fr 1fr;}
+.aba-hcell{padding:13px 22px;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;}
+.aba-hb{color:var(--rose);background:#FFF5F8;border-bottom:2px solid var(--rose);}
+.aba-ha{color:var(--green-dark);background:var(--green-light);border-bottom:2px solid var(--green);}
+.aba-row{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);}
+.aba-cell{padding:14px 22px;font-size:0.82rem;line-height:1.65;}
+.aba-b{color:var(--text-muted);background:#FEFCFD;}
+.aba-a{color:var(--text);background:#FCFEF5;font-weight:500;}
+.aba-a::before{content:'✓ ';color:var(--green-dark);}
+
+/* ── SOLUTION MAP ───────────────────────── */
+.map-head{text-align:center;max-width:700px;margin:0 auto 52px;}
+.map-head .sdesc{margin:0 auto;}
+.map-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.map-tile{
+  background:var(--white);border:1px solid rgba(0,0,0,0.07);border-radius:14px;
+  padding:32px 28px 28px;display:flex;flex-direction:column;
+  text-decoration:none;color:var(--text);position:relative;overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,0.05);
+  transition:all 0.32s cubic-bezier(0.16,1,0.3,1);
+}
+.map-tile::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--tc1),var(--tc2));border-radius:14px 14px 0 0;}
+.map-tile::after{display:none;}
+.map-tile:hover{box-shadow:0 22px 54px rgba(0,0,0,0.12);transform:translateY(-6px);border-color:transparent;}
+.map-tile-ghost{position:absolute;bottom:-10px;right:14px;font-family:'DM Mono',monospace;font-size:6.5rem;font-weight:700;color:rgba(0,0,0,0.04);line-height:1;pointer-events:none;user-select:none;transition:color 0.32s;letter-spacing:-0.04em;}
+.map-tile:hover .map-tile-ghost{color:rgba(0,0,0,0.07);}
+.map-tile-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:18px;background:var(--tibg);flex-shrink:0;}
+.map-num{font-family:'DM Mono',monospace;font-size:0.54rem;color:var(--tc1);letter-spacing:0.25em;margin-bottom:9px;font-weight:500;}
+.map-emoji{display:none;}
+.map-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800;line-height:1.3;margin-bottom:0;color:var(--text);flex:1;}
+.map-cases{font-size:0.58rem;color:var(--tc1);letter-spacing:0.1em;text-transform:uppercase;margin-top:20px;font-weight:600;padding:4px 10px;background:var(--tibg);border-radius:40px;display:inline-block;width:fit-content;}
+.map-tile:nth-child(1){--tc1:#8B5CF6;--tc2:#C084FC;--tibg:rgba(139,92,246,0.08);}
+.map-tile:nth-child(2){--tc1:#0EA5E9;--tc2:#38BDF8;--tibg:rgba(14,165,233,0.08);}
+.map-tile:nth-child(3){--tc1:#F59E0B;--tc2:#FCD34D;--tibg:rgba(245,158,11,0.08);}
+.map-tile:nth-child(4){--tc1:#8DB30A;--tc2:#BAD927;--tibg:rgba(141,179,10,0.10);}
+.map-tile:nth-child(5){--tc1:#3B82F6;--tc2:#60A5FA;--tibg:rgba(59,130,246,0.08);}
+.map-tile:nth-child(6){--tc1:#EF4444;--tc2:#F87171;--tibg:rgba(239,68,68,0.08);}
+.oracle-note{text-align:center;margin-top:28px;font-size:0.77rem;color:var(--text-muted);padding:16px 24px;border:1px solid rgba(141,179,10,0.2);border-radius:var(--r);background:var(--green-light);}
+.oracle-note strong{color:var(--green-dark);}
+
+/* ── AREA SECTIONS ──────────────────────── */
+.area-sec{padding:96px 64px;max-width:1280px;margin:0 auto;}
+.area-head{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:start;margin-bottom:44px;padding-bottom:36px;border-bottom:1px solid var(--border);}
+.area-num-big{font-family:'DM Mono',monospace;font-size:6.5rem;font-weight:700;color:var(--green);opacity:0.07;line-height:1;letter-spacing:-0.04em;}
+.area-head-r .eyebrow{margin-bottom:12px;}
+.area-head-r h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.6rem,2.7vw,2.5rem);font-weight:800;margin-bottom:14px;color:var(--text);}
+.area-head-r p{color:var(--text-muted);font-size:0.9rem;line-height:1.82;max-width:700px;}
+.sols-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.sol-card{
+  background:var(--white);
+  border:1px solid rgba(0,0,0,0.07);
+  border-left:3px solid var(--ac,var(--green));
+  border-radius:0 10px 10px 0;
+  padding:28px 28px 24px 26px;
+  position:relative;
+  box-shadow:0 2px 10px rgba(0,0,0,0.04);
+  transition:all 0.28s cubic-bezier(0.16,1,0.3,1);
+}
+.sol-card:hover{box-shadow:0 18px 44px rgba(0,0,0,0.10);transform:translateY(-4px);border-left-width:4px;border-color:rgba(0,0,0,0.07);border-left-color:var(--ac,var(--green));}
+.sol-card::before{display:none;}
+.sol-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
+.sol-icon{font-size:1.6rem;}
+.sol-badge{font-size:0.54rem;letter-spacing:0.07em;text-transform:uppercase;font-weight:700;padding:4px 12px;border-radius:40px;white-space:nowrap;}
+.bq{background:rgba(34,197,94,0.08);color:#157840;border:1px solid rgba(34,197,94,0.22);}
+.bh{background:rgba(14,165,233,0.08);color:#0369A1;border:1px solid rgba(14,165,233,0.22);}
+.bf{background:rgba(141,179,10,0.10);color:var(--green-dark);border:1px solid rgba(141,179,10,0.28);}
+.sol-id{font-family:'DM Mono',monospace;font-size:0.57rem;color:var(--ac,var(--green-dark));opacity:0.85;margin-bottom:6px;letter-spacing:0.08em;}
+.sol-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.08rem;font-weight:800;margin-bottom:10px;line-height:1.2;color:var(--text);}
+.sol-desc{font-size:0.81rem;color:var(--text-muted);line-height:1.75;margin-bottom:16px;}
+.sol-feats{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.sol-feats li{font-size:0.77rem;color:var(--text-muted);display:flex;align-items:flex-start;gap:8px;line-height:1.5;}
+.sol-feats li::before{content:'→';color:var(--ac,var(--green-dark));font-size:0.7rem;margin-top:2px;flex-shrink:0;}
+/* ── Per-area accent colors ─────────────── */
+#area01 .sol-card{--ac:#8B5CF6;}
+#area01 .eyebrow{color:#8B5CF6;background:rgba(139,92,246,0.07);border-color:rgba(139,92,246,0.22);}
+#area01 .area-num-big{color:#8B5CF6;}
+#area02 .sol-card{--ac:#0EA5E9;}
+#area02 .eyebrow{color:#0EA5E9;background:rgba(14,165,233,0.07);border-color:rgba(14,165,233,0.22);}
+#area02 .area-num-big{color:#0EA5E9;}
+#area03 .sol-card{--ac:#F59E0B;}
+#area03 .eyebrow{color:#D97706;background:rgba(245,158,11,0.07);border-color:rgba(245,158,11,0.22);}
+#area03 .area-num-big{color:#F59E0B;}
+#area04 .sol-card{--ac:#8DB30A;}
+#area05 .sol-card{--ac:#3B82F6;}
+#area05 .eyebrow{color:#3B82F6;background:rgba(59,130,246,0.07);border-color:rgba(59,130,246,0.22);}
+#area05 .area-num-big{color:#3B82F6;}
+#area06 .sol-card{--ac:#EF4444;}
+#area06 .eyebrow{color:#DC2626;background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.22);}
+#area06 .area-num-big{color:#EF4444;}
+
+/* ── BEFORE/AFTER TABLE ─────────────────── */
+.ba-wrap{overflow-x:auto;margin-top:44px;}
+.ba-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.ba-table th{padding:14px 22px;font-size:0.59rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;text-align:left;border-bottom:2px solid;}
+.ba-th-b{color:var(--rose);border-color:var(--rose);background:#FFF5F8;}
+.ba-th-a{color:var(--green-dark);border-color:var(--green);background:var(--green-light);}
+.ba-table td{padding:16px 22px;font-size:0.83rem;line-height:1.65;vertical-align:top;border-bottom:1px solid var(--border);}
+.ba-table tbody tr:last-child td{border-bottom:none;}
+.ba-table tbody tr:hover td{background:var(--off-white);}
+.ba-b{color:var(--text-muted);background:#FEFCFD;}
+.ba-a{color:var(--text);background:#FCFEF5;font-weight:500;}
+.ba-a::before{content:'✓ ';color:var(--green-dark);font-size:0.77rem;}
+
+/* ── PERSONA TABS ───────────────────────── */
+/* ── PERSONA MATRIX ────────────────────── */
+.pstack{margin-top:48px;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);}
+.pband{display:grid;grid-template-columns:200px 1fr;}
+.pband:not(:last-child){border-bottom:1px solid var(--border);}
+.pband-who{background:var(--off-white);padding:28px 22px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;gap:0;}
+.pband-icon{font-size:1.7rem;margin-bottom:9px;}
+.pband-name{font-size:0.92rem;font-weight:700;color:var(--text);margin-bottom:4px;}
+.pband-sub{font-size:0.62rem;color:var(--text-muted);line-height:1.5;}
+.pband-tag{display:inline-block;margin-top:8px;font-size:0.54rem;letter-spacing:0.13em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:4px;}
+.ptag-green{background:var(--green-light);color:var(--green-dark);border:1px solid rgba(141,179,10,0.2);}
+.ptag-blue{background:rgba(0,147,176,0.06);color:#006B85;border:1px solid rgba(0,147,176,0.2);}
+.ptag-navy{background:rgba(26,37,64,0.06);color:var(--navy);border:1px solid rgba(26,37,64,0.2);}
+.pband-content{background:var(--white);}
+.pwin-grid{display:grid;grid-template-columns:repeat(3,1fr);height:100%;}
+.pwin{padding:24px 18px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;}
+.pwin:last-child{border-right:none;}
+.pwin-before{font-size:0.77rem;color:var(--text-muted);line-height:1.6;padding:9px 11px;border-left:2px solid var(--rose);background:#FFF8FA;border-radius:0 5px 5px 0;margin-bottom:9px;}
+.pwin-arr{font-size:0.64rem;color:var(--text-light);margin:0 0 9px 4px;font-weight:600;}
+.pwin-after{font-size:0.77rem;color:var(--text);line-height:1.6;padding:9px 11px;border-left:2px solid var(--green);background:var(--green-light);border-radius:0 5px 5px 0;font-weight:500;}
+.pstat-grid{display:grid;grid-template-columns:repeat(4,1fr);height:100%;}
+.pstat{padding:22px 16px;border-right:1px solid var(--border);text-align:center;display:flex;flex-direction:column;justify-content:center;}
+.pstat:last-child{border-right:none;}
+.pstat-n{font-size:1.9rem;font-weight:800;color:var(--green-dark);line-height:1;margin-bottom:5px;}
+.pstat-l{font-size:0.68rem;color:var(--text-muted);line-height:1.5;}
+.ppillar-grid{display:grid;grid-template-columns:repeat(3,1fr);height:100%;}
+.ppillar{padding:24px 18px;border-right:1px solid var(--border);}
+.ppillar:last-child{border-right:none;}
+.ppillar-icon{font-size:1.25rem;margin-bottom:9px;}
+.ppillar-title{font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+.ppillar-desc{font-size:0.74rem;color:var(--text-muted);line-height:1.65;}
+.pmgr-grid{display:grid;grid-template-columns:repeat(3,1fr);height:100%;}
+.pmgr{padding:24px 18px;border-right:1px solid var(--border);}
+.pmgr:last-child{border-right:none;}
+.pmgr-icon{font-size:1.25rem;margin-bottom:9px;}
+.pmgr-title{font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+.pmgr-desc{font-size:0.74rem;color:var(--text-muted);line-height:1.65;}
+
+/* ── ROLE GRID ──────────────────────────── */
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px;}
+.role-card{background:var(--light-gray);border:1px solid var(--border);border-radius:var(--r);padding:22px;transition:all 0.22s;box-shadow:var(--shadow-sm);}
+.role-card:hover{border-color:rgba(141,179,10,0.3);box-shadow:var(--shadow);}
+.role-label{font-size:0.57rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--green-dark);font-weight:700;margin-bottom:9px;}
+.role-name{font-size:0.95rem;font-weight:700;margin-bottom:13px;color:var(--text);}
+.role-before{font-size:0.78rem;color:var(--rose);line-height:1.6;margin-bottom:10px;padding-left:11px;border-left:2px solid var(--rose);}
+.role-arr{font-size:0.7rem;color:var(--text-light);margin:9px 0;text-align:center;}
+.role-after{font-size:0.78rem;color:#1E6E36;line-height:1.6;padding-left:11px;border-left:2px solid var(--green);font-weight:500;}
+
+/* ── MANAGER GRID ───────────────────────── */
+.mgr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px;}
+.mgr-card{background:var(--light-gray);border:1px solid var(--border);border-radius:var(--r);padding:24px;transition:all 0.22s;box-shadow:var(--shadow-sm);}
+.mgr-card:hover{border-color:rgba(141,179,10,0.3);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.mgr-icon{font-size:1.5rem;margin-bottom:11px;}
+.mgr-title{font-size:0.88rem;font-weight:700;margin-bottom:8px;color:var(--text);}
+.mgr-desc{font-size:0.78rem;color:var(--text-muted);line-height:1.72;}
+
+/* ── IMPACT ─────────────────────────────── */
+.impact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:44px;}
+.impact-cell{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:44px 38px;box-shadow:var(--shadow-sm);}
+.impact-n{font-family:'Plus Jakarta Sans',sans-serif;font-size:4rem;font-weight:800;color:var(--green-dark);line-height:1;margin-bottom:12px;}
+.impact-lbl{font-size:0.96rem;color:var(--text);font-weight:600;margin-bottom:6px;}
+.impact-src{font-size:0.65rem;color:var(--text-light);}
+.impact-bottom{grid-column:1/-1;background:var(--green-light);border:1px solid rgba(141,179,10,0.2);border-radius:var(--r);padding:30px 38px;}
+.impact-bottom p{font-size:0.87rem;color:var(--text-muted);line-height:1.9;max-width:900px;}
+
+/* ── OWNER PILLARS ──────────────────────── */
+.owner-grid{display:grid;gap:8px;margin-top:40px;}
+.owner-row{display:grid;grid-template-columns:265px 1fr;background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all 0.22s;box-shadow:var(--shadow-sm);}
+.owner-row:hover{border-color:rgba(141,179,10,0.3);box-shadow:var(--shadow-md);}
+.owner-lbl{background:var(--green-light);padding:26px 22px;display:flex;flex-direction:column;justify-content:center;}
+.owner-lbl-num{font-family:'DM Mono',monospace;font-size:0.59rem;color:var(--green-dark);opacity:0.65;margin-bottom:6px;}
+.owner-lbl-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.03rem;font-weight:700;color:var(--text);}
+.owner-content{background:var(--white);padding:26px 30px;font-size:0.85rem;color:var(--text-muted);line-height:1.82;}
+
+/* ── ROADMAP (redesigned) ────────────────── */
+.rm-track{display:flex;align-items:flex-start;margin:44px 0 28px;}
+.rm-track-phase{flex:1;text-align:center;position:relative;}
+.rm-track-node{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:0.7rem;font-weight:700;margin:0 auto 10px;color:#fff;box-shadow:0 0 0 4px rgba(255,255,255,0.6),0 0 0 7px;}
+.rm-track-phase-1 .rm-track-node{background:#22C55E;box-shadow:0 0 0 4px var(--off-white),0 0 0 7px rgba(34,197,94,0.25);}
+.rm-track-phase-2 .rm-track-node{background:#0EA5E9;box-shadow:0 0 0 4px var(--off-white),0 0 0 7px rgba(14,165,233,0.25);}
+.rm-track-phase-3 .rm-track-node{background:var(--green);box-shadow:0 0 0 4px var(--off-white),0 0 0 7px rgba(141,179,10,0.25);}
+.rm-track-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.02rem;font-weight:700;}
+.rm-track-phase-1 .rm-track-name{color:#156E30;}
+.rm-track-phase-2 .rm-track-name{color:#005D75;}
+.rm-track-phase-3 .rm-track-name{color:var(--green-dark);}
+.rm-track-time{font-family:'DM Mono',monospace;font-size:0.61rem;color:var(--text-light);margin-top:3px;}
+.rm-track-connector{flex:1;height:2px;margin-top:23px;}
+.rm-track-conn-1{background:linear-gradient(90deg,#22C55E,#0EA5E9);}
+.rm-track-conn-2{background:linear-gradient(90deg,#0EA5E9,var(--green));}
+.rm-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.rm-col{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;}
+.rm-col-head{padding:22px 24px 18px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.rm-col-1 .rm-col-head{border-top:3px solid #22C55E;}
+.rm-col-2 .rm-col-head{border-top:3px solid #0EA5E9;}
+.rm-col-3 .rm-col-head{border-top:3px solid var(--green);}
+.rm-col-head-bg{position:absolute;right:-8px;top:-14px;font-family:'DM Mono',monospace;font-size:6rem;font-weight:700;opacity:0.04;line-height:1;pointer-events:none;}
+.rm-col-num{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-light);margin-bottom:5px;}
+.rm-col-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;}
+.rm-col-1 .rm-col-title{color:#156E30;}
+.rm-col-2 .rm-col-title{color:#005D75;}
+.rm-col-3 .rm-col-title{color:var(--green-dark);}
+.rm-col-badge{display:inline-flex;align-items:center;font-family:'DM Mono',monospace;font-size:0.6rem;background:var(--off-white);border:1px solid var(--border);border-radius:4px;padding:3px 9px;color:var(--text-muted);}
+.rm-items{flex:1;}
+.rm-item{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);gap:10px;}
+.rm-item:last-child{border-bottom:none;}
+.rm-item-name{font-size:0.78rem;color:var(--text);line-height:1.45;font-weight:500;}
+.rm-item-tag{font-family:'DM Mono',monospace;font-size:0.54rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-light);white-space:nowrap;flex-shrink:0;background:var(--off-white);border:1px solid var(--border);border-radius:3px;padding:2px 6px;}
+.rm-col-foot{padding:14px 20px;background:var(--off-white);border-top:1px solid var(--border);}
+.rm-col-foot-lbl{font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-light);margin-bottom:3px;}
+.rm-col-foot-val{font-size:0.8rem;font-weight:700;color:var(--text);}
+
+/* ── HOW WE WORK ────────────────────────── */
+.hww-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px;}
+.hww-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:30px;transition:all 0.22s;position:relative;overflow:hidden;box-shadow:var(--shadow-sm);}
+.hww-card:hover{border-color:rgba(141,179,10,0.3);box-shadow:var(--shadow-lg);transform:translateY(-3px);}
+.hww-num{font-family:'DM Mono',monospace;font-size:2.2rem;font-weight:500;color:var(--green);opacity:0.07;position:absolute;top:14px;right:18px;line-height:1;}
+.hww-icon{font-size:1.55rem;margin-bottom:13px;}
+.hww-title{font-size:0.9rem;font-weight:700;margin-bottom:9px;color:var(--text);}
+.hww-desc{font-size:0.79rem;color:var(--text-muted);line-height:1.75;}
+
+/* ── ABOUT ──────────────────────────────── */
+.about-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:40px;}
+.about-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:34px;transition:all 0.22s;box-shadow:var(--shadow-sm);}
+.about-card:hover{border-color:rgba(141,179,10,0.3);box-shadow:var(--shadow-md);}
+.about-icon{font-size:1.8rem;margin-bottom:14px;}
+.about-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.06rem;font-weight:700;margin-bottom:10px;color:var(--text);}
+.about-card p{font-size:0.81rem;color:var(--text-muted);line-height:1.82;}
+
+/* ── CTA ────────────────────────────────── */
+.cta-sec{padding:120px 64px;text-align:center;background:var(--navy);position:relative;overflow:hidden;}
+.cta-ring{position:absolute;border-radius:50%;border:1px solid rgba(141,179,10,0.06);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.cta-r1{width:480px;height:480px;}
+.cta-r2{width:780px;height:780px;border-color:rgba(141,179,10,0.04);}
+.cta-r3{width:1080px;height:1080px;border-color:rgba(141,179,10,0.025);}
+.cta-inner{position:relative;z-index:1;}
+.cta-eyebrow{font-size:0.59rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:20px;}
+.cta-quote{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.45rem,2.7vw,2.45rem);font-weight:800;line-height:1.2;max-width:820px;margin:0 auto 28px;font-style:normal;font-weight:800;color:var(--white);}
+.cta-quote em{color:var(--green);font-style:normal;}
+.cta-sub{font-size:0.9rem;color:rgba(255,255,255,0.5);margin:0 auto 44px;max-width:490px;line-height:1.75;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.cta-btn-p{background:var(--green);color:var(--white);padding:15px 38px;font-size:0.77rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;border-radius:var(--r);text-decoration:none;transition:background 0.2s;}
+.cta-btn-p:hover{background:var(--green-dark);}
+.cta-btn-g{background:transparent;color:rgba(255,255,255,0.72);padding:15px 38px;font-size:0.77rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;border-radius:var(--r);text-decoration:none;border:1px solid rgba(255,255,255,0.18);transition:all 0.2s;}
+.cta-btn-g:hover{border-color:rgba(255,255,255,0.5);color:var(--white);}
+.cta-footer{margin-top:52px;font-size:0.63rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.22);}
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media(max-width:900px){
+  nav{padding:12px 20px;}
+  .nav-links{display:none;}
+  .hero{padding:100px 20px 70px;}
+  .sec,.area-sec{padding-left:20px;padding-right:20px;}
+  .full-bg .sec{padding:0 20px;}
+  .hero-stats{grid-template-columns:repeat(2,1fr);}
+  .area-head{grid-template-columns:1fr;}
+  .area-num-big{display:none;}
+  .map-grid,.sols-grid,.opp-grid,.role-grid,.hww-grid,.about-grid,.mgr-grid,.ai-feats{grid-template-columns:1fr;}
+  [style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr!important;}
+  [style*="grid-template-columns:repeat(5"]{grid-template-columns:1fr!important;}
+  [style*="grid-template-columns:repeat(4"]{grid-template-columns:1fr 1fr!important;}
+  .impact-grid{grid-template-columns:1fr;}
+  .rm-cols{grid-template-columns:1fr;}
+  .rm-track{display:none;}
+  .owner-row{grid-template-columns:1fr;}
+  .pband{grid-template-columns:1fr;}
+  .pband-who{border-right:none;border-bottom:1px solid var(--border);}
+  .pwin-grid,.pstat-grid,.ppillar-grid,.pmgr-grid{grid-template-columns:1fr;}
+  .pwin,.pstat,.ppillar,.pmgr{border-right:none;border-bottom:1px solid var(--border);}
+  .spotlight-layout{grid-template-columns:1fr;}
+  .stat-band{padding:40px 20px;}
+  .stat-band-inner{grid-template-columns:repeat(2,1fr);gap:20px;}
+  .sband-item{border-right:none;padding-bottom:12px;}
+  .divider,.area-sep{margin:0 20px;}
+  .aba-head,.aba-row{grid-template-columns:1fr;}
+  .cta-sec{padding:80px 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ NAV ═══════ -->
+<nav>
+  <div class="nav-brand">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Codeox" class="nav-brand-logo" style="height:30px;">
+    <span class="nav-brand-sep">&times;</span>
+    <img src="https://www.apparelgroup.com/en/wp-content/uploads/2022/10/ag_logo.svg" alt="Apparel Group" class="nav-brand-logo" style="height:34px;">
+  </div>
+  <div class="nav-links">
+    <a href="#opportunity">Opportunity</a>
+    <a href="#clubapparel">Club Apparel AI</a>
+    <a href="#solutions">Solutions</a>
+    <a href="#personas">Impact</a>
+    <a href="#products">Our Products</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#codeox">Codeox</a>
+  </div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="Codeox" style="height:16px;filter:brightness(0);opacity:0.5;">
+      <span style="color:var(--border);font-size:0.8rem;">&times;</span>
+      <img src="https://www.apparelgroup.com/en/wp-content/uploads/2022/10/ag_logo.svg" alt="Apparel Group" style="height:16px;filter:brightness(0);opacity:0.5;">
+      <div class="badge-dot"></div>
+      Confidential &middot; Strategic AI Proposal &middot; 2026
+    </div>
+    <h1 class="hero-title">Apparel Group<br>× The <em>AI-Powered</em><br>Retail Future</h1>
+    <p class="hero-tagline">A complete vision for transforming 85+ brands, 2,500+ stores and 14 countries with AI — starting with your most powerful asset: Club Apparel.</p>
+    <div class="hero-brands">
+      <span class="brand-tag">Skechers</span>
+      <span class="brand-tag">Calvin Klein</span>
+      <span class="brand-tag">Tommy Hilfiger</span>
+      <span class="brand-tag">Adidas</span>
+      <span class="brand-tag">HOKA</span>
+      <span class="brand-tag">Crocs</span>
+      <span class="brand-tag">Clarks</span>
+      <span class="brand-tag">Nine West</span>
+      <span class="brand-tag">Splash</span>
+      <span class="brand-tag">Charles &amp; Keith</span>
+      <span class="brand-tag">Steve Madden</span>
+      <span class="brand-tag">Faces</span>
+      <span class="brand-tag">Tim Hortons</span>
+      <span class="brand-tag">Cold Stone</span>
+      <span class="brand-tag">+ 71 More Brands</span>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-n">85+</div><div class="h-stat-l">Brands</div></div>
+      <div class="h-stat"><div class="h-stat-n">2,500+</div><div class="h-stat-l">Stores</div></div>
+      <div class="h-stat"><div class="h-stat-n">14</div><div class="h-stat-l">Countries</div></div>
+      <div class="h-stat"><div class="h-stat-n">1M+</div><div class="h-stat-l">Loyalty Members</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ OPPORTUNITY ═══════ -->
+<section class="sec" id="opportunity">
+  <div class="eyebrow">The AI Opportunity in Retail</div>
+  <h2 class="stitle">Why AI — and<br>why right now?</h2>
+  <p class="sdesc">The retailers who invest in AI in 2026 will be impossible to out-compete by 2029. The data is unambiguous — every metric that matters moves sharply when AI is applied at scale.</p>
+  <div class="opp-grid">
+    <div class="opp-card">
+      <div class="opp-num">15–20%</div>
+      <div class="opp-title">Revenue uplift from AI personalisation</div>
+      <div class="opp-src">McKinsey Global Retail AI Study</div>
+    </div>
+    <div class="opp-card">
+      <div class="opp-num">40%</div>
+      <div class="opp-title">Reduction in inventory waste through AI demand forecasting</div>
+      <div class="opp-src">Gartner Supply Chain Research</div>
+    </div>
+    <div class="opp-card">
+      <div class="opp-num">3×</div>
+      <div class="opp-title">Higher loyalty engagement from personalised experiences</div>
+      <div class="opp-src">Salesforce Connected Shoppers Report</div>
+    </div>
+    <div class="opp-card">
+      <div class="opp-num">60–70%</div>
+      <div class="opp-title">HR queries deflected by AI chatbots — freeing HR for strategic work</div>
+      <div class="opp-src">Deloitte HR Automation Report</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ STAT BAND ═══════ -->
+<div class="stat-band">
+  <div class="stat-band-inner">
+    <div class="sband-item"><div class="sband-n">10th Year</div><div class="sband-l">Great Place to Work Certified</div></div>
+    <div class="sband-item"><div class="sband-n">1M+</div><div class="sband-l">Club Apparel Loyalty Members</div></div>
+    <div class="sband-item"><div class="sband-n">85+</div><div class="sband-l">International Brands</div></div>
+    <div class="sband-item"><div class="sband-n">2,500+</div><div class="sband-l">Stores Across 14 Countries</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════ CLUB APPAREL AI ═══════ -->
+<div class="bg-green full-bg" id="clubapparel">
+  <section class="sec">
+    <div class="spotlight-pill">⭐ Flagship Opportunity</div>
+    <div class="eyebrow">Club Apparel × AI</div>
+    <h2 class="stitle">Your Loyalty App,<br><em style="font-style:normal;font-weight:800;color:var(--green-dark);">Reimagined with AI</em></h2>
+    <p class="sdesc">Club Apparel already has 1M+ members and 85+ brands. With AI, the app evolves into an intelligent personal stylist — one that knows each customer's taste, predicts their next purchase, and builds loyalty that no generic points programme can match.</p>
+
+    <div class="spotlight-layout">
+      <!-- Phone Mockup -->
+      <div class="phone-wrap">
+        <div class="phone-outer">
+          <div class="phone-screen">
+            <div class="p-statusbar">
+              <span class="p-time">9:41</span>
+              <span class="p-icons">▪▪▪ ◉ ▮▮</span>
+            </div>
+            <div class="p-appbar">
+              <span class="p-appname">Club Apparel AI</span>
+              <span class="p-pts">2,450 pts</span>
+            </div>
+            <div class="p-chat">
+              <div class="p-bubble">
+                <p>Hi Sara! Summer sale starts next week. Based on your style, I found <strong>4 outfits</strong> you'd love across 3 of your favourites.</p>
+              </div>
+              <div class="p-reply"><p>Show me! 👗</p></div>
+              <div class="p-bubble">
+                <p>Here's a <strong>Charles &amp; Keith</strong> bag that matches your last 2 Splash orders — <strong>15% off</strong> today only.</p>
+              </div>
+            </div>
+            <div class="p-reco">
+              <div class="p-reco-card"><div class="p-reco-brand">Splash</div><div class="p-reco-name">Kaftan</div><div class="p-reco-price">AED 189</div></div>
+              <div class="p-reco-card"><div class="p-reco-brand">C&amp;K</div><div class="p-reco-name">Mini Bag</div><div class="p-reco-price">AED 279</div></div>
+              <div class="p-reco-card"><div class="p-reco-brand">Faces</div><div class="p-reco-name">Oud Perfume</div><div class="p-reco-price">AED 349</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Features -->
+      <div>
+        <div class="eyebrow" style="margin-bottom:18px;">6 AI Capabilities for Club Apparel</div>
+        <div class="ai-feats">
+          <div class="ai-feat"><div class="ai-feat-icon">🤖</div><div class="ai-feat-title">AI Personal Stylist</div><div class="ai-feat-desc">Chat-based stylist in Arabic &amp; English recommends outfits across all 85+ brands based on taste, history and occasion.</div></div>
+          <div class="ai-feat"><div class="ai-feat-icon">🔔</div><div class="ai-feat-title">Smart Notifications</div><div class="ai-feat-desc">Not generic blasts — AI knows when each customer shops, what they buy, and sends the right offer at exactly the right moment.</div></div>
+          <div class="ai-feat"><div class="ai-feat-icon">🎯</div><div class="ai-feat-title">Predictive Rewards</div><div class="ai-feat-desc">AI detects churn risk 30 days out and auto-stages a personalised retention offer before the member goes quiet.</div></div>
+          <div class="ai-feat"><div class="ai-feat-icon">📸</div><div class="ai-feat-title">Visual Search &amp; Try-On</div><div class="ai-feat-desc">Point camera at any outfit — AI finds the closest match across all brands. Virtual try-on before buying.</div></div>
+          <div class="ai-feat"><div class="ai-feat-icon">🎂</div><div class="ai-feat-title">Birthday Intelligence</div><div class="ai-feat-desc">Not a generic discount — curated gift picks from that customer's favourite brands, in their size, pre-staged weeks ahead.</div></div>
+          <div class="ai-feat"><div class="ai-feat-icon">🌙</div><div class="ai-feat-title">Seasonal AI Campaigns</div><div class="ai-feat-desc">Eid, Ramadan, National Day — AI personalises the campaign per member. 1M members get 1M different experiences.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Before / After -->
+    <div class="aba-wrap">
+      <div class="aba-head">
+        <div class="aba-hcell aba-hb">Club Apparel Today</div>
+        <div class="aba-hcell aba-ha">Club Apparel with AI</div>
+      </div>
+      <div class="aba-row"><div class="aba-cell aba-b">All 1M members receive the same promotional emails and push notifications</div><div class="aba-cell aba-a">Every member sees a personalised feed based on brands, sizes and purchase history</div></div>
+      <div class="aba-row"><div class="aba-cell aba-b">Points expire without members realising — leading to quiet churn</div><div class="aba-cell aba-a">AI predicts churn 30 days out and sends a personalised retention offer automatically</div></div>
+      <div class="aba-row"><div class="aba-cell aba-b">Birthday offer is the same AED 50 discount sent to every member</div><div class="aba-cell aba-a">Curated gift picks from that customer's top 3 brands, in their size, with bonus points</div></div>
+      <div class="aba-row"><div class="aba-cell aba-b">Members browse 85 brands separately with no intelligent cross-brand discovery</div><div class="aba-cell aba-a">AI stylist guides members across all brands — "this bag matches your last 3 orders"</div></div>
+      <div class="aba-row"><div class="aba-cell aba-b">Push notifications sent to everyone, rarely opened, frequently muted</div><div class="aba-cell aba-a">AI sends contextual nudges at the right time — open rates 3× the industry average</div></div>
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════ SOLUTION MAP ═══════ -->
+<section class="sec" id="solutions">
+  <div class="map-head">
+    <div class="eyebrow">The Full AI Opportunity</div>
+    <h2 class="stitle" style="text-align:center;">6 Areas. 30+ Solutions.<br>One Vision.</h2>
+    <p class="sdesc" style="margin:0 auto;text-align:center;">Six business domains. Thirty-plus AI use cases. Every one scoped, built, and deployed by Codeox — starting wherever makes the most business sense.</p>
+  </div>
+  <div class="map-grid">
+    <a href="#area01" class="map-tile"><span class="map-tile-ghost">01</span><div class="map-tile-icon">📣</div><div class="map-num">01</div><div class="map-title">Marketing &amp; Content</div><div class="map-cases">6 use cases</div></a>
+    <a href="#area02" class="map-tile"><span class="map-tile-ghost">02</span><div class="map-tile-icon">🛍️</div><div class="map-num">02</div><div class="map-title">Customer Experience &amp; Personalisation</div><div class="map-cases">5 use cases</div></a>
+    <a href="#area03" class="map-tile"><span class="map-tile-ghost">03</span><div class="map-tile-icon">⚙️</div><div class="map-num">03</div><div class="map-title">Operations &amp; Supply Chain</div><div class="map-cases">4 use cases</div></a>
+    <a href="#area04" class="map-tile"><span class="map-tile-ghost">04</span><div class="map-tile-icon">🏪</div><div class="map-num">04</div><div class="map-title">Retail &amp; In-Store Intelligence</div><div class="map-cases">4 use cases</div></a>
+    <a href="#area05" class="map-tile"><span class="map-tile-ghost">05</span><div class="map-tile-icon">🏢</div><div class="map-num">05</div><div class="map-title">HR &amp; Internal Operations</div><div class="map-cases">4 use cases</div></a>
+    <a href="#area06" class="map-tile"><span class="map-tile-ghost">06</span><div class="map-tile-icon">🛡️</div><div class="map-num">06</div><div class="map-title">Finance, Risk &amp; Executive Intelligence</div><div class="map-cases">4 use cases</div></a>
+  </div>
+  <p class="oracle-note"><strong>Built on top of your existing infrastructure.</strong> Every solution sits on Oracle ERP · Club Apparel CRM · Store POS · HR Systems · Social &amp; Ad Platforms. No migration. No disruption.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ AREA 01 ═══════ -->
+<section class="area-sec" id="area01">
+  <div class="area-head">
+    <div class="area-num-big">01</div>
+    <div class="area-head-r">
+      <div class="eyebrow">📣 Area 01</div>
+      <h2>Marketing &amp; Content Creation</h2>
+      <p>85 brands × 30 posts/month = 2,550 pieces of content every month. AI reduces this to review-and-approve. From studio product photography to influencer partnerships — all automated, all on-brand.</p>
+    </div>
+  </div>
+  <div class="sols-grid">
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🎨</span><span class="sol-badge bq">Quick Win · 2 weeks</span></div><div class="sol-id">1.1 · Image AI</div><div class="sol-title">AI Image Generation</div><div class="sol-desc">Generate studio-quality product visuals for every brand and SKU — without a single photoshoot. Seasonal backgrounds, brand-specific styles, output in every format needed.</div><ul class="sol-feats"><li>White studio, lifestyle &amp; seasonal backgrounds</li><li>Brand-specific visual style per output</li><li>Batch generate full product catalogues</li><li>Formats for social, digital ads &amp; in-store displays</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🎬</span><span class="sol-badge bq">Quick Win · 2 weeks</span></div><div class="sol-id">1.2 · Video AI</div><div class="sol-title">AI Video Production</div><div class="sol-desc">Create product reels, brand stories, and promotional clips for every platform — fully automated. Arabic &amp; English voiceover. Auto-captions. Formatted for every platform.</div><ul class="sol-feats"><li>AI-generated reels for Instagram &amp; TikTok</li><li>Arabic &amp; English voiceover automation</li><li>Auto-captioning &amp; subtitle generation</li><li>Adapts to Reels, Shorts &amp; TikTok formats</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">✍️</span><span class="sol-badge bh">High Impact · 4 weeks</span></div><div class="sol-id">1.3 · Copy AI</div><div class="sol-title">Per-Brand Copywriting Agent</div><div class="sol-desc">Trained on each brand's tone of voice — writes product descriptions, emails, push notifications and ad copy in Arabic &amp; English, respecting the voice of Nike vs Aldo vs Charles &amp; Keith.</div><ul class="sol-feats"><li>Individual brand voice profile per brand</li><li>English, Arabic, Hindi and more</li><li>SEO-optimised product descriptions</li><li>A/B copy variants for ad testing</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📅</span><span class="sol-badge bh">High Impact · 4 weeks</span></div><div class="sol-id">1.4 · Social AI</div><div class="sol-title">Social Media Calendar Agent</div><div class="sol-desc">Generates a full month of posts per brand — captions, hashtags, schedule and platform format for Instagram, TikTok and Snapchat. Aligned to GCC seasonal moments.</div><ul class="sol-feats"><li>Automated content calendar per brand</li><li>Optimal posting time scheduling</li><li>Eid, National Day &amp; seasonal campaign banks</li><li>Hashtag &amp; trending audio intelligence</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📊</span><span class="sol-badge bh">High Impact · 6 weeks</span></div><div class="sol-id">1.5 · Analytics AI</div><div class="sol-title">Campaign Performance Analyst</div><div class="sol-desc">Monitors all brand ad campaigns in real time — flags underperforming creatives, identifies best-performing audiences and suggests budget reallocation automatically.</div><ul class="sol-feats"><li>Real-time dashboards per brand &amp; region</li><li>Auto budget reallocation on ROAS signals</li><li>Creative fatigue detection &amp; refresh alerts</li><li>Weekly AI executive briefing reports</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🤝</span><span class="sol-badge bf">Flagship · 3 months</span></div><div class="sol-id">1.6 · Outreach AI</div><div class="sol-title">Influencer &amp; PR Intelligence Agent</div><div class="sol-desc">Scans GCC social platforms, scores influencers by brand fit and engagement quality, drafts outreach in your brand voice and tracks ROI — end to end.</div><ul class="sol-feats"><li>AI influencer discovery by brand &amp; region</li><li>Personalised outreach message drafts</li><li>Collaboration milestone tracking</li><li>Post-campaign ROI scoring</li></ul></div>
+  </div>
+</section>
+
+<hr class="area-sep">
+
+<!-- ═══════ AREA 02 ═══════ -->
+<div class="bg-off">
+<section class="area-sec" id="area02">
+  <div class="area-head">
+    <div class="area-num-big">02</div>
+    <div class="area-head-r">
+      <div class="eyebrow">🛍️ Area 02</div>
+      <h2>Customer Experience &amp; Personalisation</h2>
+      <p>Turning Club Apparel's 1M+ member data into deeply personal journeys across all 85+ brands. Every touchpoint — app, website, WhatsApp, POS — becomes smarter and more relevant for each customer.</p>
+    </div>
+  </div>
+  <div class="sols-grid">
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🤖</span><span class="sol-badge bq">Quick Win · 2–4 weeks</span></div><div class="sol-id">2.1 · Conversational AI</div><div class="sol-title">Club Apparel AI Concierge</div><div class="sol-desc">WhatsApp &amp; in-app chatbot helping customers find products across 85+ brands, check loyalty points and get personalised outfit advice — in Arabic and English. Available 24/7.</div><ul class="sol-feats"><li>Natural language product discovery across all brands</li><li>Cross-brand outfit recommendations</li><li>Arabic &amp; English conversations</li><li>Available 24/7 across all touchpoints</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🎯</span><span class="sol-badge bh">High Impact · 4–6 weeks</span></div><div class="sol-id">2.2 · Personalisation AI</div><div class="sol-title">Cross-Brand Personalisation Engine</div><div class="sol-desc">When a customer buys Skechers, the engine surfaces matching accessories from Charles &amp; Keith and outfits from Splash — in-app, email and at POS. Dynamic homepage per customer profile.</div><ul class="sol-feats"><li>Dynamic homepage tailored per customer</li><li>Cross-brand product recommendations</li><li>Propensity scoring — who will buy next</li><li>Churn prediction &amp; retention offers</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">💎</span><span class="sol-badge bf">Flagship · 2–3 months</span></div><div class="sol-id">2.3 · Loyalty AI</div><div class="sol-title">Loyalty Intelligence Agent</div><div class="sol-desc">Identifies top 5% customers by lifetime value, predicts churn risk, auto-sends personalised retention offers based on real purchase history across all 85+ brands.</div><ul class="sol-feats"><li>Unified customer profile across all brands</li><li>AI-driven loyalty tier recommendations</li><li>Personalised reward offers per customer</li><li>Cross-brand loyalty incentive programmes</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🔍</span><span class="sol-badge bh">High Impact · 6–8 weeks</span></div><div class="sol-id">2.4 · Visual AI</div><div class="sol-title">Visual Search &amp; Virtual Try-On</div><div class="sol-desc">Customer uploads a photo of any outfit — AI finds the closest match across your brands and lets them see it on themselves before buying. Significantly reduces return rates.</div><ul class="sol-feats"><li>Image-to-product search across all catalogues</li><li>Virtual try-on for footwear &amp; apparel</li><li>AI outfit &amp; styling recommendations</li><li>Significantly reduces return rates</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📞</span><span class="sol-badge bq">Quick Win · 2–3 weeks</span></div><div class="sol-id">2.5 · AI Calling Agent</div><div class="sol-title">AI Customer Care Calling</div><div class="sol-desc">When a customer calls Apparel Group support, AIKA answers instantly — no hold music, no wait. It resolves returns, orders and loyalty queries in Arabic or English, and transfers to a live agent whenever the customer asks.</div><ul class="sol-feats"><li>Zero wait time — every inbound call answered instantly</li><li>Resolves returns, order tracking &amp; loyalty queries</li><li>Seamless live-agent transfer on customer request</li><li>24/7 coverage across all brands &amp; countries</li></ul></div>
+  </div>
+</section>
+</div>
+
+<hr class="area-sep">
+
+<!-- ═══════ AREA 03 ═══════ -->
+<section class="area-sec" id="area03">
+  <div class="area-head">
+    <div class="area-num-big">03</div>
+    <div class="area-head-r">
+      <div class="eyebrow">⚙️ Area 03</div>
+      <h2>Operations &amp; Supply Chain</h2>
+      <p>Works on top of Oracle — no migration, no disruption. AI reads your data and tells you what to do next. From demand forecasting that accounts for peak seasons and tourism, to automated procurement agents.</p>
+    </div>
+  </div>
+  <div class="sols-grid">
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📦</span><span class="sol-badge bh">High Impact · 6 weeks</span></div><div class="sol-id">3.1 · Forecasting AI</div><div class="sol-title">Demand Forecasting Agent</div><div class="sol-desc">Predicts what will sell, in which store, which region and which week — factoring in peak seasons, National Day, tourism and competition. Feeds reorder signals into Oracle automatically.</div><ul class="sol-feats"><li>Brand-level demand prediction per SKU</li><li>Region and season-aware forecasting</li><li>Reduces overstock holding costs by up to 40%</li><li>Auto reorder trigger into Oracle</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🏭</span><span class="sol-badge bq">Quick Win · 2 weeks</span></div><div class="sol-id">3.2 · Procurement AI</div><div class="sol-title">AI Procurement Agent</div><div class="sol-desc">Reads supplier emails, extracts order confirmations, delivery dates and issues, updates Oracle records and flags exceptions — replacing hours of daily manual data entry.</div><ul class="sol-feats"><li>Automated PO generation &amp; tracking</li><li>Supplier performance scoring</li><li>Price &amp; lead time comparison AI</li><li>Compliance &amp; contract monitoring</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">💰</span><span class="sol-badge bf">Flagship · 3 months</span></div><div class="sol-id">3.3 · Pricing AI</div><div class="sol-title">Dynamic Pricing Engine</div><div class="sol-desc">Monitors competitor prices across GCC markets, tracks your inventory and margins, and recommends SKU-level price adjustments — with one-click Oracle sync. Margin protection guardrails built in.</div><ul class="sol-feats"><li>Real-time competitor price monitoring</li><li>AI markdown &amp; promotion optimisation</li><li>Seasonal pricing strategy recommendations</li><li>Margin protection guardrails</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🔎</span><span class="sol-badge bh">High Impact · 4 weeks</span></div><div class="sol-id">3.4 · Risk AI</div><div class="sol-title">Returns &amp; Shrinkage Analyser</div><div class="sol-desc">Detects unusual return patterns, identifies high-shrinkage stores and flags potential fraud — surfaced as weekly alerts to operations leadership.</div><ul class="sol-feats"><li>Real-time transaction anomaly detection</li><li>Shrinkage monitoring across all 2,500 stores</li><li>Return fraud pattern recognition</li><li>Automated alert &amp; escalation system</li></ul></div>
+  </div>
+</section>
+
+<hr class="area-sep">
+
+<!-- ═══════ AREA 04 ═══════ -->
+<div class="bg-off">
+<section class="area-sec" id="area04">
+  <div class="area-head">
+    <div class="area-num-big">04</div>
+    <div class="area-head-r">
+      <div class="eyebrow">🏪 Area 04</div>
+      <h2>Retail &amp; In-Store Intelligence</h2>
+      <p>Smarter stores — without replacing a single piece of hardware. Every solution works with your existing POS and store infrastructure. AI enhances what your staff do, it doesn't replace them.</p>
+    </div>
+  </div>
+  <div class="sols-grid">
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📚</span><span class="sol-badge bq">Quick Win · 2 weeks</span></div><div class="sol-id">4.1 · Knowledge AI</div><div class="sol-title">Staff Knowledge Assistant</div><div class="sol-desc">Any store associate can ask about product specs, promotions, return policies and brand guidelines from their phone — answered instantly in Arabic or English. No more calls to HQ.</div><ul class="sol-feats"><li>SOP &amp; policy question answering instantly</li><li>Brand guideline lookup per brand</li><li>Onboarding assistant for new staff</li><li>Arabic &amp; English language support</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📱</span><span class="sol-badge bq">Quick Win · 3 weeks</span></div><div class="sol-id">4.2 · Clienteling AI</div><div class="sol-title">AI Clienteling Tool</div><div class="sol-desc">When a loyalty member scans their card, staff instantly see their last 5 purchases, preferred brands, sizes and an AI-suggested upsell on a tablet. Know your customer before they say a word.</div><ul class="sol-feats"><li>Customer profile at loyalty card scan</li><li>AI-suggested upsell &amp; cross-sell</li><li>Cross-brand purchase history visible</li><li>Personalised offers generated instantly</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">👨‍💼</span><span class="sol-badge bh">High Impact · 6 weeks</span></div><div class="sol-id">4.3 · Workforce AI</div><div class="sol-title">Smart Staff Scheduler</div><div class="sol-desc">Uses historic sales, upcoming campaigns and local events to predict footfall per store and build optimal rosters automatically. Reduce overstaffing and understaffing.</div><ul class="sol-feats"><li>Demand-driven shift recommendations</li><li>Reduce overstaffing &amp; understaffing</li><li>Cross-brand staff reallocation insights</li><li>Labour cost optimisation reporting</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">👣</span><span class="sol-badge bf">Flagship · 2 months</span></div><div class="sol-id">4.4 · Store AI</div><div class="sol-title">Store Performance Intelligence</div><div class="sol-desc">Weekly AI briefing per store manager — what is working, what is not, top products, underperforming SKUs and one recommended action for the week ahead. No data analyst required.</div><ul class="sol-feats"><li>In-store heatmap and zone analytics</li><li>Peak hour and day-of-week patterns</li><li>Conversion rate by store section</li><li>Product placement recommendations</li></ul></div>
+  </div>
+</section>
+</div>
+
+<hr class="area-sep">
+
+<!-- ═══════ AREA 05 ═══════ -->
+<section class="area-sec" id="area05">
+  <div class="area-head">
+    <div class="area-num-big">05</div>
+    <div class="area-head-r">
+      <div class="eyebrow">🏢 Area 05</div>
+      <h2>HR &amp; Internal Operations</h2>
+      <p>Thousands of staff across 14 countries — AI delivers quiet, consistent, high-volume HR value. From bulk peak-season hiring to daily HR query deflection, these tools free your HR teams for work that actually matters.</p>
+    </div>
+  </div>
+  <div class="sols-grid">
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">💬</span><span class="sol-badge bq">Quick Win · 2 weeks</span></div><div class="sol-id">5.1 · Internal HR AI</div><div class="sol-title">Internal HR Chatbot</div><div class="sol-desc">Staff in any country ask about leave, payslips, dress codes, SOPs and escalation paths in Arabic or English — answered instantly without calling HR. Deflects 60–70% of all HR queries.</div><ul class="sol-feats"><li>SOP &amp; leave policy question answering</li><li>Payslip and HR record enquiries</li><li>Onboarding assistant for new joiners</li><li>Arabic &amp; English language support</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🧠</span><span class="sol-badge bq">Quick Win · 2 weeks</span></div><div class="sol-id">5.2 · Hiring AI</div><div class="sol-title">CV Screening Agent</div><div class="sol-desc">Reads incoming CVs for store associate and management roles, scores against criteria, filters shortlists and drafts interview invites — vital for peak-season bulk hiring.</div><ul class="sol-feats"><li>Automated CV screening &amp; scoring</li><li>Interview question generation by role</li><li>Culture &amp; role fit assessment</li><li>Hiring funnel analytics dashboard</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🎓</span><span class="sol-badge bh">High Impact · 6 weeks</span></div><div class="sol-id">5.3 · L&amp;D AI</div><div class="sol-title">Onboarding &amp; Training Agent</div><div class="sol-desc">New joiners get a personalised learning path on their phone — brand knowledge, product training, service standards and compliance — tracked in your HR system.</div><ul class="sol-feats"><li>Brand knowledge training bots per brand</li><li>Product expertise quizzes &amp; guides</li><li>Performance tracking per employee</li><li>Multi-language training content</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📈</span><span class="sol-badge bf">Flagship · 3 months</span></div><div class="sol-id">5.4 · Coaching AI</div><div class="sol-title">Performance Coaching Agent</div><div class="sol-desc">Pulls sales data per associate, compares to top performers and delivers targeted micro-coaching: "your upsell conversion is 12% — here is a 3-minute tip to improve it."</div><ul class="sol-feats"><li>Individual sales performance vs store average</li><li>Targeted micro-coaching per associate</li><li>Upsell &amp; conversion improvement tips</li><li>Connects to HR performance management system</li></ul></div>
+  </div>
+</section>
+
+<hr class="area-sep">
+
+<!-- ═══════ AREA 06 ═══════ -->
+<div class="bg-off">
+<section class="area-sec" id="area06">
+  <div class="area-head">
+    <div class="area-num-big">06</div>
+    <div class="area-head-r">
+      <div class="eyebrow">🛡️ Area 06</div>
+      <h2>Finance, Risk &amp; Executive Intelligence</h2>
+      <p>For leadership, board and owners — a unified intelligence layer across the entire group. Live data. Natural language queries. No analyst wait time. From fraud detection to new store site selection.</p>
+    </div>
+  </div>
+  <div class="sols-grid">
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📰</span><span class="sol-badge bh">High Impact · 3 weeks</span></div><div class="sol-id">6.1 · Intelligence AI</div><div class="sol-title">AI Executive Weekly Briefing</div><div class="sol-desc">Every Monday, leadership receives a 1-page AI-written brief: top/bottom brands, key anomalies, market moves and a recommended priority — pulled from live Oracle data.</div><ul class="sol-feats"><li>Cross-brand revenue &amp; margin view</li><li>AI-generated weekly business briefings</li><li>Regional performance benchmarking</li><li>Predictive revenue &amp; risk alerts</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">🌐</span><span class="sol-badge bq">Quick Win · 2 weeks</span></div><div class="sol-id">6.2 · Market AI</div><div class="sol-title">Competitor &amp; Market Monitor</div><div class="sol-desc">Continuously scans competitor websites, pricing, social and press releases — weekly digest to brand managers on what H&amp;M, Zara, Aldo and others are doing in GCC.</div><ul class="sol-feats"><li>Automated competitor price tracking</li><li>New product launch alerts by category</li><li>Consumer sentiment monitoring</li><li>AI trend reports by brand vertical</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📊</span><span class="sol-badge bf">Flagship · 3 months</span></div><div class="sol-id">6.3 · Dashboard AI</div><div class="sol-title">Group Performance Dashboard</div><div class="sol-desc">Live dashboard of every brand, country and store. Natural language query: "which brand had the highest conversion in KSA last week?" — no SQL, no analyst wait time.</div><ul class="sol-feats"><li>Live view of every brand, country &amp; store</li><li>Natural language querying — no SQL needed</li><li>Real-time anomaly flagging</li><li>Board-ready auto-generated reports</li></ul></div>
+    <div class="sol-card"><div class="sol-top"><span class="sol-icon">📍</span><span class="sol-badge bf">Flagship · 2 months</span></div><div class="sol-id">6.4 · Location AI</div><div class="sol-title">New Store Location Analyser</div><div class="sol-desc">For every expansion decision — analyses foot traffic, competitor density, demographics and nearby store performance — and produces a data-backed go/no-go recommendation.</div><ul class="sol-feats"><li>Foot traffic &amp; competitor density analysis</li><li>Demographic &amp; consumer profile mapping</li><li>Nearby store performance benchmark</li><li>Data-backed go/no-go recommendation</li></ul></div>
+  </div>
+</section>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════ PERSONAS ═══════ -->
+<section class="sec" id="personas">
+  <div class="eyebrow">Impact by Stakeholder</div>
+  <h2 class="stitle">What AI means for<br>everyone in the group</h2>
+  <p class="sdesc">From frontline staff to the boardroom — here is the precise difference AI makes for each group within Apparel Group.</p>
+
+  <div class="pstack">
+
+    <!-- ── Customers ── -->
+    <div class="pband">
+      <div class="pband-who">
+        <div class="pband-icon">👥</div>
+        <div class="pband-name">Customers</div>
+        <div class="pband-sub">1M+ Club Apparel Members</div>
+        <span class="pband-tag ptag-green">Club Apparel</span>
+      </div>
+      <div class="pband-content">
+        <div class="pwin-grid">
+          <div class="pwin">
+            <div class="pwin-before">Browses 85 brands separately — fragmented, no cross-brand discovery</div>
+            <div class="pwin-arr">↓ AI changes this</div>
+            <div class="pwin-after">AI concierge finds the perfect outfit across all brands in one conversation</div>
+          </div>
+          <div class="pwin">
+            <div class="pwin-before">Same homepage and offers sent to all 1M+ members identically</div>
+            <div class="pwin-arr">↓ AI changes this</div>
+            <div class="pwin-after">Personalised feed — products and offers tailored to each customer's history</div>
+          </div>
+          <div class="pwin">
+            <div class="pwin-before">Gets the same AED 50 birthday discount as every other member</div>
+            <div class="pwin-arr">↓ AI changes this</div>
+            <div class="pwin-after">Curated gift picks from their favourite brands, in their actual size</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Store Staff ── -->
+    <div class="pband">
+      <div class="pband-who">
+        <div class="pband-icon">🏷️</div>
+        <div class="pband-name">Store Staff</div>
+        <div class="pband-sub">Frontline &amp; back-office teams</div>
+        <span class="pband-tag ptag-blue">Operations</span>
+      </div>
+      <div class="pband-content">
+        <div class="pwin-grid">
+          <div class="pwin">
+            <div class="pwin-before">Memorise product info across 85 brands — miss promotions, answer slowly</div>
+            <div class="pwin-arr">↓ AI changes this</div>
+            <div class="pwin-after">Ask AI from their phone — instant answer. Know every customer before they speak</div>
+          </div>
+          <div class="pwin">
+            <div class="pwin-before">Build rosters manually — often mis-staffed on peak sale days, campaign weekends</div>
+            <div class="pwin-arr">↓ AI changes this</div>
+            <div class="pwin-after">AI-built schedules based on predicted footfall. Never under or overstaffed</div>
+          </div>
+          <div class="pwin">
+            <div class="pwin-before">HR answers the same 200 queries per week on leave, payslips, dress codes</div>
+            <div class="pwin-arr">↓ AI changes this</div>
+            <div class="pwin-after">AI deflects 60–70% of queries. HR focuses on hiring and talent strategy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Managers ── -->
+    <div class="pband">
+      <div class="pband-who">
+        <div class="pband-icon">📋</div>
+        <div class="pband-name">Managers</div>
+        <div class="pband-sub">Store &amp; brand managers</div>
+        <span class="pband-tag ptag-navy">Leadership</span>
+      </div>
+      <div class="pband-content">
+        <div class="pmgr-grid">
+          <div class="pmgr">
+            <div class="pmgr-icon">📊</div>
+            <div class="pmgr-title">Weekly AI Store Briefing</div>
+            <div class="pmgr-desc">Every Monday: top SKUs, footfall, conversion rates and one recommended action. No data analyst needed.</div>
+          </div>
+          <div class="pmgr">
+            <div class="pmgr-icon">📦</div>
+            <div class="pmgr-title">Live Inventory Alerts</div>
+            <div class="pmgr-desc">Stockout risks flagged 2 weeks in advance, by SKU and store, before a single sale is lost.</div>
+          </div>
+          <div class="pmgr">
+            <div class="pmgr-icon">🏅</div>
+            <div class="pmgr-title">Staff Performance Coaching</div>
+            <div class="pmgr-desc">AI compares each associate to store average — sends targeted coaching tips directly to their phone.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── The Board ── -->
+    <div class="pband">
+      <div class="pband-who">
+        <div class="pband-icon">📈</div>
+        <div class="pband-name">The Board</div>
+        <div class="pband-sub">Strategic &amp; financial impact</div>
+        <span class="pband-tag ptag-navy">ROI</span>
+      </div>
+      <div class="pband-content">
+        <div class="pstat-grid">
+          <div class="pstat"><div class="pstat-n">15–20%</div><div class="pstat-l">Revenue uplift from AI personalisation<br><em style="font-size:0.6rem;color:var(--text-light);">McKinsey</em></div></div>
+          <div class="pstat"><div class="pstat-n">40%</div><div class="pstat-l">Reduction in inventory waste via demand forecasting<br><em style="font-size:0.6rem;color:var(--text-light);">Gartner</em></div></div>
+          <div class="pstat"><div class="pstat-n">60–70%</div><div class="pstat-l">HR queries deflected — HR freed for strategy<br><em style="font-size:0.6rem;color:var(--text-light);">Deloitte</em></div></div>
+          <div class="pstat"><div class="pstat-n">30 days</div><div class="pstat-l">Time to first measurable ROI from pilot<br><em style="font-size:0.6rem;color:var(--text-light);">All deployments</em></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Owners ── -->
+    <div class="pband">
+      <div class="pband-who">
+        <div class="pband-icon">🏆</div>
+        <div class="pband-name">Owners</div>
+        <div class="pband-sub">Group leadership &amp; strategy</div>
+        <span class="pband-tag ptag-green">Competitive Edge</span>
+      </div>
+      <div class="pband-content">
+        <div class="ppillar-grid">
+          <div class="ppillar">
+            <div class="ppillar-icon">🌐</div>
+            <div class="ppillar-title">Group-Wide Brand Intelligence</div>
+            <div class="ppillar-desc">Live view of every brand, country and store. Ask any question in plain English — no analyst, no two-week wait.</div>
+          </div>
+          <div class="ppillar">
+            <div class="ppillar-icon">💎</div>
+            <div class="ppillar-title">Loyalty Data as Revenue Engine</div>
+            <div class="ppillar-desc">1M+ members is your biggest asset. AI predicts who will churn, who will buy, and what offer converts them — continuously.</div>
+          </div>
+          <div class="ppillar">
+            <div class="ppillar-icon">🛡️</div>
+            <div class="ppillar-title">Future-Proof Against Disruption</div>
+            <div class="ppillar-desc">AI makes your physical stores' experience impossible for pure-play online competitors to replicate.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ ROADMAP ═══════ -->
+<div class="bg-gray full-bg">
+  <section class="sec" id="roadmap">
+    <div class="eyebrow">Implementation Roadmap</div>
+    <h2 class="stitle">From first pilot to full<br>deployment in 6 months</h2>
+    <p class="sdesc">We start with quick wins that prove value within 30 days — then scale to high-impact and flagship solutions based on what works best for Apparel Group.</p>
+    <!-- Timeline track -->
+    <div class="rm-track">
+      <div class="rm-track-phase rm-track-phase-1">
+        <div class="rm-track-node">01</div>
+        <div class="rm-track-name">Quick Wins</div>
+        <div class="rm-track-time">Weeks 1–4</div>
+      </div>
+      <div class="rm-track-connector rm-track-conn-1"></div>
+      <div class="rm-track-phase rm-track-phase-2">
+        <div class="rm-track-node">02</div>
+        <div class="rm-track-name">High Impact</div>
+        <div class="rm-track-time">Weeks 5–10</div>
+      </div>
+      <div class="rm-track-connector rm-track-conn-2"></div>
+      <div class="rm-track-phase rm-track-phase-3">
+        <div class="rm-track-node">03</div>
+        <div class="rm-track-name">Flagship</div>
+        <div class="rm-track-time">Months 3–6</div>
+      </div>
+    </div>
+
+    <!-- Phase columns -->
+    <div class="rm-cols">
+
+      <!-- Phase 1 -->
+      <div class="rm-col rm-col-1">
+        <div class="rm-col-head">
+          <div class="rm-col-head-bg">01</div>
+          <div class="rm-col-num">Phase 01</div>
+          <div class="rm-col-title">Quick Wins</div>
+          <span class="rm-col-badge">⚡ Live in 30 days</span>
+        </div>
+        <div class="rm-items">
+          <div class="rm-item"><span class="rm-item-name">Club Apparel AI Concierge</span><span class="rm-item-tag">Area 02</span></div>
+          <div class="rm-item"><span class="rm-item-name">AI Customer Care Calling</span><span class="rm-item-tag">Area 02</span></div>
+          <div class="rm-item"><span class="rm-item-name">Staff Knowledge Assistant</span><span class="rm-item-tag">Area 04</span></div>
+          <div class="rm-item"><span class="rm-item-name">AI Clienteling Tool</span><span class="rm-item-tag">Area 04</span></div>
+          <div class="rm-item"><span class="rm-item-name">Internal HR Chatbot</span><span class="rm-item-tag">Area 05</span></div>
+          <div class="rm-item"><span class="rm-item-name">CV Screening Agent</span><span class="rm-item-tag">Area 05</span></div>
+          <div class="rm-item"><span class="rm-item-name">Procurement Email Agent</span><span class="rm-item-tag">Area 03</span></div>
+          <div class="rm-item"><span class="rm-item-name">Competitor Market Monitor</span><span class="rm-item-tag">Area 06</span></div>
+          <div class="rm-item"><span class="rm-item-name">AI Image Generation</span><span class="rm-item-tag">Area 01</span></div>
+          <div class="rm-item"><span class="rm-item-name">AI Video Production</span><span class="rm-item-tag">Area 01</span></div>
+        </div>
+        <div class="rm-col-foot">
+          <div class="rm-col-foot-lbl">Value delivered</div>
+          <div class="rm-col-foot-val">AI live &amp; proving ROI across 9 workflows</div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="rm-col rm-col-2">
+        <div class="rm-col-head">
+          <div class="rm-col-head-bg">02</div>
+          <div class="rm-col-num">Phase 02</div>
+          <div class="rm-col-title">High Impact</div>
+          <span class="rm-col-badge">🚀 Full retail engine</span>
+        </div>
+        <div class="rm-items">
+          <div class="rm-item"><span class="rm-item-name">Cross-Brand Personalisation Engine</span><span class="rm-item-tag">Area 02</span></div>
+          <div class="rm-item"><span class="rm-item-name">Visual Search &amp; Try-On</span><span class="rm-item-tag">Area 02</span></div>
+          <div class="rm-item"><span class="rm-item-name">Demand Forecasting Agent</span><span class="rm-item-tag">Area 03</span></div>
+          <div class="rm-item"><span class="rm-item-name">Smart Staff Scheduler</span><span class="rm-item-tag">Area 04</span></div>
+          <div class="rm-item"><span class="rm-item-name">Social Media Calendar Agent</span><span class="rm-item-tag">Area 01</span></div>
+          <div class="rm-item"><span class="rm-item-name">Campaign Performance Analyst</span><span class="rm-item-tag">Area 01</span></div>
+          <div class="rm-item"><span class="rm-item-name">AI Executive Briefing</span><span class="rm-item-tag">Area 06</span></div>
+          <div class="rm-item"><span class="rm-item-name">Returns &amp; Shrinkage Analyser</span><span class="rm-item-tag">Area 03</span></div>
+          <div class="rm-item"><span class="rm-item-name">Onboarding &amp; Training Agent</span><span class="rm-item-tag">Area 05</span></div>
+        </div>
+        <div class="rm-col-foot">
+          <div class="rm-col-foot-lbl">Value delivered</div>
+          <div class="rm-col-foot-val">Advanced AI running across all 6 areas</div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="rm-col rm-col-3">
+        <div class="rm-col-head">
+          <div class="rm-col-head-bg">03</div>
+          <div class="rm-col-num">Phase 03</div>
+          <div class="rm-col-title">Flagship</div>
+          <span class="rm-col-badge">🏆 Group-wide transformation</span>
+        </div>
+        <div class="rm-items">
+          <div class="rm-item"><span class="rm-item-name">Group Performance Dashboard</span><span class="rm-item-tag">Area 06</span></div>
+          <div class="rm-item"><span class="rm-item-name">Dynamic Pricing Engine</span><span class="rm-item-tag">Area 03</span></div>
+          <div class="rm-item"><span class="rm-item-name">Loyalty Intelligence Agent</span><span class="rm-item-tag">Area 02</span></div>
+          <div class="rm-item"><span class="rm-item-name">Performance Coaching Agent</span><span class="rm-item-tag">Area 05</span></div>
+          <div class="rm-item"><span class="rm-item-name">Influencer Intelligence Agent</span><span class="rm-item-tag">Area 01</span></div>
+          <div class="rm-item"><span class="rm-item-name">New Store Location Analyser</span><span class="rm-item-tag">Area 06</span></div>
+          <div class="rm-item"><span class="rm-item-name">Store Performance Intelligence</span><span class="rm-item-tag">Area 04</span></div>
+          <div class="rm-item"><span class="rm-item-name">AI Training Platform</span><span class="rm-item-tag">Area 05</span></div>
+        </div>
+        <div class="rm-col-foot">
+          <div class="rm-col-foot-lbl">Value delivered</div>
+          <div class="rm-col-foot-val">Complete group-wide AI transformation</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════ CODEOX PRODUCTS ═══════ -->
+<div class="bg-off full-bg" id="products">
+<section class="sec">
+  <div class="eyebrow">Powered by Codeox Products</div>
+  <h2 class="stitle">Purpose-built AI products,<br>deployed for Apparel Group</h2>
+  <p class="sdesc">These are not custom builds from scratch — they are live, production-ready AI products built by <strong>Bafar Labs</strong> and exclusively deployed in Saudi Arabia by Codeox, mapped directly to Apparel Group's six challenge areas. Faster to deploy. Proven in the field.</p>
+
+  <!-- ── Product → Area Connection Map ── -->
+  <div id="conn-map" style="margin-top:40px;background:#FAFAF7;border:1px solid var(--border);border-radius:var(--r-lg);padding:32px 36px 24px;position:relative;">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:0.57rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-light);margin-bottom:4px;">Visual Map · Hover any product to highlight its connection</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:0.93rem;font-weight:700;color:var(--text);">How each product plugs into your six challenge areas</div>
+      </div>
+      <div style="font-size:0.61rem;color:var(--text-light);text-align:right;line-height:1.65;flex-shrink:0;margin-left:20px;">All 6 areas covered<br>by Codeox products</div>
+    </div>
+
+    <svg id="cmap-svg" viewBox="0 0 860 510" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;overflow:visible;">
+      <defs>
+        <filter id="pd" x="-8%" y="-15%" width="116%" height="130%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.025 0.05" numOctaves="4" seed="7" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="1.4" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <marker id="m-violet" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,0.5 L7.5,3 L1,5.5" fill="none" stroke="#8B5CF6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="m-sky"    markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,0.5 L7.5,3 L1,5.5" fill="none" stroke="#0EA5E9" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="m-teal"   markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,0.5 L7.5,3 L1,5.5" fill="none" stroke="#10B981" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="m-blue"   markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,0.5 L7.5,3 L1,5.5" fill="none" stroke="#3B82F6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="m-cyan"   markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,0.5 L7.5,3 L1,5.5" fill="none" stroke="#06B6D4" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        <marker id="m-purple" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M1,0.5 L7.5,3 L1,5.5" fill="none" stroke="#7C3AED" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></marker>
+      </defs>
+
+      <!-- ══ Products (LEFT) — ordered to match area positions ══ -->
+      <!-- AI Image  → Area 01 (y=57) -->
+      <g class="cpill" data-id="aiimage" style="cursor:pointer;">
+        <rect x="0" y="38" width="230" height="38" rx="8" fill="rgba(139,92,246,0.07)" stroke="rgba(139,92,246,0.22)" stroke-width="1"/>
+        <circle cx="16" cy="57" r="7" fill="#8B5CF6"/>
+        <text x="30" y="53" font-family="Plus Jakarta Sans,sans-serif" font-size="12.5" font-weight="700" fill="#1A2540">AI Image</text>
+        <text x="30" y="69" font-family="DM Mono,monospace" font-size="9.5" fill="#9A9A88">Photography AI</text>
+      </g>
+
+      <!-- AI Video  → Area 01 (y=137) -->
+      <g class="cpill" data-id="aivideo" style="cursor:pointer;">
+        <rect x="0" y="118" width="230" height="38" rx="8" fill="rgba(14,165,233,0.07)" stroke="rgba(14,165,233,0.22)" stroke-width="1"/>
+        <circle cx="16" cy="137" r="7" fill="#0EA5E9"/>
+        <text x="30" y="133" font-family="Plus Jakarta Sans,sans-serif" font-size="12.5" font-weight="700" fill="#1A2540">AI Video</text>
+        <text x="30" y="149" font-family="DM Mono,monospace" font-size="9.5" fill="#9A9A88">Video Production AI</text>
+      </g>
+
+      <!-- AIWA  → Area 02 (y=217) -->
+      <g class="cpill" data-id="aiwa" style="cursor:pointer;">
+        <rect x="0" y="198" width="230" height="38" rx="8" fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.22)" stroke-width="1"/>
+        <circle cx="16" cy="217" r="7" fill="#10B981"/>
+        <text x="30" y="213" font-family="Plus Jakarta Sans,sans-serif" font-size="12.5" font-weight="700" fill="#1A2540">AIWA</text>
+        <text x="30" y="229" font-family="DM Mono,monospace" font-size="9.5" fill="#9A9A88">AI WhatsApp Agent</text>
+      </g>
+
+      <!-- AIKA  → Area 04 (y=297) -->
+      <g class="cpill" data-id="aika" style="cursor:pointer;">
+        <rect x="0" y="278" width="230" height="38" rx="8" fill="rgba(59,130,246,0.07)" stroke="rgba(59,130,246,0.22)" stroke-width="1"/>
+        <circle cx="16" cy="297" r="7" fill="#3B82F6"/>
+        <text x="30" y="293" font-family="Plus Jakarta Sans,sans-serif" font-size="12.5" font-weight="700" fill="#1A2540">AIKA</text>
+        <text x="30" y="309" font-family="DM Mono,monospace" font-size="9.5" fill="#9A9A88">AI Calling Agent</text>
+      </g>
+
+      <!-- RAG AI  → Area 04 + 05 (y=377) -->
+      <g class="cpill" data-id="ragAI" style="cursor:pointer;">
+        <rect x="0" y="358" width="230" height="38" rx="8" fill="rgba(6,182,212,0.07)" stroke="rgba(6,182,212,0.22)" stroke-width="1"/>
+        <circle cx="16" cy="377" r="7" fill="#06B6D4"/>
+        <text x="30" y="373" font-family="Plus Jakarta Sans,sans-serif" font-size="12.5" font-weight="700" fill="#1A2540">RAG AI</text>
+        <text x="30" y="389" font-family="DM Mono,monospace" font-size="9.5" fill="#9A9A88">Knowledge Base AI</text>
+      </g>
+
+      <!-- HiringPartner.ai  → Area 05 (y=457) -->
+      <g class="cpill" data-id="hiring" style="cursor:pointer;">
+        <rect x="0" y="438" width="230" height="38" rx="8" fill="rgba(124,58,237,0.07)" stroke="rgba(124,58,237,0.22)" stroke-width="1"/>
+        <circle cx="16" cy="457" r="7" fill="#7C3AED"/>
+        <text x="30" y="453" font-family="Plus Jakarta Sans,sans-serif" font-size="12.5" font-weight="700" fill="#1A2540">HiringPartner.ai</text>
+        <text x="30" y="469" font-family="DM Mono,monospace" font-size="9.5" fill="#9A9A88">Agentic Recruitment</text>
+      </g>
+
+      <!-- ══ Areas (RIGHT) — ordered 01–06 ══ -->
+      <g class="carea" data-id="a01">
+        <rect x="630" y="38" width="230" height="38" rx="8" fill="rgba(141,179,10,0.09)" stroke="rgba(141,179,10,0.3)" stroke-width="1"/>
+        <circle cx="646" cy="57" r="7" fill="#8DB30A"/>
+        <text x="660" y="52" font-family="DM Mono,monospace" font-size="10" font-weight="700" fill="#5C7A00">AREA 01</text>
+        <text x="660" y="67" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="600" fill="#1A2540">Marketing &amp; Content</text>
+      </g>
+
+      <g class="carea" data-id="a02">
+        <rect x="630" y="118" width="230" height="38" rx="8" fill="rgba(141,179,10,0.09)" stroke="rgba(141,179,10,0.3)" stroke-width="1"/>
+        <circle cx="646" cy="137" r="7" fill="#8DB30A"/>
+        <text x="660" y="132" font-family="DM Mono,monospace" font-size="10" font-weight="700" fill="#5C7A00">AREA 02</text>
+        <text x="660" y="147" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="600" fill="#1A2540">Customer Experience</text>
+      </g>
+
+      <g class="carea" data-id="a03">
+        <rect x="630" y="198" width="230" height="38" rx="8" fill="rgba(141,179,10,0.09)" stroke="rgba(141,179,10,0.3)" stroke-width="1"/>
+        <circle cx="646" cy="217" r="7" fill="#8DB30A"/>
+        <text x="660" y="212" font-family="DM Mono,monospace" font-size="10" font-weight="700" fill="#5C7A00">AREA 03</text>
+        <text x="660" y="227" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="600" fill="#1A2540">Supply Chain</text>
+      </g>
+
+      <g class="carea" data-id="a04">
+        <rect x="630" y="278" width="230" height="38" rx="8" fill="rgba(141,179,10,0.09)" stroke="rgba(141,179,10,0.3)" stroke-width="1"/>
+        <circle cx="646" cy="297" r="7" fill="#8DB30A"/>
+        <text x="660" y="292" font-family="DM Mono,monospace" font-size="10" font-weight="700" fill="#5C7A00">AREA 04</text>
+        <text x="660" y="307" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="600" fill="#1A2540">Store Operations</text>
+      </g>
+
+      <g class="carea" data-id="a05">
+        <rect x="630" y="358" width="230" height="38" rx="8" fill="rgba(141,179,10,0.09)" stroke="rgba(141,179,10,0.3)" stroke-width="1"/>
+        <circle cx="646" cy="377" r="7" fill="#8DB30A"/>
+        <text x="660" y="372" font-family="DM Mono,monospace" font-size="10" font-weight="700" fill="#5C7A00">AREA 05</text>
+        <text x="660" y="387" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="600" fill="#1A2540">People &amp; HR</text>
+      </g>
+
+      <g class="carea" data-id="a06">
+        <rect x="630" y="438" width="230" height="38" rx="8" fill="rgba(141,179,10,0.09)" stroke="rgba(141,179,10,0.3)" stroke-width="1"/>
+        <circle cx="646" cy="457" r="7" fill="#8DB30A"/>
+        <text x="660" y="452" font-family="DM Mono,monospace" font-size="10" font-weight="700" fill="#5C7A00">AREA 06</text>
+        <text x="660" y="467" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="600" fill="#1A2540">Finance &amp; Intelligence</text>
+      </g>
+
+      <!-- ══ CURVES — products now ordered to match areas, so curves barely cross ══ -->
+      <!-- AI Image (57) → Area 01 (57): nearly horizontal -->
+      <g class="cconn" data-id="aiimage">
+        <path d="M 230,57 C 380,57 480,57 630,57" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" opacity="0.7" marker-end="url(#m-violet)" filter="url(#pd)"/>
+        <text x="430" y="48" font-family="DM Mono,monospace" font-size="9" fill="#8B5CF6" text-anchor="middle" opacity="0.8">→ Area 01</text>
+      </g>
+
+      <!-- AI Video (137) → Area 01 (57): gentle arc up -->
+      <g class="cconn" data-id="aivideo">
+        <path d="M 230,137 C 380,137 480,57 630,57" fill="none" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" opacity="0.7" marker-end="url(#m-sky)" filter="url(#pd)"/>
+        <text x="430" y="88" font-family="DM Mono,monospace" font-size="9" fill="#0EA5E9" text-anchor="middle" opacity="0.8">→ Area 01</text>
+      </g>
+
+      <!-- AIWA (217) → Area 02 (137): gentle arc up -->
+      <g class="cconn" data-id="aiwa">
+        <path d="M 230,217 C 380,217 480,137 630,137" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" opacity="0.7" marker-end="url(#m-teal)" filter="url(#pd)"/>
+        <text x="430" y="168" font-family="DM Mono,monospace" font-size="9" fill="#10B981" text-anchor="middle" opacity="0.8">→ Area 02</text>
+      </g>
+
+      <!-- AIKA (297) → Area 04 (297): nearly horizontal — Store Operations -->
+      <g class="cconn" data-id="aika">
+        <path d="M 230,297 C 380,297 480,297 630,297" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" opacity="0.7" marker-end="url(#m-blue)" filter="url(#pd)"/>
+        <text x="430" y="288" font-family="DM Mono,monospace" font-size="9" fill="#3B82F6" text-anchor="middle" opacity="0.8">→ Area 04</text>
+      </g>
+      <!-- AIKA (297) → Area 02 (137): arc up — Customer Care inbound calls + human transfer -->
+      <g class="cconn" data-id="aika">
+        <path d="M 230,297 C 380,297 480,137 630,137" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="5,4" opacity="0.5" marker-end="url(#m-blue)" filter="url(#pd)"/>
+        <text x="430" y="208" font-family="DM Mono,monospace" font-size="9" fill="#3B82F6" text-anchor="middle" opacity="0.65">→ Area 02</text>
+      </g>
+
+      <!-- RAG AI (377) → Area 03 (217): arc up — Supply Chain knowledge retrieval -->
+      <g class="cconn" data-id="ragAI">
+        <path d="M 230,377 C 380,377 480,217 630,217" fill="none" stroke="#06B6D4" stroke-width="2" stroke-linecap="round" opacity="0.7" marker-end="url(#m-cyan)" filter="url(#pd)"/>
+        <text x="430" y="289" font-family="DM Mono,monospace" font-size="9" fill="#06B6D4" text-anchor="middle" opacity="0.8">→ Area 03</text>
+      </g>
+      <!-- RAG AI (377) → Area 06 (457): arc down — Finance intelligence chatbot -->
+      <g class="cconn" data-id="ragAI">
+        <path d="M 230,377 C 380,377 480,457 630,457" fill="none" stroke="#06B6D4" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="5,4" opacity="0.45" marker-end="url(#m-cyan)" filter="url(#pd)"/>
+        <text x="430" y="432" font-family="DM Mono,monospace" font-size="9" fill="#06B6D4" text-anchor="middle" opacity="0.55">→ Area 06</text>
+      </g>
+
+      <!-- HiringPartner (457) → Area 05 (377): gentle arc up -->
+      <g class="cconn" data-id="hiring">
+        <path d="M 230,457 C 380,457 480,377 630,377" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" opacity="0.7" marker-end="url(#m-purple)" filter="url(#pd)"/>
+        <text x="430" y="425" font-family="DM Mono,monospace" font-size="9" fill="#7C3AED" text-anchor="middle" opacity="0.8">→ Area 05</text>
+      </g>
+
+    </svg>
+
+    <!-- Legend -->
+    <div style="display:flex;gap:22px;flex-wrap:wrap;margin-top:4px;padding-top:14px;border-top:1px solid var(--border);">
+      <div style="display:flex;align-items:center;gap:7px;font-size:0.64rem;color:var(--text-light);">
+        <svg width="26" height="8"><line x1="0" y1="4" x2="26" y2="4" stroke="#555" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Direct product connection
+      </div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:0.64rem;color:var(--text-light);">
+        <svg width="26" height="8"><line x1="0" y1="4" x2="26" y2="4" stroke="#555" stroke-width="1.4" stroke-dasharray="4,3" stroke-linecap="round"/></svg>
+        Secondary connection
+      </div>
+
+    </div>
+  </div>
+  <script>
+  (function(){
+    var map = document.getElementById('conn-map');
+    if (!map) return;
+    function setOpacity(id, active){
+      map.querySelectorAll('.cconn').forEach(function(el){
+        el.style.transition = 'opacity 0.18s';
+        el.style.opacity = (!id || el.getAttribute('data-id')===id) ? '1' : '0.07';
+      });
+      map.querySelectorAll('.cpill').forEach(function(el){
+        el.style.transition = 'opacity 0.18s';
+        el.style.opacity = (!id || el.getAttribute('data-id')===id) ? '1' : '0.25';
+      });
+      map.querySelectorAll('.carea').forEach(function(el){
+        var aid = el.getAttribute('data-id');
+        var activeMap = {aiimage:['a01'],aivideo:['a01'],aiwa:['a02'],aika:['a04','a02'],ragAI:['a03','a06'],hiring:['a05']};
+        var relevant = id ? (activeMap[id]||[]) : [];
+        el.style.transition = 'opacity 0.18s';
+        el.style.opacity = (!id || relevant.indexOf(aid)>=0) ? '1' : '0.15';
+      });
+    }
+    map.querySelectorAll('.cpill').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ setOpacity(el.getAttribute('data-id'), true); });
+      el.addEventListener('mouseleave', function(){ setOpacity(null, false); });
+    });
+  })();
+  </script>
+
+
+
+  <!-- 6 Products Equal Grid -->
+  <div style="margin-top:44px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+    <!-- HiringPartner.ai -->
+    <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid #7C3AED;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;transition:all 0.22s;" onmouseover="this.style.boxShadow='var(--shadow-lg)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='var(--shadow-sm)';this.style.transform=''">
+      <div style="padding:28px 28px 20px;">
+        <div style="width:46px;height:46px;background:linear-gradient(135deg,#7C3AED,#A855F7);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-bottom:16px;">HR</div>
+        <div style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:3px;">HiringPartner.ai</div>
+        <div style="font-size:0.72rem;color:#7C3AED;font-weight:600;margin-bottom:13px;">Agentic AI Recruitment</div>
+        <p style="font-size:0.79rem;color:var(--text-muted);line-height:1.75;margin-bottom:16px;">Automates the full hiring funnel — CV ranking, AI phone screening, live video interviews and evaluation reports. Reduces time-to-hire from 6 weeks to 48 hours.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 16px;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#7C3AED;flex-shrink:0;">→</span>Peak season bulk hiring across 14 countries</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#7C3AED;flex-shrink:0;">→</span>Arabic &amp; English AI phone &amp; video interviews</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#7C3AED;flex-shrink:0;">→</span>Unbiased scoring — top 10 shortlist delivered</li>
+        </ul>
+      </div>
+      <div style="margin-top:auto;padding:14px 28px;background:var(--off-white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">Area 05 · HR</span>
+        <a href="https://hiringpartner.ai" target="_blank" rel="noopener" style="font-size:0.68rem;font-weight:700;color:#7C3AED;text-decoration:none;letter-spacing:0.04em;">hiringpartner.ai →</a>
+      </div>
+    </div>
+
+    <!-- AIKA -->
+    <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid #3B82F6;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;transition:all 0.22s;" onmouseover="this.style.boxShadow='var(--shadow-lg)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='var(--shadow-sm)';this.style.transform=''">
+      <div style="padding:28px 28px 20px;">
+        <div style="width:46px;height:46px;background:linear-gradient(135deg,#3B82F6,#6366F1);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-bottom:16px;">AI</div>
+        <div style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:3px;">AIKA</div>
+        <div style="font-size:0.72rem;color:#3B82F6;font-weight:600;margin-bottom:13px;">AI Calling Agent</div>
+        <p style="font-size:0.79rem;color:var(--text-muted);line-height:1.75;margin-bottom:16px;">Customers calling Apparel Group care lines no longer wait on hold — AIKA answers instantly, resolves the issue, and seamlessly transfers to a live agent if the customer prefers. Available 24/7 in Arabic and English.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 16px;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#3B82F6;flex-shrink:0;">→</span>Zero wait time — AI picks up every inbound call instantly</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#3B82F6;flex-shrink:0;">→</span>Handles returns, loyalty queries &amp; store enquiries autonomously</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#3B82F6;flex-shrink:0;">→</span>Live agent transfer on request — no dead ends, no dropped calls</li>
+        </ul>
+      </div>
+      <div style="margin-top:auto;padding:14px 28px;background:var(--off-white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">Area 02 · CX &nbsp;·&nbsp; Area 04 · Ops</span>
+        <span style="font-size:0.68rem;font-weight:600;color:var(--text-light);">by Bafar Labs</span>
+      </div>
+    </div>
+
+    <!-- AIWA -->
+    <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid #10B981;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;transition:all 0.22s;" onmouseover="this.style.boxShadow='var(--shadow-lg)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='var(--shadow-sm)';this.style.transform=''">
+      <div style="padding:28px 28px 20px;">
+        <div style="width:46px;height:46px;background:linear-gradient(135deg,#10B981,#059669);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-bottom:16px;">WA</div>
+        <div style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:3px;">AIWA</div>
+        <div style="font-size:0.72rem;color:#059669;font-weight:600;margin-bottom:13px;">AI WhatsApp Agent</div>
+        <p style="font-size:0.79rem;color:var(--text-muted);line-height:1.75;margin-bottom:16px;">WhatsApp Business API chatbot for Club Apparel — handles orders, promotions, loyalty point queries and personalised product recommendations for 1M+ members.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 16px;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#10B981;flex-shrink:0;">→</span>Club Apparel loyalty concierge on WhatsApp</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#10B981;flex-shrink:0;">→</span>Campaign broadcasts &amp; personalised offers</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#10B981;flex-shrink:0;">→</span>Order status, returns &amp; store finder 24/7</li>
+        </ul>
+      </div>
+      <div style="margin-top:auto;padding:14px 28px;background:var(--off-white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">Area 02 · CX</span>
+        <span style="font-size:0.68rem;font-weight:600;color:var(--text-light);">by Bafar Labs</span>
+      </div>
+    </div>
+
+    <!-- AI Image -->
+    <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid #8B5CF6;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;transition:all 0.22s;" onmouseover="this.style.boxShadow='var(--shadow-lg)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='var(--shadow-sm)';this.style.transform=''">
+      <div style="padding:28px 28px 20px;">
+        <div style="width:46px;height:46px;background:linear-gradient(135deg,#8B5CF6,#7C3AED);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-bottom:16px;">IM</div>
+        <div style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:3px;">AI Image</div>
+        <div style="font-size:0.72rem;color:#8B5CF6;font-weight:600;margin-bottom:13px;">Product Photography AI</div>
+        <p style="font-size:0.79rem;color:var(--text-muted);line-height:1.75;margin-bottom:16px;">Studio-quality product images for all 85+ brands without photoshoots. Generate seasonal backgrounds, brand-specific styles and every digital format in minutes, not days.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 16px;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#8B5CF6;flex-shrink:0;">→</span>New season catalogue images across 85 brands</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#8B5CF6;flex-shrink:0;">→</span>Eliminates external studio &amp; model costs</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#8B5CF6;flex-shrink:0;">→</span>On-brand backgrounds for every campaign</li>
+        </ul>
+      </div>
+      <div style="margin-top:auto;padding:14px 28px;background:var(--off-white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">Area 01 · Marketing</span>
+        <span style="font-size:0.68rem;font-weight:600;color:var(--text-light);">by Bafar Labs</span>
+      </div>
+    </div>
+
+    <!-- AI Video -->
+    <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid #0EA5E9;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;transition:all 0.22s;" onmouseover="this.style.boxShadow='var(--shadow-lg)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='var(--shadow-sm)';this.style.transform=''">
+      <div style="padding:28px 28px 20px;">
+        <div style="width:46px;height:46px;background:linear-gradient(135deg,#0EA5E9,#0284C7);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-bottom:16px;">VD</div>
+        <div style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:3px;">AI Video</div>
+        <div style="font-size:0.72rem;color:#0284C7;font-weight:600;margin-bottom:13px;">Automated Video Production</div>
+        <p style="font-size:0.79rem;color:var(--text-muted);line-height:1.75;margin-bottom:16px;">Brand reels, product launches and promotional content auto-generated for Instagram, TikTok and Snapchat — across all 85 brands simultaneously, at a fraction of production cost.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 16px;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#0EA5E9;flex-shrink:0;">→</span>85 brands × 3 platforms — automated weekly</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#0EA5E9;flex-shrink:0;">→</span>Seasonal &amp; campaign content in hours not weeks</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#0EA5E9;flex-shrink:0;">→</span>Cuts agency video production spend significantly</li>
+        </ul>
+      </div>
+      <div style="margin-top:auto;padding:14px 28px;background:var(--off-white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">Area 01 · Marketing</span>
+        <span style="font-size:0.68rem;font-weight:600;color:var(--text-light);">by Bafar Labs</span>
+      </div>
+    </div>
+
+    <!-- RAG AI -->
+    <div style="background:var(--white);border:1px solid var(--border);border-top:3px solid #06B6D4;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;transition:all 0.22s;" onmouseover="this.style.boxShadow='var(--shadow-lg)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='var(--shadow-sm)';this.style.transform=''">
+      <div style="padding:28px 28px 20px;">
+        <div style="width:46px;height:46px;background:linear-gradient(135deg,#06B6D4,#0891B2);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:800;color:#fff;margin-bottom:16px;">KB</div>
+        <div style="font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:3px;">RAG AI</div>
+        <div style="font-size:0.72rem;color:#0891B2;font-weight:600;margin-bottom:13px;">Knowledge Base AI</div>
+        <p style="font-size:0.79rem;color:var(--text-muted);line-height:1.75;margin-bottom:16px;">Turns your internal documents — SOPs, HR policies, brand guides, training manuals — into an instant AI assistant. Staff ask any question and get a grounded, accurate answer in seconds.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 16px;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#06B6D4;flex-shrink:0;">→</span>HR policy &amp; payroll queries deflected instantly</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#06B6D4;flex-shrink:0;">→</span>Brand guidelines &amp; product training on demand</li>
+          <li style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:7px;"><span style="color:#06B6D4;flex-shrink:0;">→</span>Never hallucinated — only your own data used</li>
+        </ul>
+      </div>
+      <div style="margin-top:auto;padding:14px 28px;background:var(--off-white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.08em;">Area 04 &amp; 05 · Staff</span>
+        <span style="font-size:0.68rem;font-weight:600;color:var(--text-light);">by Bafar Labs</span>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="margin-top:28px;font-size:0.68rem;color:var(--text-light);text-align:center;letter-spacing:0.04em;">Products developed by <strong style="color:var(--text-muted);">Bafar Labs</strong> · Exclusively resold &amp; deployed across Saudi Arabia by <strong style="color:var(--text-muted);">Codeox</strong></p>
+
+</section>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════ HOW WE WORK ═══════ -->
+<section class="sec">
+  <div class="eyebrow">How Codeox Works With You</div>
+  <h2 class="stitle">Fast, low-risk, and always<br>on top of Oracle</h2>
+  <p class="sdesc">Our approach is built for enterprise retail — not demos and roadmaps, but deployed production AI that your teams actually use.</p>
+  <div class="hww-grid">
+    <div class="hww-card"><div class="hww-num">01</div><div class="hww-icon">🔗</div><div class="hww-title">No System Replacement</div><div class="hww-desc">Every solution sits on top of your existing Oracle ERP and Club Apparel CRM. We read your data — we never migrate it or replace what works. Zero disruption to live operations.</div></div>
+    <div class="hww-card"><div class="hww-num">02</div><div class="hww-icon">🚀</div><div class="hww-title">Start With One Quick Win</div><div class="hww-desc">We propose beginning with a single 2-week pilot — the Club Apparel AI Concierge or Staff Knowledge Assistant — so you see real results before committing further.</div></div>
+    <div class="hww-card"><div class="hww-num">03</div><div class="hww-icon">🤖</div><div class="hww-title">Built with Claude AI</div><div class="hww-desc">We use Anthropic's Claude — trusted by the world's leading enterprises — giving you enterprise-grade security, Arabic language support and reliability that scales to 2,500 stores.</div></div>
+    <div class="hww-card"><div class="hww-num">04</div><div class="hww-icon">🌍</div><div class="hww-title">Bilingual Arabic &amp; English</div><div class="hww-desc">Every customer-facing and staff-facing tool works fluently in both Arabic and English — including Gulf dialect awareness. Built for your GCC customers and multicultural workforce.</div></div>
+    <div class="hww-card"><div class="hww-num">05</div><div class="hww-icon">🔒</div><div class="hww-title">Your Data Stays Yours</div><div class="hww-desc">We do not store or train on your customer data. Everything is processed in real time using your secure Oracle connection. Your 1M+ loyalty members' data never leaves your control.</div></div>
+    <div class="hww-card"><div class="hww-num">06</div><div class="hww-icon">📐</div><div class="hww-title">We Measure Everything</div><div class="hww-desc">Each solution comes with a clear ROI dashboard — cost saved, revenue attributed, time recovered. You know exactly what you are getting from every deployment, every week.</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ ABOUT CODEOX ═══════ -->
+<div class="bg-off full-bg">
+  <section class="sec" id="codeox">
+    <div class="eyebrow">About Codeox</div>
+    <h2 class="stitle">Built by a team that<br>understands your world</h2>
+    <p class="sdesc">Codeox Technologies is an AI-first software company built for enterprise. Not demos. Not frameworks. Deployed production AI that your teams actually use.</p>
+    <div class="about-grid">
+      <div class="about-card"><div class="about-icon">🏢</div><h3>Who We Are</h3><p>Codeox Technologies is an AI-first software company headquartered in India, with delivery teams across UAE, Saudi Arabia, Qatar, and Kuwait. We build intelligent systems that solve real enterprise problems — deployed production software, not PoC demos.</p></div>
+      <div class="about-card"><div class="about-icon">🤖</div><h3>What We Specialise In</h3><p>AI agents, LLM integrations, Oracle ERP &amp; Odoo, custom mobile and web applications, and marketing automation. We have deployed AI across procurement, retail, healthcare, logistics, and F&amp;B — from SMEs to enterprise groups across the GCC.</p></div>
+      <div class="about-card"><div class="about-icon">🌍</div><h3>Where We Operate</h3><p>India · Saudi Arabia · UAE. We understand the GCC market deeply — Arabic language AI, regional compliance, local business culture, and the operational realities of running a large retail group across 14 countries in this region.</p></div>
+      <div class="about-card"><div class="about-icon">⚡</div><h3>How We Work</h3><p>We start with a focused pilot — delivering a working AI use case fast to prove value, then scale. Every engagement is practical, outcome-driven, and built for your team to actually use. Not theoretical frameworks before you see anything.</p></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════ CTA ═══════ -->
+<section class="cta-sec" id="contact">
+  <div class="cta-ring cta-r1"></div>
+  <div class="cta-ring cta-r2"></div>
+  <div class="cta-ring cta-r3"></div>
+  <div class="cta-inner">
+    <div class="cta-eyebrow">The Next Step</div>
+    <p class="cta-quote">"The question is not whether AI will transform retail. It already is. The question is whether Apparel Group <em>leads it</em> — or watches competitors do it first."</p>
+    <p class="cta-sub">Let's build the first pilot together. Two weeks. One use case. Real results — before any further commitment.</p>
+    <div class="cta-btns">
+      <a href="mailto:hello@codeox.com" class="cta-btn-p">Start the Conversation</a>
+      <a href="https://codeox.com" class="cta-btn-g" target="_blank" rel="noopener">View Our Portfolio →</a>
+    </div>
+    <p class="cta-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="Codeox" style="height:16px;opacity:0.25;vertical-align:middle;filter:invert(1);">
+      &nbsp;&nbsp;codeox.com · GCC &amp; India · Riyadh, Saudi Arabia · 2026 · Confidential
+    </p>
+  </div>
+</section>
+
+<script>
+// Scroll-reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+
+document.querySelectorAll(
+  '.sol-card,.opp-card,.map-tile,.hww-card,.about-card,.mgr-card,.role-card,.owner-row,.phase,.ai-feat,.impact-cell,.sband-item'
+).forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(16px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, border-color 0.22s, box-shadow 0.22s';
+  obs.observe(el);
+});
+
+// Active nav highlight
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) cur = s.id; });
+  navLinks.forEach(a => {
+    const isActive = a.getAttribute('href') === '#' + cur;
+    a.style.color = isActive ? 'var(--green-dark)' : '';
+    a.style.fontWeight = isActive ? '700' : '';
+  });
+}, { passive: true });
+</script>
+</body>
+</html>
