@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elie Catering — Digital Growth Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple-deep:   #1A0D2E;
+    --purple-dark:   #21103A;
+    --purple-mid:    #2E1655;
+    --purple-rich:   #3D1E72;
+    --purple-accent: #7B3FA0;
+    --purple-bright: #9B59C4;
+    --gold:          #B8860B;
+    --gold-light:    #D4AF6A;
+    --gold-dim:      rgba(184,134,11,0.12);
+    --border:        rgba(123,63,160,0.13);
+    --border-gold:   rgba(184,134,11,0.22);
+    --cream:         #F7F3FD;
+    --text:          #1A0D2E;
+    --text-dim:      rgba(26,13,46,0.52);
+    --text-mid:      rgba(26,13,46,0.74);
+    --green:         #1a7a3c;
+    --green-dim:     rgba(26,122,60,0.10);
+    /* surfaces */
+    --surface:       #FFFFFF;
+    --surface-alt:   #F7F3FD;
+    --surface-card:  #EDE6F7;
+    /* hero/panel text (on dark bg) */
+    --on-dark:       #F3EEF8;
+    --on-dark-dim:   rgba(243,238,248,0.60);
+    --on-dark-mid:   rgba(243,238,248,0.80);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; font-size:18px; }
+
+  body {
+    font-family:'Outfit',sans-serif;
+    background:var(--surface);
+    color:var(--text);
+    overflow-x:hidden;
+    line-height:1.7;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height:100vh;
+    display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+    text-align:center;
+    padding:120px 60px 140px;
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% 55%, rgba(61,30,114,0.65) 0%, transparent 70%),
+      linear-gradient(180deg, var(--purple-deep) 0%, var(--purple-dark) 100%);
+  }
+  .hero::before {
+    content:''; position:absolute;
+    width:900px; height:900px; border-radius:50%;
+    background:radial-gradient(circle, rgba(123,63,160,0.2) 0%, transparent 70%);
+    top:-200px; left:-300px; pointer-events:none;
+  }
+  .hero::after {
+    content:''; position:absolute;
+    width:600px; height:600px; border-radius:50%;
+    background:radial-gradient(circle, rgba(212,175,106,0.08) 0%, transparent 70%);
+    bottom:-50px; right:-150px; pointer-events:none;
+  }
+
+  .hero-logo {
+    width:200px; margin-bottom:48px;
+    opacity:0; animation:fadeUp 0.8s ease forwards 0.1s;
+    filter:drop-shadow(0 0 32px rgba(212,175,106,0.4));
+    position:relative; z-index:1;
+  }
+  .hero-eyebrow {
+    font-size:13px; letter-spacing:6px;
+    text-transform:uppercase; color:var(--gold); font-weight:600;
+    margin-bottom:32px;
+    opacity:0; animation:fadeUp 0.8s ease forwards 0.3s;
+    position:relative; z-index:1;
+  }
+  .hero-title {
+    font-family:'DM Sans',sans-serif;
+    font-size:clamp(40px,5.5vw,76px);
+    font-weight:800; line-height:1.05; letter-spacing:-0.5px;
+    margin-bottom:36px; color:var(--cream);
+    opacity:0; animation:fadeUp 0.9s ease forwards 0.5s;
+    position:relative; z-index:1;
+  }
+  .hero-title em {
+    font-weight:800; font-style:normal;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .hero-sub {
+    font-size:20px; font-weight:300; color:var(--on-dark-dim);
+    max-width:640px; margin-bottom:56px; line-height:1.9;
+    opacity:0; animation:fadeUp 0.9s ease forwards 0.7s;
+    position:relative; z-index:1;
+  }
+
+  /* hero stats bar */
+  .hero-stats {
+    display:flex; gap:0; margin-bottom:72px;
+    border:1px solid var(--border-gold); border-radius:4px; overflow:hidden;
+    opacity:0; animation:fadeUp 0.9s ease forwards 0.85s;
+    position:relative; z-index:1;
+  }
+  .hstat {
+    padding:20px 40px; text-align:center;
+    border-right:1px solid var(--border-gold);
+  }
+  .hstat:last-child { border-right:none; }
+  .hstat-val {
+    font-family:'DM Sans',sans-serif; font-size:30px; font-weight:700;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    line-height:1;
+  }
+  .hstat-lbl { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--on-dark-dim); margin-top:6px; font-weight:600; }
+
+  .hero-scroll {
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    opacity:0; animation:fadeUp 0.9s ease forwards 1s;
+    position:relative; z-index:1;
+  }
+  .hero-scroll span { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--on-dark-dim); }
+  .scroll-line { width:1px; height:80px; background:linear-gradient(to bottom,var(--gold),transparent); }
+
+  /* ─── ORNAMENT ─── */
+  .ornament { display:flex; align-items:center; gap:16px; margin:20px 0 32px; }
+  .ornament-line { flex:1; height:1px; background:var(--border-gold); }
+  .ornament-diamond { width:9px; height:9px; background:var(--gold); transform:rotate(45deg); flex-shrink:0; }
+
+  /* ─── STORY INTRO ─── */
+  .story-intro { border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--surface-alt); }
+  .story-intro-inner { max-width:980px; margin:0 auto; padding:110px 60px; text-align:center; }
+
+  .section-label {
+    font-size:12px; letter-spacing:6px;
+    text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:20px;
+  }
+  .story-quote {
+    font-family:'DM Sans',sans-serif;
+    font-size:clamp(22px,2.8vw,34px);
+    font-weight:500; line-height:1.7; color:var(--text);
+  }
+  .story-quote span {
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+
+  /* ─── WHAT'S INCLUDED ─── */
+  .included-section { max-width:1400px; margin:0 auto; padding:80px 60px; }
+  .included-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin-top:48px; }
+  .included-card {
+    background:var(--surface); border:1px solid var(--border);
+    padding:36px 28px; border-radius:4px;
+    transition:border-color 0.3s, box-shadow 0.3s;
+  }
+  .included-card:hover { border-color:var(--border-gold); box-shadow:0 4px 24px rgba(184,134,11,0.07); }
+  .included-num {
+    font-family:'DM Sans',sans-serif; font-size:44px; font-weight:700; line-height:1;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    margin-bottom:12px;
+  }
+  .included-title { font-size:15px; font-weight:700; color:var(--purple-deep); margin-bottom:10px; letter-spacing:0.3px; }
+  .included-desc { font-size:14px; color:var(--text-dim); font-weight:400; line-height:1.75; }
+
+  /* ─── MONTHS ─── */
+  .months-wrapper { max-width:1400px; margin:0 auto; padding:0 60px 24px; display:flex; flex-direction:column; gap:4px; }
+
+  .month-block {
+    border:1px solid var(--border); border-radius:4px; overflow:hidden;
+    transition:border-color 0.35s, box-shadow 0.35s;
+    background:var(--surface);
+  }
+  .month-block:hover { border-color:rgba(123,63,160,0.30); box-shadow:0 4px 32px rgba(123,63,160,0.10); }
+
+  .month-inner { display:grid; grid-template-columns:360px 1fr; min-height:560px; }
+
+  /* left */
+  .month-left {
+    background:var(--purple-mid); padding:72px 60px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    border-right:1px solid var(--border);
+    position:relative; overflow:hidden;
+  }
+  .month-left::before {
+    content:''; position:absolute; bottom:-100px; left:-100px;
+    width:340px; height:340px; border-radius:50%;
+    background:radial-gradient(circle,rgba(212,175,106,0.07) 0%,transparent 70%);
+  }
+  .month-left::after {
+    content:''; position:absolute; top:-80px; right:-80px;
+    width:240px; height:240px; border-radius:50%;
+    background:radial-gradient(circle,rgba(155,89,196,0.16) 0%,transparent 70%);
+  }
+  .month-number-bg {
+    font-family:'DM Sans',sans-serif; font-size:180px; font-weight:800;
+    line-height:1; color:var(--purple-accent); opacity:0.15;
+    position:absolute; top:0; right:10px; letter-spacing:-6px; pointer-events:none;
+  }
+  .month-tag { font-size:12px; letter-spacing:5px; text-transform:uppercase; color:var(--gold); font-weight:600; position:relative; z-index:1; }
+  .month-name { font-family:'DM Sans',sans-serif; font-size:44px; font-weight:800; line-height:1.1; color:var(--cream); margin-top:18px; position:relative; z-index:1; }
+  .month-name em {
+    font-style:normal; font-weight:800;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .month-theme { font-size:16px; color:var(--on-dark-dim); font-weight:300; line-height:1.8; margin-top:20px; position:relative; z-index:1; }
+  .month-bar { display:flex; align-items:center; gap:12px; margin-top:44px; position:relative; z-index:1; }
+  .bar-dot { width:10px; height:10px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+  .bar-line { flex:1; height:1px; background:linear-gradient(to right,var(--gold),transparent); }
+  .bar-label { font-size:12px; color:var(--on-dark-dim); letter-spacing:1px; }
+
+  /* week pills */
+  .week-pills { display:flex; flex-direction:column; gap:10px; margin-top:32px; position:relative; z-index:1; }
+  .week-pill {
+    display:flex; align-items:flex-start; gap:12px;
+    padding:14px 18px; background:rgba(26,13,46,0.5);
+    border:1px solid var(--border); border-radius:3px;
+    font-size:13px;
+  }
+  .week-pill-label { color:var(--gold); font-weight:700; letter-spacing:1px; flex-shrink:0; min-width:58px; }
+  .week-pill-text { color:var(--on-dark-mid); font-weight:300; line-height:1.5; }
+
+  /* right */
+  .month-right { padding:72px 64px; display:flex; flex-direction:column; gap:40px; }
+  .month-story {
+    font-size:19px; color:var(--text-mid); font-weight:300; line-height:2;
+    border-left:3px solid var(--gold-dim); padding-left:28px;
+    font-family:'Outfit',sans-serif;
+  }
+  .activities-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .activity-card {
+    background:var(--surface-alt); border:1px solid var(--border); border-radius:4px;
+    padding:28px 30px; transition:background 0.25s,border-color 0.25s;
+  }
+  .activity-card:hover { background:var(--surface-card); border-color:rgba(184,134,11,0.30); }
+  .activity-icon { font-size:28px; display:block; margin-bottom:14px; }
+  .activity-title { font-size:15px; font-weight:700; color:var(--purple-accent); margin-bottom:10px; letter-spacing:0.2px; }
+  .activity-desc { font-size:15px; color:var(--text-dim); font-weight:300; line-height:1.75; }
+  .activity-deliverables { margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
+  .deliverable-item { display:flex; align-items:flex-start; gap:8px; font-size:13px; color:var(--text-dim); line-height:1.5; margin-bottom:6px; }
+  .deliverable-item::before { content:'✓'; color:var(--green); flex-shrink:0; font-size:12px; margin-top:1px; }
+
+  /* milestone */
+  .milestone-strip { background:var(--surface-card); border-top:1px solid var(--border); padding:28px 64px; }
+  .milestone-label { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:16px; }
+  .milestones { display:flex; flex-wrap:wrap; gap:12px 36px; }
+  .milestone-item { display:flex; align-items:center; gap:10px; font-size:15px; color:var(--text-mid); font-weight:300; }
+  .milestone-item::before { content:'◆'; color:var(--gold); font-size:8px; flex-shrink:0; }
+
+  /* ─── TIMELINE ─── */
+  .timeline-section { max-width:1400px; margin:0 auto; padding:0 60px 100px; }
+  .timeline-bar-wrapper { display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-top:48px; }
+  .tbar { background:var(--surface-alt); border:1px solid var(--border); border-radius:3px; padding:36px 40px; position:relative; overflow:hidden; }
+  .tbar::after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; }
+  .tbar-1::after { background:linear-gradient(90deg,var(--purple-bright),var(--purple-accent)); }
+  .tbar-2::after { background:linear-gradient(90deg,var(--purple-accent),var(--gold)); }
+  .tbar-3::after { background:linear-gradient(90deg,var(--gold),var(--gold-light)); }
+  .tbar-month { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:10px; }
+  .tbar-title { font-family:'DM Sans',sans-serif; font-size:26px; font-weight:700; color:var(--purple-deep); }
+  .tbar-status { font-size:15px; color:var(--text-dim); margin-top:10px; font-weight:300; }
+  .tbar-list { margin-top:20px; display:flex; flex-direction:column; gap:8px; }
+  .tbar-item { font-size:13px; color:var(--text-mid); display:flex; align-items:flex-start; gap:8px; font-weight:300; }
+  .tbar-item::before { content:'→'; color:var(--gold); flex-shrink:0; }
+
+  /* ─── OUTCOMES ─── */
+  .outcome-section { border-top:1px solid var(--border); background:var(--surface-alt); }
+  .section-block { max-width:1400px; margin:0 auto; padding:100px 60px; }
+  .section-title { font-family:'DM Sans',sans-serif; font-size:clamp(32px,3.5vw,54px); font-weight:800; line-height:1.1; margin-bottom:24px; color:var(--purple-deep); }
+  .section-title em {
+    font-style:normal; font-weight:800;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .outcome-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-top:56px; }
+  .outcome-card {
+    background:var(--surface); border:1px solid var(--border);
+    padding:60px 40px; text-align:center; border-radius:3px;
+    transition:border-color 0.3s, box-shadow 0.3s;
+  }
+  .outcome-card:hover { border-color:rgba(184,134,11,0.35); box-shadow:0 4px 24px rgba(184,134,11,0.07); }
+  .outcome-number {
+    font-family:'DM Sans',sans-serif; font-size:68px; font-weight:800; line-height:1;
+    margin-bottom:8px;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .outcome-unit { font-size:12px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--text-dim); margin-bottom:18px; }
+  .outcome-desc { font-size:16px; color:var(--text-dim); font-weight:300; line-height:1.75; }
+
+  /* ─── WHY US ─── */
+  .why-section { border-top:1px solid var(--border); }
+  .why-inner { max-width:1400px; margin:0 auto; padding:100px 60px; }
+  .why-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:56px; }
+  .why-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:4px;
+    padding:48px 44px; transition:border-color 0.3s, box-shadow 0.3s;
+  }
+  .why-card:hover { border-color:var(--border-gold); box-shadow:0 4px 24px rgba(184,134,11,0.07); }
+  .why-icon { font-size:36px; margin-bottom:20px; display:block; }
+  .why-title { font-family:'DM Sans',sans-serif; font-size:22px; font-weight:700; color:var(--purple-deep); margin-bottom:16px; }
+  .why-desc { font-size:16px; color:var(--text-dim); font-weight:300; line-height:1.85; }
+
+  /* ─── FAQ ─── */
+  .faq-section { border-top:1px solid var(--border); background:var(--surface-alt); }
+  .faq-inner { max-width:900px; margin:0 auto; padding:100px 60px; }
+  .faq-item { border-bottom:1px solid var(--border); padding:32px 0; }
+  .faq-item:last-child { border-bottom:none; }
+  .faq-q { font-family:'DM Sans',sans-serif; font-size:18px; font-weight:700; color:var(--purple-deep); margin-bottom:16px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+  .faq-q-icon { color:var(--gold); font-size:24px; flex-shrink:0; line-height:1.2; transition:transform 0.3s; }
+  .faq-a { font-size:17px; color:var(--text-dim); font-weight:300; line-height:1.85; }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    border-top:1px solid var(--border);
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 50%, rgba(184,134,11,0.06) 0%, transparent 70%),
+      var(--surface-alt);
+    padding:120px 60px; text-align:center; position:relative; overflow:hidden;
+  }
+  .cta-section::before {
+    content:''; position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%); width:700px; height:700px;
+    border-radius:50%; border:1px solid rgba(212,175,106,0.06); pointer-events:none;
+  }
+  .cta-title { font-family:'DM Sans',sans-serif; font-size:clamp(32px,4vw,60px); font-weight:800; line-height:1.08; color:var(--purple-deep); margin-bottom:28px; position:relative; z-index:1; }
+  .cta-title em {
+    font-style:normal; font-weight:800;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .cta-sub { font-size:19px; color:var(--text-dim); font-weight:300; max-width:560px; margin:0 auto 48px; line-height:1.9; position:relative; z-index:1; }
+  .cta-steps { display:flex; justify-content:center; gap:4px; margin-bottom:56px; position:relative; z-index:1; }
+  .cta-step {
+    background:var(--surface); border:1px solid var(--border); border-radius:4px;
+    padding:28px 36px; text-align:center; min-width:200px;
+  }
+  .cta-step-num {
+    font-family:'DM Sans',sans-serif; font-size:36px; font-weight:800; line-height:1;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    margin-bottom:10px;
+  }
+  .cta-step-title { font-size:14px; font-weight:700; color:var(--purple-deep); margin-bottom:6px; }
+  .cta-step-desc { font-size:13px; color:var(--text-dim); font-weight:300; }
+  .cta-button {
+    display:inline-block; background:linear-gradient(135deg,var(--gold),var(--gold-light));
+    color:var(--purple-deep); font-size:13px; font-weight:700; letter-spacing:4px;
+    text-transform:uppercase; padding:20px 60px; border-radius:3px; text-decoration:none;
+    position:relative; z-index:1; transition:opacity 0.2s, transform 0.2s;
+  }
+  .cta-button:hover { opacity:0.9; transform:translateY(-1px); }
+
+  /* ─── CLOSING ─── */
+  .closing {
+    text-align:center; padding:140px 60px;
+    position:relative; overflow:hidden;
+    border-top:1px solid var(--border);
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 50%, rgba(123,63,160,0.06) 0%, transparent 70%),
+      var(--surface-alt);
+  }
+  .closing::before {
+    content:''; position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%); width:800px; height:800px;
+    border-radius:50%; border:1px solid rgba(212,175,106,0.07); pointer-events:none;
+  }
+  .closing::after {
+    content:''; position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%); width:500px; height:500px;
+    border-radius:50%; border:1px solid rgba(212,175,106,0.07); pointer-events:none;
+  }
+  .closing-logo { width:120px; margin:0 auto 48px; display:block; filter:drop-shadow(0 0 24px rgba(212,175,106,0.35)); position:relative; z-index:1; }
+  .closing-big { font-family:'DM Sans',sans-serif; font-size:clamp(40px,6vw,84px); font-weight:800; line-height:1.05; color:var(--purple-deep); margin-bottom:30px; position:relative; z-index:1; }
+  .closing-big em {
+    font-style:normal; font-weight:800;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .closing-sub { font-size:19px; color:var(--text-dim); font-weight:300; max-width:580px; margin:0 auto 60px; line-height:1.9; position:relative; z-index:1; }
+  .closing-badge {
+    display:inline-block; border:1px solid var(--border-gold); background:var(--surface);
+    padding:18px 48px; font-size:12px; letter-spacing:5px;
+    text-transform:uppercase; color:var(--gold); font-weight:600; border-radius:3px;
+    position:relative; z-index:1;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top:1px solid var(--border); padding:36px 60px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:14px; color:var(--text-dim); font-weight:300;
+    background:var(--surface-card);
+  }
+  footer img { height:44px; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(32px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .reveal { opacity:0; transform:translateY(32px); transition:opacity 0.75s ease,transform 0.75s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width:900px) {
+    html { font-size:16px; }
+    .month-inner { grid-template-columns:1fr; }
+    .month-left { border-right:none; border-bottom:1px solid var(--border); padding:48px 36px; }
+    .month-right { padding:48px 36px; }
+    .activities-grid { grid-template-columns:1fr; }
+    .outcome-grid { grid-template-columns:1fr; }
+    .timeline-bar-wrapper { grid-template-columns:1fr; }
+    .included-grid { grid-template-columns:1fr 1fr; }
+    .why-grid { grid-template-columns:1fr; }
+    .cta-steps { flex-direction:column; align-items:center; }
+    footer { flex-direction:column; gap:16px; text-align:center; }
+    .milestones { flex-direction:column; gap:12px; }
+    .milestone-strip { padding:24px 36px; }
+    .months-wrapper { padding:0 24px 24px; }
+    .section-block,.timeline-section,.included-section,.why-inner,.faq-inner { padding-left:28px; padding-right:28px; }
+    .story-intro-inner { padding:80px 28px; }
+    .hero-stats { flex-direction:column; }
+    .hstat { border-right:none; border-bottom:1px solid var(--border-gold); }
+    .hstat:last-child { border-bottom:none; }
+  }
+  @media (max-width:600px) {
+    .included-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <img class="hero-logo"
+    src="https://elie-catering.webcrowdsolutions.com/images/ref_img_12.png"
+    alt="Elie Catering"
+    onerror="this.style.display='none'">
+  <p class="hero-eyebrow">Exclusive Digital Growth Roadmap · 2025</p>
+  <h1 class="hero-title">Your Journey<br>to the <em>Top</em></h1>
+  <p class="hero-sub">A 90-day plan crafted exclusively for Elie Catering — engineered to make you the undisputed first choice when Riyadh searches for catering that truly matters.</p>
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-val">90</div>
+      <div class="hstat-lbl">Day Plan</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val">3×</div>
+      <div class="hstat-lbl">Avg. Reach Growth</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val">36+</div>
+      <div class="hstat-lbl">Premium Posts</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val">100%</div>
+      <div class="hstat-lbl">Dedicated to You</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll to explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STORY INTRO -->
+<div class="story-intro">
+  <div class="story-intro-inner reveal">
+    <p class="section-label">The Opportunity</p>
+    <div class="ornament"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line"></div></div>
+    <p class="story-quote">Elie Catering already delivers <span>extraordinary experiences</span> at every event. The problem isn't the product — it's visibility. Right now, clients who would choose you can't find you. In 90 days, we change that completely.</p>
+  </div>
+</div>
+
+<!-- WHAT'S INCLUDED -->
+<div class="included-section">
+  <p class="section-label reveal">Everything You Get</p>
+  <h2 class="section-title reveal">Your Complete <em>Package</em></h2>
+  <div class="included-grid reveal">
+    <div class="included-card">
+      <div class="included-num">36+</div>
+      <div class="included-title">Premium Content Pieces</div>
+      <div class="included-desc">Reels, carousels, and single posts — minimum 12 per month, crafted to stop the scroll and drive real inquiries.</div>
+    </div>
+    <div class="included-card">
+      <div class="included-num">12</div>
+      <div class="included-title">Google Business Updates</div>
+      <div class="included-desc">Weekly posts keeping your profile active, ranked, and converting — the single most powerful local SEO lever available.</div>
+    </div>
+    <div class="included-card">
+      <div class="included-num">3</div>
+      <div class="included-title">Monthly Strategy Reports</div>
+      <div class="included-desc">Full performance breakdowns every month — reach, calls, profile views, review growth, and what's being optimized next.</div>
+    </div>
+    <div class="included-card">
+      <div class="included-num">∞</div>
+      <div class="included-title">Ongoing DM & Review Management</div>
+      <div class="included-desc">Every inquiry gets a fast, professional response. Every review is replied to. Your reputation is managed daily, not weekly.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MONTHS -->
+<div class="months-wrapper">
+
+  <!-- MONTH 1 -->
+  <div class="month-block reveal">
+    <div class="month-inner">
+      <div class="month-left">
+        <div class="month-number-bg">01</div>
+        <div>
+          <p class="month-tag">Month One · Weeks 1–4</p>
+          <h2 class="month-name">Building the<br><em>Foundation</em></h2>
+          <p class="month-theme">Before we grow, we build correctly. Every digital touchpoint audited, rebuilt, and aligned to the premium standard Elie Catering already delivers on the ground.</p>
+        </div>
+        <div class="week-pills">
+          <div class="week-pill">
+            <span class="week-pill-label">Week 1</span>
+            <span class="week-pill-text">Full digital audit — profiles, SEO baseline, competitor analysis</span>
+          </div>
+          <div class="week-pill">
+            <span class="week-pill-label">Week 2</span>
+            <span class="week-pill-text">Google Business rebuild + social profile transformation</span>
+          </div>
+          <div class="week-pill">
+            <span class="week-pill-label">Week 3</span>
+            <span class="week-pill-text">First content wave live — 6 posts minimum across platforms</span>
+          </div>
+          <div class="week-pill">
+            <span class="week-pill-label">Week 4</span>
+            <span class="week-pill-text">SEO foundation deployed + review system activated</span>
+          </div>
+        </div>
+        <div class="month-bar">
+          <div class="bar-dot"></div>
+          <div class="bar-line"></div>
+          <span class="bar-label">Setup &amp; Launch</span>
+        </div>
+      </div>
+      <div class="month-right">
+        <p class="month-story">"Picture a corporate event planner in Riyadh searching for premium catering right now. That moment is a missed booking. By the end of Month One, Elie Catering will own that search result — visible, polished, and impossible to scroll past."</p>
+        <div class="activities-grid">
+          <div class="activity-card">
+            <span class="activity-icon">📍</span>
+            <p class="activity-title">Google Business — Full Rebuild</p>
+            <p class="activity-desc">Complete optimization with SEO-rich service descriptions, precise category setup, high-quality photo uploads, and direct booking CTAs. You appear when Riyadh searches.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">Keyword-optimized business description</div>
+              <div class="deliverable-item">All service categories populated</div>
+              <div class="deliverable-item">20+ photos uploaded and geotagged</div>
+              <div class="deliverable-item">Q&amp;A section pre-filled with key questions</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <span class="activity-icon">✨</span>
+            <p class="activity-title">Social Media Transformation</p>
+            <p class="activity-desc">Bio rewrites, branded highlight covers, link-in-bio setup, and consistent contact details — every profile tells the Elie story from the very first second.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">Instagram, TikTok &amp; Snapchat profiles rebuilt</div>
+              <div class="deliverable-item">Branded highlight icons designed</div>
+              <div class="deliverable-item">Bio copy optimized for discovery</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <span class="activity-icon">🎨</span>
+            <p class="activity-title">Content Creation Begins</p>
+            <p class="activity-desc">12 premium posts this month — Reels, carousels, and statics built around your signature setups, dishes, and brand moments. Captioned in both Arabic and English.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">4 short-form Reels (15–30 seconds)</div>
+              <div class="deliverable-item">4 carousel posts showcasing menus &amp; events</div>
+              <div class="deliverable-item">4 branded static posts</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <span class="activity-icon">🔍</span>
+            <p class="activity-title">Local SEO Foundations</p>
+            <p class="activity-desc">Keyword research targeting Riyadh catering searches, metadata alignment, on-page optimization, and citation building across local directories.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">Top 20 target keywords identified</div>
+              <div class="deliverable-item">Website metadata optimized</div>
+              <div class="deliverable-item">Local citations submitted</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="milestone-strip">
+      <p class="milestone-label">By End of Month 1 — You Will Have</p>
+      <div class="milestones">
+        <div class="milestone-item">A fully rebuilt, optimized Google Business listing</div>
+        <div class="milestone-item">Brand-consistent social profiles on all platforms</div>
+        <div class="milestone-item">12 pieces of premium content live</div>
+        <div class="milestone-item">Your local SEO foundation fully in place</div>
+        <div class="milestone-item">Review request system activated and running</div>
+        <div class="milestone-item">First monthly performance report delivered</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONTH 2 -->
+  <div class="month-block reveal" style="margin-top:5px">
+    <div class="month-inner">
+      <div class="month-left">
+        <div class="month-number-bg">02</div>
+        <div>
+          <p class="month-tag">Month Two · Weeks 5–8</p>
+          <h2 class="month-name">Building<br><em>Momentum</em></h2>
+          <p class="month-theme">The groundwork is laid. Now we amplify. This is the month Elie Catering starts showing up everywhere — and people start actively choosing you over competitors.</p>
+        </div>
+        <div class="week-pills">
+          <div class="week-pill">
+            <span class="week-pill-label">Week 5</span>
+            <span class="week-pill-text">Performance analysis — double down on what's working</span>
+          </div>
+          <div class="week-pill">
+            <span class="week-pill-label">Week 6</span>
+            <span class="week-pill-text">Review growth push — targeted client follow-up system</span>
+          </div>
+          <div class="week-pill">
+            <span class="week-pill-label">Week 7</span>
+            <span class="week-pill-text">Engagement campaign — DM funnels and story sequences</span>
+          </div>
+          <div class="week-pill">
+            <span class="week-pill-label">Week 8</span>
+            <span class="week-pill-text">Content volume increase + Google post frequency raised</span>
+          </div>
+        </div>
+        <div class="month-bar">
+          <div class="bar-dot"></div>
+          <div class="bar-line"></div>
+          <span class="bar-label">Growth Phase</span>
+        </div>
+      </div>
+      <div class="month-right">
+        <p class="month-story">"The first real results arrive this month. Profile views are climbing. DMs with event inquiries are coming in. People are calling because they found you on Google. Month Two is when Elie Catering stops being hidden and starts becoming the name Riyadh reaches for."</p>
+        <div class="activities-grid">
+          <div class="activity-card">
+            <span class="activity-icon">📅</span>
+            <p class="activity-title">Content Calendar in Full Swing</p>
+            <p class="activity-desc">12 posts shaped by Month 1 data — trending formats, Arabic-English captions, and strategic timing tuned to your audience's peak activity windows.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">Posting schedule optimized by analytics</div>
+              <div class="deliverable-item">Trending audio and formats incorporated</div>
+              <div class="deliverable-item">Seasonal and event-relevant content</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <span class="activity-icon">💬</span>
+            <p class="activity-title">Community &amp; DM Engagement</p>
+            <p class="activity-desc">Active daily management of DMs, comments, and story replies. Fast-response templates set up to convert inquiries into booked consultations the same day.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">Response time under 1 hour on all platforms</div>
+              <div class="deliverable-item">Inquiry-to-consultation conversion script</div>
+              <div class="deliverable-item">Comment engagement daily</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <span class="activity-icon">⭐</span>
+            <p class="activity-title">Google Review Growth Campaign</p>
+            <p class="activity-desc">A systematic strategy targeting happy past clients — direct follow-up messages, QR codes for in-person requests, and professional responses to every review received.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">Target: 10–20 new reviews this month</div>
+              <div class="deliverable-item">Review request messaging sequence</div>
+              <div class="deliverable-item">All reviews professionally responded to</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <span class="activity-icon">📌</span>
+            <p class="activity-title">Weekly Google Business Posts</p>
+            <p class="activity-desc">4 posts this month — offers, event highlights, service showcases, and seasonal content — keeping your profile active and climbing Riyadh's local rankings.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">1 post per week minimum</div>
+              <div class="deliverable-item">Photo + keyword-rich caption each post</div>
+              <div class="deliverable-item">Call-to-action on every update</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="milestone-strip">
+      <p class="milestone-label">By End of Month 2 — You Will See</p>
+      <div class="milestones">
+        <div class="milestone-item">Measurable rise in profile views, calls, and direction requests</div>
+        <div class="milestone-item">10–20 new Google reviews added</div>
+        <div class="milestone-item">Social reach growing significantly week over week</div>
+        <div class="milestone-item">Consistent inbound DMs with event booking inquiries</div>
+        <div class="milestone-item">A brand people in Riyadh recognize and trust</div>
+        <div class="milestone-item">Second monthly performance report delivered</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONTH 3 -->
+  <div class="month-block reveal" style="margin-top:5px">
+    <div class="month-inner">
+      <div class="month-left">
+        <div class="month-number-bg">03</div>
+        <div>
+          <p class="month-tag">Month Three · Weeks 9–12</p>
+          <h2 class="month-name">Owning<br><em>Riyadh</em></h2>
+          <p class="month-theme">Strategy becomes leadership. Elie Catering is no longer trying to catch up — it is setting the pace and defining what premium catering looks like online in Riyadh.</p>
+        </div>
+        <div class="week-pills">
+          <div class="week-pill">
+            <span class="week-pill-label">Week 9</span>
+            <span class="week-pill-text">SEO refinement — push top keywords into Page 1 results</span>
+          </div>
+          <div class="week-pill">
+            <span class="week-pill-label">Week 10</span>
+            <span class="week-pill-text">Viral content push — higher production value Reels</span>
+          </div>
+          <div class="week-pill">
+            <span class="week-pill-label">Week 11</span>
+            <span class="week-pill-text">Reputation lock-in — solidify review volume and authority</span>
+          </div>
+          <div class="week-pill">
+            <span class="week-pill-label">Week 12</span>
+            <span class="week-pill-text">Full 90-day report delivered + next phase strategy</span>
+          </div>
+        </div>
+        <div class="month-bar">
+          <div class="bar-dot"></div>
+          <div class="bar-line"></div>
+          <span class="bar-label">Market Leadership</span>
+        </div>
+      </div>
+      <div class="month-right">
+        <p class="month-story">"Two months of compounding work are paying off now. You're ranking for the searches that matter. Content is reaching thousands of the right people weekly. Inquiries are converting into real bookings. Month Three locks in that position — and makes it permanent."</p>
+        <div class="activities-grid">
+          <div class="activity-card">
+            <span class="activity-icon">🏆</span>
+            <p class="activity-title">SEO Compounding &amp; Dominance</p>
+            <p class="activity-desc">Refining keywords, targeting competitor gaps, and aligning every piece of content to top Riyadh search terms. Goal: Page 1 for your highest-value keywords.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">Competitor keyword gap analysis</div>
+              <div class="deliverable-item">Content optimized for top 10 target terms</div>
+              <div class="deliverable-item">Backlink outreach to local directories</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <span class="activity-icon">🎬</span>
+            <p class="activity-title">Trend-Led Content at Scale</p>
+            <p class="activity-desc">Higher-production Reels. Behind-the-scenes at live events. Event showcases crafted to be shared — bringing new audiences into the Elie Catering world every week.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">12+ posts including higher-production Reels</div>
+              <div class="deliverable-item">Event-day coverage content included</div>
+              <div class="deliverable-item">Story series and highlights updated</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <span class="activity-icon">📊</span>
+            <p class="activity-title">Full 90-Day Performance Report</p>
+            <p class="activity-desc">A comprehensive review of the entire journey — what grew, what ranked, what converted — with precise numbers demonstrating the return on your investment.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">Google Analytics + Business Profile data</div>
+              <div class="deliverable-item">Social reach and engagement summary</div>
+              <div class="deliverable-item">Recommendations for Phase 2 growth</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <span class="activity-icon">🌟</span>
+            <p class="activity-title">Reputation Solidified</p>
+            <p class="activity-desc">A sustained flow of positive reviews, a fully active online presence, and a brand that feels premium at every touchpoint. Word-of-mouth now has a digital engine behind it.</p>
+            <div class="activity-deliverables">
+              <div class="deliverable-item">Target: 30+ total reviews by Day 90</div>
+              <div class="deliverable-item">Brand authority established across platforms</div>
+              <div class="deliverable-item">Referral loop system in place</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="milestone-strip">
+      <p class="milestone-label">By End of Month 3 — Elie Catering Will Have</p>
+      <div class="milestones">
+        <div class="milestone-item">Top visibility on Google for catering searches across Riyadh</div>
+        <div class="milestone-item">30+ Google reviews building undeniable trust</div>
+        <div class="milestone-item">A trusted brand with strong, consistent social proof</div>
+        <div class="milestone-item">Consistent inbound inquiries converting to real bookings</div>
+        <div class="milestone-item">A complete 90-day performance report in hand</div>
+        <div class="milestone-item">A scalable foundation ready for the next growth phase</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /months-wrapper -->
+
+<!-- TIMELINE SUMMARY -->
+<div class="timeline-section reveal">
+  <p class="section-label">The Journey at a Glance</p>
+  <div class="timeline-bar-wrapper">
+    <div class="tbar tbar-1">
+      <p class="tbar-month">Month 1</p>
+      <p class="tbar-title">Foundation</p>
+      <p class="tbar-status">Build the stage. Polish every touchpoint.</p>
+      <div class="tbar-list">
+        <div class="tbar-item">Google Business fully rebuilt</div>
+        <div class="tbar-item">All social profiles transformed</div>
+        <div class="tbar-item">12 premium posts published</div>
+        <div class="tbar-item">SEO baseline established</div>
+      </div>
+    </div>
+    <div class="tbar tbar-2">
+      <p class="tbar-month">Month 2</p>
+      <p class="tbar-title">Momentum</p>
+      <p class="tbar-status">Amplify. Engage. Start being found.</p>
+      <div class="tbar-list">
+        <div class="tbar-item">Profile views climbing weekly</div>
+        <div class="tbar-item">10–20 new Google reviews</div>
+        <div class="tbar-item">Inbound DMs with real inquiries</div>
+        <div class="tbar-item">Community actively growing</div>
+      </div>
+    </div>
+    <div class="tbar tbar-3">
+      <p class="tbar-month">Month 3</p>
+      <p class="tbar-title">Leadership</p>
+      <p class="tbar-status">Own the market. Lock in the position.</p>
+      <div class="tbar-list">
+        <div class="tbar-item">Page 1 for top Riyadh searches</div>
+        <div class="tbar-item">30+ Google reviews achieved</div>
+        <div class="tbar-item">Bookings converting from digital</div>
+        <div class="tbar-item">90-day report delivered</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTCOMES -->
+<div class="outcome-section">
+  <div class="section-block">
+    <p class="section-label reveal">What to Expect</p>
+    <h2 class="section-title reveal">Results You Can <em>Measure</em></h2>
+    <div class="outcome-grid reveal">
+      <div class="outcome-card">
+        <div class="outcome-number">3–4</div>
+        <div class="outcome-unit">Weeks</div>
+        <div class="outcome-desc">First signals of growth appear. Profile visits, calls, and clicks begin rising within weeks of launch — not months.</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-number">60</div>
+        <div class="outcome-unit">Days to Momentum</div>
+        <div class="outcome-desc">The algorithm is working in your favor. Content reaches further, reviews grow, and Elie Catering becomes a recognized name online.</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-number">90</div>
+        <div class="outcome-unit">Days to Leadership</div>
+        <div class="outcome-desc">A measurable digital presence, consistent inbound bookings, and a reputation that speaks for itself — across all of Riyadh.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY US -->
+<div class="why-section reveal">
+  <div class="why-inner">
+    <p class="section-label">Why This Works</p>
+    <h2 class="section-title">What Makes This Plan <em>Different</em></h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="why-icon">🎯</span>
+        <div class="why-title">Built for Riyadh, Not Just "the Market"</div>
+        <div class="why-desc">Every keyword, every caption, every strategy is built around how people in Riyadh actually search for catering — in Arabic and English. Generic marketing doesn't work here. Precision does.</div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">📈</span>
+        <div class="why-title">Data-Led, Not Guesswork</div>
+        <div class="why-desc">Every decision we make is backed by real performance data. We track what's working week by week and shift resources immediately — so your budget is always working as hard as possible.</div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">⚡</span>
+        <div class="why-title">Speed Without Shortcuts</div>
+        <div class="why-desc">We move fast — your profile is rebuilt in Week 1, content is live in Week 3. But we never use tactics that risk your account or reputation. Everything we build is designed to last.</div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🤝</span>
+        <div class="why-title">Complete Transparency</div>
+        <div class="why-desc">Monthly reports with real numbers. You'll see exactly what has improved, what we're working on next, and precisely what your investment is producing — no vague summaries, ever.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="faq-inner">
+    <p class="section-label reveal">Common Questions</p>
+    <h2 class="section-title reveal">Straight <em>Answers</em></h2>
+    <div style="margin-top:48px;">
+      <div class="faq-item reveal">
+        <div class="faq-q">How quickly will we see real results?<span class="faq-q-icon">+</span></div>
+        <div class="faq-a">Most clients see the first measurable improvements within 3–4 weeks — profile views rising, new calls, and first direct inquiries. Significant growth in reach and reviews typically appears by Week 6–8. Full market positioning takes the complete 90 days, because that's what lasting results require.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">What do you actually need from us?<span class="faq-q-icon">+</span></div>
+        <div class="faq-a">Very little — we handle almost everything. We'll need your Google Business login, social media access, and any event photos or videos you have available. The more event media you can share with us, the stronger your content will be. Approximately 1–2 hours of your time per month for reviews and approvals.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">How many posts per month and on which platforms?<span class="faq-q-icon">+</span></div>
+        <div class="faq-a">Minimum 12 posts per month across Instagram, TikTok, and Snapchat — plus 4 Google Business profile updates. Content includes Reels, carousels, and static posts, all captioned in both Arabic and English. We prioritize the platforms where your audience is most active.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">What happens after the 90 days?<span class="faq-q-icon">+</span></div>
+        <div class="faq-a">You'll own everything we've built — the optimized profiles, the review base, the content library, the SEO foundation. At the end of Month 3, we present a full performance report and a recommended Phase 2 growth strategy. Continuing the relationship is entirely your choice, but the foundation we build is yours to keep regardless.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-q">How do you measure success?<span class="faq-q-icon">+</span></div>
+        <div class="faq-a">We track Google Business profile views, website clicks, direct calls, direction requests, search ranking positions for target keywords, social media reach and engagement, follower growth, DM inquiry volume, and Google review count. Every metric is reported monthly with honest commentary.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section reveal">
+  <h2 class="cta-title">Ready to Start<br>Your <em>Journey?</em></h2>
+  <p class="cta-sub">The next 90 days will determine whether Elie Catering is the brand Riyadh finds — or the brand Riyadh never gets to experience.</p>
+  <div class="cta-steps">
+    <div class="cta-step">
+      <div class="cta-step-num">01</div>
+      <div class="cta-step-title">Confirm &amp; Onboard</div>
+      <div class="cta-step-desc">Sign off on the plan. Share account access. We begin immediately.</div>
+    </div>
+    <div class="cta-step">
+      <div class="cta-step-num">02</div>
+      <div class="cta-step-title">Week 1 Kickoff</div>
+      <div class="cta-step-desc">Full audit delivered. Strategy locked. Profiles rebuilt and live.</div>
+    </div>
+    <div class="cta-step">
+      <div class="cta-step-num">03</div>
+      <div class="cta-step-title">Watch It Grow</div>
+      <div class="cta-step-desc">Monthly reports. Real results. Elie Catering on top of Riyadh.</div>
+    </div>
+  </div>
+  <a href="mailto:hello@webcrowdsolutions.com" class="cta-button">Let's Begin</a>
+</div>
+
+<!-- CLOSING -->
+<section class="closing reveal">
+  <img class="closing-logo"
+    src="https://elie-catering.webcrowdsolutions.com/images/ref_img_12.png"
+    alt="Elie Catering"
+    onerror="this.style.display='none'">
+  <h2 class="closing-big">90 Days.<br>One <em>Goal.</em></h2>
+  <p class="closing-sub">Make Elie Catering the first name every person in Riyadh finds — and trusts — when they search for catering that truly matters.</p>
+  <div class="closing-badge">Elie Catering · Digital Growth Journey 2025</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img
+    src="https://elie-catering.webcrowdsolutions.com/images/ref_img_12.png"
+    alt="Elie Catering"
+    onerror="this.style.display='none'">
+  <span style="color:var(--gold);font-weight:700;letter-spacing:2px;font-size:13px;">3-Month Digital Marketing Plan</span>
+  <span>Riyadh, Saudi Arabia <  /span>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const answer = item.querySelector('.faq-a');
+      const icon = q.querySelector('.faq-q-icon');
+      const isOpen = answer.style.display === 'block';
+      // close all
+      document.querySelectorAll('.faq-a').forEach(a => a.style.display = 'none');
+      document.querySelectorAll('.faq-q-icon').forEach(i => { i.textContent = '+'; i.style.transform = 'none'; });
+      if (!isOpen) {
+        answer.style.display = 'block';
+        icon.textContent = '−';
+      }
+    });
+  });
+  // show first answer by default
+  const firstAnswer = document.querySelector('.faq-a');
+  if (firstAnswer) firstAnswer.style.display = 'block';
+  const firstIcon = document.querySelector('.faq-q-icon');
+  if (firstIcon) firstIcon.textContent = '−';
+</script>
+</body>
+</html>
