@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIC Gateway — Website Admin Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:       #0a1628;
+  --navy2:      #0f1e35;
+  --navy3:      #152444;
+  --blue:       #1a3a5c;
+  --blue2:      #1e4976;
+  --cyan:       #4fc3f7;
+  --cyan-dim:   rgba(79,195,247,0.12);
+  --cyan-line:  rgba(79,195,247,0.25);
+  --text:       #e2e8f0;
+  --text-60:    #94a3b8;
+  --text-30:    #4b5e72;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --card:       rgba(255,255,255,0.03);
+  --card2:      rgba(255,255,255,0.055);
+
+  --green:      #22c55e;
+  --green-dim:  rgba(34,197,94,0.1);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.1);
+  --red:        #ef4444;
+  --red-dim:    rgba(239,68,68,0.1);
+  --info:       #38bdf8;
+  --info-dim:   rgba(56,189,248,0.1);
+
+  --sidebar-w:  260px;
+  --header-h:   60px;
+  --font:       'Inter', system-ui, sans-serif;
+  --mono:       'JetBrains Mono', monospace;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; font-size:15px; }
+body { font-family:var(--font); background:var(--navy); color:var(--text); line-height:1.7; overflow-x:hidden; }
+a { color:var(--cyan); text-decoration:none; transition:opacity 0.15s; }
+a:hover { opacity:0.8; }
+::selection { background:rgba(79,195,247,0.2); }
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-thumb { background:var(--text-30); border-radius:4px; }
+
+/* ── HEADER ── */
+header {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  height:var(--header-h);
+  background:rgba(8,14,26,0.95); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; padding:0 28px; gap:20px;
+}
+.header-logo {
+  display:flex; align-items:center; gap:12px; flex-shrink:0;
+  width:var(--sidebar-w); padding-right:20px;
+  border-right:1px solid var(--border);
+}
+.logo-mark {
+  width:34px; height:34px; border-radius:8px;
+  background:linear-gradient(135deg, #1a3a5c, #0a1628);
+  border:1px solid rgba(79,195,247,0.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.75rem; font-weight:800; color:var(--cyan); letter-spacing:0.04em;
+}
+.logo-text { font-size:0.85rem; font-weight:700; color:#fff; }
+.logo-sub { font-size:0.62rem; color:var(--text-60); margin-top:1px; }
+.header-center { flex:1; display:flex; align-items:center; gap:12px; }
+.header-badge {
+  font-size:0.62rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;
+  padding:4px 12px; border-radius:100px;
+  background:var(--cyan-dim); border:1px solid var(--cyan-line); color:var(--cyan);
+}
+.header-title { font-size:0.9rem; font-weight:500; color:var(--text-60); }
+.header-meta { margin-left:auto; font-size:0.7rem; color:var(--text-30); white-space:nowrap; }
+
+/* ── LAYOUT ── */
+.layout { display:flex; padding-top:var(--header-h); min-height:100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width:var(--sidebar-w); flex-shrink:0;
+  position:fixed; top:var(--header-h); bottom:0; left:0;
+  overflow-y:auto; padding:24px 0;
+  background:var(--navy2);
+  border-right:1px solid var(--border);
+}
+.sidebar::-webkit-scrollbar { width:3px; }
+.sidebar-section-label {
+  font-size:0.58rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--text-30); padding:10px 20px 6px; margin-top:8px;
+}
+.sidebar-link {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 20px; font-size:0.8rem; font-weight:500;
+  color:var(--text-60); transition:all 0.15s; cursor:pointer;
+  border-left:2px solid transparent;
+  text-decoration:none;
+}
+.sidebar-link:hover { color:var(--text); background:var(--card); border-left-color:var(--text-30); }
+.sidebar-link.active { color:var(--cyan); background:var(--cyan-dim); border-left-color:var(--cyan); }
+.sidebar-link .snum {
+  width:20px; height:20px; border-radius:5px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.6rem; font-weight:700; font-family:var(--mono);
+  background:rgba(255,255,255,0.05); color:var(--text-30);
+}
+.sidebar-link.active .snum { background:var(--cyan-dim); color:var(--cyan); }
+
+/* ── MAIN CONTENT ── */
+main {
+  margin-left:var(--sidebar-w);
+  flex:1; max-width:860px; padding:52px 60px 100px;
+}
+
+/* ── COVER / INTRO BANNER ── */
+.cover-banner {
+  border-radius:16px; overflow:hidden; margin-bottom:60px;
+  background:linear-gradient(135deg, var(--navy3) 0%, var(--blue) 100%);
+  border:1px solid var(--border2); position:relative;
+}
+.cover-banner::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size:40px 40px;
+}
+.cover-banner::after {
+  content:''; position:absolute; top:-60px; right:-60px;
+  width:280px; height:280px; border-radius:50%;
+  background:radial-gradient(circle, rgba(79,195,247,0.12), transparent 70%);
+  pointer-events:none;
+}
+.cover-inner { position:relative; z-index:1; padding:48px 52px; }
+.cover-eyebrow {
+  font-size:0.62rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--cyan); margin-bottom:16px;
+  display:flex; align-items:center; gap:8px;
+}
+.cover-eyebrow::before { content:''; width:16px; height:1px; background:var(--cyan); }
+.cover-banner h1 {
+  font-size:2rem; font-weight:700; line-height:1.2; color:#fff;
+  margin-bottom:12px; letter-spacing:-0.02em;
+}
+.cover-sub { font-size:0.9rem; color:var(--text-60); max-width:480px; line-height:1.75; margin-bottom:32px; }
+.cover-meta-row { display:flex; gap:32px; flex-wrap:wrap; }
+.cover-meta-item { }
+.cover-meta-label { font-size:0.6rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-30); margin-bottom:2px; }
+.cover-meta-val { font-size:0.8rem; color:rgba(255,255,255,0.65); font-weight:500; }
+
+/* ── SECTIONS ── */
+.doc-section { margin-bottom:72px; scroll-margin-top:80px; }
+.section-head { margin-bottom:32px; }
+.section-num {
+  font-size:0.6rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--cyan); margin-bottom:8px; display:flex; align-items:center; gap:8px;
+}
+.section-num::before { content:''; width:16px; height:1px; background:var(--cyan); }
+h2.sh {
+  font-size:1.55rem; font-weight:700; letter-spacing:-0.02em; color:#fff;
+  line-height:1.2; margin-bottom:10px;
+}
+.sh-line { width:40px; height:2px; background:linear-gradient(90deg, var(--cyan), transparent); margin-top:12px; }
+.sdesc { font-size:0.9rem; color:var(--text-60); line-height:1.75; margin-top:10px; max-width:580px; }
+
+/* Sub-headings */
+h3.subh {
+  font-size:1rem; font-weight:600; color:rgba(255,255,255,0.85);
+  margin:32px 0 14px; padding-left:14px;
+  border-left:3px solid var(--cyan);
+}
+h4.subsubh {
+  font-size:0.88rem; font-weight:600; color:var(--text-60);
+  margin:20px 0 10px; text-transform:uppercase; letter-spacing:0.06em; font-size:0.72rem;
+}
+
+/* Prose */
+p.prose { font-size:0.9rem; color:var(--text-60); line-height:1.8; margin-bottom:14px; }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-radius:10px; padding:16px 20px; margin:18px 0;
+  display:flex; gap:14px; align-items:flex-start;
+}
+.callout-icon { font-size:1rem; flex-shrink:0; margin-top:1px; }
+.callout-body {}
+.callout-title { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:5px; }
+.callout-text { font-size:0.85rem; line-height:1.65; }
+.callout.info { background:var(--info-dim); border:1px solid rgba(56,189,248,0.2); }
+.callout.info .callout-title { color:var(--info); }
+.callout.info .callout-text { color:rgba(186,230,253,0.8); }
+.callout.warn { background:var(--amber-dim); border:1px solid rgba(245,158,11,0.2); }
+.callout.warn .callout-title { color:var(--amber); }
+.callout.warn .callout-text { color:rgba(253,230,138,0.8); }
+.callout.success { background:var(--green-dim); border:1px solid rgba(34,197,94,0.2); }
+.callout.success .callout-title { color:var(--green); }
+.callout.success .callout-text { color:rgba(187,247,208,0.8); }
+
+/* ── STEP LIST ── */
+.steps { list-style:none; display:flex; flex-direction:column; gap:8px; margin:14px 0; }
+.steps li {
+  display:flex; gap:14px; align-items:flex-start;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:13px 16px;
+  font-size:0.87rem; color:var(--text-60); line-height:1.6;
+  counter-increment:step;
+}
+.step-num {
+  width:24px; height:24px; border-radius:6px; flex-shrink:0;
+  background:var(--cyan-dim); border:1px solid var(--cyan-line);
+  color:var(--cyan); font-size:0.65rem; font-weight:800; font-family:var(--mono);
+  display:flex; align-items:center; justify-content:center; margin-top:1px;
+}
+
+/* ── BULLET LIST ── */
+ul.blist { list-style:none; margin:12px 0; display:flex; flex-direction:column; gap:6px; }
+ul.blist li {
+  font-size:0.87rem; color:var(--text-60); line-height:1.65;
+  padding:4px 0 4px 18px; position:relative;
+}
+ul.blist li::before {
+  content:''; position:absolute; left:0; top:11px;
+  width:6px; height:6px; border-radius:50%;
+  background:var(--cyan); opacity:0.6;
+}
+
+/* ── URL / CODE ── */
+.url, code {
+  font-family:var(--mono); font-size:0.78rem;
+  background:#0d1a2d; color:#80cbc4;
+  padding:2px 8px; border-radius:5px;
+  border:1px solid rgba(128,203,196,0.15);
+  white-space:nowrap;
+}
+
+/* ── TABLES ── */
+.table-wrap { border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:16px 0; overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:0.83rem; min-width:480px; }
+thead tr { background:rgba(255,255,255,0.04); }
+th {
+  padding:12px 16px; text-align:left; font-size:0.65rem; font-weight:700;
+  letter-spacing:0.08em; text-transform:uppercase; color:var(--text-30);
+  border-bottom:1px solid var(--border2);
+}
+td { padding:11px 16px; color:var(--text-60); border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:rgba(255,255,255,0.015); }
+td strong, td b { color:rgba(255,255,255,0.8); font-weight:600; }
+
+/* ── BADGES ── */
+.badge {
+  display:inline-block; font-size:0.62rem; font-weight:700;
+  letter-spacing:0.06em; padding:3px 10px; border-radius:100px;
+}
+.badge-req { background:var(--amber-dim); color:#fcd34d; border:1px solid rgba(245,158,11,0.25); }
+.badge-opt { background:var(--green-dim); color:#86efac; border:1px solid rgba(34,197,94,0.2); }
+.badge-new { background:var(--info-dim); color:var(--info); border:1px solid rgba(56,189,248,0.2); }
+.badge-read { background:var(--amber-dim); color:#fcd34d; border:1px solid rgba(245,158,11,0.25); }
+.badge-replied { background:var(--green-dim); color:#86efac; border:1px solid rgba(34,197,94,0.2); }
+
+/* ── NAV ITEMS (Sidebar visual) ── */
+.nav-items { display:flex; flex-direction:column; gap:8px; margin:14px 0; }
+.nav-item-card {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 16px; border-radius:10px;
+  background:var(--card); border:1px solid var(--border);
+  transition:border-color 0.2s;
+}
+.nav-item-card:hover { border-color:var(--border2); }
+.nav-item-icon {
+  width:36px; height:36px; border-radius:8px; flex-shrink:0;
+  background:var(--cyan-dim); border:1px solid var(--cyan-line);
+  display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+}
+.nav-item-label { font-size:0.88rem; font-weight:600; color:rgba(255,255,255,0.8); margin-bottom:2px; }
+.nav-item-desc { font-size:0.74rem; color:var(--text-60); }
+
+/* ── QUICK REF GRID ── */
+.qr-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:20px 0; }
+.qr-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:20px; position:relative; overflow:hidden;
+}
+.qr-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, var(--cyan), transparent); }
+.qr-title { font-size:0.82rem; font-weight:700; color:rgba(255,255,255,0.85); margin-bottom:12px; }
+.qr-steps { list-style:none; display:flex; flex-direction:column; gap:4px; }
+.qr-steps li { font-size:0.76rem; color:var(--text-60); padding:3px 0 3px 14px; position:relative; line-height:1.45; }
+.qr-steps li::before { content:counter(qr-counter)'.'; counter-increment:qr-counter; position:absolute; left:0; color:var(--cyan); font-size:0.62rem; font-weight:700; top:4px; }
+.qr-card ol { counter-reset:qr-counter; list-style:none; padding:0; display:flex; flex-direction:column; gap:4px; }
+.qr-card ol li { font-size:0.76rem; color:var(--text-60); padding:3px 0 3px 20px; position:relative; line-height:1.45; }
+.qr-card ol li::before { content:counter(qr-counter)'.'; counter-increment:qr-counter; position:absolute; left:0; color:var(--cyan); font-size:0.65rem; font-weight:700; top:4px; }
+.qr-card ol { counter-reset:qr-counter; }
+
+/* ── DIVIDER ── */
+.divider { height:1px; background:var(--border); margin:48px 0; }
+
+/* ── SUPPORT TABLE SPECIAL ── */
+.trouble-table td:first-child { color:rgba(255,255,255,0.75); font-weight:500; }
+.trouble-table td:nth-child(2) { color:var(--amber); font-size:0.8rem; }
+.trouble-table td:nth-child(3) { font-size:0.82rem; }
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .sidebar { display:none; }
+  main { margin-left:0; padding:32px 20px 80px; }
+  .cover-inner { padding:32px 24px; }
+  .qr-grid { grid-template-columns:1fr; }
+  .header-logo { width:auto; border-right:none; }
+  .header-title, .header-meta { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-logo">
+    <div class="logo-mark">RIC</div>
+    <div>
+      <div class="logo-text">RIC Gateway</div>
+      <div class="logo-sub">Riyadh International Corporation</div>
+    </div>
+  </div>
+  <div class="header-center">
+    <span class="header-badge">Internal Use Only</span>
+    <span class="header-title">Website Admin Guide — v1.0</span>
+  </div>
+  <div class="header-meta">Prepared by Shab.co · April 2026</div>
+</header>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-section-label">Documentation</div>
+  <a class="sidebar-link" href="#intro">
+    <span class="snum">00</span> Introduction
+  </a>
+  <div class="sidebar-section-label">Admin Access</div>
+  <a class="sidebar-link" href="#access">
+    <span class="snum">02</span> Accessing the Dashboard
+  </a>
+  <a class="sidebar-link" href="#dashboard">
+    <span class="snum">03</span> Dashboard Overview
+  </a>
+  <div class="sidebar-section-label">Content Management</div>
+  <a class="sidebar-link" href="#products">
+    <span class="snum">04</span> Managing Products
+  </a>
+  <a class="sidebar-link" href="#categories">
+    <span class="snum">05</span> Managing Categories
+  </a>
+  <a class="sidebar-link" href="#partners">
+    <span class="snum">06</span> Managing Partners
+  </a>
+  <a class="sidebar-link" href="#pagecontent">
+    <span class="snum">07</span> Page Content
+  </a>
+  <a class="sidebar-link" href="#enquiries">
+    <span class="snum">08</span> Customer Enquiries
+  </a>
+  <div class="sidebar-section-label">Reference</div>
+  <a class="sidebar-link" href="#quickref">
+    <span class="snum">09</span> Quick Reference
+  </a>
+  <a class="sidebar-link" href="#troubleshoot">
+    <span class="snum">10</span> Troubleshooting
+  </a>
+</nav>
+
+<!-- MAIN -->
+<div class="layout">
+<main>
+
+  <!-- COVER BANNER -->
+  <div class="cover-banner">
+    <div class="cover-inner">
+      <div class="cover-eyebrow">Admin Documentation</div>
+      <h1>Website Admin Dashboard<br>User Guide</h1>
+      <p class="cover-sub">
+        Everything you need to manage the RIC Gateway website — products, categories, partners, page content, and customer enquiries. No coding knowledge required.
+      </p>
+      <div class="cover-meta-row">
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Prepared for</div>
+          <div class="cover-meta-val">RIC Medical IT Team</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Prepared by</div>
+          <div class="cover-meta-val">Shab.co Development Team</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Version</div>
+          <div class="cover-meta-val">1.0 — April 2026</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Classification</div>
+          <div class="cover-meta-val">Confidential · Internal Use</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 1. INTRODUCTION ══ -->
+  <div class="doc-section" id="intro">
+    <div class="section-head">
+      <div class="section-num">01 — Introduction</div>
+      <h2 class="sh">What this guide covers</h2>
+      <div class="sh-line"></div>
+    </div>
+
+    <p class="prose">
+      This guide is written for the IT administrator responsible for managing the RIC Gateway website. It covers everything you need to keep the website's content up to date — without requiring any programming or technical development knowledge.
+    </p>
+    <p class="prose">
+      The RIC Gateway website is the official online presence of <strong>Riyadh International Corporation (RIC Medical)</strong>, showcasing medical equipment from world-class manufacturers including Mindray, GE Healthcare, BASDA, Combat Medical, and others.
+    </p>
+
+    <h3 class="subh">Your Role as Content Manager</h3>
+    <p class="prose">As the website administrator, your day-to-day responsibilities include:</p>
+    <ul class="blist">
+      <li>Adding, updating, and removing <strong>products</strong> from the website catalogue</li>
+      <li>Managing <strong>product categories</strong> (e.g., Imaging, Diagnostics, ICU Equipment)</li>
+      <li>Adding and updating <strong>manufacturer / partner</strong> profiles and logos</li>
+      <li>Editing <strong>page text and content</strong> on the Home, About, Services, and Contact pages</li>
+      <li>Reviewing <strong>customer enquiries</strong> and quotation requests from the website</li>
+    </ul>
+
+    <div class="callout info" style="margin-top:20px;">
+      <span class="callout-icon">💡</span>
+      <div class="callout-body">
+        <div class="callout-title">No coding needed</div>
+        <div class="callout-text">You do not need to write any code or contact a developer for these tasks. Everything is managed through the visual admin dashboard using simple forms and buttons.</div>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-icon">🔒</span>
+      <div class="callout-body">
+        <div class="callout-title">Security reminder</div>
+        <div class="callout-text">Your admin login credentials are confidential. Do not share them with anyone outside the authorised team. Always log out when finished.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ 2. ACCESSING ══ -->
+  <div class="doc-section" id="access">
+    <div class="section-head">
+      <div class="section-num">02 — Admin Access</div>
+      <h2 class="sh">Accessing the Admin Dashboard</h2>
+      <div class="sh-line"></div>
+    </div>
+
+    <h3 class="subh">Website &amp; Admin URLs</h3>
+    <p class="prose">There are two addresses you need to know:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What</th><th>Address</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Public Website</strong></td><td><code>www.ricmedical.com.sa</code></td><td>The website that visitors see</td></tr>
+          <tr><td><strong>Admin Dashboard</strong></td><td><code>www.ricmedical.com.sa/admin</code></td><td>Your management area — requires login</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">🔖</span>
+      <div class="callout-body">
+        <div class="callout-title">Tip</div>
+        <div class="callout-text">Bookmark the admin login page in your browser so you can access it quickly without typing the full URL each time.</div>
+      </div>
+    </div>
+
+    <h3 class="subh">Logging In</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Open your web browser (Chrome, Edge, Firefox, or Safari).</li>
+      <li><span class="step-num">2</span>In the address bar, type <code>www.ricmedical.com.sa/admin/login</code> and press <strong>Enter</strong>.</li>
+      <li><span class="step-num">3</span>You will see the RIC Gateway login screen with two fields.</li>
+      <li><span class="step-num">4</span>Enter your <strong>Email Address</strong> in the first field.</li>
+      <li><span class="step-num">5</span>Enter your <strong>Password</strong> in the second field.</li>
+      <li><span class="step-num">6</span>Click the <strong>"Sign In"</strong> button.</li>
+      <li><span class="step-num">7</span>If your credentials are correct, you will be taken to the main dashboard automatically.</li>
+    </ol>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body">
+        <div class="callout-title">Login Credentials</div>
+        <div class="callout-text">Your login details will be provided separately by the development team. Keep them private. The system will lock access for 15 minutes after 5 incorrect password attempts.</div>
+      </div>
+    </div>
+
+    <h3 class="subh">Logging Out</h3>
+    <p class="prose">Always log out when finished, especially on a shared computer.</p>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Look at the bottom of the left sidebar navigation panel.</li>
+      <li><span class="step-num">2</span>Click the <strong>"Logout"</strong> button.</li>
+      <li><span class="step-num">3</span>You will be returned to the login screen. You are now safely logged out.</li>
+    </ol>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ 3. DASHBOARD ══ -->
+  <div class="doc-section" id="dashboard">
+    <div class="section-head">
+      <div class="section-num">03 — Overview</div>
+      <h2 class="sh">Dashboard Overview</h2>
+      <div class="sh-line"></div>
+    </div>
+
+    <h3 class="subh">Main Dashboard Page</h3>
+    <p class="prose">After logging in, the first page you see is the <strong>main dashboard</strong>. It gives you a high-level summary at a glance:</p>
+    <ul class="blist">
+      <li><strong>Statistics Cards</strong> — Quick counts: products, categories, partners, and enquiries currently on the website</li>
+      <li><strong>Charts</strong> — Visual graphs showing products by category and type</li>
+      <li><strong>Top Partners</strong> — Manufacturers sorted by number of products</li>
+      <li><strong>Quick Action Buttons</strong> — Shortcuts to common tasks like adding a product or viewing enquiries</li>
+    </ul>
+
+    <div class="callout info">
+      <span class="callout-icon">ℹ️</span>
+      <div class="callout-body">
+        <div class="callout-title">Note</div>
+        <div class="callout-text">The main dashboard is for information only. Your actual work happens in the sections listed in the left sidebar.</div>
+      </div>
+    </div>
+
+    <h3 class="subh">Navigation Sidebar</h3>
+    <p class="prose">On the left of every admin page is the <strong>sidebar</strong> — your main navigation tool. Click any item to go to that section.</p>
+
+    <div class="nav-items">
+      <div class="nav-item-card">
+        <div class="nav-item-icon">📊</div>
+        <div>
+          <div class="nav-item-label">Dashboard</div>
+          <div class="nav-item-desc">Overview and statistics of the website</div>
+        </div>
+      </div>
+      <div class="nav-item-card">
+        <div class="nav-item-icon">📦</div>
+        <div>
+          <div class="nav-item-label">Products</div>
+          <div class="nav-item-desc">Add, edit, and remove medical equipment products</div>
+        </div>
+      </div>
+      <div class="nav-item-card">
+        <div class="nav-item-icon">📁</div>
+        <div>
+          <div class="nav-item-label">Categories</div>
+          <div class="nav-item-desc">Manage product categories and subcategories</div>
+        </div>
+      </div>
+      <div class="nav-item-card">
+        <div class="nav-item-icon">🤝</div>
+        <div>
+          <div class="nav-item-label">Partners</div>
+          <div class="nav-item-desc">Manage manufacturer and partner profiles</div>
+        </div>
+      </div>
+      <div class="nav-item-card">
+        <div class="nav-item-icon">📄</div>
+        <div>
+          <div class="nav-item-label">Content</div>
+          <div class="nav-item-desc">Edit text and information on website pages</div>
+        </div>
+      </div>
+      <div class="nav-item-card">
+        <div class="nav-item-icon">💬</div>
+        <div>
+          <div class="nav-item-label">Enquiries</div>
+          <div class="nav-item-desc">View customer messages and quotation requests</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ 4. PRODUCTS ══ -->
+  <div class="doc-section" id="products">
+    <div class="section-head">
+      <div class="section-num">04 — Products</div>
+      <h2 class="sh">Managing Products</h2>
+      <div class="sh-line"></div>
+      <p class="sdesc">The Products section is where you manage all medical equipment listed on the RIC Gateway website. Each product has a name, description, images, specifications, and more.</p>
+    </div>
+
+    <h3 class="subh">Viewing All Products</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Click <strong>"Products"</strong> in the left sidebar.</li>
+      <li><span class="step-num">2</span>You will see a table of all products currently on the website.</li>
+      <li><span class="step-num">3</span>Search for a product by typing its name in the search bar at the top.</li>
+      <li><span class="step-num">4</span>Filter by category or partner using the dropdown menus.</li>
+    </ol>
+
+    <h3 class="subh">Adding a New Product</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Click <strong>"Products"</strong> in the left sidebar.</li>
+      <li><span class="step-num">2</span>Click the <strong>"Add Product"</strong> button (top-right corner).</li>
+      <li><span class="step-num">3</span>Fill in the product details using the form. See the field reference table below.</li>
+      <li><span class="step-num">4</span>Upload product images by clicking the image upload area and selecting photos from your computer.</li>
+      <li><span class="step-num">5</span>Click <strong>"Save Product"</strong> or <strong>"Create"</strong> at the bottom when finished.</li>
+    </ol>
+
+    <h4 class="subsubh">Product Fields Reference</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Field Name</th><th>What to Enter</th><th>Required?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Product Title</strong></td><td>The full name of the product (e.g., "Mindray DC-80 Ultrasound System")</td><td><span class="badge badge-req">Required</span></td></tr>
+          <tr><td><strong>Description</strong></td><td>A clear explanation of what the product is and what it does</td><td><span class="badge badge-req">Required</span></td></tr>
+          <tr><td><strong>Category</strong></td><td>Select from the dropdown (e.g., Imaging, Diagnostics)</td><td><span class="badge badge-req">Required</span></td></tr>
+          <tr><td><strong>Sub-Category</strong></td><td>A more specific grouping under the main category, if applicable</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Partner / Manufacturer</strong></td><td>Select the brand (e.g., Mindray, GE Healthcare)</td><td><span class="badge badge-req">Required</span></td></tr>
+          <tr><td><strong>Product Type</strong></td><td>Select whether it is a "Product" or "Solution"</td><td><span class="badge badge-req">Required</span></td></tr>
+          <tr><td><strong>Thumbnail Image</strong></td><td>The main image shown in the product list (upload from computer)</td><td><span class="badge badge-req">Required</span></td></tr>
+          <tr><td><strong>Product Images</strong></td><td>Additional photos — you can upload multiple images</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Features</strong></td><td>Key highlights or feature points (add as separate lines)</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Specifications</strong></td><td>Technical specs (e.g., Weight: 12kg, Display: 15-inch LCD)</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Is Featured?</strong></td><td>Turn ON to show this product in featured/highlighted sections</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Is Active?</strong></td><td>ON = visible on website. OFF = hidden temporarily.</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>SEO Title</strong></td><td>Title for search engines like Google (usually same as product title)</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>SEO Description</strong></td><td>Brief description for search results (1–2 sentences)</td><td><span class="badge badge-opt">Optional</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">🖼️</span>
+      <div class="callout-body">
+        <div class="callout-title">Image Upload Tips</div>
+        <div class="callout-text">Use <strong>JPG or PNG</strong> format. Minimum size: <strong>800 × 600 pixels</strong>. Images are uploaded to the cloud automatically. You can upload multiple images per product to create a gallery.</div>
+      </div>
+    </div>
+
+    <h3 class="subh">Editing an Existing Product</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Go to <strong>Products</strong> in the sidebar.</li>
+      <li><span class="step-num">2</span>Find the product (use the search bar if needed).</li>
+      <li><span class="step-num">3</span>Click the <strong>Edit button</strong> (pencil icon) next to the product.</li>
+      <li><span class="step-num">4</span>Make your changes in the form.</li>
+      <li><span class="step-num">5</span>Click <strong>"Save"</strong> or <strong>"Update"</strong> to apply the changes.</li>
+    </ol>
+
+    <h3 class="subh">Deleting a Product</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Go to <strong>Products</strong> in the sidebar.</li>
+      <li><span class="step-num">2</span>Find the product you want to remove.</li>
+      <li><span class="step-num">3</span>Click the <strong>Delete button</strong> (bin icon) next to the product.</li>
+      <li><span class="step-num">4</span>A confirmation message will appear — click <strong>"Confirm"</strong> or <strong>"Yes, Delete"</strong>.</li>
+    </ol>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body">
+        <div class="callout-title">Deletion is permanent</div>
+        <div class="callout-text">Once deleted, a product cannot be recovered. To temporarily hide a product, use the <strong>"Is Active"</strong> toggle instead of deleting it.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ 5. CATEGORIES ══ -->
+  <div class="doc-section" id="categories">
+    <div class="section-head">
+      <div class="section-num">05 — Categories</div>
+      <h2 class="sh">Managing Categories</h2>
+      <div class="sh-line"></div>
+      <p class="sdesc">Categories help visitors find products by grouping similar items together — e.g., "Imaging", "Patient Monitoring", or "Critical Care".</p>
+    </div>
+
+    <h3 class="subh">Viewing Categories</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Click <strong>"Categories"</strong> in the left sidebar.</li>
+      <li><span class="step-num">2</span>You will see all existing categories listed.</li>
+    </ol>
+
+    <h3 class="subh">Adding a New Category</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Click <strong>"Categories"</strong> in the left sidebar.</li>
+      <li><span class="step-num">2</span>Click the <strong>"Add Category"</strong> button.</li>
+      <li><span class="step-num">3</span>Fill in the category details (name, description, icon if required).</li>
+      <li><span class="step-num">4</span>Click <strong>"Save"</strong> to create the category.</li>
+    </ol>
+
+    <h4 class="subsubh">Category Fields Reference</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Field</th><th>What to Enter</th><th>Required?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Category Name</strong></td><td>Name displayed on the website (e.g., "Patient Monitoring")</td><td><span class="badge badge-req">Required</span></td></tr>
+          <tr><td><strong>Description</strong></td><td>Brief explanation of what products belong in this category</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Icon</strong></td><td>A small symbol or image representing the category</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Display Order</strong></td><td>A number controlling the order categories appear (1 = first)</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Is Active?</strong></td><td>Toggle ON to show this category on the website</td><td><span class="badge badge-opt">Optional</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subh">Editing or Deleting a Category</h3>
+    <p class="prose">Click the <strong>Edit (pencil)</strong> icon to modify, or the <strong>Delete (bin)</strong> icon to remove a category.</p>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body">
+        <div class="callout-title">Important</div>
+        <div class="callout-text">Do not delete a category that still has products assigned to it. First move those products to another category, then delete the empty one.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ 6. PARTNERS ══ -->
+  <div class="doc-section" id="partners">
+    <div class="section-head">
+      <div class="section-num">06 — Partners</div>
+      <h2 class="sh">Managing Partners (Manufacturers)</h2>
+      <div class="sh-line"></div>
+      <p class="sdesc">Manage the manufacturers and suppliers whose products are listed on the website — Mindray, GE Healthcare, BASDA, Combat Medical, and others. Each partner has a profile page with logo, description, and related products.</p>
+    </div>
+
+    <h3 class="subh">Adding a New Partner</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Click <strong>"Partners"</strong> in the left sidebar.</li>
+      <li><span class="step-num">2</span>Click <strong>"Add Partner"</strong>.</li>
+      <li><span class="step-num">3</span>Fill in the partner information using the form.</li>
+      <li><span class="step-num">4</span>Upload the partner's logo image.</li>
+      <li><span class="step-num">5</span>Click <strong>"Save"</strong> to create the partner profile.</li>
+    </ol>
+
+    <h4 class="subsubh">Partner Fields Reference</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Field</th><th>What to Enter</th><th>Required?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Partner Name</strong></td><td>The manufacturer's full name (e.g., "Mindray Medical International")</td><td><span class="badge badge-req">Required</span></td></tr>
+          <tr><td><strong>Logo</strong></td><td>Upload the manufacturer's official logo image (PNG preferred)</td><td><span class="badge badge-req">Required</span></td></tr>
+          <tr><td><strong>Description</strong></td><td>A short paragraph about the manufacturer — who they are, what they make</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Website</strong></td><td>The manufacturer's official website (e.g., www.mindray.com)</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Country</strong></td><td>Country where the manufacturer is based (e.g., China, USA, Germany)</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Categories</strong></td><td>Select which product categories this partner's products belong to</td><td><span class="badge badge-opt">Optional</span></td></tr>
+          <tr><td><strong>Invert Logo Color</strong></td><td>Turn ON if the logo appears invisible on white backgrounds</td><td><span class="badge badge-opt">Optional</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">🖼️</span>
+      <div class="callout-body">
+        <div class="callout-title">Logo Image Tip</div>
+        <div class="callout-text">Use <strong>PNG format with a transparent background</strong> for the cleanest look. Avoid logos with coloured backgrounds unless the brand requires it.</div>
+      </div>
+    </div>
+
+    <h3 class="subh">Editing or Deleting a Partner</h3>
+    <p class="prose">Click the <strong>Edit (pencil)</strong> icon to update details, or <strong>Delete (bin)</strong> to remove a partner.</p>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body">
+        <div class="callout-title">Important</div>
+        <div class="callout-text">Deleting a partner does not delete their products. Products assigned to a deleted partner may display incorrectly. Reassign products to another partner before deleting.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ 7. PAGE CONTENT ══ -->
+  <div class="doc-section" id="pagecontent">
+    <div class="section-head">
+      <div class="section-num">07 — Page Content</div>
+      <h2 class="sh">Managing Page Content</h2>
+      <div class="sh-line"></div>
+      <p class="sdesc">Edit the text, headings, and information displayed on each website page — without touching any code. Changes appear live on the website immediately after saving.</p>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">💡</span>
+      <div class="callout-body">
+        <div class="callout-title">How content management works</div>
+        <div class="callout-text">The website is divided into "pages" and each page has multiple "sections". For example, the Home page has a Hero section (the big top banner), an About section, a Partners section, and so on. You select the page and section to edit, change the text, and save.</div>
+      </div>
+    </div>
+
+    <h3 class="subh">Home Page Sections</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Section Name</th><th>What It Controls</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Hero</strong></td><td>The main banner — large heading, subtitle text, and button labels</td></tr>
+          <tr><td><strong>Product Categories</strong></td><td>The category cards displayed on the home page</td></tr>
+          <tr><td><strong>About Section</strong></td><td>The "About RIC" text block on the home page</td></tr>
+          <tr><td><strong>Vision &amp; Mission</strong></td><td>The company's vision statement and mission statement text</td></tr>
+          <tr><td><strong>Partners Section</strong></td><td>Heading and description shown above the partner logos</td></tr>
+          <tr><td><strong>Contact CTA</strong></td><td>The "Contact Us" call-to-action — heading, description, button text</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subh">About Page Sections</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Section Name</th><th>What It Controls</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Hero</strong></td><td>Top banner heading and subtitle of the About page</td></tr>
+          <tr><td><strong>Our Story</strong></td><td>Company history and background text</td></tr>
+          <tr><td><strong>Stats</strong></td><td>Numbers such as "X Years in Business", "X Products", "X Partners"</td></tr>
+          <tr><td><strong>Our Values</strong></td><td>The company's core values section</td></tr>
+          <tr><td><strong>CTA</strong></td><td>Contact call-to-action at the bottom of the About page</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subh">Services Page Sections</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Section Name</th><th>What It Controls</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Hero</strong></td><td>Top banner of the Services page</td></tr>
+          <tr><td><strong>Why Choose Us</strong></td><td>Reasons and benefits listed for choosing RIC Medical</td></tr>
+          <tr><td><strong>Service Process</strong></td><td>Steps describing the service process (e.g., Consultation → Delivery → Support)</td></tr>
+          <tr><td><strong>Our Offerings</strong></td><td>The list of services offered</td></tr>
+          <tr><td><strong>Partner Integration</strong></td><td>Text explaining partnership and manufacturer relationships</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subh">Contact Page Sections</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Section Name</th><th>What It Controls</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Hero</strong></td><td>Top banner of the Contact page</td></tr>
+          <tr><td><strong>Contact Information</strong></td><td>Physical address, phone number(s), and email address on the page</td></tr>
+          <tr><td><strong>Contact Form</strong></td><td>Heading and description above the contact form</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subh">How to Edit Content</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Click <strong>"Content"</strong> in the left sidebar.</li>
+      <li><span class="step-num">2</span>You will see a list of all content sections grouped by page.</li>
+      <li><span class="step-num">3</span>Click the <strong>Edit (pencil)</strong> icon next to the section you want to change.</li>
+      <li><span class="step-num">4</span>Update the text fields in the form that appears.</li>
+      <li><span class="step-num">5</span>Click <strong>"Save"</strong> to publish the changes to the live website.</li>
+    </ol>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚡</span>
+      <div class="callout-body">
+        <div class="callout-title">Changes go live immediately</div>
+        <div class="callout-text">When you save content changes, they appear on the public website right away. Double-check your text for spelling and accuracy before saving.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ 8. ENQUIRIES ══ -->
+  <div class="doc-section" id="enquiries">
+    <div class="section-head">
+      <div class="section-num">08 — Enquiries</div>
+      <h2 class="sh">Viewing Customer Enquiries</h2>
+      <div class="sh-line"></div>
+      <p class="sdesc">When visitors fill out a form on the website — general contact or product quotation request — their message is saved in the Enquiries section. An email notification is also sent automatically to the RIC Medical team.</p>
+    </div>
+
+    <h3 class="subh">Types of Enquiries</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Enquiry Type</th><th>Source</th><th>What It Contains</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Contact Enquiries</strong></td><td>Contact page form</td><td>Visitor's name, email, phone, company, and message</td></tr>
+          <tr><td><strong>Product Quotation Requests</strong></td><td>"Request a Quote" button on product pages</td><td>Visitor details + the specific product they're interested in</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subh">Viewing Enquiries</h3>
+    <ol class="steps">
+      <li><span class="step-num">1</span>Click <strong>"Enquiries"</strong> in the left sidebar.</li>
+      <li><span class="step-num">2</span>You will see two tabs — <strong>Contact Enquiries</strong> and <strong>Product Requests</strong>.</li>
+      <li><span class="step-num">3</span>Click on any enquiry row to view the full details of the message.</li>
+    </ol>
+
+    <h3 class="subh">Enquiry Status</h3>
+    <p class="prose">Each enquiry has a status to help you track what's been handled:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-new">New</span></td><td>Just received — has not been viewed or responded to yet</td></tr>
+          <tr><td><span class="badge badge-read">Read</span></td><td>Has been opened and reviewed in the admin dashboard</td></tr>
+          <tr><td><span class="badge badge-replied">Replied</span></td><td>The customer has been responded to (you update this manually)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">📧</span>
+      <div class="callout-body">
+        <div class="callout-title">Automatic Email Notifications</div>
+        <div class="callout-text">
+          Every time a visitor submits a form, an automatic email is sent to:<br>
+          <code>ricmede@ricmedical.com.sa</code> and <code>chukri@ricmedical.com.sa</code><br><br>
+          You can reply directly from your email client. The enquiry dashboard is for record-keeping and tracking.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ 9. QUICK REFERENCE ══ -->
+  <div class="doc-section" id="quickref">
+    <div class="section-head">
+      <div class="section-num">09 — Quick Reference</div>
+      <h2 class="sh">Quick Reference Card</h2>
+      <div class="sh-line"></div>
+      <p class="sdesc">A handy cheat sheet for the most common tasks.</p>
+    </div>
+
+    <div class="qr-grid">
+      <div class="qr-card">
+        <div class="qr-title">📦 Add a New Product</div>
+        <ol>
+          <li>Sidebar → Products</li>
+          <li>Click "Add Product"</li>
+          <li>Fill in Title, Description, Category, Partner</li>
+          <li>Upload Thumbnail image</li>
+          <li>Toggle "Is Active" to ON</li>
+          <li>Click "Save"</li>
+        </ol>
+      </div>
+      <div class="qr-card">
+        <div class="qr-title">✏️ Edit a Product</div>
+        <ol>
+          <li>Sidebar → Products</li>
+          <li>Search for the product</li>
+          <li>Click the pencil (edit) icon</li>
+          <li>Make your changes</li>
+          <li>Click "Save" / "Update"</li>
+        </ol>
+      </div>
+      <div class="qr-card">
+        <div class="qr-title">👁️ Hide a Product (Temporarily)</div>
+        <ol>
+          <li>Sidebar → Products</li>
+          <li>Click Edit on the product</li>
+          <li>Toggle "Is Active" to OFF</li>
+          <li>Click "Save"</li>
+          <li>Product is now hidden from visitors</li>
+        </ol>
+      </div>
+      <div class="qr-card">
+        <div class="qr-title">🤝 Add a Partner / Manufacturer</div>
+        <ol>
+          <li>Sidebar → Partners</li>
+          <li>Click "Add Partner"</li>
+          <li>Enter Name, upload Logo</li>
+          <li>Add Description and Website</li>
+          <li>Click "Save"</li>
+        </ol>
+      </div>
+      <div class="qr-card">
+        <div class="qr-title">📄 Edit Website Page Text</div>
+        <ol>
+          <li>Sidebar → Content</li>
+          <li>Find the page section to edit</li>
+          <li>Click the pencil (edit) icon</li>
+          <li>Update the text fields</li>
+          <li>Click "Save" — goes live instantly</li>
+        </ol>
+      </div>
+      <div class="qr-card">
+        <div class="qr-title">💬 View Customer Enquiries</div>
+        <ol>
+          <li>Sidebar → Enquiries</li>
+          <li>Choose tab: Contact or Product</li>
+          <li>Click any row to read the full message</li>
+          <li>Update status to "Read" or "Replied"</li>
+        </ol>
+      </div>
+    </div>
+
+    <h3 class="subh" style="margin-top:32px;">Important URLs at a Glance</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Page</th><th>URL</th></tr></thead>
+        <tbody>
+          <tr><td>Public Website</td><td><code>www.ricmedical.com.sa</code></td></tr>
+          <tr><td>Admin Login</td><td><code>www.ricmedical.com.sa/admin/login</code></td></tr>
+          <tr><td>Admin Dashboard</td><td><code>www.ricmedical.com.sa/admin</code></td></tr>
+          <tr><td>Products Management</td><td><code>www.ricmedical.com.sa/admin/products</code></td></tr>
+          <tr><td>Categories Management</td><td><code>www.ricmedical.com.sa/admin/categories</code></td></tr>
+          <tr><td>Partners Management</td><td><code>www.ricmedical.com.sa/admin/partners</code></td></tr>
+          <tr><td>Content Management</td><td><code>www.ricmedical.com.sa/admin/content</code></td></tr>
+          <tr><td>Enquiries</td><td><code>www.ricmedical.com.sa/admin/enquiries</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ 10. TROUBLESHOOTING ══ -->
+  <div class="doc-section" id="troubleshoot">
+    <div class="section-head">
+      <div class="section-num">10 — Troubleshooting</div>
+      <h2 class="sh">Troubleshooting &amp; Support</h2>
+      <div class="sh-line"></div>
+    </div>
+
+    <h3 class="subh">Common Issues &amp; Solutions</h3>
+    <div class="table-wrap">
+      <table class="trouble-table">
+        <thead><tr><th>Problem</th><th>Likely Cause</th><th>What to Do</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Cannot log in — "Invalid credentials" error</td>
+            <td>Wrong email or password</td>
+            <td>Double-check your email and password. Ensure Caps Lock is off. If forgotten, contact the developer to reset.</td>
+          </tr>
+          <tr>
+            <td>Account locked — "Too many attempts"</td>
+            <td>More than 5 failed login attempts</td>
+            <td>Wait 15 minutes and try again. If urgent, contact technical support.</td>
+          </tr>
+          <tr>
+            <td>Logged out automatically</td>
+            <td>Session expired (after 7 days of inactivity)</td>
+            <td>This is normal. Simply log in again at the admin login page.</td>
+          </tr>
+          <tr>
+            <td>Image not uploading</td>
+            <td>File too large or wrong format</td>
+            <td>Ensure the image is JPG or PNG. Try compressing if over 5MB — use a free tool like TinyPNG.</td>
+          </tr>
+          <tr>
+            <td>Changes not appearing on the live website</td>
+            <td>Browser cache is showing an old version</td>
+            <td>Press <strong>Ctrl + Shift + R</strong> (Windows) or <strong>Cmd + Shift + R</strong> (Mac) to hard-refresh the page.</td>
+          </tr>
+          <tr>
+            <td>Product not showing after adding</td>
+            <td>"Is Active" toggle is turned OFF</td>
+            <td>Edit the product and make sure the "Is Active" toggle is ON, then save.</td>
+          </tr>
+          <tr>
+            <td>Enquiry emails not arriving</td>
+            <td>Email may be in spam/junk folder</td>
+            <td>Check your spam folder. The email comes from <code>shabeebkaip@gmail.com</code> — mark as "Not Spam". The enquiry is always visible in the admin dashboard.</td>
+          </tr>
+          <tr>
+            <td>Page shows error / blank screen</td>
+            <td>Temporary server issue</td>
+            <td>Refresh the page. If it persists after 5 minutes, contact technical support.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subh">Before Contacting Support</h3>
+    <p class="prose">To help the technical team resolve your issue faster, please have the following ready:</p>
+    <ul class="blist">
+      <li>A description of what you were trying to do</li>
+      <li>What happened instead (the error message, if any)</li>
+      <li>A screenshot of the issue — press <strong>Win + Shift + S</strong> on Windows, or <strong>Cmd + Shift + 4</strong> on Mac</li>
+      <li>The time and date when the problem occurred</li>
+    </ul>
+
+    <h3 class="subh">Technical Support Contact</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Support Type</th><th>Contact</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Website Developer (Shab.co)</strong></td><td>Contact via the project handover communication channel</td></tr>
+          <tr><td><strong>Login / access issues</strong></td><td>Contact the developer to reset admin credentials</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout success">
+      <span class="callout-icon">✅</span>
+      <div class="callout-body">
+        <div class="callout-title">Remember</div>
+        <div class="callout-text">Most day-to-day content tasks — adding products, editing page text, viewing enquiries — require <strong>no technical help</strong>. This guide has everything you need. Only contact support if you encounter a technical error that prevents you from using the dashboard.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+// Sidebar active link highlighting
+const links = document.querySelectorAll('.sidebar-link');
+const sections = document.querySelectorAll('.doc-section');
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.sidebar-link[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
