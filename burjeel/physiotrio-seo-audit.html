@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEO Audit Report — PhysioTrio.sa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #181c27;
+      --surface2: #1e2335;
+      --border: #2a2f45;
+      --border2: #353d5c;
+      --text: #e8eaf6;
+      --text-muted: #8892b0;
+      --text-dim: #4a5475;
+      --accent: #6c8bff;
+      --accent2: #a78bfa;
+      --red: #ff5f6d;
+      --red-bg: rgba(255,95,109,0.08);
+      --red-border: rgba(255,95,109,0.25);
+      --orange: #ff9a3c;
+      --orange-bg: rgba(255,154,60,0.08);
+      --orange-border: rgba(255,154,60,0.25);
+      --yellow: #ffd166;
+      --yellow-bg: rgba(255,209,102,0.08);
+      --yellow-border: rgba(255,209,102,0.25);
+      --green: #06d6a0;
+      --green-bg: rgba(6,214,160,0.08);
+      --green-border: rgba(6,214,160,0.25);
+      --blue-bg: rgba(108,139,255,0.08);
+      --blue-border: rgba(108,139,255,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #0d1220 0%, #131829 50%, #0f1520 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 40px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(108,139,255,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 30%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(167,139,250,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--blue-bg);
+      border: 1px solid var(--blue-border);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .header-badge::before { content: '◆'; font-size: 8px; }
+    header h1 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-url {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      font-size: 14px;
+      margin-bottom: 24px;
+      opacity: 0.9;
+    }
+    .header-meta {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .header-meta span { display: flex; align-items: center; gap: 6px; }
+
+    /* ── SCORE BANNER ── */
+    .score-banner {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 40px;
+    }
+    .score-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .score-circle {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(var(--red) 0% 45%, var(--border2) 45% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: var(--surface);
+    }
+    .score-num {
+      position: relative;
+      z-index: 1;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--red);
+    }
+    .score-label { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 8px; }
+    .score-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .score-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .score-item-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .score-item-val { font-size: 20px; font-weight: 700; }
+    .val-red { color: var(--red); }
+    .val-orange { color: var(--orange); }
+    .val-yellow { color: var(--yellow); }
+    .val-green { color: var(--green); }
+
+    /* ── LAYOUT ── */
+    .wrapper { max-width: 1100px; margin: 0 auto; padding: 48px 40px 80px; }
+
+    /* ── SECTION HEADERS ── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      margin-top: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-title:first-child { margin-top: 0; }
+
+    /* ── EXECUTIVE SUMMARY ── */
+    .exec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .exec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .exec-card h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px; }
+    .exec-card p { font-size: 14px; line-height: 1.55; color: var(--text); }
+
+    /* ── ISSUE CARDS ── */
+    .issue-list { display: flex; flex-direction: column; gap: 12px; }
+    .issue-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .issue-card:hover { border-color: var(--border2); }
+    .issue-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 18px 20px;
+      cursor: pointer;
+    }
+    .severity-badge {
+      flex-shrink: 0;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-top: 2px;
+    }
+    .sev-critical { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .sev-high { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+    .sev-medium { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+    .sev-low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .issue-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .issue-sub { font-size: 13px; color: var(--text-muted); }
+    .issue-body {
+      padding: 0 20px 18px 20px;
+      border-top: 1px solid var(--border);
+      margin-top: 0;
+    }
+    .issue-body p { font-size: 13.5px; color: var(--text-muted); margin-top: 14px; line-height: 1.6; }
+    .code-block {
+      background: #0a0d15;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #a5b4fc;
+      overflow-x: auto;
+      line-height: 1.7;
+      white-space: pre;
+    }
+    .code-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-top: 14px; margin-bottom: 4px; }
+    .code-block .bad { color: var(--red); }
+    .code-block .good { color: var(--green); }
+    .code-block .comment { color: var(--text-dim); }
+
+    /* ── PASSES ── */
+    .pass-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+    .pass-item {
+      background: var(--surface);
+      border: 1px solid var(--green-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .pass-icon { color: var(--green); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .pass-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); }
+    .pass-text span { font-size: 12px; color: var(--text-muted); }
+
+    /* ── TABLE ── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(255,255,255,0.015); }
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* ── PRIORITY ROADMAP ── */
+    .roadmap { display: flex; flex-direction: column; gap: 0; }
+    .phase {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 24px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+    .phase:last-child { border-bottom: none; }
+    .phase-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding-top: 4px;
+    }
+    .phase-label span { display: block; font-size: 11px; font-weight: 400; color: var(--text-dim); margin-top: 2px; }
+    .phase-tasks { display: flex; flex-direction: column; gap: 8px; }
+    .task-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13.5px;
+    }
+    .task-row .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-red { background: var(--red); }
+    .dot-orange { background: var(--orange); }
+    .dot-yellow { background: var(--yellow); }
+    .dot-green { background: var(--green); }
+    .task-time { margin-left: auto; font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+
+    /* ── IMPACT TABLE ── */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .impact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .impact-card .timeframe { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px; }
+    .impact-card .uplift { font-size: 28px; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+    .impact-card .desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 28px 40px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      header { padding: 36px 20px 32px; }
+      .score-inner { grid-template-columns: 1fr; }
+      .score-circle { margin: 0 auto; }
+      .wrapper { padding: 32px 20px 60px; }
+      .phase { grid-template-columns: 1fr; gap: 8px; }
+      .impact-grid { grid-template-columns: 1fr; }
+      footer { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─────────── HEADER ─────────── -->
+<header>
+  <div class="header-inner">
+    <div class="header-badge">SEO Audit Report</div>
+    <h1>PhysioTrio.sa<br>SEO Audit</h1>
+    <div class="header-url">https://physiotrio.sa/</div>
+    <div class="header-meta">
+      <span>📅 April 3, 2026</span>
+      <span>🔍 Full Technical + On-Page Audit</span>
+      <span>⚠️ 12 Issues Found</span>
+    </div>
+  </div>
+</header>
+
+<!-- ─────────── SCORE BANNER ─────────── -->
+<div class="score-banner">
+  <div class="score-inner">
+    <div>
+      <div class="score-circle">
+        <span class="score-num">28</span>
+      </div>
+      <div class="score-label">Overall SEO Score<br><em style="color:var(--red);font-weight:700">POOR</em></div>
+    </div>
+    <div class="score-breakdown">
+      <div class="score-item">
+        <div class="score-item-label">Technical SEO</div>
+        <div class="score-item-val val-red">20 / 100</div>
+      </div>
+      <div class="score-item">
+        <div class="score-item-label">On-Page SEO</div>
+        <div class="score-item-val val-orange">30 / 100</div>
+      </div>
+      <div class="score-item">
+        <div class="score-item-label">Infrastructure</div>
+        <div class="score-item-val val-red">10 / 100</div>
+      </div>
+      <div class="score-item">
+        <div class="score-item-label">Performance</div>
+        <div class="score-item-val val-orange">55 / 100</div>
+      </div>
+      <div class="score-item">
+        <div class="score-item-label">Content (Est.)</div>
+        <div class="score-item-val val-yellow">40 / 100</div>
+      </div>
+      <div class="score-item">
+        <div class="score-item-label">Critical Issues</div>
+        <div class="score-item-val val-red">5</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── MAIN CONTENT ─────────── -->
+<div class="wrapper">
+
+  <!-- EXEC SUMMARY -->
+  <div class="section-title">Executive Summary</div>
+  <div class="exec-grid">
+    <div class="exec-card">
+      <h4>Platform</h4>
+      <p>Built with <strong>Mocha</strong> (no-code SPA builder). The site renders entirely via JavaScript — the HTML shell delivered to crawlers is nearly empty, making traditional SEO extremely difficult.</p>
+    </div>
+    <div class="exec-card">
+      <h4>Root Problem</h4>
+      <p><strong>Client-Side Rendering (CSR)</strong> is the single biggest SEO risk. Googlebot may not execute JavaScript reliably, meaning the entire page content could be invisible to search engines.</p>
+    </div>
+    <div class="exec-card">
+      <h4>Biggest Quick Win</h4>
+      <p>Fix the <strong>og:url mismatch</strong> (points to a Mocha staging domain), add a proper <strong>meta description</strong>, and create <strong>robots.txt + sitemap</strong> — all achievable within one working day.</p>
+    </div>
+    <div class="exec-card">
+      <h4>Long-Term Priority</h4>
+      <p>Migrate to a platform that supports <strong>Server-Side Rendering (SSR)</strong> or <strong>Static Site Generation (SSG)</strong> — such as Next.js, Astro, or WordPress — to unlock full indexability.</p>
+    </div>
+  </div>
+
+  <!-- CRITICAL ISSUES -->
+  <div class="section-title">Critical Issues</div>
+  <div class="issue-list">
+
+    <!-- Issue 1 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div>
+          <span class="severity-badge sev-critical">Critical</span>
+        </div>
+        <div>
+          <div class="issue-title">Client-Side Only Rendering (JavaScript SPA)</div>
+          <div class="issue-sub">The entire page content is invisible to search engine crawlers in static HTML</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>The website is built with Mocha — a React-based single-page application. The raw HTML returned by the server is essentially an empty shell with <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">&lt;div id="root"&gt;&lt;/div&gt;</code>. All content — headings, services, contact info, text — is injected at runtime by JavaScript. While Googlebot can sometimes render JavaScript, it is unreliable, delayed, and may miss dynamically loaded content. This is the most severe SEO issue on the site.</p>
+        <div class="code-label">Current HTML (what crawlers see)</div>
+        <div class="code-block"><span class="bad">&lt;body&gt;
+  &lt;div id="root"&gt;&lt;/div&gt;  &lt;!-- Empty. No content visible --&gt;
+  &lt;script src="/assets/index-uh1mQkVb.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</span></div>
+        <div class="code-label">Recommended Fix</div>
+        <div class="code-block"><span class="comment">// Option A: Migrate to Next.js (SSR/SSG) — recommended
+// Option B: Use Prerender.io or similar service
+// Option C: Switch to Astro or WordPress
+// Option D: Request Mocha to enable SSR mode</span>
+
+<span class="good">// The goal: serve fully rendered HTML so crawlers
+// see the same content as users</span></div>
+      </div>
+    </div>
+
+    <!-- Issue 2 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-critical">Critical</span></div>
+        <div>
+          <div class="issue-title">og:url Points to Mocha Staging Domain</div>
+          <div class="issue-sub">Open Graph URL is set to the wrong domain entirely</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>The <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">og:url</code> meta tag is pointing to <strong>3bf5h5cfoq7mk.mocha.app</strong> — the internal Mocha builder URL — instead of the live domain. This breaks social sharing previews, causes SEO tracking inconsistencies, and signals to search engines that this is not the canonical version of the content.</p>
+        <div class="code-label">Current (BROKEN)</div>
+        <div class="code-block"><span class="bad">&lt;meta property="og:url" content="https://3bf5h5cfoq7mk.mocha.app" /&gt;</span></div>
+        <div class="code-label">Fixed</div>
+        <div class="code-block"><span class="good">&lt;meta property="og:url" content="https://physiotrio.sa/" /&gt;</span></div>
+      </div>
+    </div>
+
+    <!-- Issue 3 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-critical">Critical</span></div>
+        <div>
+          <div class="issue-title">Missing robots.txt</div>
+          <div class="issue-sub">https://physiotrio.sa/robots.txt returns 404</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>A missing robots.txt file means search engine crawlers have no guidance on how to crawl the site. Without it, crawlers may waste crawl budget on irrelevant pages, and Google Search Console will flag this as an error. This file is mandatory for any production website.</p>
+        <div class="code-label">Create at: /robots.txt</div>
+        <div class="code-block"><span class="good">User-agent: *
+Allow: /
+
+Sitemap: https://physiotrio.sa/sitemap.xml</span></div>
+      </div>
+    </div>
+
+    <!-- Issue 4 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-critical">Critical</span></div>
+        <div>
+          <div class="issue-title">Missing XML Sitemap</div>
+          <div class="issue-sub">https://physiotrio.sa/sitemap.xml returns 404</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Without an XML sitemap, search engines must discover pages by crawling links alone. For a JavaScript-rendered site, this is especially dangerous — crawlers may never find deep pages. A sitemap tells Google exactly what pages exist and when they were last updated.</p>
+        <div class="code-label">Minimum sitemap to create at: /sitemap.xml</div>
+        <div class="code-block"><span class="good">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://physiotrio.sa/&lt;/loc&gt;
+    &lt;lastmod&gt;2026-04-03&lt;/lastmod&gt;
+    &lt;changefreq&gt;weekly&lt;/changefreq&gt;
+    &lt;priority&gt;1.0&lt;/priority&gt;
+  &lt;/url&gt;
+  <span class="comment">&lt;!-- Add all sub-pages here --&gt;</span>
+&lt;/urlset&gt;</span></div>
+      </div>
+    </div>
+
+    <!-- Issue 5 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-critical">Critical</span></div>
+        <div>
+          <div class="issue-title">No Schema / Structured Data Markup</div>
+          <div class="issue-sub">Zero JSON-LD schema detected — no rich results possible</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>There is no structured data (JSON-LD schema) on any page. For a physiotherapy clinic, this is a major missed opportunity. Schema markup enables Google rich results such as business name, star ratings, services, opening hours, and location in search results — dramatically improving click-through rates.</p>
+        <div class="code-label">Recommended: LocalBusiness + MedicalBusiness Schema</div>
+        <div class="code-block"><span class="good">&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "name": "PhysioTrio",
+  "url": "https://physiotrio.sa",
+  "logo": "https://physiotrio.sa/logo.png",
+  "telephone": "+966-XX-XXXXXXXX",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "[Street Address]",
+    "addressLocality": "Riyadh",
+    "addressCountry": "SA"
+  },
+  "openingHours": ["Mo-Fr 08:00-20:00", "Sa 09:00-17:00"],
+  "medicalSpecialty": "Physiotherapy",
+  "sameAs": [
+    "https://www.instagram.com/physiotrio",
+    "https://www.linkedin.com/company/physiotrio"
+  ]
+}
+&lt;/script&gt;</span></div>
+      </div>
+    </div>
+
+  </div><!-- /issue-list critical -->
+
+  <!-- HIGH SEVERITY -->
+  <div class="section-title">High Severity Issues</div>
+  <div class="issue-list">
+
+    <!-- Issue 6 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-high">High</span></div>
+        <div>
+          <div class="issue-title">Weak Title Tag</div>
+          <div class="issue-sub">Current: "Physiotrio" — 10 characters, no keywords, no location</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>The title tag is the most important on-page SEO element. "Physiotrio" alone provides no context to search engines or users about what the business does, where it's located, or what services are offered. Google recommends 50–60 characters with primary keywords near the front.</p>
+        <div class="code-label">Current</div>
+        <div class="code-block"><span class="bad">&lt;title&gt;Physiotrio&lt;/title&gt;</span></div>
+        <div class="code-label">Recommended</div>
+        <div class="code-block"><span class="good">&lt;title&gt;PhysioTrio — Physiotherapy &amp; Rehabilitation | Saudi Arabia&lt;/title&gt;</span>
+<span class="comment">&lt;!-- 57 characters — includes brand, service, location --&gt;</span></div>
+      </div>
+    </div>
+
+    <!-- Issue 7 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-high">High</span></div>
+        <div>
+          <div class="issue-title">Missing &lt;meta name="description"&gt;</div>
+          <div class="issue-sub">No standard HTML meta description — only an OG description exists</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>While an <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">og:description</code> is present, there is no standard <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">&lt;meta name="description"&gt;</code> tag. Google uses the meta description to generate the snippet shown in search results. Without it, Google will auto-generate a description — often a poor choice — reducing click-through rates by an estimated 30–40%.</p>
+        <div class="code-label">Add to &lt;head&gt;</div>
+        <div class="code-block"><span class="good">&lt;meta name="description" content="PhysioTrio offers expert physiotherapy and rehabilitation services across Saudi Arabia. Part of the Burjeel Physio Network — book your appointment today." /&gt;</span>
+<span class="comment">&lt;!-- Keep between 140–160 characters --&gt;</span></div>
+      </div>
+    </div>
+
+    <!-- Issue 8 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-high">High</span></div>
+        <div>
+          <div class="issue-title">Missing Canonical Tag</div>
+          <div class="issue-sub">No &lt;link rel="canonical"&gt; — duplicate content risk</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Without a canonical tag, Google may index multiple versions of the same page (with/without trailing slash, HTTP vs HTTPS, www vs non-www). This splits link equity and can cause ranking dilution. A canonical tag explicitly declares the preferred URL version.</p>
+        <div class="code-label">Add to &lt;head&gt;</div>
+        <div class="code-block"><span class="good">&lt;link rel="canonical" href="https://physiotrio.sa/" /&gt;</span></div>
+      </div>
+    </div>
+
+    <!-- Issue 9 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-high">High</span></div>
+        <div>
+          <div class="issue-title">Wrong Favicon & Social Image (Mocha Defaults)</div>
+          <div class="issue-sub">Favicon and OG image point to Mocha CDN, not PhysioTrio brand assets</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>Both the favicon (<code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">getmocha.com/favicon.ico</code>) and the Open Graph social preview image (<code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">static.getmocha.com/og.png</code>) are Mocha branding assets. When this page is shared on WhatsApp, LinkedIn, or Twitter, it will show the Mocha logo — not PhysioTrio's. This undermines brand recognition and trust.</p>
+        <div class="code-label">Fix</div>
+        <div class="code-block"><span class="good">&lt;link rel="shortcut icon" href="/favicon.ico" /&gt;
+&lt;meta property="og:image" content="https://physiotrio.sa/og-image.jpg" /&gt;</span>
+<span class="comment">&lt;!-- Recommended OG image size: 1200x630px --&gt;</span></div>
+      </div>
+    </div>
+
+  </div><!-- /high issues -->
+
+  <!-- MEDIUM ISSUES -->
+  <div class="section-title">Medium Severity Issues</div>
+  <div class="issue-list">
+
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-medium">Medium</span></div>
+        <div>
+          <div class="issue-title">Large JavaScript Bundle (482 KB)</div>
+          <div class="issue-sub">Main JS bundle may delay First Contentful Paint and LCP</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>The main JavaScript file (<code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">index-uh1mQkVb.js</code>) is approximately 482 KB. Google's Core Web Vitals (CWV) directly influence rankings. A large, render-blocking JS bundle delays LCP (Largest Contentful Paint) and FID (First Input Delay). Target: under 150 KB compressed per bundle.</p>
+      </div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-medium">Medium</span></div>
+        <div>
+          <div class="issue-title">og:author Set to "Mocha" — Not the Brand</div>
+          <div class="issue-sub">Platform branding leaking into meta tags</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>The <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">og:author</code> tag currently contains "Mocha" — the name of the no-code platform, not PhysioTrio or Burjeel. Twitter card also references <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">@get_mocha</code> instead of the PhysioTrio Twitter handle.</p>
+        <div class="code-label">Fix</div>
+        <div class="code-block"><span class="good">&lt;meta property="og:author" content="PhysioTrio" /&gt;
+&lt;meta property="twitter:site" content="@physiotrio" /&gt;</span></div>
+      </div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-header">
+        <div><span class="severity-badge sev-medium">Medium</span></div>
+        <div>
+          <div class="issue-title">No Hreflang for Arabic Language</div>
+          <div class="issue-sub">Saudi Arabian site likely needs Arabic content — no language targeting configured</div>
+        </div>
+      </div>
+      <div class="issue-body">
+        <p>The site serves a Saudi Arabian audience (<code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">.sa</code> TLD) but has no Arabic language version or <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px">hreflang</code> tags. The majority of organic search queries in Saudi Arabia are in Arabic. Without Arabic content, the site is invisible to the largest segment of the local search audience.</p>
+        <div class="code-label">When Arabic version is available</div>
+        <div class="code-block"><span class="good">&lt;link rel="alternate" hreflang="en-SA" href="https://physiotrio.sa/en/" /&gt;
+&lt;link rel="alternate" hreflang="ar-SA" href="https://physiotrio.sa/ar/" /&gt;
+&lt;link rel="alternate" hreflang="x-default" href="https://physiotrio.sa/" /&gt;</span></div>
+      </div>
+    </div>
+
+  </div><!-- /medium issues -->
+
+  <!-- WHAT'S WORKING -->
+  <div class="section-title">What's Working</div>
+  <div class="pass-grid">
+    <div class="pass-item">
+      <div class="pass-icon">✓</div>
+      <div class="pass-text">
+        <strong>HTTPS Enabled</strong>
+        <span>Secure connection configured</span>
+      </div>
+    </div>
+    <div class="pass-item">
+      <div class="pass-icon">✓</div>
+      <div class="pass-text">
+        <strong>Cloudflare CDN</strong>
+        <span>Fast global delivery network in use</span>
+      </div>
+    </div>
+    <div class="pass-item">
+      <div class="pass-icon">✓</div>
+      <div class="pass-text">
+        <strong>Mobile Viewport Tag</strong>
+        <span>Responsive meta viewport present</span>
+      </div>
+    </div>
+    <div class="pass-item">
+      <div class="pass-icon">✓</div>
+      <div class="pass-text">
+        <strong>UTF-8 Charset</strong>
+        <span>Correct character encoding declared</span>
+      </div>
+    </div>
+    <div class="pass-item">
+      <div class="pass-icon">✓</div>
+      <div class="pass-text">
+        <strong>Open Graph Tags Present</strong>
+        <span>og:title, og:type, og:description exist (need fixes)</span>
+      </div>
+    </div>
+    <div class="pass-item">
+      <div class="pass-icon">✓</div>
+      <div class="pass-text">
+        <strong>Twitter Card Tags</strong>
+        <span>twitter:card, twitter:title exist (need fixes)</span>
+      </div>
+    </div>
+    <div class="pass-item">
+      <div class="pass-icon">✓</div>
+      <div class="pass-text">
+        <strong>lang="en" Attribute</strong>
+        <span>HTML language declared correctly</span>
+      </div>
+    </div>
+    <div class="pass-item">
+      <div class="pass-icon">✓</div>
+      <div class="pass-text">
+        <strong>HTTP/2 Protocol</strong>
+        <span>Modern connection multiplexing enabled</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- META TAGS AUDIT TABLE -->
+  <div class="section-title">Meta Tag Audit</div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Tag</th>
+          <th>Status</th>
+          <th>Current Value</th>
+          <th>Recommendation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">&lt;title&gt;</code></td>
+          <td><span style="color:var(--orange);font-weight:600">⚠ Weak</span></td>
+          <td style="font-family:monospace;font-size:12px">Physiotrio (10 chars)</td>
+          <td>Expand to 50–60 chars with keywords + location</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">meta description</code></td>
+          <td><span style="color:var(--red);font-weight:600">✗ Missing</span></td>
+          <td style="color:var(--text-dim)">Not found</td>
+          <td>Add 140–160 char description with primary keywords</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">canonical</code></td>
+          <td><span style="color:var(--red);font-weight:600">✗ Missing</span></td>
+          <td style="color:var(--text-dim)">Not found</td>
+          <td>Add <code style="font-family:monospace;font-size:12px">&lt;link rel="canonical" href="https://physiotrio.sa/"&gt;</code></td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">og:title</code></td>
+          <td><span style="color:var(--yellow);font-weight:600">~ Weak</span></td>
+          <td style="font-family:monospace;font-size:12px">Physiotrio</td>
+          <td>Match improved &lt;title&gt; tag</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">og:description</code></td>
+          <td><span style="color:var(--yellow);font-weight:600">~ Present</span></td>
+          <td style="font-family:monospace;font-size:12px;max-width:260px;word-break:break-word">Discover comprehensive physiotherapy...</td>
+          <td>Good length — update brand name consistency</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">og:url</code></td>
+          <td><span style="color:var(--red);font-weight:600">✗ Wrong Domain</span></td>
+          <td style="font-family:monospace;font-size:12px;color:var(--red)">3bf5h5cfoq7mk.mocha.app</td>
+          <td>Must be <code style="font-family:monospace;font-size:12px">https://physiotrio.sa/</code></td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">og:image</code></td>
+          <td><span style="color:var(--red);font-weight:600">✗ Wrong Brand</span></td>
+          <td style="font-family:monospace;font-size:12px;color:var(--red)">static.getmocha.com/og.png</td>
+          <td>Upload PhysioTrio branded 1200×630px image</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">og:author</code></td>
+          <td><span style="color:var(--orange);font-weight:600">⚠ Wrong Brand</span></td>
+          <td style="font-family:monospace;font-size:12px;color:var(--orange)">Mocha</td>
+          <td>Change to "PhysioTrio"</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">twitter:site</code></td>
+          <td><span style="color:var(--orange);font-weight:600">⚠ Wrong Handle</span></td>
+          <td style="font-family:monospace;font-size:12px;color:var(--orange)">@get_mocha</td>
+          <td>Change to PhysioTrio Twitter handle</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">robots.txt</code></td>
+          <td><span style="color:var(--red);font-weight:600">✗ 404</span></td>
+          <td style="color:var(--text-dim)">File not found</td>
+          <td>Create at /robots.txt with Allow: /</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">sitemap.xml</code></td>
+          <td><span style="color:var(--red);font-weight:600">✗ 404</span></td>
+          <td style="color:var(--text-dim)">File not found</td>
+          <td>Generate and submit to Google Search Console</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">Schema Markup</code></td>
+          <td><span style="color:var(--red);font-weight:600">✗ Missing</span></td>
+          <td style="color:var(--text-dim)">None detected</td>
+          <td>Add MedicalBusiness + LocalBusiness JSON-LD</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">hreflang (AR)</code></td>
+          <td><span style="color:var(--orange);font-weight:600">⚠ Missing</span></td>
+          <td style="color:var(--text-dim)">Not configured</td>
+          <td>Add Arabic version targeting Saudi audience</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">H1 Tag</code></td>
+          <td><span style="color:var(--orange);font-weight:600">⚠ JS Only</span></td>
+          <td style="color:var(--text-dim)">Not in static HTML</td>
+          <td>Ensure H1 is server-rendered with primary keyword</td>
+        </tr>
+        <tr>
+          <td><code style="font-family:monospace;font-size:12px">Image Alt Tags</code></td>
+          <td><span style="color:var(--orange);font-weight:600">⚠ JS Only</span></td>
+          <td style="color:var(--text-dim)">Not in static HTML</td>
+          <td>Ensure all images have descriptive alt attributes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PRIORITY ROADMAP -->
+  <div class="section-title">Prioritised Fix Roadmap</div>
+  <div class="roadmap">
+    <div class="phase">
+      <div class="phase-label">
+        Phase 1
+        <span>Day 1 — ~90 min</span>
+      </div>
+      <div class="phase-tasks">
+        <div class="task-row">
+          <div class="dot dot-red"></div>
+          Fix og:url — change to https://physiotrio.sa/
+          <span class="task-time">5 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-red"></div>
+          Add &lt;meta name="description"&gt; with keywords
+          <span class="task-time">10 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-red"></div>
+          Improve &lt;title&gt; tag (50–60 chars, add keywords)
+          <span class="task-time">10 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-red"></div>
+          Add canonical link tag
+          <span class="task-time">5 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-red"></div>
+          Create robots.txt and submit to Google
+          <span class="task-time">10 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-red"></div>
+          Create XML sitemap and submit to GSC
+          <span class="task-time">20 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-orange"></div>
+          Replace Mocha favicon with PhysioTrio favicon
+          <span class="task-time">15 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-orange"></div>
+          Upload branded 1200×630 OG image
+          <span class="task-time">15 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-label">
+        Phase 2
+        <span>Week 1 — ~4 hrs</span>
+      </div>
+      <div class="phase-tasks">
+        <div class="task-row">
+          <div class="dot dot-red"></div>
+          Add MedicalBusiness + LocalBusiness JSON-LD schema
+          <span class="task-time">1–2 hrs</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-orange"></div>
+          Fix twitter:site to PhysioTrio handle
+          <span class="task-time">5 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-orange"></div>
+          Fix og:author to "PhysioTrio"
+          <span class="task-time">5 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-yellow"></div>
+          Set up Google Search Console + verify domain
+          <span class="task-time">30 min</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-yellow"></div>
+          Set up Google Analytics 4 for traffic tracking
+          <span class="task-time">30 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-label">
+        Phase 3
+        <span>Month 1–2</span>
+      </div>
+      <div class="phase-tasks">
+        <div class="task-row">
+          <div class="dot dot-red"></div>
+          Evaluate SSR migration (Next.js / Astro / WordPress)
+          <span class="task-time">Strategic</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-yellow"></div>
+          Create Arabic language version of the site
+          <span class="task-time">1–2 weeks</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-yellow"></div>
+          Add hreflang tags for EN/AR targeting
+          <span class="task-time">1 hr</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-yellow"></div>
+          Optimise page performance / Core Web Vitals
+          <span class="task-time">Ongoing</span>
+        </div>
+        <div class="task-row">
+          <div class="dot dot-green"></div>
+          Build keyword-targeted service landing pages
+          <span class="task-time">Ongoing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPECTED IMPACT -->
+  <div class="section-title">Expected Impact</div>
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="timeframe">After Phase 1 (2–4 weeks)</div>
+      <div class="uplift">+30–50%</div>
+      <div class="desc">Organic traffic improvement from fixing meta tags, sitemap, and social sharing</div>
+    </div>
+    <div class="impact-card">
+      <div class="timeframe">After Phase 2 (4–8 weeks)</div>
+      <div class="uplift">+20–40%</div>
+      <div class="desc">Additional growth from schema markup enabling rich results and CTR improvements</div>
+    </div>
+    <div class="impact-card">
+      <div class="timeframe">After Phase 3 (3–6 months)</div>
+      <div class="uplift">+100%+</div>
+      <div class="desc">SSR migration and Arabic content unlock the full addressable Saudi search market</div>
+    </div>
+  </div>
+
+  <!-- GOOGLE SEARCH CONSOLE -->
+  <div class="section-title">Google Search Console Setup</div>
+  <div class="exec-card" style="margin-bottom:16px">
+    <h4>Immediate Action Required</h4>
+    <p>PhysioTrio should be registered in <strong>Google Search Console</strong> immediately. Without it, there is no visibility into: which keywords trigger impressions, crawl errors Google has found, mobile usability issues, Core Web Vitals scores, or manual penalty notifications. This is the single most important free SEO tool available.</p>
+  </div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Setup Step</th><th>Instructions</th></tr></thead>
+      <tbody>
+        <tr><td>1. Verify domain ownership</td><td>Go to search.google.com/search-console → Add property → Domain → Add TXT record to DNS</td></tr>
+        <tr><td>2. Submit sitemap</td><td>After creating sitemap.xml → GSC → Sitemaps → Enter URL → Submit</td></tr>
+        <tr><td>3. Request indexing</td><td>GSC → URL Inspection → Enter homepage URL → Request Indexing</td></tr>
+        <tr><td>4. Monitor Core Web Vitals</td><td>GSC → Experience → Core Web Vitals — fix any red/orange URLs</td></tr>
+        <tr><td>5. Check Coverage report</td><td>GSC → Indexing → Pages — look for "Crawled but not indexed" errors</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /wrapper -->
+
+<!-- FOOTER -->
+<footer>
+  SEO Audit Report for <a href="https://physiotrio.sa/" target="_blank">physiotrio.sa</a> &nbsp;·&nbsp; Generated April 3, 2026 &nbsp;·&nbsp; Prepared by Shab.co
+</footer>
+
+</body>
+</html>
