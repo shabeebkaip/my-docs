@@ -3,479 +3,350 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shab.co — Docs</title>
+<title>Shab.co — Client Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;600;700;800&display=swap');
+:root {
+  --bg:       #07080f;
+  --bg2:      #0d0f1a;
+  --surface:  #111520;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --accent:   #4f6ef7;
+  --accent2:  #7c3aed;
+  --accent3:  #06b6d4;
+  --text:     #e2e8f0;
+  --muted:    #526070;
+  --muted2:   #8095a8;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Fraunces', Georgia, serif;
+  --sans:     'Syne', sans-serif;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-thumb { background:rgba(79,110,247,0.3); border-radius:4px; }
 
-  :root {
-    --bg: #0a0c14;
-    --surface: #111420;
-    --surface2: #181c2e;
-    --border: #252a42;
-    --accent: #4f6ef7;
-    --accent2: #7c3aed;
-    --green: #10b981;
-    --amber: #f59e0b;
-    --red: #ef4444;
-    --cyan: #06b6d4;
-    --pink: #ec4899;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Syne', sans-serif;
-  }
+/* ── BACKGROUND ── */
+.bg-canvas {
+  position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+}
+.bg-grid {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+}
+.bg-orb1 {
+  position:absolute; width:600px; height:600px; border-radius:50%;
+  background:radial-gradient(circle, rgba(79,110,247,0.12) 0%, transparent 65%);
+  top:-150px; left:-100px;
+}
+.bg-orb2 {
+  position:absolute; width:500px; height:500px; border-radius:50%;
+  background:radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 65%);
+  bottom:-100px; right:-80px;
+}
+.bg-orb3 {
+  position:absolute; width:300px; height:300px; border-radius:50%;
+  background:radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 65%);
+  top:40%; right:10%;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── LAYOUT ── */
+.wrap {
+  position:relative; z-index:1;
+  max-width:1000px; margin:0 auto; padding:0 40px;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+/* ── HEADER ── */
+header {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding:0 40px; height:56px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(7,8,15,0.7); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.header-logo {
+  font-family:var(--sans); font-size:1rem; font-weight:800;
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  letter-spacing:-0.03em;
+}
+.header-tag {
+  font-family:var(--mono); font-size:0.6rem;
+  color:var(--muted); letter-spacing:0.12em; text-transform:uppercase;
+}
 
-  /* ── HEADER ── */
-  .header {
-    padding: 28px 48px 24px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    display: flex;
-    align-items: flex-end;
-    gap: 24px;
-  }
-  .header-brand {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .logo {
-    font-size: 2rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -1px;
-    line-height: 1;
-  }
-  .tagline {
-    font-size: 0.8rem;
-    color: var(--muted);
-    font-family: var(--mono);
-  }
-  .header-meta {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .header-badge {
-    font-size: 0.7rem;
-    font-family: var(--mono);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 4px 10px;
-    border-radius: 20px;
-  }
+/* ── HERO ── */
+.hero {
+  min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+  padding:100px 0 80px;
+}
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--mono); font-size:0.65rem; font-weight:500;
+  letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--accent3); margin-bottom:36px;
+  opacity:0; animation:fadeUp 0.8s 0.1s ease forwards;
+}
+.hero-eyebrow::before {
+  content:''; width:24px; height:1px; background:var(--accent3);
+}
+.hero-eyebrow::after {
+  content:'●'; font-size:0.4rem; animation:blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-  /* ── MAIN ── */
-  .main {
-    flex: 1;
-    padding: 48px;
-    max-width: 1100px;
-    width: 100%;
-    margin: 0 auto;
-  }
+h1.hero-title {
+  font-family:var(--serif);
+  font-size:clamp(3rem, 7vw, 5.5rem);
+  font-weight:300; line-height:1.08; letter-spacing:-0.02em;
+  color:#fff; margin-bottom:28px;
+  opacity:0; animation:fadeUp 0.9s 0.2s ease forwards;
+}
+h1.hero-title em {
+  font-style:italic; font-weight:300;
+  background:linear-gradient(120deg, var(--accent), var(--accent3) 60%, var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.hero-body {
+  font-size:1.05rem; color:var(--muted2); line-height:1.85;
+  max-width:540px; margin-bottom:52px;
+  opacity:0; animation:fadeUp 0.9s 0.32s ease forwards;
+}
 
-  .section-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+/* ── SERVICES STRIP ── */
+.services-strip {
+  display:flex; gap:0; flex-wrap:wrap;
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  margin-bottom:64px;
+  opacity:0; animation:fadeUp 0.9s 0.44s ease forwards;
+}
+.svc {
+  flex:1; min-width:140px; padding:18px 22px;
+  border-right:1px solid var(--border);
+  transition:background 0.2s;
+}
+.svc:last-child { border-right:none; }
+.svc:hover { background:rgba(255,255,255,0.03); }
+.svc-icon { font-size:1.1rem; margin-bottom:8px; }
+.svc-name { font-size:0.75rem; font-weight:700; color:rgba(255,255,255,0.7); margin-bottom:3px; letter-spacing:0.02em; }
+.svc-desc { font-size:0.65rem; color:var(--muted); line-height:1.5; font-family:var(--mono); }
 
-  /* ── DOC GRID ── */
-  .doc-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 16px;
-    margin-bottom: 48px;
-  }
+/* ── PORTAL SECTION ── */
+.portal-section {
+  border-top:1px solid var(--border); padding:72px 0;
+  opacity:0; animation:fadeUp 0.9s 0.55s ease forwards;
+}
+.portal-label {
+  font-family:var(--mono); font-size:0.6rem; font-weight:500;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:16px;
+  display:flex; align-items:center; gap:10px;
+}
+.portal-label::before { content:''; width:18px; height:1px; background:var(--accent); }
+.portal-heading {
+  font-family:var(--serif); font-size:2.2rem; font-weight:300; font-style:italic;
+  color:#fff; margin-bottom:14px; line-height:1.2;
+}
+.portal-desc {
+  font-size:0.9rem; color:var(--muted2); line-height:1.8; max-width:520px; margin-bottom:36px;
+}
 
-  .doc-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 22px 24px;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
-    position: relative;
-    overflow: hidden;
-  }
-  .doc-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, var(--card-color, var(--accent)), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
-  }
-  .doc-card:hover {
-    border-color: var(--card-color, var(--accent));
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  }
-  .doc-card:hover::before { opacity: 0.04; }
+.portal-card {
+  background:var(--surface); border:1px solid var(--border2);
+  border-radius:14px; padding:28px 32px;
+  display:flex; align-items:center; gap:24px;
+  max-width:480px; position:relative; overflow:hidden;
+}
+.portal-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+}
+.portal-card-icon {
+  width:44px; height:44px; flex-shrink:0;
+  border-radius:10px; background:rgba(79,110,247,0.12);
+  border:1px solid rgba(79,110,247,0.25);
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+}
+.portal-card-text {}
+.portal-card-title { font-size:0.9rem; font-weight:700; color:#fff; margin-bottom:4px; }
+.portal-card-body { font-size:0.78rem; color:var(--muted2); line-height:1.6; font-family:var(--mono); }
 
-  .card-top {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
-  .card-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    flex-shrink: 0;
-  }
-  .card-title {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-    line-height: 1.3;
-  }
-  .card-subtitle {
-    font-size: 0.72rem;
-    color: var(--muted);
-    font-family: var(--mono);
-  }
+/* ── ABOUT STRIP ── */
+.about-strip {
+  border-top:1px solid var(--border);
+  padding:72px 0 100px;
+  display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;
+  opacity:0; animation:fadeUp 0.9s 0.65s ease forwards;
+}
+.about-left {}
+.about-tag {
+  font-family:var(--mono); font-size:0.6rem; font-weight:500;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:14px;
+}
+.about-left h2 {
+  font-family:var(--serif); font-size:1.9rem; font-weight:300; color:#fff;
+  line-height:1.25; margin-bottom:16px;
+}
+.about-left p {
+  font-size:0.88rem; color:var(--muted2); line-height:1.85;
+}
+.about-right { display:flex; flex-direction:column; gap:16px; }
+.stat-row {
+  display:flex; align-items:baseline; gap:12px;
+  padding:18px 0; border-bottom:1px solid var(--border);
+}
+.stat-row:last-child { border-bottom:none; }
+.stat-num {
+  font-family:var(--serif); font-size:2.2rem; font-weight:300;
+  background:linear-gradient(135deg, var(--accent), var(--accent3));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  flex-shrink:0; line-height:1;
+}
+.stat-label { font-size:0.8rem; color:var(--muted2); line-height:1.5; }
 
-  .card-desc {
-    font-size: 0.8rem;
-    color: var(--muted);
-    line-height: 1.6;
-    flex: 1;
-  }
+/* ── FOOTER ── */
+footer {
+  position:relative; z-index:1;
+  border-top:1px solid var(--border);
+  padding:24px 40px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.footer-l { font-family:var(--mono); font-size:0.65rem; color:var(--muted); }
+.footer-r { font-family:var(--mono); font-size:0.65rem; color:var(--muted); }
 
-  .card-footer {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .card-tag {
-    font-size: 0.63rem;
-    font-family: var(--mono);
-    padding: 3px 8px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    background: var(--surface2);
-  }
-  .card-arrow {
-    margin-left: auto;
-    color: var(--muted);
-    font-size: 0.85rem;
-    transition: transform 0.15s, color 0.15s;
-  }
-  .doc-card:hover .card-arrow {
-    transform: translateX(3px);
-    color: var(--card-color, var(--accent));
-  }
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
 
-  /* ── FOOTER ── */
-  .footer {
-    padding: 20px 48px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.72rem;
-    color: var(--muted);
-    font-family: var(--mono);
-    background: var(--surface);
-  }
-  .footer-dot { color: var(--border); }
-
-  /* ── SEARCH ── */
-  .search-wrap {
-    margin-bottom: 32px;
-    position: relative;
-  }
-  .search-icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--muted);
-    font-size: 0.9rem;
-    pointer-events: none;
-  }
-  .search-input {
-    width: 100%;
-    max-width: 400px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 14px 10px 38px;
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 0.85rem;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .search-input:focus { border-color: var(--accent); }
-  .search-input::placeholder { color: var(--muted); }
-
-  /* hidden via search */
-  .doc-card.hidden { display: none; }
-
-  /* ── EMPTY STATE ── */
-  .empty-state {
-    display: none;
-    text-align: center;
-    padding: 48px;
-    color: var(--muted);
-    font-size: 0.85rem;
-  }
-  .empty-state.visible { display: block; }
+@media(max-width:720px){
+  header { padding:0 20px; }
+  .wrap { padding:0 20px; }
+  .about-strip { grid-template-columns:1fr; gap:40px; }
+  .services-strip { flex-direction:column; }
+  .svc { border-right:none; border-bottom:1px solid var(--border); }
+  .svc:last-child { border-bottom:none; }
+  footer { flex-direction:column; gap:8px; text-align:center; }
+}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-brand">
-    <div class="logo">Shab.co</div>
-    <div class="tagline">internal docs &amp; references</div>
-  </div>
-  <div class="header-meta">
-    <span class="header-badge">📁 my-docs</span>
-    <span class="header-badge" id="doc-count">— docs</span>
-  </div>
+<div class="bg-canvas">
+  <div class="bg-grid"></div>
+  <div class="bg-orb1"></div>
+  <div class="bg-orb2"></div>
+  <div class="bg-orb3"></div>
 </div>
 
-<!-- MAIN -->
-<div class="main">
+<header>
+  <div class="header-logo">Shab.co</div>
+  <div class="header-tag">Client Portal</div>
+</header>
 
-  <!-- Search -->
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input class="search-input" type="text" placeholder="Search documents…" oninput="filterDocs(this.value)" />
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Design &amp; Development Studio</div>
+    <h1 class="hero-title">
+      We build things<br>
+      people <em>remember.</em>
+    </h1>
+    <p class="hero-body">
+      Shab.co is a boutique design and development studio specialising in web platforms, AI-powered tools, and digital experiences for businesses across the Gulf and beyond. We work closely with each client — from concept to deployment.
+    </p>
+
+    <div class="services-strip">
+      <div class="svc">
+        <div class="svc-icon">🌐</div>
+        <div class="svc-name">Web Development</div>
+        <div class="svc-desc">Custom websites &amp; web platforms</div>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">🤖</div>
+        <div class="svc-name">AI Solutions</div>
+        <div class="svc-desc">Intelligent automation &amp; agents</div>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">🎨</div>
+        <div class="svc-name">UI/UX Design</div>
+        <div class="svc-desc">Interfaces worth remembering</div>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">⚙️</div>
+        <div class="svc-name">ERP &amp; Systems</div>
+        <div class="svc-desc">Odoo, integrations &amp; workflows</div>
+      </div>
+      <div class="svc">
+        <div class="svc-icon">📱</div>
+        <div class="svc-name">Mobile Apps</div>
+        <div class="svc-desc">Cross-platform applications</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTAL -->
+  <div class="portal-section">
+    <div class="portal-label">Client Documentation Portal</div>
+    <div class="portal-heading">Your project documents,<br>always accessible.</div>
+    <p class="portal-desc">
+      This portal hosts all project documentation, proposals, technical guides, and handover materials prepared by Shab.co for our clients. Each client receives a private link to their dedicated space.
+    </p>
+    <div class="portal-card">
+      <div class="portal-card-icon">🔗</div>
+      <div class="portal-card-text">
+        <div class="portal-card-title">Access your documents</div>
+        <div class="portal-card-body">Use the private link provided to you by your project contact at Shab.co to access your documents.</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Abjad -->
-  <div class="section-label" id="label-abjad">Abjad Platform</div>
-  <div class="doc-grid" id="grid-abjad">
-
-    <a class="doc-card" href="abjad-db.html" style="--card-color:#4f6ef7">
-      <div class="card-top">
-        <div class="card-icon" style="background:rgba(79,110,247,0.12)">🗄️</div>
-        <div>
-          <div class="card-title">MongoDB Schema Reference</div>
-          <div class="card-subtitle">abjad-db.html · v2.0</div>
-        </div>
+  <!-- ABOUT -->
+  <div class="about-strip">
+    <div class="about-left">
+      <div class="about-tag">About the Studio</div>
+      <h2>Small team.<br>Serious craft.</h2>
+      <p>
+        We're a focused studio that believes great digital products come from deep collaboration, not assembly lines. Every project we take on gets our full attention — from the first conversation to the final deployment and beyond.
+      </p>
+    </div>
+    <div class="about-right">
+      <div class="stat-row">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Projects delivered across web, AI, mobile, and ERP</div>
       </div>
-      <div class="card-desc">
-        Interactive database schema for the Abjad teacher recruitment platform. 16 MongoDB collections with full field tables, indexes, embedded arrays, and a collection references view.
+      <div class="stat-row">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Years building for clients across the Gulf region</div>
       </div>
-      <div class="card-footer">
-        <span class="card-tag">MongoDB</span>
-        <span class="card-tag">16 collections</span>
-        <span class="card-tag">200+ fields</span>
-        <span class="card-tag">Schema</span>
-        <span class="card-arrow">→</span>
+      <div class="stat-row">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Custom-built — no templates, no shortcuts</div>
       </div>
-    </a>
-
-    <a class="doc-card" href="abjad-authentication-tasks.html" style="--card-color:#10b981">
-      <div class="card-top">
-        <div class="card-icon" style="background:rgba(16,185,129,0.12)">🔐</div>
-        <div>
-          <div class="card-title">Authentication Flow — Task List</div>
-          <div class="card-subtitle">abjad-authentication-tasks.html · v1.0</div>
-        </div>
-      </div>
-      <div class="card-desc">
-        Complete implementation task list for mobile OTP auth — Mongoose models, JWT access + refresh token rotation, session management, rate limiting, and test suites.
-      </div>
-      <div class="card-footer">
-        <span class="card-tag">Node.js</span>
-        <span class="card-tag">JWT + OTP</span>
-        <span class="card-tag">39 tasks</span>
-        <span class="card-tag">Task List</span>
-        <span class="card-arrow">→</span>
-      </div>
-    </a>
-
+    </div>
   </div>
-
-  <!-- WeCare Tech -->
-  <div class="section-label" id="label-wecaretech">WeCare Tech</div>
-  <div class="doc-grid" id="grid-wecaretech">
-
-    <a class="doc-card" href="wecaretech-procurement.html" style="--card-color:#00C8FF">
-      <div class="card-top">
-        <div class="card-icon" style="background:rgba(0,200,255,0.12)">🤖</div>
-        <div>
-          <div class="card-title">AI Procurement Intelligence</div>
-          <div class="card-subtitle">wecaretech-procurement.html · Client Presentation</div>
-        </div>
-      </div>
-      <div class="card-desc">
-        Standalone AI procurement automation system for WeCare Tech — email-triggered BOQ ingestion, ICT/data center material intelligence, vendor matching, and real-time operations dashboard.
-      </div>
-      <div class="card-footer">
-        <span class="card-tag">AI</span>
-        <span class="card-tag">Procurement</span>
-        <span class="card-tag">Data Center</span>
-        <span class="card-tag">ICT</span>
-        <span class="card-arrow">→</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- Alamco -->
-  <div class="section-label" id="label-alamco">Alamco</div>
-  <div class="doc-grid" id="grid-alamco">
-
-    <a class="doc-card" href="alamco-procurement.html" style="--card-color:#f59e0b">
-      <div class="card-top">
-        <div class="card-icon" style="background:rgba(245,158,11,0.12)">🤖</div>
-        <div>
-          <div class="card-title">AI Procurement Automation</div>
-          <div class="card-subtitle">alamco-procurement.html · Client Presentation</div>
-        </div>
-      </div>
-      <div class="card-desc">
-        Client-facing presentation on AI-driven procurement automation — capabilities, workflow, and implementation roadmap for Alamco.
-      </div>
-      <div class="card-footer">
-        <span class="card-tag">AI</span>
-        <span class="card-tag">Procurement</span>
-        <span class="card-tag">Presentation</span>
-        <span class="card-arrow">→</span>
-      </div>
-    </a>
-
-    <a class="doc-card" href="alamco-procurement-v2.html" style="--card-color:#1b5e6e">
-      <div class="card-top">
-        <div class="card-icon" style="background:rgba(27,94,110,0.12)">🏗️</div>
-        <div>
-          <div class="card-title">AI Procurement Agent — Deep Dive</div>
-          <div class="card-subtitle">alamco-procurement-v2.html · Technical Proposal</div>
-        </div>
-      </div>
-      <div class="card-desc">
-        Full technical proposal with annotated architecture diagram, step-by-step data flow, Odoo 19 integration, and delivery tracking system.
-      </div>
-      <div class="card-footer">
-        <span class="card-tag">Architecture</span>
-        <span class="card-tag">Odoo 19</span>
-        <span class="card-tag">Claude Opus 4</span>
-        <span class="card-arrow">→</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- Apparel Group -->
-  <div class="section-label" id="label-apparelgroup">Apparel Group</div>
-  <div class="doc-grid" id="grid-apparelgroup">
-
-    <a class="doc-card" href="apparel-group-pitch-deck.html" style="--card-color:#C9A84C">
-      <div class="card-top">
-        <div class="card-icon" style="background:rgba(201,168,76,0.12)">🛍️</div>
-        <div>
-          <div class="card-title">AI Strategy Pitch Deck</div>
-          <div class="card-subtitle">apparel-group-pitch-deck.html · Strategic Proposal</div>
-        </div>
-      </div>
-      <div class="card-desc">
-        Full AI transformation proposal for Apparel Group — 85+ brands, 2,500+ stores across 14 countries. Covers 6 solution areas: personalisation, inventory, store ops, supply chain, HR, and owner intelligence.
-      </div>
-      <div class="card-footer">
-        <span class="card-tag">AI</span>
-        <span class="card-tag">Retail</span>
-        <span class="card-tag">85+ Brands</span>
-        <span class="card-tag">Pitch Deck</span>
-        <span class="card-arrow">→</span>
-      </div>
-    </a>
-
-  </div>
-
-  <div class="empty-state" id="empty-state">No documents match your search.</div>
 
 </div>
 
-<!-- FOOTER -->
-<div class="footer">
-  <span>Shab.co</span>
-  <span class="footer-dot">·</span>
-  <span>Internal Docs</span>
-  <span class="footer-dot">·</span>
-  <span id="footer-date"></span>
-  <span class="footer-dot" style="margin-left:auto"></span>
-  <span>my-docs / main</span>
-</div>
+<footer>
+  <div class="footer-l">© 2026 Shab.co — All rights reserved</div>
+  <div class="footer-r">shabeeb.k@code-ox.com</div>
+</footer>
 
-<script>
-  // Set date
-  document.getElementById('footer-date').textContent =
-    new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-
-  // Count docs
-  const cards = document.querySelectorAll('.doc-card');
-  document.getElementById('doc-count').textContent = cards.length + ' docs';
-
-  // Search
-  function filterDocs(query) {
-    const q = query.toLowerCase().trim();
-    let visible = 0;
-
-    cards.forEach(card => {
-      const text = card.textContent.toLowerCase();
-      const match = !q || text.includes(q);
-      card.classList.toggle('hidden', !match);
-      if (match) visible++;
-    });
-
-    // Hide section labels if all cards in their grid are hidden
-    ['abjad', 'wecaretech', 'alamco', 'apparelgroup'].forEach(group => {
-      const grid = document.getElementById('grid-' + group);
-      const label = document.getElementById('label-' + group);
-      const anyVisible = [...grid.querySelectorAll('.doc-card')].some(c => !c.classList.contains('hidden'));
-      grid.style.display = anyVisible ? '' : 'none';
-      label.style.display = anyVisible ? '' : 'none';
-    });
-
-    document.getElementById('empty-state').classList.toggle('visible', visible === 0);
-  }
-</script>
 </body>
 </html>

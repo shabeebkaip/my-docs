@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jethur Website Revamp Proposal — Codeox Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --surface: #ffffff;
+    --surface2: #f0f2f8;
+    --border: #dde1ee;
+    --accent: #0891b2;
+    --accent2: #0369a1;
+    --text: #0f172a;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --green: #10b981;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-jethur img {
+    height: 30px;
+    width: auto;
+    display: block;
+    filter: brightness(0);
+  }
+  .header-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+  }
+  .header-tagline {
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .header-meta { margin-left: auto; }
+  .header-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .header-badge img {
+    height: 13px;
+    width: auto;
+    filter: brightness(0);
+    opacity: 0.55;
+  }
+
+  /* ── BACK ── */
+  .back-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 9px 48px;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    padding: 48px;
+    max-width: 1080px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 56px 64px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), #06b6d4);
+  }
+  .cover-logos {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 44px;
+  }
+  .cover-logos img { height: 26px; width: auto; filter: brightness(0); }
+  .cover-logos img:last-child { opacity: 0.6; }
+  .cover-vdivider { width: 1px; height: 28px; background: var(--border); }
+  .cover-conf {
+    font-size: 0.62rem;
+    font-family: var(--mono);
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .cover-eyebrow {
+    font-size: 0.65rem;
+    font-family: var(--mono);
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .cover-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .cover-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .cover-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 620px;
+    line-height: 1.75;
+    margin-bottom: 36px;
+  }
+  .cover-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pill {
+    font-size: 0.68rem;
+    font-family: var(--mono);
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .pill.accent {
+    background: rgba(8,145,178,0.08);
+    border-color: rgba(8,145,178,0.25);
+    color: var(--accent);
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 44px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: rgba(8,145,178,0.1);
+    border: 1px solid rgba(8,145,178,0.2);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    flex: 1;
+  }
+  .section-tag {
+    font-size: 0.62rem;
+    font-family: var(--mono);
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .subsection-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 24px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .subsection-title::before {
+    content: '';
+    width: 3px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── PROSE ── */
+  .prose {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: 16px;
+  }
+  .prose strong { color: var(--text); font-weight: 600; }
+
+  /* ── BOXES ── */
+  .info-box {
+    background: rgba(8,145,178,0.05);
+    border: 1px solid rgba(8,145,178,0.18);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+  }
+  .info-box p { font-size: 0.875rem; color: var(--text); line-height: 1.75; }
+
+  .warning-box {
+    background: rgba(239,68,68,0.04);
+    border: 1px solid rgba(239,68,68,0.18);
+    border-left: 3px solid var(--red);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+  }
+  .warning-box-label {
+    font-size: 0.65rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .warning-box p { font-size: 0.875rem; color: var(--text); line-height: 1.75; }
+
+  /* ── ARGUMENT CARDS ── */
+  .arg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .arg-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .arg-card-label {
+    font-size: 0.6rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .arg-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .arg-card-body {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── FEATURE LIST ── */
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.845rem;
+    color: var(--muted);
+    line-height: 1.55;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .feature-list li::before {
+    content: '→';
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .feature-list li strong { color: var(--text); }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  thead { background: var(--surface2); }
+  th {
+    padding: 11px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+  }
+  td strong { color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(8,145,178,0.02); }
+
+  .badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-family: var(--mono);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .badge-cyan { background: rgba(8,145,178,0.1); color: var(--accent); border: 1px solid rgba(8,145,178,0.2); }
+  .badge-green { background: rgba(16,185,129,0.1); color: var(--green); border: 1px solid rgba(16,185,129,0.2); }
+  .badge-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+
+  /* ── TECH STACK ── */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stack-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .stack-layer {
+    font-size: 0.6rem;
+    font-family: var(--mono);
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted2);
+    margin-bottom: 6px;
+  }
+  .stack-value {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* ── SECURITY LIST ── */
+  .security-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .security-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .security-item::before {
+    content: '🔒';
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 20px;
+    bottom: 20px;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    display: flex;
+    gap: 22px;
+    padding: 14px 0;
+  }
+  .tl-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    font-size: 0.68rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--accent);
+  }
+  .tl-content { flex: 1; padding-top: 5px; }
+  .tl-phase {
+    font-size: 0.6rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+  .tl-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+  .tl-body {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── SCOPE ── */
+  .scope-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .scope-box { border-radius: 10px; padding: 22px 24px; }
+  .scope-in {
+    background: rgba(16,185,129,0.04);
+    border: 1px solid rgba(16,185,129,0.2);
+  }
+  .scope-out {
+    background: rgba(239,68,68,0.03);
+    border: 1px solid rgba(239,68,68,0.15);
+  }
+  .scope-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .scope-in .scope-head { color: var(--green); }
+  .scope-out .scope-head { color: var(--red); }
+  .scope-ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .scope-ul li {
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .scope-in li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+  .scope-out li::before { content: '✗'; color: var(--red); font-weight: 700; flex-shrink: 0; }
+
+  /* ── RESPONSIBILITIES ── */
+  .resp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .resp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+  }
+  .resp-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(8,145,178,0.1);
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .resp-text {
+    font-size: 0.845rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .resp-text strong { color: var(--text); }
+
+  /* ── PRICING ── */
+  .price-card {
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    border-radius: 14px;
+    padding: 32px 36px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .price-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .price-label {
+    font-size: 0.62rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .price-amount {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .price-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-family: var(--mono);
+  }
+  .price-includes {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .price-includes li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.845rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .price-includes li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── WHY US ── */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .why-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .why-card:hover {
+    border-color: rgba(8,145,178,0.4);
+    transform: translateY(-2px);
+  }
+  .why-icon { font-size: 1.4rem; margin-bottom: 10px; }
+  .why-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .why-body {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── NEXT STEPS ── */
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(8,145,178,0.1);
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .step-body {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── TERMS ── */
+  .terms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .term-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .term-heading {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .term-body {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 18px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    background: var(--surface);
+  }
+  .footer img {
+    height: 13px;
+    width: auto;
+    filter: brightness(0);
+    opacity: 0.4;
+  }
+  .footer-dot { color: var(--border); }
+
+  @media (max-width: 768px) {
+    .header { padding: 14px 20px; }
+    .back-bar { padding: 9px 20px; }
+    .main { padding: 24px 20px; }
+    .footer { padding: 14px 20px; flex-wrap: wrap; }
+    .cover { padding: 32px 24px; }
+    .cover-title { font-size: 1.9rem; }
+    .scope-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-jethur">
+    <img src="https://jethur.com/wp-content/uploads//2025/05/site-logo-1.svg" alt="Jethur">
+  </div>
+  <div class="header-divider"></div>
+  <div class="header-tagline">website revamp proposal</div>
+  <div class="header-meta">
+    <span class="header-badge">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+      Codeox Technologies
+    </span>
+  </div>
+</div>
+
+<!-- BACK -->
+<div class="back-bar">
+  <a href="index.html" class="back-link">← Back to Documents</a>
+</div>
+
+<div class="main">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-logos">
+      <img src="https://jethur.com/wp-content/uploads//2025/05/site-logo-1.svg" alt="Jethur">
+      <div class="cover-vdivider"></div>
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="Codeox">
+      <div class="cover-vdivider"></div>
+      <span class="cover-conf">Confidential · April 2026</span>
+    </div>
+    <div class="cover-eyebrow">Website Revamp Proposal</div>
+    <h1 class="cover-title">From WordPress<br>to <em>Enterprise-Grade.</em></h1>
+    <p class="cover-sub">
+      Codeox Technologies' plan to revamp jethur.com from the ground up — replacing the WordPress infrastructure with a secure, enterprise-grade Next.js application, designed first in Figma, with a custom built-in CMS and deployed on Saudi Arabia-based infrastructure.
+    </p>
+    <div class="cover-pills">
+      <span class="pill accent">Next.js 16</span>
+      <span class="pill accent">Figma-First Design</span>
+      <span class="pill accent">Custom Next.js CMS</span>
+      <span class="pill">jethur.com</span>
+      <span class="pill">Riyadh, Saudi Arabia</span>
+      <span class="pill">Prepared by Codeox Technologies</span>
+    </div>
+  </div>
+
+  <!-- 1. EXECUTIVE SUMMARY -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title">Executive Summary</div>
+      <span class="section-tag">Overview</span>
+    </div>
+    <p class="prose">Jethur is a leading Governance, Risk & Compliance (GRC) platform operating in the Saudi Arabian cybersecurity market — a sector that demands the highest standards of trust, credibility, and digital security. Your current website is built on WordPress, a platform that is inherently at odds with the message a cybersecurity company should be sending to enterprise clients and regulators.</p>
+    <div class="info-box">
+      <p>This proposal outlines Codeox Technologies' plan to revamp the Jethur website from the ground up — replacing the WordPress infrastructure with a secure, enterprise-grade <strong>Next.js 16 application</strong>, designed first in Figma, with a fully custom built-in CMS and deployed on Saudi Arabia-based infrastructure. The result will be a website that reflects Jethur's authority in the GRC space, performs at enterprise standards, and actively contributes to the trust your clients place in you.</p>
+    </div>
+  </div>
+
+  <!-- 2. WHY WORDPRESS IS WRONG -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title">Why WordPress is the Wrong Platform for Jethur</div>
+      <span class="section-tag">The Case for Migration</span>
+    </div>
+    <p class="prose">During our initial discovery meeting, the WordPress-to-Next.js migration was flagged as a strategic priority. Below is the structured case for why continuing on WordPress poses both technical and business risks for a company in Jethur's position.</p>
+
+    <div class="arg-grid">
+      <div class="arg-card">
+        <div class="arg-card-label">2.1 · The Security Argument</div>
+        <div class="arg-card-title">A Compliance Brand on the World's Most-Hacked CMS</div>
+        <div class="arg-card-body">WordPress powers approximately <strong>43% of the internet</strong>, which also makes it the most targeted CMS by attackers worldwide. For a company whose core product is helping clients achieve NCA ECC compliance and manage cybersecurity risk, this creates a direct contradiction. A GRC vendor running on the most-exploited platform is a credibility liability.</div>
+      </div>
+      <div class="arg-card">
+        <div class="arg-card-label">2.2 · The Credibility Argument</div>
+        <div class="arg-card-title">Enterprise Buyers Audit Your Security Posture</div>
+        <div class="arg-card-body">Your target audience — <strong>CISOs, compliance officers, risk managers, and C-suite executives</strong> across Saudi government and private sectors — are sophisticated buyers. Enterprise procurement processes increasingly include vendor cybersecurity assessments. A Next.js application on hardened infrastructure passes these assessments far more convincingly than a CMS-dependent site with plugin dependencies.</div>
+      </div>
+      <div class="arg-card">
+        <div class="arg-card-label">2.3 · The Performance Argument</div>
+        <div class="arg-card-title">Native Performance vs. Expensive Optimisation</div>
+        <div class="arg-card-body">WordPress performance degrades significantly without expensive optimisation layers — caching plugins, CDN configurations, database tuning. <strong>Next.js 16 delivers static generation and server-side rendering natively</strong>, resulting in near-instant page loads that improve both user experience and search engine ranking, with zero additional overhead.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PROJECT SCOPE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title">Project Scope</div>
+      <span class="section-tag">5 Workstreams</span>
+    </div>
+    <p class="prose">The following scope covers the full end-to-end revamp of jethur.com across five workstreams: Discovery & Strategy, Design (Figma), Development (Next.js 16), Custom CMS Build, and Launch & Handover.</p>
+
+    <div class="subsection-title">3.1 — Discovery & Strategy</div>
+    <ul class="feature-list">
+      <li>Stakeholder alignment session to define sitemap, messaging hierarchy, and content priorities</li>
+      <li>Full audit of existing 22-page WordPress site — content inventory, SEO baseline, traffic analysis</li>
+      <li>Competitor and benchmarking analysis across GRC/cybersecurity platforms in the GCC region</li>
+      <li>Definition of target audience personas — CISOs, Compliance Officers, Risk Managers, C-suite</li>
+      <li>Information architecture design — revised sitemap and page hierarchy</li>
+      <li><strong>SEO strategy document</strong> — keyword mapping per page, redirect plan for existing URLs</li>
+    </ul>
+
+    <div class="subsection-title">3.2 — UX & Design (Figma-First)</div>
+    <p class="prose">All design work will be completed in Figma before a single line of code is written. This ensures Jethur has full visibility and sign-off on the experience before development begins.</p>
+    <ul class="feature-list">
+      <li><strong>Design System</strong> — typography scale, color palette, spacing system, component library</li>
+      <li>Low-fidelity wireframes for all key page templates (desktop and mobile)</li>
+      <li>High-fidelity UI designs for all page templates — pixel-perfect, production-ready</li>
+      <li>Interactive prototype in Figma for stakeholder review and client presentations</li>
+      <li>Responsive design specifications — Desktop (1440px), Tablet (768px), Mobile (375px)</li>
+      <li>Accessibility review against WCAG 2.1 AA standards</li>
+      <li>Micro-interaction and animation specifications</li>
+    </ul>
+
+    <div class="subsection-title">3.3 — Frontend Development — Next.js 16</div>
+    <p class="prose">The site will be built on Next.js 16 using the App Router architecture, deployed on Jethur's own server infrastructure or a recommended Saudi Arabia-based cloud environment — ensuring data residency, sovereignty, and latency performance for the Gulf market.</p>
+    <ul class="feature-list">
+      <li><strong>Next.js 16 App Router</strong> — server components, static generation, and ISR (Incremental Static Regeneration)</li>
+      <li><strong>TypeScript</strong> — full type safety across the codebase</li>
+      <li><strong>Tailwind CSS</strong> — utility-first styling, consistent with the Figma design system</li>
+      <li>Component-driven architecture — reusable, documented React components</li>
+      <li><strong>Framer Motion</strong> — smooth, professional page transitions and scroll animations</li>
+      <li>Full SEO implementation — meta tags, structured data (JSON-LD), Open Graph, sitemap.xml, robots.txt</li>
+      <li>Performance optimisation — Core Web Vitals targeting <strong>95+ on Lighthouse</strong></li>
+      <li>Security headers — CSP, HSTS, X-Frame-Options, CORS policies configured at deployment</li>
+      <li>Contact forms with spam protection (reCAPTCHA v3 or Cloudflare Turnstile)</li>
+      <li>Analytics integration — Google Analytics 4 or privacy-first alternative (Plausible)</li>
+    </ul>
+
+    <div class="subsection-title">3.4 — Custom Content Management System (Built in Next.js)</div>
+    <p class="prose">Rather than relying on a third-party headless CMS, a fully custom admin panel will be built directly within the Next.js application. This gives Jethur complete ownership of the CMS, no recurring third-party subscription costs, and a content management experience tailored exactly to the team's workflow — without any external platform dependency.</p>
+    <ul class="feature-list">
+      <li><strong>Custom admin panel</strong> built within the Next.js app — same codebase, no external service</li>
+      <li><strong>Blog / Insights management</strong> — create, edit, publish articles with rich text, images, and tags</li>
+      <li><strong>Custom page builder</strong> — create new landing pages using pre-built block components without code</li>
+      <li>Team & leadership profiles management</li>
+      <li>Case studies and client success stories management</li>
+      <li>Standards & Regulations library — NCA ECC, SAMA, PDPL, NIST, ISO 27001, etc.</li>
+      <li>Product feature pages management</li>
+      <li>User roles and permissions — editor, publisher, admin</li>
+      <li>Media asset management — image upload, optimisation, and delivery</li>
+      <li><strong>Arabic language content support</strong> — RTL-ready architecture</li>
+      <li>No third-party CMS subscription — fully owned by Jethur</li>
+    </ul>
+
+    <div class="subsection-title">3.5 — Pages to be Developed</div>
+    <p class="prose">Based on the existing 22-page site and the discovery session, the following page templates will be designed and built. Each template covers multiple actual pages where content structure repeats.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Template</th>
+            <th>Pages Covered</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Homepage</strong></td>
+            <td>jethur.com/</td>
+            <td><span class="badge badge-cyan">Custom</span></td>
+          </tr>
+          <tr>
+            <td><strong>Product / Solution Pages</strong></td>
+            <td>GRC platform, RootX, feature pages</td>
+            <td><span class="badge badge-cyan">Template</span></td>
+          </tr>
+          <tr>
+            <td><strong>About</strong></td>
+            <td>Company, leadership, culture</td>
+            <td><span class="badge badge-cyan">Custom</span></td>
+          </tr>
+          <tr>
+            <td><strong>Blog / Insights</strong></td>
+            <td>Listing + individual article pages</td>
+            <td><span class="badge badge-amber">CMS-driven</span></td>
+          </tr>
+          <tr>
+            <td><strong>Regulatory Landing Pages</strong></td>
+            <td>NCA ECC, SAMA CSF, PDPL, NIST, ISO 27001</td>
+            <td><span class="badge badge-amber">CMS-driven</span></td>
+          </tr>
+          <tr>
+            <td><strong>Case Studies</strong></td>
+            <td>Client success stories</td>
+            <td><span class="badge badge-amber">CMS-driven</span></td>
+          </tr>
+          <tr>
+            <td><strong>Contact / Demo Request</strong></td>
+            <td>Contact form, schedule demo</td>
+            <td><span class="badge badge-cyan">Custom</span></td>
+          </tr>
+          <tr>
+            <td><strong>Legal Pages</strong></td>
+            <td>Privacy Policy, Terms & Conditions</td>
+            <td><span class="badge badge-cyan">Template</span></td>
+          </tr>
+          <tr>
+            <td><strong>Newsroom</strong></td>
+            <td>Press releases, awards, recognition</td>
+            <td><span class="badge badge-amber">CMS-driven</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. TECHNICAL ARCHITECTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-title">Technical Architecture</div>
+      <span class="section-tag">Stack & Security</span>
+    </div>
+
+    <div class="subsection-title">4.1 — Technology Stack</div>
+    <div class="stack-grid">
+      <div class="stack-item">
+        <div class="stack-layer">Framework</div>
+        <div class="stack-value">Next.js 16</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-layer">Language</div>
+        <div class="stack-value">TypeScript</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-layer">Styling</div>
+        <div class="stack-value">Tailwind CSS</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-layer">Animation</div>
+        <div class="stack-value">Framer Motion</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-layer">CMS</div>
+        <div class="stack-value">Custom (Next.js)</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-layer">Deployment</div>
+        <div class="stack-value">Client Server / KSA Cloud</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-layer">CDN / WAF</div>
+        <div class="stack-value">Cloudflare</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-layer">Design</div>
+        <div class="stack-value">Figma</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-layer">Analytics</div>
+        <div class="stack-value">GA4 / Plausible</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-layer">Forms</div>
+        <div class="stack-value">reCAPTCHA v3 / Turnstile</div>
+      </div>
+    </div>
+
+    <div class="subsection-title">4.2 — Deployment & Infrastructure</div>
+    <div class="info-box">
+      <p>The application will be deployed on <strong>Jethur's own server infrastructure</strong> or a recommended Saudi Arabia-based cloud environment — such as AWS Middle East (Riyadh) region or STC Cloud — ensuring data residency within the Kingdom, compliance with NCA ECC data localisation requirements, and optimal latency for Gulf users. The deployment option will be confirmed during the discovery phase based on Jethur's existing infrastructure and preferences.</p>
+    </div>
+
+    <div class="subsection-title">4.3 — Security Architecture</div>
+    <p class="prose">The following security measures are implemented as standard — not add-ons. These are non-negotiable for a cybersecurity brand.</p>
+    <div class="security-list">
+      <div class="security-item">HTTP Security Headers — CSP, X-Frame-Options, HSTS, Referrer-Policy</div>
+      <div class="security-item">No exposed admin panels or backend endpoints on the public domain</div>
+      <div class="security-item">All API routes secured with server-side authentication</div>
+      <div class="security-item">Cloudflare WAF protecting against OWASP Top 10</div>
+      <div class="security-item">Dependency audit pipeline — automated CVE scanning on every code commit</div>
+      <div class="security-item">HTTPS-only with automatic certificate renewal (TLS 1.3)</div>
+      <div class="security-item">No WordPress, no plugins, no shared execution environment</div>
+      <div class="security-item">Environment variables isolated — no secrets in the codebase</div>
+      <div class="security-item">Privacy-compliant analytics — no PII shared with third parties without consent</div>
+    </div>
+  </div>
+
+  <!-- 5. TIMELINE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-title">Delivery Methodology & Timeline</div>
+      <span class="section-tag">Milestone-Based</span>
+    </div>
+    <p class="prose">The project follows a phased, milestone-based delivery model. Each phase has a defined deliverable and a client sign-off checkpoint before the next phase begins.</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="tl-dot">1</div>
+        <div class="tl-content">
+          <div class="tl-phase">Phase 1</div>
+          <div class="tl-title">Discovery & Strategy</div>
+          <div class="tl-body">Stakeholder alignment, full site audit, competitor benchmarking, persona definition, information architecture, SEO strategy document, redirect plan.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">2</div>
+        <div class="tl-content">
+          <div class="tl-phase">Phase 2</div>
+          <div class="tl-title">Design System & Wireframes</div>
+          <div class="tl-body">Design system creation, low-fidelity wireframes for all templates, client review and sign-off before high-fidelity work begins.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">3</div>
+        <div class="tl-content">
+          <div class="tl-phase">Phase 3</div>
+          <div class="tl-title">High-Fidelity Design (Figma)</div>
+          <div class="tl-body">Pixel-perfect UI designs for all templates at Desktop, Tablet, and Mobile. Interactive Figma prototype for stakeholder presentations. Client sign-off before development.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">4</div>
+        <div class="tl-content">
+          <div class="tl-phase">Phase 4</div>
+          <div class="tl-title">Next.js 16 Development</div>
+          <div class="tl-body">Component-driven build from approved Figma designs. Custom CMS admin panel, form setup, security headers, SEO implementation, analytics. Staged preview environment for client review.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">5</div>
+        <div class="tl-content">
+          <div class="tl-phase">Phase 5</div>
+          <div class="tl-title">QA, Testing & Optimisation</div>
+          <div class="tl-body">Cross-browser testing (Chrome, Safari, Firefox, Edge), responsive QA across all breakpoints, Lighthouse performance audit targeting 90+ scores, accessibility review.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">6</div>
+        <div class="tl-content">
+          <div class="tl-phase">Phase 6</div>
+          <div class="tl-title">Content Migration & CMS Training</div>
+          <div class="tl-body">Migration of existing WordPress content into the custom CMS. 2-hour recorded training session for Jethur's content team on using the admin panel.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">7</div>
+        <div class="tl-content">
+          <div class="tl-phase">Phase 7</div>
+          <div class="tl-title">Launch & Handover</div>
+          <div class="tl-body">DNS cutover, deployment to production, GSC verification, redirect validation. Technical handover documentation. 30-day post-launch bug fix support.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. SCOPE DEFINITION -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div class="section-title">Scope Definition</div>
+      <span class="section-tag">Inclusions & Exclusions</span>
+    </div>
+    <div class="scope-grid">
+      <div class="scope-box scope-in">
+        <div class="scope-head">✓ In Scope</div>
+        <ul class="scope-ul">
+          <li>Full Figma design — wireframes + high fidelity, all templates, all breakpoints</li>
+          <li>Next.js 16 development of all page templates (Section 3.5)</li>
+          <li>Custom Next.js CMS admin panel build and content migration</li>
+          <li>Custom page builder blocks for Jethur's marketing team</li>
+          <li>Full SEO implementation — on-page, technical, structured data, sitemap, redirects</li>
+          <li>Contact and demo request forms with email notification routing</li>
+          <li>Cloudflare integration and security headers setup</li>
+          <li>Deployment to Jethur's server or Saudi Arabia-based cloud infrastructure</li>
+          <li>Cross-browser testing — Chrome, Safari, Firefox, Edge</li>
+          <li>Responsive testing — Desktop, Tablet, Mobile</li>
+          <li>Lighthouse score 90+ across all pages</li>
+          <li>CMS training session (2 hours, recorded)</li>
+          <li>Technical handover documentation</li>
+          <li>30-day post-launch bug fix support</li>
+        </ul>
+      </div>
+      <div class="scope-box scope-out">
+        <div class="scope-head">✗ Out of Scope</div>
+        <ul class="scope-ul">
+          <li>Copywriting and content creation (client to provide all text)</li>
+          <li>Photography or custom illustration</li>
+          <li>Arabic content translation and RTL content population (RTL architecture is in scope)</li>
+          <li>Backend application development (GRC platform integrations, portals, dashboards)</li>
+          <li>Email marketing system integration</li>
+          <li>Paid media campaign setup (Google Ads, LinkedIn)</li>
+          <li>Ongoing content management after handover</li>
+          <li>Server infrastructure provisioning and ongoing hosting costs (billed to client)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. CLIENT RESPONSIBILITIES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <div class="section-title">Client Responsibilities</div>
+      <span class="section-tag">Jethur's Role</span>
+    </div>
+    <p class="prose">A successful project requires active participation from the Jethur team at key milestones. The following responsibilities are assigned to the client to ensure the project stays on schedule.</p>
+    <div class="resp-list">
+      <div class="resp-item">
+        <div class="resp-num">1</div>
+        <div class="resp-text"><strong>Appoint a single Project Owner</strong> as the primary point of contact — all approvals routed through this person.</div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-num">2</div>
+        <div class="resp-text"><strong>Provide all existing brand assets within 5 business days</strong> of project kick-off — logo files, brand guidelines, color codes, fonts.</div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-num">3</div>
+        <div class="resp-text"><strong>Provide all text content</strong> for each page before the development phase begins. A content template will be shared by Codeox.</div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-num">4</div>
+        <div class="resp-text"><strong>Provide feedback on Figma designs within 5 business days</strong> of each design milestone delivery.</div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-num">5</div>
+        <div class="resp-text"><strong>Provide feedback on staged development builds within 5 business days</strong> of each development milestone delivery.</div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-num">6</div>
+        <div class="resp-text">Provide access to the existing WordPress site for content migration review.</div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-num">7</div>
+        <div class="resp-text">Provide <strong>DNS access</strong> for deployment and cutover during the launch phase.</div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-num">8</div>
+        <div class="resp-text">Attend scheduled kick-off, design review, and handover sessions.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. INVESTMENT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <div class="section-title">Investment & Pricing</div>
+      <span class="section-tag">Proposal</span>
+    </div>
+    <p class="prose">The project investment is structured across the seven phases outlined in Section 5. Pricing is fixed-scope and not subject to change unless scope changes are agreed in writing by both parties.</p>
+    <div class="price-card">
+      <div class="price-label">Project Investment</div>
+      <div class="price-amount">$1,600 USD</div>
+      <div class="price-note">Fixed-scope · Third-party infrastructure billed separately</div>
+      <ul class="price-includes">
+        <li>Full Figma design system + wireframes + high-fidelity UI for all templates</li>
+        <li>Next.js 16 development — all page templates (App Router, TypeScript, Tailwind)</li>
+        <li>Custom Next.js CMS admin panel — fully owned, no third-party subscription</li>
+        <li>Custom page builder blocks for Jethur's marketing team</li>
+        <li>Full SEO implementation — structured data, sitemap, redirects, Open Graph</li>
+        <li>Security headers — CSP, HSTS, X-Frame-Options, Cloudflare WAF</li>
+        <li>Cross-browser + responsive QA, Lighthouse 90+ optimisation</li>
+        <li>CMS training session — 2 hours, recorded</li>
+        <li>Technical handover documentation</li>
+        <li>30-day post-launch bug fix support</li>
+      </ul>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Milestone</th>
+            <th>Trigger</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Milestone 1</strong></td>
+            <td>Project commencement / contract signing</td>
+            <td><span style="font-family:var(--mono);font-weight:600">$800 USD</span></td>
+          </tr>
+          <tr>
+            <td><strong>Milestone 2</strong></td>
+            <td>Figma high-fidelity design sign-off</td>
+            <td><span style="font-family:var(--mono);font-weight:600">—</span></td>
+          </tr>
+          <tr>
+            <td><strong>Milestone 3</strong></td>
+            <td>Staged development build approval</td>
+            <td><span style="font-family:var(--mono);font-weight:600">—</span></td>
+          </tr>
+          <tr>
+            <td><strong>Milestone 4</strong></td>
+            <td>Final delivery and launch</td>
+            <td><span style="font-family:var(--mono);font-weight:600">$800 USD</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose" style="font-size:0.78rem;"><strong>Note:</strong> Server infrastructure and hosting costs are billed directly to Jethur and are not included in the project fee. The custom CMS is fully built-in — no third-party CMS subscription required.</p>
+  </div>
+
+  <!-- 9. WHY CODEOX -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">09</div>
+      <div class="section-title">Why Codeox Technologies</div>
+      <span class="section-tag">Our Approach</span>
+    </div>
+    <p class="prose">Codeox Technologies is a software and AI development company based in Riyadh, Saudi Arabia. We specialise in building enterprise-grade digital products for clients across the GCC who require the highest standards of quality, security, and professionalism.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">⚡</div>
+        <div class="why-title">Next.js GCC Specialists</div>
+        <div class="why-body">Deep experience building Next.js applications for B2B SaaS and enterprise clients across the Gulf. We have delivered what we are proposing here, before.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🎨</div>
+        <div class="why-title">Figma-First Process</div>
+        <div class="why-body">Every pixel is intentional and client-approved before development begins. You will never be surprised by what gets built — because you signed off on it in Figma first.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏢</div>
+        <div class="why-title">Saudi Enterprise Buyer Understanding</div>
+        <div class="why-body">We build for CISOs, not just end-users. We understand the Saudi enterprise procurement process, cultural expectations, and the level of trust the market requires.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📍</div>
+        <div class="why-title">Local Team in Riyadh</div>
+        <div class="why-body">On-ground availability for meetings, design reviews, and handover sessions. No time zone delays, no handoff gaps between a remote offshore team.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔗</div>
+        <div class="why-title">Full-Stack Capability</div>
+        <div class="why-body">Strategy, design, development, custom CMS, deployment, and analytics — all under one roof. Design and development are fully integrated internally; no handoff delays between departments.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤖</div>
+        <div class="why-title">AI-Powered SEO</div>
+        <div class="why-body">Our 6-agent SEO system identified 30 issues on the current site. Those findings directly inform what we build next — ensuring the new site launches in a position to rank.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. NEXT STEPS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div class="section-title">Next Steps</div>
+      <span class="section-tag">Getting Started</span>
+    </div>
+    <div class="steps-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Review & Approve This Proposal</div>
+          <div class="step-body">Confirm scope and raise any questions. Scope adjustments can be discussed at this stage before contract signing.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Sign Service Agreement</div>
+          <div class="step-body">Codeox will issue a formal service agreement covering scope, timeline, payment schedule, and IP transfer terms.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Discovery Kick-off Call</div>
+          <div class="step-body">90-minute session to align on sitemap, messaging hierarchy, content priorities, and design direction. Project Owner confirmed. Brand assets shared.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Phase 1 Begins</div>
+          <div class="step-body">Discovery & Strategy workstream commences. Full site audit, competitor analysis, and information architecture delivered within the first two weeks.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. TERMS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <div class="section-title">Terms & Conditions</div>
+      <span class="section-tag">Commercial</span>
+    </div>
+    <div class="terms-list">
+      <div class="term-item">
+        <div class="term-heading">11.1 — Intellectual Property</div>
+        <div class="term-body">Upon receipt of the final payment, all design files (Figma), source code, and website assets created by Codeox Technologies for this project will transfer to Jethur. Codeox Technologies retains the right to display the completed project as portfolio work unless otherwise agreed in writing.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-heading">11.2 — Confidentiality</div>
+        <div class="term-body">Both parties agree to treat all information exchanged during this engagement as confidential, including but not limited to business strategy, technical architecture, pricing, and client data. A mutual NDA can be executed upon request prior to project commencement.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-heading">11.3 — Change Management</div>
+        <div class="term-body">Any changes to the agreed scope must be submitted in writing and will be subject to a Change Request (CR) process. Codeox Technologies will provide a written estimate for any additional work required. Scope changes that materially affect timeline or budget will require a signed amendment before work proceeds.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-heading">11.4 — Late Payment</div>
+        <div class="term-body">Milestone payments are due within 10 business days of invoice issuance. Late payments beyond 15 business days may result in work pausing until payment is received. Codeox Technologies reserves the right to charge a late fee of 2% per additional 30-day period.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-heading">11.5 — Limitation of Liability</div>
+        <div class="term-body">Codeox Technologies' liability for any claim arising from this engagement is limited to the total fees paid by Jethur for the relevant project phase. Codeox Technologies is not liable for third-party platform outages, client content errors, or issues arising from changes made by the client after handover.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://code-ox.com/codeoxlogo.svg" alt="Codeox">
+  <span class="footer-dot">·</span>
+  <span>Codeox Technologies</span>
+  <span class="footer-dot">·</span>
+  <span>Riyadh, Saudi Arabia</span>
+  <span class="footer-dot">·</span>
+  <span>Prepared for Jethur</span>
+  <span class="footer-dot" style="margin-left:auto">·</span>
+  <span>April 2026</span>
+  <span class="footer-dot">·</span>
+  <span>Confidential</span>
+</div>
+
+</body>
+</html>

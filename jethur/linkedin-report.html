@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn Profile Report — Jethur — Code-ox</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --surface2: #f0f2f8;
+  --surface3: #e8ebf4;
+  --border: #dde1ee;
+  --border2: #c8cee3;
+  --accent: #0891b2;
+  --accent-dim: rgba(8,145,178,0.08);
+  --accent-mid: rgba(8,145,178,0.15);
+  --green: #059669;
+  --green-dim: rgba(5,150,105,0.08);
+  --green-mid: rgba(5,150,105,0.15);
+  --amber: #d97706;
+  --amber-dim: rgba(217,119,6,0.08);
+  --amber-mid: rgba(217,119,6,0.15);
+  --red: #dc2626;
+  --red-dim: rgba(220,38,38,0.07);
+  --blue: #2563eb;
+  --blue-dim: rgba(37,99,235,0.08);
+  --purple: #7c3aed;
+  --purple-dim: rgba(124,58,237,0.07);
+  --linkedin: #0a66c2;
+  --linkedin-dim: rgba(10,102,194,0.08);
+  --text: #0f172a;
+  --text-muted: #334155;
+  --text-dim: #64748b;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 48px;
+}
+.breadcrumb-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-family: var(--mono);
+  color: var(--text-dim);
+}
+.breadcrumb-inner a { color: var(--accent); text-decoration: none; }
+.breadcrumb-inner a:hover { text-decoration: underline; }
+.breadcrumb-sep { color: var(--border2); }
+.breadcrumb-inner span:last-child { color: var(--text-muted); font-weight: 500; }
+
+/* ── REPORT HEADER ── */
+.report-header {
+  position: relative;
+  padding: 28px 48px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+}
+.report-header::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -40px;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(10,102,194,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.report-header::after {
+  content: '';
+  position: absolute;
+  bottom: -50px; left: 30%;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(8,145,178,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.header-left { display: flex; align-items: flex-start; gap: 18px; }
+.company-logo {
+  width: 52px; height: 52px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0a66c2, #0891b2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 22px;
+  box-shadow: 0 2px 12px rgba(10,102,194,0.2);
+}
+.header-text { display: flex; flex-direction: column; gap: 4px; }
+.header-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--linkedin);
+  display: flex; align-items: center; gap: 6px;
+}
+.header-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--linkedin);
+}
+.header-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.header-title span { color: var(--linkedin); }
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.header-meta-item {
+  font-size: 12px;
+  color: var(--text-dim);
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--mono);
+}
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.report-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.badge-linkedin { background: var(--linkedin-dim); color: var(--linkedin); border: 1px solid rgba(10,102,194,0.2); }
+.badge-date { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); font-size: 11px; }
+.header-url {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--linkedin);
+  text-decoration: none;
+  background: var(--linkedin-dim);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(10,102,194,0.15);
+}
+.header-url:hover { text-decoration: underline; }
+
+/* ── MAIN LAYOUT ── */
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 48px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ── SECTION HEADERS ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.section-icon {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+.card-sm { padding: 16px 20px; }
+.card-lg { padding: 24px 28px; }
+
+/* ── SCORECARD ── */
+.scorecard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.score-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.score-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 12px 12px 0 0;
+}
+.score-card.amber::before { background: var(--amber); }
+.score-card.orange::before { background: #f97316; }
+.score-card.red::before { background: var(--red); }
+.score-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+.score-value {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.score-value .denom {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+.score-card.amber .score-value { color: var(--amber); }
+.score-card.orange .score-value { color: #f97316; }
+.score-card.red .score-value { color: var(--red); }
+.score-bar-track {
+  height: 6px;
+  background: var(--surface3);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.score-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 1s ease;
+}
+.score-card.amber .score-bar-fill { background: var(--amber); }
+.score-card.orange .score-bar-fill { background: #f97316; }
+.score-card.red .score-bar-fill { background: var(--red); }
+.score-note {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ── INFO GRID ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.info-cell {
+  background: var(--surface);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.info-cell:first-child { border-radius: 10px 0 0 0; }
+.info-cell:nth-child(2) { border-radius: 0 10px 0 0; }
+.info-cell:nth-last-child(2) { border-radius: 0 0 0 10px; }
+.info-cell:last-child { border-radius: 0 0 10px 0; }
+.info-key {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+.info-val {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.info-val a { color: var(--accent); text-decoration: none; }
+.info-val a:hover { text-decoration: underline; }
+.info-val.tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ── QUOTE BLOCK ── */
+.quote-block {
+  background: var(--surface2);
+  border-left: 3px solid var(--linkedin);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.quote-text {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.quote-attr {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+
+/* ── TEAM GRID ── */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+.team-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.team-avatar {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: white;
+}
+.team-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.team-role { font-size: 11.5px; color: var(--text-dim); font-family: var(--mono); }
+.team-loc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+/* ── MODULE CARDS ── */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+.module-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.module-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.mod-cyan::after { background: var(--accent); }
+.mod-green::after { background: var(--green); }
+.mod-blue::after { background: var(--blue); }
+.mod-purple::after { background: var(--purple); }
+.mod-amber::after { background: var(--amber); }
+.module-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  width: fit-content;
+}
+.mod-cyan .module-tag { background: var(--accent-dim); color: var(--accent); }
+.mod-green .module-tag { background: var(--green-dim); color: var(--green); }
+.mod-blue .module-tag { background: var(--blue-dim); color: var(--blue); }
+.mod-purple .module-tag { background: var(--purple-dim); color: var(--purple); }
+.mod-amber .module-tag { background: var(--amber-dim); color: var(--amber); }
+.module-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.module-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+/* ── TECH TAGS ── */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--mono);
+  background: var(--surface2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.tech-tag.accent { background: var(--accent-dim); color: var(--accent); border-color: rgba(8,145,178,0.2); }
+.tech-tag.green { background: var(--green-dim); color: var(--green); border-color: rgba(5,150,105,0.2); }
+.tech-tag.purple { background: var(--purple-dim); color: var(--purple); border-color: rgba(124,58,237,0.15); }
+
+/* ── FRAMEWORK GRID ── */
+.framework-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.framework-tag {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  font-family: var(--mono);
+  background: var(--surface2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.framework-tag.primary {
+  background: var(--linkedin-dim);
+  color: var(--linkedin);
+  border-color: rgba(10,102,194,0.2);
+}
+
+/* ── PROFILE ANALYSIS ── */
+.analysis-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.analysis-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 160px 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+.analysis-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.analysis-value {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+.status-pill {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+.pill-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(217,119,6,0.2); }
+.pill-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(220,38,38,0.15); }
+.pill-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(5,150,105,0.2); }
+.pill-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(37,99,235,0.2); }
+
+/* ── COMPETITOR TABLE ── */
+.comp-table { width: 100%; border-collapse: collapse; }
+.comp-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.comp-table th:first-child { border-radius: 8px 0 0 0; }
+.comp-table th:last-child { border-radius: 0 8px 0 0; }
+.comp-table td {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table tr:hover td { background: var(--surface2); }
+.comp-name { font-weight: 700; }
+.comp-jethur td { background: var(--linkedin-dim) !important; }
+.comp-jethur .comp-name { color: var(--linkedin); }
+
+/* ── RECOGNITION ── */
+.recognition-card {
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(10,102,194,0.03) 100%);
+  border: 1px solid rgba(10,102,194,0.2);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+.recognition-icon {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0a66c2, #0891b2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(10,102,194,0.2);
+}
+.recognition-content { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.recognition-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.recognition-sub { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.recognition-meta {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  margin-top: 4px;
+}
+
+/* ── RECOMMENDATIONS ── */
+.rec-list { display: flex; flex-direction: column; gap: 10px; }
+.rec-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.rec-num {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  background: var(--linkedin-dim);
+  color: var(--linkedin);
+  font-size: 12px;
+  font-weight: 800;
+  font-family: var(--mono);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(10,102,194,0.2);
+}
+.rec-content { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.rec-title { font-size: 13.5px; font-weight: 700; color: var(--text); }
+.rec-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; }
+.rec-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.priority-tag {
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: var(--mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.priority-high { background: var(--red-dim); color: var(--red); border: 1px solid rgba(220,38,38,0.15); }
+.priority-medium { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(217,119,6,0.2); }
+.priority-low { background: var(--green-dim); color: var(--green); border: 1px solid rgba(5,150,105,0.2); }
+.effort-tag {
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text-dim);
+}
+
+/* ── INDIA ENTITY ── */
+.entity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.entity-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.entity-key {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-family: var(--mono);
+}
+.entity-val {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: var(--mono);
+}
+
+/* ── TWO COL ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* ── SUB LABELS ── */
+.sub-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  margin-bottom: 10px;
+}
+
+/* ── REVIEW CARD ── */
+.review-row { display: flex; gap: 12px; }
+.review-card {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.review-platform { font-size: 11.5px; font-weight: 700; color: var(--text-dim); font-family: var(--mono); }
+.review-stars { font-size: 18px; letter-spacing: 2px; }
+.review-score { font-size: 22px; font-weight: 800; color: var(--green); letter-spacing: -0.02em; }
+.review-detail { font-size: 12px; color: var(--text-dim); }
+.review-note { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; font-style: italic; }
+
+/* ── FOOTER ── */
+.report-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 18px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-left { display: flex; flex-direction: column; gap: 3px; }
+.footer-brand {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  letter-spacing: 0.05em;
+}
+.footer-note { font-size: 11px; color: var(--text-dim); }
+.footer-right { font-size: 11.5px; color: var(--text-dim); font-family: var(--mono); }
+
+/* ── ALERT BOX ── */
+.alert {
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.alert-amber { background: var(--amber-dim); border: 1px solid rgba(217,119,6,0.2); color: var(--text-muted); }
+.alert-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  .main { padding: 24px 20px 60px; }
+  .report-header { padding: 20px 20px 18px; }
+  .breadcrumb { padding: 8px 20px; }
+  .scorecard-grid { grid-template-columns: 1fr; }
+  .two-col, .three-col, .info-grid { grid-template-columns: 1fr; }
+  .analysis-item { grid-template-columns: 1fr; gap: 6px; }
+  .report-footer { padding: 16px 20px; flex-direction: column; align-items: flex-start; }
+  .header-top { flex-direction: column; }
+  .header-right { align-items: flex-start; }
+  .review-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- BACK BAR -->
+<div style="background:var(--surface);border-bottom:1px solid var(--border);padding:8px 48px;">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;font-size:0.8rem;font-family:var(--mono);color:var(--text-dim);text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-dim)'">
+    ← Back to Jethur Docs
+  </a>
+</div>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="#">Code-ox</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="#">Jethur</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>LinkedIn Profile Report</span>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="report-header">
+  <div class="header-top">
+    <div class="header-left">
+      <div class="company-logo">in</div>
+      <div class="header-text">
+        <div class="header-eyebrow">LinkedIn Profile Report</div>
+        <h1 class="header-title"><span>Jethur</span> — Company Page Analysis</h1>
+        <div class="header-meta">
+          <span class="header-meta-item">📍 Riyadh, Saudi Arabia</span>
+          <span class="header-meta-item">🏭 RegTech / GRC Software</span>
+          <span class="header-meta-item">📅 Founded 2024</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="report-badge badge-linkedin">LinkedIn Audit</span>
+      <span class="report-badge badge-date">April 2, 2026</span>
+      <a href="https://www.linkedin.com/company/jethur" target="_blank" class="header-url">linkedin.com/company/jethur ↗</a>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- SCORECARD -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--linkedin-dim);">📊</div>
+      <span class="section-title">LinkedIn Health Scorecard</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="scorecard-grid">
+      <div class="score-card amber">
+        <div class="score-label">Profile Completeness</div>
+        <div class="score-value">65<span class="denom">/100</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:65%"></div></div>
+        <div class="score-note">Basic info and about section present. Missing optimized banner, featured content, and showcase pages.</div>
+      </div>
+      <div class="score-card orange">
+        <div class="score-label">Content & Posting</div>
+        <div class="score-value">50<span class="denom">/100</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:50%"></div></div>
+        <div class="score-note">Quality thought leadership content but infrequent cadence. No LinkedIn newsletter. Limited content variety.</div>
+      </div>
+      <div class="score-card red">
+        <div class="score-label">Engagement & Reach</div>
+        <div class="score-value">40<span class="denom">/100</span></div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:40%"></div></div>
+        <div class="score-note">Expected low reach for a 2024 bootstrapped startup. Employee advocacy and CEO branding not yet activated.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPANY OVERVIEW -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--accent-dim);">🏢</div>
+      <span class="section-title">Company Overview</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="card card-lg" style="display:flex;flex-direction:column;gap:16px;">
+      <div class="info-grid">
+        <div class="info-cell">
+          <span class="info-key">Company Name</span>
+          <span class="info-val">Jethur</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-key">Tagline</span>
+          <span class="info-val" style="color:var(--linkedin);">"One Platform, Complete GRC Control"</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-key">Founded</span>
+          <span class="info-val">2024</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-key">Headquarters</span>
+          <span class="info-val">Riyadh, Saudi Arabia</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-key">Industry</span>
+          <span class="info-val">RegTech / GRC Software</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-key">Company Type</span>
+          <span class="info-val"><span class="tag" style="background:var(--green-dim);color:var(--green);border:1px solid rgba(5,150,105,0.2);">Private · Bootstrapped</span></span>
+        </div>
+        <div class="info-cell">
+          <span class="info-key">Website</span>
+          <span class="info-val"><a href="https://jethur.com" target="_blank">jethur.com ↗</a></span>
+        </div>
+        <div class="info-cell">
+          <span class="info-key">LinkedIn URL</span>
+          <span class="info-val"><a href="https://linkedin.com/company/jethur" target="_blank">linkedin.com/company/jethur ↗</a></span>
+        </div>
+        <div class="info-cell">
+          <span class="info-key">Name Origin</span>
+          <span class="info-val" style="font-size:13px;font-weight:500;">"Jethur" = Arabic for "Roots" — strength from interconnected foundations</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-key">Linktree</span>
+          <span class="info-val"><a href="https://linktr.ee/jethurgrc" target="_blank">linktr.ee/jethurgrc ↗</a></span>
+        </div>
+      </div>
+
+      <!-- CEO Quote -->
+      <div class="quote-block">
+        <div class="quote-text">"Risk worked alone. Compliance worked alone. Cyber worked alone. Audit worked alone."</div>
+        <div class="quote-attr">— Hatem Alboush, Founder & CEO · Origin of the Jethur thesis</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--purple-dim);">👥</div>
+      <span class="section-title">Leadership & Team</span>
+      <div class="section-line"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <!-- CEO highlight -->
+      <div class="card" style="display:flex;align-items:flex-start;gap:16px;">
+        <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#0a66c2,#0891b2);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:white;flex-shrink:0;">HA</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span style="font-size:15px;font-weight:800;color:var(--text);">Hatem Alboush</span>
+            <span class="report-badge badge-linkedin">Founder & CEO</span>
+          </div>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.6;">Spent years working across complex technology programs in regulated industries. Observed that risk, compliance, cyber, and audit functions consistently operated in silos with no unified leadership perspective — and built Jethur to create a single source of truth across all governance functions.</p>
+          <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;">
+            <span class="tech-tag">GRC Industry Veteran</span>
+            <span class="tech-tag">RegTech Innovator</span>
+            <span class="tech-tag">Saudi Arabia</span>
+          </div>
+        </div>
+      </div>
+      <!-- Team grid -->
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#0891b2,#0369a1);">SS</div>
+          <div class="team-name">Sharafudheen S S</div>
+          <div class="team-role">Project Manager</div>
+          <div class="team-loc">📍 Riyadh, Saudi Arabia</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">OB</div>
+          <div class="team-name">Oumaima BALTI</div>
+          <div class="team-role">Team Member</div>
+          <div class="team-loc">📍 Jethur</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#059669,#047857);">FJ</div>
+          <div class="team-name">Fatma Ezzahra JAOUANI</div>
+          <div class="team-role">Team Member</div>
+          <div class="team-loc">📍 Jethur</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#d97706,#b45309);">MA</div>
+          <div class="team-name">Mashoor Ahadal</div>
+          <div class="team-role">Team Member</div>
+          <div class="team-loc">📍 Jethur</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#dc2626,#b91c1c);">MK</div>
+          <div class="team-name">Mohammed Khasim Kunnil Shafi</div>
+          <div class="team-role">Team Member</div>
+          <div class="team-loc">📍 Jethur</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDIA ENTITY -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--amber-dim);">🏗️</div>
+      <span class="section-title">India Legal Entity</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="card card-lg">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:15px;font-weight:800;color:var(--text);">Jethur Innovations Private Limited</span>
+        <span class="status-pill pill-green">Active</span>
+      </div>
+      <div class="entity-grid">
+        <div class="entity-field">
+          <span class="entity-key">CIN</span>
+          <span class="entity-val">U62020KL2025PTC093959</span>
+        </div>
+        <div class="entity-field">
+          <span class="entity-key">Incorporated</span>
+          <span class="entity-val">April 25, 2025</span>
+        </div>
+        <div class="entity-field">
+          <span class="entity-key">Registrar</span>
+          <span class="entity-val">ROC Ernakulam</span>
+        </div>
+        <div class="entity-field">
+          <span class="entity-key">Industry</span>
+          <span class="entity-val">Computer Programming & Consultancy</span>
+        </div>
+        <div class="entity-field" style="grid-column:1/-1;">
+          <span class="entity-key">Address</span>
+          <span class="entity-val">Suite 544, 2nd Floor, Cochin Special Economic Zone, Ernakulam, Kerala 682037</span>
+        </div>
+        <div class="entity-field" style="grid-column:1/-1;">
+          <span class="entity-key">Directors</span>
+          <span class="entity-val">Muntasir Mansoor · Ibrahim Ashfaq Ukaye · Muhammed Shihabuddeen Fareed</span>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--amber-dim);border-radius:8px;border:1px solid rgba(217,119,6,0.2);font-size:12.5px;color:var(--text-muted);">
+        <strong>Context:</strong> India subsidiary (likely development/tech arm) incorporated April 2025, ~12 months after the Saudi HQ. Registered in Cochin SEZ suggests software development and export focus.
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT: ROOTX PLATFORM -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--accent-dim);">⚙️</div>
+      <span class="section-title">Product — RootX Platform</span>
+      <div class="section-line"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="card" style="background:linear-gradient(135deg,var(--surface) 0%,rgba(10,102,194,0.02) 100%);">
+        <p style="font-size:13.5px;color:var(--text-muted);line-height:1.65;">RootX is Jethur's unified GRC backbone — a single data model where every organizational element connects: controls, risks, policies, assets, third parties, incidents, BIAs, KRIs, and evidence. Built on an API-first, microservice architecture with cloud and on-premises deployment options.</p>
+      </div>
+
+      <div>
+        <div class="sub-label">Core Modules</div>
+        <div class="module-grid">
+          <div class="module-card mod-cyan">
+            <span class="module-tag">RootCyber</span>
+            <div class="module-name">Cyber GRC</div>
+            <div class="module-desc">Unified cybersecurity governance, risk, and compliance management</div>
+          </div>
+          <div class="module-card mod-green">
+            <span class="module-tag">RootBCM</span>
+            <div class="module-name">Business Continuity</div>
+            <div class="module-desc">BCM planning, BIA management, and resilience frameworks</div>
+          </div>
+          <div class="module-card mod-blue">
+            <span class="module-tag">RootCorp</span>
+            <div class="module-name">Enterprise Risk</div>
+            <div class="module-desc">Enterprise-wide risk management and KRI tracking</div>
+          </div>
+          <div class="module-card mod-purple">
+            <span class="module-tag">RootAM</span>
+            <div class="module-name">Audit Management</div>
+            <div class="module-desc">End-to-end internal and external audit lifecycle management</div>
+          </div>
+          <div class="module-card mod-amber">
+            <span class="module-tag">RootS</span>
+            <div class="module-name">Strategy Management</div>
+            <div class="module-desc">Connect strategic objectives to risk and compliance outcomes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="sub-label">Additional Capabilities</div>
+          <div class="tag-list">
+            <span class="tech-tag">Incident Management</span>
+            <span class="tech-tag">Crisis Management</span>
+            <span class="tech-tag">Vendor/Third-Party Management</span>
+            <span class="tech-tag">Governance & Policy</span>
+            <span class="tech-tag">Document Management</span>
+          </div>
+        </div>
+        <div>
+          <div class="sub-label">Technology Stack</div>
+          <div class="tag-list">
+            <span class="tech-tag accent">API-First</span>
+            <span class="tech-tag accent">Microservices</span>
+            <span class="tech-tag green">Cloud + On-Prem</span>
+            <span class="tech-tag green">iOS &amp; Android</span>
+            <span class="tech-tag purple">AI/ML Engine</span>
+            <span class="tech-tag purple">OpenAI Integration</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sub-label">AI/ML Capabilities</div>
+        <div class="tag-list">
+          <span class="tech-tag purple">Evidence Classification</span>
+          <span class="tech-tag purple">Anomaly Detection</span>
+          <span class="tech-tag purple">Risk Scoring</span>
+          <span class="tech-tag purple">Control Weakness ID</span>
+          <span class="tech-tag purple">Regulatory Obligation Extraction</span>
+          <span class="tech-tag purple">Predictive Compliance</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="sub-label">Compliance Frameworks Supported (25+)</div>
+        <div class="framework-list">
+          <span class="framework-tag primary">ISO 27001</span>
+          <span class="framework-tag primary">GDPR</span>
+          <span class="framework-tag primary">NIST</span>
+          <span class="framework-tag primary">HIPAA</span>
+          <span class="framework-tag primary">PCI DSS</span>
+          <span class="framework-tag primary">NCA</span>
+          <span class="framework-tag primary">SAMA CSF</span>
+          <span class="framework-tag">+ 18 regional frameworks</span>
+          <span class="framework-tag">Europe · APAC · Africa · North America</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINKEDIN PROFILE ANALYSIS -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--linkedin-dim);">🔍</div>
+      <span class="section-title">LinkedIn Profile Analysis</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="analysis-row">
+      <div class="analysis-item">
+        <span class="analysis-label">Profile Completeness</span>
+        <span class="analysis-value">Basic company info, about section, and posts feed are present. Missing: optimized banner image, featured section, showcase pages.</span>
+        <span class="status-pill pill-amber">Partial</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-label">Content Type</span>
+        <span class="analysis-value">Primarily thought leadership, product announcements (RootX, modules), and GRC industry insights. Quality over quantity approach.</span>
+        <span class="status-pill pill-blue">Thought Leadership</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-label">Target Audience</span>
+        <span class="analysis-value">GRC professionals, CISOs, compliance officers, risk managers, financial services and healthcare executives. Mid-to-large regulated organizations.</span>
+        <span class="status-pill pill-green">Well Defined</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-label">Posting Frequency</span>
+        <span class="analysis-value">Regular but infrequent. Early-stage startup still building content engine. No consistent weekly cadence established yet.</span>
+        <span class="status-pill pill-amber">Infrequent</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-label">Engagement Level</span>
+        <span class="analysis-value">Low absolute numbers expected given small following (2024 startup). No employee advocacy program or CEO personal branding amplifying reach.</span>
+        <span class="status-pill pill-red">Low — Early Stage</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-label">LinkedIn Newsletter</span>
+        <span class="analysis-value">No newsletter launched. High-value opportunity given the GRC regulatory update space — compliance officers actively seek framework news.</span>
+        <span class="status-pill pill-red">Missing</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-label">Employee Showcase</span>
+        <span class="analysis-value">Limited employee presence on company page. Team members not yet actively amplifying company content through their personal profiles.</span>
+        <span class="status-pill pill-red">Not Activated</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-label">CEO Personal Brand</span>
+        <span class="analysis-value">Hatem Alboush has a compelling founder story and strong GRC thesis. Personal branding not yet leveraged to build organic company reach.</span>
+        <span class="status-pill pill-amber">Underutilized</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-label">RegTech100 Visibility</span>
+        <span class="analysis-value">Recognition earned (FinTech Global RegTech100 2026) is a major credibility signal that should be prominently featured and celebrated on LinkedIn.</span>
+        <span class="status-pill pill-amber">Opportunity</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPETITORS -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--red-dim);">⚔️</div>
+      <span class="section-title">Competitive Landscape</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;border-radius:12px;">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Category</th>
+            <th>Focus Area</th>
+            <th>LinkedIn Presence</th>
+            <th>Jethur Advantage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="comp-jethur">
+            <td><span class="comp-name">Jethur</span></td>
+            <td><span class="status-pill pill-blue">RegTech · GRC</span></td>
+            <td>Unified GRC platform (RootX backbone)</td>
+            <td><span class="status-pill pill-amber">Growing · Early Stage</span></td>
+            <td>Single data model · AI-native · Regional compliance</td>
+          </tr>
+          <tr>
+            <td><span class="comp-name">AuditBoard</span></td>
+            <td>GRC Platform</td>
+            <td>Audit, risk, compliance management</td>
+            <td><span class="status-pill pill-green">Strong</span></td>
+            <td>Jethur: unified RootX vs. siloed modules</td>
+          </tr>
+          <tr>
+            <td><span class="comp-name">Vanta</span></td>
+            <td>Compliance Automation</td>
+            <td>Security compliance (SOC2, ISO 27001)</td>
+            <td><span class="status-pill pill-green">Very Strong</span></td>
+            <td>Jethur: broader GRC scope, not just security compliance</td>
+          </tr>
+          <tr>
+            <td><span class="comp-name">OneTrust</span></td>
+            <td>GRC · Privacy</td>
+            <td>Privacy, security, data governance</td>
+            <td><span class="status-pill pill-green">Very Strong</span></td>
+            <td>Jethur: MENA-native compliance frameworks (NCA, SAMA)</td>
+          </tr>
+          <tr>
+            <td><span class="comp-name">Drata</span></td>
+            <td>Compliance Automation</td>
+            <td>Continuous compliance monitoring</td>
+            <td><span class="status-pill pill-green">Strong</span></td>
+            <td>Jethur: enterprise depth, BCM, strategy alignment</td>
+          </tr>
+          <tr>
+            <td><span class="comp-name">Sprinto</span></td>
+            <td>Compliance Automation</td>
+            <td>SMB-focused compliance</td>
+            <td><span class="status-pill pill-amber">Moderate</span></td>
+            <td>Jethur: mid-to-large enterprise focus, more comprehensive</td>
+          </tr>
+          <tr>
+            <td><span class="comp-name">Secureframe</span></td>
+            <td>Compliance Automation</td>
+            <td>Security compliance frameworks</td>
+            <td><span class="status-pill pill-amber">Moderate</span></td>
+            <td>Jethur: AI/ML engine, unified data backbone</td>
+          </tr>
+          <tr>
+            <td><span class="comp-name">Palantir</span></td>
+            <td>Data / GRC Analytics</td>
+            <td>Enterprise data, risk analytics</td>
+            <td><span class="status-pill pill-green">Very Strong</span></td>
+            <td>Jethur: GRC-specialized, faster to deploy, purpose-built</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- RECOGNITION -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--amber-dim);">🏆</div>
+      <span class="section-title">Recognition & Media</span>
+      <div class="section-line"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="recognition-card">
+        <div class="recognition-icon">🏆</div>
+        <div class="recognition-content">
+          <div class="recognition-title">RegTech100 2026 — FinTech Global</div>
+          <div class="recognition-sub">Named one of the <strong>100 most innovative regulatory technology companies to watch in 2026</strong> in FinTech Global's 9th Annual RegTech100 report. A remarkable milestone for a company founded only in 2024, competing against established global RegTech players.</div>
+          <div class="recognition-meta">📅 December 2025 · FinTech Global · 9th Annual Report</div>
+        </div>
+      </div>
+      <div class="recognition-card" style="background:linear-gradient(135deg,var(--surface) 0%,rgba(8,145,178,0.02) 100%);border-color:rgba(8,145,178,0.2);">
+        <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#0369a1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px rgba(8,145,178,0.2);">📰</div>
+        <div class="recognition-content">
+          <div class="recognition-title">FinTech Global Feature Article</div>
+          <div class="recognition-sub">"Why strong foundations are an imperative part of Jethur story" — featuring CEO Hatem Alboush and the company's foundational philosophy. Republished by RegTech Analyst, indicating growing industry media attention.</div>
+          <div class="recognition-meta">📅 February 4, 2026 · FinTech Global + RegTech Analyst</div>
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div>
+        <div class="sub-label" style="margin-top:4px;">Customer Reviews</div>
+        <div class="review-row">
+          <div class="review-card">
+            <div class="review-platform">Capterra</div>
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <div class="review-score">5.0 / 5.0</div>
+            <div class="review-detail">2 verified reviews</div>
+            <div class="review-note">"Smooth implementation process and great support. Successfully replaced spreadsheets and multiple disconnected tools with centralized management."</div>
+          </div>
+          <div class="review-card">
+            <div class="review-platform">G2</div>
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <div class="review-score">Listed</div>
+            <div class="review-detail">Profile active on G2</div>
+            <div class="review-note">Listed on G2 as "Jethur GRC". Early presence on major software review platforms — strong foundation for future social proof.</div>
+          </div>
+          <div class="review-card">
+            <div class="review-platform">SoftwareAdvice</div>
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <div class="review-score">Listed</div>
+            <div class="review-detail">Profile active</div>
+            <div class="review-note">Present on SoftwareAdvice marketplace. No free trial available; enterprise sales model with 24/7 support, webinars, and in-person training.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--green-dim);">✅</div>
+      <span class="section-title">LinkedIn Growth Recommendations</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="rec-list">
+      <div class="rec-item">
+        <div class="rec-num">01</div>
+        <div class="rec-content">
+          <div class="rec-title">Optimize Company Banner</div>
+          <div class="rec-desc">Design and upload a professional LinkedIn banner (1,128 × 191 px) featuring the "One Platform, Complete GRC Control" tagline alongside a RootX platform visual. This is the first thing visitors see — make it count with a clear value proposition and brand identity.</div>
+          <div class="rec-meta">
+            <span class="priority-tag priority-high">High Priority</span>
+            <span class="effort-tag">⚡ Low effort · High impact</span>
+          </div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">02</div>
+        <div class="rec-content">
+          <div class="rec-title">Establish a Consistent Posting Cadence</div>
+          <div class="rec-desc">Target 3–4 posts per week with a structured content calendar: <strong>Monday</strong> — Framework Spotlight (ISO 27001, SAMA CSF, NCA deep dives); <strong>Wednesday</strong> — RootX product features and demos; <strong>Friday</strong> — Regulatory news and GRC industry updates; <strong>Sunday</strong> — Team culture and behind-the-scenes.</div>
+          <div class="rec-meta">
+            <span class="priority-tag priority-high">High Priority</span>
+            <span class="effort-tag">📅 Ongoing · Medium effort</span>
+          </div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">03</div>
+        <div class="rec-content">
+          <div class="rec-title">Activate CEO Personal Branding</div>
+          <div class="rec-desc">Hatem Alboush has a compelling founder story and deep GRC expertise. A weekly LinkedIn post from the CEO — covering GRC insights, regulatory trends, and industry commentary — will dramatically amplify company reach. The "Risk worked alone. Compliance worked alone." narrative resonates strongly with the target audience.</div>
+          <div class="rec-meta">
+            <span class="priority-tag priority-high">High Priority</span>
+            <span class="effort-tag">📝 1 post/week · High leverage</span>
+          </div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">04</div>
+        <div class="rec-content">
+          <div class="rec-title">Launch "GRC Intelligence" LinkedIn Newsletter</div>
+          <div class="rec-desc">Create a LinkedIn newsletter covering framework updates, regulatory news, and compliance best practices. GRC professionals and compliance officers actively subscribe to newsletters in this space. A bi-weekly "GRC Intelligence" newsletter positions Jethur as the authoritative voice in unified GRC and builds a recurring subscriber base that receives notifications automatically.</div>
+          <div class="rec-meta">
+            <span class="priority-tag priority-medium">Medium Priority</span>
+            <span class="effort-tag">📰 Bi-weekly · Medium effort</span>
+          </div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">05</div>
+        <div class="rec-content">
+          <div class="rec-title">Activate Employee Advocacy Program</div>
+          <div class="rec-desc">Brief all team members on a simple employee advocacy protocol: reshare one company post per week with a personal comment, engage with CEO posts within the first 30 minutes of publishing (boosts algorithmic reach), and complete their LinkedIn profiles linking back to Jethur. Even a small team of 5–7 active employees can multiply reach 3–5x.</div>
+          <div class="rec-meta">
+            <span class="priority-tag priority-medium">Medium Priority</span>
+            <span class="effort-tag">👥 Team onboarding · Low ongoing effort</span>
+          </div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">06</div>
+        <div class="rec-content">
+          <div class="rec-title">Publish Client Success Case Studies</div>
+          <div class="rec-desc">Create anonymized before/after case study posts showing real transformations: "How [Financial Services Firm] moved from 12 spreadsheets and 4 disconnected tools to a single RootX platform in 6 weeks." These posts convert passive followers into inbound leads and provide tangible proof of value — Capterra reviews confirm the "spreadsheet replacement" story resonates strongly.</div>
+          <div class="rec-meta">
+            <span class="priority-tag priority-medium">Medium Priority</span>
+            <span class="effort-tag">📊 1–2 per month · Medium effort</span>
+          </div>
+        </div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-num">07</div>
+        <div class="rec-content">
+          <div class="rec-title">Publish a High-Visibility RegTech100 Announcement Post</div>
+          <div class="rec-desc">Publish a dedicated post celebrating the RegTech100 2026 recognition from FinTech Global. Use hashtags: <span style="font-family:var(--mono);font-size:12px;color:var(--linkedin);">#RegTech100 #GRC #RegTech #Compliance #CyberGRC #RiskManagement #Jethur</span>. Tag FinTech Global in the post. This award is a major credibility signal for CISOs and compliance officers evaluating vendors — make it visible and pin it to the top of the company page.</div>
+          <div class="rec-meta">
+            <span class="priority-tag priority-high">High Priority</span>
+            <span class="effort-tag">📣 One-time post · Low effort · High visibility</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="report-footer">
+  <div class="footer-left">
+    <div class="footer-brand">Code-ox</div>
+    <div class="footer-note">LinkedIn Profile Report · Jethur · April 2, 2026</div>
+  </div>
+  <div class="footer-right">Prepared by Code-ox · linkedin.com/company/jethur</div>
+</footer>
+
+</body>
+</html>

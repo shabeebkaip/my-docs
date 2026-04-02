@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Proposal — jethur.com — Code-ox</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --surface2: #f0f2f8;
+  --surface3: #e8ebf4;
+  --border: #dde1ee;
+  --border2: #c8cee3;
+  --accent: #0891b2;
+  --accent-dim: rgba(8,145,178,0.08);
+  --accent-mid: rgba(8,145,178,0.15);
+  --red: #dc2626;
+  --red-dim: rgba(220,38,38,0.07);
+  --amber: #d97706;
+  --amber-dim: rgba(217,119,6,0.08);
+  --green: #059669;
+  --green-dim: rgba(5,150,105,0.08);
+  --text: #0f172a;
+  --text-muted: #334155;
+  --text-dim: #64748b;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+}
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 48px;
+}
+.breadcrumb a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.8rem; font-family: var(--mono);
+  color: var(--text-dim); text-decoration: none;
+  transition: color 0.15s;
+}
+.breadcrumb a:hover { color: var(--text); }
+
+/* ── HEADER ── */
+.doc-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 48px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.doc-header::before {
+  content: '';
+  position: absolute; top: -80px; right: -60px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(8,145,178,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-top {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  position: relative; z-index: 1;
+}
+.brand { display: flex; flex-direction: column; gap: 10px; }
+.brand-label {
+  font-size: 0.62rem; font-family: var(--mono);
+  color: var(--accent); letter-spacing: 3px;
+  text-transform: uppercase; display: flex;
+  align-items: center; gap: 8px;
+}
+.brand-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.doc-title {
+  font-size: 2rem; font-weight: 800;
+  letter-spacing: -0.04em; color: var(--text); line-height: 1.1;
+}
+.doc-subtitle {
+  font-size: 0.82rem; font-family: var(--mono);
+  color: var(--text-dim); margin-top: 2px;
+}
+.header-right {
+  display: flex; flex-direction: column;
+  align-items: flex-end; gap: 14px;
+}
+.header-logo { height: 40px; width: auto; display: block; filter: brightness(0); }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.badge {
+  font-size: 0.63rem; font-family: var(--mono);
+  padding: 5px 11px; border-radius: 20px; border: 1px solid;
+  white-space: nowrap;
+}
+.badge-cyan { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.badge-green { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+.badge-dim { border-color: var(--border2); color: var(--text-dim); background: var(--surface2); }
+
+.header-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  border: 1px solid var(--border); border-radius: 10px;
+  overflow: hidden; margin-top: 20px;
+  position: relative; z-index: 1;
+}
+.meta-item {
+  padding: 10px 16px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.meta-item:nth-child(even) { background: var(--surface2); }
+.meta-label {
+  font-size: 0.55rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-dim); margin-bottom: 4px;
+}
+.meta-value { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+.meta-value.green { color: var(--green); }
+
+/* ── CONTAINER ── */
+.container {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 48px 80px;
+}
+
+/* ── SECTION CHROME ── */
+.eyebrow {
+  font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); font-family: var(--mono);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--accent); }
+.sec-title {
+  font-size: 1.35rem; font-weight: 800;
+  letter-spacing: -0.02em; color: var(--text);
+  margin-bottom: 6px;
+}
+.sec-sub {
+  font-size: 0.85rem; color: var(--text-dim);
+  line-height: 1.7; margin-bottom: 28px;
+}
+hr.divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 52px 0;
+}
+
+/* ── CONTEXT SECTION ── */
+.context-section {
+  padding: 52px 0 44px;
+  border-bottom: 1px solid var(--border);
+}
+.context-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.context-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 26px;
+}
+.context-block.accent-border { border-color: var(--accent); }
+.context-block-label {
+  font-size: 0.6rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-dim); margin-bottom: 10px;
+}
+.context-block-title {
+  font-size: 1rem; font-weight: 700;
+  color: var(--text); margin-bottom: 10px;
+  line-height: 1.3;
+}
+.context-block-body {
+  font-size: 0.84rem; color: var(--text-dim);
+  line-height: 1.75;
+}
+
+/* ── SCORE BANNER ── */
+.score-banner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 32px;
+  display: flex; align-items: center; gap: 32px;
+  margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.score-banner::before {
+  content: '';
+  position: absolute; top: 0; left: 0; bottom: 0;
+  width: 4px;
+  background: var(--red);
+}
+.score-num {
+  font-size: 3.5rem; font-weight: 800;
+  font-family: var(--mono); color: var(--red);
+  letter-spacing: -3px; line-height: 1; flex-shrink: 0;
+}
+.score-denom {
+  font-size: 1rem; color: var(--text-dim);
+  font-family: var(--mono); margin-top: 6px;
+}
+.score-info { flex: 1; }
+.score-verdict {
+  font-size: 0.68rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--red); background: var(--red-dim);
+  border: 1px solid rgba(220,38,38,0.2);
+  border-radius: 20px; padding: 4px 12px;
+  display: inline-block; margin-bottom: 10px;
+}
+.score-info-title {
+  font-size: 1.05rem; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.score-info-body {
+  font-size: 0.83rem; color: var(--text-dim); line-height: 1.65;
+}
+
+/* ── SCORE BREAKDOWN ── */
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.brow {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex; align-items: center; gap: 14px;
+}
+.brow-label {
+  font-size: 0.78rem; font-weight: 600;
+  color: var(--text); flex: 1;
+}
+.brow-wt {
+  font-size: 0.62rem; font-family: var(--mono);
+  color: var(--text-dim);
+}
+.brow-bar {
+  width: 80px; height: 5px;
+  background: var(--surface3);
+  border-radius: 99px; overflow: hidden; flex-shrink: 0;
+}
+.brow-fill { height: 100%; border-radius: 99px; }
+.fill-red { background: var(--red); }
+.fill-amber { background: var(--amber); }
+.fill-green { background: var(--green); }
+.brow-score {
+  font-size: 0.78rem; font-weight: 700;
+  font-family: var(--mono); flex-shrink: 0; width: 28px;
+  text-align: right;
+}
+.sc-red { color: var(--red); }
+.sc-amber { color: var(--amber); }
+.sc-green { color: var(--green); }
+
+/* ── ISSUES SUMMARY ── */
+.issues-row {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.issue-pill {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 20px;
+  flex: 1; min-width: 140px;
+}
+.pill-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.pill-dot.c { background: var(--red); }
+.pill-dot.h { background: var(--amber); }
+.pill-dot.m { background: #2563eb; }
+.pill-dot.l { background: var(--text-dim); }
+.pill-label {
+  font-size: 0.7rem; color: var(--text-dim);
+  font-family: var(--mono); flex: 1;
+}
+.pill-count {
+  font-size: 1.2rem; font-weight: 800;
+  color: var(--text); font-family: var(--mono);
+  letter-spacing: -1px;
+}
+
+/* ── OPPORTUNITY SECTION ── */
+.opportunity-section {
+  padding: 52px 0 44px;
+  border-bottom: 1px solid var(--border);
+}
+.opp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.opp-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 22px 20px;
+}
+.opp-icon {
+  font-size: 1.5rem; margin-bottom: 12px;
+}
+.opp-title {
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--text); margin-bottom: 8px;
+}
+.opp-body {
+  font-size: 0.78rem; color: var(--text-dim);
+  line-height: 1.65;
+}
+
+/* ── SCOPE SECTION ── */
+.scope-section {
+  padding: 52px 0 44px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Phase block */
+.phase {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.phase-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 16px;
+  background: var(--surface2);
+}
+.phase-num {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--accent); color: #fff;
+  font-size: 0.75rem; font-weight: 800; font-family: var(--mono);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.phase-info { flex: 1; }
+.phase-title {
+  font-size: 0.95rem; font-weight: 700; color: var(--text);
+  line-height: 1.2;
+}
+.phase-timing {
+  font-size: 0.68rem; font-family: var(--mono);
+  color: var(--text-dim); margin-top: 2px;
+}
+.phase-tag {
+  font-size: 0.62rem; font-family: var(--mono);
+  padding: 4px 10px; border-radius: 20px;
+  border: 1px solid var(--accent); color: var(--accent);
+  background: var(--accent-dim); white-space: nowrap;
+}
+.phase-body { padding: 22px 24px; }
+.phase-desc {
+  font-size: 0.84rem; color: var(--text-dim);
+  line-height: 1.7; margin-bottom: 18px;
+}
+
+/* Checklist */
+.checklist {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cl-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;
+}
+.cl-check {
+  width: 18px; height: 18px; border-radius: 5px;
+  background: var(--green-dim); border: 1px solid rgba(5,150,105,0.25);
+  color: var(--green); font-size: 0.65rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.cl-item strong { color: var(--text); font-weight: 600; }
+.cl-item span { font-family: var(--mono); font-size: 0.7rem; color: var(--text-dim); }
+
+/* Sub-grid inside phase */
+.phase-cols {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+.phase-col-label {
+  font-size: 0.6rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-dim); margin-bottom: 12px;
+}
+
+/* ── DELIVERABLES ── */
+.deliverables-section {
+  padding: 52px 0 44px;
+  border-bottom: 1px solid var(--border);
+}
+.deliv-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.deliv-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+.deliv-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: var(--accent-dim); border: 1px solid var(--accent-mid);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; margin-bottom: 12px;
+}
+.deliv-title {
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--text); margin-bottom: 6px;
+}
+.deliv-body {
+  font-size: 0.77rem; color: var(--text-dim); line-height: 1.65;
+}
+
+/* ── PRICING SECTION ── */
+.pricing-section {
+  padding: 52px 0 44px;
+  border-bottom: 1px solid var(--border);
+}
+.pricing-card {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 620px;
+}
+.pricing-header {
+  background: var(--accent);
+  padding: 22px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pricing-plan {
+  font-size: 0.65rem; font-family: var(--mono);
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(255,255,255,0.7); margin-bottom: 4px;
+}
+.pricing-name {
+  font-size: 1.15rem; font-weight: 800;
+  color: #fff; letter-spacing: -0.02em;
+}
+.pricing-amount {
+  text-align: right;
+}
+.pricing-num {
+  font-size: 2.6rem; font-weight: 800;
+  font-family: var(--mono); color: #fff;
+  letter-spacing: -2px; line-height: 1;
+}
+.pricing-period {
+  font-size: 0.7rem; font-family: var(--mono);
+  color: rgba(255,255,255,0.65); margin-top: 2px;
+}
+.pricing-body { padding: 24px 28px; }
+.pricing-includes-label {
+  font-size: 0.58rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-dim); margin-bottom: 14px;
+}
+.pricing-list {
+  display: flex; flex-direction: column; gap: 9px;
+  margin-bottom: 22px;
+}
+.pricing-item {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.84rem; color: var(--text-muted);
+}
+.pricing-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--accent-dim); border: 1px solid var(--accent-mid);
+  color: var(--accent); font-size: 0.65rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.pricing-note {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-mid);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.pricing-note strong { color: var(--accent); }
+
+/* ── NEXT STEPS ── */
+.next-section {
+  padding: 52px 0 0;
+}
+.steps-row {
+  display: flex; gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.step {
+  flex: 1;
+  padding: 22px 24px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  position: relative;
+}
+.step:last-child { border-right: none; }
+.step-num {
+  font-size: 2rem; font-weight: 800;
+  font-family: var(--mono); color: var(--surface3);
+  line-height: 1; margin-bottom: 10px;
+  letter-spacing: -2px;
+}
+.step-title {
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--text); margin-bottom: 6px;
+}
+.step-body {
+  font-size: 0.77rem; color: var(--text-dim); line-height: 1.6;
+}
+
+/* ── FOOTER ── */
+.doc-footer {
+  padding: 16px 48px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.7rem; color: var(--text-dim);
+  font-family: var(--mono); background: var(--surface);
+}
+.footer-dot { color: var(--border2); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .breadcrumb, .doc-header, .doc-footer { padding-left: 20px; padding-right: 20px; }
+  .container { padding-left: 20px; padding-right: 20px; }
+  .context-grid { grid-template-columns: 1fr; }
+  .opp-grid { grid-template-columns: 1fr; }
+  .breakdown-grid { grid-template-columns: 1fr; }
+  .deliv-grid { grid-template-columns: 1fr; }
+  .phase-cols { grid-template-columns: 1fr; }
+  .steps-row { flex-direction: column; }
+  .step { border-right: none; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .score-banner { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .header-top { flex-direction: column; }
+  .header-right { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html"
+    onmouseover="this.style.color='var(--text)'"
+    onmouseout="this.style.color='var(--text-dim)'">
+    ← Back to Jethur Docs
+  </a>
+</div>
+
+<!-- HEADER -->
+<header class="doc-header">
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-label">
+        <span class="brand-dot"></span>
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox" style="height:22px;width:auto;filter:brightness(0);">
+        &nbsp;·&nbsp; SEO Proposal
+      </div>
+      <div class="doc-title">SEO Retainer Proposal</div>
+      <div class="doc-subtitle">Website Revamp + Ongoing SEO Management &nbsp;·&nbsp; jethur.com</div>
+    </div>
+    <div class="header-right">
+      <img class="header-logo" src="https://jethur.com/wp-content/uploads//2025/05/site-logo-1.svg" alt="Jethur">
+      <div class="badges">
+        <span class="badge badge-cyan">$400 / month</span>
+        <span class="badge badge-green">Revamp Inclusive</span>
+        <span class="badge badge-dim">jethur.com</span>
+        <span class="badge badge-dim">April 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-meta">
+    <div class="meta-item"><div class="meta-label">Prepared For</div><div class="meta-value">Jethur (jethur.com)</div></div>
+    <div class="meta-item"><div class="meta-label">Prepared By</div><div class="meta-value">Code-ox</div></div>
+    <div class="meta-item"><div class="meta-label">Proposal Date</div><div class="meta-value">April 2, 2026</div></div>
+    <div class="meta-item"><div class="meta-label">Monthly Retainer</div><div class="meta-value green">$400 / month</div></div>
+    <div class="meta-item"><div class="meta-label">Audit Baseline</div><div class="meta-value">43 / 100 SEO Score</div></div>
+    <div class="meta-item"><div class="meta-label">Scope</div><div class="meta-value">Revamp SEO + Ongoing</div></div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="container">
+
+  <!-- CONTEXT -->
+  <section class="context-section">
+    <div class="eyebrow">Context</div>
+    <div class="sec-title">The Situation</div>
+    <p class="sec-sub">
+      Our SEO audit of jethur.com revealed a score of 43/100 — well below the benchmark for a competitive Enterprise SaaS in the GRC space. The upcoming website revamp is the ideal moment to rebuild on strong SEO foundations, fixing structural issues at the source rather than patching them afterwards.
+    </p>
+
+    <!-- Score Banner -->
+    <div class="score-banner">
+      <div>
+        <div class="score-num">43</div>
+        <div class="score-denom">/ 100</div>
+      </div>
+      <div class="score-info">
+        <div class="score-verdict">Needs Significant Work</div>
+        <div class="score-info-title">Current SEO health is below competitive threshold</div>
+        <div class="score-info-body">
+          Against competitors like Vanta, Sprinto, and Hyperproof — who rank for high-intent GRC keywords — jethur.com is currently invisible in organic search. With the revamp, we fix this from the ground up.
+        </div>
+      </div>
+    </div>
+
+    <!-- Score Breakdown -->
+    <div class="breakdown-grid">
+      <div class="brow">
+        <div class="brow-label">Technical SEO</div>
+        <div class="brow-wt">25%</div>
+        <div class="brow-bar"><div class="brow-fill fill-amber" style="width:61%"></div></div>
+        <div class="brow-score sc-amber">61</div>
+      </div>
+      <div class="brow">
+        <div class="brow-label">Content / E-E-A-T</div>
+        <div class="brow-wt">25%</div>
+        <div class="brow-bar"><div class="brow-fill fill-red" style="width:40%"></div></div>
+        <div class="brow-score sc-red">40</div>
+      </div>
+      <div class="brow">
+        <div class="brow-label">On-Page SEO</div>
+        <div class="brow-wt">20%</div>
+        <div class="brow-bar"><div class="brow-fill fill-red" style="width:40%"></div></div>
+        <div class="brow-score sc-red">40</div>
+      </div>
+      <div class="brow">
+        <div class="brow-label">Schema / Structured Data</div>
+        <div class="brow-wt">10%</div>
+        <div class="brow-bar"><div class="brow-fill fill-amber" style="width:45%"></div></div>
+        <div class="brow-score sc-amber">45</div>
+      </div>
+      <div class="brow">
+        <div class="brow-label">Performance (CWV)</div>
+        <div class="brow-wt">10%</div>
+        <div class="brow-bar"><div class="brow-fill fill-red" style="width:30%"></div></div>
+        <div class="brow-score sc-red">30</div>
+      </div>
+      <div class="brow">
+        <div class="brow-label">Images</div>
+        <div class="brow-wt">5%</div>
+        <div class="brow-bar"><div class="brow-fill fill-red" style="width:20%"></div></div>
+        <div class="brow-score sc-red">20</div>
+      </div>
+      <div class="brow">
+        <div class="brow-label">AI Search Readiness</div>
+        <div class="brow-wt">5%</div>
+        <div class="brow-bar"><div class="brow-fill fill-red" style="width:28%"></div></div>
+        <div class="brow-score sc-red">28</div>
+      </div>
+    </div>
+
+    <!-- Issues Summary -->
+    <div class="issues-row">
+      <div class="issue-pill">
+        <div class="pill-dot c"></div>
+        <div class="pill-label">Critical</div>
+        <div class="pill-count">5</div>
+      </div>
+      <div class="issue-pill">
+        <div class="pill-dot h"></div>
+        <div class="pill-label">High Priority</div>
+        <div class="pill-count">15</div>
+      </div>
+      <div class="issue-pill">
+        <div class="pill-dot m"></div>
+        <div class="pill-label">Medium</div>
+        <div class="pill-count">10</div>
+      </div>
+      <div class="issue-pill">
+        <div class="pill-dot l"></div>
+        <div class="pill-label">Low / Backlog</div>
+        <div class="pill-count">9</div>
+      </div>
+    </div>
+
+    <!-- Context Blocks -->
+    <div class="context-grid">
+      <div class="context-block accent-border">
+        <div class="context-block-label">Why Now</div>
+        <div class="context-block-title">The revamp is the right time to fix SEO</div>
+        <div class="context-block-body">
+          Most of the 30 identified issues are structural — page architecture, heading hierarchy, schema markup, content strategy, and performance configuration. These are far easier (and cheaper) to fix during a rebuild than retroactively. Launching the new site with these issues already resolved means you start ranking from day one, not catching up.
+        </div>
+      </div>
+      <div class="context-block">
+        <div class="context-block-label">The Opportunity</div>
+        <div class="context-block-title">Strong foundations already exist</div>
+        <div class="context-block-body">
+          Jethur has real competitive advantages that are simply not visible to search engines yet — RegTech100 2026 recognition, ISO certifications across 4 domains, 15+ supported compliance frameworks, and deep regional expertise in Saudi/MENA regulations. The SEO work is about surfacing what already exists, not inventing it.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPPORTUNITY -->
+  <section class="opportunity-section">
+    <div class="eyebrow">Why This Works</div>
+    <div class="sec-title">Three Reasons This Investment Pays Off</div>
+    <p class="sec-sub">GRC is a high-intent, high-value search category. Ranking for the right keywords changes the economics of enterprise lead generation.</p>
+
+    <div class="opp-grid">
+      <div class="opp-card">
+        <div class="opp-icon">🎯</div>
+        <div class="opp-title">High-Intent, High-Value Keywords</div>
+        <div class="opp-body">
+          CISOs and compliance officers searching "GRC software Saudi Arabia," "NCA ECC compliance platform," or "ISO 27001 GRC tool" are ready-to-buy. A single enterprise deal won through organic search covers months of retainer cost.
+        </div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">🤖</div>
+        <div class="opp-title">AI Search is the Next Frontier</div>
+        <div class="opp-body">
+          Jethur's AI search readiness score is 28/100. Buyers increasingly use ChatGPT, Gemini, and Perplexity to evaluate software. Structured data, FAQ content, and E-E-A-T signals directly determine whether Jethur appears in AI-generated answers.
+        </div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">🏆</div>
+        <div class="opp-title">Regional Competitive Gap</div>
+        <div class="opp-body">
+          Global GRC competitors (Vanta, Sprinto, Drata) dominate generic keywords but have weak coverage of MENA-specific mandates — NCA ECC, SAMA CSF, PDPL, Saudi Vision 2030. This is Jethur's clearest path to first-page rankings.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCOPE -->
+  <section class="scope-section">
+    <div class="eyebrow">Scope of Work</div>
+    <div class="sec-title">What's Included</div>
+    <p class="sec-sub">The retainer covers two interconnected streams: SEO integration into the website revamp, and ongoing monthly SEO management after launch.</p>
+
+    <!-- Phase 1 -->
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">01</div>
+        <div class="phase-info">
+          <div class="phase-title">Revamp Integration — SEO-First Build</div>
+          <div class="phase-timing">Delivered as part of the website revamp · Month 1</div>
+        </div>
+        <div class="phase-tag">One-time · Included in retainer</div>
+      </div>
+      <div class="phase-body">
+        <p class="phase-desc">
+          Every issue identified in the SEO audit will be resolved as part of the new site build. Rather than launching and patching, we build the new site SEO-correct from the start. This covers all 5 critical issues and the 15 high-priority issues.
+        </p>
+        <div class="phase-cols">
+          <div>
+            <div class="phase-col-label">Technical Fixes</div>
+            <div class="checklist">
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>CDN Edge Caching</strong> — Cloudflare cache rules configured; 40–60% TTFB reduction</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>HSTS + Security Headers</strong> — HSTS, Referrer-Policy, Permissions-Policy</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Generator Tags Removed</strong> — WordPress, Elementor, SiteKit versions hidden</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>jQuery Migrate Removed</strong> — ~10KB JS reduction on every page</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>URL Structure Unified</strong> — /solution/ vs /solutions/ canonical resolved</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Blog Pagination Fixed</strong> — paginated pages self-canonicalize</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>WP REST API Restricted</strong> — unauthenticated access blocked</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Hero Image Preload</strong> — fetchpriority hint for LCP improvement</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Elementor Asset Loading</strong> — per-page JS; forms scripts only where needed</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="phase-col-label">On-Page & Content</div>
+            <div class="checklist">
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>H1 Corrected</strong> — tagline promoted to H1, current H1 demoted</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Real Estate Copy Removed</strong> — /solution/grc/ rebuilt with proper GRC content</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>JS Stat Counters Fixed</strong> — hardcoded in HTML, animated progressively</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Privacy Policy & T&C Pages</strong> — real pages created and linked</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Mobile CTA Restored</strong> — hidden-tablet/mobile classes removed</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Image Alt Text</strong> — all 25 empty alt attributes filled</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>OG Images Rebuilt</strong> — 1200×630px branded images for all key pages</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Schema Markup Corrected</strong> — Article removed from non-blog pages; SoftwareApplication, AboutPage, ContactPage, CollectionPage added correctly</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Organization sameAs Updated</strong> — LinkedIn, Crunchbase, G2, Capterra linked</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">02</div>
+        <div class="phase-info">
+          <div class="phase-title">Ongoing Monthly SEO Management</div>
+          <div class="phase-timing">Post-launch · Every month</div>
+        </div>
+        <div class="phase-tag">Recurring · $400/month</div>
+      </div>
+      <div class="phase-body">
+        <p class="phase-desc">
+          After launch, SEO is a continuous process. Rankings shift, competitors adapt, and Google's algorithm evolves. The monthly retainer keeps Jethur's SEO health compounding — not stagnating.
+        </p>
+        <div class="phase-cols">
+          <div>
+            <div class="phase-col-label">Content & Authority</div>
+            <div class="checklist">
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Author Profiles Built</strong> — real names, credentials (CRISC, CISM, ISO 27001), bios</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Blog Content Expansion</strong> — existing posts grown to 1,500+ words with expert depth</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Regional Keyword Coverage</strong> — NCA ECC, SAMA CSF, PDPL, Saudi Vision 2030 integrated into copy</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>FAQ Expansion</strong> — 8–10 answer-first questions on /solution/grc/ for AI citation</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Blog Publishing Cadence</strong> — 2+ posts/month on high-intent GRC topics</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>About Page Rebuild</strong> — founding story, leadership bios, certifications, 600+ words</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="phase-col-label">Technical & Monitoring</div>
+            <div class="checklist">
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Monthly Rank Tracking</strong> — target keywords monitored weekly</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>GSC Health Monitoring</strong> — crawl errors, indexing issues, core update impact</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Core Web Vitals Tracking</strong> — CWV score maintained and improved post-launch</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Certification Badges Surfaced</strong> — ISO certs and RegTech100 on all key pages</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Thin/Noindex Audit</strong> — gated/form-only pages removed from sitemap</div>
+              </div>
+              <div class="cl-item">
+                <div class="cl-check">✓</div>
+                <div><strong>Monthly Report</strong> — rankings, traffic, impressions, issues, next month's plan</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DELIVERABLES -->
+  <section class="deliverables-section">
+    <div class="eyebrow">Monthly Deliverables</div>
+    <div class="sec-title">What You Receive Each Month</div>
+    <p class="sec-sub">Tangible outputs every month — not just background work.</p>
+
+    <div class="deliv-grid">
+      <div class="deliv-card">
+        <div class="deliv-icon">📊</div>
+        <div class="deliv-title">SEO Performance Report</div>
+        <div class="deliv-body">Rankings for target keywords, organic traffic trends, impressions in Google Search Console, and CWV scores. Clear progress against the 43/100 baseline.</div>
+      </div>
+      <div class="deliv-card">
+        <div class="deliv-icon">✍️</div>
+        <div class="deliv-title">Content Deliverables</div>
+        <div class="deliv-body">2 blog posts per month optimised for target GRC keywords, plus ongoing expansion of existing page content — About, Solutions, and product pages.</div>
+      </div>
+      <div class="deliv-card">
+        <div class="deliv-icon">🔧</div>
+        <div class="deliv-title">Technical Fixes Log</div>
+        <div class="deliv-body">A documented list of any technical issues found and fixed during the month — new crawl errors, schema changes, redirect issues, Core Web Vitals regressions.</div>
+      </div>
+      <div class="deliv-card">
+        <div class="deliv-icon">🗺️</div>
+        <div class="deliv-title">Next Month's Plan</div>
+        <div class="deliv-body">A clear prioritised action list for the coming month, so you always know exactly what's being worked on and why.</div>
+      </div>
+      <div class="deliv-card">
+        <div class="deliv-icon">🤖</div>
+        <div class="deliv-title">AI Search Readiness Updates</div>
+        <div class="deliv-body">Structured data additions, FAQ updates, and E-E-A-T improvements that increase Jethur's presence in AI-generated answers on ChatGPT, Gemini, and Perplexity.</div>
+      </div>
+      <div class="deliv-card">
+        <div class="deliv-icon">📞</div>
+        <div class="deliv-title">Monthly Check-in</div>
+        <div class="deliv-body">A brief sync call to review the report, discuss findings, and align on priorities. No surprises — full visibility into everything being done and why.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section">
+    <div class="eyebrow">Investment</div>
+    <div class="sec-title">Pricing</div>
+    <p class="sec-sub">One flat monthly fee. No setup fee. No hidden extras.</p>
+
+    <div class="pricing-card">
+      <div class="pricing-header">
+        <div>
+          <div class="pricing-plan">Monthly SEO Retainer</div>
+          <div class="pricing-name">SEO — Website Revamp + Ongoing</div>
+        </div>
+        <div class="pricing-amount">
+          <div class="pricing-num">$400</div>
+          <div class="pricing-period">per month</div>
+        </div>
+      </div>
+      <div class="pricing-body">
+        <div class="pricing-includes-label">Everything Included</div>
+        <div class="pricing-list">
+          <div class="pricing-item">
+            <div class="pricing-check">✓</div>
+            All 30 SEO issues from the audit resolved (critical + high as part of revamp)
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-check">✓</div>
+            Full technical SEO integration into the new website build
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-check">✓</div>
+            On-page SEO: headings, schema, meta tags, OG images, canonical structure
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-check">✓</div>
+            2 SEO blog posts per month targeting high-intent GRC keywords
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-check">✓</div>
+            Regional keyword strategy — NCA ECC, SAMA CSF, PDPL, Saudi Vision 2030
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-check">✓</div>
+            Monthly rank tracking, GSC monitoring, Core Web Vitals
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-check">✓</div>
+            AI search readiness — structured data, FAQ content, E-E-A-T signals
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-check">✓</div>
+            Monthly performance report + next-month action plan
+          </div>
+          <div class="pricing-item">
+            <div class="pricing-check">✓</div>
+            Monthly check-in call — full transparency on all work done
+          </div>
+        </div>
+        <div class="pricing-note">
+          <strong>Note:</strong> The revamp SEO integration (Phase 01) is included within the monthly retainer — there is no separate setup fee or onboarding charge. The retainer begins from the month the revamp project kicks off.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT STEPS -->
+  <section class="next-section">
+    <div class="eyebrow">Getting Started</div>
+    <div class="sec-title">Next Steps</div>
+    <p class="sec-sub">Simple process to get underway.</p>
+
+    <div class="steps-row">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Approve Proposal</div>
+        <div class="step-body">Confirm agreement to the scope and pricing by replying to your Code-ox contact. No contract paperwork — your confirmation is enough to begin.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Revamp Kickoff</div>
+        <div class="step-body">SEO requirements are fed directly into the website revamp brief. All Phase 01 fixes are delivered as part of the build — no additional effort from Jethur's side.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Launch SEO-Ready</div>
+        <div class="step-body">New site goes live with all 30 audit issues resolved. Rank tracking, GSC monitoring, and content work begin from day one of launch.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Monthly Cadence</div>
+        <div class="step-body">Report delivered each month. Rankings tracked weekly. Content published regularly. Jethur's organic presence compounds month over month.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="doc-footer">
+  <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox" style="height:14px;width:auto;filter:brightness(0);opacity:0.4;">
+  <span class="footer-dot">·</span>
+  <span>Code-ox × Jethur</span>
+  <span class="footer-dot" style="margin-left:auto">·</span>
+  <span id="footer-date"></span>
+</footer>
+
+<script>
+  document.getElementById('footer-date').textContent =
+    new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+</script>
+</body>
+</html>

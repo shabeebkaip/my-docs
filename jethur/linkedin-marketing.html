@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn Marketing Proposal — Jethur — Code-ox</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --surface2: #f0f2f8;
+  --surface3: #e8ebf4;
+  --border: #dde1ee;
+  --border2: #c8cee3;
+  --accent: #0891b2;
+  --accent-dim: rgba(8,145,178,0.08);
+  --accent-mid: rgba(8,145,178,0.15);
+  --green: #059669;
+  --green-dim: rgba(5,150,105,0.08);
+  --green-mid: rgba(5,150,105,0.15);
+  --amber: #d97706;
+  --amber-dim: rgba(217,119,6,0.08);
+  --purple: #7c3aed;
+  --purple-dim: rgba(124,58,237,0.07);
+  --text: #0f172a;
+  --text-muted: #334155;
+  --text-dim: #64748b;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+}
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 48px;
+}
+.breadcrumb a {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.8rem; font-family: var(--mono);
+  color: var(--text-dim); text-decoration: none;
+  transition: color 0.15s;
+}
+.breadcrumb a:hover { color: var(--text); }
+
+/* ── HEADER ── */
+.doc-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 48px 28px;
+  position: relative; overflow: hidden;
+}
+.doc-header::before {
+  content: '';
+  position: absolute; top: -80px; right: -60px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(8,145,178,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-top {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  position: relative; z-index: 1;
+}
+.brand { display: flex; flex-direction: column; gap: 10px; }
+.brand-label {
+  font-size: 0.62rem; font-family: var(--mono);
+  color: var(--accent); letter-spacing: 3px;
+  text-transform: uppercase; display: flex;
+  align-items: center; gap: 8px;
+}
+.brand-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.doc-title {
+  font-size: 2rem; font-weight: 800;
+  letter-spacing: -0.04em; color: var(--text); line-height: 1.1;
+}
+.doc-subtitle {
+  font-size: 0.82rem; font-family: var(--mono);
+  color: var(--text-dim); margin-top: 2px;
+}
+.header-right {
+  display: flex; flex-direction: column;
+  align-items: flex-end; gap: 14px;
+}
+.header-logo { height: 40px; width: auto; display: block; filter: brightness(0); }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.badge {
+  font-size: 0.63rem; font-family: var(--mono);
+  padding: 5px 11px; border-radius: 20px; border: 1px solid;
+  white-space: nowrap;
+}
+.badge-cyan  { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.badge-green { border-color: var(--green);  color: var(--green);  background: var(--green-dim); }
+.badge-dim   { border-color: var(--border2); color: var(--text-dim); background: var(--surface2); }
+
+.header-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  border: 1px solid var(--border); border-radius: 10px;
+  overflow: hidden; margin-top: 20px;
+  position: relative; z-index: 1;
+}
+.meta-item {
+  padding: 10px 16px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.meta-item:nth-child(even) { background: var(--surface2); }
+.meta-label {
+  font-size: 0.55rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-dim); margin-bottom: 4px;
+}
+.meta-value { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+.meta-value.accent { color: var(--accent); }
+
+/* ── CONTAINER ── */
+.container {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 48px 80px;
+}
+
+/* ── SECTION CHROME ── */
+.section {
+  padding: 52px 0 44px;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+.eyebrow {
+  font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); font-family: var(--mono);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--accent); }
+.sec-title {
+  font-size: 1.35rem; font-weight: 800;
+  letter-spacing: -0.02em; color: var(--text);
+  margin-bottom: 6px;
+}
+.sec-sub {
+  font-size: 0.85rem; color: var(--text-dim);
+  line-height: 1.7; margin-bottom: 28px; max-width: 580px;
+}
+
+/* ── IMPACT BANNER ── */
+.impact-banner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 28px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-bottom: 28px;
+}
+.impact-item {
+  padding: 8px 20px;
+  border-right: 1px solid var(--border);
+}
+.impact-item:first-child { padding-left: 0; }
+.impact-item:last-child { border-right: none; }
+.impact-val {
+  font-size: 2rem; font-weight: 800;
+  font-family: var(--mono); color: var(--accent);
+  letter-spacing: -2px; line-height: 1; margin-bottom: 4px;
+}
+.impact-label {
+  font-size: 0.65rem; font-family: var(--mono);
+  color: var(--text-dim); text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.impact-note {
+  font-size: 0.62rem; font-family: var(--mono);
+  color: var(--border2); text-align: right;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--border);
+  grid-column: 1 / -1;
+}
+
+/* ── WHY GRID ── */
+.why-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.why-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 22px;
+}
+.why-stat {
+  font-size: 2.2rem; font-weight: 800;
+  font-family: var(--mono); color: var(--accent);
+  letter-spacing: -2px; line-height: 1; margin-bottom: 10px;
+}
+.why-title {
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--text); margin-bottom: 8px;
+}
+.why-body {
+  font-size: 0.79rem; color: var(--text-dim); line-height: 1.65;
+}
+
+/* ── PILLARS ── */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.pillar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+.pillar-num {
+  font-size: 0.6rem; font-family: var(--mono);
+  color: var(--text-dim); letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.pillar-icon { font-size: 1.3rem; margin-bottom: 8px; }
+.pillar-name {
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--text); margin-bottom: 8px;
+}
+.pillar-desc {
+  font-size: 0.78rem; color: var(--text-dim);
+  line-height: 1.65; margin-bottom: 12px;
+}
+.pillar-examples { display: flex; flex-wrap: wrap; gap: 6px; }
+.pillar-ex {
+  font-size: 0.62rem; font-family: var(--mono);
+  padding: 3px 8px; border-radius: 4px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-mid);
+  color: var(--accent);
+}
+
+/* ── CALENDAR ── */
+.calendar-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cal-header {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.cal-week-label {
+  padding: 10px 16px;
+  font-size: 0.62rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-dim); font-weight: 600;
+  border-right: 1px solid var(--border);
+}
+.cal-week-label:last-child { border-right: none; }
+.cal-body {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+}
+.cal-col {
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+}
+.cal-col:last-child { border-right: none; }
+.cal-post {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  flex: 1;
+}
+.cal-post:last-child { border-bottom: none; }
+.cal-post-type {
+  font-size: 0.58rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--accent); margin-bottom: 6px;
+}
+.cal-post-title {
+  font-size: 0.78rem; color: var(--text-muted);
+  line-height: 1.5; font-weight: 500;
+}
+
+/* ── SCOPE / PHASE BLOCKS ── */
+.phase {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.phase-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 16px;
+  background: var(--surface2);
+}
+.phase-num {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--accent); color: #fff;
+  font-size: 0.75rem; font-weight: 800; font-family: var(--mono);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.phase-info { flex: 1; }
+.phase-title {
+  font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1.2;
+}
+.phase-timing {
+  font-size: 0.68rem; font-family: var(--mono);
+  color: var(--text-dim); margin-top: 2px;
+}
+.phase-price {
+  font-size: 0.75rem; font-weight: 700;
+  font-family: var(--mono); color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-mid);
+  padding: 5px 12px; border-radius: 20px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.phase-body { padding: 22px 24px; }
+.phase-desc {
+  font-size: 0.84rem; color: var(--text-dim);
+  line-height: 1.7; margin-bottom: 18px;
+}
+.checklist { display: flex; flex-direction: column; gap: 8px; }
+.cl-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;
+}
+.cl-check {
+  width: 18px; height: 18px; border-radius: 5px;
+  background: var(--green-dim); border: 1px solid var(--green-mid);
+  color: var(--green); font-size: 0.65rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.cl-item strong { color: var(--text); font-weight: 600; }
+.scope-deliverables-label {
+  font-size: 0.58rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-dim); margin-top: 18px; margin-bottom: 10px;
+}
+.scope-deliverables { display: flex; flex-wrap: wrap; gap: 6px; }
+.scope-deliv {
+  font-size: 0.65rem; font-family: var(--mono);
+  padding: 4px 10px; border-radius: 5px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  color: var(--text-dim);
+}
+
+/* ── OUTREACH FLOW ── */
+.outreach-flow {
+  display: flex; gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.of-step {
+  flex: 1; padding: 22px 20px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+}
+.of-step:last-child { border-right: none; }
+.of-num {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--accent); color: #fff;
+  font-size: 0.7rem; font-weight: 800; font-family: var(--mono);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.of-title {
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--text); margin-bottom: 6px;
+}
+.of-desc {
+  font-size: 0.75rem; color: var(--text-dim); line-height: 1.6;
+}
+
+/* ── ICP CARDS ── */
+.icp-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.icp-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 22px;
+}
+.icp-role {
+  font-size: 0.58rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--accent); margin-bottom: 6px;
+}
+.icp-name {
+  font-size: 0.95rem; font-weight: 800;
+  color: var(--text); margin-bottom: 4px;
+}
+.icp-company {
+  font-size: 0.7rem; font-family: var(--mono);
+  color: var(--text-dim); margin-bottom: 16px;
+}
+.icp-section-label {
+  font-size: 0.58rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text-dim); margin-bottom: 8px;
+  padding-top: 12px; border-top: 1px solid var(--border);
+}
+.icp-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 5px;
+  margin-bottom: 4px;
+}
+.icp-list li {
+  font-size: 0.77rem; color: var(--text-dim);
+  line-height: 1.5; display: flex; gap: 8px;
+}
+.icp-list li::before {
+  content: '—'; color: var(--accent);
+  font-family: var(--mono); flex-shrink: 0;
+}
+
+/* ── MESSAGE SEQUENCE ── */
+.msg-sequence {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.msg-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden; display: flex;
+}
+.msg-num {
+  width: 52px;
+  background: var(--surface2);
+  border-right: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; font-weight: 800;
+  font-family: var(--mono); color: var(--accent);
+  flex-shrink: 0;
+}
+.msg-body { padding: 18px 22px; flex: 1; }
+.msg-timing {
+  font-size: 0.6rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--accent); margin-bottom: 6px;
+}
+.msg-subject {
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--text); margin-bottom: 8px;
+}
+.msg-text {
+  font-family: var(--mono); font-size: 0.76rem;
+  color: var(--text-dim); line-height: 1.7;
+  white-space: pre-line;
+}
+
+/* ── KPI PHASES ── */
+.kpi-phases {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.kpi-phase {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.kpi-phase-header {
+  background: var(--surface2);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.kpi-phase-name {
+  font-size: 0.82rem; font-weight: 700; color: var(--text);
+}
+.kpi-phase-period {
+  font-size: 0.62rem; font-family: var(--mono);
+  color: var(--text-dim);
+}
+.kpi-list {
+  padding: 14px 18px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.kpi-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
+}
+.kpi-row:last-child { border-bottom: none; padding-bottom: 0; }
+.kpi-metric { font-size: 0.77rem; color: var(--text-dim); }
+.kpi-target {
+  font-size: 0.75rem; font-weight: 700;
+  font-family: var(--mono); color: var(--accent);
+}
+
+/* ── TIMELINE ── */
+.timeline {
+  position: relative; padding-left: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 6px; top: 8px; bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), rgba(8,145,178,0.15));
+}
+.tl-item { position: relative; padding-bottom: 32px; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-dot {
+  position: absolute; left: -25px; top: 5px;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg);
+}
+.tl-period {
+  font-size: 0.62rem; font-family: var(--mono);
+  color: var(--accent); letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.tl-title {
+  font-size: 0.9rem; font-weight: 700;
+  color: var(--text); margin-bottom: 8px;
+}
+.tl-tasks { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.tl-tasks li {
+  font-size: 0.79rem; color: var(--text-dim);
+  line-height: 1.5; display: flex; gap: 8px;
+}
+.tl-tasks li::before {
+  content: '—'; color: var(--accent);
+  font-family: var(--mono); flex-shrink: 0;
+}
+
+/* ── PRICING ── */
+.pricing-card {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 16px; overflow: hidden;
+  max-width: 620px;
+}
+.pricing-header {
+  background: var(--accent);
+  padding: 22px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pricing-plan {
+  font-size: 0.65rem; font-family: var(--mono);
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(255,255,255,0.7); margin-bottom: 4px;
+}
+.pricing-name {
+  font-size: 1.1rem; font-weight: 800;
+  color: #fff; letter-spacing: -0.02em;
+}
+.pricing-total {
+  text-align: right;
+}
+.pricing-num {
+  font-size: 2.4rem; font-weight: 800;
+  font-family: var(--mono); color: #fff;
+  letter-spacing: -2px; line-height: 1;
+}
+.pricing-period {
+  font-size: 0.68rem; font-family: var(--mono);
+  color: rgba(255,255,255,0.65); margin-top: 2px;
+}
+.pricing-body { padding: 22px 28px; }
+.pricing-breakdown-label {
+  font-size: 0.58rem; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-dim); margin-bottom: 14px;
+}
+.pricing-rows { display: flex; flex-direction: column; gap: 0; margin-bottom: 20px; }
+.pricing-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.pricing-row:last-child { border-bottom: none; }
+.pricing-service { font-size: 0.84rem; color: var(--text-muted); }
+.pricing-price {
+  font-size: 0.88rem; font-weight: 700;
+  font-family: var(--mono); color: var(--accent);
+}
+.pricing-note {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-mid);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.78rem; color: var(--text-dim); line-height: 1.6;
+}
+.pricing-note strong { color: var(--accent); }
+
+/* ── NEXT STEPS ── */
+.steps-row {
+  display: flex; gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.step {
+  flex: 1; padding: 22px 22px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+}
+.step:last-child { border-right: none; }
+.step-num {
+  font-size: 2rem; font-weight: 800;
+  font-family: var(--mono); color: var(--surface3);
+  line-height: 1; margin-bottom: 10px; letter-spacing: -2px;
+}
+.step-title {
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--text); margin-bottom: 6px;
+}
+.step-body { font-size: 0.77rem; color: var(--text-dim); line-height: 1.6; }
+
+/* ── FOOTER ── */
+.doc-footer {
+  padding: 16px 48px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.7rem; color: var(--text-dim);
+  font-family: var(--mono); background: var(--surface);
+}
+.footer-dot { color: var(--border2); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .breadcrumb, .doc-header, .doc-footer { padding-left: 20px; padding-right: 20px; }
+  .container { padding-left: 20px; padding-right: 20px; }
+  .why-grid, .pillars-grid, .icp-grid, .kpi-phases { grid-template-columns: 1fr; }
+  .impact-banner { grid-template-columns: 1fr 1fr; }
+  .outreach-flow { flex-direction: column; }
+  .of-step { border-right: none; border-bottom: 1px solid var(--border); }
+  .of-step:last-child { border-bottom: none; }
+  .steps-row { flex-direction: column; }
+  .step { border-right: none; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .header-top { flex-direction: column; }
+  .header-right { align-items: flex-start; }
+  .cal-header, .cal-body { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html"
+    onmouseover="this.style.color='var(--text)'"
+    onmouseout="this.style.color='var(--text-dim)'">
+    ← Back to Jethur Docs
+  </a>
+</div>
+
+<!-- HEADER -->
+<header class="doc-header">
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-label">
+        <span class="brand-dot"></span>
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox" style="height:22px;width:auto;filter:brightness(0);">
+        &nbsp;·&nbsp; LinkedIn Marketing
+      </div>
+      <div class="doc-title">LinkedIn Marketing Proposal</div>
+      <div class="doc-subtitle">Authority-first growth strategy for GRC leaders &nbsp;·&nbsp; jethur.com</div>
+    </div>
+    <div class="header-right">
+      <img class="header-logo" src="https://jethur.com/wp-content/uploads//2025/05/site-logo-1.svg" alt="Jethur">
+      <div class="badges">
+        <span class="badge badge-cyan">Page Management</span>
+        <span class="badge badge-green">Outreach & Pipeline</span>
+        <span class="badge badge-dim">jethur.com</span>
+        <span class="badge badge-dim">2026</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-meta">
+    <div class="meta-item"><div class="meta-label">Prepared For</div><div class="meta-value">Jethur (jethur.com)</div></div>
+    <div class="meta-item"><div class="meta-label">Prepared By</div><div class="meta-value">Code-ox</div></div>
+    <div class="meta-item"><div class="meta-label">Channel</div><div class="meta-value">LinkedIn</div></div>
+    <div class="meta-item"><div class="meta-label">Content Posts</div><div class="meta-value">12 / month</div></div>
+    <div class="meta-item"><div class="meta-label">Page Management</div><div class="meta-value">12 posts / month</div></div>
+    <div class="meta-item"><div class="meta-label">Outreach</div><div class="meta-value">150+ prospects / month</div></div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="container">
+
+  <!-- WHY LINKEDIN -->
+  <section class="section">
+    <div class="eyebrow">Platform Rationale</div>
+    <div class="sec-title">Why LinkedIn for Jethur</div>
+    <p class="sec-sub">GRC decision-makers live on LinkedIn. It's where CISOs research vendors, compliance directors share challenges, and regulatory leaders build peer networks — making it the highest-ROI channel for Jethur's sales cycle.</p>
+
+    <div class="impact-banner">
+      <div class="impact-item">
+        <div class="impact-val">12</div>
+        <div class="impact-label">Posts / Month</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-val">150+</div>
+        <div class="impact-label">Outreach / Month</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-val">3×</div>
+        <div class="impact-label">More B2B Leads vs. Other Platforms</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-val">96%</div>
+        <div class="impact-label">B2B Marketers on LinkedIn</div>
+      </div>
+      <div class="impact-note">The 12 posts and 150+ outreach are what we commit to delivering each month. Follower and lead growth compound over time with consistency — results vary based on audience, content resonance, and market conditions.</div>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-stat">96%</div>
+        <div class="why-title">B2B Decision-Maker Reach</div>
+        <div class="why-body">96% of B2B marketers use LinkedIn for content distribution. Your buyers are active here — and currently, your competitors are too.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-stat">3×</div>
+        <div class="why-title">Higher Lead Quality</div>
+        <div class="why-body">LinkedIn generates 3× more B2B leads than other social platforms. In regulated industries like GRC, consistent presence builds the trust that eventually accelerates the buying cycle.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-stat">1st</div>
+        <div class="why-title">First-Mover Advantage</div>
+        <div class="why-body">No dominant GRC platform has claimed the LinkedIn thought leadership space in Saudi Arabia. Jethur has a clear window to own that position before competitors do.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT PILLARS -->
+  <section class="section">
+    <div class="eyebrow">Content Strategy</div>
+    <div class="sec-title">Six Content Pillars</div>
+    <p class="sec-sub">Every post maps to one of six strategic pillars — ensuring consistent messaging, varied formats, and full funnel coverage from awareness to conversion.</p>
+
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <div class="pillar-icon">📋</div>
+        <div class="pillar-name">Compliance Intelligence</div>
+        <div class="pillar-desc">Regulatory updates, SAMA/NCA frameworks, PDPL changes — positioned as must-read alerts for Saudi compliance professionals.</div>
+        <div class="pillar-examples">
+          <span class="pillar-ex">Regulation updates</span>
+          <span class="pillar-ex">PDPL breakdowns</span>
+          <span class="pillar-ex">NCA alerts</span>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <div class="pillar-icon">🎯</div>
+        <div class="pillar-name">Product Education</div>
+        <div class="pillar-desc">Showcasing RootX capabilities through demos, use cases, and walkthroughs — showing what AI-driven compliance actually looks like in practice.</div>
+        <div class="pillar-examples">
+          <span class="pillar-ex">Product demos</span>
+          <span class="pillar-ex">Feature reels</span>
+          <span class="pillar-ex">Use cases</span>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <div class="pillar-icon">💡</div>
+        <div class="pillar-name">Thought Leadership</div>
+        <div class="pillar-desc">Founder and team insights on the future of GRC, AI in compliance, and risk management trends in the Gulf region.</div>
+        <div class="pillar-examples">
+          <span class="pillar-ex">Founder posts</span>
+          <span class="pillar-ex">Opinion pieces</span>
+          <span class="pillar-ex">Industry trends</span>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">04</div>
+        <div class="pillar-icon">🏆</div>
+        <div class="pillar-name">Social Proof</div>
+        <div class="pillar-desc">Client wins, RegTech100 recognition, partnerships, and testimonials — building credibility and signalling traction to prospects.</div>
+        <div class="pillar-examples">
+          <span class="pillar-ex">Case studies</span>
+          <span class="pillar-ex">Awards</span>
+          <span class="pillar-ex">Client quotes</span>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">05</div>
+        <div class="pillar-icon">👥</div>
+        <div class="pillar-name">Team & Culture</div>
+        <div class="pillar-desc">Behind-the-scenes posts that humanise Jethur — team members, hiring, company culture, and the Saudi startup journey.</div>
+        <div class="pillar-examples">
+          <span class="pillar-ex">Team spotlights</span>
+          <span class="pillar-ex">Hiring posts</span>
+          <span class="pillar-ex">Events</span>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">06</div>
+        <div class="pillar-icon">🔥</div>
+        <div class="pillar-name">Problem Awareness</div>
+        <div class="pillar-desc">Pain-point posts that resonate with CISOs and compliance officers — highlighting the cost of manual compliance and the risks of outdated tooling.</div>
+        <div class="pillar-examples">
+          <span class="pillar-ex">Pain points</span>
+          <span class="pillar-ex">Stats posts</span>
+          <span class="pillar-ex">Challenge posts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT CALENDAR -->
+  <section class="section">
+    <div class="eyebrow">Monthly Calendar</div>
+    <div class="sec-title">12 Posts Per Month</div>
+    <p class="sec-sub">Three posts per week, strategically distributed across the content pillars. Adjusted each month based on regulatory news and product milestones.</p>
+
+    <div class="calendar-wrap">
+      <div class="cal-header">
+        <div class="cal-week-label">Week 1</div>
+        <div class="cal-week-label">Week 2</div>
+        <div class="cal-week-label">Week 3</div>
+        <div class="cal-week-label">Week 4</div>
+      </div>
+      <div class="cal-body">
+        <div class="cal-col">
+          <div class="cal-post">
+            <div class="cal-post-type">Compliance Intel</div>
+            <div class="cal-post-title">PDPL Update: What it means for Saudi enterprises in Q3</div>
+          </div>
+          <div class="cal-post">
+            <div class="cal-post-type">Thought Leadership</div>
+            <div class="cal-post-title">Why GRC is a board-level conversation in 2026</div>
+          </div>
+          <div class="cal-post">
+            <div class="cal-post-type">Product Education</div>
+            <div class="cal-post-title">How RootX maps controls to SAMA CSF automatically</div>
+          </div>
+        </div>
+        <div class="cal-col">
+          <div class="cal-post">
+            <div class="cal-post-type">Problem Awareness</div>
+            <div class="cal-post-title">Manual compliance tracking is costing your team 20 hours/week</div>
+          </div>
+          <div class="cal-post">
+            <div class="cal-post-type">Social Proof</div>
+            <div class="cal-post-title">Jethur named RegTech100 for 2026 — what this means</div>
+          </div>
+          <div class="cal-post">
+            <div class="cal-post-type">Team & Culture</div>
+            <div class="cal-post-title">Building a GRC platform from Riyadh: the founding story</div>
+          </div>
+        </div>
+        <div class="cal-col">
+          <div class="cal-post">
+            <div class="cal-post-type">Compliance Intel</div>
+            <div class="cal-post-title">NCA Essential Cybersecurity Controls — 2026 checklist</div>
+          </div>
+          <div class="cal-post">
+            <div class="cal-post-type">Product Education</div>
+            <div class="cal-post-title">3-minute demo: Audit trail automation in RootX</div>
+          </div>
+          <div class="cal-post">
+            <div class="cal-post-type">Thought Leadership</div>
+            <div class="cal-post-title">AI and compliance: separating hype from real capability</div>
+          </div>
+        </div>
+        <div class="cal-col">
+          <div class="cal-post">
+            <div class="cal-post-type">Problem Awareness</div>
+            <div class="cal-post-title">What a failed audit really costs (hint: it's not just the fine)</div>
+          </div>
+          <div class="cal-post">
+            <div class="cal-post-type">Social Proof</div>
+            <div class="cal-post-title">Customer story: From spreadsheets to full GRC visibility in 6 weeks</div>
+          </div>
+          <div class="cal-post">
+            <div class="cal-post-type">Team & Culture</div>
+            <div class="cal-post-title">We're hiring — join us in building the future of RegTech</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCOPE OF WORK -->
+  <section class="section">
+    <div class="eyebrow">Scope of Work</div>
+    <div class="sec-title">Two Services, One Team</div>
+    <p class="sec-sub">We operate as an extension of Jethur's marketing function — handling page management and content end-to-end, while running targeted outreach to build a qualified prospect pipeline.</p>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">01</div>
+        <div class="phase-info">
+          <div class="phase-title">Page Management & Content</div>
+          <div class="phase-timing">Ongoing monthly · Full company page management</div>
+        </div>
+        <div class="phase-price">$400 / month</div>
+      </div>
+      <div class="phase-body">
+        <p class="phase-desc">Full LinkedIn company page management — profile, banner, and about section optimised for GRC audience, 12 posts per month across all 6 content pillars, and ongoing community engagement.</p>
+        <div class="checklist">
+          <div class="cl-item"><div class="cl-check">✓</div><div>Full LinkedIn company page management — profile, banner, about section optimised for GRC audience</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>12 posts per month crafted across the 6 content pillars — carousels, text, video scripts</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>Copywriting, design assets, and caption optimisation for LinkedIn's algorithm</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>Hashtag strategy and optimal posting schedule based on audience activity data</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>Comment monitoring and community engagement — replies and conversation seeding</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>Monthly performance report with reach, impressions, engagement, and follower growth</div></div>
+        </div>
+        <div class="scope-deliverables-label">Monthly Deliverables</div>
+        <div class="scope-deliverables">
+          <span class="scope-deliv">12 Posts</span>
+          <span class="scope-deliv">Design Assets</span>
+          <span class="scope-deliv">Captions</span>
+          <span class="scope-deliv">Scheduling</span>
+          <span class="scope-deliv">Monthly Report</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">02</div>
+        <div class="phase-info">
+          <div class="phase-title">Outreach & Pipeline Building</div>
+          <div class="phase-timing">Ongoing monthly · ICP-targeted prospect outreach</div>
+        </div>
+        <div class="phase-price">$500 / month</div>
+      </div>
+      <div class="phase-body">
+        <p class="phase-desc">ICP-targeted connection campaigns, personalised 3-message nurture sequences, and warm lead handoffs — building a steady pipeline of qualified prospects for Jethur's sales team.</p>
+        <div class="checklist">
+          <div class="cl-item"><div class="cl-check">✓</div><div>ICP identification — targeted list of CISOs, CROs, and Compliance Directors at Saudi enterprises and regulated industries</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>150+ personalised connection requests monthly, filtered by seniority, industry, and company size</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>3-message nurture sequence per prospect — personalised to role and regulatory context</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>LinkedIn Sales Navigator used for precision targeting beyond organic reach</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>Warm lead handoff to Jethur's sales team with conversation context and notes</div></div>
+          <div class="cl-item"><div class="cl-check">✓</div><div>Weekly outreach report: sent, accepted, replied, meetings booked</div></div>
+        </div>
+        <div class="scope-deliverables-label">Monthly Deliverables</div>
+        <div class="scope-deliverables">
+          <span class="scope-deliv">150+ Outreach</span>
+          <span class="scope-deliv">Message Sequences</span>
+          <span class="scope-deliv">Lead Handoffs</span>
+          <span class="scope-deliv">Weekly Reports</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTREACH FLOW -->
+  <section class="section">
+    <div class="eyebrow">Outreach Process</div>
+    <div class="sec-title">How We Build Your Pipeline</div>
+    <p class="sec-sub">Every outreach campaign follows a structured 5-step process — from ICP identification to handing warm conversations directly to your sales team.</p>
+
+    <div class="outreach-flow">
+      <div class="of-step">
+        <div class="of-num">1</div>
+        <div class="of-title">ICP Mapping</div>
+        <div class="of-desc">Define target profiles: CISO, CRO, Compliance Director at Saudi enterprises & regulated sectors</div>
+      </div>
+      <div class="of-step">
+        <div class="of-num">2</div>
+        <div class="of-title">Prospect List</div>
+        <div class="of-desc">Sales Navigator search filters: 150+ qualified prospects identified monthly</div>
+      </div>
+      <div class="of-step">
+        <div class="of-num">3</div>
+        <div class="of-title">Connect Request</div>
+        <div class="of-desc">Personalised connection note referencing shared regulatory context or mutual network</div>
+      </div>
+      <div class="of-step">
+        <div class="of-num">4</div>
+        <div class="of-title">Nurture Sequence</div>
+        <div class="of-desc">3-message sequence: value first, problem awareness, then a soft ask for a conversation</div>
+      </div>
+      <div class="of-step">
+        <div class="of-num">5</div>
+        <div class="of-title">Warm Handoff</div>
+        <div class="of-desc">Interested prospects passed to Jethur's team with full conversation context</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ICP PERSONAS -->
+  <section class="section">
+    <div class="eyebrow">Target Audience</div>
+    <div class="sec-title">Ideal Customer Profiles</div>
+    <p class="sec-sub">We target three core decision-maker types across Saudi Arabia's regulated industries — financial services, healthcare, government, and critical infrastructure.</p>
+
+    <div class="icp-grid">
+      <div class="icp-card">
+        <div class="icp-role">ICP 01</div>
+        <div class="icp-name">Chief Information Security Officer</div>
+        <div class="icp-company">Financial Services · Healthcare · Telecom</div>
+        <div class="icp-section-label">Pain Points</div>
+        <ul class="icp-list">
+          <li>Managing NCA and SAMA compliance with fragmented tools</li>
+          <li>Board pressure to demonstrate security posture</li>
+          <li>Audit preparation consuming team bandwidth</li>
+          <li>No real-time visibility across controls</li>
+        </ul>
+        <div class="icp-section-label">Why Jethur Resonates</div>
+        <ul class="icp-list">
+          <li>AI-driven control mapping to NCA/SAMA frameworks</li>
+          <li>Automated audit trail and evidence collection</li>
+          <li>Single dashboard for full GRC visibility</li>
+        </ul>
+      </div>
+      <div class="icp-card">
+        <div class="icp-role">ICP 02</div>
+        <div class="icp-name">Chief Risk Officer</div>
+        <div class="icp-company">Banking · Insurance · Investment Firms</div>
+        <div class="icp-section-label">Pain Points</div>
+        <ul class="icp-list">
+          <li>Manual risk registers and spreadsheet-based tracking</li>
+          <li>Slow incident response and escalation processes</li>
+          <li>Regulatory reporting across multiple frameworks</li>
+          <li>Difficulty quantifying risk exposure for leadership</li>
+        </ul>
+        <div class="icp-section-label">Why Jethur Resonates</div>
+        <ul class="icp-list">
+          <li>Unified risk register with real-time scoring</li>
+          <li>Automated escalation workflows</li>
+          <li>Board-ready reporting in minutes, not days</li>
+        </ul>
+      </div>
+      <div class="icp-card">
+        <div class="icp-role">ICP 03</div>
+        <div class="icp-name">Head of Compliance</div>
+        <div class="icp-company">Government · Regulated Enterprises · Legal</div>
+        <div class="icp-section-label">Pain Points</div>
+        <ul class="icp-list">
+          <li>Keeping pace with PDPL and evolving Saudi regulations</li>
+          <li>Policy management across business units</li>
+          <li>Training and attestation tracking manually</li>
+          <li>External audit preparation stress</li>
+        </ul>
+        <div class="icp-section-label">Why Jethur Resonates</div>
+        <ul class="icp-list">
+          <li>Regulation change tracking with mapped obligations</li>
+          <li>Policy lifecycle management built-in</li>
+          <li>Automated training and attestation workflows</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MESSAGE SEQUENCE -->
+  <section class="section">
+    <div class="eyebrow">Outreach Templates</div>
+    <div class="sec-title">The 3-Message Sequence</div>
+    <p class="sec-sub">Each message is personalised to the prospect's role and context. These templates show the strategic arc — from building rapport to opening a conversation.</p>
+
+    <div class="msg-sequence">
+      <div class="msg-card">
+        <div class="msg-num">1</div>
+        <div class="msg-body">
+          <div class="msg-timing">Day 0 — Connection Request Note</div>
+          <div class="msg-subject">Personalised Connection</div>
+          <div class="msg-text">Hi [Name], I noticed your work at [Company] — especially around [compliance/risk area]. We're building Jethur, an AI-powered GRC platform focused specifically on SAMA and NCA frameworks. Would love to connect and share what we're seeing in the Saudi compliance space.</div>
+        </div>
+      </div>
+      <div class="msg-card">
+        <div class="msg-num">2</div>
+        <div class="msg-body">
+          <div class="msg-timing">Day 3–5 — Value Message (after acceptance)</div>
+          <div class="msg-subject">Insight Share</div>
+          <div class="msg-text">Thanks for connecting, [Name]. We recently published a breakdown of the [PDPL/NCA/SAMA] changes that are affecting [their industry] — happy to share it directly if useful. We've also put together a short overview of how teams like yours are using RootX to cut audit prep time significantly. Worth a look?</div>
+        </div>
+      </div>
+      <div class="msg-card">
+        <div class="msg-num">3</div>
+        <div class="msg-body">
+          <div class="msg-timing">Day 10–12 — Soft Ask</div>
+          <div class="msg-subject">Meeting Request</div>
+          <div class="msg-text">Hey [Name], last message — I know you're busy. If [compliance challenge] is something on your radar for 2026, I'd genuinely enjoy a 20-minute call to show you what RootX does and get your take on it. No sales pressure — just a conversation. Would any time next week work?</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI METRICS -->
+  <section class="section">
+    <div class="eyebrow">Metrics & Reporting</div>
+    <div class="sec-title">What We Track Each Month</div>
+    <p class="sec-sub">We track and report on these metrics across three phases. Follower growth and engagement improve with consistency over time — we don't guarantee specific numbers, but we commit to the inputs that drive them.</p>
+
+    <div class="kpi-phases">
+      <div class="kpi-phase">
+        <div class="kpi-phase-header">
+          <div class="kpi-phase-name">Phase 1 — Foundation</div>
+          <div class="kpi-phase-period">Month 1</div>
+        </div>
+        <div class="kpi-list">
+          <div class="kpi-row"><div class="kpi-metric">Page Followers</div><div class="kpi-target">Tracking</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Avg. Post Impressions</div><div class="kpi-target">Tracking</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Connection Requests Sent</div><div class="kpi-target">150 ✓</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Connection Accept Rate</div><div class="kpi-target">Tracking</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Profile Visits</div><div class="kpi-target">Tracking</div></div>
+        </div>
+      </div>
+      <div class="kpi-phase">
+        <div class="kpi-phase-header">
+          <div class="kpi-phase-name">Phase 2 — Traction</div>
+          <div class="kpi-phase-period">Month 2</div>
+        </div>
+        <div class="kpi-list">
+          <div class="kpi-row"><div class="kpi-metric">Follower Growth</div><div class="kpi-target">Trending up</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Avg. Post Impressions</div><div class="kpi-target">vs. Month 1</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Message Replies</div><div class="kpi-target">Tracking</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Qualified Conversations</div><div class="kpi-target">Tracking</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Outreach Sent</div><div class="kpi-target">150 ✓</div></div>
+        </div>
+      </div>
+      <div class="kpi-phase">
+        <div class="kpi-phase-header">
+          <div class="kpi-phase-name">Phase 3 — Consistency</div>
+          <div class="kpi-phase-period">Month 3+</div>
+        </div>
+        <div class="kpi-list">
+          <div class="kpi-row"><div class="kpi-metric">Follower Growth</div><div class="kpi-target">Compounding</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Content Reach</div><div class="kpi-target">vs. Month 1</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Total Outreach (cumulative)</div><div class="kpi-target">450+ ✓</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Warm Conversations</div><div class="kpi-target">Tracking</div></div>
+          <div class="kpi-row"><div class="kpi-metric">Posts Published</div><div class="kpi-target">36 ✓</div></div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:0.75rem;font-family:var(--mono);color:var(--text-dim);margin-top:16px;line-height:1.7;">
+      ✓ = committed deliverable &nbsp;·&nbsp; Tracking = reported monthly, growth depends on content resonance, audience, and consistency over time
+    </p>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="section">
+    <div class="eyebrow">Implementation Plan</div>
+    <div class="sec-title">90-Day Roadmap</div>
+    <p class="sec-sub">From kickoff to active pipeline — a structured 90-day plan to establish Jethur's LinkedIn presence, build an audience, and generate qualified leads.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Week 1–2 · Onboarding</div>
+        <div class="tl-title">Foundation & Setup</div>
+        <ul class="tl-tasks">
+          <li>LinkedIn page audit and full optimisation (headline, about, banner, CTA)</li>
+          <li>Brand voice and tone guidelines document for Jethur's LinkedIn presence</li>
+          <li>Content pillar definition and first month content calendar approval</li>
+          <li>ICP definition workshop — refine target persona list with Jethur team</li>
+          <li>Sales Navigator setup and initial prospect list of 150+ contacts</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Week 3–6 · Month 1</div>
+        <div class="tl-title">Launch & Establish</div>
+        <ul class="tl-tasks">
+          <li>12 posts published across all 6 content pillars</li>
+          <li>Outreach campaign launched — 150 connection requests sent</li>
+          <li>Engagement strategy active — commenting on industry content to boost visibility</li>
+          <li>First weekly outreach reports delivered to Jethur team</li>
+          <li>End-of-month performance review and strategy refinement</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Week 7–10 · Month 2</div>
+        <div class="tl-title">Optimise & Scale</div>
+        <ul class="tl-tasks">
+          <li>Top-performing content formats doubled down on based on Month 1 data</li>
+          <li>Second outreach batch launched — nurture sequences begin for Month 1 accepts</li>
+          <li>First warm leads handed off to Jethur's sales team</li>
+          <li>Introduce carousel posts and richer media formats</li>
+          <li>Mid-quarter review — adjust ICP targeting based on response rates</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Week 11–13 · Month 3</div>
+        <div class="tl-title">Pipeline & Review</div>
+        <ul class="tl-tasks">
+          <li>Full 3-month content library built — repurposable across future channels</li>
+          <li>450+ prospects contacted cumulatively across all outreach batches</li>
+          <li>Warm conversations handed to Jethur's sales team as they develop</li>
+          <li>Comprehensive 90-day report — what worked, what to double down on</li>
+          <li>Recommendations for month 4+ based on real performance data</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section">
+    <div class="eyebrow">Investment</div>
+    <div class="sec-title">Transparent, Simple Pricing</div>
+    <p class="sec-sub">Two distinct services, one focused team. Start with page management alone or combine both for a full-funnel LinkedIn growth engine.</p>
+
+    <div class="pricing-card">
+      <div class="pricing-header">
+        <div>
+          <div class="pricing-plan">Monthly Retainer Options</div>
+          <div class="pricing-name">Full LinkedIn Growth Package</div>
+        </div>
+        <div class="pricing-total">
+          <div class="pricing-num">$900</div>
+          <div class="pricing-period">per month (combined)</div>
+        </div>
+      </div>
+      <div class="pricing-body">
+        <div class="pricing-breakdown-label">Service Breakdown</div>
+        <div class="pricing-rows">
+          <div class="pricing-row">
+            <div class="pricing-service">Service 01 — Page Management & Content (12 posts/month, community engagement, reporting)</div>
+            <div class="pricing-price">$400 / mo</div>
+          </div>
+          <div class="pricing-row">
+            <div class="pricing-service">Service 02 — Outreach & Pipeline Building (150+ prospects, nurture sequences, lead handoffs)</div>
+            <div class="pricing-price">$500 / mo</div>
+          </div>
+        </div>
+        <div class="pricing-note">
+          <strong>Note:</strong> Services can be taken individually or combined. Month-to-month — no long-term contract required. Cancel anytime.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT STEPS -->
+  <section class="section">
+    <div class="eyebrow">Getting Started</div>
+    <div class="sec-title">Next Steps</div>
+    <p class="sec-sub">Simple process to get underway — from approval to active campaigns in under two weeks.</p>
+
+    <div class="steps-row">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Approve Proposal</div>
+        <div class="step-body">Confirm the scope and pricing by replying to your Code-ox contact. Choose page management only, outreach only, or the full package.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Onboarding Call</div>
+        <div class="step-body">A 60-minute kickoff session to align on brand voice, ICP definitions, content calendar, and outreach messaging. We handle the rest.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Page Optimisation</div>
+        <div class="step-body">LinkedIn company page fully optimised in week 1. Content calendar approved. First posts go live in week 2, alongside the first outreach batch.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Monthly Cadence</div>
+        <div class="step-body">12 posts published. 150+ prospects reached. Weekly outreach reports. Monthly performance review. Pipeline compounds month over month.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="doc-footer">
+  <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox" style="height:14px;width:auto;filter:brightness(0);opacity:0.4;">
+  <span class="footer-dot">·</span>
+  <span>Code-ox × Jethur</span>
+  <span class="footer-dot" style="margin-left:auto">·</span>
+  <span id="footer-date"></span>
+</footer>
+
+<script>
+  document.getElementById('footer-date').textContent =
+    new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+</script>
+</body>
+</html>

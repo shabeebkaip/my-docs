@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jethur — Docs</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --bg: #f4f6fa;
+    --surface: #ffffff;
+    --surface2: #f0f2f8;
+    --border: #dde1ee;
+    --accent: #0891b2;
+    --text: #0f172a;
+    --muted: #64748b;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .header-brand { display: flex; flex-direction: column; gap: 4px; }
+  .logo img { height: 36px; width: auto; display: block; filter: brightness(0); }
+  .tagline { font-size: 0.75rem; color: var(--muted); font-family: var(--mono); }
+  .header-meta { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .header-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .header-badge img { height: 14px; width: auto; filter: brightness(0); opacity: 0.6; }
+
+  .main {
+    flex: 1;
+    padding: 40px 48px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .doc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-card:hover {
+    border-color: var(--card-color, var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  }
+
+  .card-top { display: flex; align-items: flex-start; gap: 14px; }
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .card-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 3px; line-height: 1.3; color: var(--text); }
+  .card-subtitle { font-size: 0.7rem; color: var(--muted); font-family: var(--mono); }
+  .card-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; flex: 1; }
+  .card-footer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .card-tag {
+    font-size: 0.62rem;
+    font-family: var(--mono);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface2);
+  }
+  .card-arrow { margin-left: auto; color: var(--muted); font-size: 0.85rem; transition: transform 0.15s, color 0.15s; }
+  .doc-card:hover .card-arrow { transform: translateX(3px); color: var(--card-color, var(--accent)); }
+
+  /* ── INTRO ── */
+  .intro {
+    padding: 48px 0 36px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: center;
+  }
+  .intro-eyebrow {
+    font-size: 0.62rem; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); font-family: var(--mono);
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 14px;
+  }
+  .intro-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--accent); }
+  .intro h1 {
+    font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+    font-weight: 800; letter-spacing: -0.03em;
+    color: var(--text); line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .intro h1 span { color: var(--accent); }
+  .intro-desc {
+    font-size: 0.9rem; color: var(--muted);
+    line-height: 1.8; max-width: 500px;
+  }
+  .intro-stats {
+    display: flex; flex-direction: column; gap: 0;
+    border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; flex-shrink: 0; min-width: 200px;
+  }
+  .istat {
+    padding: 16px 22px; border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .istat:last-child { border-bottom: none; }
+  .istat-val {
+    font-size: 1.5rem; font-weight: 800; color: var(--accent);
+    letter-spacing: -0.03em; line-height: 1;
+    margin-bottom: 3px;
+  }
+  .istat-label {
+    font-size: 0.65rem; color: var(--muted);
+    font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .scope-chips {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px;
+  }
+  .scope-chip {
+    font-size: 0.68rem; font-weight: 600; font-family: var(--mono);
+    padding: 5px 12px; border-radius: 100px;
+    background: rgba(8,145,178,0.07);
+    border: 1px solid rgba(8,145,178,0.2);
+    color: var(--accent); letter-spacing: 0.04em;
+  }
+
+  .footer {
+    padding: 16px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    background: var(--surface);
+  }
+  .footer-dot { color: var(--border); }
+
+  @media (max-width: 700px) {
+    .header { padding: 16px 20px; }
+    .main { padding: 24px 20px; }
+    .footer { padding: 14px 20px; }
+    .intro { grid-template-columns: 1fr; }
+    .intro-stats { flex-direction: row; min-width: unset; }
+    .istat { border-bottom: none; border-right: 1px solid var(--border); flex: 1; }
+    .istat:last-child { border-right: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">
+    <div class="logo">
+      <img src="https://jethur.com/wp-content/uploads//2025/05/site-logo-1.svg" alt="Jethur">
+    </div>
+    <div class="tagline">project documentation</div>
+  </div>
+  <div class="header-meta">
+    <span class="header-badge">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+      Code-ox
+    </span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- INTRO -->
+  <div class="intro">
+    <div>
+      <div class="intro-eyebrow">Project Documentation</div>
+      <h1>Digital Growth<br>for <span>Jethur.</span></h1>
+      <p class="intro-desc">
+        This space contains all strategy documents, reports, and planning materials prepared by Code-ox for Jethur's digital presence — covering SEO, LinkedIn marketing, and website development.
+      </p>
+      <div class="scope-chips">
+        <span class="scope-chip">LinkedIn Marketing </span>
+        <span class="scope-chip">Website </span>
+        <span class="scope-chip">SEO </span>
+        <span class="scope-chip">Performance Reports</span>
+      </div>
+    </div>
+    <div class="intro-stats">
+      <div class="istat">
+        <div class="istat-val">6</div>
+        <div class="istat-label">Documents</div>
+      </div>
+      <div class="istat">
+        <div class="istat-val">3</div>
+        <div class="istat-label">Focus Areas</div>
+      </div>
+      <div class="istat">
+        <div class="istat-val">2026</div>
+        <div class="istat-label">Project Year</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Reports</div>
+  <div class="doc-grid" style="margin-bottom: 48px;">
+
+    <a class="doc-card" href="website-report.html" style="--card-color:#dc2626">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(220,38,38,0.08)">🔎</div>
+        <div>
+          <div class="card-title">Website Audit Report</div>
+          <div class="card-subtitle">website-report.html · March 2026</div>
+        </div>
+      </div>
+      <div class="card-desc">Diagnostic audit of the current jethur.com — 25 issues documented across 7 categories including 6 critical conversion and trust failures.</div>
+      <div class="card-footer">
+        <span class="card-tag">Report</span>
+        <span class="card-tag">25 Issues</span>
+        <span class="card-tag">6 Critical</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card" href="seo-report.html" style="--card-color:#0891b2">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(8,145,178,0.08)">📊</div>
+        <div>
+          <div class="card-title">SEO Report</div>
+          <div class="card-subtitle">seo-report.html</div>
+        </div>
+      </div>
+      <div class="card-desc">SEO analysis and performance report for Jethur.</div>
+      <div class="card-footer">
+        <span class="card-tag">Report</span>
+        <span class="card-tag">SEO</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card" href="linkedin-report.html" style="--card-color:#0a66c2">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(10,102,194,0.08)">💼</div>
+        <div>
+          <div class="card-title">LinkedIn Report</div>
+          <div class="card-subtitle">linkedin-report.html · March 2026</div>
+        </div>
+      </div>
+      <div class="card-desc">LinkedIn presence and performance report for Jethur.</div>
+      <div class="card-footer">
+        <span class="card-tag">Report</span>
+        <span class="card-tag">LinkedIn</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Proposals</div>
+  <div class="doc-grid">
+
+    <a class="doc-card" href="website.html" style="--card-color:#0891b2">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(8,145,178,0.08)">🌐</div>
+        <div>
+          <div class="card-title">Website Proposal</div>
+          <div class="card-subtitle">website.html</div>
+        </div>
+      </div>
+      <div class="card-desc">Website revamp proposal — scope, approach, and deliverables for Jethur's new site.</div>
+      <div class="card-footer">
+        <span class="card-tag">Proposal</span>
+        <span class="card-tag">Website</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card" href="seo-proposal.html" style="--card-color:#059669">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(5,150,105,0.08)">📋</div>
+        <div>
+          <div class="card-title">SEO Proposal</div>
+          <div class="card-subtitle">seo-proposal.html</div>
+        </div>
+      </div>
+      <div class="card-desc">SEO retainer proposal — website revamp integration + ongoing monthly SEO management at $400/month.</div>
+      <div class="card-footer">
+        <span class="card-tag">Proposal</span>
+        <span class="card-tag">SEO</span>
+        <span class="card-tag">$400/mo</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="doc-card" href="linkedin-marketing.html" style="--card-color:#0891b2">
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(8,145,178,0.08)">📣</div>
+        <div>
+          <div class="card-title">LinkedIn Marketing Proposal</div>
+          <div class="card-subtitle">linkedin-marketing.html</div>
+        </div>
+      </div>
+      <div class="card-desc">LinkedIn marketing strategy and content plan for Jethur.</div>
+      <div class="card-footer">
+        <span class="card-tag">Proposal</span>
+        <span class="card-tag">LinkedIn</span>
+        <span class="card-tag">Marketing</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox" style="height:14px;width:auto;filter:brightness(0);opacity:0.4;">
+  <span class="footer-dot">·</span>
+  <span>Jethur Docs</span>
+  <span class="footer-dot" style="margin-left:auto">·</span>
+  <span id="footer-date"></span>
+</div>
+
+<script>
+  document.getElementById('footer-date').textContent =
+    new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+</script>
+</body>
+</html>
