@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our workss — Codeox Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;400;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f4f9;--bg1:#e6ecf4;
+  --card:#ffffff;--cb:rgba(0,30,80,.1);--cbh:rgba(0,87,255,.3);
+  --accent:#0057ff;--blue:#0033cc;--violet:#7c3aed;
+  --adim:rgba(0,87,255,.07);
+  --t1:#0d1829;--t2:#3a546e;--t3:#6b88a4;
+  --r:20px;--rp:100px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t1);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:rgba(0,87,255,.4);border-radius:2px}
+
+/* BG */
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(120px)}
+.bg-orb-1{width:900px;height:900px;background:radial-gradient(circle,rgba(0,87,255,.07),transparent 68%);top:-350px;right:-200px}
+.bg-orb-2{width:700px;height:700px;background:radial-gradient(circle,rgba(0,150,255,.05),transparent 68%);bottom:-250px;left:-200px}
+.bg-orb-3{width:500px;height:500px;background:radial-gradient(circle,rgba(124,58,237,.04),transparent 68%);top:45%;left:35%}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,87,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,87,255,.04) 1px,transparent 1px);background-size:64px 64px}
+
+/* CURSOR */
+#cg{position:fixed;pointer-events:none;z-index:9998;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,87,255,.06) 0%,transparent 62%);will-change:transform;opacity:0;transition:opacity .6s ease}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;padding:1.25rem 5%;display:flex;align-items:center;justify-content:space-between;background:rgba(240,244,249,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,30,80,.08);box-shadow:0 1px 12px rgba(0,30,80,.06)}
+.logo img{height:30px;display:block}
+.h-cta{display:inline-flex;align-items:center;gap:.45rem;padding:.55rem 1.3rem;background:var(--accent);border:none;color:#fff;font-size:.78rem;font-weight:600;letter-spacing:.05em;text-decoration:none;border-radius:var(--rp);transition:all .3s ease;box-shadow:0 2px 12px rgba(0,87,255,.25)}
+.h-cta:hover{background:var(--blue);box-shadow:0 4px 20px rgba(0,87,255,.35);transform:translateY(-1px)}
+
+/* PAGE HERO */
+.page-hero{position:relative;z-index:1;padding:5rem 5% 2.5rem;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;padding:.38rem 1.1rem;background:rgba(0,87,255,.08);border:1px solid rgba(0,87,255,.18);border-radius:var(--rp);font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.5rem}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:dot-pulse 2s ease infinite}
+@keyframes dot-pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.page-title{font-family:'Unbounded',sans-serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;line-height:.92;letter-spacing:-.04em;margin-bottom:1.25rem;color:var(--t1);opacity:0;animation:rise .9s cubic-bezier(.4,0,.2,1) .1s forwards}
+.page-title .g{background:linear-gradient(135deg,var(--accent) 0%,#0044cc 55%,#7c3aed 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.page-sub{font-size:1rem;color:var(--t2);max-width:440px;margin:0 auto;line-height:1.75;opacity:0;animation:rise .9s cubic-bezier(.4,0,.2,1) .25s forwards}
+
+/* FILTERS */
+.filters{position:relative;z-index:1;padding:2.5rem 5% 1.5rem;display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap}
+.f-btn{padding:.5rem 1.2rem;background:#fff;border:1px solid rgba(0,30,80,.12);border-radius:var(--rp);color:var(--t2);font-size:.8rem;font-weight:500;cursor:pointer;transition:all .25s ease;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:.4rem;box-shadow:0 1px 4px rgba(0,30,80,.06)}
+.f-btn:hover{background:#fff;border-color:rgba(0,87,255,.3);color:var(--accent)}
+.f-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(0,87,255,.3)}
+.f-btn.active .f-count{background:rgba(255,255,255,.25);color:#fff}
+.f-count{background:rgba(0,87,255,.1);border-radius:var(--rp);padding:.05rem .45rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent)}
+
+/* GRID */
+.projects-wrap{position:relative;z-index:1;padding:1rem 5% 6rem}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--cb);border-radius:var(--r);overflow:hidden;transition:box-shadow .4s ease,border-color .4s ease,transform .4s ease;display:flex;flex-direction:column;will-change:transform;transform-style:preserve-3d;transform:perspective(1200px);box-shadow:0 2px 12px rgba(0,30,80,.07)}
+.card.wide{grid-column:span 2}
+.card:hover{border-color:rgba(0,87,255,.2);box-shadow:0 20px 60px rgba(0,30,80,.14),0 0 0 1px rgba(0,87,255,.12)}
+
+/* CARD VISUAL */
+.cv{position:relative;height:220px;overflow:hidden;flex-shrink:0}
+.card.wide .cv{height:255px}.card.wide.mobile-app .cv{height:300px}
+.cvbg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.cover{position:absolute;inset:0;background:rgba(5,15,35,.82);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s ease}
+.card:hover .cover{opacity:1}
+.visit-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.55rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.5);color:#fff;font-size:.78rem;font-weight:600;letter-spacing:.07em;text-decoration:none;border-radius:var(--rp);transition:all .25s ease;backdrop-filter:blur(8px)}
+.visit-btn:hover{background:rgba(255,255,255,.25);box-shadow:0 0 24px rgba(255,255,255,.15);transform:scale(1.05)}
+
+/* CARD BODY */
+.cb{padding:1.4rem 1.5rem;flex:1;display:flex;flex-direction:column}
+.c-cat{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.45rem;font-weight:600}
+.c-name{font-family:'Unbounded',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:-.025em;margin-bottom:.65rem;line-height:1.2;color:var(--t1)}
+.card.wide .c-name{font-size:1.2rem}
+.c-desc{font-size:.84rem;color:var(--t2);line-height:1.75;flex:1;margin-bottom:1rem}
+.c-tags{display:flex;flex-wrap:wrap;gap:.35rem}
+.c-tag{padding:.22rem .7rem;background:rgba(0,87,255,.06);border:1px solid rgba(0,87,255,.14);border-radius:var(--rp);font-size:.67rem;color:var(--accent);font-family:'JetBrains Mono',monospace;letter-spacing:.03em;font-weight:500}
+
+/* CARD REFERENCE FOOTER */
+.c-ref{border-top:1px solid rgba(0,30,80,.08);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;text-decoration:none;transition:background .25s ease;cursor:pointer;background:rgba(0,87,255,.02)}
+.c-ref:hover{background:rgba(0,87,255,.05)}
+.ref-left{display:flex;align-items:center;gap:.5rem;min-width:0;flex:1}
+.ref-pulse{width:7px;height:7px;border-radius:50%;background:#16a34a;box-shadow:0 0 8px rgba(22,163,74,.5);animation:rp 2.5s ease infinite;flex-shrink:0}
+@keyframes rp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.65)}}
+.ref-info{display:flex;flex-direction:column;gap:.1rem;min-width:0}
+.ref-name{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t1);font-weight:600;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ref-phone{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent);font-weight:600;white-space:nowrap;letter-spacing:.02em}
+.ref-ico{color:var(--accent);flex-shrink:0;opacity:.7;transition:opacity .2s ease,transform .2s ease}
+.c-ref:hover .ref-ico{opacity:1;transform:rotate(12deg)}
+
+/* COMING SOON BADGE */
+.badge-soon{position:absolute;top:12px;right:12px;z-index:10;display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .75rem;border-radius:var(--rp);font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.badge-soon.soon{background:rgba(251,146,60,.92);color:#fff;box-shadow:0 2px 12px rgba(251,146,60,.4)}
+.badge-soon.live-soon{background:rgba(16,185,129,.92);color:#fff;box-shadow:0 2px 12px rgba(16,185,129,.4)}
+.badge-soon-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.85);animation:dot-pulse 2s ease infinite}
+
+/* MOCK BROWSER */
+.mock{width:80%;max-width:350px;border-radius:12px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.07)}
+.card.wide .mock{max-width:420px}
+.mock-bar{height:28px;display:flex;align-items:center;gap:5px;padding:0 11px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.05)}
+.m-dot{width:8px;height:8px;border-radius:50%}
+.mock-url{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:5px;margin-left:7px}
+.mock-body{padding:12px;display:flex;flex-direction:column;gap:6px;min-height:90px}
+.m-logo{font-family:'Unbounded',sans-serif;font-size:.65rem;font-weight:900;letter-spacing:.05em}
+.m-line{height:3px;border-radius:2px;background:rgba(255,255,255,.07)}
+.m-blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:4px}
+.m-block{height:26px;border-radius:6px;background:rgba(255,255,255,.04)}
+.m-strip{height:48px;border-radius:8px;display:flex;align-items:center;padding:0 10px;gap:8px;margin-bottom:5px}
+.m-bar{width:3px;border-radius:2px}
+
+/* SECTION HEADER */
+.sect-wrap{position:relative;z-index:1;padding:3.5rem 5% 0}
+.sect-head{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.sect-title{font-family:'Unbounded',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:-.02em;color:var(--t1);white-space:nowrap}
+.sect-badge{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;background:rgba(0,87,255,.07);padding:.25rem .65rem;border-radius:var(--rp);border:1px solid rgba(0,87,255,.13);white-space:nowrap}
+.sect-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(0,30,80,.12) 0%,transparent 100%)}
+.sect-mobile-head{padding-top:0}
+#mobile-grid{padding-bottom:0}
+
+/* FADE IN */
+.fade-up{opacity:0;transform:translateY(22px);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.4,0,.2,1)}
+.fade-up.in{opacity:1;transform:none}
+
+/* NO RESULTS */
+.no-res{grid-column:1/-1;text-align:center;padding:5rem 0;color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.8rem;letter-spacing:.1em;display:none}
+
+/* FOOTER BAR */
+.footer-bar{position:relative;z-index:1;border-top:1px solid rgba(0,30,80,.08);padding:1.5rem 5%;display:flex;align-items:center;justify-content:space-between;background:#fff}
+.footer-bar p{font-size:.76rem;color:var(--t3)}
+.footer-bar em{color:var(--accent);font-style:normal}
+
+.cv img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.card:hover .cv img{transform:scale(1.04)}
+
+#mobile-grid{grid-template-columns:repeat(2,1fr)}
+@media(max-width:1100px){.projects-grid{grid-template-columns:repeat(2,1fr)}.card.wide{grid-column:span 2}}
+@media(max-width:640px){#mobile-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.projects-grid{grid-template-columns:1fr;gap:1rem}.card.wide{grid-column:span 1}.card.wide .cv{height:200px}.page-hero{padding:3.5rem 5% 1.5rem}.filters{gap:.4rem}.f-btn{font-size:.75rem;padding:.45rem .95rem}.footer-bar{flex-direction:column;gap:.5rem;text-align:center}}
+</style>
+</head>
+<body>
+
+<div id="cg"></div>
+
+<div class="bg-mesh">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+  <div class="bg-grid"></div>
+</div>
+
+<header>
+  <a href="https://code-ox.com" class="logo">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Codeox Technologies" height="30">
+  </a>
+  <a href="mailto:hello@code-ox.com" class="h-cta">
+    Start a Project
+    <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</header>
+
+<section class="page-hero">
+  <div class="eyebrow"><div class="eyebrow-dot"></div>12 Websites · 4 Mobile Apps · 6 Industries</div>
+  <h1 class="page-title">Our <span class="g">Work</span></h1>
+  <p class="page-sub">Real products, shipped and live — each one a testament to precision engineering and design craft.</p>
+</section>
+
+<div class="sect-wrap">
+  <div class="sect-head">
+    <div class="sect-title">Website Projects</div>
+    <div class="sect-badge">12 Delivered</div>
+    <div class="sect-line"></div>
+  </div>
+</div>
+<div class="filters">
+  <button class="f-btn active" data-filter="all">All <span class="f-count">12</span></button>
+  <button class="f-btn" data-filter="business">Business <span class="f-count">4</span></button>
+  <button class="f-btn" data-filter="hospitality">Hospitality <span class="f-count">1</span></button>
+  <button class="f-btn" data-filter="travel">Travel <span class="f-count">1</span></button>
+  <button class="f-btn" data-filter="healthcare">Healthcare <span class="f-count">3</span></button>
+  <button class="f-btn" data-filter="design">Design <span class="f-count">1</span></button>
+  <button class="f-btn" data-filter="tech">Tech <span class="f-count">2</span></button>
+</div>
+
+<main class="projects-wrap">
+  <div class="projects-grid" id="web-grid">
+
+    <!-- 1. OCX EXPERTS — wide -->
+    <div class="card wide fade-up" data-cat="business">
+      <div class="cv">
+        <img src="images/ocxexperts.png" alt="OCX Experts">
+        <div class="cover"><a href="https://ocxexperts.com/" target="_blank" rel="noopener" class="visit-btn">Visit Site <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg></a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Business Consultancy · UAE &amp; Saudi Arabia</div>
+        <div class="c-name">OCX Experts</div>
+        <p class="c-desc">Big-4 caliber consulting firm covering accounting, taxation, digital marketing, investment advisory, and recruitment — crafted with a commanding dark-navy corporate identity for the UAE market.</p>
+        <div class="c-tags"><span class="c-tag">Corporate</span><span class="c-tag">Multi-Service</span><span class="c-tag">UAE</span><span class="c-tag">Finance</span></div>
+      </div>
+      <a class="c-ref" href="tel:+966532264851">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Omar Mahfooz</span><span class="ref-phone">+966 53 226 4851</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 2. KISAH STAYS -->
+    <div class="card fade-up" data-cat="hospitality">
+      <div class="cv">
+        <img src="images/kisastays.png" alt="Kisah Stays">
+        <div class="cover"><a href="https://kisahstays.com/" target="_blank" rel="noopener" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Luxury Hospitality · Kerala, India</div>
+        <div class="c-name">Kisah Stays</div>
+        <p class="c-desc">Curated heritage property platform across Kerala — plantation walks, beachfront escapes, and cultural experiences for discerning travellers with warm earth-tone editorial branding.</p>
+        <div class="c-tags"><span class="c-tag">Heritage</span><span class="c-tag">Hospitality</span><span class="c-tag">Kerala</span></div>
+      </div>
+      <a class="c-ref" href="tel:+919012155756">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Akheel Abdul Kareem</span><span class="ref-phone">+91 90121 55756</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 3. J GROUP -->
+    <div class="card fade-up" data-cat="business">
+      <div class="cv">
+        <img src="images/j-group.png" alt="J Group">
+        <div class="cover"><a href="https://j-group.co/" target="_blank" rel="noopener" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Business Services · Dubai</div>
+        <div class="c-name">J Group</div>
+        <p class="c-desc">30-year Dubai institution spanning documentation, digital printing, gifting, and event photography — four specialised divisions under one refined gold-accented brand.</p>
+        <div class="c-tags"><span class="c-tag">Multi-Division</span><span class="c-tag">Dubai</span><span class="c-tag">30+ Years</span></div>
+      </div>
+      <a class="c-ref" href="tel:+917736000073">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Faseen Moosa</span><span class="ref-phone">+91 77360 00073</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 4. FLYTERN -->
+    <div class="card fade-up" data-cat="travel">
+      <div class="cv">
+        <img src="images/flytern.png" alt="Flytern">
+        <div class="cover"><a href="https://flytern.com/" target="_blank" rel="noopener" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Travel &amp; Aviation</div>
+        <div class="c-name">Flytern</div>
+        <p class="c-desc">Modern travel platform delivering seamless flight booking with a conversion-optimised, clean sky-blue interface built for speed and ease.</p>
+        <div class="c-tags"><span class="c-tag">Travel Tech</span><span class="c-tag">Booking Platform</span></div>
+      </div>
+      <a class="c-ref" href="tel:+96550785840">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Harshad</span><span class="ref-phone">+965 5078 5840</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 5. IDEA DECOR — wide -->
+    <div class="card wide fade-up" data-cat="design">
+      <div class="cv">
+        <img src="images/ideadecor.png" alt="Idea Decor LLC">
+        <div class="cover"><a href="https://ideadecor.net/" target="_blank" rel="noopener" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Interior Design &amp; Fit-Out · Dubai</div>
+        <div class="c-name">Idea Decor LLC</div>
+        <p class="c-desc">Dubai's premium interior fit-out company — design, construction, home automation, and hospitality projects delivered with architectural precision. Sleek monochrome luxury with high-quality project photography.</p>
+        <div class="c-tags"><span class="c-tag">Interior Design</span><span class="c-tag">Luxury</span><span class="c-tag">Dubai</span><span class="c-tag">Hospitality</span></div>
+      </div>
+      <a class="c-ref" href="tel:+971557079314">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Azhar</span><span class="ref-phone">+971 55 707 9314</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 6. PHARMA-C -->
+    <div class="card fade-up" data-cat="healthcare">
+      <div class="cv">
+        <img src="images/pharmac.png" alt="Pharma-C">
+        <div class="badge-soon live-soon"><div class="badge-soon-dot"></div>Live Soon</div>
+        <div class="cover"><a href="https://pharma.code-ox.com/" target="_blank" rel="noopener" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Healthcare · UAE</div>
+        <div class="c-name">Pharma-C</div>
+        <p class="c-desc">Community-focused pharmacy chain across UAE — combining global standards with warm, personalised neighbourhood care under a navy and sky-blue identity.</p>
+        <div class="c-tags"><span class="c-tag">Healthcare</span><span class="c-tag">Pharmacy</span><span class="c-tag">UAE</span></div>
+      </div>
+      <a class="c-ref" href="tel:+971564044565">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Ameen</span><span class="ref-phone">+971 56 404 4565</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 7. WE CARE TECH -->
+    <div class="card fade-up" data-cat="healthcare">
+      <div class="cv">
+        <img src="images/wecaretech.png" alt="We Care Tech">
+        <div class="cover"><a href="https://wecaretech.com/" target="_blank" rel="noopener" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Healthcare Technology</div>
+        <div class="c-name">We Care Tech</div>
+        <p class="c-desc">Digital health technology platform delivering innovative, accessible care solutions with a human-first design philosophy and clean teal branding.</p>
+        <div class="c-tags"><span class="c-tag">HealthTech</span><span class="c-tag">Digital Health</span></div>
+      </div>
+      <a class="c-ref" href="tel:+966509385672">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Fasal Sheriff</span><span class="ref-phone">+966 50 938 5672</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 8. ASIAN HARVEST -->
+    <div class="card fade-up" data-cat="business">
+      <div class="cv">
+        <img src="images/asianharvest.png" alt="Asian Harvest">
+        <div class="cover"><a href="https://asianharvest.in/" target="_blank" rel="noopener" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Agricultural Exports · India</div>
+        <div class="c-name">Asian Harvest</div>
+        <p class="c-desc">Premium export brand for Kerala cashews and Kashmir saffron — bringing India's finest agricultural produce to global markets with a refined natural aesthetic.</p>
+        <div class="c-tags"><span class="c-tag">Exports</span><span class="c-tag">Agriculture</span><span class="c-tag">Kerala</span></div>
+      </div>
+      <a class="c-ref" href="mailto:mail@asianharvest.in">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Unaiz</span><span class="ref-phone">mail@asianharvest.in</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
+
+    <!-- 9. OG HUB -->
+    <div class="card fade-up" data-cat="tech">
+      <div class="cv">
+        <img src="images/oghub.png" alt="OG Hub">
+        <div class="cover"><a href="https://oghub.com/" target="_blank" rel="noopener" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Digital Platform · Global</div>
+        <div class="c-name">OG Hub</div>
+        <p class="c-desc">One Global Hub — a modern Next.js platform with a clean minimalist aesthetic, scalable architecture, and fast performance designed for global reach.</p>
+        <div class="c-tags"><span class="c-tag">Next.js</span><span class="c-tag">Platform</span><span class="c-tag">Global</span></div>
+      </div>
+      <a class="c-ref" href="tel:+989131583988">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Hamid Alibeiki</span><span class="ref-phone">+98 913 158 3988</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 10. RIC — Medical Equipment -->
+    <div class="card fade-up" data-cat="healthcare">
+      <div class="cv">
+        <img src="images/ric.png" alt="RIC Medical Equipment">
+        <div class="cover"><a href="#" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Healthcare &amp; Medical Equipment · Riyadh, KSA</div>
+        <div class="c-name">Riyadh International Cooperation</div>
+        <p class="c-desc">Riyadh International Cooperation Medical Equipments and Healthcare Solutions — connecting global healthcare partners with cutting-edge medical equipment distribution and a trust-first digital presence across Saudi Arabia.</p>
+        <div class="c-tags"><span class="c-tag">Healthcare</span><span class="c-tag">Medical Equipment</span><span class="c-tag">Saudi Arabia</span><span class="c-tag">B2B</span></div>
+      </div>
+      <a class="c-ref" href="tel:+966509698043">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Chukri Fadoul</span><span class="ref-phone">+966 50 969 8043</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 11. POLYMERS HUB — B2B Marketplace -->
+    <div class="card fade-up" data-cat="business">
+      <div class="cv">
+        <img src="images/polymershub.png" alt="Polymers Hub">
+        <div class="badge-soon soon"><div class="badge-soon-dot"></div>Coming Soon</div>
+        <div class="cover"><a href="#" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">B2B Marketplace · Chemical Industry · Global</div>
+        <div class="c-name">Polymers Hub</div>
+        <p class="c-desc">A global polymer marketplace connecting buyers and suppliers across the chemical industry worldwide — featuring product discovery by top suppliers, featured supplier listings, and a clean white-and-green professional identity built for industrial-scale B2B trade.</p>
+        <div class="c-tags"><span class="c-tag">B2B Marketplace</span><span class="c-tag">Chemicals</span><span class="c-tag">Global</span><span class="c-tag">Industrial</span></div>
+      </div>
+      <a class="c-ref" href="tel:+966595450190">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Ahmed Juhani</span><span class="ref-phone">+966 59 545 0190</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 12. ABJAD — EdTech Recruitment -->
+    <div class="card fade-up" data-cat="tech">
+      <div class="cv">
+        <img src="images/abjad.png" alt="Abjad">
+        <div class="badge-soon soon"><div class="badge-soon-dot"></div>Coming Soon</div>
+        <div class="cover"><a href="https://abjad-frontend.vercel.app/" target="_blank" rel="noopener" class="visit-btn">Visit Site ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">EdTech &amp; HR Technology · Saudi Arabia &amp; GCC</div>
+        <div class="c-name">Abjad</div>
+        <p class="c-desc">An AI-powered teacher recruitment platform connecting qualified educators with schools across Saudi Arabia and the GCC — 70% faster hiring through intelligent matching, verified profiles, curriculum-based filtering, and a bilingual Arabic/English experience.</p>
+        <div class="c-tags"><span class="c-tag">EdTech</span><span class="c-tag">AI Matching</span><span class="c-tag">Saudi Arabia</span><span class="c-tag">Bilingual</span><span class="c-tag">HR Tech</span></div>
+      </div>
+      <a class="c-ref" href="tel:+966508176193">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Reference</span><span class="ref-phone">+966 50 817 6193</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <div class="no-res" id="no-res">No projects in this category yet.</div>
+  </div>
+</main>
+
+<!-- MOBILE APPLICATIONS SECTION -->
+<div class="sect-wrap">
+  <div class="sect-head sect-mobile-head">
+    <div class="sect-title">Mobile Applications</div>
+    <div class="sect-badge">4 Shipped</div>
+    <div class="sect-line"></div>
+  </div>
+</div>
+
+<div class="projects-wrap">
+  <div class="projects-grid" id="mobile-grid">
+
+    <!-- 11. FEED MEALS — Mobile App Wide -->
+    <div class="card fade-up" data-cat="mobile">
+      <div class="cv" style="height:300px;background:linear-gradient(145deg,#f7edd8 0%,#ead9b0 50%,#d9c08a 100%)">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 32px">
+          <div style="flex:1;height:88%;border-radius:20px;overflow:hidden;box-shadow:0 14px 44px rgba(0,0,0,.18);transform:rotate(-4deg) translateY(6px)">
+            <img src="images/feed-1.webp" alt="Feed Meals splash" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+          <div style="flex:1;height:94%;border-radius:20px;overflow:hidden;box-shadow:0 18px 54px rgba(0,0,0,.24);transform:translateY(-4px)">
+            <img src="images/feed-2.webp" alt="Feed Meals packages" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+          <div style="flex:1;height:88%;border-radius:20px;overflow:hidden;box-shadow:0 14px 44px rgba(0,0,0,.18);transform:rotate(2deg) translateY(4px)">
+            <img src="images/feed-5.webp" alt="Feed Meals menu" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+          <div style="flex:1;height:80%;border-radius:20px;overflow:hidden;box-shadow:0 10px 34px rgba(0,0,0,.15);transform:rotate(4deg) translateY(10px)">
+            <img src="images/feed-4.webp" alt="Feed Meals rewards" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+        </div>
+        <div class="cover"><a href="#" class="visit-btn">View App ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Mobile Application · iOS &amp; Android · Saudi Arabia</div>
+        <div class="c-name">Feed Meals — Eat Like Dineinn</div>
+        <p class="c-desc">A premium gourmet meal subscription app delivering restaurant-quality food to your doorstep across Saudi Arabia. Features flexible diet &amp; lifestyle plans, allergy preferences, a rewards programme, and a bilingual Arabic/English experience crafted for the health-conscious Saudi market.</p>
+        <div class="c-tags"><span class="c-tag">iOS &amp; Android</span><span class="c-tag">Food Tech</span><span class="c-tag">Subscription</span><span class="c-tag">Saudi Arabia</span><span class="c-tag">Arabic</span><span class="c-tag">Rewards</span></div>
+      </div>
+      <a class="c-ref" href="tel:+966504810912">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Mr. Marvan Albhara</span><span class="ref-phone">+966 50 481 0912</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 12. DIET DONE — Mobile App -->
+    <div class="card fade-up" data-cat="mobile">
+      <div class="cv" style="height:300px;background:linear-gradient(145deg,#fff0f5 0%,#fce4ef 50%,#f9cfe4 100%)">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 48px">
+          <div style="flex:1;height:92%;border-radius:20px;overflow:hidden;box-shadow:0 16px 50px rgba(233,30,140,.15),0 4px 20px rgba(0,0,0,.12);transform:rotate(-3deg) translateY(5px)">
+            <img src="images/diet-done.webp" alt="Diet Done menu" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+          <div style="flex:1;height:96%;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(233,30,140,.2),0 6px 24px rgba(0,0,0,.14);transform:translateY(-5px)">
+            <img src="images/diet-done-2.webp" alt="Diet Done plans" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+        </div>
+        <div class="cover"><a href="#" class="visit-btn">View App ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Mobile Application · iOS &amp; Android</div>
+        <div class="c-name">Diet Done</div>
+        <p class="c-desc">A smart diet meal planning and ordering app with detailed macro tracking — featuring curated menus with calorie, protein, carb and fat breakdowns, customisable diet plans (Low Carb, 2-Day and more), and a clean bilingual interface that makes healthy eating effortless.</p>
+        <div class="c-tags"><span class="c-tag">iOS &amp; Android</span><span class="c-tag">Diet &amp; Nutrition</span><span class="c-tag">Meal Planning</span><span class="c-tag">Food Tech</span><span class="c-tag">Bilingual</span></div>
+      </div>
+      <a class="c-ref" href="tel:+96555727775">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Mubarak Alqabandi</span><span class="ref-phone">+965 557 27775</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+    <!-- 13. PLANET ZERO — Mobile App -->
+    <div class="card fade-up" data-cat="mobile">
+      <div class="cv" style="height:300px;background:linear-gradient(145deg,#e8f5e9 0%,#c8e6c9 50%,#a5d6a7 100%)">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 48px">
+          <div style="flex:1;height:96%;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,100,50,.18),0 6px 24px rgba(0,0,0,.12);transform:translateY(-5px)">
+            <img src="images/planetzero2.webp" alt="Planet Zero dashboard" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+          <div style="flex:1;height:90%;border-radius:20px;overflow:hidden;box-shadow:0 14px 44px rgba(0,100,50,.14),0 4px 18px rgba(0,0,0,.1);transform:rotate(3deg) translateY(6px)">
+            <img src="images/planetzero1.webp" alt="Planet Zero meal select" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+        </div>
+        <div class="cover"><a href="#" class="visit-btn">View App ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Mobile Application · iOS &amp; Android</div>
+        <div class="c-name">Planet Zero</div>
+        <p class="c-desc">A smart meal subscription app with weekly meal planning and real-time calorie tracking — users select daily meals across a 7-day calendar, monitor macros (carbs, protein, fat, kcal per item), manage active subscriptions, and unlock combo offers, all within a clean and intuitive interface.</p>
+        <div class="c-tags"><span class="c-tag">iOS &amp; Android</span><span class="c-tag">Meal Planning</span><span class="c-tag">Calorie Tracking</span><span class="c-tag">Subscription</span><span class="c-tag">Food Tech</span></div>
+      </div>
+      <a class="c-ref" href="mailto:abdulaziz@watad.com.sa">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Abdulaziz Saudi</span><span class="ref-phone">abdulaziz@watad.com.sa</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
+
+    <!-- 14. DIET STEPS — Mobile App -->
+    <div class="card fade-up" data-cat="mobile">
+      <div class="cv" style="height:300px;background:linear-gradient(145deg,#0d1a0a 0%,#1a1208 55%,#0a0f0a 100%)">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 48px">
+          <div style="flex:1;height:96%;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5),0 6px 24px rgba(0,0,0,.3);transform:translateY(-5px)">
+            <img src="images/dietsteps1.webp" alt="Diet Steps splash" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+          <div style="flex:1;height:90%;border-radius:20px;overflow:hidden;box-shadow:0 14px 44px rgba(0,0,0,.4),0 4px 18px rgba(0,0,0,.25);transform:rotate(3deg) translateY(6px)">
+            <img src="images/dietsteps-2.webp" alt="Diet Steps meal select" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block">
+          </div>
+        </div>
+        <div class="cover"><a href="#" class="visit-btn">View App ↗</a></div>
+      </div>
+      <div class="cb">
+        <div class="c-cat">Mobile Application · iOS &amp; Android</div>
+        <div class="c-name">Diet Steps</div>
+        <p class="c-desc">A fast food delivery and meal subscription app bringing a world of culinary delights to your doorstep — featuring weekly meal planning with a 7-day calendar, categorised menus (Breakfast, Main Course), real-time calorie tracking, and a bold dark aesthetic with rich food photography.</p>
+        <div class="c-tags"><span class="c-tag">iOS &amp; Android</span><span class="c-tag">Food Delivery</span><span class="c-tag">Meal Planning</span><span class="c-tag">Calorie Tracking</span><span class="c-tag">Food Tech</span></div>
+      </div>
+      <a class="c-ref" href="tel:+966570706257">
+        <div class="ref-left"><div class="ref-pulse"></div><div class="ref-info"><span class="ref-name">Kamaruddeen</span><span class="ref-phone">+966 57 070 6257</span></div></div>
+        <svg class="ref-ico" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.97a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer-bar">
+  <p>© 2026 <em>Codeox Technologies</em>. All rights reserved.</p>
+  <a href="https://code-ox.com" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);text-decoration:none;transition:color .3s ease" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--t3)'">code-ox.com ↗</a>
+</footer>
+
+<script>
+// CURSOR GLOW
+const cg=document.getElementById('cg');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cg.style.opacity='1'});
+document.addEventListener('mouseleave',()=>cg.style.opacity='0');
+(function animCursor(){cx+=(mx-cx)*.08;cy+=(my-cy)*.08;cg.style.transform=`translate(${cx-300}px,${cy-300}px)`;requestAnimationFrame(animCursor)})();
+
+// 3D TILT ON HOVER
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left-r.width/2)/(r.width/2);
+    const y=(e.clientY-r.top-r.height/2)/(r.height/2);
+    card.style.transform=`perspective(1100px) rotateX(${-y*5}deg) rotateY(${x*5}deg) translateY(-10px)`;
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transition='transform .5s cubic-bezier(.4,0,.2,1),box-shadow .4s ease,border-color .4s ease';
+    card.style.transform='perspective(1100px) rotateX(0) rotateY(0) translateY(0)';
+    setTimeout(()=>card.style.transition='',500);
+  });
+  card.addEventListener('mouseenter',()=>{
+    card.style.transition='box-shadow .4s ease,border-color .4s ease';
+  });
+});
+
+// FILTER (website section only)
+const cards=document.querySelectorAll('#web-grid .card[data-cat]');
+document.querySelectorAll('.f-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    let vis=0;
+    cards.forEach((c,i)=>{
+      const show=f==='all'||c.dataset.cat===f;
+      c.style.display=show?'flex':'none';
+      if(show){
+        c.style.animationDelay=`${vis*60}ms`;
+        c.classList.remove('in');
+        setTimeout(()=>c.classList.add('in'),10+vis*60);
+        vis++;
+      }
+    });
+    document.getElementById('no-res').style.display=vis===0?'block':'none';
+  });
+});
+
+// SCROLL REVEAL
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('in'),i*80);
+      ro.unobserve(e.target);
+    }
+  });
+},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.fade-up').forEach(el=>ro.observe(el));
+</script>
+</body>
+</html>
