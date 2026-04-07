@@ -269,6 +269,10 @@
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
   }
+  @keyframes barGrow {
+    from { transform: scaleY(0); opacity: 0.3; }
+    to { transform: scaleY(1); opacity: 1; }
+  }
 
   /* ===== SLIDE 1: HERO ===== */
   .slide-hero {
@@ -912,6 +916,7 @@
     justify-content: center;
     text-align: center;
     overflow: hidden;
+    padding: 52px 80px !important; /* symmetric padding — override general 72px top rule */
   }
   .close-kicker {
     font-size: 11px;
@@ -1213,83 +1218,125 @@
 
   /* ===== MOBILE RESPONSIVE ===== */
   @media (max-width: 768px) {
-    .slide { padding: 64px 20px 60px; }
-    .slide-hero { padding-top: 70px; }
-    .slide-projects { padding-top: 70px; }
+    /* ---- SCROLL MODE: override the slide system completely ---- */
+    html, body {
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      height: auto !important;
+    }
+    body { cursor: default !important; }
+    .cursor, .cursor-ring { display: none !important; }
 
-    /* Hero */
-    .hero-visual { display: none; }
-    .hero-h1 { font-size: clamp(36px, 10vw, 56px); letter-spacing: -1px; }
+    .presentation {
+      height: auto !important;
+      overflow: visible !important;
+    }
+
+    .slide {
+      position: static !important;
+      opacity: 1 !important;
+      pointer-events: all !important;
+      transform: none !important;
+      height: auto !important;
+      min-height: 100svh;
+      padding: 72px 16px 48px !important;
+      border-bottom: 1px solid var(--border);
+      display: flex !important;
+    }
+    .slide.exit {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    /* Hide navigation chrome */
+    .nav-dots, .nav-prev, .nav-next, .slide-counter, .progress {
+      display: none !important;
+    }
+    .pres-header { padding: 0 16px; }
+    .pres-header .pres-label { display: none; }
+
+    /* ---- Typography ---- */
+    h2.stitle { font-size: clamp(24px, 7vw, 36px) !important; margin-bottom: 16px !important; }
+
+    /* ---- Hero ---- */
+    .hero-visual { display: none !important; }
+    .hero-h1 { font-size: clamp(36px, 10vw, 52px) !important; letter-spacing: -1px; }
     .hero-desc { font-size: 13px; }
     .hero-pills { gap: 6px; }
     .hero-pill { font-size: 11px; padding: 5px 12px; }
 
-    /* Titles */
-    h2.stitle { font-size: clamp(24px, 7vw, 36px); margin-bottom: 18px; }
+    /* ---- Overview (now inline-style 2x2 grid) ---- */
+    .mob-ov-grid { grid-template-columns: 1fr 1fr !important; }
 
-    /* Overview */
-    .overview-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .ov-card { padding: 16px 14px; }
-    .ov-card h3 { font-size: 12px; }
-    .ov-card p { font-size: 11px; }
+    /* ---- Core Features ---- */
+    .mob-feat-top { grid-template-columns: 1fr 1fr !important; }
+    .mob-feat-bot { grid-template-columns: 1fr 1fr !important; }
 
-    /* Features */
-    .feat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .feat-card { padding: 14px 12px; }
-    .feat-card .ficon { font-size: 20px; }
-    .feat-card h3 { font-size: 12px; }
-    .feat-card p { font-size: 10.5px; }
+    /* ---- Dashboard & Sales ---- */
+    .mob-dash-main { grid-template-columns: 1fr !important; }
+    .mob-dash-kpi { grid-template-columns: repeat(3,1fr) !important; }
+    .mob-dash-modules { grid-template-columns: 1fr 1fr !important; }
+    .mob-reports-grid { grid-template-columns: repeat(4,1fr) !important; }
 
-    /* Odoo */
+    /* ---- Odoo ---- */
     .odoo-wrap { grid-template-columns: 1fr; gap: 20px; }
     .odoo-orbit { height: 200px; transform: scale(0.75); }
 
-    /* E-Shop */
+    /* ---- E-Shop ---- */
     .eshop-wrap { grid-template-columns: 1fr; gap: 20px; }
     .browser-mock { display: none; }
 
-    /* Projects */
+    /* ---- Operations ---- */
+    .detail-layout { grid-template-columns: 1fr; }
+    .detail-section.full { grid-column: span 1; }
+    .ops-layout { grid-template-columns: 1fr; }
+    .ops-group { padding: 14px 14px; }
+
+    /* ---- Projects ---- */
     .proj-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
     .proj-thumb { height: 140px; }
     .proj-body { padding: 12px 12px 10px; }
     .proj-name { font-size: 13px; }
     .proj-desc { font-size: 10px; }
 
-    /* Charts */
+    /* ---- Feed slide ---- */
+    .mob-feed-split { flex-direction: column !important; }
+    .mob-feed-phones { width: 100% !important; height: 280px !important; flex-direction: row !important; }
+    .mob-feed-info { width: 100% !important; padding: 24px 20px !important; }
+
+    /* ---- Charts ---- */
     .chart-wrap { grid-template-columns: 1fr; }
     .chart-wrap-rev { grid-template-columns: 1fr; }
     .chart-stats { flex-direction: row; flex-wrap: wrap; gap: 8px; }
     .chart-stats .scard { flex: 1 1 calc(50% - 4px); min-width: 0; }
     .sc-val { font-size: 22px; }
 
-    /* Diet Steps */
+    /* ---- Diet Steps ---- */
     .steps-wrap { grid-template-columns: 1fr; }
     .steps-right { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .steps-stats-row { grid-column: span 2; }
     .growth-note { grid-column: span 2; }
 
-    /* Summary */
+    /* ---- Summary / Combined ---- */
     .summary-top { grid-template-columns: 1fr 1fr; }
     .summary-chart-box { margin-top: 10px; padding: 16px; }
 
-    /* Nav */
-    .nav-dots { right: 10px; }
-    .pres-header { padding: 0 16px; }
-    .pres-header .pres-label { display: none; }
-
-    /* Close */
-    .close-h1 { font-size: clamp(32px, 8vw, 52px); }
+    /* ---- Close ---- */
+    .slide-close { padding: 40px 24px !important; }
+    .close-h1 { font-size: clamp(32px, 8vw, 52px) !important; }
     .close-pills { gap: 8px; }
     .close-pill { font-size: 11px; padding: 7px 14px; }
   }
 
   @media (max-width: 480px) {
-    .overview-grid { grid-template-columns: 1fr; }
-    .feat-grid { grid-template-columns: 1fr 1fr; }
+    .mob-ov-grid { grid-template-columns: 1fr !important; }
     .proj-grid { grid-template-columns: 1fr; }
-    .summary-top { grid-template-columns: 1fr 1fr; }
-    .hero-h1 { font-size: 32px; }
-    .module-list .mod-card { padding: 12px 14px; }
+    .summary-top { grid-template-columns: 1fr; }
+    .hero-h1 { font-size: 32px !important; }
+    .mob-dash-kpi { grid-template-columns: 1fr 1fr !important; }
+    .mob-dash-modules { grid-template-columns: 1fr !important; }
+    .mob-feat-top { grid-template-columns: 1fr !important; }
+    .mob-feat-bot { grid-template-columns: 1fr 1fr !important; }
   }
 
   /* chart tooltips */
@@ -1362,222 +1409,378 @@
 
   <!-- SLIDE 2: OVERVIEW -->
   <div class="slide slide-overview" data-slide="1">
-    <div style="width:100%">
-      <div class="tag"><div class="dot-tag"></div>System Overview</div>
-      <h2 class="stitle">Everything your diet<br>business <span>needs</span></h2>
-      <div class="overview-grid stagger">
-        <div class="ov-card">
-          <div class="ov-num">01</div>
-          <div class="ov-icon">📋</div>
-          <h3>Personalized Subscriptions</h3>
-          <p>Tailored diet plans giving customers full control over meal choices, dietary preferences, and progress tracking.</p>
+    <div style="width:100%;height:100%;display:flex;flex-direction:column;gap:12px;">
+
+      <!-- Header -->
+      <div style="flex-shrink:0;">
+        <div class="tag"><div class="dot-tag"></div>System Overview</div>
+        <h2 class="stitle" style="margin-bottom:0;">Everything your diet<br>business <span>needs</span></h2>
+      </div>
+
+      <!-- 2x2 visual bento grid -->
+      <div class="mob-ov-grid" style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;flex:1;min-height:0;">
+
+        <!-- Subscriptions -->
+        <div style="background:linear-gradient(145deg,#eff6ff,#dbeafe);border:1.5px solid #bfdbfe;border-radius:20px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
+          <div style="position:absolute;bottom:-16px;right:-10px;font-size:88px;opacity:0.06;line-height:1;">📋</div>
+          <div>
+            <div style="font-size:34px;margin-bottom:10px;">📋</div>
+            <div style="font-size:16px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;line-height:1.2;margin-bottom:5px;">Personalized<br>Subscriptions</div>
+            <div style="font-size:11px;color:#6b7280;line-height:1.5;">Tailored diet plans for every customer goal</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;">
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">🍽️ Meal Choices</span>
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">📈 Progress Tracking</span>
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">❄️ Freeze / Unfreeze</span>
+          </div>
         </div>
-        <div class="ov-card">
-          <div class="ov-num">02</div>
-          <div class="ov-icon">🥩</div>
-          <h3>Plans & Plan Choices</h3>
-          <p>Flexible plan selection with customizable choices that perfectly suit each customer's dietary needs and goals.</p>
+
+        <!-- Plans & Choices -->
+        <div style="background:linear-gradient(145deg,#fffbeb,#fef3c7);border:1.5px solid #fde68a;border-radius:20px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
+          <div style="position:absolute;bottom:-16px;right:-10px;font-size:88px;opacity:0.06;line-height:1;">🥗</div>
+          <div>
+            <div style="font-size:34px;margin-bottom:10px;">🥗</div>
+            <div style="font-size:16px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;line-height:1.2;margin-bottom:5px;">Plans &<br>Plan Choices</div>
+            <div style="font-size:11px;color:#6b7280;line-height:1.5;">Flexible plan builder for every dietary need</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;">
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#d97706;border:1px solid #fde68a;">📂 Plan Categories</span>
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#d97706;border:1px solid #fde68a;">📅 Day Choices</span>
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#d97706;border:1px solid #fde68a;">🍱 Meal Count</span>
+          </div>
         </div>
-        <div class="ov-card">
-          <div class="ov-num">03</div>
-          <div class="ov-icon">👨‍⚕️</div>
-          <h3>Dietician Appointments</h3>
-          <p>Integrated scheduling for customers to book consultations with certified dieticians directly through the platform.</p>
+
+        <!-- Dietician Appointments -->
+        <div style="background:linear-gradient(145deg,#fdf2f8,#fce7f3);border:1.5px solid #fbcfe8;border-radius:20px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
+          <div style="position:absolute;bottom:-16px;right:-10px;font-size:88px;opacity:0.06;line-height:1;">👩‍⚕️</div>
+          <div>
+            <div style="font-size:34px;margin-bottom:10px;">👩‍⚕️</div>
+            <div style="font-size:16px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;line-height:1.2;margin-bottom:5px;">Dietician<br>Appointments</div>
+            <div style="font-size:11px;color:#6b7280;line-height:1.5;">Book consultations directly through the platform</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;">
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#db2777;border:1px solid #fbcfe8;">🗓️ Scheduling</span>
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#db2777;border:1px solid #fbcfe8;">💬 Consultation</span>
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#db2777;border:1px solid #fbcfe8;">📋 History</span>
+          </div>
         </div>
-        <div class="ov-card">
-          <div class="ov-num">04</div>
-          <div class="ov-icon">📊</div>
-          <h3>Analytics & Reports</h3>
-          <p>In-depth order and sales reports providing data-driven insights to support strategic business decisions.</p>
+
+        <!-- Analytics & Reports -->
+        <div style="background:linear-gradient(145deg,#f0fdf4,#dcfce7);border:1.5px solid #bbf7d0;border-radius:20px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
+          <div style="position:absolute;bottom:-16px;right:-10px;font-size:88px;opacity:0.06;line-height:1;">📊</div>
+          <div>
+            <div style="font-size:34px;margin-bottom:10px;">📊</div>
+            <div style="font-size:16px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;line-height:1.2;margin-bottom:5px;">Analytics<br>& Reports</div>
+            <div style="font-size:11px;color:#6b7280;line-height:1.5;">Deep insights to power smarter decisions</div>
+          </div>
+          <!-- Mini bar chart -->
+          <div style="display:flex;align-items:flex-end;gap:3px;height:28px;margin-top:8px;margin-bottom:6px;">
+            <div style="flex:1;background:#22c55e;opacity:0.35;border-radius:3px 3px 0 0;height:45%;"></div>
+            <div style="flex:1;background:#22c55e;opacity:0.55;border-radius:3px 3px 0 0;height:65%;"></div>
+            <div style="flex:1;background:#22c55e;opacity:0.7;border-radius:3px 3px 0 0;height:80%;"></div>
+            <div style="flex:1;background:#22c55e;border-radius:3px 3px 0 0;height:100%;"></div>
+            <div style="flex:1;background:#22c55e;opacity:0.85;border-radius:3px 3px 0 0;height:90%;"></div>
+            <div style="flex:1;background:#84cc16;opacity:0.7;border-radius:3px 3px 0 0;height:70%;"></div>
+            <div style="flex:1;background:#84cc16;opacity:0.5;border-radius:3px 3px 0 0;height:55%;"></div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;">
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#16a34a;border:1px solid #bbf7d0;">📦 Order Reports</span>
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#16a34a;border:1px solid #bbf7d0;">📈 Sales Reports</span>
+            <span style="background:white;border-radius:100px;padding:3px 10px;font-size:8.5px;font-weight:700;color:#16a34a;border:1px solid #bbf7d0;">🚚 Delivery Reports</span>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
 
   <!-- SLIDE 3: FEATURES -->
   <div class="slide slide-features" data-slide="2">
-    <div style="width:100%">
-      <div class="tag"><div class="dot-tag"></div>Core Features</div>
-      <h2 class="stitle">Built for <span>engagement</span> & growth</h2>
-      <div class="feat-grid stagger">
-        <div class="feat-card">
-          <div class="fnum">01</div>
-          <span class="ficon">🍽️</span>
-          <h3>Personalized Subscriptions</h3>
-          <p>Diet plans tailored to individual goals with progress tracking built in.</p>
-        </div>
-        <div class="feat-card">
-          <div class="fnum">02</div>
-          <span class="ficon">🥗</span>
-          <h3>Plans & Choices</h3>
-          <p>Flexible plan selection and customization to match every dietary need.</p>
-        </div>
-        <div class="feat-card">
-          <div class="fnum">03</div>
-          <span class="ficon">👩‍⚕️</span>
-          <h3>Dietician Appointments</h3>
-          <p>Schedule consultations with dieticians directly through the system.</p>
-        </div>
-        <div class="feat-card">
-          <div class="fnum">04</div>
-          <span class="ficon">⭐</span>
-          <h3>Meal Rating</h3>
-          <p>Built-in feedback for customers to rate meals and improve quality.</p>
-        </div>
-        <div class="feat-card">
-          <div class="fnum">05</div>
-          <span class="ficon">🏷️</span>
-          <h3>Promo Codes</h3>
-          <p>Apply discount codes to enhance value and boost customer engagement.</p>
-        </div>
-        <div class="feat-card">
-          <div class="fnum">06</div>
-          <span class="ficon">🔗</span>
-          <h3>Referral Program</h3>
-          <p>Earn points through referrals and redeem them in future subscriptions.</p>
-        </div>
-        <div class="feat-card">
-          <div class="fnum">07</div>
-          <span class="ficon">📦</span>
-          <h3>Order Reports</h3>
-          <p>Detailed order analytics enabling smarter, data-driven decisions.</p>
-        </div>
-        <div class="feat-card">
-          <div class="fnum">08</div>
-          <span class="ficon">📈</span>
-          <h3>Sales Reporting</h3>
-          <p>Clear sales data revealing customer trends and strategic opportunities.</p>
-        </div>
+    <div style="width:100%;height:100%;display:flex;flex-direction:column;gap:10px;">
+
+      <div style="flex-shrink:0;">
+        <div class="tag"><div class="dot-tag"></div>Core Features</div>
+        <h2 class="stitle" style="margin-bottom:0;">Built for <span>engagement</span> & growth</h2>
       </div>
+
+      <!-- Top row: 4 featured cards (richer, taller) -->
+      <div class="mob-feat-top" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex:1.2;">
+
+        <div style="background:linear-gradient(160deg,#eff6ff,#dbeafe);border:1.5px solid #bfdbfe;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-8px;right:-8px;font-size:60px;opacity:0.07;line-height:1;">🍽️</div>
+          <div style="width:44px;height:44px;background:white;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 2px 8px rgba(37,99,235,0.15);">🍽️</div>
+          <div style="font-size:13px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;line-height:1.2;">Personalized<br>Subscriptions</div>
+          <div style="display:flex;flex-direction:column;gap:4px;margin-top:auto;">
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">🎯 Goal-based Plans</span>
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">❄️ Freeze / Unfreeze</span>
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">📅 Meal Calendar</span>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(160deg,#fffbeb,#fef3c7);border:1.5px solid #fde68a;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-8px;right:-8px;font-size:60px;opacity:0.07;line-height:1;">🥗</div>
+          <div style="width:44px;height:44px;background:white;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 2px 8px rgba(217,119,6,0.15);">🥗</div>
+          <div style="font-size:13px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;line-height:1.2;">Plans &<br>Plan Choices</div>
+          <div style="display:flex;flex-direction:column;gap:4px;margin-top:auto;">
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#d97706;border:1px solid #fde68a;">📂 Plan Categories</span>
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#d97706;border:1px solid #fde68a;">🍱 Meal Config</span>
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#d97706;border:1px solid #fde68a;">⚖️ Dietary Tags</span>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(160deg,#fdf2f8,#fce7f3);border:1.5px solid #fbcfe8;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-8px;right:-8px;font-size:60px;opacity:0.07;line-height:1;">👩‍⚕️</div>
+          <div style="width:44px;height:44px;background:white;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 2px 8px rgba(219,39,119,0.15);">👩‍⚕️</div>
+          <div style="font-size:13px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;line-height:1.2;">Dietician<br>Appointments</div>
+          <div style="display:flex;flex-direction:column;gap:4px;margin-top:auto;">
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#db2777;border:1px solid #fbcfe8;">🗓️ Scheduling</span>
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#db2777;border:1px solid #fbcfe8;">💬 Consultations</span>
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#db2777;border:1px solid #fbcfe8;">📋 Patient History</span>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(160deg,#f5f3ff,#ede9fe);border:1.5px solid #ddd6fe;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-8px;right:-8px;font-size:60px;opacity:0.07;line-height:1;">⭐</div>
+          <div style="width:44px;height:44px;background:white;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 2px 8px rgba(124,58,237,0.15);">⭐</div>
+          <div style="font-size:13px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;line-height:1.2;">Meal<br>Rating</div>
+          <div style="display:flex;flex-direction:column;gap:4px;margin-top:auto;">
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#7c3aed;border:1px solid #ddd6fe;">⭐ Customer Ratings</span>
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#7c3aed;border:1px solid #ddd6fe;">📊 Per Meal Breakdown</span>
+            <span style="background:white;border-radius:8px;padding:4px 9px;font-size:8.5px;font-weight:700;color:#7c3aed;border:1px solid #ddd6fe;">🔍 Quality Tracking</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom row: 4 compact feature cards -->
+      <div class="mob-feat-bot" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex:0.8;">
+
+        <div style="background:linear-gradient(160deg,#fff7ed,#ffedd5);border:1.5px solid #fed7aa;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 6px rgba(234,88,12,0.12);flex-shrink:0;">🏷️</div>
+            <div style="font-size:12px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;">Promo Codes</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <span style="background:white;border-radius:6px;padding:2px 8px;font-size:8px;font-weight:700;color:#ea580c;border:1px solid #fed7aa;">% Discounts</span>
+            <span style="background:white;border-radius:6px;padding:2px 8px;font-size:8px;font-weight:700;color:#ea580c;border:1px solid #fed7aa;">🎁 Boost Engagement</span>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(160deg,#f0fdfa,#ccfbf1);border:1.5px solid #99f6e4;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 6px rgba(13,148,136,0.12);flex-shrink:0;">🔗</div>
+            <div style="font-size:12px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;">Referral Program</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <span style="background:white;border-radius:6px;padding:2px 8px;font-size:8px;font-weight:700;color:#0d9488;border:1px solid #99f6e4;">🤝 Earn Points</span>
+            <span style="background:white;border-radius:6px;padding:2px 8px;font-size:8px;font-weight:700;color:#0d9488;border:1px solid #99f6e4;">🔄 Redeem Credits</span>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(160deg,#f0fdf4,#dcfce7);border:1.5px solid #bbf7d0;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 6px rgba(22,163,74,0.12);flex-shrink:0;">📦</div>
+            <div style="font-size:12px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;">Order Reports</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <span style="background:white;border-radius:6px;padding:2px 8px;font-size:8px;font-weight:700;color:#16a34a;border:1px solid #bbf7d0;">📊 Order Analytics</span>
+            <span style="background:white;border-radius:6px;padding:2px 8px;font-size:8px;font-weight:700;color:#16a34a;border:1px solid #bbf7d0;">📥 Package Reports</span>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(160deg,#eef2ff,#e0e7ff);border:1.5px solid #c7d2fe;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 6px rgba(79,70,229,0.12);flex-shrink:0;">📈</div>
+            <div style="font-size:12px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;">Sales Reporting</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <span style="background:white;border-radius:6px;padding:2px 8px;font-size:8px;font-weight:700;color:#4338ca;border:1px solid #c7d2fe;">📅 Monthly Sales</span>
+            <span style="background:white;border-radius:6px;padding:2px 8px;font-size:8px;font-weight:700;color:#4338ca;border:1px solid #c7d2fe;">💡 Trends & Insights</span>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
   <!-- SLIDE 4: DASHBOARD & SALES FEATURES -->
   <div class="slide slide-detail" data-slide="3">
-    <div style="width:100%">
-      <div class="tag"><div class="dot-tag"></div>System Modules · Sales</div>
-      <h2 class="stitle"><span>Dashboard</span> & Sales</h2>
-      <div class="detail-layout stagger">
+    <div style="width:100%;height:100%;display:flex;flex-direction:column;gap:10px;">
 
-        <!-- Dashboard -->
-        <div class="detail-section full accent-green">
-          <div class="ds-header">
-            <div class="ds-icon">📊</div>
-            <div>
-              <div class="ds-title">Dashboard</div>
-              <div class="ds-sub">Real-time business overview at a glance</div>
+      <!-- HEADER -->
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-shrink:0;">
+        <div>
+          <div class="tag" style="margin-bottom:6px;"><div class="dot-tag"></div>System Modules · Sales</div>
+          <h2 class="stitle" style="margin-bottom:0;font-size:clamp(24px,3vw,40px)"><span>Dashboard</span> & Sales</h2>
+        </div>
+        <div style="font-size:10px;color:var(--text-gray);font-weight:500;padding-bottom:6px;">Real-time business intelligence</div>
+      </div>
+
+      <!-- MAIN BODY: left dashboard + right modules -->
+      <div class="mob-dash-main" style="display:grid;grid-template-columns:1.1fr 1fr;gap:12px;flex:1;min-height:0;">
+
+        <!-- LEFT: visual dashboard panel -->
+        <div style="background:linear-gradient(145deg,#f0fdf4,#e8fdf0);border:1.5px solid #bbf7d0;border-radius:20px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;overflow:hidden;">
+
+          <!-- KPI row -->
+          <div class="mob-dash-kpi" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+            <div style="background:white;border-radius:12px;padding:12px 10px;text-align:center;border:1px solid #d1fae5;box-shadow:0 2px 8px rgba(34,197,94,0.06);">
+              <div style="font-size:11px;margin-bottom:4px;">👥</div>
+              <div style="font-size:26px;font-weight:800;color:#22c55e;font-family:'Space Grotesk',sans-serif;line-height:1;">248</div>
+              <div style="font-size:8px;color:#9ca3af;margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Customers</div>
+            </div>
+            <div style="background:white;border-radius:12px;padding:12px 10px;text-align:center;border:1px solid #d1fae5;box-shadow:0 2px 8px rgba(34,197,94,0.06);">
+              <div style="font-size:11px;margin-bottom:4px;">🚚</div>
+              <div style="font-size:26px;font-weight:800;color:#0891b2;font-family:'Space Grotesk',sans-serif;line-height:1;">47</div>
+              <div style="font-size:8px;color:#9ca3af;margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Deliveries Today</div>
+            </div>
+            <div style="background:white;border-radius:12px;padding:12px 10px;text-align:center;border:1px solid #d1fae5;box-shadow:0 2px 8px rgba(34,197,94,0.06);">
+              <div style="font-size:11px;margin-bottom:4px;">⭐</div>
+              <div style="font-size:26px;font-weight:800;color:#d97706;font-family:'Space Grotesk',sans-serif;line-height:1;">4.8</div>
+              <div style="font-size:8px;color:#9ca3af;margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Avg Rating</div>
             </div>
           </div>
-          <div class="ds-chips">
-            <span class="ds-chip green">Total Customers</span>
-            <span class="ds-chip green">Active Customers</span>
-            <span class="ds-chip green">Customers Today</span>
-            <span class="ds-chip green">Sales Today</span>
-            <span class="ds-chip green">Deliveries Today</span>
-            <span class="ds-chip green">Monthly Order Reports</span>
-            <span class="ds-chip green">Package Analysis</span>
-            <span class="ds-chip green">Plan Choice Analysis</span>
-            <span class="ds-chip green">Meal Rating Overview</span>
-            <span class="ds-chip green">Customer Birthdays</span>
-            <span class="ds-chip green">Invoice by Payment Status</span>
-          </div>
-        </div>
 
-        <!-- Customers -->
-        <div class="detail-section">
-          <div class="ds-header">
-            <div class="ds-icon">👤</div>
-            <div>
-              <div class="ds-title">Sales → Customers</div>
-              <div class="ds-sub">Full customer profile management</div>
+          <!-- Bar chart: weekly deliveries -->
+          <div style="background:white;border-radius:14px;padding:14px 14px 10px;border:1px solid #d1fae5;flex:1;display:flex;flex-direction:column;">
+            <div style="font-size:10px;font-weight:700;color:#14532d;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+              <span style="width:8px;height:8px;background:#22c55e;border-radius:2px;display:inline-block;"></span>
+              Weekly Meal Deliveries
+            </div>
+            <div style="display:flex;align-items:flex-end;gap:6px;flex:1;min-height:0;">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <div style="width:100%;background:linear-gradient(180deg,#22c55e,#86efac);border-radius:4px 4px 0 0;height:55%;animation:barGrow 0.6s 0.1s ease both;transform-origin:bottom;"></div>
+                <div style="font-size:7.5px;color:#9ca3af;font-weight:600;">Mon</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <div style="width:100%;background:linear-gradient(180deg,#22c55e,#86efac);border-radius:4px 4px 0 0;height:80%;animation:barGrow 0.6s 0.18s ease both;transform-origin:bottom;"></div>
+                <div style="font-size:7.5px;color:#9ca3af;font-weight:600;">Tue</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <div style="width:100%;background:linear-gradient(180deg,#22c55e,#86efac);border-radius:4px 4px 0 0;height:65%;animation:barGrow 0.6s 0.26s ease both;transform-origin:bottom;"></div>
+                <div style="font-size:7.5px;color:#9ca3af;font-weight:600;">Wed</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <div style="width:100%;background:linear-gradient(180deg,#16a34a,#22c55e);border-radius:4px 4px 0 0;height:100%;animation:barGrow 0.6s 0.34s ease both;transform-origin:bottom;"></div>
+                <div style="font-size:7.5px;color:#22c55e;font-weight:700;">Thu</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <div style="width:100%;background:linear-gradient(180deg,#22c55e,#86efac);border-radius:4px 4px 0 0;height:75%;animation:barGrow 0.6s 0.42s ease both;transform-origin:bottom;"></div>
+                <div style="font-size:7.5px;color:#9ca3af;font-weight:600;">Fri</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <div style="width:100%;background:linear-gradient(180deg,#84cc16,#bef264);border-radius:4px 4px 0 0;height:45%;animation:barGrow 0.6s 0.50s ease both;transform-origin:bottom;"></div>
+                <div style="font-size:7.5px;color:#9ca3af;font-weight:600;">Sat</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <div style="width:100%;background:linear-gradient(180deg,#84cc16,#bef264);border-radius:4px 4px 0 0;height:38%;animation:barGrow 0.6s 0.58s ease both;transform-origin:bottom;"></div>
+                <div style="font-size:7.5px;color:#9ca3af;font-weight:600;">Sun</div>
+              </div>
             </div>
           </div>
-          <div class="ds-chips">
-            <span class="ds-chip">Name & Tag</span>
-            <span class="ds-chip">Address</span>
-            <span class="ds-chip">Subscriptions</span>
-            <span class="ds-chip">Allergies & Dislikes</span>
-            <span class="ds-chip">Medical Reports</span>
-            <span class="ds-chip">Delivery Schedule</span>
-            <span class="ds-chip">Meal Rating</span>
-            <span class="ds-chip">Dietitian Consultation</span>
-            <span class="ds-chip">Health History</span>
-          </div>
-        </div>
 
-        <!-- Sales Orders -->
-        <div class="detail-section">
-          <div class="ds-header">
-            <div class="ds-icon">📋</div>
-            <div>
-              <div class="ds-title">Sales → Sales Orders</div>
-              <div class="ds-sub">Subscription lifecycle management</div>
+          <!-- Donut + active ratio -->
+          <div style="background:white;border-radius:14px;padding:12px 14px;border:1px solid #d1fae5;display:flex;align-items:center;gap:14px;">
+            <!-- Donut via conic-gradient -->
+            <div style="position:relative;width:56px;height:56px;flex-shrink:0;">
+              <div style="width:56px;height:56px;border-radius:50%;background:conic-gradient(#22c55e 0% 74%,#dcfce7 74% 100%);"></div>
+              <div style="position:absolute;inset:9px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#22c55e;font-family:'Space Grotesk',sans-serif;">74%</div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:11px;font-weight:700;color:#14532d;">Active Customer Rate</div>
+              <div style="font-size:9px;color:#6b7280;margin-top:2px;">183 active · 65 inactive</div>
+              <div style="display:flex;gap:2px;margin-top:7px;height:6px;border-radius:100px;overflow:hidden;">
+                <div style="width:74%;background:#22c55e;border-radius:100px 0 0 100px;"></div>
+                <div style="width:26%;background:#dcfce7;border-radius:0 100px 100px 0;"></div>
+              </div>
             </div>
           </div>
-          <div class="ds-chips">
-            <span class="ds-chip">Start Date</span>
-            <span class="ds-chip">Freeze / Unfreeze</span>
-            <span class="ds-chip">Close Subscription</span>
-            <span class="ds-chip">Default Meals</span>
-            <span class="ds-chip">Minus Days</span>
-            <span class="ds-chip">Meal Calendar</span>
-            <span class="ds-chip">Meal Configurations</span>
-            <span class="ds-chip">Invoice</span>
-          </div>
+
         </div>
 
-        <!-- Meal Ratings + Dietitian Appointments -->
-        <div class="detail-section">
-          <div class="ds-header">
-            <div class="ds-icon">⭐</div>
-            <div>
-              <div class="ds-title">Sales → Meal Ratings</div>
-              <div class="ds-sub">Customer feedback on meals</div>
+        <!-- RIGHT: modules + reports -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+
+          <!-- 2x2 module tiles -->
+          <div class="mob-dash-modules" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
+
+            <div style="background:linear-gradient(145deg,#eff6ff,#dbeafe);border:1.5px solid #bfdbfe;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:30px;line-height:1;">👤</div>
+              <div style="font-size:13px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;">Customers</div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;">
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">Allergies</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">Medical</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">Schedule</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#2563eb;border:1px solid #bfdbfe;">Health History</span>
+              </div>
+            </div>
+
+            <div style="background:linear-gradient(145deg,#fffbeb,#fef3c7);border:1.5px solid #fde68a;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:30px;line-height:1;">📋</div>
+              <div style="font-size:13px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;">Sales Orders</div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;">
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#d97706;border:1px solid #fde68a;">Subscriptions</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#d97706;border:1px solid #fde68a;">Freeze/Unfreeze</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#d97706;border:1px solid #fde68a;">Meal Calendar</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#d97706;border:1px solid #fde68a;">Invoice</span>
+              </div>
+            </div>
+
+            <div style="background:linear-gradient(145deg,#fdf2f8,#fce7f3);border:1.5px solid #fbcfe8;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:30px;line-height:1;">⭐</div>
+              <div style="font-size:13px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;">Meal Ratings</div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;">
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#db2777;border:1px solid #fbcfe8;">Customer Ratings</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#db2777;border:1px solid #fbcfe8;">Per Meal</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#db2777;border:1px solid #fbcfe8;">Quality Tracking</span>
+              </div>
+            </div>
+
+            <div style="background:linear-gradient(145deg,#f0fdf4,#dcfce7);border:1.5px solid #bbf7d0;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:30px;line-height:1;">👩‍⚕️</div>
+              <div style="font-size:13px;font-weight:800;color:#14532d;font-family:'Space Grotesk',sans-serif;">Dietitian Appts.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;">
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#16a34a;border:1px solid #bbf7d0;">Scheduling</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#16a34a;border:1px solid #bbf7d0;">Consultation</span>
+                <span style="background:white;border-radius:100px;padding:2px 8px;font-size:8px;font-weight:700;color:#16a34a;border:1px solid #bbf7d0;">History</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Reports icon grid -->
+          <div style="background:linear-gradient(135deg,#f7fee7,#ecfccb);border:1.5px solid #bef264;border-radius:16px;padding:12px 14px;">
+            <div style="font-size:10px;font-weight:700;color:#365314;margin-bottom:9px;display:flex;align-items:center;gap:5px;"><span style="font-size:13px;">📄</span> Reports Suite</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+              <div style="background:white;border-radius:10px;padding:8px 4px;text-align:center;border:1px solid #bef264;">
+                <div style="font-size:16px;">📦</div><div style="font-size:7.5px;font-weight:700;color:#4d7c0f;margin-top:3px;">Orders</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:8px 4px;text-align:center;border:1px solid #bef264;">
+                <div style="font-size:16px;">📬</div><div style="font-size:7.5px;font-weight:700;color:#4d7c0f;margin-top:3px;">Packages</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:8px 4px;text-align:center;border:1px solid #bef264;">
+                <div style="font-size:16px;">🚚</div><div style="font-size:7.5px;font-weight:700;color:#4d7c0f;margin-top:3px;">Delivery</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:8px 4px;text-align:center;border:1px solid #bef264;">
+                <div style="font-size:16px;">🏷️</div><div style="font-size:7.5px;font-weight:700;color:#4d7c0f;margin-top:3px;">Stickers</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:8px 4px;text-align:center;border:1px solid #bef264;">
+                <div style="font-size:16px;">📈</div><div style="font-size:7.5px;font-weight:700;color:#4d7c0f;margin-top:3px;">Sales</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:8px 4px;text-align:center;border:1px solid #bef264;">
+                <div style="font-size:16px;">📅</div><div style="font-size:7.5px;font-weight:700;color:#4d7c0f;margin-top:3px;">Monthly</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:8px 4px;text-align:center;border:1px solid #bef264;">
+                <div style="font-size:16px;">🔖</div><div style="font-size:7.5px;font-weight:700;color:#4d7c0f;margin-top:3px;">Del. Sticker</div>
+              </div>
+              <div style="background:white;border-radius:10px;padding:8px 4px;text-align:center;border:1px solid #bef264;">
+                <div style="font-size:16px;">⚙️</div><div style="font-size:7.5px;font-weight:700;color:#4d7c0f;margin-top:3px;">Dislikes</div>
+              </div>
             </div>
           </div>
-          <div class="ds-chips">
-            <span class="ds-chip">Ratings by customers</span>
-            <span class="ds-chip">Per meal breakdown</span>
-            <span class="ds-chip">Quality tracking</span>
-          </div>
-        </div>
 
-        <div class="detail-section">
-          <div class="ds-header">
-            <div class="ds-icon">👩‍⚕️</div>
-            <div>
-              <div class="ds-title">Sales → Dietitian Appointments</div>
-              <div class="ds-sub">Consultation scheduling</div>
-            </div>
-          </div>
-          <div class="ds-chips">
-            <span class="ds-chip">Customer ↔ Dietitian</span>
-            <span class="ds-chip">Appointment Management</span>
-            <span class="ds-chip">Consultation History</span>
-          </div>
         </div>
-
-        <!-- Reports -->
-        <div class="detail-section full accent-lime">
-          <div class="ds-header">
-            <div class="ds-icon">📄</div>
-            <div>
-              <div class="ds-title">Reports</div>
-              <div class="ds-sub">Comprehensive reporting suite</div>
-            </div>
-          </div>
-          <div class="ds-chips">
-            <span class="ds-chip lime">Order Reports</span>
-            <span class="ds-chip lime">Package Reports</span>
-            <span class="ds-chip lime">Delivery Reports</span>
-            <span class="ds-chip lime">Meal Sticker Reports</span>
-            <span class="ds-chip lime">Sales Reports</span>
-            <span class="ds-chip lime">Monthly Sales</span>
-            <span class="ds-chip lime">Delivery Sticker</span>
-            <span class="ds-chip lime">Reports with/without Dislikes</span>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
@@ -1861,10 +2064,10 @@
 
   <!-- SLIDE 7: DIET DONE MEALS -->
   <!-- SLIDE 8: FEED MEALS -->
-  <div class="slide" data-slide="8" style="background:linear-gradient(150deg,#fffbf0 0%,#fef3c7 40%,#fffbf0 100%);flex-direction:row;gap:0;padding:0;overflow:hidden;">
+  <div class="slide mob-feed-split" data-slide="8" style="background:linear-gradient(150deg,#fffbf0 0%,#fef3c7 40%,#fffbf0 100%);flex-direction:row;gap:0;padding:0;overflow:hidden;">
 
     <!-- Left: phones -->
-    <div style="flex:1.1;height:100%;background:linear-gradient(145deg,#f7edd8,#e8d49a 60%,#f7edd8);display:flex;align-items:flex-end;justify-content:center;gap:12px;padding:60px 24px 0;position:relative;overflow:hidden;">
+    <div class="mob-feed-phones" style="flex:1.1;height:100%;background:linear-gradient(145deg,#f7edd8,#e8d49a 60%,#f7edd8);display:flex;align-items:flex-end;justify-content:center;gap:12px;padding:60px 24px 0;position:relative;overflow:hidden;">
       <!-- decorative circle -->
       <div style="position:absolute;width:420px;height:420px;border-radius:50%;border:1px solid rgba(180,130,40,0.12);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;"></div>
       <div style="position:absolute;width:260px;height:260px;border-radius:50%;border:1px solid rgba(180,130,40,0.08);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;"></div>
@@ -1884,7 +2087,7 @@
     </div>
 
     <!-- Right: stats -->
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 48px;gap:20px;">
+    <div class="mob-feed-info" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 48px;gap:20px;">
       <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(180,130,40,0.12);border:1px solid #fde68a;border-radius:100px;padding:5px 14px;width:fit-content;font-size:10.5px;font-weight:700;color:#92400e;letter-spacing:1.5px;text-transform:uppercase;font-family:'Space Mono',monospace;">
         <span style="width:5px;height:5px;background:#d97706;border-radius:50%;animation:pulse 2s infinite;display:inline-block;"></span>
         Feed Meals · Saudi Arabia
@@ -2050,7 +2253,7 @@
   <div class="slide slide-close" data-slide="12">
     <div class="close-blob1"></div>
     <div class="close-blob2"></div>
-    <div style="position:relative;z-index:2;text-align:center">
+    <div style="position:relative;z-index:2;text-align:center;width:100%;max-width:720px;display:flex;flex-direction:column;align-items:center;">
       <div class="close-kicker">Built by Code-OX</div>
       <h2 class="close-h1">The Future of<br><span class="green">Diet Management</span></h2>
       <p class="close-desc">Scalable, fully integrated, and built for growth. The Diet Food Management System powers thousands of healthy meals delivered to customers every single day.</p>
