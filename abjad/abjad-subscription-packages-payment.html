@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abjad Platform — Subscription Ranking, School Packages & ZATCA Payment Flow</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1A3C6E;
+      --gold:   #C8A84B;
+      --bronze: #CD7F32;
+      --silver: #A8A9AD;
+      --light:  #F5F7FA;
+      --border: #DDE3EE;
+      --text:   #1E1E2D;
+      --muted:  #6B7280;
+      --green:  #16A34A;
+      --red:    #DC2626;
+      --warn-bg:#FFFBEB;
+      --warn-border:#F59E0B;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text);
+      background: #E8ECF3;
+    }
+
+    a { color: var(--navy); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Page Wrapper ── */
+    .page {
+      max-width: 1100px;
+      margin: 32px auto;
+      background: #fff;
+      box-shadow: 0 4px 32px rgba(26,60,110,0.12);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .doc-header {
+      background: linear-gradient(135deg, var(--navy) 0%, #0F2549 100%);
+      color: #fff;
+      padding: 44px 48px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .doc-header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(200,168,75,0.12);
+    }
+    .doc-header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 200px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(200,168,75,0.08);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .platform-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(200,168,75,0.2);
+      border: 1px solid rgba(200,168,75,0.4);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .doc-title {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #fff;
+      max-width: 720px;
+      margin-bottom: 8px;
+    }
+    .doc-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 24px;
+    }
+    .doc-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+    }
+    .meta-item i { color: var(--gold); font-size: 12px; }
+
+    .header-badge {
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .gold-bar {
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold) 0%, #E8C66A 50%, var(--gold) 100%);
+    }
+
+    /* ── Table of Contents ── */
+    .toc-wrapper {
+      background: var(--light);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 48px;
+    }
+    .toc-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 8px;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--navy);
+      font-weight: 500;
+      transition: border-color 0.15s;
+    }
+    .toc-item:hover { border-color: var(--gold); text-decoration: none; }
+    .toc-num {
+      background: var(--navy);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Content ── */
+    .content { padding: 0 48px 48px; }
+
+    /* ── Section ── */
+    .section {
+      margin-top: 44px;
+      scroll-margin-top: 24px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--border);
+    }
+    .section-num {
+      background: var(--navy);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      width: 36px; height: 36px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .section-icon {
+      margin-left: auto;
+      color: var(--gold);
+      font-size: 20px;
+    }
+
+    /* ── Sub-sections ── */
+    .subsection { margin-top: 28px; }
+    .subsection-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .subsection-title i { color: var(--gold); }
+
+    p { margin-bottom: 12px; color: var(--text); }
+
+    /* ── Formula Box ── */
+    .formula-box {
+      background: linear-gradient(135deg, #0F2549 0%, var(--navy) 100%);
+      color: #fff;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 16px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 13.5px;
+      line-height: 1.7;
+      position: relative;
+      overflow: hidden;
+    }
+    .formula-box::before {
+      content: 'WDRS FORMULA';
+      position: absolute;
+      top: 8px; right: 14px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--gold);
+      opacity: 0.8;
+    }
+    .formula-box .formula-text {
+      color: #fff;
+      font-weight: 600;
+    }
+    .formula-highlight { color: var(--gold); }
+
+    /* ── Tables ── */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 16px 0;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      background: var(--navy);
+      color: #fff;
+      padding: 11px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+    thead th:first-child { border-radius: 6px 0 0 0; }
+    thead th:last-child  { border-radius: 0 6px 0 0; }
+    tbody tr:nth-child(odd)  { background: #fff; }
+    tbody tr:nth-child(even) { background: var(--light); }
+    tbody tr:hover { background: #EEF2F9; }
+    tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .td-center { text-align: center; }
+    .check { color: var(--green); font-weight: 700; }
+    .dash  { color: #C4C9D4; }
+
+    /* ── Package Badges ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .badge-bronze { background: rgba(205,127,50,0.15); color: var(--bronze); border: 1px solid rgba(205,127,50,0.3); }
+    .badge-silver { background: rgba(168,169,173,0.15); color: #6B7280; border: 1px solid rgba(168,169,173,0.4); }
+    .badge-gold   { background: rgba(200,168,75,0.15); color: #92720A; border: 1px solid rgba(200,168,75,0.4); }
+    .badge-navy   { background: rgba(26,60,110,0.1); color: var(--navy); border: 1px solid rgba(26,60,110,0.2); }
+    .badge-green  { background: rgba(22,163,74,0.1); color: var(--green); border: 1px solid rgba(22,163,74,0.3); }
+
+    .tier-free     { background: #F3F4F6; color: var(--muted); border: 1px solid #D1D5DB; }
+    .tier-monthly  { background: rgba(26,60,110,0.08); color: var(--navy); border: 1px solid rgba(26,60,110,0.2); }
+    .tier-semi     { background: rgba(200,168,75,0.12); color: #92720A; border: 1px solid rgba(200,168,75,0.3); }
+    .tier-annual   { background: rgba(200,168,75,0.25); color: #6B4E00; border: 1px solid var(--gold); }
+
+    /* ── Callout Boxes ── */
+    .callout {
+      border-left: 4px solid var(--warn-border);
+      background: var(--warn-bg);
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    .callout i { color: var(--warn-border); margin-right: 7px; }
+    .callout strong { color: #92400E; }
+
+    .callout-info {
+      border-left-color: var(--navy);
+      background: rgba(26,60,110,0.05);
+    }
+    .callout-info i { color: var(--navy); }
+    .callout-info strong { color: var(--navy); }
+
+    .callout-success {
+      border-left-color: var(--green);
+      background: rgba(22,163,74,0.06);
+    }
+    .callout-success i { color: var(--green); }
+    .callout-success strong { color: #14532D; }
+
+    /* ── Flow Steps ── */
+    .flow-steps { margin: 16px 0; }
+    .flow-step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+    .step-num {
+      background: var(--navy);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      min-width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .step-title {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 13.5px;
+      margin-bottom: 4px;
+    }
+    .step-desc {
+      font-size: 13px;
+      color: var(--text);
+      margin: 0;
+    }
+    .step-connector {
+      width: 2px;
+      height: 16px;
+      background: var(--border);
+      margin-left: 15px;
+    }
+
+    /* ── Sub-flow (nested) ── */
+    .sub-flow {
+      margin: 8px 0 8px 16px;
+      padding-left: 16px;
+      border-left: 2px solid var(--border);
+    }
+    .sub-flow-item {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 3px 0;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .sub-flow-item::before {
+      content: '→';
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── Arabic Hint ── */
+    .arabic {
+      font-family: 'Segoe UI', 'Arial Unicode MS', sans-serif;
+      direction: rtl;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── Summary Cards ── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .summary-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .summary-card-header {
+      background: var(--navy);
+      color: #fff;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .summary-card-header i { color: var(--gold); }
+    .summary-card-body {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--text);
+      background: #fff;
+    }
+
+    /* ── Section Divider ── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+      margin: 40px 0 0;
+    }
+
+    /* ── Price Highlight ── */
+    .price {
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .price-usd {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-left: 2px;
+    }
+
+    /* ── Invoice Field ── */
+    .inv-arabic {
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+      direction: rtl;
+      unicode-bidi: embed;
+    }
+
+    /* ── Footer ── */
+    .doc-footer {
+      background: var(--light);
+      border-top: 2px solid var(--border);
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .footer-logo {
+      height: 36px;
+      width: auto;
+    }
+    .footer-divider {
+      width: 1px;
+      height: 36px;
+      background: var(--border);
+    }
+    .footer-contact {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    .footer-contact a { color: var(--navy); font-weight: 500; }
+    .footer-contact .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 4px;
+    }
+    .footer-contact i { color: var(--gold); font-size: 11px; width: 14px; }
+    .footer-note {
+      font-size: 11.5px;
+      color: var(--muted);
+      text-align: right;
+    }
+    .footer-note strong { color: var(--navy); }
+
+    /* ── Feature List ── */
+    .feature-list {
+      list-style: none;
+      margin: 10px 0;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 5px 0;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid #F0F2F6;
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list li i {
+      color: var(--gold);
+      margin-top: 2px;
+      flex-shrink: 0;
+      font-size: 12px;
+    }
+
+    /* ── Tag stripe ── */
+    .tag-stripe {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { background: #fff; }
+      .page {
+        max-width: 100%;
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+      }
+      .toc-wrapper { break-inside: avoid; }
+      .section { break-inside: avoid; page-break-inside: avoid; }
+      .table-wrapper { break-inside: avoid; }
+      .callout { break-inside: avoid; }
+      .flow-steps { break-inside: avoid; }
+      a { color: inherit; }
+    }
+
+    @media (max-width: 700px) {
+      .doc-header { padding: 28px 22px 24px; }
+      .content { padding: 0 22px 36px; }
+      .toc-wrapper { padding: 20px 22px; }
+      .doc-footer { padding: 20px 22px; flex-direction: column; }
+      .footer-note { text-align: left; }
+      .header-top { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ══════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════ -->
+  <div class="doc-header">
+    <div class="header-top">
+      <div>
+        <div class="platform-tag">
+          <i class="fa-solid fa-graduation-cap"></i>
+          Abjad Platform &mdash; منصة أبجد
+        </div>
+        <h1 class="doc-title">Subscription Ranking, School Packages &amp; ZATCA Payment Flow</h1>
+        <p class="doc-subtitle">Supplementary Specification Document</p>
+        <div class="doc-meta">
+          <span class="meta-item"><i class="fa-solid fa-code-branch"></i> Version 1.0</span>
+          <span class="meta-item"><i class="fa-solid fa-calendar-days"></i> April 8, 2026</span>
+          <span class="meta-item"><i class="fa-solid fa-building"></i> Prepared by CodeOx</span>
+          <span class="meta-item"><i class="fa-solid fa-flag"></i> Saudi Arabia</span>
+        </div>
+      </div>
+      <div class="header-badge">SSD v1.0</div>
+    </div>
+  </div>
+  <div class="gold-bar"></div>
+
+  <!-- ══════════════════════════════════════════
+       TABLE OF CONTENTS
+  ══════════════════════════════════════════ -->
+  <div class="toc-wrapper">
+    <div class="toc-title"><i class="fa-solid fa-list"></i> Table of Contents</div>
+    <div class="toc-grid">
+      <a href="#section1" class="toc-item">
+        <span class="toc-num">1</span>
+        Teacher Subscription — Ranking Algorithm
+      </a>
+      <a href="#section2" class="toc-item">
+        <span class="toc-num">2</span>
+        School Subscription Packages
+      </a>
+      <a href="#section3" class="toc-item">
+        <span class="toc-num">3</span>
+        Payment Flow &amp; ZATCA Compliance
+      </a>
+      <a href="#section4" class="toc-item">
+        <span class="toc-num">4</span>
+        Summary Recommendations
+      </a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CONTENT
+  ══════════════════════════════════════════ -->
+  <div class="content">
+
+    <!-- ═══════════════════════════════════════
+         SECTION 1 — Teacher Ranking
+    ═══════════════════════════════════════ -->
+    <div class="section" id="section1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2 class="section-title">Teacher Subscription — Ranking Algorithm</h2>
+        <i class="fa-solid fa-ranking-star section-icon"></i>
+      </div>
+
+      <!-- 1.1 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-triangle-exclamation"></i> 1.1 Problem Statement</h3>
+        <p>When multiple teachers subscribe to gain top visibility, a simple "pay first, rank first" approach creates unfairness, stale listings, and poor experience for schools. The platform requires a <strong>smart, multi-factor ranking system</strong> that rewards profile quality, genuine activity, and verified credentials — not just payment order.</p>
+        <div class="callout">
+          <i class="fa-solid fa-lightbulb"></i>
+          <strong>Key Challenge:</strong> Without a dynamic ranking mechanism, early subscribers permanently monopolise top positions, discouraging new teacher sign-ups and reducing result quality for schools.
+        </div>
+      </div>
+
+      <!-- 1.2 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-chart-bar"></i> 1.2 Recommended Approach: Weighted Dynamic Ranking Score (WDRS)</h3>
+        <p>Subscribed teachers are placed in a <strong>Premium Pool</strong> and ranked among themselves using the Weighted Dynamic Ranking Score (WDRS). Non-subscribed teachers are ranked separately below the premium pool.</p>
+
+        <div class="callout callout-success">
+          <i class="fa-solid fa-star"></i>
+          <strong>Best Option: Hybrid Quality + Subscription Ranking</strong> — combines subscription investment with genuine teacher quality signals, ensuring schools always see the most relevant candidates first.
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-text">
+            WDRS = <span class="formula-highlight">(Profile Score × 30%)</span>
+                 + <span class="formula-highlight">(Subscription Tier × 20%)</span>
+                 + <span class="formula-highlight">(Activity Score × 20%)</span>
+                 + <span class="formula-highlight">(Response Rate × 15%)</span>
+                 + <span class="formula-highlight">(Verification Score × 15%)</span>
+          </div>
+          <div style="margin-top:8px; font-size:12px; color:rgba(255,255,255,0.6); font-family:'Segoe UI',sans-serif;">
+            Maximum possible score: <strong style="color:var(--gold)">100 points</strong>
+          </div>
+        </div>
+
+        <p><strong>Scoring Breakdown:</strong></p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Factor</th>
+                <th>Weight</th>
+                <th>How It Is Calculated</th>
+                <th style="text-align:center">Max Points</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><i class="fa-solid fa-id-card" style="color:var(--gold);margin-right:6px"></i>Profile Completeness</td>
+                <td><span class="badge badge-navy">30%</span></td>
+                <td>% of profile fields filled — photo, credentials, certifications, CV, bio, all sections</td>
+                <td class="td-center"><strong>30</strong></td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-layer-group" style="color:var(--gold);margin-right:6px"></i>Subscription Tier</td>
+                <td><span class="badge badge-navy">20%</span></td>
+                <td>Annual = 20 pts &nbsp;|&nbsp; 6-Month = 14 pts &nbsp;|&nbsp; Monthly = 8 pts</td>
+                <td class="td-center"><strong>20</strong></td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-bolt" style="color:var(--gold);margin-right:6px"></i>Activity Score</td>
+                <td><span class="badge badge-navy">20%</span></td>
+                <td>Last login recency + response rate to interview invitations</td>
+                <td class="td-center"><strong>20</strong></td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-reply" style="color:var(--gold);margin-right:6px"></i>Response Rate</td>
+                <td><span class="badge badge-navy">15%</span></td>
+                <td>% of school inquiries / interview requests responded to within 48 hours</td>
+                <td class="td-center"><strong>15</strong></td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-shield-halved" style="color:var(--gold);margin-right:6px"></i>Verification Level</td>
+                <td><span class="badge badge-navy">15%</span></td>
+                <td>Admin-verified documents: Degree +5 pts &nbsp;|&nbsp; Certifications +5 pts &nbsp;|&nbsp; ID +5 pts</td>
+                <td class="td-center"><strong>15</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info">
+          <i class="fa-solid fa-circle-info"></i>
+          <strong>Tie-Breaking Rule:</strong> When two teachers have an equal WDRS, the one with the earlier subscription start date ranks higher.
+        </div>
+
+        <div class="callout">
+          <i class="fa-solid fa-rotate"></i>
+          <strong>Anti-Monopoly Rotation:</strong> Subscribed teachers in the top positions rotate every <strong>24 hours</strong> among those within equal score bands (±5 points of each other) to ensure fair exposure and prevent permanent position lock-in.
+        </div>
+      </div>
+
+      <!-- 1.3 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-tags"></i> 1.3 Subscription Tiers for Teachers</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Price</th>
+                <th>Duration</th>
+                <th>Visibility Boost</th>
+                <th>Position in Premium Pool</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge tier-free"><i class="fa-solid fa-user"></i> Standard (Free)</span></td>
+                <td><span class="price">$0 <span class="price-usd">/ month</span></span></td>
+                <td>—</td>
+                <td><span class="dash">None</span></td>
+                <td><span class="dash">Below all premium</span></td>
+              </tr>
+              <tr>
+                <td><span class="badge tier-monthly"><i class="fa-solid fa-calendar"></i> Monthly Premium</span></td>
+                <td><span class="price">$27 <span class="price-usd">/ month</span></span></td>
+                <td>30 days</td>
+                <td><span class="badge badge-green">+8 pts to WDRS</span></td>
+                <td>Premium Pool</td>
+              </tr>
+              <tr>
+                <td><span class="badge tier-semi"><i class="fa-solid fa-calendar-week"></i> Semi-Annual Premium</span></td>
+                <td><span class="price">$133 <span class="price-usd">/ 6 months</span></span></td>
+                <td>6 months</td>
+                <td><span class="badge badge-gold">+14 pts to WDRS</span></td>
+                <td>Premium Pool — Higher Band</td>
+              </tr>
+              <tr>
+                <td><span class="badge tier-annual"><i class="fa-solid fa-crown"></i> Annual Premium</span></td>
+                <td><span class="price">$240 <span class="price-usd">/ year</span></span></td>
+                <td>12 months</td>
+                <td><span class="badge badge-gold"><i class="fa-solid fa-star"></i> +20 pts to WDRS</span></td>
+                <td>Premium Pool — Top Band</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <i class="fa-solid fa-circle-info"></i>
+          <strong>Note:</strong> Suggested prices above are recommendations — final pricing to be confirmed by the Abjad team.
+        </div>
+      </div>
+
+      <!-- 1.4 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-gift"></i> 1.4 What Subscribed Teachers Get (Beyond Ranking)</h3>
+        <ul class="feature-list">
+          <li><i class="fa-solid fa-certificate"></i> <strong>"Featured" badge</strong> displayed on profile card in all search results</li>
+          <li><i class="fa-solid fa-arrow-up"></i> Profile appears in school search results <strong>before all non-subscribed teachers</strong></li>
+          <li><i class="fa-solid fa-bell"></i> Receive job match notifications <strong>faster</strong> — real-time vs. daily digest for free users</li>
+          <li><i class="fa-solid fa-eye"></i> Profile shown in <strong>"Recommended Candidates"</strong> section visible to all schools</li>
+          <li><i class="fa-solid fa-border-all"></i> Highlighted profile border in search results for visual distinction</li>
+        </ul>
+      </div>
+
+      <!-- 1.5 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-sliders"></i> 1.5 Admin Control</h3>
+        <ul class="feature-list">
+          <li><i class="fa-solid fa-gear"></i> Admin can <strong>adjust WDRS weights</strong> from the Admin Panel (Feature 4.7.4) without code changes</li>
+          <li><i class="fa-solid fa-magnifying-glass"></i> Admin can <strong>manually review</strong> if a subscribed teacher is gaming the system or inflating activity metrics</li>
+          <li><i class="fa-solid fa-flag"></i> Suspicious activity flag <strong>removes premium visibility boost</strong> pending administrative review</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════
+         SECTION 2 — School Packages
+    ═══════════════════════════════════════ -->
+    <div class="section" id="section2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2 class="section-title">School Subscription Packages — Bronze, Silver, Gold</h2>
+        <i class="fa-solid fa-building-columns section-icon"></i>
+      </div>
+
+      <!-- 2.1 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-table-cells-large"></i> 2.1 Package Overview</h3>
+        <p>Three tiers targeting different school sizes and hiring volumes:</p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Package</th>
+                <th>Target</th>
+                <th>Monthly</th>
+                <th>6-Month</th>
+                <th>Annual</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-bronze"><i class="fa-solid fa-medal"></i> Bronze</span></td>
+                <td>Small schools, 1–2 hires/year</td>
+                <td><span class="price">$80 <span class="price-usd">/ mo</span></span></td>
+                <td><span class="price">$400 <span class="price-usd">/ 6 mo</span></span></td>
+                <td><span class="price">$800 <span class="price-usd">/ yr</span></span></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-silver"><i class="fa-solid fa-medal"></i> Silver</span></td>
+                <td>Medium schools, 3–10 hires/year</td>
+                <td><span class="price">$160 <span class="price-usd">/ mo</span></span></td>
+                <td><span class="price">$800 <span class="price-usd">/ 6 mo</span></span></td>
+                <td><span class="price">$1,600 <span class="price-usd">/ yr</span></span></td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-gold"><i class="fa-solid fa-crown"></i> Gold</span></td>
+                <td>Large / Multi-campus, 10+ hires/year</td>
+                <td><span class="price">$320 <span class="price-usd">/ mo</span></span></td>
+                <td><span class="price">$1,600 <span class="price-usd">/ 6 mo</span></span></td>
+                <td><span class="price">$3,200 <span class="price-usd">/ yr</span></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <i class="fa-solid fa-percent"></i>
+          <strong>VAT (15%) applies to all prices.</strong> Current SRS has only one tier — this document adds the Bronze / Silver / Gold structure. Prices are exclusive of VAT.
+        </div>
+      </div>
+
+      <!-- 2.2 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-table"></i> 2.2 Feature Matrix — School Packages</h3>
+
+        <!-- Job Posting -->
+        <p style="margin-top:16px;margin-bottom:8px;font-weight:700;color:var(--navy);font-size:13px;">
+          <i class="fa-solid fa-briefcase" style="color:var(--gold);margin-right:6px"></i>Job Posting Features
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th><span class="badge badge-bronze">Bronze</span></th>
+                <th><span class="badge badge-silver">Silver</span></th>
+                <th><span class="badge badge-gold">Gold</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Active Job Postings</td>
+                <td>Up to 3</td>
+                <td>Up to 10</td>
+                <td><strong>Unlimited</strong></td>
+              </tr>
+              <tr>
+                <td>Job Post Duration</td>
+                <td>30 days</td>
+                <td>60 days</td>
+                <td>90 days</td>
+              </tr>
+              <tr>
+                <td>Featured Job Posts</td>
+                <td class="dash">—</td>
+                <td>3 / month</td>
+                <td><strong>Unlimited</strong></td>
+              </tr>
+              <tr>
+                <td>Job Post Duplication</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Draft Job Posts</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Rich Text Job Description</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Candidate Search -->
+        <p style="margin-top:20px;margin-bottom:8px;font-weight:700;color:var(--navy);font-size:13px;">
+          <i class="fa-solid fa-magnifying-glass-plus" style="color:var(--gold);margin-right:6px"></i>Candidate Search &amp; Access
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th><span class="badge badge-bronze">Bronze</span></th>
+                <th><span class="badge badge-silver">Silver</span></th>
+                <th><span class="badge badge-gold">Gold</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Teacher Database Access</td>
+                <td>Basic (limited filters)</td>
+                <td>Advanced (all filters)</td>
+                <td>Advanced + AI Match</td>
+              </tr>
+              <tr>
+                <td>Profile Views / Month</td>
+                <td>50</td>
+                <td>300</td>
+                <td><strong>Unlimited</strong></td>
+              </tr>
+              <tr>
+                <td>CV / Résumé Downloads</td>
+                <td>20 / month</td>
+                <td>100 / month</td>
+                <td><strong>Unlimited</strong></td>
+              </tr>
+              <tr>
+                <td>Shortlist Folders</td>
+                <td>1 per job</td>
+                <td>3 per job</td>
+                <td><strong>Unlimited</strong></td>
+              </tr>
+              <tr>
+                <td>Candidate Comparison</td>
+                <td class="dash td-center">—</td>
+                <td>Side-by-side (2)</td>
+                <td>Side-by-side (4)</td>
+              </tr>
+              <tr>
+                <td>Bulk Profile Export (PDF)</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Contact Teacher Directly</td>
+                <td class="dash td-center">—</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i> (via platform)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Analytics -->
+        <p style="margin-top:20px;margin-bottom:8px;font-weight:700;color:var(--navy);font-size:13px;">
+          <i class="fa-solid fa-chart-line" style="color:var(--gold);margin-right:6px"></i>Analytics &amp; Reporting
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th><span class="badge badge-bronze">Bronze</span></th>
+                <th><span class="badge badge-silver">Silver</span></th>
+                <th><span class="badge badge-gold">Gold</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Basic Dashboard</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Hiring Metrics</td>
+                <td>Basic</td>
+                <td>Full</td>
+                <td>Full + Custom</td>
+              </tr>
+              <tr>
+                <td>Job Performance Analytics</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Custom Report Builder</td>
+                <td class="dash td-center">—</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Automated Report Scheduling</td>
+                <td class="dash td-center">—</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Data Export (Excel / CSV)</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Hiring Funnel Visualization</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Team -->
+        <p style="margin-top:20px;margin-bottom:8px;font-weight:700;color:var(--navy);font-size:13px;">
+          <i class="fa-solid fa-users" style="color:var(--gold);margin-right:6px"></i>Team &amp; Account Management
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th><span class="badge badge-bronze">Bronze</span></th>
+                <th><span class="badge badge-silver">Silver</span></th>
+                <th><span class="badge badge-gold">Gold</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Team Member Accounts</td>
+                <td>2</td>
+                <td>5</td>
+                <td><strong>Unlimited</strong></td>
+              </tr>
+              <tr>
+                <td>Role Permissions (RBAC)</td>
+                <td>Basic</td>
+                <td>Full</td>
+                <td>Full</td>
+              </tr>
+              <tr>
+                <td>Activity Log Per User</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Multi-Campus Support</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Interview -->
+        <p style="margin-top:20px;margin-bottom:8px;font-weight:700;color:var(--navy);font-size:13px;">
+          <i class="fa-solid fa-calendar-check" style="color:var(--gold);margin-right:6px"></i>Interview &amp; Hiring Tools
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th><span class="badge badge-bronze">Bronze</span></th>
+                <th><span class="badge badge-silver">Silver</span></th>
+                <th><span class="badge badge-gold">Gold</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Interview Scheduling</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Interview Calendar</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>External Calendar Sync</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Abjad-Coordinated Interviews</td>
+                <td class="dash td-center">—</td>
+                <td>2 / month</td>
+                <td><strong>Unlimited</strong></td>
+              </tr>
+              <tr>
+                <td>Interview Feedback Forms</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Background Check Requests</td>
+                <td class="dash td-center">—</td>
+                <td>3 / year</td>
+                <td><strong>Unlimited</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Support -->
+        <p style="margin-top:20px;margin-bottom:8px;font-weight:700;color:var(--navy);font-size:13px;">
+          <i class="fa-solid fa-headset" style="color:var(--gold);margin-right:6px"></i>Support &amp; Account
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th><span class="badge badge-bronze">Bronze</span></th>
+                <th><span class="badge badge-silver">Silver</span></th>
+                <th><span class="badge badge-gold">Gold</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Support Response SLA</td>
+                <td>48 hours</td>
+                <td>24 hours</td>
+                <td><strong style="color:var(--green)">4 hours</strong></td>
+              </tr>
+              <tr>
+                <td>Dedicated Account Manager</td>
+                <td class="dash td-center">—</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Onboarding Assistance</td>
+                <td>Self-serve</td>
+                <td>Guided setup</td>
+                <td>Full onboarding</td>
+              </tr>
+              <tr>
+                <td>Platform Training</td>
+                <td>Help centre</td>
+                <td>Video tutorials</td>
+                <td>Live training</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- AI -->
+        <p style="margin-top:20px;margin-bottom:8px;font-weight:700;color:var(--navy);font-size:13px;">
+          <i class="fa-solid fa-robot" style="color:var(--gold);margin-right:6px"></i>AI &amp; Visibility
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th><span class="badge badge-bronze">Bronze</span></th>
+                <th><span class="badge badge-silver">Silver</span></th>
+                <th><span class="badge badge-gold">Gold</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Basic AI Matching</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Premium AI Filters</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i></td>
+              </tr>
+              <tr>
+                <td>Priority in Teacher Search Results</td>
+                <td class="dash td-center">—</td>
+                <td class="dash td-center">—</td>
+                <td class="check td-center"><i class="fa-solid fa-check"></i> (Gold Badge)</td>
+              </tr>
+              <tr>
+                <td>School Profile Verification Badge</td>
+                <td><span class="badge badge-bronze"><i class="fa-solid fa-shield"></i> Standard</span></td>
+                <td><span class="badge badge-silver"><i class="fa-solid fa-shield-halved"></i> Silver Badge</span></td>
+                <td><span class="badge badge-gold"><i class="fa-solid fa-shield"></i> Gold Badge</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2.3 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-arrows-rotate"></i> 2.3 Package Upgrade / Downgrade Rules</h3>
+        <ul class="feature-list">
+          <li><i class="fa-solid fa-circle-up" style="color:var(--green)"></i> <strong>Upgrade:</strong> Immediate access to new features; prorated billing for the remaining subscription period</li>
+          <li><i class="fa-solid fa-circle-down" style="color:var(--muted)"></i> <strong>Downgrade:</strong> Effective at next billing cycle; excess features locked (data fully preserved)</li>
+          <li><i class="fa-solid fa-ban" style="color:var(--red)"></i> <strong>Annual Cancellation:</strong> No refund (per ZATCA-compliant non-refundable subscription terms); access continues until period end</li>
+          <li><i class="fa-solid fa-calendar-xmark" style="color:var(--muted)"></i> <strong>Monthly Cancellation:</strong> Effective at end of current billing month</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════
+         SECTION 3 — Payment Flow & ZATCA
+    ═══════════════════════════════════════ -->
+    <div class="section" id="section3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2 class="section-title">Payment Flow &amp; ZATCA Compliance</h2>
+        <i class="fa-solid fa-file-invoice-dollar section-icon"></i>
+      </div>
+
+      <!-- 3.1 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-landmark"></i> 3.1 What is ZATCA E-Invoicing?</h3>
+        <p>The <strong>Zakat, Tax and Customs Authority (ZATCA)</strong> — هيئة الزكاة والضريبة والجمارك — mandates e-invoicing (<em>Fatoorah / فاتورة</em>) for all VAT-registered businesses in Saudi Arabia.</p>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-card-header"><i class="fa-solid fa-file-code"></i> Phase 1 — Generation</div>
+            <div class="summary-card-body">Generate and store e-invoices in ZATCA-approved XML format with cryptographic QR codes for all transactions.</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-header"><i class="fa-solid fa-plug"></i> Phase 2 — Integration</div>
+            <div class="summary-card-body">Real-time invoice reporting to ZATCA via API using Cryptographic Stamp Identifier (CSID) for B2B transactions.</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-header"><i class="fa-solid fa-percent"></i> VAT Rate</div>
+            <div class="summary-card-body"><strong style="font-size:22px;color:var(--navy)">15%</strong> on all taxable transactions — hardcoded to avoid calculation errors.</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-header"><i class="fa-solid fa-database"></i> Invoice Archiving</div>
+            <div class="summary-card-body">All invoices must be stored and accessible for a minimum of <strong>6 years</strong> from invoice date — non-negotiable.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.2 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-file-lines"></i> 3.2 Invoice Types Required</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Transaction Type</th>
+                <th>Customer Type</th>
+                <th>Invoice Type</th>
+                <th>Requirements</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Subscription Payment</td>
+                <td>School (B2B)</td>
+                <td><span class="badge badge-navy">Standard Tax Invoice</span></td>
+                <td>Buyer VAT number, XML format, QR code, UUID</td>
+              </tr>
+              <tr>
+                <td>Teacher Subscription</td>
+                <td>Teacher (B2C)</td>
+                <td><span class="badge badge-green">Simplified Tax Invoice</span></td>
+                <td>Seller details, QR code, UUID — no buyer VAT required</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3.3 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-credit-card"></i> 3.3 Recommended Payment Gateway</h3>
+
+        <div class="callout callout-success">
+          <i class="fa-solid fa-star"></i>
+          <strong>Best Option: Moyasar</strong> (Primary) + <strong>Tamara</strong> (BNPL)
+        </div>
+
+        <p>Moyasar is a Saudi-native payment gateway offering:</p>
+
+        <div class="tag-stripe">
+          <span class="badge badge-green"><i class="fa-solid fa-check"></i> ZATCA Phase 2 Compliant</span>
+          <span class="badge badge-green"><i class="fa-solid fa-check"></i> SAMA Regulated</span>
+          <span class="badge badge-navy"><i class="fa-solid fa-credit-card"></i> Mada</span>
+          <span class="badge badge-navy"><i class="fa-brands fa-apple"></i> Apple Pay</span>
+          <span class="badge badge-navy"><i class="fa-solid fa-mobile-screen"></i> STCPay</span>
+          <span class="badge badge-navy"><i class="fa-brands fa-visa"></i> Visa / Mastercard</span>
+          <span class="badge badge-navy"><i class="fa-solid fa-globe"></i> AMEX</span>
+          <span class="badge badge-green"><i class="fa-solid fa-language"></i> Arabic Checkout</span>
+          <span class="badge badge-green"><i class="fa-solid fa-webhook"></i> Webhook Confirmation</span>
+        </div>
+
+        <div class="callout callout-info" style="margin-top:12px">
+          <i class="fa-solid fa-info-circle"></i>
+          <strong>Backup / Alternative:</strong> HyperPay — also SAMA-regulated and ZATCA-compliant, suitable as a failover gateway.
+        </div>
+      </div>
+
+      <!-- 3.4 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-diagram-project"></i> 3.4 Complete Payment Flow — School Subscription</h3>
+
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Package Selection</div>
+              <p class="step-desc">School selects Bronze / Silver / Gold and billing period (Monthly / 6-Month / Annual) from the pricing page.</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+
+          <div class="flow-step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Cart Summary</div>
+              <p class="step-desc">System displays: package name and features, base price (SAR), VAT amount (15%), total amount (SAR), billing start and end dates.</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+
+          <div class="flow-step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">VAT Registration Check</div>
+              <p class="step-desc">System prompts: <em>"Do you have a VAT Registration Number?"</em></p>
+              <div class="sub-flow">
+                <div class="sub-flow-item">YES — Collect VAT number → Generate <strong>Standard Tax Invoice (B2B)</strong></div>
+                <div class="sub-flow-item">NO — Proceed → Generate <strong>Simplified Tax Invoice</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+
+          <div class="flow-step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Payment Method Selection</div>
+              <div class="tag-stripe" style="margin-top:6px">
+                <span class="badge badge-navy">Mada</span>
+                <span class="badge badge-navy">Apple Pay</span>
+                <span class="badge badge-navy">STCPay</span>
+                <span class="badge badge-navy">Tamara (BNPL)</span>
+                <span class="badge badge-navy">Visa / Mastercard</span>
+              </div>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+
+          <div class="flow-step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <div class="step-title">OTP / 3DS Verification</div>
+              <div class="sub-flow">
+                <div class="sub-flow-item">Mada / STCPay: OTP via SMS</div>
+                <div class="sub-flow-item">Visa / Mastercard: 3D Secure redirect</div>
+                <div class="sub-flow-item">Apple Pay: Face ID / Touch ID</div>
+                <div class="sub-flow-item">Tamara: Tamara app approval</div>
+              </div>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+
+          <div class="flow-step">
+            <div class="step-num">6</div>
+            <div class="step-body">
+              <div class="step-title">Payment Processing (Moyasar Gateway)</div>
+              <div class="sub-flow">
+                <div class="sub-flow-item">Real-time authorisation sent to gateway</div>
+                <div class="sub-flow-item">Success → Proceed to Step 7</div>
+                <div class="sub-flow-item">Failure → Show error, offer retry or alternative payment method</div>
+              </div>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+
+          <div class="flow-step">
+            <div class="step-num">7</div>
+            <div class="step-body">
+              <div class="step-title">E-Invoice Generation (ZATCA Compliant)</div>
+              <p class="step-desc" style="margin-bottom:8px">System automatically generates invoice containing:</p>
+              <div class="sub-flow">
+                <div class="sub-flow-item">UUID (unique invoice identifier, system generated)</div>
+                <div class="sub-flow-item">Invoice date — Gregorian + Hijri (ميلادي + هجري)</div>
+                <div class="sub-flow-item">Seller details: Abjad company name, VAT number, CR number, address</div>
+                <div class="sub-flow-item">Buyer details: school name, VAT number (B2B), address</div>
+                <div class="sub-flow-item">Line items: package name, period, base amount</div>
+                <div class="sub-flow-item">VAT amount (15%) + Total amount inclusive of VAT</div>
+                <div class="sub-flow-item">QR code (ZATCA cryptographic stamp) + Digital signature (CSID for Phase 2)</div>
+              </div>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+
+          <div class="flow-step">
+            <div class="step-num">8</div>
+            <div class="step-body">
+              <div class="step-title">Invoice Distribution</div>
+              <div class="sub-flow">
+                <div class="sub-flow-item">PDF invoice emailed to school billing email address</div>
+                <div class="sub-flow-item">Invoice available in school dashboard (Payment History)</div>
+                <div class="sub-flow-item">Invoice stored in Abjad system for 6 years (ZATCA requirement)</div>
+                <div class="sub-flow-item">Phase 2: Real-time XML submission to ZATCA portal</div>
+              </div>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+
+          <div class="flow-step">
+            <div class="step-num">9</div>
+            <div class="step-body">
+              <div class="step-title">Subscription Activation</div>
+              <div class="sub-flow">
+                <div class="sub-flow-item">School account upgraded immediately upon payment confirmation</div>
+                <div class="sub-flow-item">Welcome notification sent to school admin</div>
+                <div class="sub-flow-item">Billing reminder set for renewal date (7 days before expiry)</div>
+                <div class="sub-flow-item">Auto-renewal processed if enabled by school</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.5 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-handshake-simple"></i> 3.5 Complete Payment Flow — Pay-Per-Hire</h3>
+
+        <div class="callout callout-info">
+          <i class="fa-solid fa-circle-info"></i>
+          <strong>Trigger:</strong> Teacher and school both confirm a hire (Feature 3.8.4) — system auto-detects the dual confirmation.
+        </div>
+
+        <div class="flow-steps" style="margin-top:16px">
+          <div class="flow-step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Hire Confirmation Detection</div>
+              <p class="step-desc">System detects hire confirmation from both the teacher and the school via the platform's confirmation workflow.</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="flow-step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Invoice Preview</div>
+              <p class="step-desc">School is shown a preview: <strong>1,500 SAR</strong> + <strong>225 SAR VAT</strong> = <strong>1,725 SAR total</strong> (discounted rates apply for Silver/Gold — see §2.3).</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="flow-step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Payment Method + Verification</div>
+              <p class="step-desc">School selects from available methods (Mada, Apple Pay, STCPay, Tamara, Visa/MC). OTP or 3DS verification applied.</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="flow-step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">Payment Processed via Moyasar</div>
+              <p class="step-desc">Gateway processes the payment in real time. Failure handling and retry logic apply.</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="flow-step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <div class="step-title">ZATCA Invoice Generated &amp; Sent</div>
+              <p class="step-desc">Standard Tax Invoice (B2B) generated with full ZATCA fields, QR code, UUID, and emailed to school.</p>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="flow-step">
+            <div class="step-num">6</div>
+            <div class="step-body">
+              <div class="step-title">Hire Locked — Onboarding Activated</div>
+              <p class="step-desc">Hire status locked in system. Onboarding checklist activated for the school-teacher pair.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.6 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-list-check"></i> 3.6 ZATCA Required Invoice Fields</h3>
+        <p>All invoices generated by the Abjad platform must include the following fields:</p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Field <span class="inv-arabic">الحقل</span></th>
+                <th>Required For</th>
+                <th>Example / Format</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Invoice Number</strong> <span class="inv-arabic">رقم الفاتورة</span></td>
+                <td>All</td>
+                <td><code>INV-2026-00145</code></td>
+              </tr>
+              <tr>
+                <td><strong>UUID</strong></td>
+                <td>All</td>
+                <td><code>8a3f2b... (system generated)</code></td>
+              </tr>
+              <tr>
+                <td><strong>Invoice Date (Gregorian)</strong></td>
+                <td>All</td>
+                <td><code>2026-04-08</code></td>
+              </tr>
+              <tr>
+                <td><strong>Invoice Date (Hijri)</strong> <span class="inv-arabic">التاريخ الهجري</span></td>
+                <td>All</td>
+                <td><code>1447-10-10</code></td>
+              </tr>
+              <tr>
+                <td><strong>Seller Name (Arabic)</strong></td>
+                <td>All</td>
+                <td><span class="arabic">منصة أبجد</span></td>
+              </tr>
+              <tr>
+                <td><strong>Seller Name (English)</strong></td>
+                <td>All</td>
+                <td>Abjad Platform</td>
+              </tr>
+              <tr>
+                <td><strong>Seller VAT Number</strong> <span class="inv-arabic">الرقم الضريبي</span></td>
+                <td>All</td>
+                <td><code>310XXXXXXXXX3</code></td>
+              </tr>
+              <tr>
+                <td><strong>Seller CR Number</strong> <span class="inv-arabic">السجل التجاري</span></td>
+                <td>All</td>
+                <td><code>1010XXXXXX</code></td>
+              </tr>
+              <tr>
+                <td><strong>Seller Address</strong></td>
+                <td>All</td>
+                <td>Riyadh, Saudi Arabia</td>
+              </tr>
+              <tr>
+                <td><strong>Buyer Name</strong></td>
+                <td>All</td>
+                <td>[School Name]</td>
+              </tr>
+              <tr>
+                <td><strong>Buyer VAT Number</strong></td>
+                <td>B2B only</td>
+                <td><code>310XXXXXXXXX4</code></td>
+              </tr>
+              <tr>
+                <td><strong>Buyer Address</strong></td>
+                <td>B2B only</td>
+                <td>[School Address]</td>
+              </tr>
+              <tr>
+                <td><strong>Line Item Description</strong></td>
+                <td>All</td>
+                <td>Silver Package — Monthly Subscription</td>
+              </tr>
+              <tr>
+                <td><strong>Unit Price (excl. VAT)</strong></td>
+                <td>All</td>
+                <td>600.00 SAR</td>
+              </tr>
+              <tr>
+                <td><strong>VAT Rate</strong> <span class="inv-arabic">نسبة الضريبة</span></td>
+                <td>All</td>
+                <td>15%</td>
+              </tr>
+              <tr>
+                <td><strong>VAT Amount</strong> <span class="inv-arabic">مبلغ الضريبة</span></td>
+                <td>All</td>
+                <td>90.00 SAR</td>
+              </tr>
+              <tr>
+                <td><strong>Total (incl. VAT)</strong> <span class="inv-arabic">الإجمالي شامل الضريبة</span></td>
+                <td>All</td>
+                <td>690.00 SAR</td>
+              </tr>
+              <tr>
+                <td><strong>QR Code</strong> <span class="inv-arabic">رمز الاستجابة السريعة</span></td>
+                <td>All</td>
+                <td>ZATCA cryptographic stamp (TLV encoded)</td>
+              </tr>
+              <tr>
+                <td><strong>Payment Method</strong></td>
+                <td>All</td>
+                <td>Mada / Apple Pay / STCPay / etc.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3.7 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-rotate-left"></i> 3.7 Refund Policy (ZATCA Compliant)</h3>
+
+        <div class="callout">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <strong>Admin approval required</strong> for any refund, per Feature 3.9.6. Refunds cannot be processed unilaterally by the school.
+        </div>
+
+        <p>When a refund is approved, the system must:</p>
+        <ul class="feature-list">
+          <li><i class="fa-solid fa-file-circle-minus" style="color:var(--red)"></i> Generate a <strong>Credit Note</strong> (debit/credit note is ZATCA-mandated for all refunds)</li>
+          <li><i class="fa-solid fa-link"></i> Credit Note references the <strong>original invoice UUID</strong> for traceability</li>
+          <li><i class="fa-solid fa-minus" style="color:var(--red)"></i> Credit Note contains <strong>negative amounts</strong> matching the original line items</li>
+          <li><i class="fa-solid fa-upload"></i> Submitted to ZATCA (Phase 2) identically to the original invoice</li>
+          <li><i class="fa-solid fa-money-bill-transfer"></i> Refund processed back to <strong>original payment method only</strong></li>
+          <li><i class="fa-solid fa-clock"></i> Processing time: <strong>5–10 business days</strong> (Mada/local) or <strong>10–15 days</strong> (international cards)</li>
+        </ul>
+      </div>
+
+      <!-- 3.8 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-layer-group"></i> 3.8 Recommended Tech Stack for Payments</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Recommended Solution</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><i class="fa-solid fa-gateway" style="color:var(--gold);margin-right:6px"></i>Payment Gateway</td>
+                <td><span class="badge badge-green">Moyasar</span></td>
+                <td>SAMA-licensed, ZATCA-ready, Saudi-native gateway</td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-calendar-plus" style="color:var(--gold);margin-right:6px"></i>BNPL Option</td>
+                <td><span class="badge badge-green">Tamara</span></td>
+                <td>Already in SRS, Saudi-regulated, widely adopted locally</td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-file-invoice" style="color:var(--gold);margin-right:6px"></i>E-Invoice Engine</td>
+                <td><span class="badge badge-navy">Wafid / Custom ZATCA SDK</span></td>
+                <td>ZATCA Phase 2 certified engine for compliant XML generation</td>
+              </tr>
+              <tr>
+                <td><i class="fa-brands fa-aws" style="color:var(--gold);margin-right:6px"></i>Invoice Storage</td>
+                <td><span class="badge badge-navy">AWS S3 (KSA Region)</span></td>
+                <td>Data residency within Saudi Arabia (PDPL compliance)</td>
+              </tr>
+              <tr>
+                <td><i class="fa-solid fa-percent" style="color:var(--gold);margin-right:6px"></i>VAT Calculation</td>
+                <td><span class="badge badge-navy">Automated (Hardcoded 15%)</span></td>
+                <td>Prevents calculation errors; no manual rate entry</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3.9 -->
+      <div class="subsection">
+        <h3 class="subsection-title"><i class="fa-solid fa-shield"></i> 3.9 PDPL Compliance Note</h3>
+        <p>In addition to ZATCA, the <strong>Personal Data Protection Law (PDPL)</strong> of Saudi Arabia — نظام حماية البيانات الشخصية — applies to all payment data handled by Abjad:</p>
+        <ul class="feature-list">
+          <li><i class="fa-solid fa-flag-sa" style="color:var(--gold)"></i> Payment data must be stored in Saudi Arabia or countries with <strong>equivalent data protection</strong></li>
+          <li><i class="fa-solid fa-lock"></i> School and teacher financial data must <strong>not be shared</strong> with third parties without explicit consent</li>
+          <li><i class="fa-solid fa-user-xmark" style="color:var(--muted)"></i> Users have the right to request deletion of payment history — <strong>subject to the 6-year ZATCA archiving override</strong> for invoice records</li>
+        </ul>
+        <div class="callout callout-info">
+          <i class="fa-solid fa-balance-scale"></i>
+          <strong>ZATCA vs PDPL:</strong> The mandatory 6-year ZATCA invoice archiving requirement legally overrides individual deletion requests for invoice records. Users can be informed of this limitation transparently.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══════════════════════════════════════
+         SECTION 4 — Summary
+    ═══════════════════════════════════════ -->
+    <div class="section" id="section4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2 class="section-title">Summary Recommendations</h2>
+        <i class="fa-solid fa-circle-check section-icon"></i>
+      </div>
+
+      <div class="callout callout-success" style="margin-bottom:20px">
+        <i class="fa-solid fa-check-double"></i>
+        <strong>All three questions addressed.</strong> The following table consolidates the key recommendations from Sections 1–3 for quick stakeholder reference.
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:30%">Question</th>
+              <th>Recommended Solution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                  <i class="fa-solid fa-ranking-star" style="color:var(--gold)"></i>
+                  <strong>Teacher Subscription Ranking</strong>
+                </div>
+                <span class="badge badge-navy" style="font-size:10px">Section 1</span>
+              </td>
+              <td>
+                <strong>Weighted Dynamic Ranking Score (WDRS)</strong> — hybrid quality + subscription tier + activity score system. Subscribed teachers enter a Premium Pool ranked by a 5-factor formula (profile 30%, subscription tier 20%, activity 20%, response rate 15%, verification 15%). Equal-score bands rotate every 24 hours to prevent position monopolisation. Admin can tune weights from the control panel.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                  <i class="fa-solid fa-building-columns" style="color:var(--gold)"></i>
+                  <strong>School Packages</strong>
+                </div>
+                <span class="badge badge-navy" style="font-size:10px">Section 2</span>
+              </td>
+              <td>
+                <strong>3-tier Bronze / Silver / Gold</strong> mapped to job posting limits, candidate search depth, analytics maturity, team account size, support SLA, and AI feature access. Bronze targets small schools (300 SAR/mo), Silver for medium (600 SAR/mo), Gold for large/multi-campus (1,200 SAR/mo). All tiers still include pay-per-hire with tier-based discounts (0%, 10%, 20–25%).
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                  <i class="fa-solid fa-file-invoice-dollar" style="color:var(--gold)"></i>
+                  <strong>Payment Flow &amp; ZATCA</strong>
+                </div>
+                <span class="badge badge-navy" style="font-size:10px">Section 3</span>
+              </td>
+              <td>
+                <strong>Moyasar gateway</strong> + ZATCA Phase 1 &amp; 2 e-invoicing engine. Standard Tax Invoice for B2B school transactions; Simplified Tax Invoice for B2C teacher subscriptions. All invoices are QR-coded, UUID-stamped, Hijri-dated, and archived for 6 years. Refunds use ZATCA-compliant Credit Notes. PDPL data residency via AWS KSA region.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:28px">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-card-header"><i class="fa-solid fa-road-circle-check"></i> Next Steps — Abjad Team</div>
+            <div class="summary-card-body">
+              <ul class="feature-list">
+                <li><i class="fa-solid fa-check" style="color:var(--green)"></i> Confirm teacher subscription pricing (§1.3)</li>
+                <li><i class="fa-solid fa-check" style="color:var(--green)"></i> Finalise Bronze/Silver/Gold price points (§2.1)</li>
+                <li><i class="fa-solid fa-check" style="color:var(--green)"></i> Register with Moyasar and initiate ZATCA Phase 1 sandbox testing</li>
+                <li><i class="fa-solid fa-check" style="color:var(--green)"></i> Procure CSID for ZATCA Phase 2 integration</li>
+                <li><i class="fa-solid fa-check" style="color:var(--green)"></i> Review PDPL data residency requirements with legal team</li>
+              </ul>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-card-header"><i class="fa-solid fa-code"></i> Next Steps — Development Team</div>
+            <div class="summary-card-body">
+              <ul class="feature-list">
+                <li><i class="fa-solid fa-code" style="color:var(--navy)"></i> Implement WDRS scoring engine with configurable weights</li>
+                <li><i class="fa-solid fa-code" style="color:var(--navy)"></i> Build Bronze/Silver/Gold feature gate middleware</li>
+                <li><i class="fa-solid fa-code" style="color:var(--navy)"></i> Integrate Moyasar SDK and configure webhooks</li>
+                <li><i class="fa-solid fa-code" style="color:var(--navy)"></i> Build ZATCA XML invoice generator (Wafid SDK or custom)</li>
+                <li><i class="fa-solid fa-code" style="color:var(--navy)"></i> Configure AWS S3 KSA for invoice archiving</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+  <div class="doc-footer">
+    <div class="footer-brand">
+      <a href="https://code-ox.com" target="_blank">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx Logo" class="footer-logo" />
+      </a>
+      <div class="footer-divider"></div>
+      <div class="footer-contact">
+        <div class="contact-row">
+          <i class="fa-solid fa-envelope"></i>
+          <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a>
+        </div>
+        <div class="contact-row">
+          <i class="fa-solid fa-phone"></i>
+          <a href="tel:+966535716437">+966 535 716 437</a>
+        </div>
+        <div class="contact-row">
+          <i class="fa-solid fa-globe"></i>
+          <a href="https://code-ox.com" target="_blank">code-ox.com</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-note">
+      <strong>Abjad Platform</strong><br />
+      Subscription Ranking, School Packages &amp; ZATCA Payment Flow<br />
+      <span style="font-size:11px">Version 1.0 &nbsp;|&nbsp; April 8, 2026 &nbsp;|&nbsp; Prepared by CodeOx</span><br />
+      <span style="font-size:10.5px;color:#9CA3AF">This document is a supplementary specification for internal use.</span>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
