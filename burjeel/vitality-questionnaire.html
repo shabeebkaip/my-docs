@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vitality Home Health Services — Discovery Questionnaire</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7f6; color: #1a1a1a; font-size: 15px; line-height: 1.6; }
+  .wrap { max-width: 780px; margin: 2.5rem auto; padding: 0 1.25rem 3rem; }
+  .header { background: #fff; border: 0.5px solid #dde3e0; border-radius: 14px; padding: 1.75rem 2rem; margin-bottom: 1.5rem; }
+  .logo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .logo-mark { width: 40px; height: 40px; border-radius: 10px; background: #1D9E75; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 13px; flex-shrink: 0; }
+  .org { font-size: 12.5px; color: #6b7b74; margin-top: 2px; }
+  h1 { font-size: 22px; font-weight: 600; color: #111; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 13.5px; color: #5a6b64; line-height: 1.65; }
+  .section { margin-bottom: 1.25rem; }
+  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.85rem; }
+  .sec-num { width: 26px; height: 26px; border-radius: 50%; background: #E1F5EE; color: #0F6E56; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sec-title { font-size: 15px; font-weight: 600; color: #111; }
+  .q-block { background: #fff; border: 0.5px solid #dde3e0; border-radius: 12px; padding: 1.1rem 1.3rem; margin-bottom: 0.75rem; }
+  .q-text { font-size: 14px; font-weight: 600; color: #111; margin-bottom: 0.7rem; line-height: 1.5; }
+  .q-note { font-size: 12px; color: #7a8c85; font-weight: 400; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: #222; cursor: pointer; line-height: 1.45; }
+  .opt input[type=checkbox], .opt input[type=radio] { accent-color: #1D9E75; width: 15px; height: 15px; flex-shrink: 0; cursor: pointer; }
+  .inline-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .inline-opt { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #222; cursor: pointer; background: #f5f7f6; border: 0.5px solid #dde3e0; border-radius: 7px; padding: 5px 11px; }
+  .inline-opt input { accent-color: #1D9E75; width: 14px; height: 14px; cursor: pointer; }
+  input[type=text], input[type=number], textarea { border: 0.5px solid #dde3e0; border-radius: 7px; padding: 8px 10px; font-size: 13.5px; background: #f9faf9; color: #1a1a1a; font-family: inherit; outline: none; resize: vertical; transition: border-color 0.15s; }
+  input[type=text]:focus, input[type=number]:focus, textarea:focus { border-color: #1D9E75; background: #fff; }
+  input[type=text].full, textarea.full { width: 100%; margin-top: 4px; }
+  input[type=text].inline-input { display: inline-block; margin-left: 8px; padding: 3px 8px; vertical-align: middle; }
+  .divider { height: 0.5px; background: #e4eae7; margin: 0.5rem 0 1.5rem; }
+  .submit-row { display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding-top: 1.25rem; border-top: 0.5px solid #dde3e0; margin-top: 0.5rem; }
+  .btn-submit { background: #1D9E75; color: #fff; border: none; border-radius: 9px; padding: 11px 30px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+  .btn-submit:hover:not(:disabled) { background: #0F6E56; }
+  .btn-submit:disabled { background: #7ecaad; cursor: not-allowed; }
+  .btn-clear { background: transparent; border: 0.5px solid #c5d0cb; color: #5a6b64; border-radius: 9px; padding: 11px 20px; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .btn-clear:hover { background: #f0f4f2; }
+
+  /* Status banners */
+  .status-msg { display: none; align-items: center; gap: 10px; border-radius: 10px; padding: 12px 16px; font-size: 13.5px; font-weight: 500; margin-top: 1rem; }
+  .status-msg.success { display: flex; background: #e6f9f1; border: 0.5px solid #7ed9b7; color: #0a5c40; }
+  .status-msg.error   { display: flex; background: #fdf2f2; border: 0.5px solid #f0b0b0; color: #8b1a1a; }
+  .status-icon { font-size: 17px; }
+
+  .spinner { display: inline-block; width: 15px; height: 15px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .footer-note { text-align: center; font-size: 12px; color: #9aaba4; margin-top: 2rem; }
+  @media (max-width: 560px) { .wrap { padding: 0 0.75rem 2rem; } .header { padding: 1.25rem; } .q-block { padding: 1rem; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<form id="mainForm" onsubmit="handleSubmit(event)">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="logo-row">
+      <div class="logo-mark">VH</div>
+      <div>
+        <div style="font-size:14px;font-weight:600;color:#111;">Vitality Home Health Services</div>
+        <div class="org">Burjeel Holdings &nbsp;·&nbsp; AI Agent Demo — Discovery Questionnaire</div>
+      </div>
+    </div>
+    <h1>Pre-Demo Discovery Form</h1>
+    <p class="subtitle">This short questionnaire helps us tailor your AI agent demo to your actual workflows. It should take less than 10 minutes to complete. Most questions are checkboxes — no lengthy answers needed.</p>
+  </div>
+
+  <!-- ── SECTION 1: Services & Use Cases ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="sec-num">1</div>
+      <div class="sec-title">Services &amp; use cases</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">1. Which home healthcare services do you currently offer? </div>
+      <div class="options">
+        <label class="opt"><input type="checkbox" name="services" value="Physiotherapy"> Physiotherapy</label>
+        <label class="opt"><input type="checkbox" name="services" value="Nursing care"> Nursing care</label>
+        <label class="opt"><input type="checkbox" name="services" value="Post-surgical care"> Post-surgical care</label>
+        <label class="opt"><input type="checkbox" name="services" value="Elderly / chronic care"> Elderly / chronic care</label>
+        <label class="opt"><input type="checkbox" name="services" value="Occupational therapy"> Occupational therapy</label>
+        <label class="opt"><input type="checkbox" name="services" value="Other"> Other: <input type="text" class="inline-input" id="services_other" style="width:180px;" placeholder="specify..."></label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">2. Which use cases should the AI demo focus on? </div>
+      <div class="options">
+        <label class="opt"><input type="checkbox" name="use_cases" value="Patient requests a home visit via WhatsApp"> Patient requests a home visit via WhatsApp</label>
+        <label class="opt"><input type="checkbox" name="use_cases" value="AI assigns the nearest available therapist"> AI assigns the nearest available therapist</label>
+        <label class="opt"><input type="checkbox" name="use_cases" value="Automated appointment reminders to patients"> Automated appointment reminders to patients</label>
+        <label class="opt"><input type="checkbox" name="use_cases" value="Escalation to staff when no therapist is available"> Escalation to staff when no therapist is available</label>
+        <label class="opt"><input type="checkbox" name="use_cases" value="Processing patient-sent documents / photos"> Processing patient-sent documents / photos</label>
+        <label class="opt"><input type="checkbox" name="use_cases" value="Voice call reminders to patients"> Voice call reminders to patients</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── SECTION 2: Patient Communication ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="sec-num">2</div>
+      <div class="sec-title">Patient communication (WhatsApp &amp; voice)</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">3. Do you currently use WhatsApp to communicate with patients?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="whatsapp_usage" value="Yes — already using WhatsApp Business"> Yes — already using WhatsApp Business</label>
+        <label class="opt"><input type="radio" name="whatsapp_usage" value="No — we use phone calls / SMS only"> No — we use phone calls / SMS only</label>
+        <label class="opt"><input type="radio" name="whatsapp_usage" value="We are open to starting WhatsApp"> We are open to starting WhatsApp</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">4. How do patients currently request a home visit?</div>
+      <div class="inline-opts">
+        <label class="inline-opt"><input type="checkbox" name="request_channel" value="Phone call"> Phone call</label>
+        <label class="inline-opt"><input type="checkbox" name="request_channel" value="WhatsApp"> WhatsApp</label>
+        <label class="inline-opt"><input type="checkbox" name="request_channel" value="Website form"> Website form</label>
+        <label class="inline-opt"><input type="checkbox" name="request_channel" value="Walk-in / reception"> Walk-in / reception</label>
+        <label class="inline-opt"><input type="checkbox" name="request_channel" value="Via doctor referral"> Via doctor referral</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">5. What language(s) should the AI communicate in?</div>
+      <div class="inline-opts">
+        <label class="inline-opt"><input type="checkbox" name="languages" value="English"> English</label>
+        <label class="inline-opt"><input type="checkbox" name="languages" value="Arabic"> Arabic</label>
+        <label class="inline-opt"><input type="checkbox" name="languages" value="Other"> Other: <input type="text" id="language_other" style="width:100px;display:inline-block;margin-left:6px;padding:2px 7px;" placeholder="language"></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── SECTION 3: Location & Therapist Assignment ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="sec-num">3</div>
+      <div class="sec-title">Location &amp; therapist assignment</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">6. How should the AI identify the patient's location?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="location_method" value="Patient shares  location via WhatsApp"> Patient shares  location via WhatsApp</label>
+        <label class="opt"><input type="radio" name="location_method" value="Patient types their address"> Patient types their address</label>
+        <label class="opt"><input type="radio" name="location_method" value="Use address saved in the patient record"> Use address saved in the patient record</label>
+        <label class="opt"><input type="radio" name="location_method" value="Any of the above — show all options in demo"> Any of the above — show all options in demo</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">7. How should therapists be assigned? </div>
+      <div class="options">
+        <label class="opt"><input type="checkbox" name="assign_method" value="Nearest to patient location"> Nearest to patient location</label>
+        <label class="opt"><input type="checkbox" name="assign_method" value="Current availability / calendar"> Current availability / calendar</label>
+        <label class="opt"><input type="checkbox" name="assign_method" value="Patient preference (same therapist as last time)"> Patient preference (same therapist as last time)</label>
+        <label class="opt"><input type="checkbox" name="assign_method" value="Skill / specialisation match"> Skill / specialisation match</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">8. If a therapist doesn't respond, how long should the AI wait before notifying the next one?</div>
+      <div class="inline-opts">
+        <label class="inline-opt"><input type="radio" name="buffer_time" value="5 min"> 5 min</label>
+        <label class="inline-opt"><input type="radio" name="buffer_time" value="10 min"> 10 min</label>
+        <label class="inline-opt"><input type="radio" name="buffer_time" value="15 min"> 15 min</label>
+        <label class="inline-opt"><input type="radio" name="buffer_time" value="Custom"> Custom: <input type="number" id="buffer_custom" style="width:60px;display:inline-block;margin-left:6px;padding:2px 7px;" min="1" max="60" placeholder="min"></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── SECTION 4: Attachments & Voice ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="sec-num">4</div>
+      <div class="sec-title">Attachments &amp; voice messages</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">9. What types of files might patients send? </div>
+      <div class="inline-opts">
+        <label class="inline-opt"><input type="checkbox" name="file_types" value="Photos (wounds, prescriptions)"> Photos (wounds, prescriptions)</label>
+        <label class="inline-opt"><input type="checkbox" name="file_types" value="PDF reports / referrals"> PDF reports / referrals</label>
+        <label class="inline-opt"><input type="checkbox" name="file_types" value="Voice notes"> Voice notes</label>
+        <label class="inline-opt"><input type="checkbox" name="file_types" value="Videos"> Videos</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">10. What should the AI do with patient-sent files?</div>
+      <div class="options">
+        <label class="opt"><input type="checkbox" name="file_action" value="Acknowledge receipt and forward to the assigned therapist"> Acknowledge receipt and forward to the assigned therapist</label>
+        <label class="opt"><input type="checkbox" name="file_action" value="Extract key information (e.g. diagnosis from PDF)"> Extract key information (e.g. diagnosis from PDF)</label>
+        <label class="opt"><input type="checkbox" name="file_action" value="Save to the patient record in the hospital system"> Save to the patient record in the hospital system</label>
+        <label class="opt"><input type="checkbox" name="file_action" value="Only for demo — no action needed, just show it's received"> Only for demo — no action needed, just show it's received</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── SECTION 5: Scheduling & Reminders ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="sec-num">5</div>
+      <div class="sec-title">Appointment scheduling &amp; reminders</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">11. How far in advance should the AI send appointment reminders?</div>
+      <div class="inline-opts">
+        <label class="inline-opt"><input type="radio" name="reminder_timing" value="1 hour before"> 1 hour before</label>
+        <label class="inline-opt"><input type="radio" name="reminder_timing" value="3 hours before"> 3 hours before</label>
+        <label class="inline-opt"><input type="radio" name="reminder_timing" value="Day before"> Day before</label>
+        <label class="inline-opt"><input type="radio" name="reminder_timing" value="Both day before & 1 hour before"> Both day before &amp; 1 hour before</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">12. How should reminders be sent?</div>
+      <div class="inline-opts">
+        <label class="inline-opt"><input type="checkbox" name="reminder_channel" value="WhatsApp message"> WhatsApp message</label>
+        <label class="inline-opt"><input type="checkbox" name="reminder_channel" value="Automated voice call"> Automated voice call</label>
+        <label class="inline-opt"><input type="checkbox" name="reminder_channel" value="SMS"> SMS</label>
+        <label class="inline-opt"><input type="checkbox" name="reminder_channel" value="Patient's choice"> Patient's choice</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── SECTION 6: Escalation ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="sec-num">6</div>
+      <div class="sec-title">Escalation to support team</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">13. When should the AI escalate to a human staff member?</div>
+      <div class="options">
+        <label class="opt"><input type="checkbox" name="escalation" value="No therapist accepts after the buffer time"> No therapist accepts after the buffer time</label>
+        <label class="opt"><input type="checkbox" name="escalation" value="Patient expresses urgency or emergency"> Patient expresses urgency or emergency</label>
+        <label class="opt"><input type="checkbox" name="escalation" value="Patient asks to speak to a human directly"> Patient asks to speak to a human directly</label>
+        <label class="opt"><input type="checkbox" name="escalation" value="AI cannot understand the patient's request"> AI cannot understand the patient's request</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── SECTION 7: Systems & Integrations ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="sec-num">7</div>
+      <div class="sec-title">Systems &amp; integrations</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">14. Do you have an existing Hospital Information System (HIS) or scheduling system?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="his_system" value="Yes"> Yes — system name: <input type="text" class="inline-input" id="his_name" style="width:200px;" placeholder="e.g. Oracle Health, Cerner..."></label>
+        <label class="opt"><input type="radio" name="his_system" value="No"> No — we use spreadsheets / manual scheduling</label>
+        <label class="opt"><input type="radio" name="his_system" value="In progress"> In progress / being implemented</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">15. For the demo, how should therapist data be handled?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="data_handling" value="Use a small set of sample / dummy data"> Use a small set of sample / dummy data <span class="q-note">(recommended for demo)</span></label>
+        <label class="opt"><input type="radio" name="data_handling" value="Provide us with a real sample export from your system"> Provide us with a real sample export from your system</label>
+        <label class="opt"><input type="radio" name="data_handling" value="We will share API access to the scheduling system"> We will share API access to the scheduling system</label>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-text">Any additional context or specific requests for the demo? <span class="q-note">(optional)</span></div>
+      <textarea name="extra_notes" class="full" rows="3" placeholder="e.g. specific scenarios to showcase, branding preferences, key stakeholders attending..."></textarea>
+    </div>
+  </div>
+
+  <!-- ── SUBMIT ── -->
+  <div class="submit-row">
+    <button class="btn-clear" type="button" id="clearBtn">Clear form</button>
+    <button class="btn-submit" type="submit" id="submitBtn">Submit responses</button>
+  </div>
+
+  <div class="status-msg" id="successMsg">
+    <span class="status-icon">✅</span>
+    <span>Thank you! Your responses have been sent successfully. We'll be in touch shortly.</span>
+  </div>
+  <div class="status-msg" id="errorMsg">
+    <span class="status-icon">❌</span>
+    <span id="errorText">Something went wrong. Please try again or contact us directly.</span>
+  </div>
+
+</form>
+
+<p class="footer-note">Prepared by your AI Solutions Consultant &nbsp;·&nbsp; For demo purposes only</p>
+</div>
+
+<!-- ──────────────────────────────────────────
+     EmailJS CONFIG  — replace values below
+     with your own from emailjs.com dashboard
+────────────────────────────────────────── -->
+<script>
+  // ── YOUR EMAILJS CREDENTIALS ──────────────────────
+  const EMAILJS_PUBLIC_KEY  = 'KYH01AKqQdwfQc3Gi';   // Account → API Keys → Public Key
+  const EMAILJS_SERVICE_ID  = 'service_vgjlxwh';      // Email Services → Service ID
+  const EMAILJS_TEMPLATE_ID = 'template_rwhkmj4';     // Email Templates → Template ID
+  // ─────────────────────────────────────────────────
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  /* ── Helpers ── */
+  function getChecked(name) {
+    return [...document.querySelectorAll(`input[name="${name}"]:checked`)]
+      .map(el => el.value).join(', ') || '—';
+  }
+  function getRadio(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : '—';
+  }
+  function getVal(id) {
+    const el = document.getElementById(id);
+    return el && el.value.trim() ? el.value.trim() : '';
+  }
+
+  /* ── Build readable summary ── */
+  function buildSummary() {
+    const bufferTime = getRadio('buffer_time') === 'Custom'
+      ? `Custom — ${getVal('buffer_custom') || '?'} min`
+      : getRadio('buffer_time');
+
+    const servicesVal = getChecked('services') +
+      (getVal('services_other') ? ` (Other: ${getVal('services_other')})` : '');
+
+    const languagesVal = getChecked('languages') +
+      (getVal('language_other') ? ` (Other: ${getVal('language_other')})` : '');
+
+    const hisVal = getRadio('his_system') === 'Yes'
+      ? `Yes — ${getVal('his_name') || 'name not provided'}`
+      : getRadio('his_system');
+
+    return {
+      submitted_at:      new Date().toLocaleString('en-GB', { timeZone: 'Asia/Dubai' }) + ' (GST)',
+      services:          servicesVal,
+      use_cases:         getChecked('use_cases'),
+      whatsapp_usage:    getRadio('whatsapp_usage'),
+      request_channels:  getChecked('request_channel'),
+      languages:         languagesVal,
+      location_method:   getRadio('location_method'),
+      assign_method:     getChecked('assign_method'),
+      buffer_time:       bufferTime,
+      file_types:        getChecked('file_types'),
+      file_action:       getChecked('file_action'),
+      reminder_timing:   getRadio('reminder_timing'),
+      reminder_channel:  getChecked('reminder_channel'),
+      escalation:        getChecked('escalation'),
+      his_system:        hisVal,
+      data_handling:     getRadio('data_handling'),
+      extra_notes:       getVal('extra_notes') || '—',
+    };
+  }
+
+  /* ── Submit handler ── */
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const btn        = document.getElementById('submitBtn');
+    const successEl  = document.getElementById('successMsg');
+    const errorEl    = document.getElementById('errorMsg');
+    const errorText  = document.getElementById('errorText');
+
+    // Reset banners
+    successEl.className = 'status-msg';
+    errorEl.className   = 'status-msg';
+
+    // Loading state
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Sending…';
+
+    try {
+      const params = buildSummary();
+
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          // These variable names must match your EmailJS template placeholders
+          name:             'Vitality Discovery Form',
+          reply_to:         'no-reply@vitality.ae',
+          submitted_at:     params.submitted_at,
+          services:         params.services,
+          use_cases:        params.use_cases,
+          whatsapp_usage:   params.whatsapp_usage,
+          request_channels: params.request_channels,
+          languages:        params.languages,
+          location_method:  params.location_method,
+          assign_method:    params.assign_method,
+          buffer_time:      params.buffer_time,
+          file_types:       params.file_types,
+          file_action:      params.file_action,
+          reminder_timing:  params.reminder_timing,
+          reminder_channel: params.reminder_channel,
+          escalation:       params.escalation,
+          his_system:       params.his_system,
+          data_handling:    params.data_handling,
+          extra_notes:      params.extra_notes,
+        }
+      );
+
+      successEl.className = 'status-msg success';
+      btn.innerHTML = '✓ Submitted';
+
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      errorText.textContent = `Failed to send (${err.text || err.message || 'unknown error'}). Please try again.`;
+      errorEl.className = 'status-msg error';
+      btn.disabled  = false;
+      btn.innerHTML = 'Submit responses';
+    }
+  }
+
+  /* ── Clear form ── */
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    if (!confirm('Clear all answers?')) return;
+    document.querySelectorAll('input[type=checkbox], input[type=radio]')
+      .forEach(i => i.checked = false);
+    document.querySelectorAll('input[type=text], textarea, input[type=number]')
+      .forEach(i => i.value = '');
+    document.getElementById('successMsg').className = 'status-msg';
+    document.getElementById('errorMsg').className   = 'status-msg';
+    const btn = document.getElementById('submitBtn');
+    btn.disabled  = false;
+    btn.innerHTML = 'Submit responses';
+  });
+</script>
+
+</body>
+</html>
