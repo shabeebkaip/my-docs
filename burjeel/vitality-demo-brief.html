@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vitality Home Health — AI Demo Developer Brief</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:   #1D9E75;
+    --dark:    #0F6E56;
+    --navy:    #0B2E3E;
+    --light:   #F4F8F6;
+    --border:  #DDE8E3;
+    --text:    #1A1A1A;
+    --muted:   #6B7B74;
+    --warn:    #F59E0B;
+    --warn-bg: #FFFBEB;
+    --red:     #DC2626;
+    --red-bg:  #FEF2F2;
+    --tbc:     #7C3AED;
+    --tbc-bg:  #F5F3FF;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--text);
+    background: #E8EEF0;
+  }
+
+  .page {
+    max-width: 1060px;
+    margin: 32px auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 32px rgba(11,46,62,0.11);
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  .doc-header {
+    background: linear-gradient(135deg, #0B2E3E 0%, #0F6E56 100%);
+    color: #fff;
+    padding: 44px 52px 38px;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-header::before {
+    content: '';
+    position: absolute; top: -60px; right: -50px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(29,158,117,0.18);
+  }
+  .doc-header::after {
+    content: '';
+    position: absolute; bottom: -40px; left: 180px;
+    width: 140px; height: 140px; border-radius: 50%;
+    background: rgba(29,158,117,0.10);
+  }
+
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .logo-block { display: flex; align-items: center; gap: 14px; }
+  .logo-mark {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; color: #fff; letter-spacing: 0.5px;
+  }
+  .logo-text { font-size: 15px; font-weight: 600; color: #fff; }
+  .logo-sub { font-size: 11.5px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+
+  .badge-header {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(29,158,117,0.25); border: 1px solid rgba(29,158,117,0.45);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 11px; color: #7ED9B7; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  .doc-title { font-size: 27px; font-weight: 700; line-height: 1.25; color: #fff; max-width: 680px; margin-bottom: 10px; }
+  .doc-subtitle { font-size: 13.5px; color: rgba(255,255,255,0.72); max-width: 600px; line-height: 1.65; }
+
+  .header-meta { display: flex; gap: 24px; margin-top: 24px; }
+  .meta-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: rgba(255,255,255,0.7); }
+  .meta-item i { color: #7ED9B7; font-size: 12px; }
+
+  /* ── Content ── */
+  .content { padding: 0 52px 52px; }
+
+  /* ── Alert Banner ── */
+  .alert-tbc {
+    background: var(--tbc-bg); border: 1px solid #C4B5FD;
+    border-radius: 8px; padding: 14px 18px;
+    display: flex; gap: 12px; margin: 28px 0 0;
+  }
+  .alert-tbc i { color: var(--tbc); font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+  .alert-tbc p { font-size: 13px; color: #4C1D95; line-height: 1.6; }
+  .alert-tbc strong { color: #3B0764; }
+
+  /* ── Section ── */
+  .section { margin-top: 36px; }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px;
+  }
+  .section-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .section-icon { margin-left: auto; color: var(--green); font-size: 18px; opacity: 0.6; }
+
+  /* ── Subsection ── */
+  .subsection { margin-bottom: 24px; }
+  .sub-title { font-size: 12.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; }
+
+  /* ── Cards / Items ── */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cards-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .card {
+    background: var(--light); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+  }
+  .card-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .card-value { font-size: 13.5px; color: var(--text); font-weight: 500; line-height: 1.55; }
+
+  /* ── Tag list ── */
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #E6F7F1; border: 1px solid #A7DFD0;
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 12.5px; color: var(--dark); font-weight: 500;
+  }
+  .tag i { font-size: 11px; color: var(--green); }
+  .tag.warn { background: var(--warn-bg); border-color: #FCD34D; color: #78350F; }
+  .tag.warn i { color: var(--warn); }
+  .tag.tbc { background: var(--tbc-bg); border-color: #C4B5FD; color: #4C1D95; }
+
+  /* ── Confirmed / TBC rows ── */
+  .q-row {
+    display: grid; grid-template-columns: 280px 1fr; gap: 0;
+    border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden;
+  }
+  .q-label {
+    background: var(--light); padding: 12px 14px;
+    font-size: 12.5px; font-weight: 600; color: var(--navy);
+    border-right: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .q-label i { color: var(--green); font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+  .q-answer { padding: 12px 14px; font-size: 13px; color: var(--text); line-height: 1.6; }
+
+  .q-answer.confirmed { background: #F0FDF8; }
+  .q-answer.tbc {
+    background: var(--tbc-bg);
+    font-style: italic; color: #4C1D95;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .q-answer.tbc i { color: var(--tbc); flex-shrink: 0; margin-top: 2px; }
+  .q-answer.default {
+    background: #EEF2FF; color: #1E3A8A;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .q-answer.default i { color: #3B82F6; flex-shrink: 0; margin-top: 2px; }
+
+  /* ── Conflict row ── */
+  .conflict-box {
+    background: var(--warn-bg); border: 1px solid #FCD34D;
+    border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;
+    display: flex; gap: 10px;
+  }
+  .conflict-box i { color: var(--warn); flex-shrink: 0; margin-top: 2px; }
+  .conflict-box div { font-size: 13px; color: #78350F; line-height: 1.6; }
+
+  /* ── Flow ── */
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .flow-step { display: flex; gap: 14px; align-items: flex-start; }
+  .flow-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+  }
+  .flow-body { flex: 1; padding-bottom: 18px; border-left: 2px solid var(--border); margin-left: -1px; padding-left: 16px; }
+  .flow-step:last-child .flow-body { border-left: 2px solid transparent; }
+  .flow-title { font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .flow-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .flow-note { font-size: 12px; color: #fff; background: var(--green); border-radius: 4px; padding: 2px 8px; display: inline-block; margin-top: 4px; }
+  .flow-tbc { font-size: 12px; color: var(--tbc); background: var(--tbc-bg); border-radius: 4px; padding: 2px 8px; display: inline-block; margin-top: 4px; font-style: italic; }
+  .flow-warn { font-size: 12px; color: #78350F; background: var(--warn-bg); border-radius: 4px; padding: 2px 8px; display: inline-block; margin-top: 4px; }
+
+  /* ── Table ── */
+  .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: var(--navy); color: #fff; padding: 10px 14px; font-size: 12px; font-weight: 600; text-align: left; }
+  td { padding: 10px 14px; font-size: 12.5px; border-top: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+  tr:nth-child(even) td { background: var(--light); }
+  td.check { color: var(--green); text-align: center; }
+  td.cross { color: var(--red); text-align: center; }
+  td.tbc-cell { color: var(--tbc); font-style: italic; }
+
+  /* ── Legend ── */
+  .legend { display: flex; gap: 18px; margin-bottom: 20px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── Callout ── */
+  .callout {
+    border-radius: 8px; padding: 12px 16px;
+    display: flex; gap: 10px; margin-bottom: 12px;
+    background: var(--light); border: 1px solid var(--border);
+  }
+  .callout i { flex-shrink: 0; margin-top: 2px; }
+  .callout p { font-size: 13px; line-height: 1.6; }
+  .callout.green { background: #E6F7F1; border-color: #A7DFD0; }
+  .callout.green i { color: var(--green); }
+  .callout.warn { background: var(--warn-bg); border-color: #FCD34D; }
+  .callout.warn i { color: var(--warn); }
+  .callout.tbc { background: var(--tbc-bg); border-color: #C4B5FD; }
+  .callout.tbc i { color: var(--tbc); }
+
+  /* ── Section divider ── */
+  .sec-divider { height: 1px; background: var(--border); margin: 36px 0; }
+
+  /* ── Footer ── */
+  .doc-footer {
+    background: var(--navy); color: rgba(255,255,255,0.75);
+    padding: 24px 52px; display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px;
+  }
+  .footer-logo { height: 28px; filter: brightness(0) invert(1) opacity(0.85); }
+  .footer-contact { text-align: right; line-height: 1.8; }
+  .footer-contact a { color: rgba(255,255,255,0.75); text-decoration: none; }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; }
+    .page { box-shadow: none; border-radius: 0; margin: 0; max-width: 100%; }
+    .doc-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .doc-footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
+  <div class="doc-header">
+    <div class="header-top">
+      <div class="logo-block">
+        <div class="logo-mark">VH</div>
+        <div>
+          <div class="logo-text">Vitality Home Health Services</div>
+          <div class="logo-sub">Burjeel Holdings &nbsp;·&nbsp; AI Agent Demo</div>
+        </div>
+      </div>
+      <div class="badge-header"><i class="fa-solid fa-code"></i> Developer Brief</div>
+    </div>
+    <div class="doc-title">AI Agent Demo — Developer Specification</div>
+    <div class="doc-subtitle">Consolidated from 2 client questionnaire responses. Outlines confirmed requirements, demo defaults for unanswered items, and all user flows the demonstration must cover.</div>
+    <div class="header-meta">
+      <div class="meta-item"><i class="fa-solid fa-calendar"></i> April 10, 2026</div>
+      <div class="meta-item"><i class="fa-solid fa-users"></i> 2 respondents</div>
+      <div class="meta-item"><i class="fa-solid fa-circle-info"></i> Demo scope only — not production spec</div>
+      <div class="meta-item"><i class="fa-solid fa-building"></i> Prepared by CodeOx</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ CONTENT ═══════════════════ -->
+  <div class="content">
+
+    <!-- Alert -->
+    <div class="alert-tbc">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <p><strong>Reading this document:</strong> Items marked <span style="color:var(--tbc);font-weight:600">TBC — Confirm with client</span> were left unanswered by both respondents. For the demo, sensible defaults have been suggested — these must be validated with the Vitality team before the live demo. Items marked <span style="color:#1E3A8A;font-weight:600">Demo Default</span> are suggested values that work well for demonstration purposes.</p>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend" style="margin-top:20px">
+      <div class="legend-item"><div class="leg-dot" style="background:var(--green)"></div> Confirmed by client</div>
+      <div class="legend-item"><div class="leg-dot" style="background:#FCD34D"></div> Conflict between responses</div>
+      <div class="legend-item"><div class="leg-dot" style="background:var(--tbc)"></div> Not answered — TBC</div>
+      <div class="legend-item"><div class="leg-dot" style="background:#3B82F6"></div> Demo default (suggested)</div>
+    </div>
+
+    <!-- ─── SECTION 1: Overview ─── -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">Platform Overview — What the AI Agent Is</div>
+        <i class="fa-solid fa-robot section-icon"></i>
+      </div>
+
+      <div class="callout green">
+        <i class="fa-solid fa-circle-check"></i>
+        <p>The demo must show an AI agent that handles <strong>home healthcare coordination</strong> — taking patient requests via WhatsApp, assigning the nearest available therapist, sending reminders, processing documents, and escalating to human staff when needed. The agent communicates in both <strong>English and Arabic</strong>.</p>
+      </div>
+
+      <div class="cards" style="margin-top:16px">
+        <div class="card">
+          <div class="card-label"><i class="fa-solid fa-stethoscope" style="margin-right:5px;color:var(--green)"></i>Services Covered in Demo</div>
+          <div class="card-value">
+            <div class="tag-list" style="margin-top:4px">
+              <span class="tag"><i class="fa-solid fa-check"></i> Physiotherapy</span>
+              <span class="tag"><i class="fa-solid fa-check"></i> Nursing Care</span>
+              <span class="tag"><i class="fa-solid fa-check"></i> Post-Surgical Care</span>
+              <span class="tag"><i class="fa-solid fa-check"></i> Elderly / Chronic Care</span>
+              <span class="tag"><i class="fa-solid fa-check"></i> Occupational Therapy</span>
+              <span class="tag warn"><i class="fa-solid fa-star"></i> IV Drips</span>
+              <span class="tag warn"><i class="fa-solid fa-star"></i> At-Home Hydrofacials</span>
+              <span class="tag warn"><i class="fa-solid fa-star"></i> Venus Legacy (Cosmetic)</span>
+              <span class="tag warn"><i class="fa-solid fa-star"></i> Telemedicine</span>
+            </div>
+            <div style="margin-top:10px;font-size:12px;color:var(--muted)">
+              <i class="fa-solid fa-star" style="color:var(--warn);margin-right:4px"></i>Additional services from Respondent 2 only. Include in demo service menu.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label"><i class="fa-solid fa-language" style="margin-right:5px;color:var(--green)"></i>Languages</div>
+          <div class="card-value">
+            <div class="tag-list" style="margin-top:4px">
+              <span class="tag"><i class="fa-solid fa-check"></i> English</span>
+              <span class="tag"><i class="fa-solid fa-check"></i> Arabic (عربي)</span>
+            </div>
+            <div style="margin-top:10px;font-size:12px;color:var(--muted)">
+              AI must detect language automatically and reply in the same language. Both responses confirmed.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-divider"></div>
+
+    <!-- ─── SECTION 2: WhatsApp Channel ─── -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">Communication Channel — WhatsApp</div>
+        <i class="fa-solid fa-comment-dots section-icon"></i>
+      </div>
+
+      <div class="conflict-box">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div>
+          <strong>Conflict between responses:</strong> Respondent 1 said they do <em>not</em> currently use WhatsApp (uses phone/SMS only). Respondent 2 said they <em>already use WhatsApp Business</em>. For the demo, build around <strong>WhatsApp Business API</strong> — this is the more complete setup and the primary use case requested by both respondents.
+        </div>
+      </div>
+
+      <div class="q-row">
+        <div class="q-label"><i class="fa-brands fa-whatsapp"></i> Primary channel</div>
+        <div class="q-answer confirmed"><strong>WhatsApp Business API</strong> — demo built entirely around WhatsApp as the patient-facing channel</div>
+      </div>
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-phone"></i> Fallback / secondary</div>
+        <div class="q-answer default"><i class="fa-solid fa-circle-info"></i> Demo default: Include voice call reminder as a secondary channel (requested by Respondent 1). Show as an optional flow in the demo.</div>
+      </div>
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-globe"></i> Demo WhatsApp setup</div>
+        <div class="q-answer confirmed">Use <strong>WhatsApp Business API sandbox</strong> (Twilio or Meta Cloud API test environment) for the demo — no production number required</div>
+      </div>
+    </div>
+
+    <div class="sec-divider"></div>
+
+    <!-- ─── SECTION 3: Use Cases to Demo ─── -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">Use Cases — What the Demo Must Show</div>
+        <i class="fa-solid fa-list-check section-icon"></i>
+      </div>
+
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">The following use cases were confirmed by at least one respondent. All marked <span style="background:#E6F7F1;border:1px solid #A7DFD0;border-radius:4px;padding:1px 7px;font-size:11.5px;color:var(--dark);font-weight:600">BOTH</span> are required by both respondents and are the highest priority.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Use Case</th>
+              <th>Requested By</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>UC-1</strong></td>
+              <td>Patient requests a home visit via WhatsApp</td>
+              <td class="check"><i class="fa-solid fa-check"></i> Both</td>
+              <td><span style="background:#D1FAE5;color:#065F46;border-radius:4px;padding:2px 8px;font-size:11.5px;font-weight:600">Must Have</span></td>
+            </tr>
+            <tr>
+              <td><strong>UC-2</strong></td>
+              <td>AI assigns the nearest available therapist automatically</td>
+              <td class="check"><i class="fa-solid fa-check"></i> Both</td>
+              <td><span style="background:#D1FAE5;color:#065F46;border-radius:4px;padding:2px 8px;font-size:11.5px;font-weight:600">Must Have</span></td>
+            </tr>
+            <tr>
+              <td><strong>UC-3</strong></td>
+              <td>Automated appointment reminders sent to patients</td>
+              <td class="check"><i class="fa-solid fa-check"></i> Both</td>
+              <td><span style="background:#D1FAE5;color:#065F46;border-radius:4px;padding:2px 8px;font-size:11.5px;font-weight:600">Must Have</span></td>
+            </tr>
+            <tr>
+              <td><strong>UC-4</strong></td>
+              <td>Processing patient-sent documents and photos</td>
+              <td class="check"><i class="fa-solid fa-check"></i> Both</td>
+              <td><span style="background:#D1FAE5;color:#065F46;border-radius:4px;padding:2px 8px;font-size:11.5px;font-weight:600">Must Have</span></td>
+            </tr>
+            <tr>
+              <td><strong>UC-5</strong></td>
+              <td>Escalation to human staff when no therapist accepts</td>
+              <td><i class="fa-solid fa-check" style="color:var(--green)"></i> Respondent 1 + 2 (both)</td>
+              <td><span style="background:#D1FAE5;color:#065F46;border-radius:4px;padding:2px 8px;font-size:11.5px;font-weight:600">Must Have</span></td>
+            </tr>
+            <tr>
+              <td><strong>UC-6</strong></td>
+              <td>Escalation when patient expresses urgency or emergency</td>
+              <td><i class="fa-solid fa-check" style="color:var(--green)"></i> Both</td>
+              <td><span style="background:#D1FAE5;color:#065F46;border-radius:4px;padding:2px 8px;font-size:11.5px;font-weight:600">Must Have</span></td>
+            </tr>
+            <tr>
+              <td><strong>UC-7</strong></td>
+              <td>Escalation when patient asks to speak to a human directly</td>
+              <td><i class="fa-solid fa-check" style="color:var(--green)"></i> Respondent 2</td>
+              <td><span style="background:#FEF3C7;color:#92400E;border-radius:4px;padding:2px 8px;font-size:11.5px;font-weight:600">Should Have</span></td>
+            </tr>
+            <tr>
+              <td><strong>UC-8</strong></td>
+              <td>Escalation when AI cannot understand the patient's request</td>
+              <td><i class="fa-solid fa-check" style="color:var(--green)"></i> Respondent 2</td>
+              <td><span style="background:#FEF3C7;color:#92400E;border-radius:4px;padding:2px 8px;font-size:11.5px;font-weight:600">Should Have</span></td>
+            </tr>
+            <tr>
+              <td><strong>UC-9</strong></td>
+              <td>Voice call reminders to patients (phone fallback)</td>
+              <td><i class="fa-solid fa-check" style="color:var(--green)"></i> Respondent 1</td>
+              <td><span style="background:#EEF2FF;color:#1E3A8A;border-radius:4px;padding:2px 8px;font-size:11.5px;font-weight:600">Nice to Have</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec-divider"></div>
+
+    <!-- ─── SECTION 4: Main Flow ─── -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">Primary Demo Flow — Patient Booking via WhatsApp</div>
+        <i class="fa-solid fa-diagram-project section-icon"></i>
+      </div>
+
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px">This is the main flow the demo should walk through. Items with a <span style="color:var(--tbc);font-weight:600">purple label</span> need client confirmation before the demo; defaults are suggested below.</p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-body">
+            <div class="flow-title">Patient Sends Message on WhatsApp</div>
+            <div class="flow-desc">Patient messages the Vitality WhatsApp number requesting a home visit. They may type freely in English or Arabic. The AI greets them and collects: service type, preferred date/time, and location.</div>
+            <span class="flow-note">UC-1 confirmed by both respondents</span>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-body">
+            <div class="flow-title">Location Identification</div>
+            <div class="flow-desc">
+              <strong>Respondent 1:</strong> Use address saved in patient record.<br>
+              <strong>Respondent 2:</strong> Show all options in the demo.
+            </div>
+            <span class="flow-note">Demo: Show all 3 options as a menu — (a) saved address, (b) patient shares live location via WhatsApp, (c) patient types their address</span>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-body">
+            <div class="flow-title">Patient Sends Documents / Photos (if any)</div>
+            <div class="flow-desc">Patient may send referral letters, prescriptions, lab results, or wound photos directly via WhatsApp.</div>
+            <span class="flow-tbc">TBC: File types — Suggested demo default: PDF (prescriptions, reports), JPEG/PNG (wound photos, referral letters)</span>
+            <br><span class="flow-tbc">TBC: What to do with files — Demo default: Auto-acknowledge receipt to patient, store against booking record, flag for coordinator review</span>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-body">
+            <div class="flow-title">AI Assigns Nearest Available Therapist</div>
+            <div class="flow-desc">AI queries the dummy therapist database and selects the best match. Assignment logic uses proximity (nearest) + service specialization.</div>
+            <span class="flow-tbc">TBC: Assignment criteria — Demo default: Location proximity (nearest) + therapist specialization match + availability</span>
+            <br><span class="flow-note">Use sample/dummy data — confirmed by both respondents</span>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">5</div>
+          <div class="flow-body">
+            <div class="flow-title">Therapist Notification &amp; Acceptance</div>
+            <div class="flow-desc">AI notifies the assigned therapist (via WhatsApp or SMS in the demo). Therapist accepts or declines. If no response within the buffer window, AI moves to the next available therapist.</div>
+            <span class="flow-tbc">TBC: Buffer wait time — Demo default: <strong>10 minutes</strong> before notifying the next therapist</span>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">6</div>
+          <div class="flow-body">
+            <div class="flow-title">Booking Confirmation</div>
+            <div class="flow-desc">AI sends a booking confirmation to the patient via WhatsApp with: therapist name, service, date/time, and a summary of the visit details.</div>
+            <span class="flow-note">Automated — no staff needed at this step</span>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">7</div>
+          <div class="flow-body">
+            <div class="flow-title">Appointment Reminders</div>
+            <div class="flow-desc">AI automatically sends reminder messages to the patient before the appointment.</div>
+            <span class="flow-tbc">TBC: Timing — Demo default: 24 hours before + 2 hours before</span>
+            <br><span class="flow-tbc">TBC: Method — Demo default: WhatsApp message (primary) + optional voice call (secondary, per Respondent 1)</span>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num">8</div>
+          <div class="flow-body">
+            <div class="flow-title">Escalation to Human Staff</div>
+            <div class="flow-desc">AI transfers control to a human coordinator in any of these situations:</div>
+            <div style="margin-top:8px">
+              <span class="flow-warn">No therapist accepts after buffer window</span>
+              <span class="flow-warn" style="margin-left:6px">Patient is urgent / emergency</span>
+              <span class="flow-warn" style="margin-left:6px">Patient asks for a human</span>
+              <span class="flow-warn" style="margin-left:6px">AI cannot understand request</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-divider"></div>
+
+    <!-- ─── SECTION 5: TBC Items ─── -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <div class="section-title">Unanswered Questions — Confirm Before Demo</div>
+        <i class="fa-solid fa-circle-question section-icon"></i>
+      </div>
+
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Both respondents left the following questions blank. The demo can proceed with the suggested defaults, but these should be confirmed with the Vitality team to avoid presenting the wrong behaviour.</p>
+
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-mobile-screen"></i> Q4 — How do patients currently request a home visit?</div>
+        <div class="q-answer tbc"><i class="fa-solid fa-circle-question"></i> Not answered by either respondent. Demo will show WhatsApp as the primary intake channel. <strong>Ask: Do patients call the clinic directly, or use an app/website?</strong></div>
+      </div>
+
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-user-nurse"></i> Q7 — How should therapists be assigned?</div>
+        <div class="q-answer default"><i class="fa-solid fa-circle-info"></i> <strong>Demo default:</strong> Assign based on (1) proximity to patient location, (2) specialization match for the requested service, (3) current availability. Confirm if any other criteria apply (e.g. preferred therapist, gender preference).</div>
+      </div>
+
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-clock"></i> Q8 — Wait time before notifying next therapist?</div>
+        <div class="q-answer default"><i class="fa-solid fa-circle-info"></i> <strong>Demo default: 10 minutes.</strong> If therapist does not accept within 10 minutes, AI notifies the next available therapist. Confirm if a different window is preferred.</div>
+      </div>
+
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-file"></i> Q9 — What types of files might patients send?</div>
+        <div class="q-answer default"><i class="fa-solid fa-circle-info"></i> <strong>Demo default:</strong> PDF (prescriptions, medical reports, discharge summaries), JPEG/PNG (wound photos, X-ray images, referral letters). Confirm if other formats are needed.</div>
+      </div>
+
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-file-circle-check"></i> Q10 — What should the AI do with patient-sent files?</div>
+        <div class="q-answer default"><i class="fa-solid fa-circle-info"></i> <strong>Demo default:</strong> (1) Acknowledge receipt to patient via WhatsApp. (2) Attach file to the patient's booking record. (3) Notify coordinator that a document has been received and is awaiting review.</div>
+      </div>
+
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-bell"></i> Q11 — How far in advance should reminders be sent?</div>
+        <div class="q-answer default"><i class="fa-solid fa-circle-info"></i> <strong>Demo default:</strong> Two reminders — 24 hours before the appointment and 2 hours before. Confirm preferred timing windows.</div>
+      </div>
+
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-paper-plane"></i> Q12 — How should reminders be sent?</div>
+        <div class="q-answer default"><i class="fa-solid fa-circle-info"></i> <strong>Demo default:</strong> WhatsApp message (primary). Optionally, voice call as secondary (Respondent 1 uses phone calls currently). Confirm if SMS should also be included.</div>
+      </div>
+
+      <div class="q-row">
+        <div class="q-label"><i class="fa-solid fa-hospital"></i> Q14 — Existing HIS / scheduling system?</div>
+        <div class="q-answer tbc"><i class="fa-solid fa-circle-question"></i> Not answered. Demo will use <strong>dummy data only</strong> (confirmed by both). <strong>Ask: Is there an existing system the live version would need to integrate with?</strong> Not needed for the demo itself.</div>
+      </div>
+    </div>
+
+    <div class="sec-divider"></div>
+
+    <!-- ─── SECTION 6: Demo Data ─── -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <div class="section-title">Demo Data Requirements</div>
+        <i class="fa-solid fa-database section-icon"></i>
+      </div>
+
+      <div class="callout green">
+        <i class="fa-solid fa-circle-check"></i>
+        <p><strong>Both respondents confirmed:</strong> Use a small set of sample / dummy data for the demo. No real patient or therapist data should be used.</p>
+      </div>
+
+      <div class="cards-3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-label"><i class="fa-solid fa-user-nurse" style="margin-right:5px;color:var(--green)"></i>Sample Therapists</div>
+          <div class="card-value" style="font-size:12.5px">
+            Create <strong>5–8 dummy therapist profiles</strong> with:<br>
+            • Name, specialization<br>
+            • Location (lat/lng in Dubai/Abu Dhabi area)<br>
+            • Availability schedule<br>
+            • WhatsApp/phone number (sandbox)
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label"><i class="fa-solid fa-user" style="margin-right:5px;color:var(--green)"></i>Sample Patients</div>
+          <div class="card-value" style="font-size:12.5px">
+            Create <strong>3–5 dummy patient records</strong> with:<br>
+            • Name, saved address<br>
+            • Language preference (EN/AR)<br>
+            • WhatsApp number (sandbox)<br>
+            • Sample past booking
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label"><i class="fa-solid fa-file" style="margin-right:5px;color:var(--green)"></i>Sample Files</div>
+          <div class="card-value" style="font-size:12.5px">
+            Prepare <strong>2–3 sample files</strong> for the document-processing demo:<br>
+            • Dummy prescription PDF<br>
+            • Dummy wound photo (JPEG)<br>
+            • Dummy referral letter PDF
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-divider"></div>
+
+    <!-- ─── SECTION 7: Tech Stack Guidance ─── -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <div class="section-title">Suggested Tech Stack for Demo</div>
+        <i class="fa-solid fa-layer-group section-icon"></i>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Suggested Option</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>WhatsApp Integration</strong></td>
+              <td>Meta Cloud API (WhatsApp Business) or Twilio WhatsApp Sandbox</td>
+              <td>Twilio sandbox is quickest to get running for demo purposes</td>
+            </tr>
+            <tr>
+              <td><strong>AI / NLP Engine</strong></td>
+              <td>Claude API (Anthropic) or GPT-4o</td>
+              <td>Used for understanding patient messages, detecting language, generating replies</td>
+            </tr>
+            <tr>
+              <td><strong>Language Detection</strong></td>
+              <td>AI model handles this automatically</td>
+              <td>Detect Arabic/English from incoming message; respond in same language</td>
+            </tr>
+            <tr>
+              <td><strong>Backend / Orchestration</strong></td>
+              <td>Node.js / Python (FastAPI or Express)</td>
+              <td>Webhook receiver, booking logic, therapist assignment algorithm</td>
+            </tr>
+            <tr>
+              <td><strong>Therapist Assignment</strong></td>
+              <td>Haversine formula or Google Maps Distance Matrix (demo)</td>
+              <td>Calculate nearest therapist from patient location using dummy lat/lng data</td>
+            </tr>
+            <tr>
+              <td><strong>Document Processing</strong></td>
+              <td>OCR (Tesseract / AWS Textract) for PDFs; image storage for photos</td>
+              <td>For demo: just store and acknowledge; full extraction is a production feature</td>
+            </tr>
+            <tr>
+              <td><strong>Reminders / Scheduler</strong></td>
+              <td>Cron job (node-cron or APScheduler)</td>
+              <td>Trigger reminder messages at configured intervals before appointment</td>
+            </tr>
+            <tr>
+              <td><strong>Voice Call Fallback</strong></td>
+              <td>Twilio Voice API</td>
+              <td>For UC-9 (optional nice-to-have for demo)</td>
+            </tr>
+            <tr>
+              <td><strong>Data Store (demo)</strong></td>
+              <td>JSON file or SQLite</td>
+              <td>Keeps demo setup simple — no production database needed</td>
+            </tr>
+            <tr>
+              <td><strong>Demo UI (optional)</strong></td>
+              <td>Simple dashboard showing live bookings, therapist assignments, escalation log</td>
+              <td>Useful for the demo presentation to show the coordinator's view alongside the WhatsApp conversation</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec-divider"></div>
+
+    <!-- ─── SECTION 8: Demo Script ─── -->
+    <div class="section" id="s8">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <div class="section-title">Suggested Demo Script (Walkthrough Order)</div>
+        <i class="fa-solid fa-play-circle section-icon"></i>
+      </div>
+
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Recommended order for presenting the demo to the Vitality team. Each scene maps to a confirmed use case.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Scene</th>
+              <th>What to Show</th>
+              <th>Maps To</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Scene 1</strong></td>
+              <td>Patient messages in <strong>English</strong>: "I need a physiotherapist at home tomorrow morning." AI collects location, date/time, confirms service. Assigns nearest therapist. Therapist accepts. Booking confirmed.</td>
+              <td>UC-1, UC-2</td>
+            </tr>
+            <tr>
+              <td><strong>Scene 2</strong></td>
+              <td>Same flow in <strong>Arabic</strong>: "أريد ممرضة في المنزل." AI switches to Arabic automatically and completes the booking.</td>
+              <td>UC-1, UC-2 (AR)</td>
+            </tr>
+            <tr>
+              <td><strong>Scene 3</strong></td>
+              <td>Patient sends a <strong>prescription PDF</strong> and a <strong>wound photo</strong> via WhatsApp. AI acknowledges receipt and flags coordinator.</td>
+              <td>UC-4</td>
+            </tr>
+            <tr>
+              <td><strong>Scene 4</strong></td>
+              <td>Show the <strong>automated reminder</strong> being sent to patient 24 hours before the appointment.</td>
+              <td>UC-3</td>
+            </tr>
+            <tr>
+              <td><strong>Scene 5</strong></td>
+              <td>Therapist does not respond within 10 minutes. AI automatically notifies the <strong>next available therapist</strong>. After another failed attempt, AI <strong>escalates to staff</strong>.</td>
+              <td>UC-5</td>
+            </tr>
+            <tr>
+              <td><strong>Scene 6</strong></td>
+              <td>Patient types "this is an emergency, I need someone now." AI detects urgency and <strong>immediately escalates</strong> to human coordinator.</td>
+              <td>UC-6, UC-7</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <div class="doc-footer">
+    <a href="https://code-ox.com" target="_blank">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" class="footer-logo" />
+    </a>
+    <div class="footer-contact">
+      <div><a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a></div>
+      <div><a href="tel:+966535716437">+966 535 716 437</a></div>
+      <div><a href="https://code-ox.com" target="_blank">code-ox.com</a></div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
