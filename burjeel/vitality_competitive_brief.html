@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internal Comparison Brief — Vitality Home Care</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBFAF6;
+  --bg-1:#F4F2EB;
+  --bg-2:#EDEAE0;
+  --paper:#FFFFFF;
+  --line:rgba(20,20,20,0.07);
+  --line-2:rgba(20,20,20,0.13);
+  --line-3:rgba(20,20,20,0.22);
+
+  --text:#15171A;
+  --text-2:#3A3D40;
+  --text-3:#6E7177;
+  --text-4:#A0A29A;
+
+  --us:#0E6B53;
+  --us-deep:#08503E;
+  --us-soft:#DEEFE8;
+  --us-soft-2:#CAE5DA;
+  --us-bg:rgba(14,107,83,0.06);
+  --us-line:rgba(14,107,83,0.22);
+
+  --them:#A8503A;
+  --them-soft:#F2DCD3;
+  --them-soft-2:#E8C7BA;
+  --them-bg:rgba(168,80,58,0.05);
+  --them-line:rgba(168,80,58,0.20);
+
+  --gold:#9C7A2C;
+  --gold-soft:#EFE3C5;
+
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+
+  --radius:8px;
+  --radius-lg:14px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:16px;line-height:1.7;
+  font-weight:400;letter-spacing:-0.005em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* atmospheric background — subtle noise + gradient wash */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse at 15% 5%, rgba(14,107,83,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 95%, rgba(168,80,58,0.03) 0%, transparent 50%);
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity:0.025;mix-blend-mode:multiply;
+}
+
+main{position:relative;z-index:2}
+
+.wrap{max-width:980px;margin:0 auto;padding:0 36px}
+section{padding:88px 0;position:relative}
+section + section{padding-top:0}
+
+/* ============ STAMP BAR ============ */
+.stamp-bar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(251,250,246,0.88);
+  backdrop-filter:blur(24px) saturate(140%);
+  -webkit-backdrop-filter:blur(24px) saturate(140%);
+  border-bottom:1px solid var(--line);padding:14px 0;
+}
+.stamp-inner{
+  max-width:980px;margin:0 auto;padding:0 36px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:11px;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--text-3);
+}
+.stamp-inner .red{color:var(--them);display:flex;align-items:center;gap:8px;font-weight:500}
+.stamp-inner .red::before{
+  content:"";width:6px;height:6px;border-radius:50%;background:var(--them);
+  box-shadow:0 0 0 3px rgba(168,80,58,0.15);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 3px rgba(168,80,58,0.15)}
+  50%{box-shadow:0 0 0 6px rgba(168,80,58,0.05)}
+}
+
+/* ============ TYPOGRAPHY ============ */
+.kicker{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:0.16em;text-transform:uppercase;color:var(--us);
+  display:inline-flex;align-items:center;gap:14px;margin-bottom:28px;
+}
+.kicker::before{
+  content:"";width:28px;height:1px;background:var(--us);
+}
+
+h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(48px,5.6vw,76px);line-height:0.96;
+  letter-spacing:-0.028em;margin-bottom:28px;max-width:18ch;
+  color:var(--text);
+}
+h1 em{
+  font-style:italic;color:var(--us);
+  display:inline-block;
+  position:relative;
+}
+
+.lead{
+  font-family:var(--serif);font-style:italic;font-size:22px;
+  line-height:1.45;color:var(--text-2);max-width:60ch;font-weight:400;
+}
+
+h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(34px,3.8vw,46px);line-height:1.05;
+  letter-spacing:-0.022em;margin-bottom:16px;color:var(--text);
+}
+h2 em{font-style:italic;color:var(--us)}
+
+p{color:var(--text-2);line-height:1.7;max-width:62ch}
+
+.section-head{margin-bottom:56px;max-width:60ch}
+.tag{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:0.14em;color:var(--us);
+  text-transform:uppercase;margin-bottom:18px;display:inline-flex;
+  align-items:center;gap:10px;
+}
+.tag::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--us)}
+
+/* ============ HERO ============ */
+.hero{padding:88px 0 0;position:relative}
+.meta-row{
+  display:flex;flex-wrap:wrap;gap:28px;margin-top:36px;padding-top:28px;
+  border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;color:var(--text-3);
+  letter-spacing:0.06em;
+}
+.meta-row span{display:flex;align-items:center;gap:10px}
+.meta-row span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--us)}
+
+/* ============ THE WIN BLOCK ============ */
+.win-block{
+  margin-top:64px;
+  background:linear-gradient(135deg, var(--us-soft) 0%, var(--us-soft-2) 100%);
+  border:1px solid var(--us-line);
+  border-radius:var(--radius-lg);
+  padding:48px 52px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:
+    0 1px 2px rgba(14,107,83,0.04),
+    0 8px 24px -8px rgba(14,107,83,0.10);
+}
+.win-block::before{
+  content:"";position:absolute;top:-40%;right:-10%;width:380px;height:380px;
+  background:radial-gradient(circle, rgba(14,107,83,0.12), transparent 60%);
+  filter:blur(40px);pointer-events:none;
+}
+.win-lbl{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--us);margin-bottom:24px;font-weight:500;
+  display:inline-flex;align-items:center;gap:10px;position:relative;
+}
+.win-lbl::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--us)}
+.win-text{
+  font-family:var(--serif);font-size:32px;line-height:1.32;
+  letter-spacing:-0.012em;color:var(--text);font-weight:400;
+  position:relative;
+}
+.win-text em{font-style:italic;color:var(--us-deep)}
+.win-text strong{
+  font-weight:500;font-style:normal;color:var(--us-deep);
+}
+.win-divider{
+  height:1px;background:linear-gradient(90deg, var(--us-line), transparent);
+  margin:28px 0;position:relative;
+}
+.win-sub{
+  font-size:15px;color:var(--text-2);line-height:1.7;max-width:60ch;
+  position:relative;
+}
+.win-sub strong{color:var(--text);font-weight:600}
+
+/* ============ MASTER COMPARISON TABLE ============ */
+.master-table-wrap{
+  background:var(--paper);
+  border:1px solid var(--line-2);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.03),
+    0 12px 36px -12px rgba(0,0,0,0.08);
+}
+.master-table{width:100%;border-collapse:collapse}
+
+/* table header — elevated panels */
+.master-table thead th{
+  padding:32px 28px 24px;text-align:left;
+  border-bottom:2px solid var(--line-2);
+  vertical-align:bottom;
+  position:relative;
+}
+.master-table thead th.h-feature{
+  width:30%;background:var(--bg-1);
+  font-family:var(--mono);font-size:11px;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--text-3);font-weight:500;
+}
+.master-table thead th.h-us{
+  width:35%;background:linear-gradient(180deg, var(--us-soft) 0%, var(--us-soft-2) 100%);
+  border-bottom:3px solid var(--us);
+}
+.master-table thead th.h-them{
+  width:35%;background:linear-gradient(180deg, var(--them-soft) 0%, var(--them-soft-2) 100%);
+  border-bottom:3px solid var(--them);
+}
+.h-tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.16em;
+  text-transform:uppercase;font-weight:600;margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.h-us .h-tag{color:var(--us-deep)}
+.h-us .h-tag::before{
+  content:"";width:7px;height:7px;border-radius:50%;background:var(--us);
+  box-shadow:0 0 0 3px rgba(14,107,83,0.18);
+}
+.h-them .h-tag{color:var(--them)}
+.h-them .h-tag::before{
+  content:"";width:7px;height:7px;border-radius:50%;background:var(--them);
+  box-shadow:0 0 0 3px rgba(168,80,58,0.18);
+}
+.h-name{
+  font-family:var(--serif);font-size:26px;font-weight:400;line-height:1.1;
+  letter-spacing:-0.018em;color:var(--text);
+}
+.h-name em{font-style:italic}
+.h-us .h-name em{color:var(--us-deep)}
+.h-them .h-name em{color:var(--them)}
+.h-sub{
+  font-size:12.5px;color:var(--text-3);margin-top:6px;
+  font-family:var(--sans);
+}
+
+/* section row */
+.master-table tr.section-row td{
+  padding:22px 28px 12px;
+  background:var(--bg-1);
+  border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:10px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--text-3);font-weight:600;
+}
+.master-table tr.section-row td span.s-num{
+  display:inline-block;
+  font-family:var(--serif);font-style:italic;font-size:13px;
+  color:var(--us);margin-right:10px;letter-spacing:normal;
+  text-transform:none;font-weight:400;
+}
+
+/* body rows */
+.master-table tbody td{
+  padding:18px 28px;font-size:14.5px;
+  border-bottom:1px solid var(--line);vertical-align:middle;
+  transition:background-color 0.15s ease;
+}
+.master-table tbody tr:last-child td{border-bottom:none}
+.master-table tbody tr:not(.section-row):not(.price-row):not(.total-row):hover td.us-cell{
+  background:rgba(14,107,83,0.06);
+}
+.master-table tbody tr:not(.section-row):not(.price-row):not(.total-row):hover td.them-cell{
+  background:rgba(168,80,58,0.04);
+}
+.master-table .feature{color:var(--text);font-weight:500}
+.master-table .us-cell{color:var(--text-2);background:rgba(14,107,83,0.025)}
+.master-table .them-cell{color:var(--text-3);background:rgba(168,80,58,0.018)}
+
+/* check pills */
+.check{
+  display:inline-flex;align-items:center;gap:11px;
+  font-family:var(--mono);font-size:12px;letter-spacing:0.04em;font-weight:600;
+}
+.check.yes{color:var(--us-deep)}
+.check.no{color:var(--them)}
+.check.partial{color:var(--gold)}
+.check::before{
+  content:"";width:20px;height:20px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:10px;font-weight:700;
+}
+.check.yes::before{
+  background:var(--us);color:#fff;content:"✓";
+  box-shadow:0 0 0 3px rgba(14,107,83,0.12);
+}
+.check.no::before{
+  background:var(--them);color:#fff;content:"−";
+  box-shadow:0 0 0 3px rgba(168,80,58,0.12);
+}
+.check.partial::before{
+  background:var(--gold);color:#fff;content:"~";
+  box-shadow:0 0 0 3px rgba(156,122,44,0.12);
+}
+.cell-detail{
+  display:block;margin-top:5px;font-size:13px;
+  color:var(--text-3);line-height:1.5;font-family:var(--sans);
+  letter-spacing:0;text-transform:none;font-weight:400;
+}
+
+/* pricing rows */
+.master-table tr.price-row td{
+  background:var(--paper);
+  font-family:var(--serif);font-size:26px;font-weight:400;
+  letter-spacing:-0.018em;line-height:1.1;
+  padding:24px 28px;
+}
+.master-table tr.price-row .feature{
+  font-family:var(--sans);font-size:14.5px;font-weight:500;color:var(--text);
+}
+.master-table tr.price-row .us-cell{
+  color:var(--us-deep);
+  background:linear-gradient(180deg, var(--us-soft) 0%, rgba(222,239,232,0.5) 100%);
+}
+.master-table tr.price-row .them-cell{
+  color:var(--them);
+  background:linear-gradient(180deg, var(--them-soft) 0%, rgba(242,220,211,0.5) 100%);
+}
+.master-table tr.price-row em{font-style:italic}
+.master-table tr.price-row small{
+  display:block;font-family:var(--mono);font-size:10px;
+  letter-spacing:0.1em;color:var(--text-3);text-transform:uppercase;
+  margin-top:6px;font-weight:500;font-style:normal;
+}
+.master-table tr.price-row .us-cell small{color:var(--us);opacity:0.75}
+.master-table tr.price-row .them-cell small{color:var(--them);opacity:0.75}
+
+/* total row — the punctuation */
+.master-table tr.total-row td{
+  background:var(--bg-2);
+  border-top:2px solid var(--line-2);
+  padding:28px 28px;
+}
+.master-table tr.total-row .feature{
+  font-family:var(--sans);font-size:13px;font-weight:600;
+  color:var(--text);text-transform:uppercase;letter-spacing:0.08em;
+}
+.master-table tr.total-row .us-cell{
+  font-family:var(--serif);font-size:36px;font-weight:400;
+  letter-spacing:-0.025em;color:var(--us-deep);
+  background:linear-gradient(180deg, var(--us-soft-2) 0%, var(--us-soft) 100%);
+}
+.master-table tr.total-row .them-cell{
+  font-family:var(--serif);font-size:36px;font-weight:400;
+  letter-spacing:-0.025em;color:var(--them);
+  background:linear-gradient(180deg, var(--them-soft-2) 0%, var(--them-soft) 100%);
+}
+.master-table tr.total-row em{font-style:italic}
+
+/* ============ TAKEAWAY ============ */
+.takeaway{
+  margin-top:36px;padding:40px 44px;
+  background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  border-left:4px solid var(--us);
+  position:relative;
+  box-shadow:0 1px 3px rgba(0,0,0,0.03);
+}
+.takeaway::before{
+  content:"";position:absolute;left:-4px;top:24px;width:4px;height:32px;
+  background:var(--us);border-radius:0 2px 2px 0;
+  box-shadow:0 0 16px rgba(14,107,83,0.4);
+}
+.takeaway-tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--us);font-weight:600;margin-bottom:18px;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.takeaway-tag::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--us)}
+.takeaway p{
+  font-family:var(--serif);font-size:21px;font-style:italic;
+  line-height:1.45;color:var(--text);max-width:none;font-weight:400;
+}
+.takeaway p strong{font-style:normal;color:var(--us-deep);font-weight:500}
+.takeaway p+p{margin-top:18px;font-size:18px;color:var(--text-2)}
+
+/* ============ ASK ============ */
+.ask{
+  background:var(--paper);
+  border:1px solid var(--us-line);
+  border-radius:var(--radius-lg);
+  padding:56px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:
+    0 1px 2px rgba(14,107,83,0.05),
+    0 16px 48px -16px rgba(14,107,83,0.15);
+}
+.ask::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg, var(--us-deep), var(--us), var(--us-deep));
+}
+.ask::after{
+  content:"";position:absolute;top:-30%;right:-10%;width:380px;height:380px;
+  background:radial-gradient(circle, rgba(14,107,83,0.08), transparent 60%);
+  filter:blur(40px);pointer-events:none;
+}
+.ask-inner{position:relative}
+.ask h2{margin-bottom:32px;font-size:38px}
+.ask-list{counter-reset:ask-num;list-style:none;position:relative}
+.ask-list li{
+  counter-increment:ask-num;padding:24px 0 24px 70px;
+  border-top:1px solid var(--line);position:relative;
+  font-family:var(--serif);font-size:21px;line-height:1.45;color:var(--text);font-style:italic;
+  font-weight:400;
+}
+.ask-list li:first-child{border-top:none;padding-top:8px}
+.ask-list li:first-child::before{top:8px}
+.ask-list li::before{
+  content:counter(ask-num,decimal-leading-zero);position:absolute;left:0;top:24px;
+  font-family:var(--mono);font-size:13px;color:var(--us);font-weight:600;
+  letter-spacing:0.1em;font-style:normal;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  background:var(--us-soft);border-radius:8px;
+  margin-top:-6px;
+}
+.ask-tail{
+  margin-top:36px;padding:24px 28px;
+  background:var(--bg-1);border-radius:var(--radius);
+  font-size:14px;color:var(--text-2);line-height:1.7;
+  position:relative;
+}
+.ask-tail strong{color:var(--us-deep);font-weight:600}
+
+/* ============ FOOTER ============ */
+footer{
+  padding:64px 0 48px;text-align:center;border-top:1px solid var(--line);
+  margin-top:64px;
+}
+footer p{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--text-4);font-weight:500;
+}
+
+/* ============ VALUE GRID ============ */
+.value-grid-header{
+  display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px;
+  flex-wrap:wrap;gap:6px;
+}
+.value-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:760px){
+  section{padding:48px 0}
+  .wrap{padding:0 18px}
+  .stamp-inner{padding:0 18px;flex-direction:column;align-items:flex-start;gap:6px}
+
+  /* typography */
+  h1{font-size:36px;line-height:1.05}
+  h2{font-size:28px}
+  .lead{font-size:17px}
+  .kicker{font-size:10px}
+
+  /* hero */
+  .hero{padding:48px 0 0}
+  .meta-row{gap:14px;flex-direction:column}
+
+  /* win block */
+  .win-block{padding:28px 22px}
+  .win-text{font-size:20px}
+  .win-sub{font-size:13px}
+
+  /* takeaway */
+  .takeaway{padding:24px 18px}
+  .takeaway p{font-size:16px}
+
+  /* value grid — 2 cols on mobile */
+  .value-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .value-grid-header{flex-direction:column;align-items:flex-start;gap:4px}
+
+  /* price footer — stack vertically */
+  .price-footer{flex-direction:column !important;align-items:flex-start !important;gap:14px}
+  .price-footer > div:last-child{text-align:left !important}
+
+  /* ask block */
+  .ask{padding:28px 18px}
+  .ask h2{font-size:26px}
+  .ask-list li{font-size:17px;padding-left:52px}
+
+  /* table → cards */
+  .master-table-wrap{border-radius:var(--radius)}
+  .master-table thead{display:none}
+  .master-table,.master-table tbody,.master-table tr{display:block}
+  .master-table tr{border-bottom:1px solid var(--line-2)}
+  .master-table tbody td{
+    display:block;padding:12px 18px;border:none;font-size:14px;
+  }
+  .master-table tbody td.feature{
+    background:var(--bg-1);padding:12px 18px;
+    font-family:var(--mono);font-size:11px;font-weight:600;
+    letter-spacing:0.1em;text-transform:uppercase;color:var(--text-3);
+  }
+  .master-table tbody td.us-cell::before{
+    content:"Us · ";color:var(--us);font-family:var(--mono);
+    font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+    font-weight:600;margin-right:8px;
+  }
+  .master-table tbody td.them-cell::before{
+    content:"Mawj · ";color:var(--them);font-family:var(--mono);
+    font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+    font-weight:600;margin-right:8px;
+  }
+  .master-table tbody td.us-cell{padding-bottom:14px}
+  .master-table tr.section-row td{display:block}
+  .master-table tr.price-row td,
+  .master-table tr.total-row td{padding:14px 18px;font-size:18px}
+  .master-table tr.price-row .feature,
+  .master-table tr.total-row .feature{font-size:11px}
+  .master-table tr.total-row .us-cell,
+  .master-table tr.total-row .them-cell{font-size:24px}
+  .master-table tr.price-row td,
+  .master-table tr.total-row td{display:block}
+  .cell-detail{font-size:12px}
+  .check{font-size:11px}
+}
+
+@media print{
+  body::before,body::after{display:none}
+  body{background:#fff}
+  .stamp-bar{position:static}
+  section{padding:32px 0;break-inside:avoid}
+  .master-table-wrap,.ask,.win-block,.takeaway{break-inside:avoid;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="stamp-bar">
+  <div class="stamp-inner">
+    <span>Internal · Comparison brief · Vitality Home Care</span>
+    <span class="red">Do not share externally</span>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker">For the Vitality point of contact</div>
+    <h1>The pilot already<br><em>happened.</em></h1>
+    <p class="lead">Going with anyone else means starting that clock over. Here is the case in one page.</p>
+    <div class="meta-row">
+      <span>April 2026</span>
+      <span>Vitality Home Care · Riyadh</span>
+      <span>Confidential</span>
+    </div>
+
+    <div class="win-block">
+      <div class="win-lbl">The case in three lines</div>
+      <p class="win-text">Mawj sells a callbot. <em>We deliver AI transformation at every level</em> — voice, chat, integrations, dashboards, and the platform to grow into.</p>
+      <div class="win-divider"></div>
+      <p class="win-sub">At <strong>SAR 65,000</strong> against Mawj's <strong>SAR 59,000 all-in</strong>, the gap is SAR 6,000 — and for that, Vitality gets: a validated pilot already live on their flow, Nixpend HMS integration, payment gateway, SMS gateway, a custom unified dashboard, therapist matching across 15 districts, 12,000 AIKA voice minutes and 48,000 AIWA messages included annually. Mawj's number buys a license. Ours buys a working system.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MASTER COMPARISON ============ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">The comparison</span>
+      <h2>Side by side,<br><em>line by line.</em></h2>
+      <p class="lead">Capabilities, integrations, and pricing — all in one table.</p>
+    </div>
+
+    <div class="master-table-wrap">
+      <table class="master-table">
+        <thead>
+          <tr>
+            <th class="h-feature">Capability</th>
+            <th class="h-us">
+              <div class="h-tag">Our solution</div>
+              <div class="h-name"><em>End-to-end</em><br>home-care solution</div>
+              <div class="h-sub">Built on Vitality's validated pilot</div>
+            </th>
+            <th class="h-them">
+              <div class="h-tag">Mawj proposal</div>
+              <div class="h-name">Voice AI<br><em>platform license</em></div>
+              <div class="h-sub">Generic Saudi-dialect platform</div>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr class="section-row"><td colspan="3"><span class="s-num">i</span>Workflow fit</td></tr>
+
+          <tr>
+            <td class="feature">Validated with Vitality</td>
+            <td class="us-cell"><span class="check yes">Pilot completed</span><span class="cell-detail">Live on actual flow</span></td>
+            <td class="them-cell"><span class="check no">Greenfield</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Approach</td>
+            <td class="us-cell"><span class="check yes">Solution</span><span class="cell-detail">End-to-end build for Vitality</span></td>
+            <td class="them-cell"><span class="check partial">License only</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Voice + WhatsApp · shared brain</td>
+            <td class="us-cell"><span class="check yes">Yes</span><span class="cell-detail">AIWA + AIKA on one operational layer</span></td>
+            <td class="them-cell"><span class="check no">Separate products</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Complete agentic system</td>
+            <td class="us-cell"><span class="check yes">Yes</span><span class="cell-detail">Agents act, decide, escalate — not just respond</span></td>
+            <td class="them-cell"><span class="check no">Conversational only</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Multi-agent orchestration</td>
+            <td class="us-cell"><span class="check yes">Future enhancement</span><span class="cell-detail">Voice, chat, image, document agents on one platform</span></td>
+            <td class="them-cell"><span class="check no">Single-product platform</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Document processing agent</td>
+            <td class="us-cell"><span class="check yes">Future enhancement</span><span class="cell-detail">Extracts data from prescriptions, referrals, IDs</span></td>
+            <td class="them-cell"><span class="check no">Not offered</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Image processing agent</td>
+            <td class="us-cell"><span class="check yes">Future enhancement</span><span class="cell-detail">Wound photos, document photos, condition assessment</span></td>
+            <td class="them-cell"><span class="check no">Not offered</span></td>
+          </tr>
+
+          <tr class="section-row"><td colspan="3"><span class="s-num">ii</span>Language &amp; media</td></tr>
+
+          <tr>
+            <td class="feature">Chat agent languages</td>
+            <td class="us-cell"><span class="check yes">Five</span><span class="cell-detail">Arabic Najdi · MSA · English · Hindi · Malayalam</span></td>
+            <td class="them-cell"><span class="check partial">Saudi dialect only</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Messaging channels</td>
+            <td class="us-cell"><span class="check yes">WhatsApp</span><span class="cell-detail">Multi-number, Business API, templates, media</span></td>
+            <td class="them-cell"><span class="check partial">Generic chatbot</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Rich media support</td>
+            <td class="us-cell"><span class="check yes">Full</span><span class="cell-detail">Audio · PDF · images</span></td>
+            <td class="them-cell"><span class="check no">Voice / text only</span></td>
+          </tr>
+
+          <tr class="section-row"><td colspan="3"><span class="s-num">iii</span>Integrations</td></tr>
+
+          <tr>
+            <td class="feature">Nixpend HMS integration</td>
+            <td class="us-cell"><span class="check yes">Included</span><span class="cell-detail">Availability, matching, write-back</span></td>
+            <td class="them-cell"><span class="check no">Not included</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Custom HMS integration</td>
+            <td class="us-cell"><span class="check yes">Yes</span><span class="cell-detail">Any HMS — REST, FHIR, HL7, DB-level</span></td>
+            <td class="them-cell"><span class="check no">Not offered</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Therapist matching · 15 districts</td>
+            <td class="us-cell"><span class="check yes">Included</span></td>
+            <td class="them-cell"><span class="check no">Not mentioned</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Payment gateway</td>
+            <td class="us-cell"><span class="check yes">Included</span></td>
+            <td class="them-cell"><span class="check no">Not included</span></td>
+          </tr>
+          <tr>
+            <td class="feature">SMS gateway</td>
+            <td class="us-cell"><span class="check yes">Included</span></td>
+            <td class="them-cell"><span class="check no">Not included</span></td>
+          </tr>
+
+          <tr class="section-row"><td colspan="3"><span class="s-num">iv</span>Operations &amp; experience</td></tr>
+
+          <tr>
+            <td class="feature">Custom Unified Dashboard</td>
+            <td class="us-cell"><span class="check yes">Included</span><span class="cell-detail">Tailored to Vitality's operational view</span></td>
+            <td class="them-cell"><span class="check no">Not mentioned</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Coordinator escalation workflow</td>
+            <td class="us-cell"><span class="check yes">Included</span></td>
+            <td class="them-cell"><span class="check no">Not mentioned</span></td>
+          </tr>
+          <tr>
+            <td class="feature">WhatsApp location understanding</td>
+            <td class="us-cell"><span class="check yes">Included</span><span class="cell-detail">Reads Google Maps pins sent by patients via WhatsApp — parses coordinates and notifies the assigned therapist automatically</span></td>
+            <td class="them-cell"><span class="check no">Not mentioned</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Multi-number / multi-brand</td>
+            <td class="us-cell"><span class="check yes">Yes</span><span class="cell-detail">Scales across Burjeel entities</span></td>
+            <td class="them-cell"><span class="check no">One brand only</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Unified omnichannel</td>
+            <td class="us-cell"><span class="check yes">Future enhancement</span><span class="cell-detail">Web, social, in-app, email — one inbox</span></td>
+            <td class="them-cell"><span class="check no">Not offered</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Saudi-region cloud hosting</td>
+            <td class="us-cell"><span class="check yes">Borne by us</span></td>
+            <td class="them-cell"><span class="check partial">Not specified</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Group-wide AI transformation roadmap</td>
+            <td class="us-cell"><span class="check yes">Available</span><span class="cell-detail">Beyond Vitality, into Burjeel</span></td>
+            <td class="them-cell"><span class="check no">Single product vendor</span></td>
+          </tr>
+
+          <tr class="section-row"><td colspan="3"><span class="s-num">v</span>Pricing</td></tr>
+
+          <tr class="price-row">
+            <td class="feature">Annual fee</td>
+            <td class="us-cell"><em>SAR 65,000</em><small>All-in · everything included</small></td>
+            <td class="them-cell">SAR 57,000<small>License only</small></td>
+          </tr>
+          <tr class="price-row">
+            <td class="feature">Setup fee</td>
+            <td class="us-cell"><em>Included</em><small>No additional charge</small></td>
+            <td class="them-cell">SAR 2,000<small>One-time</small></td>
+          </tr>
+          <tr>
+            <td class="feature">AIKA voice minutes included</td>
+            <td class="us-cell"><span class="check yes">12,000 / yr</span></td>
+            <td class="them-cell"><span class="check no">Not specified</span></td>
+          </tr>
+          <tr>
+            <td class="feature">AIWA inbound messages included</td>
+            <td class="us-cell"><span class="check yes">48,000 / yr</span></td>
+            <td class="them-cell"><span class="check no">Not specified</span></td>
+          </tr>
+          <tr>
+            <td class="feature">Licensing model</td>
+            <td class="us-cell"><span class="check yes">Both</span><span class="cell-detail">Usage-based or annual licence</span></td>
+            <td class="them-cell"><span class="check partial">Annual licence only</span></td>
+          </tr>
+
+          <tr class="total-row">
+            <td class="feature">Year 1 total</td>
+            <td class="us-cell"><em>SAR 65,000</em></td>
+            <td class="them-cell">SAR 59,000</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div class="takeaway">
+      <div class="takeaway-tag">The takeaway</div>
+      <p>Read the green column down. <strong>Vitality is not buying a callbot. They are buying a fully operational AI transformation</strong> — voice, chat, HMS integration, payment gateway, SMS, a custom dashboard, and therapist matching across 15 districts, all live on their actual workflow from day one.</p>
+      <!-- ── What's inside SAR 65,000 ── -->
+      <div style="margin-top:28px">
+        <div class="value-grid-header">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--us);font-weight:600">Everything inside SAR 65,000 / year</div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-4)">All-in · no setup fee · no surprises</div>
+        </div>
+
+        <div class="value-grid" style="margin-bottom:10px">
+
+          <div style="background:#fff;border:1px solid var(--us-line);border-radius:10px;padding:16px 15px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--us-deep),var(--us))"></div>
+            <div style="font-size:18px;margin-bottom:8px">🤖</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">AIKA Voice AI</div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.5">Outbound voice agent · Arabic, English, Hindi, Malayalam · 12,000 min/yr included</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--us-line);border-radius:10px;padding:16px 15px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--us-deep),var(--us))"></div>
+            <div style="font-size:18px;margin-bottom:8px">💬</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">AIWA WhatsApp AI</div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.5">Inbound & outbound chat agent · rich media · location parsing · 48,000 msgs/yr included</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--us-line);border-radius:10px;padding:16px 15px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--us-deep),var(--us))"></div>
+            <div style="font-size:18px;margin-bottom:8px">🏥</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Nixpend HMS Integration</div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.5">Live availability · therapist matching · write-back — built and maintained by us</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--us-line);border-radius:10px;padding:16px 15px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--us-deep),var(--us))"></div>
+            <div style="font-size:18px;margin-bottom:8px">📍</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Location Intelligence</div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.5">Reads Google Maps pins from WhatsApp · parses coordinates · notifies assigned therapist instantly</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--us-line);border-radius:10px;padding:16px 15px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--us-deep),var(--us))"></div>
+            <div style="font-size:18px;margin-bottom:8px">💳</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Payment Gateway</div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.5">Integrated payments via WhatsApp — no separate vendor, no extra setup fee</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--us-line);border-radius:10px;padding:16px 15px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--us-deep),var(--us))"></div>
+            <div style="font-size:18px;margin-bottom:8px">📊</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Custom Dashboard</div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.5">Tailored to Vitality's operational view · coordinator escalation workflow built in</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--us-line);border-radius:10px;padding:16px 15px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--us-deep),var(--us))"></div>
+            <div style="font-size:18px;margin-bottom:8px">🗺️</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Therapist Matching</div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.5">15 Riyadh districts · availability-aware · auto-assigned via AIWA flow</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--us-line);border-radius:10px;padding:16px 15px;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--us-deep),var(--us))"></div>
+            <div style="font-size:18px;margin-bottom:8px">☁️</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Saudi Cloud Hosting</div>
+            <div style="font-size:11px;color:var(--text-3);line-height:1.5">Saudi-region infrastructure · SMS gateway · all running costs borne by us</div>
+          </div>
+
+        </div>
+
+        <!-- price footer -->
+        <div class="price-footer" style="background:linear-gradient(135deg,var(--us-soft) 0%,var(--us-soft-2) 100%);border:1px solid var(--us-line);border-radius:10px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--us);font-weight:600;margin-bottom:4px">One number. Everything above.</div>
+            <div style="font-size:13px;color:var(--text-2)">Pilot already validated on Vitality's live flow — no cold start, no hidden costs.</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-family:var(--serif);font-size:36px;color:var(--us-deep);letter-spacing:-0.025em;line-height:1">SAR 65,000</div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--us);margin-top:4px">Per year · all-in</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ASK ============ -->
+
+</main>
+
+<footer>
+  <div class="wrap"><p>Internal comparison brief · Confidential</p></div>
+</footer>
+
+</body>
+</html>
