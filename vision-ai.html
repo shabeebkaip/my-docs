@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vision AI & CCTV Intelligence — CodeOx</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#02040f;--bg1:#080d1c;--bgc:rgba(14,21,41,.85);
+  --blue:#38bdf8;--blue2:#0ea5e9;
+  --purple:#a78bfa;--purple2:#7c3aed;
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;
+  --t1:#f0f4ff;--t2:#94a3b8;--t3:#4b5a72;
+  --bdr:rgba(148,163,184,.1);--bdr2:rgba(148,163,184,.2);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1)}
+h1,h2,h3,h4,h5{font-family:'Space Grotesk',sans-serif}
+
+/* ── DECK ── */
+#deck{width:100vw;height:100vh;position:relative;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:4.5rem 6vw 5rem;
+  opacity:0;pointer-events:none;
+  transition:opacity .5s ease,transform .5s ease;
+  transform:translateX(60px);
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.prev{opacity:0;transform:translateX(-60px)}
+.slide::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(56,189,248,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(56,189,248,.025) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 90% 90% at 50% 50%,black 20%,transparent 80%);
+  pointer-events:none;
+}
+
+/* ── BACKGROUNDS ── */
+.slide-cover{background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(56,189,248,.14),transparent 55%),radial-gradient(ellipse 60% 60% at 80% 70%,rgba(124,58,237,.1),transparent 50%),var(--bg)}
+.slide-blue{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(56,189,248,.1),transparent 60%),var(--bg)}
+.slide-purple{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(124,58,237,.12),transparent 60%),var(--bg)}
+.slide-green{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(16,185,129,.1),transparent 60%),var(--bg)}
+.slide-amber{background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(251,191,36,.08),transparent 60%),var(--bg)}
+.slide-dark{background:var(--bg1)}
+
+/* ── PROGRESS & CHROME ── */
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .4s ease;z-index:200}
+#logo-corner{position:fixed;top:1.25rem;left:1.75rem;z-index:100}
+#logo-corner img{height:32px;width:auto}
+#slide-num{position:fixed;top:1.25rem;right:1.75rem;z-index:100;font-size:.7rem;font-weight:700;color:var(--t3);letter-spacing:.1em}
+#nav-bar{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:1rem;background:rgba(8,13,28,.85);backdrop-filter:blur(20px);border:1px solid var(--bdr2);border-radius:999px;padding:.625rem 1.25rem}
+.nav-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--bdr2);background:rgba(255,255,255,.05);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:1rem}
+.nav-btn:hover{background:rgba(56,189,248,.15);border-color:rgba(56,189,248,.4);color:var(--blue)}
+#slide-counter{font-size:.75rem;font-weight:600;color:var(--t3);min-width:50px;text-align:center}
+.dot-row{display:flex;gap:.4rem;align-items:center}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--t3);cursor:pointer;transition:all .25s}
+.dot.on{background:var(--blue);width:18px;border-radius:3px}
+
+/* ── SCAN LINE ── */
+.scan-line{position:absolute;left:0;right:0;height:1.5px;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(56,189,248,.5) 40%,rgba(167,139,250,.5) 60%,transparent);animation:sl 5s linear infinite;z-index:1}
+@keyframes sl{0%{top:-1%;opacity:0}3%{opacity:.6}97%{opacity:.6}100%{top:101%;opacity:0}}
+
+/* ── SHARED LAYOUT ── */
+.sw{width:100%;max-width:1200px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:2}
+.slide-label{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);padding:.3rem .9rem;border-radius:999px;margin-bottom:.875rem}
+.slide-label.lp{color:var(--purple);background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.2)}
+.slide-label.lg{color:var(--green);background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.2)}
+.slide-label.la{color:var(--amber);background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.2)}
+.slide-h1{font-size:clamp(2rem,3.5vw,3rem);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:.875rem;text-align:center}
+.slide-h1 .tb{color:var(--blue)}.slide-h1 .tp{color:var(--purple)}.slide-h1 .tg{color:var(--green)}.slide-h1 .ta{color:var(--amber)}.slide-h1 .tr{color:var(--red)}
+.slide-sub{font-size:.95rem;color:var(--t2);max-width:620px;text-align:center;line-height:1.7;margin-bottom:2rem}
+
+/* ── COVER ── */
+.cover-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:rgba(56,189,248,.09);border:1px solid rgba(56,189,248,.28);padding:.35rem 1rem;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:1.75rem}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.7)}50%{box-shadow:0 0 0 5px rgba(52,211,153,0)}}
+.cover-title{font-size:clamp(3rem,6vw,5.5rem);font-weight:900;line-height:1.05;letter-spacing:-.04em;text-align:center;margin-bottom:1.25rem}
+.cover-title .gt{background:linear-gradient(135deg,var(--blue),var(--purple) 50%,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cover-sub{font-size:1.2rem;color:var(--t2);text-align:center;max-width:680px;line-height:1.7;margin-bottom:2.5rem}
+.cover-pills{display:flex;flex-wrap:wrap;gap:.625rem;justify-content:center}
+.cpill{background:rgba(255,255,255,.05);border:1px solid var(--bdr2);padding:.35rem 1rem;border-radius:999px;font-size:.75rem;color:var(--t2);font-weight:500}
+
+/* ── STAT NUMBERS ── */
+.stats-row{display:flex;gap:1px;background:var(--bdr);border-radius:20px;overflow:hidden;border:1px solid var(--bdr)}
+.stat{flex:1;background:var(--bgc);padding:2rem 1.5rem;text-align:center}
+.stat .num{font-size:clamp(2.5rem,4vw,4rem);font-weight:900;font-family:'Space Grotesk',sans-serif;line-height:1;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat .lbl{font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-top:.5rem;font-weight:600}
+.stat .hint{font-size:.75rem;color:var(--t2);margin-top:.35rem}
+
+/* ── VISUAL PRODUCT CARDS (Sensory Stack) ── */
+.prod-row{display:flex;gap:1.25rem;width:100%}
+.prod{flex:1;background:var(--bgc);border:1px solid var(--bdr);border-radius:20px;padding:1.75rem 1.5rem;display:flex;flex-direction:column;align-items:flex-start;gap:.625rem;position:relative;overflow:hidden;transition:all .3s}
+.prod::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--pc,var(--blue));opacity:.7}
+.prod:hover{transform:translateY(-4px);border-color:var(--bdr2)}
+.prod .pi{font-size:2.5rem;line-height:1;margin-bottom:.25rem}
+.prod .pt{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:.1rem}
+.prod h3{font-size:1.05rem;font-weight:800;letter-spacing:-.02em}
+.prod p{font-size:.78rem;color:var(--t2);line-height:1.5}
+
+/* ── CAPABILITY PILLS ── */
+.cap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.625rem;width:100%}
+.cap{display:flex;align-items:center;gap:.625rem;background:var(--bgc);border:1px solid var(--bdr);border-radius:12px;padding:.75rem 1rem;transition:all .2s;cursor:default}
+.cap:hover{border-color:rgba(56,189,248,.3);background:rgba(56,189,248,.04)}
+.cap .ci{font-size:1.4rem;flex-shrink:0}
+.cap h4{font-size:.78rem;font-weight:700;letter-spacing:-.01em}
+.cap p{font-size:.65rem;color:var(--t3);margin-top:.1rem}
+
+/* ── HUB / ALERT CHANNELS ── */
+.channel-row{display:flex;gap:1rem;width:100%;justify-content:center}
+.ch{flex:1;max-width:180px;background:var(--bgc);border:1px solid var(--bdr);border-radius:18px;padding:1.5rem 1rem;text-align:center;transition:all .25s}
+.ch:hover{transform:translateY(-4px)}
+.ch .ci{font-size:2.5rem;margin-bottom:.75rem;display:block}
+.ch h4{font-size:.85rem;font-weight:800;margin-bottom:.35rem}
+.ch p{font-size:.72rem;color:var(--t2);line-height:1.45}
+.ch.c-amber{border-color:rgba(251,191,36,.25);background:rgba(251,191,36,.04)}.ch.c-amber h4{color:var(--amber)}
+.ch.c-green{border-color:rgba(52,211,153,.25);background:rgba(52,211,153,.04)}.ch.c-green h4{color:var(--green)}
+.ch.c-blue{border-color:rgba(56,189,248,.25);background:rgba(56,189,248,.04)}.ch.c-blue h4{color:var(--blue)}
+.ch.c-purple{border-color:rgba(167,139,250,.25);background:rgba(167,139,250,.04)}.ch.c-purple h4{color:var(--purple)}
+.ch.c-slate{border-color:var(--bdr2)}.ch.c-slate h4{color:var(--t2)}
+.ch.c-red{border-color:rgba(248,113,113,.25);background:rgba(248,113,113,.04)}.ch.c-red h4{color:var(--red)}
+
+/* ── ETHICS ── */
+.ethics-row{display:flex;gap:1.5rem;width:100%}
+.eth{flex:1;background:var(--bgc);border:1px solid rgba(52,211,153,.15);border-radius:20px;padding:2rem 1.5rem;text-align:center;transition:all .3s}
+.eth:hover{transform:translateY(-4px);border-color:rgba(52,211,153,.35)}
+.eth .ei{font-size:2.75rem;margin-bottom:.875rem;display:block}
+.eth h3{font-size:.95rem;font-weight:800;margin-bottom:.5rem}
+.eth p{font-size:.78rem;color:var(--t2);line-height:1.5}
+
+/* ── INDUSTRY TABS ── */
+.ind-tabs{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-bottom:1.75rem}
+.itab{background:var(--bgc);border:1px solid var(--bdr);color:var(--t2);padding:.35rem .875rem;border-radius:999px;font-size:.72rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.itab:hover{border-color:var(--bdr2);color:var(--t1)}
+.itab.on{background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.4);color:var(--blue)}
+.ipanel{display:none}
+.ipanel.on{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.sc{background:var(--bgc);border:1px solid var(--bdr);border-radius:16px;padding:1.5rem;transition:all .2s}
+.sc:hover{border-color:rgba(56,189,248,.3);transform:translateY(-3px)}
+.sc .si{font-size:2rem;margin-bottom:.75rem;display:block}
+.sc h4{font-size:.875rem;font-weight:800;margin-bottom:.35rem}
+.sc p{font-size:.75rem;color:var(--t2);line-height:1.5}
+
+/* ── IOT FLOW ── */
+.flow-row{display:flex;align-items:center;justify-content:center;gap:0;width:100%;margin-bottom:2rem}
+.fn{flex-shrink:0;background:var(--bgc);border:1px solid var(--bdr);border-radius:16px;padding:1.25rem 1rem;text-align:center;min-width:110px}
+.fn .fi{font-size:1.75rem;margin-bottom:.4rem}
+.fn h5{font-size:.72rem;font-weight:700}
+.fn p{font-size:.62rem;color:var(--t3);margin-top:.15rem}
+.farr{flex-shrink:0;width:44px;display:flex;flex-direction:column;align-items:center;gap:.15rem}
+.fline{width:100%;height:1.5px;background:linear-gradient(90deg,transparent,var(--green),transparent);position:relative;overflow:hidden}
+.fline::after{content:'';position:absolute;height:100%;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);animation:af 2s linear infinite}
+@keyframes af{from{left:-40%}to{left:140%}}
+.fhead{font-size:.75rem;color:var(--green)}
+
+/* ── IOT STATS ── */
+.iot-stats{display:flex;gap:1.25rem;width:100%}
+.is{flex:1;background:var(--bgc);border:1px solid rgba(52,211,153,.2);border-radius:18px;padding:1.75rem 1.25rem;text-align:center}
+.is .isn{font-size:2.75rem;font-weight:900;font-family:'Space Grotesk';line-height:1;color:var(--green)}
+.is .isl{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-top:.4rem;font-weight:600}
+.is p{font-size:.75rem;color:var(--t2);margin-top:.4rem}
+
+/* ── TRAINING TIMELINE ── */
+.timeline{display:flex;align-items:flex-start;width:100%;gap:0}
+.tl-step{flex:1;position:relative;text-align:center;padding:0 .5rem}
+.tl-step:not(:last-child)::after{content:'';position:absolute;top:22px;left:calc(50% + 22px);width:calc(100% - 44px);height:2px;background:linear-gradient(90deg,var(--bdr2),transparent)}
+.tl-node{width:44px;height:44px;border-radius:50%;border:2px solid var(--blue);background:var(--bgc);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1rem;color:var(--blue);margin:0 auto 1rem}
+.tl-step h4{font-size:.82rem;font-weight:800;margin-bottom:.4rem}
+.tl-step p{font-size:.72rem;color:var(--t2);line-height:1.5}
+
+/* ── CUSTOM MODEL TYPES ── */
+.mtype-row{display:flex;gap:1.25rem;width:100%}
+.mt{flex:1;background:var(--bgc);border:1px solid var(--bdr);border-radius:20px;padding:1.75rem 1.5rem;transition:all .3s;position:relative;overflow:hidden}
+.mt::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--mc,var(--purple))}
+.mt:hover{transform:translateY(-4px);border-color:var(--bdr2)}
+.mt .mi{font-size:2.25rem;margin-bottom:.875rem;display:block}
+.mt h3{font-size:.9rem;font-weight:800;margin-bottom:.4rem}
+.mt p{font-size:.75rem;color:var(--t2);line-height:1.5}
+.mt-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.75rem}
+.mtag{font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(167,139,250,.1);color:var(--purple)}
+
+/* ── DIFFERENTIATORS ── */
+.diff-row{display:flex;gap:1.25rem;width:100%;margin-bottom:1.25rem}
+.df{flex:1;background:var(--bgc);border:1px solid var(--bdr);border-radius:20px;padding:1.75rem 1.5rem;transition:all .3s}
+.df:hover{transform:translateY(-4px);border-color:rgba(167,139,250,.3)}
+.df .di{font-size:2.25rem;margin-bottom:.75rem;display:block}
+.df h3{font-size:.95rem;font-weight:800;margin-bottom:.35rem}
+.df p{font-size:.78rem;color:var(--t2);line-height:1.5}
+
+/* ── TECH STACK ── */
+.tech-layers{display:flex;flex-direction:column;gap:.625rem;width:100%}
+.tl{display:flex;align-items:center;gap:1rem;background:var(--bgc);border:1px solid var(--bdr);border-radius:14px;padding:1rem 1.5rem}
+.tl-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;min-width:140px;color:var(--blue)}
+.tl.lp .tl-label{color:var(--purple)}.tl.lg .tl-label{color:var(--green)}.tl.la .tl-label{color:var(--amber)}.tl.lr .tl-label{color:var(--red)}
+.tl-tags{display:flex;flex-wrap:wrap;gap:.35rem}
+.ttag{font-size:.7rem;color:var(--t2);background:rgba(255,255,255,.05);border:1px solid var(--bdr);padding:.2rem .6rem;border-radius:6px;font-family:monospace}
+
+/* ── DEPLOYMENT ── */
+.dep-row{display:flex;gap:1.25rem;width:100%}
+.dep{flex:1;border-radius:20px;padding:2rem 1.75rem;border:1px solid var(--bdr);background:var(--bgc);position:relative;overflow:hidden;transition:all .3s}
+.dep:hover{transform:translateY(-4px)}
+.dep::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.dep.t1::before{background:linear-gradient(90deg,var(--blue),var(--blue2))}.dep.t2::before{background:linear-gradient(90deg,var(--purple),var(--purple2))}.dep.t3::before{background:linear-gradient(90deg,var(--green),#10b981)}
+.dep.t2{border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.04)}
+.dep-tier{font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.dep.t1 .dep-tier{color:var(--blue)}.dep.t2 .dep-tier{color:var(--purple)}.dep.t3 .dep-tier{color:var(--green)}
+.dep .di{font-size:2.5rem;margin-bottom:.75rem;display:block}
+.dep h3{font-size:1.2rem;font-weight:900;margin-bottom:.625rem}
+.dep p{font-size:.82rem;color:var(--t2);line-height:1.6;margin-bottom:1rem}
+.dep ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.dep li{font-size:.78rem;color:var(--t2);display:flex;align-items:center;gap:.5rem}
+.dep.t1 li::before{content:'✓';color:var(--blue);font-weight:800}.dep.t2 li::before{content:'✓';color:var(--purple);font-weight:800}.dep.t3 li::before{content:'✓';color:var(--green);font-weight:800}
+
+/* ── INTEGRATIONS ── */
+.int-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;width:100%}
+.int{background:var(--bgc);border:1px solid var(--bdr);border-radius:18px;padding:1.75rem 1.25rem;text-align:center;transition:all .3s}
+.int:hover{transform:translateY(-4px);border-color:rgba(251,191,36,.3)}
+.int .ii{font-size:2.5rem;margin-bottom:.875rem;display:block}
+.int h4{font-size:.9rem;font-weight:800;margin-bottom:.375rem}
+.int p{font-size:.72rem;color:var(--t2);line-height:1.45}
+
+/* ── ACCESS CONTROL ── */
+.ac-row{display:flex;gap:1.25rem;width:100%}
+.ac{flex:1;background:var(--bgc);border:1px solid rgba(248,113,113,.15);border-radius:20px;padding:1.75rem 1.5rem;transition:all .3s}
+.ac:hover{transform:translateY(-4px);border-color:rgba(248,113,113,.35)}
+.ac .ai{font-size:2.5rem;margin-bottom:.75rem;display:block}
+.ac h3{font-size:.95rem;font-weight:800;margin-bottom:.4rem}
+.ac p{font-size:.78rem;color:var(--t2);line-height:1.5}
+
+/* ── TERMINAL ── */
+.terminal{background:var(--bgc);border:1px solid rgba(167,139,250,.35);border-radius:18px;overflow:hidden;box-shadow:0 0 60px rgba(124,58,237,.15);width:100%;max-width:820px}
+.tbar{background:rgba(255,255,255,.04);border-bottom:1px solid var(--bdr);padding:.875rem 1.375rem;display:flex;align-items:center;gap:.625rem}
+.td{width:10px;height:10px;border-radius:50%}.td.r{background:#f87171}.td.y{background:#fbbf24}.td.g{background:#34d399}
+.ttitle{margin-left:.5rem;font-size:.78rem;color:var(--t3)}
+.tbadge{margin-left:auto;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);padding:.2rem .7rem;border-radius:999px;font-size:.62rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.07em}
+.tbody{padding:1.5rem}
+.sinput{display:flex;align-items:center;gap:.75rem;background:rgba(255,255,255,.04);border:1px solid var(--bdr2);border-radius:10px;padding:.75rem 1rem;margin-bottom:1.25rem}
+.sinput svg{width:16px;height:16px;flex-shrink:0;color:var(--t3)}
+.sinput input{background:none;border:none;outline:none;color:var(--t1);font-size:.9rem;font-family:'Inter',sans-serif;flex:1}
+.sinput input::placeholder{color:var(--t3)}
+.qrow{display:flex;align-items:center;gap:.875rem;padding:.875rem 1rem;background:rgba(255,255,255,.025);border:1px solid var(--bdr);border-radius:10px;cursor:pointer;transition:all .2s;margin-bottom:.625rem}
+.qrow:last-child{margin-bottom:0}
+.qrow:hover{border-color:rgba(167,139,250,.35);background:rgba(167,139,250,.05)}
+.qico{flex-shrink:0;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.qt{font-size:.825rem;color:var(--t1);font-weight:500}
+.ql{font-size:.7rem;color:var(--t3);margin-top:.1rem}
+.qchip{margin-left:auto;flex-shrink:0;font-size:.62rem;font-weight:700;background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.25);padding:.15rem .6rem;border-radius:999px;white-space:nowrap}
+
+/* ── TWO-COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;width:100%;max-width:1100px}
+.col-text h2{font-size:clamp(1.75rem,3vw,2.75rem);font-weight:900;letter-spacing:-.03em;line-height:1.15;margin-bottom:1rem}
+.col-text p{font-size:.95rem;color:var(--t2);line-height:1.75;margin-bottom:1.25rem}
+.col-list{list-style:none;display:flex;flex-direction:column;gap:.625rem}
+.col-list li{font-size:.875rem;color:var(--t2);display:flex;align-items:flex-start;gap:.625rem}
+.col-list li::before{content:'→';color:var(--blue);font-weight:700;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="slide-num">1 / 17</div>
+<div id="deck">
+
+<!-- ══ S1: COVER ══ -->
+<div class="slide slide-cover active" id="s1">
+  <div class="scan-line"></div>
+  <div class="sw" style="align-items:center;text-align:center">
+    <div class="cover-eyebrow" style="margin-bottom:1.75rem"><span class="live-dot"></span>Live Intelligence · Enterprise Ready · 2026</div>
+    <h1 class="cover-title" style="margin-bottom:1.25rem">
+      Vision AI &amp;<br><span class="gt">CCTV Intelligence</span>
+    </h1>
+    <p class="cover-sub" style="margin-bottom:2.5rem">Capabilities &amp; Solutions Catalogue<br><span style="font-size:.9rem;opacity:.7">Secure · Ethical · IoT-Integrated AI Vision for Enterprise</span></p>
+    <div class="cover-pills">
+      <span class="cpill">No Camera Replacement</span>
+      <span class="cpill">RTSP / ONVIF</span>
+      <span class="cpill">PDPL · NCA · GDPR</span>
+      <span class="cpill">Edge or Cloud</span>
+      <span class="cpill">Arabic &amp; English Native</span>
+      <span class="cpill">IoT Integrated</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S2: WHAT WE DO ══ -->
+<div class="slide slide-blue" id="s2">
+  <div class="sw">
+    <div class="two-col">
+      <div class="col-text">
+        <div class="slide-label" style="margin-bottom:.875rem">What We Do</div>
+        <h2>We Turn Cameras Into <span style="color:var(--blue)">Intelligence</span></h2>
+        <p>Tap directly into your existing RTSP or ONVIF streams — no hardware replacement. AI runs at the edge or cloud, routing the right alert to the right person on the right channel.</p>
+        <ul class="col-list">
+          <li>Works with <strong>any</strong> existing CCTV camera</li>
+          <li>Hikvision, Dahua, Axis, Bosch, CP Plus — all supported</li>
+          <li>Every detection can trigger IoT: lights, locks, alarms, barriers</li>
+          <li>Pilots live in days, not months</li>
+        </ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1px;background:var(--bdr);border-radius:20px;overflow:hidden;border:1px solid var(--bdr)">
+        <div style="display:flex;gap:1px;background:var(--bdr)">
+          <div class="stat"><div class="num">500+</div><div class="lbl">Camera Brands</div></div>
+          <div class="stat"><div class="num">20+</div><div class="lbl">Industries Served</div></div>
+        </div>
+        <div style="display:flex;gap:1px;background:var(--bdr)">
+          <div class="stat"><div class="num">40%</div><div class="lbl">Accuracy Gain</div><div class="hint">vs generic cloud APIs</div></div>
+          <div class="stat"><div class="num">99.9%</div><div class="lbl">Uptime SLA</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S3: SENSORY STACK ══ -->
+<div class="slide slide-dark" id="s3">
+  <div class="sw">
+    <div class="slide-label" style="margin-bottom:.875rem">The CodeOx Sensory Stack</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Five Products. <span class="tb">One Platform.</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.75rem">No competitor in the GCC has this under one roof.</p>
+    <div class="prod-row">
+      <div class="prod" style="--pc:var(--blue)">
+        <div class="pi">📷</div>
+        <div class="pt">Core</div>
+        <h3>Vision AI</h3>
+        <p>Real-time detection, tracking, recognition &amp; counting on any camera stream.</p>
+      </div>
+      <div class="prod" style="--pc:var(--amber)">
+        <div class="pi">📞</div>
+        <div class="pt">+ Voice</div>
+        <h3>AIKA</h3>
+        <p>Auto-calls supervisors in Arabic, English, Malayalam, Hindi. Escalates until acknowledged.</p>
+      </div>
+      <div class="prod" style="--pc:var(--green)">
+        <div class="pi">💬</div>
+        <div class="pt">+ Chat</div>
+        <h3>AIWA</h3>
+        <p>AI agent across WhatsApp, Telegram, Slack, Teams and web portals.</p>
+      </div>
+      <div class="prod" style="--pc:var(--purple)">
+        <div class="pi">✨</div>
+        <div class="pt">+ Enhancement</div>
+        <h3>VisualAI Studio</h3>
+        <p>Upscales blurry CCTV frames to forensic-quality faces and plates.</p>
+      </div>
+      <div class="prod" style="--pc:var(--red)">
+        <div class="pi">🧠</div>
+        <div class="pt">+ Intelligence</div>
+        <h3>RAG Intelligence</h3>
+        <p>Plain-English search across months of footage. Daily briefings &amp; timelines.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S4: DETECTION CAPABILITIES ══ -->
+<div class="slide slide-blue" id="s4">
+  <div class="sw">
+    <div class="slide-label" style="margin-bottom:.875rem">Detection Library</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">16 AI Capabilities. <span class="tb">Running Simultaneously.</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.75rem">Mix and match per site, per zone, per client — all from a single platform.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);width:100%;border:1px solid var(--bdr);border-radius:22px;overflow:hidden">
+
+      <!-- SECURITY -->
+      <div style="padding:1.5rem 1.375rem;border-right:1px solid var(--bdr);background:linear-gradient(160deg,rgba(248,113,113,.07) 0%,transparent 50%)">
+        <div style="display:flex;align-items:center;gap:.625rem;padding-bottom:.875rem;margin-bottom:1.25rem;border-bottom:1px solid rgba(248,113,113,.2)">
+          <span style="font-size:1.1rem">🛡️</span>
+          <span style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--red)">Security</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1.1rem">
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🔫</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Weapon Detection</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Knives, firearms — human escalated</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🔥</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Fire &amp; Smoke</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Early stage — before sprinklers</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">👊</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Aggression Detection</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Physical contact · rapid motion</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">⏱️</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Loitering &amp; Dwell Time</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Configurable threshold per zone</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAFETY -->
+      <div style="padding:1.5rem 1.375rem;border-right:1px solid var(--bdr);background:linear-gradient(160deg,rgba(251,191,36,.06) 0%,transparent 50%)">
+        <div style="display:flex;align-items:center;gap:.625rem;padding-bottom:.875rem;margin-bottom:1.25rem;border-bottom:1px solid rgba(251,191,36,.2)">
+          <span style="font-size:1.1rem">⚠️</span>
+          <span style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--amber)">Safety</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1.1rem">
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🦺</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">PPE Compliance</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Helmet, vest, gloves, harness per zone</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🤸</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Pose &amp; Fall Detection</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">MediaPipe skeleton · life safety</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🚬</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Smoking / Phone / Sleeping</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Zero-tolerance · 3-second alert</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">👥</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Crowd Density</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Predictive surge before threshold</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div style="padding:1.5rem 1.375rem;border-right:1px solid var(--bdr);background:linear-gradient(160deg,rgba(56,189,248,.06) 0%,transparent 50%)">
+        <div style="display:flex;align-items:center;gap:.625rem;padding-bottom:.875rem;margin-bottom:1.25rem;border-bottom:1px solid rgba(56,189,248,.2)">
+          <span style="font-size:1.1rem">📊</span>
+          <span style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--blue)">Analytics</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1.1rem">
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🚶</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Person &amp; Vehicle Detection</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Multi-class · re-ID tracking</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🌡️</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Thermal Heatmaps</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Anonymous dwell &amp; traffic flow</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🔢</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Counting &amp; Queue Analysis</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Bi-directional · service time</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">📈</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Anonymous Demographics</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Age bracket · gender — no identity</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTELLIGENCE -->
+      <div style="padding:1.5rem 1.375rem;background:linear-gradient(160deg,rgba(167,139,250,.07) 0%,transparent 50%)">
+        <div style="display:flex;align-items:center;gap:.625rem;padding-bottom:.875rem;margin-bottom:1.25rem;border-bottom:1px solid rgba(167,139,250,.2)">
+          <span style="font-size:1.1rem">🧠</span>
+          <span style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--purple)">Intelligence</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1.1rem">
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">👤</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Face Recognition</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">1:1 verify · 1:N search</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🔢</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">ANPR / LPR</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">GCC, India, EU plates</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🔄</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">Multi-Camera Tracking</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Re-ID follows person site-wide</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.625rem">
+            <span style="font-size:1.3rem;flex-shrink:0;line-height:1.2">🔤</span>
+            <div><div style="font-size:.82rem;font-weight:700;line-height:1.3">OCR &amp; Gauge Reading</div><div style="font-size:.68rem;color:var(--t3);margin-top:.1rem">Labels · analogue gauges to SCADA</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ S5: KILLER FEATURE ══ -->
+<div class="slide slide-purple" id="s5">
+  <div class="sw" style="align-items:center">
+    <div class="slide-label lp" style="margin-bottom:.875rem">Killer Feature</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Search Footage <span class="tp">in Plain English</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.5rem">No regional competitor packages this today. Demo these queries live in the meeting.</p>
+    <div class="terminal">
+      <div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><span class="ttitle">CodeOx Intelligence Console — Footage Search</span><div class="tbadge">Gemini · GPT-4 Vision · Claude · RAG</div></div>
+      <div class="tbody">
+        <div class="sinput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" placeholder="Ask anything about your footage…" readonly></div>
+        <div class="qrow"><div class="qico" style="background:rgba(251,191,36,.1)">⚠️</div><div><div class="qt">"Show me every time a forklift came near a worker without a vest last month"</div><div class="ql">Safety compliance · Warehouse · Date range</div></div><div class="qchip">14 clips</div></div>
+        <div class="qrow"><div class="qico" style="background:rgba(56,189,248,.1)">🔍</div><div><div class="qt">"Find the customer in a red shirt at counter four around 3:15 PM yesterday"</div><div class="ql">Person search · Multi-camera · Retail</div></div><div class="qchip">3 clips</div></div>
+        <div class="qrow"><div class="qico" style="background:rgba(52,211,153,.1)">📦</div><div><div class="qt">"How many after-hours entries to the pharmacy this month?"</div><div class="ql">Access analytics · Compliance report</div></div><div class="qchip">7 entries</div></div>
+        <div class="qrow"><div class="qico" style="background:rgba(167,139,250,.1)">🚛</div><div><div class="qt">"Which loading bay had the most idle truck dwell last week?"</div><div class="ql">Operations analytics · Logistics</div></div><div class="qchip">Bay 3 — 4.2h avg</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S6: ETHICS ══ -->
+<div class="slide slide-green" id="s6">
+  <div class="sw">
+    <div class="slide-label lg" style="margin-bottom:.875rem">Ethics &amp; Compliance</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Built In. <span class="tg">Not Bolted On.</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.75rem">PDPL, GDPR, and NCA-ready from day one — a core reason enterprises choose us over foreign SaaS.</p>
+    <div class="ethics-row">
+      <div class="eth">
+        <span class="ei">🏛️</span>
+        <h3>Data Sovereignty</h3>
+        <p>UAE, KSA, India hosting or full on-prem. Data never leaves jurisdiction without client authorization.</p>
+      </div>
+      <div class="eth">
+        <span class="ei">🔒</span>
+        <h3>Privacy by Default</h3>
+        <p>Face blurring, anonymous heatmaps, masked zones — PDPL-safe out of the box.</p>
+      </div>
+      <div class="eth">
+        <span class="ei">👁️</span>
+        <h3>Full Audit Trail</h3>
+        <p>Every view, search, and export logged. Complete record of who saw what and when.</p>
+      </div>
+      <div class="eth">
+        <span class="ei">🤝</span>
+        <h3>Human-in-the-Loop</h3>
+        <p>Weapon, fire, medical — always escalates to a human first. AI informs; humans decide.</p>
+      </div>
+      <div class="eth">
+        <span class="ei">💡</span>
+        <h3>Transparent AI</h3>
+        <p>Every alert shows what was detected, why it fired, and the confidence level. No black box.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S7: ALERT CHANNELS ══ -->
+<div class="slide slide-dark" id="s7">
+  <div class="sw">
+    <div class="slide-label" style="margin-bottom:.875rem">Alert Channels</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Right Alert. <span class="tb">Right Person. Right Channel.</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.75rem">Any detection combines multiple channels simultaneously. Arabic, English, Hindi, Malayalam, Tamil — all native.</p>
+    <div class="channel-row">
+      <div class="ch c-amber">
+        <span class="ci">📞</span>
+        <h4>AIKA Voice AI</h4>
+        <p>Auto-calls in your language. Escalates up the chain every 60 seconds until acknowledged.</p>
+      </div>
+      <div class="ch c-green">
+        <span class="ci">💬</span>
+        <h4>AIWA Chat AI</h4>
+        <p>WhatsApp, Telegram, Slack, Teams. Sends clips, handles approvals, answers queries.</p>
+      </div>
+      <div class="ch c-blue">
+        <span class="ci">📊</span>
+        <h4>Live Dashboard</h4>
+        <p>Multi-site feed with AI overlay, heatmaps, counters and footage search.</p>
+      </div>
+      <div class="ch c-purple">
+        <span class="ci">📧</span>
+        <h4>Email Reports</h4>
+        <p>Daily summaries, incident reports, compliance records per site and event type.</p>
+      </div>
+      <div class="ch c-slate">
+        <span class="ci">📱</span>
+        <h4>SMS Fallback</h4>
+        <p>Field staff without data plans. Always-on last-resort on any network.</p>
+      </div>
+      <div class="ch c-red">
+        <span class="ci">🔗</span>
+        <h4>API &amp; Webhooks</h4>
+        <p>SAP, Oracle, Dynamics, SIEM, SOAR. REST, GraphQL, custom payload schema.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S8: INDUSTRY SOLUTIONS ══ -->
+<div class="slide slide-blue" id="s8">
+  <div class="sw">
+    <div class="slide-label" style="margin-bottom:.875rem">Solutions Catalogue</div>
+    <h2 class="slide-h1" style="margin-bottom:1.25rem">Built for <span class="tp">any Industry</span></h2>
+    <div class="ind-tabs">
+      <button class="itab on" data-ip="factory">🏭 Manufacturing</button>
+      <button class="itab" data-ip="warehouse">📦 Warehouse</button>
+      <button class="itab" data-ip="retail">🛍️ Retail &amp; Malls</button>
+      <button class="itab" data-ip="supermarket">🛒 Supermarkets</button>
+      <button class="itab" data-ip="restaurant">🍽️ Restaurants</button>
+      <button class="itab" data-ip="hotel">🏨 Hotels</button>
+      <button class="itab" data-ip="health">🏥 Healthcare</button>
+      <button class="itab" data-ip="construction">🏗️ Construction</button>
+      <button class="itab" data-ip="oilgas">⛽ Oil &amp; Gas</button>
+      <button class="itab" data-ip="banking">🏦 Banking</button>
+      <button class="itab" data-ip="school">🎓 Schools</button>
+      <button class="itab" data-ip="residential">🏘️ Residential</button>
+      <button class="itab" data-ip="jewellery">💎 Jewellery</button>
+      <button class="itab" data-ip="parking">🅿️ Parking</button>
+      <button class="itab" data-ip="govt">🏙️ Smart City</button>
+    </div>
+    <div style="width:100%">
+      <div class="ipanel on" id="ip-factory">
+        <div class="sc"><span class="si">🦺</span><h4>PPE Compliance — Full Zone</h4><p>Helmet, vest, gloves, boots per zone. Live compliance scoring, AIKA escalation, email audit export.</p></div>
+        <div class="sc"><span class="si">⚙️</span><h4>Machine Hazard Auto-Stop</h4><p>Virtual fences around presses and robots. IoT PLC stop via Modbus/OPC-UA before contact.</p></div>
+        <div class="sc"><span class="si">🔍</span><h4>Visual Quality Control</h4><p>Custom-trained defect detection — misalignment, missing parts, colour variance on your line.</p></div>
+        <div class="sc"><span class="si">🚜</span><h4>Forklift &amp; Headcount Safety</h4><p>Speed, path, near-miss tracking. Headcount vs HR roster per station per shift.</p></div>
+      </div>
+      <div class="ipanel" id="ip-warehouse">
+        <div class="sc"><span class="si">🔢</span><h4>LPR with Manifest Check</h4><p>Plate matched against delivery schedule. Auto-opens barrier, AIWA to driver, audit log.</p></div>
+        <div class="sc"><span class="si">📦</span><h4>SKU Mis-Pick Detection</h4><p>Vision matches packed item against barcode scan. Flags errors before parcel ships.</p></div>
+        <div class="sc"><span class="si">🔒</span><h4>Theft &amp; Pilferage Patterns</h4><p>After-hours activity, repeated sensitive stock access. VisualAI enhances evidence.</p></div>
+        <div class="sc"><span class="si">🌡️</span><h4>Cold Storage Monitoring</h4><p>Freezer doors left open combined with IoT temperature sensors. AIKA to manager.</p></div>
+      </div>
+      <div class="ipanel" id="ip-retail">
+        <div class="sc"><span class="si">📍</span><h4>Footfall &amp; Zone Heatmaps</h4><p>Counts per floor, tenant, zone. Heatmaps by hour and day for lease decisions.</p></div>
+        <div class="sc"><span class="si">🛒</span><h4>Shoplifting Behaviour</h4><p>Bag concealment, item palming, group distraction patterns. Silent alert to loss prevention.</p></div>
+        <div class="sc"><span class="si">👶</span><h4>Lost Child Visual Search</h4><p>RAG searches every mall camera, returns last-seen location in seconds.</p></div>
+        <div class="sc"><span class="si">⭐</span><h4>VIP Customer Recognition</h4><p>Opt-in face recognition notifies floor manager on entry with CRM preferences.</p></div>
+      </div>
+      <div class="ipanel" id="ip-supermarket">
+        <div class="sc"><span class="si">🚨</span><h4>Shrinkage &amp; SCO Fraud</h4><p>Item skip at self-checkout, bag concealment, scale manipulation — silent alert to LP.</p></div>
+        <div class="sc"><span class="si">📋</span><h4>Planogram Compliance</h4><p>Morning shelf check vs planogram. Flags out-of-stock zones and misplaced products.</p></div>
+        <div class="sc"><span class="si">🔢</span><h4>Checkout Queue Optimisation</h4><p>Queue depth triggers backup cashier dispatch. Measures wait time per lane.</p></div>
+        <div class="sc"><span class="si">❄️</span><h4>Cold Chain Door Monitoring</h4><p>Freezer left open — visual + IoT sensor. AIKA to store manager instantly.</p></div>
+      </div>
+      <div class="ipanel" id="ip-restaurant">
+        <div class="sc"><span class="si">🔢</span><h4>Real-Time Queue Management</h4><p>Live queue depth at counter and drive-through. Auto-dispatches staff when wait exceeds target. Average 15-min service time reduction.</p></div>
+        <div class="sc"><span class="si">👨‍🍳</span><h4>Kitchen Operations Analytics</h4><p>Track prep time per station, order-to-serve duration, bottleneck shifts. Surfaces underperforming stations before they affect service.</p></div>
+        <div class="sc"><span class="si">🍽️</span><h4>Dining Area &amp; Table Intelligence</h4><p>Seat occupancy by zone, table turnover rate, peak-hour dwell patterns. Guides layout and staffing decisions in real time.</p></div>
+        <div class="sc"><span class="si">🖥️</span><h4>POS &amp; Cold Chain Integration</h4><p>Order volumes from POS cross-matched with camera counts. Chiller and freezer door alerts combined with IoT temperature sensors.</p></div>
+      </div>
+      <div class="ipanel" id="ip-hotel">
+        <div class="sc"><span class="si">🚗</span><h4>VIP Arrival Recognition</h4><p>LPR triggers personalised welcome across front desk, concierge, housekeeping.</p></div>
+        <div class="sc"><span class="si">🏊</span><h4>Pool &amp; Spa Distress</h4><p>Drowning posture and prolonged underwater presence. AIKA to lifeguard in seconds.</p></div>
+        <div class="sc"><span class="si">🛏️</span><h4>Housekeeping SLA Tracking</h4><p>Entry/exit per room tracked. Measures cleaning time against SLA standards.</p></div>
+        <div class="sc"><span class="si">🎪</span><h4>Banquet Setup Verification</h4><p>Verifies hall vs standard photo 1 hour before events. Remote GM review.</p></div>
+      </div>
+      <div class="ipanel" id="ip-health">
+        <div class="sc"><span class="si">🤕</span><h4>Patient Fall Detection</h4><p>Privacy-preserving ward cameras detect falls, bed exits, prolonged immobility.</p></div>
+        <div class="sc"><span class="si">💊</span><h4>Pharmacy Dual-Person Rule</h4><p>Face-gated access to controlled substances. Full audit trail on every entry.</p></div>
+        <div class="sc"><span class="si">🚶</span><h4>Wandering Patient Alerts</h4><p>Face-tagged monitoring for dementia, post-anaesthesia, high-risk patients.</p></div>
+        <div class="sc"><span class="si">🙌</span><h4>Hand Hygiene Compliance</h4><p>Audits hand washing before patient contact. Weekly scores to infection control.</p></div>
+      </div>
+      <div class="ipanel" id="ip-construction">
+        <div class="sc"><span class="si">🪖</span><h4>PPE &amp; Height-Work Compliance</h4><p>Helmet, vest, harness per zone. AIKA calls HSE officer on harness absence at height.</p></div>
+        <div class="sc"><span class="si">🏗️</span><h4>Heavy Equipment Proximity</h4><p>People within danger zone of cranes. Optional IoT: Modbus stop signal.</p></div>
+        <div class="sc"><span class="si">🌙</span><h4>After-Hours Perimeter</h4><p>Virtual fencing at quiet hours. IoT floodlight activation on breach.</p></div>
+        <div class="sc"><span class="si">📸</span><h4>BIM Progress Monitoring</h4><p>Auto-captures daily site vs BIM model to track construction schedule.</p></div>
+      </div>
+      <div class="ipanel" id="ip-oilgas">
+        <div class="sc"><span class="si">🛢️</span><h4>Tank Farm Perimeter</h4><p>Virtual fencing around tanks and pipelines. AIKA to control room instantly.</p></div>
+        <div class="sc"><span class="si">🚬</span><h4>Smoking &amp; Phone in ATEX</h4><p>Zero-tolerance. AIKA auto-dials HSE manager within 3 seconds of detection.</p></div>
+        <div class="sc"><span class="si">⏳</span><h4>Confined Space Monitoring</h4><p>Person count, elapsed time, buddy rule enforcement. AIKA on distress.</p></div>
+        <div class="sc"><span class="si">🎛️</span><h4>Gauge &amp; Valve Reading</h4><p>Cameras read analogue gauges to SCADA directly — automates manual rounds.</p></div>
+      </div>
+      <div class="ipanel" id="ip-banking">
+        <div class="sc"><span class="si">💳</span><h4>ATM Skimmer Detection</h4><p>Visual anomaly on card slots before data compromise. AIKA to ATM ops team.</p></div>
+        <div class="sc"><span class="si">🏦</span><h4>Vault Dual-Person Rule</h4><p>Face confirms two officers at every vault access. AIKA on any anomaly.</p></div>
+        <div class="sc"><span class="si">🕵️</span><h4>Suspicious Behaviour</h4><p>Masked entries, exit scoping, pre-attack casing. VisualAI + silent alert.</p></div>
+        <div class="sc"><span class="si">🚐</span><h4>CIT Vehicle Verification</h4><p>LPR + face for cash-in-transit crews. Prevents impersonation.</p></div>
+      </div>
+      <div class="ipanel" id="ip-school">
+        <div class="sc"><span class="si">👊</span><h4>Bullying &amp; Fight Detection</h4><p>Fights, shoving, isolated cornering in corridors and playgrounds.</p></div>
+        <div class="sc"><span class="si">🚪</span><h4>Stranger Entry Detection</h4><p>Face against student, staff, visitor databases. Unknown faces trigger alert.</p></div>
+        <div class="sc"><span class="si">🚌</span><h4>Bus Drop-Off Compliance</h4><p>Verifies each student boards assigned bus. Instant AIWA parent confirmation.</p></div>
+        <div class="sc"><span class="si">📝</span><h4>Classroom Attendance</h4><p>Face-based attendance replaces roll calls. Syncs to school ERP &amp; parent portal.</p></div>
+      </div>
+      <div class="ipanel" id="ip-residential">
+        <div class="sc"><span class="si">🔔</span><h4>Visitor Pre-Approval</h4><p>WhatsApp approval from resident before gate opens. AIKA if no reply in 60s.</p></div>
+        <div class="sc"><span class="si">🏊</span><h4>Pool &amp; Amenity Safety</h4><p>Drowning posture detection. AIKA to building security in seconds.</p></div>
+        <div class="sc"><span class="si">📦</span><h4>Parcel Theft Prevention</h4><p>Package at door tracked until collected. Motion at uncollected parcel triggers AIWA.</p></div>
+        <div class="sc"><span class="si">🌙</span><h4>Perimeter After Hours</h4><p>Night vision + IoT floodlights on breach. Full perimeter patrol automation.</p></div>
+      </div>
+      <div class="ipanel" id="ip-jewellery">
+        <div class="sc"><span class="si">💎</span><h4>Display Case Tamper</h4><p>Any contact with showcases triggers instant silent alert to staff and CCTV review.</p></div>
+        <div class="sc"><span class="si">👥</span><h4>Distraction Theft Pattern</h4><p>Group entry, staff distraction, multi-point approach — detected before the act.</p></div>
+        <div class="sc"><span class="si">🔐</span><h4>Vault Dual-Person Rule</h4><p>Two named staff at every vault access. Face confirmed. AIKA on violation.</p></div>
+        <div class="sc"><span class="si">🔄</span><h4>Switch &amp; Swap Detection</h4><p>VisualAI compares item picked vs replaced using high-res frame enhancement.</p></div>
+      </div>
+      <div class="ipanel" id="ip-parking">
+        <div class="sc"><span class="si">🔢</span><h4>Smart LPR Entry &amp; Exit</h4><p>Plate matched to permit. Visitors get AIWA payment link. Barrier auto-opens.</p></div>
+        <div class="sc"><span class="si">🅿️</span><h4>Live Occupancy &amp; Guidance</h4><p>Floor-by-floor vacancy fed to signage and app. Reduce circulation by 35%.</p></div>
+        <div class="sc"><span class="si">🚗</span><h4>Wrong-Way &amp; Speed Detection</h4><p>IoT alert signage and AIKA to security on violation in narrow aisles.</p></div>
+        <div class="sc"><span class="si">⚡</span><h4>EV Bay Compliance</h4><p>ICE vehicles in EV bays, charger hogging — automated notification to driver.</p></div>
+      </div>
+      <div class="ipanel" id="ip-govt">
+        <div class="sc"><span class="si">👥</span><h4>Crowd Density &amp; Surge</h4><p>Real-time density at metro, mosques, events with predictive surge warning.</p></div>
+        <div class="sc"><span class="si">🚦</span><h4>Traffic Violation Detection</h4><p>Red light, no helmet, wrong-way. Auto-challan — AIWA sends fine payment link.</p></div>
+        <div class="sc"><span class="si">💼</span><h4>Suspicious Object Left</h4><p>Unattended bags in crowded areas. Core anti-terror infrastructure alert.</p></div>
+        <div class="sc"><span class="si">🗺️</span><h4>Road &amp; Infrastructure Damage</h4><p>Dashcam fleets auto-log potholes with geo-tags and severity scoring.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S9: IOT ══ -->
+<div class="slide slide-green" id="s9">
+  <div class="sw">
+    <div class="slide-label lg" style="margin-bottom:.875rem">IoT &amp; Smart Automation</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Cameras Don't Just Watch. <span class="tg">They Act.</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.5rem">MQTT · Modbus · OPC-UA · Zigbee · Z-Wave · KNX · Direct Relay</p>
+    <div class="flow-row" style="margin-bottom:1.75rem">
+      <div class="fn"><div class="fi">📷</div><h5>Camera</h5><p>Any RTSP/ONVIF</p></div>
+      <div class="farr"><div class="fline"></div><div class="fhead">▶</div></div>
+      <div class="fn"><div class="fi">🧠</div><h5>AI Detection</h5><p>Edge or Cloud</p></div>
+      <div class="farr"><div class="fline"></div><div class="fhead">▶</div></div>
+      <div class="fn"><div class="fi">⚡</div><h5>Event Engine</h5><p>Rules + Context</p></div>
+      <div class="farr"><div class="fline"></div><div class="fhead">▶</div></div>
+      <div class="fn"><div class="fi">📡</div><h5>IoT Protocol</h5><p>MQTT/Modbus/KNX</p></div>
+      <div class="farr"><div class="fline"></div><div class="fhead">▶</div></div>
+      <div class="fn"><div class="fi">🏭</div><h5>Physical Action</h5><p>Lock · Light · Stop</p></div>
+      <div class="farr"><div class="fline"></div><div class="fhead">▶</div></div>
+      <div class="fn"><div class="fi">📣</div><h5>Multi-Alert</h5><p>AIKA · AIWA · Email</p></div>
+    </div>
+    <div class="iot-stats">
+      <div class="is"><div class="isn">40–60%</div><div class="isl">Energy Savings</div><p>Occupancy-based lighting automation</p></div>
+      <div class="is"><div class="isn">&lt;1s</div><div class="isl">Response Time</div><p>Detection to physical action</p></div>
+      <div class="is"><div class="isn">20–30%</div><div class="isl">HVAC Reduction</div><p>BACnet/Modbus BMS integration</p></div>
+      <div class="is"><div class="isn">500+</div><div class="isl">Device Brands</div><p>Philips Hue, Tuya, Hikvision, Nice, FAAC</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S9b: BEYOND SECURITY ══ -->
+<div class="slide slide-dark" id="s9b">
+  <div class="sw" style="align-items:center;text-align:center">
+    <div class="slide-label lp" style="margin-bottom:.875rem">Productivity Intelligence</div>
+    <h2 class="slide-h1" style="margin-bottom:.75rem;font-size:clamp(2.25rem,4.5vw,4rem)">Security Was <span class="tp">Just the Beginning.</span></h2>
+    <p style="font-size:1.05rem;color:var(--t2);max-width:700px;line-height:1.75;margin-bottom:2.5rem">Every camera you already own is generating 24 hours of business intelligence every day — unread. We turn that raw footage into operational decisions.</p>
+    <div style="display:flex;gap:1.5rem;align-items:stretch;width:100%;max-width:1100px;margin-bottom:2rem">
+      <div style="flex:1;background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.2);border-radius:20px;padding:2rem 1.75rem;text-align:left">
+        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:var(--red);margin-bottom:1rem">Traditional CCTV</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t2)"><span style="color:var(--red);font-size:1rem">✗</span> Reviewed only after an incident</div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t2)"><span style="color:var(--red);font-size:1rem">✗</span> Operator manually watches hours of footage</div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t2)"><span style="color:var(--red);font-size:1rem">✗</span> Zero data on productivity or operations</div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t2)"><span style="color:var(--red);font-size:1rem">✗</span> No integration with business systems</div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t2)"><span style="color:var(--red);font-size:1rem">✗</span> Cost centre with no measurable ROI</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;flex-shrink:0;flex-direction:column;gap:.5rem">
+        <div style="font-size:2.5rem">⚡</div>
+        <div style="font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em">CodeOx</div>
+      </div>
+      <div style="flex:1;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.25);border-radius:20px;padding:2rem 1.75rem;text-align:left">
+        <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:var(--purple);margin-bottom:1rem">CodeOx Vision AI</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t1)"><span style="color:var(--green);font-size:1rem">✓</span> Live alerts — zero footage review needed</div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t1)"><span style="color:var(--green);font-size:1rem">✓</span> Daily automated productivity reports</div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t1)"><span style="color:var(--green);font-size:1rem">✓</span> Staff utilisation, queue times, throughput</div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t1)"><span style="color:var(--green);font-size:1rem">✓</span> Syncs directly to ERP, HR, WMS systems</div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--t1)"><span style="color:var(--green);font-size:1rem">✓</span> Measurable ROI from week one</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:2rem;justify-content:center">
+      <div style="text-align:center"><div style="font-size:2.25rem;font-weight:900;font-family:'Space Grotesk';background:linear-gradient(135deg,var(--purple),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">3–8×</div><div style="font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-top:.25rem">ROI vs traditional CCTV</div></div>
+      <div style="text-align:center"><div style="font-size:2.25rem;font-weight:900;font-family:'Space Grotesk';background:linear-gradient(135deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">24/7</div><div style="font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-top:.25rem">Continuous business intelligence</div></div>
+      <div style="text-align:center"><div style="font-size:2.25rem;font-weight:900;font-family:'Space Grotesk';background:linear-gradient(135deg,var(--amber),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Zero</div><div style="font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-top:.25rem">New cameras needed</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S9c: PRODUCTIVITY ANALYTICS ══ -->
+<div class="slide slide-purple" id="s9c">
+  <div class="sw">
+    <div class="slide-label lp" style="margin-bottom:.875rem">Productivity Analytics</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Six Analytics Domains <span class="tp">From Your Existing Cameras</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.75rem">Delivered as daily reports, live dashboards, WhatsApp briefings, or direct ERP data feeds.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;width:100%">
+      <div style="background:var(--bgc);border:1px solid rgba(167,139,250,.2);border-radius:20px;padding:1.75rem 1.5rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2.25rem;margin-bottom:.75rem">👷</div>
+        <h3 style="font-size:.95rem;font-weight:800;margin-bottom:.5rem;color:var(--purple)">People &amp; Staff Utilisation</h3>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--purple)">›</span> Staff zone presence vs shift roster</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--purple)">›</span> Idle time per workstation per hour</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--purple)">›</span> Peak staffing vs actual demand</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--purple)">›</span> Task time-on-station benchmarks</div>
+        </div>
+      </div>
+      <div style="background:var(--bgc);border:1px solid rgba(56,189,248,.2);border-radius:20px;padding:1.75rem 1.5rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2.25rem;margin-bottom:.75rem">🗺️</div>
+        <h3 style="font-size:.95rem;font-weight:800;margin-bottom:.5rem;color:var(--blue)">Space &amp; Occupancy Intelligence</h3>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--blue)">›</span> Zone occupancy by hour and day</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--blue)">›</span> Underutilised areas and dead zones</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--blue)">›</span> Traffic flow and footfall heatmaps</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--blue)">›</span> Meeting room / bay utilisation rates</div>
+        </div>
+      </div>
+      <div style="background:var(--bgc);border:1px solid rgba(52,211,153,.2);border-radius:20px;padding:1.75rem 1.5rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2.25rem;margin-bottom:.75rem">⏱️</div>
+        <h3 style="font-size:.95rem;font-weight:800;margin-bottom:.5rem;color:var(--green)">Queue &amp; Wait Time Analytics</h3>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--green)">›</span> Queue depth per counter per hour</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--green)">›</span> Average wait time vs SLA target</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--green)">›</span> Auto-dispatch staff on threshold</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--green)">›</span> Abandonment rate tracking</div>
+        </div>
+      </div>
+      <div style="background:var(--bgc);border:1px solid rgba(251,191,36,.2);border-radius:20px;padding:1.75rem 1.5rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2.25rem;margin-bottom:.75rem">📋</div>
+        <h3 style="font-size:.95rem;font-weight:800;margin-bottom:.5rem;color:var(--amber)">Process &amp; SOP Compliance</h3>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--amber)">›</span> SOP step completion per shift</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--amber)">›</span> Break compliance and return-to-post</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--amber)">›</span> Handoff timing between teams</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--amber)">›</span> Training gap identification</div>
+        </div>
+      </div>
+      <div style="background:var(--bgc);border:1px solid rgba(248,113,113,.2);border-radius:20px;padding:1.75rem 1.5rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2.25rem;margin-bottom:.75rem">📈</div>
+        <h3 style="font-size:.95rem;font-weight:800;margin-bottom:.5rem;color:var(--red)">Throughput &amp; Output Rates</h3>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--red)">›</span> Pick/pack rate per operator</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--red)">›</span> Table or bay turnovers per hour</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--red)">›</span> Vehicle loading/unloading duration</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--red)">›</span> Production line speed benchmarks</div>
+        </div>
+      </div>
+      <div style="background:var(--bgc);border:1px solid rgba(148,163,184,.15);border-radius:20px;padding:1.75rem 1.5rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2.25rem;margin-bottom:.75rem">⚙️</div>
+        <h3 style="font-size:.95rem;font-weight:800;margin-bottom:.5rem;color:var(--t2)">Asset &amp; Equipment Utilisation</h3>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--t3)">›</span> Machine uptime vs idle downtime</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--t3)">›</span> Vehicle dwell and bay occupancy</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--t3)">›</span> Forklift route efficiency scoring</div>
+          <div style="font-size:.75rem;color:var(--t2);display:flex;align-items:center;gap:.5rem"><span style="color:var(--t3)">›</span> Preventive maintenance triggers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S9d: F&B ANALYTICS ══ -->
+<div class="slide slide-amber" id="s9d">
+  <div class="sw">
+    <div class="slide-label la" style="margin-bottom:.875rem">F&amp;B &amp; Restaurant Intelligence</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Every Camera in Your Restaurant <span class="ta">Is an Operations Manager</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.75rem">Used by leading QSR, casual dining, and café brands across the GCC to cut wait times, improve kitchen flow, and increase table turnover.</p>
+
+    <!-- Stats row -->
+    <div style="display:flex;gap:1.25rem;width:100%;margin-bottom:1.75rem">
+      <div style="flex:1;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);border-radius:18px;padding:1.5rem;text-align:center">
+        <div style="font-size:2.75rem;font-weight:900;font-family:'Space Grotesk';color:var(--amber);line-height:1">25%</div>
+        <div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);font-weight:700;margin-top:.35rem">Operational Efficiency Gain</div>
+        <div style="font-size:.75rem;color:var(--t2);margin-top:.35rem">Average across deployed sites</div>
+      </div>
+      <div style="flex:1;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25);border-radius:18px;padding:1.5rem;text-align:center">
+        <div style="font-size:2.75rem;font-weight:900;font-family:'Space Grotesk';color:var(--green);line-height:1">15<span style="font-size:1.5rem">min</span></div>
+        <div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);font-weight:700;margin-top:.35rem">Faster Customer Service</div>
+        <div style="font-size:.75rem;color:var(--t2);margin-top:.35rem">Reduction in average wait time</div>
+      </div>
+      <div style="flex:1;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:18px;padding:1.5rem;text-align:center">
+        <div style="font-size:2.75rem;font-weight:900;font-family:'Space Grotesk';color:var(--blue);line-height:1">98%</div>
+        <div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);font-weight:700;margin-top:.35rem">Customer Satisfaction</div>
+        <div style="font-size:.75rem;color:var(--t2);margin-top:.35rem">With AI-optimised service flow</div>
+      </div>
+    </div>
+
+    <!-- Feature cards -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;width:100%">
+      <div style="background:var(--bgc);border:1px solid rgba(251,191,36,.2);border-radius:18px;padding:1.5rem 1.25rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2rem;margin-bottom:.75rem">🔢</div>
+        <h4 style="font-size:.875rem;font-weight:800;margin-bottom:.35rem">Queue Management</h4>
+        <p style="font-size:.75rem;color:var(--t2);line-height:1.5">Real-time queue depth at every counter and drive-through lane. Auto-pages backup staff the moment wait exceeds your target.</p>
+      </div>
+      <div style="background:var(--bgc);border:1px solid rgba(251,191,36,.2);border-radius:18px;padding:1.5rem 1.25rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2rem;margin-bottom:.75rem">👨‍🍳</div>
+        <h4 style="font-size:.875rem;font-weight:800;margin-bottom:.35rem">Kitchen Operations</h4>
+        <p style="font-size:.75rem;color:var(--t2);line-height:1.5">Prep time per station, order-to-serve duration, bottleneck detection. Know which station is slowing down the whole kitchen.</p>
+      </div>
+      <div style="background:var(--bgc);border:1px solid rgba(251,191,36,.2);border-radius:18px;padding:1.5rem 1.25rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2rem;margin-bottom:.75rem">🍽️</div>
+        <h4 style="font-size:.875rem;font-weight:800;margin-bottom:.35rem">Dining Area Analytics</h4>
+        <p style="font-size:.75rem;color:var(--t2);line-height:1.5">Seating patterns, table turnover rates, peak-hour occupancy by zone. Optimise layout, staffing, and reservation policy.</p>
+      </div>
+      <div style="background:var(--bgc);border:1px solid rgba(251,191,36,.2);border-radius:18px;padding:1.5rem 1.25rem;transition:all .3s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+        <div style="font-size:2rem;margin-bottom:.75rem">🖥️</div>
+        <h4 style="font-size:.875rem;font-weight:800;margin-bottom:.35rem">POS &amp; System Integration</h4>
+        <p style="font-size:.75rem;color:var(--t2);line-height:1.5">Camera data cross-matched with POS order volumes, chiller/freezer IoT sensors, and delivery platform APIs — one unified picture.</p>
+      </div>
+    </div>
+
+    <!-- Trusted by -->
+    <div style="margin-top:1.5rem;display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,.03);border:1px solid var(--bdr);border-radius:999px;padding:.625rem 1.5rem">
+      <span style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3)">Trusted by</span>
+      <span style="font-size:.8rem;font-weight:600;color:var(--t2)">Jan Burger &nbsp;·&nbsp; Pizzaratti &nbsp;·&nbsp; Tameesa &nbsp;·&nbsp; and leading QSR brands across KSA</span>
+      <div style="margin-left:auto;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);border-radius:999px;padding:.2rem .75rem;font-size:.62rem;font-weight:700;color:var(--amber);white-space:nowrap">F6S Top 100 Startup</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S10: CUSTOM MODEL TRAINING ══ -->
+<div class="slide slide-purple" id="s10">
+  <div class="sw">
+    <div class="slide-label lp" style="margin-bottom:.875rem">Custom AI Model Training</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Trained on <em>Your</em> Footage. <span class="tp">20–40% Better Accuracy.</span></h2>
+    <p class="slide-sub" style="margin-bottom:2rem">You own every model and every annotated frame. Zero vendor lock-in.</p>
+    <div class="timeline" style="margin-bottom:2rem">
+      <div class="tl-step">
+        <div class="tl-node" style="border-color:var(--blue);color:var(--blue)">1</div>
+        <h4>Discovery &amp; Audit</h4>
+        <p>Site visit, footage audit, edge cases and success metrics defined with client</p>
+      </div>
+      <div class="tl-step">
+        <div class="tl-node" style="border-color:#8a7cfc;color:#8a7cfc">2</div>
+        <h4>Dataset &amp; Labeling</h4>
+        <p>200–2,000 frames from your cameras. Annotated in Roboflow or Label Studio</p>
+      </div>
+      <div class="tl-step">
+        <div class="tl-node" style="border-color:var(--purple);color:var(--purple)">3</div>
+        <h4>Train &amp; Iterate</h4>
+        <p>Fine-tune YOLOv11 or RT-DETR. 2–3 cycles with client sign-off each stage</p>
+      </div>
+      <div class="tl-step">
+        <div class="tl-node" style="border-color:#a78bfa;color:#a78bfa">4</div>
+        <h4>Shadow Deploy</h4>
+        <p>48–72 hrs running silently in live environment. Measure real-world precision</p>
+      </div>
+      <div class="tl-step">
+        <div class="tl-node" style="border-color:var(--green);color:var(--green)">5</div>
+        <h4>Go Live</h4>
+        <p>Alerts live. Every false positive becomes a training example. Monthly retraining</p>
+      </div>
+    </div>
+    <div class="mtype-row">
+      <div class="mt" style="--mc:var(--blue)"><span class="mi">🔍</span><h3>Product Defect Detection</h3><p>Scratch, dent, missing label — trained on your product, your line, your standard</p></div>
+      <div class="mt" style="--mc:var(--amber)"><span class="mi">🦺</span><h3>Brand PPE &amp; Uniform</h3><p>Your company's specific colours and logo — not generic "vest detected"</p></div>
+      <div class="mt" style="--mc:var(--green)"><span class="mi">🔢</span><h3>Regional LPR Models</h3><p>GCC, India (all states), EU — better than commercial APIs on local fonts</p></div>
+      <div class="mt" style="--mc:var(--amber)"><span class="mi">🕌</span><h3>Cultural Context</h3><p>Abaya, Thobe, Kandora as valid PPE — built for GCC, not adapted from Western data</p></div>
+      <div class="mt" style="--mc:var(--red)"><span class="mi">📋</span><h3>SOP Compliance</h3><p>Your exact procedure as a visual checklist — every step, every shift, audited</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S11: WHY CODEOX ══ -->
+<div class="slide slide-dark" id="s11">
+  <div class="sw">
+    <div class="slide-label lp" style="margin-bottom:.875rem">Why CodeOx</div>
+    <h2 class="slide-h1" style="margin-bottom:1.75rem">Six Differentiators <span class="tp">No Regional Competitor Matches</span></h2>
+    <div class="diff-row" style="margin-bottom:1.25rem">
+      <div class="df"><span class="di">🔬</span><h3>Full Sensory Stack</h3><p>Vision + Voice + Chat + Image Enhancement + Knowledge — integrated, not stitched. Unique in the GCC.</p></div>
+      <div class="df"><span class="di">📡</span><h3>No Hardware Replacement</h3><p>Hikvision, Dahua, Axis, Bosch — works with every RTSP/ONVIF camera you already own.</p></div>
+      <div class="df"><span class="di">🏛️</span><h3>Local Hosting &amp; Compliance</h3><p>UAE, KSA, India. PDPL, NCA, GDPR day one. Full on-prem for government and Aramco-tier.</p></div>
+    </div>
+    <div class="diff-row">
+      <div class="df"><span class="di">🌍</span><h3>Arabic &amp; English Native</h3><p>Arabic, Malayalam, Hindi, Tamil, English in alerts, voice, chat, and dashboard from day one.</p></div>
+      <div class="df"><span class="di">🎯</span><h3>Custom-Built Models</h3><p>Trained on your cameras, your environment, your problems. 20–40% better than generic APIs.</p></div>
+      <div class="df"><span class="di">⚡</span><h3>IoT-Integrated Automation</h3><p>Detections trigger lights, locks, gates, alarms, HVAC, PA, and PLC stop signals automatically.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S12: TECHNOLOGY ══ -->
+<div class="slide slide-blue" id="s12">
+  <div class="sw">
+    <div class="slide-label" style="margin-bottom:.875rem">Technology Foundation</div>
+    <h2 class="slide-h1" style="margin-bottom:1.75rem">Best-in-Class Stack, <span class="tb">Purpose-Built for Vision AI</span></h2>
+    <div class="tech-layers">
+      <div class="tl">
+        <div class="tl-label">🧠 Detection Models</div>
+        <div class="tl-tags"><span class="ttag">YOLOv11</span><span class="ttag">RT-DETR</span><span class="ttag">SAM 2</span><span class="ttag">MediaPipe Pose</span><span class="ttag">Custom-Trained</span></div>
+      </div>
+      <div class="tl lp">
+        <div class="tl-label">💬 Vision Language</div>
+        <div class="tl-tags"><span class="ttag">Gemini 2.5 Pro</span><span class="ttag">GPT-4 Vision</span><span class="ttag">Claude Vision</span><span class="ttag">Qwen-VL</span></div>
+      </div>
+      <div class="tl lg">
+        <div class="tl-label">⚡ Edge Inference</div>
+        <div class="tl-tags"><span class="ttag">Jetson Orin</span><span class="ttag">Hailo-8</span><span class="ttag">Google Coral</span><span class="ttag">RK3588</span></div>
+      </div>
+      <div class="tl la">
+        <div class="tl-label">🎬 Video Pipeline</div>
+        <div class="tl-tags"><span class="ttag">Frigate NVR</span><span class="ttag">DeepStream</span><span class="ttag">ffmpeg</span><span class="ttag">GStreamer</span></div>
+      </div>
+      <div class="tl lr">
+        <div class="tl-label">💾 Storage &amp; Search</div>
+        <div class="tl-tags"><span class="ttag">S3-compatible</span><span class="ttag">Qdrant Vector DB</span><span class="ttag">ClickHouse</span><span class="ttag">Vector Captions</span></div>
+      </div>
+      <div class="tl">
+        <div class="tl-label">☁️ Cloud &amp; Training</div>
+        <div class="tl-tags"><span class="ttag">AWS / Azure / GCP</span><span class="ttag">Oracle Cloud</span><span class="ttag">Roboflow</span><span class="ttag">Ultralytics HUB</span><span class="ttag">SageMaker</span><span class="ttag">Vertex AI</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S13: DEPLOYMENT ══ -->
+<div class="slide slide-dark" id="s13">
+  <div class="sw">
+    <div class="slide-label" style="margin-bottom:.875rem">Deployment Options</div>
+    <h2 class="slide-h1" style="margin-bottom:1.75rem">Three Tiers. <span class="tb">One Platform.</span></h2>
+    <div class="dep-row">
+      <div class="dep t1">
+        <div class="dep-tier">Tier 1</div>
+        <span class="di">☁️</span>
+        <h3>Pure Cloud</h3>
+        <p>RTSP relay to AWS or Azure. Fastest to deploy — pilots live within days.</p>
+        <ul><li>Deploy in days, not weeks</li><li>Zero on-site hardware</li><li>UAE, KSA, India regions</li><li>Auto-scaling on event volume</li></ul>
+      </div>
+      <div class="dep t2">
+        <div class="dep-tier">Tier 2 — Most Popular</div>
+        <span class="di">🖥️</span>
+        <h3>Hybrid Edge</h3>
+        <p>On-site Jetson or mini-PC runs AI. Only event metadata syncs to cloud. PDPL-friendly.</p>
+        <ul><li>Jetson Orin or Hailo-8 on-site</li><li>Raw footage never leaves network</li><li>Works on &lt;1 Mbps uplink</li><li>PDPL and NCA compliant by design</li></ul>
+      </div>
+      <div class="dep t3">
+        <div class="dep-tier">Tier 3</div>
+        <span class="di">🏛️</span>
+        <h3>Full On-Premises</h3>
+        <p>Dedicated GPU server, air-gapped or VPN-only. Government and Aramco-grade.</p>
+        <ul><li>Dedicated GPU server on-site</li><li>Air-gapped or VPN-only</li><li>Government &amp; NCA grade</li><li>No cloud dependency</li></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S14: INTEGRATIONS ══ -->
+<div class="slide slide-amber" id="s14">
+  <div class="sw">
+    <div class="slide-label la" style="margin-bottom:.875rem">Integrations</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Plugs Into <span class="ta">Your Existing Systems</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.75rem">REST, GraphQL, Webhooks, MQTT, Modbus — any protocol, any system.</p>
+    <div class="int-grid">
+      <div class="int">
+        <span class="ii">🏢</span>
+        <h4>ERP &amp; Operations</h4>
+        <p>SAP · Oracle · Dynamics · Odoo · Zoho</p>
+      </div>
+      <div class="int">
+        <span class="ii">📦</span>
+        <h4>WMS &amp; Fulfilment</h4>
+        <p>SAP EWM · Oracle WMS · Infor · Fishbowl</p>
+      </div>
+      <div class="int">
+        <span class="ii">👥</span>
+        <h4>HR &amp; Workforce</h4>
+        <p>SAP HR · Oracle HCM · ADP · Bayzat · Darwinbox</p>
+      </div>
+      <div class="int">
+        <span class="ii">🔐</span>
+        <h4>Access Control</h4>
+        <p>ZKTeco · HID · Suprema · Hikvision · RFID</p>
+      </div>
+      <div class="int">
+        <span class="ii">⚙️</span>
+        <h4>Industrial &amp; SCADA</h4>
+        <p>Modbus · OPC-UA · Profinet · MQTT</p>
+      </div>
+      <div class="int">
+        <span class="ii">🌐</span>
+        <h4>IoT &amp; Smart Building</h4>
+        <p>KNX · BACnet · Zigbee · Z-Wave · LoRaWAN</p>
+      </div>
+      <div class="int">
+        <span class="ii">🏛️</span>
+        <h4>Government APIs</h4>
+        <p>MOI · SADAD · Absher · Elm · UAE ICP</p>
+      </div>
+      <div class="int">
+        <span class="ii">🧾</span>
+        <h4>POS &amp; F&amp;B Systems</h4>
+        <p>Oracle MICROS · NCR · Lightspeed · Square · Toast · Mada</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S15: ACCESS CONTROL ══ -->
+<div class="slide slide-dark" id="s15">
+  <div class="sw">
+    <div class="slide-label" style="margin-bottom:.875rem">Access Control &amp; Security</div>
+    <h2 class="slide-h1" style="margin-bottom:.5rem">Real-Time Response the Moment <span class="tr">Unauthorized Access Occurs</span></h2>
+    <p class="slide-sub" style="margin-bottom:1.75rem">Virtual fences, dual-person rules, tailgating prevention — automated and audited.</p>
+    <div class="ac-row" style="margin-bottom:1.25rem">
+      <div class="ac">
+        <span class="ai">🚫</span>
+        <h3>Restricted Area Alerts</h3>
+        <p>Virtual fences around vaults, server rooms, tank farms. Instant multi-channel alert. Optional auto-lockdown via IoT.</p>
+      </div>
+      <div class="ac">
+        <span class="ai">👥</span>
+        <h3>Dual-Person Rule</h3>
+        <p>Vaults, pharmacies, narcotics — access only when two authorized staff are face-confirmed present. AIKA on violation.</p>
+      </div>
+      <div class="ac">
+        <span class="ai">🚪</span>
+        <h3>Tailgating Prevention</h3>
+        <p>Second person entering on someone else's credential detected. Optional mid-entry IoT lockdown.</p>
+      </div>
+    </div>
+    <div class="ac-row">
+      <div class="ac">
+        <span class="ai">✅</span>
+        <h3>Visitor Pre-Approval</h3>
+        <p>Face + LPR + WhatsApp approval from host before access. AIKA calls host if no reply in 60 seconds. Full audit.</p>
+      </div>
+      <div class="ac">
+        <span class="ai">🌙</span>
+        <h3>After-Hours Auto-Lockdown</h3>
+        <p>Any movement outside working hours triggers alarm, IoT lockdown, and on-call escalation automatically.</p>
+      </div>
+      <div class="ac">
+        <span class="ai">📍</span>
+        <h3>Multi-Factor Visual Access</h3>
+        <p>Face + badge + PIN. Prevents badge sharing. Integrates ZKTeco, HID, Suprema panels.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ S16: CONTACT ══ -->
+<div class="slide slide-cover" id="s16">
+  <div class="scan-line"></div>
+  <div class="sw" style="align-items:center;text-align:center">
+    <h2 style="font-size:clamp(2rem,4vw,3.5rem);font-weight:900;letter-spacing:-.03em;margin-bottom:1rem">Ready to Deploy?<br><span style="background:linear-gradient(135deg,var(--blue),var(--purple) 50%,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Let's Start with a Pilot.</span></h2>
+    <p style="font-size:1.05rem;color:var(--t2);max-width:560px;line-height:1.75;margin-bottom:2.5rem">Every client starts with a scoped pilot — 4–8 cameras, one use case, measurable outcome in 2 weeks. No commitment until you see it work on your cameras.</p>
+    <div style="display:flex;gap:1.25rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem">
+      <a href="mailto:shabeeb.k@code-ox.com" style="display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(135deg,var(--blue2),var(--purple2));color:#fff;padding:.875rem 2rem;border-radius:999px;font-size:.9rem;font-weight:700;text-decoration:none">📧 shabeeb.k@code-ox.com</a>
+      <a href="tel:+966535716437" style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.07);border:1px solid var(--bdr2);color:var(--t1);padding:.875rem 2rem;border-radius:999px;font-size:.9rem;font-weight:700;text-decoration:none">📞 +966 535 716 437</a>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:.625rem;justify-content:center">
+      <span class="cpill">code-ox.com</span>
+      <span class="cpill">UAE · KSA · India</span>
+      <span class="cpill">PDPL · NCA · GDPR Ready</span>
+      <span class="cpill">Pilot in 2 Weeks</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- ── NAVIGATION ── -->
+<div id="nav-bar">
+  <button class="nav-btn" onclick="changeSlide(-1)">←</button>
+  <div class="dot-row" id="dots"></div>
+  <span id="slide-counter">1 / 16</span>
+  <button class="nav-btn" onclick="changeSlide(1)">→</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let cur = 0;
+
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' on' : '');
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+}
+
+function goTo(n) {
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('prev');
+  setTimeout(() => slides[cur].classList.remove('prev'), 500);
+  cur = Math.max(0, Math.min(n, total - 1));
+  slides[cur].classList.add('active');
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+  document.getElementById('slide-counter').textContent = (cur + 1) + ' / ' + total;
+  document.getElementById('slide-num').textContent = (cur + 1) + ' / ' + total;
+  document.getElementById('progress').style.width = ((cur + 1) / total * 100) + '%';
+}
+function changeSlide(dir) { goTo(cur + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); changeSlide(1); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); changeSlide(-1); }
+});
+
+// Industry tabs
+document.querySelectorAll('.itab').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const ip = btn.dataset.ip;
+    document.querySelectorAll('.itab').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('.ipanel').forEach(p => p.classList.remove('on'));
+    btn.classList.add('on');
+    const panel = document.getElementById('ip-' + ip);
+    if (panel) panel.classList.add('on');
+  });
+});
+
+// Typewriter in search box
+const queries = [
+  "Show me every forklift near a worker without a vest last month",
+  "Find the visitor in a blue shirt at gate 3 around 9 AM today",
+  "How many after-hours entries to the server room this week?",
+  "Which zone had the highest crowd density on Friday?",
+  "Show all fire alarm events in Building B — last 30 days"
+];
+let qi = 0, ci = 0, fwd = true;
+const inp = document.querySelector('.sinput input');
+if (inp) {
+  setInterval(() => {
+    const q = queries[qi];
+    if (fwd) { if (ci <= q.length) { inp.value = q.slice(0, ci++); } else fwd = false; }
+    else { if (ci > 0) { inp.value = q.slice(0, ci--); } else { fwd = true; qi = (qi + 1) % queries.length; } }
+  }, 55);
+}
+
+document.getElementById('progress').style.width = (1 / total * 100) + '%';
+</script>
+</body>
+</html>
