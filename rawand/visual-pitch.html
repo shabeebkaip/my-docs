@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -125,7 +125,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 1px solid rgba(255,255,255,0.1);
+  border-left: 1px solid rgba(255,255,255,0.1);
 }
 .cover-logo-area {
   display: flex;
@@ -722,10 +722,41 @@ body {
   font-weight: 600;
   color: var(--muted);
   letter-spacing: 2px;
-  text-align: right;
+  text-align: left;
   margin-top: auto;
   padding-top: 20px;
+  direction: ltr;
 }
+
+/* ── RTL FIXES ── */
+/* English subtitles stay LTR */
+.si-en, .geo-platform-note, .geo-action p, .plan-en,
+.plat-note, .wa-title-en, .channel-stat-v,
+.closing-item-desc, .cir-val-en, .cover-main-en,
+.result-en, .result-timeline, .kpi-bar-title {
+  direction: ltr;
+  text-align: right;
+  unicode-bidi: plaintext;
+}
+/* Section tag bar goes on the right in RTL */
+.slide-tag::before { display: none; }
+.slide-tag::after {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--brand);
+}
+/* Flip open arrow in CTA */
+.ac-open-btn::after { content: ' →'; }
+/* Keep numbers LTR */
+.stat-num, .cstat-num, .score-big, .result-num,
+.wa-stat-num, .why-num, .af-count, .cover-stat-num,
+.plat-users, .kpi-val { direction: ltr; unicode-bidi: isolate; }
+/* Keep Google preview LTR */
+.google-preview { direction: ltr; }
+/* Keep chart LTR */
+canvas { direction: ltr; }
 
 @media print {
   .slide { page-break-after: always; }
@@ -806,7 +837,7 @@ body {
       <div class="cover-info-row">
         <div class="cir-label">تاريخ التقرير</div>
         <div class="cir-val-ar">مايو 2026</div>
-        <div class="cir-val-en">May 2026 — Prepared by Shab.co</div>
+        <div class="cir-val-en">May 2026</div>
       </div>
       <div class="cover-page-num">01 / 10</div>
     </div>
@@ -1006,9 +1037,36 @@ body {
 <div class="slide s-missing">
   <div class="slide-inner">
     <div class="slide-tag">الفجوات · What's Missing</div>
-    <div class="ar-heading">6 أشياء <span>تكلفك</span> مبيعات كل يوم</div>
-    <div class="en-heading">6 gaps that cost Rawand revenue every single day — all fixable within 90 days</div>
-    <div class="missing-grid">
+    <div class="ar-heading">7 أشياء <span>تكلفك</span> مبيعات كل يوم</div>
+    <div class="en-heading">7 gaps costing Rawand revenue every day — all fixable within 90 days</div>
+    <div class="missing-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="missing-card" style="grid-column:1/4;background:#fff0f0;border-color:var(--red)">
+        <div class="mc-icon">⚡</div>
+        <div class="mc-ar" style="color:var(--red)">سرعة الموقع — 32 من 100 — Core Web Vitals فاشل</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 0">
+          <div>
+            <div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px;font-family:'Cairo',sans-serif">📱 الجوال</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:rgba(220,38,38,0.08);border-radius:5px;font-family:'Cairo',sans-serif"><span>Performance</span><strong style="color:var(--red)">32 / 100</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:rgba(220,38,38,0.08);border-radius:5px;font-family:'Cairo',sans-serif"><span>TTFB</span><strong style="color:var(--red)">2.1 ثانية</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:#fffbeb;border-radius:5px;font-family:'Cairo',sans-serif"><span>LCP</span><strong style="color:#d97706">3.2 ثانية</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:#fffbeb;border-radius:5px;font-family:'Cairo',sans-serif"><span>Best Practices</span><strong style="color:#d97706">50 / 100</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:var(--green-bg);border-radius:5px;font-family:'Cairo',sans-serif"><span>SEO</span><strong style="color:var(--green)">92 / 100 ✓</strong></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px;font-family:'Cairo',sans-serif">🖥️ الكمبيوتر</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:rgba(220,38,38,0.08);border-radius:5px;font-family:'Cairo',sans-serif"><span>Performance</span><strong style="color:var(--red)">37 / 100</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:rgba(220,38,38,0.08);border-radius:5px;font-family:'Cairo',sans-serif"><span>TTFB</span><strong style="color:var(--red)">1.9 ثانية</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:#fffbeb;border-radius:5px;font-family:'Cairo',sans-serif"><span>LCP</span><strong style="color:#d97706">2.5 ثانية</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:#fffbeb;border-radius:5px;font-family:'Cairo',sans-serif"><span>Best Practices</span><strong style="color:#d97706">50 / 100</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:3px 8px;background:var(--green-bg);border-radius:5px;font-family:'Cairo',sans-serif"><span>SEO</span><strong style="color:var(--green)">92 / 100 ✓</strong></div>
+            </div>
+          </div>
+        </div>
+        <div class="mc-impact" style="font-family:'Cairo',sans-serif">جوجل يعاقب المواقع البطيئة في الترتيب — كل ثانية تأخير = 7% خسارة في التحويل</div>
+      </div>
       <div class="missing-card">
         <div class="mc-icon">🛒</div>
         <div class="mc-ar">جوجل شوبنج غائب</div>
@@ -1539,14 +1597,14 @@ body {
     </div>
 
     <div class="next-contact">
-      <div class="nc-item">📧 Prepared by Shab.co</div>
       <div class="nc-item">📅 May 2026</div>
-      <div class="nc-item">🔒 Confidential</div>
+      <div class="nc-item">📅 May 2026</div>
+      <div class="nc-item"></div>
     </div>
 
     <div style="margin-top:24px;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:2px;font-weight:600">10 / 10</div>
   </div>
 </div>
 
-</body>
+<a href="index.html" style="position:fixed;bottom:28px;left:28px;z-index:9999;display:inline-flex;align-items:center;gap:8px;background:#0f172a;color:white;padding:10px 18px;border-radius:30px;font-family:Cairo,sans-serif;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,0.25);transition:all 0.2s" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'">الرئيسية ←</a></body>
 </html>
