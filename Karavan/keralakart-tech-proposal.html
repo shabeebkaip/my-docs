@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KeralaKart.ca — Platform Architecture & Build Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g1:#072F1E; --g2:#0F6E56; --g3:#1A9B73; --gl:#E8F7F3; --gm:#C5EAE1;
+  --gold:#BA7517; --gold2:#D4920E; --goldl:#FDF4E0; --goldm:#F5D98A;
+  --cream:#FAF6EE; --white:#FFFFFF;
+  --ink:#111827; --ink2:#374151; --muted:#6B7280; --light:#9CA3AF;
+  --border:#E5E7EB; --border2:#D1D5DB;
+  --surface:#F9FAFB; --surface2:#F3F4F6;
+  --sh:0 1px 3px rgba(0,0,0,.05),0 4px 12px rgba(0,0,0,.05);
+  --shmd:0 4px 16px rgba(0,0,0,.08),0 12px 36px rgba(0,0,0,.08);
+}
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--cream)}
+::-webkit-scrollbar-thumb{background:var(--g2);border-radius:2px}
+
+/* ── NAV ──────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  height:60px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(250,246,238,.9);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);transition:box-shadow .3s;
+}
+nav.s{box-shadow:var(--sh)}
+.nl{display:flex;align-items:center;gap:14px}
+.nlogo{height:20px}
+.nsep{width:1px;height:24px;background:var(--border2)}
+.nbrand{font-size:12px;font-weight:700;color:var(--ink2)}
+.nlinks{display:flex;gap:24px;list-style:none}
+.nlinks a{font-size:11.5px;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s}
+.nlinks a:hover{color:var(--g2)}
+.ncta{font-size:11px;font-weight:700;background:var(--g2);color:#fff;padding:7px 18px;border-radius:7px;text-decoration:none;transition:all .2s}
+.ncta:hover{background:var(--g1);box-shadow:0 4px 14px rgba(15,110,86,.3)}
+
+/* ── HERO ─────────────────────────────── */
+#hero{
+  min-height:100vh;
+  background:linear-gradient(150deg,#FDFAF4 0%,#F5FAF7 40%,var(--cream) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 48px 80px;position:relative;overflow:hidden;
+}
+.hbg1{position:absolute;width:500px;height:500px;border-radius:50%;border:1px solid rgba(15,110,86,.07);top:-100px;right:-100px;pointer-events:none}
+.hbg2{position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(186,117,23,.06);bottom:-60px;left:-60px;pointer-events:none}
+.hbg3{position:absolute;width:180px;height:180px;background:radial-gradient(rgba(15,110,86,.05),transparent);top:25%;left:4%;border-radius:50%;pointer-events:none}
+
+.hbadge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--gl);border:1px solid var(--gm);border-radius:20px;
+  padding:6px 16px;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--g2);margin-bottom:24px;
+}
+.hbdot{width:6px;height:6px;border-radius:50%;background:var(--g2);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.htitle{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:1.1;color:var(--ink);
+  max-width:760px;
+}
+.htitle em{font-style:italic;color:var(--g2)}
+.htitle .au{color:var(--gold)}
+
+.hsub{font-size:clamp(13px,1.3vw,16px);color:var(--muted);line-height:1.75;max-width:480px;margin:18px auto 0}
+
+.hpills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.hpill{
+  display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;
+  background:var(--white);border:1px solid var(--border);font-size:11.5px;font-weight:600;
+  color:var(--ink2);box-shadow:var(--sh);transition:all .2s;
+}
+.hpill:hover{transform:translateY(-2px);box-shadow:var(--shmd)}
+.hpdot{width:7px;height:7px;border-radius:50%}
+
+.hstats{
+  margin-top:48px;display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--white);border:1px solid var(--border);border-radius:18px;overflow:hidden;
+  box-shadow:var(--shmd);max-width:720px;width:100%;
+}
+.hs{padding:24px 20px;text-align:center;border-right:1px solid var(--border)}
+.hs:last-child{border:none}
+.hsn{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;line-height:1;color:var(--g2)}
+.hsn.gold{color:var(--gold)}
+.hsl{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:1.4}
+
+.hcta{margin-top:40px;display:flex;gap:10px;justify-content:center}
+.btng{font-size:12.5px;font-weight:700;background:var(--g2);color:#fff;padding:11px 26px;border-radius:9px;text-decoration:none;transition:all .25s;box-shadow:0 3px 12px rgba(15,110,86,.22)}
+.btng:hover{background:var(--g1);transform:translateY(-1px);box-shadow:0 6px 20px rgba(15,110,86,.3)}
+.btno{font-size:12.5px;font-weight:600;color:var(--ink2);padding:11px 26px;border-radius:9px;text-decoration:none;border:1.5px solid var(--border2);transition:all .25s;background:var(--white)}
+.btno:hover{border-color:var(--g2);color:var(--g2)}
+
+/* ── SECTIONS ─────────────────────────── */
+section{padding:88px 48px}
+.container{max-width:1060px;margin:0 auto}
+section:nth-child(even){background:var(--white)}
+
+.ey{font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--g2);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.ey::before{content:'';width:14px;height:2px;background:var(--g2);flex-shrink:0}
+.ey.gold{color:var(--gold)}.ey.gold::before{background:var(--gold)}
+.ey.muted{color:var(--muted)}.ey.muted::before{background:var(--muted)}
+
+h2{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,40px);font-weight:700;line-height:1.15;margin-bottom:10px;color:var(--ink)}
+.lead{font-size:14.5px;color:var(--muted);line-height:1.8;max-width:560px;margin-bottom:48px}
+
+.rv{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
+.rv.on{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+
+/* code tags */
+code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface2);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--g1)}
+
+/* ── PHASE OVERVIEW ───────────────────── */
+#phases{background:var(--cream)}
+
+.pstrip{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  border-radius:18px;overflow:hidden;border:1px solid var(--border);
+  box-shadow:var(--shmd);margin-top:48px;
+}
+.pcol{border-right:1px solid var(--border)}
+.pcol:last-child{border:none}
+
+.pcol-h{padding:28px 24px 20px;position:relative;overflow:hidden}
+.pcol:nth-child(1) .pcol-h{background:linear-gradient(135deg,var(--gl),#EEF8F5)}
+.pcol:nth-child(2) .pcol-h{background:linear-gradient(135deg,var(--goldl),#FFF8ED)}
+.pcol:nth-child(3) .pcol-h{background:linear-gradient(135deg,#F3F4F6,var(--surface))}
+
+.pcol-n{position:absolute;right:14px;top:8px;font-family:'Playfair Display',serif;font-size:68px;font-weight:900;opacity:.07;color:var(--ink)}
+.pcol-period{font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+.pcol:nth-child(1) .pcol-period{color:var(--g2)}
+.pcol:nth-child(2) .pcol-period{color:var(--gold)}
+.pcol:nth-child(3) .pcol-period{color:var(--muted)}
+.pcol-title{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:3px}
+.pcol-sub{font-size:11px;color:var(--muted)}
+
+.pcol-b{padding:18px 24px 24px;background:var(--white)}
+.prow{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--ink2);line-height:1.5}
+.prow:last-child{border:none}
+.parr{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-size:8px;font-weight:700}
+.pcol:nth-child(1) .parr{background:var(--gl);color:var(--g2)}
+.pcol:nth-child(2) .parr{background:var(--goldl);color:var(--gold)}
+.pcol:nth-child(3) .parr{background:var(--surface2);color:var(--muted)}
+
+.ptag{margin-top:16px;display:inline-block;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:6px 14px;border-radius:6px}
+.pcol:nth-child(1) .ptag{background:var(--g2);color:#fff}
+.pcol:nth-child(2) .ptag{background:var(--gold);color:#fff}
+.pcol:nth-child(3) .ptag{background:var(--ink);color:#fff}
+
+/* ── PLATFORM ─────────────────────────── */
+#platform{background:var(--white)}
+
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+.pf-card{border-radius:14px;padding:26px;border:1px solid}
+.pf-card.yes{border-color:#BBF7D0;background:#F0FDF4}
+.pf-card.no{border-color:#FECACA;background:#FFF5F5}
+.pf-head{font-size:13px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:7px}
+.pf-card.yes .pf-head{color:#15803D}
+.pf-card.no  .pf-head{color:#DC2626}
+
+.pf-item{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.04);font-size:12.5px;color:var(--ink2);line-height:1.5}
+.pf-item:last-child{border:none}
+.pf-icon{flex-shrink:0;font-size:13px;margin-top:1px}
+
+.scale-vis{margin-top:40px}
+.scale-title{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.scale-bars{display:flex;flex-direction:column;gap:12px}
+.sbar-row{display:grid;grid-template-columns:100px 1fr 90px;align-items:center;gap:14px}
+.sbar-lbl{font-size:11.5px;font-weight:600;color:var(--muted);text-align:right}
+.sbar-track{height:34px;background:var(--surface2);border-radius:8px;overflow:hidden;border:1px solid var(--border);position:relative}
+.sbar-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:11.5px;font-weight:700;color:#fff;white-space:nowrap;transition:width 1.3s cubic-bezier(.22,.61,.36,1)}
+.sbar-row:nth-child(1) .sbar-fill{background:linear-gradient(90deg,#22C55E,#16A34A);width:8%}
+.sbar-row:nth-child(2) .sbar-fill{background:linear-gradient(90deg,#F59E0B,#D97706);width:32%}
+.sbar-row:nth-child(3) .sbar-fill{background:linear-gradient(90deg,#F97316,#EA580C);width:65%}
+.sbar-row:nth-child(4) .sbar-fill{background:linear-gradient(90deg,#EF4444,#DC2626);width:100%}
+.sbar-val{font-size:12px;font-weight:700;color:var(--ink)}
+
+.note{margin-top:24px;padding:18px 22px;background:var(--gl);border-left:4px solid var(--g2);border-radius:0 10px 10px 0;font-size:13px;color:var(--ink2);line-height:1.75}
+.note strong{color:var(--g2)}
+
+/* ── INTEGRATIONS ─────────────────────── */
+#integrations{background:var(--cream)}
+
+.int-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.icard{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--sh);transition:all .25s}
+.icard:hover{border-color:var(--gm);transform:translateY(-3px);box-shadow:var(--shmd)}
+.icard-icon{font-size:26px;margin-bottom:10px;display:block}
+.icard-name{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.icard-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.icard-tag{display:inline-block;margin-top:10px;font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+.tag-g{background:var(--gl);color:var(--g2)}
+.tag-gold{background:var(--goldl);color:var(--gold)}
+.tag-s{background:var(--surface2);color:var(--muted)}
+.tag-ph2{background:#EFF6FF;color:#1D4ED8}
+
+/* ── TECH STACK ─────────────────────────── */
+#stack{background:var(--white)}
+
+.stabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:28px;padding:6px;background:var(--surface);border:1px solid var(--border);border-radius:11px;box-shadow:var(--sh)}
+.stab{padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted);border:none;background:transparent}
+.stab.on{background:var(--g2);color:#fff;box-shadow:0 2px 8px rgba(15,110,86,.22)}
+.stab:hover:not(.on){background:var(--surface2);color:var(--ink)}
+
+.spanel{display:none;animation:fu .3s ease}
+.spanel.on{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.tc{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:20px 18px;transition:all .25s}
+.tc:hover{background:var(--white);border-color:var(--gm);transform:translateY(-2px);box-shadow:var(--shmd)}
+.tc-icon{font-size:24px;margin-bottom:10px;display:block}
+.tc-name{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.tc-desc{font-size:11.5px;color:var(--muted);line-height:1.6}
+.tc-tag{display:inline-block;margin-top:10px;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:20px}
+.tp1{background:var(--gl);color:var(--g2)}
+.tp2{background:var(--goldl);color:var(--gold)}
+.tp3{background:var(--surface2);color:var(--muted)}
+.tall{background:#EFF6FF;color:#1D4ED8}
+
+/* ── ARCHITECTURE ─────────────────────── */
+#arch{background:var(--cream)}
+
+.arch-wrap{
+  margin-top:48px;padding:40px 36px;
+  background:var(--white);border:1px solid var(--border);border-radius:20px;box-shadow:var(--sh);
+}
+.al{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--light);margin-bottom:9px;padding-left:2px}
+.arow{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.an{flex:1;min-width:78px;max-width:115px;padding:9px 11px;border-radius:9px;font-size:10.5px;font-weight:600;text-align:center;line-height:1.35;transition:transform .2s;cursor:default}
+.an:hover{transform:translateY(-2px)}
+.an small{display:block;font-size:9px;font-weight:400;margin-top:2px}
+.nc{background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8}
+.nv{background:#F5F3FF;border:1px solid #DDD6FE;color:#6D28D9}
+.nf{background:var(--gl);border:1px solid var(--gm);color:var(--g1)}
+.na{background:var(--goldl);border:1px solid var(--goldm);color:var(--gold)}
+.ns{background:#FEF2F2;border:1px solid #FECACA;color:#B91C1C}
+.nd{background:var(--ink);border:1px solid #374151;color:#fff}
+.ne{background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+
+.aconn{height:22px;display:flex;align-items:center;justify-content:center;gap:10px;margin:-4px 0}
+.aconn-line{flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--border2) 0,var(--border2) 5px,transparent 5px,transparent 10px)}
+.aconn-text{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--light);white-space:nowrap;padding:0 8px}
+
+/* ── SHOPIFY PLAN ─────────────────────── */
+#shopifyplan{background:var(--white)}
+
+.plan-table{width:100%;border-collapse:collapse;border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--sh);margin-top:48px}
+.plan-table th{padding:13px 16px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;text-align:left;background:var(--surface);border-bottom:1px solid var(--border);color:var(--muted)}
+.plan-table td{padding:12px 16px;font-size:13px;color:var(--ink2);border-bottom:1px solid var(--border)}
+.plan-table tbody tr:last-child td{border:none}
+.plan-table tbody tr:hover{background:var(--surface)}
+.ok{color:#15803D!important;font-weight:600}
+.mid{color:#B45309!important;font-weight:600}
+.bad{color:#DC2626!important;font-weight:600}
+
+.plan-rec{margin-top:20px;padding:16px 20px;background:var(--gl);border-left:4px solid var(--g2);border-radius:0 10px 10px 0;font-size:13px;color:var(--ink2);line-height:1.7}
+.plan-rec strong{color:var(--g2)}
+
+/* ── CATALOGUE ─────────────────────────── */
+#catalogue{background:var(--cream)}
+
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px}
+.ccat{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--sh);transition:all .25s}
+.ccat:hover{transform:translateY(-2px);box-shadow:var(--shmd)}
+.ccat-h{padding:14px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.ccat-h-dot{width:10px;height:10px;border-radius:50%;background:var(--g2)}
+.ccat-h-name{font-size:13px;font-weight:700;color:var(--ink)}
+.ccat-h-tier{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-left:auto;padding:3px 8px;border-radius:5px}
+.tier1{background:var(--gl);color:var(--g2)}
+.tier2{background:var(--goldl);color:var(--gold)}
+.tier3{background:var(--surface2);color:var(--muted)}
+.ccat-b{padding:12px 18px;font-size:11.5px;color:var(--muted);line-height:1.6}
+.ccat-skus{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--g2);margin-top:4px}
+
+/* ── ROADMAP ──────────────────────────── */
+#roadmap{background:var(--white)}
+
+.tl{position:relative;padding-left:36px;margin-top:48px}
+.tl::before{content:'';position:absolute;left:7px;top:8px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--g2),rgba(15,110,86,.1))}
+
+.tl-it{position:relative;margin-bottom:32px}
+.tl-it:last-child{margin-bottom:0}
+.tldot{position:absolute;left:-40px;top:8px;width:16px;height:16px;border-radius:50%;border:2.5px solid var(--cream)}
+.tldot.g{background:var(--g2);box-shadow:0 0 0 3px rgba(15,110,86,.14)}
+.tldot.gold{background:var(--gold);box-shadow:0 0 0 3px rgba(186,117,23,.14)}
+.tldot.dk{background:#9CA3AF;box-shadow:0 0 0 3px rgba(156,163,175,.1)}
+
+.tl-box{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:22px 24px;box-shadow:var(--sh);transition:all .3s}
+.tl-box:hover{background:var(--white);border-color:var(--gm);box-shadow:var(--shmd)}
+
+.tl-period{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px}
+.tl-it:nth-child(-n+2) .tl-period{color:var(--g2)}
+.tl-it:nth-child(n+3):nth-child(-n+4) .tl-period{color:var(--gold)}
+.tl-it:nth-child(n+5) .tl-period{color:var(--muted)}
+
+.tl-title{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:7px}
+.tl-body{font-size:13px;color:var(--muted);line-height:1.75}
+.tl-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:11px}
+.chip{font-size:10px;font-weight:600;padding:2px 9px;border-radius:20px;background:var(--gl);color:var(--g2)}
+.chip.gold{background:var(--goldl);color:var(--gold)}
+.chip.dark{background:var(--surface2);color:var(--muted)}
+
+/* ── SEO ─────────────────────────────── */
+#seo{background:var(--cream)}
+
+.kw-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:48px}
+.kwcard{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 20px;box-shadow:var(--sh)}
+.kwcard-q{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.kwcard-q::before{content:'🔍';font-size:13px}
+.kwbar{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin:6px 0 4px}
+.kwfill{height:100%;border-radius:3px}
+.kw-hi .kwfill{background:var(--g2);width:85%}
+.kw-md .kwfill{background:var(--gold);width:55%}
+.kw-lo .kwfill{background:var(--light);width:30%}
+.kwcard-vol{font-size:10.5px;color:var(--muted)}
+.kw-hi .kwcard-vol em{color:var(--g2);font-style:normal;font-weight:700}
+.kw-md .kwcard-vol em{color:var(--gold);font-style:normal;font-weight:700}
+
+.seo-wins{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.sw{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:var(--sh)}
+.sw-icon{font-size:22px;margin-bottom:8px;display:block}
+.sw-title{font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.sw-body{font-size:11.5px;color:var(--muted);line-height:1.6}
+
+/* ── XKART ───────────────────────────── */
+#xkart{background:var(--white)}
+
+.xk-hero{
+  background:linear-gradient(135deg,var(--gl) 0%,#F0FAF7 50%,var(--goldl) 100%);
+  border:1px solid var(--gm);border-radius:20px;padding:40px;margin-top:48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+}
+.xk-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:12px}
+.xk-title span{color:var(--g2)}
+.xk-desc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:20px}
+.xk-tags{display:flex;gap:6px;flex-wrap:wrap}
+.xktag{font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:20px;background:var(--gl);color:var(--g2);border:1px solid var(--gm)}
+
+.xk-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.xkcol{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:var(--sh)}
+.xkcol-title{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em}
+.xkcol-item{font-size:12.5px;color:var(--ink2);padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:7px;align-items:flex-start;line-height:1.5}
+.xkcol-item:last-child{border:none}
+.xi-dot{width:5px;height:5px;border-radius:50%;background:var(--g2);flex-shrink:0;margin-top:5px}
+
+.xk-vision{margin-top:24px;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
+.xkv-head{background:var(--ink);padding:14px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.xkvh{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.xkv-row{padding:12px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;border-bottom:1px solid var(--border);transition:background .15s}
+.xkv-row:last-child{border:none}
+.xkv-row:hover{background:var(--surface)}
+.xkv-cell{font-size:12.5px;color:var(--ink2)}
+.xkv-cell:first-child{font-weight:600;color:var(--g2)}
+
+/* ── CHECKLIST ───────────────────────── */
+#checklist{background:var(--cream)}
+
+.cklist{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:48px}
+.ckcard{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:26px;box-shadow:var(--sh)}
+.ckcard-title{font-size:13px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:7px}
+.ckdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ckcard:nth-child(1) .ckcard-title{color:var(--g2)}
+.ckcard:nth-child(1) .ckdot{background:var(--g2)}
+.ckcard:nth-child(2) .ckcard-title{color:var(--gold)}
+.ckcard:nth-child(2) .ckdot{background:var(--gold)}
+.ckcard:nth-child(3) .ckcard-title{color:var(--ink2)}
+.ckcard:nth-child(3) .ckdot{background:var(--ink2)}
+.ckcard:nth-child(4) .ckcard-title{color:var(--g3)}
+.ckcard:nth-child(4) .ckdot{background:var(--g3)}
+
+.cki{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--ink2);line-height:1.5}
+.cki:last-child{border:none}
+.ckbox{width:15px;height:15px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px;background:var(--surface)}
+
+/* ── FOOTER ──────────────────────────── */
+footer{background:var(--ink);padding:40px 48px;display:flex;align-items:center;justify-content:space-between}
+.flogo img{height:20px;filter:brightness(0) invert(1);opacity:.55}
+.fcopy{font-size:11px;color:rgba(255,255,255,.2)}
+.fcon a{display:block;color:var(--gold2);text-decoration:none;font-size:12.5px;font-weight:600;margin-bottom:2px}
+.fcon span{font-size:10px;color:rgba(255,255,255,.25)}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nl">
+    <img class="nlogo" src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" onerror="this.style.display='none'">
+    <div class="nsep"></div>
+    <span class="nbrand">KeralaKart.ca — Platform Architecture</span>
+  </div>
+  <ul class="nlinks">
+    <li><a href="#phases">Phases</a></li>
+    <li><a href="#platform">Platform</a></li>
+    <li><a href="#integrations">Integrations</a></li>
+    <li><a href="#stack">Tech Stack</a></li>
+    <li><a href="#arch">Architecture</a></li>
+    <li><a href="#xkart">xkart.ca</a></li>
+    <li><a href="#checklist">Checklist</a></li>
+  </ul>
+  <a href="mailto:shabeeb.k@code-ox.com" class="ncta">CodeOx</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hbg1"></div><div class="hbg2"></div><div class="hbg3"></div>
+
+  <div class="hbadge"><span class="hbdot"></span>Platform Architecture · May 2026</div>
+
+  <h1 class="htitle">
+    KeralaKart.ca<br>
+    <em>Technical Build Plan</em><br>
+    <span class="au">& Expansion Architecture</span>
+  </h1>
+
+  <p class="hsub">Shopify D2C → Headless storefront → xkart.ca multi-ethnic marketplace. A phased technical guide for the full platform build.</p>
+
+  <div class="hpills">
+    <div class="hpill"><span class="hpdot" style="background:var(--g2)"></span>Phase 1 · Shopify D2C</div>
+    <div class="hpill"><span class="hpdot" style="background:var(--gold)"></span>Phase 2 · Headless + Native App</div>
+    <div class="hpill"><span class="hpdot" style="background:var(--ink)"></span>Phase 3 · xkart.ca Marketplace</div>
+  </div>
+
+  <div class="hstats">
+    <div class="hs"><div class="hsn">4 wk</div><div class="hsl">Phase 1 to soft<br>launch</div></div>
+    <div class="hs"><div class="hsn">60+</div><div class="hsl">Karavan SKUs<br>at launch</div></div>
+    <div class="hs"><div class="hsn gold">5</div><div class="hsl">Core integrations<br>at launch</div></div>
+    <div class="hs"><div class="hsn">xkart</div><div class="hsl">Multi-ethnic<br>end state</div></div>
+  </div>
+
+  <div class="hcta">
+    <a href="#phases" class="btng">View Build Plan →</a>
+    <a href="#checklist" class="btno">Launch Checklist</a>
+  </div>
+</section>
+
+<!-- PHASE OVERVIEW -->
+<section id="phases">
+  <div class="container">
+    <div class="ey rv">Platform Strategy</div>
+    <h2 class="rv">Three-Phase Build Plan</h2>
+    <p class="lead rv">Each phase is independently deployable. Phase 1 infrastructure decisions are made to support Phase 3 without a full rebuild.</p>
+
+    <div class="pstrip rv">
+      <div class="pcol">
+        <div class="pcol-h">
+          <div class="pcol-n">1</div>
+          <div class="pcol-period">Now → Month 6</div>
+          <div class="pcol-title">Shopify D2C</div>
+          <div class="pcol-sub">keralakart.ca · GTA delivery</div>
+        </div>
+        <div class="pcol-b">
+          <div class="prow"><div class="parr">▸</div>Shopify Basic or Shopify plan</div>
+          <div class="prow"><div class="parr">▸</div>Impulse or Prestige theme</div>
+          <div class="prow"><div class="parr">▸</div>Synder → QBO accounting sync</div>
+          <div class="prow"><div class="parr">▸</div>Klaviyo email + SMS automation</div>
+          <div class="prow"><div class="parr">▸</div>WATI WhatsApp Business API</div>
+          <div class="prow"><div class="parr">▸</div>Vajro iOS + Android wrapper app</div>
+          <div class="prow"><div class="parr">▸</div>GA4 + Google Search Console</div>
+          <div class="ptag">Launch</div>
+        </div>
+      </div>
+      <div class="pcol">
+        <div class="pcol-h">
+          <div class="pcol-n">2</div>
+          <div class="pcol-period">Month 6 → 18</div>
+          <div class="pcol-title">Headless + Native App</div>
+          <div class="pcol-sub">Next.js frontend · Flutter</div>
+        </div>
+        <div class="pcol-b">
+          <div class="prow"><div class="parr">▸</div>Next.js 15 storefront (headless Shopify)</div>
+          <div class="prow"><div class="parr">▸</div>Shopify Storefront API (GraphQL)</div>
+          <div class="prow"><div class="parr">▸</div>Flutter app (iOS + Android)</div>
+          <div class="prow"><div class="parr">▸</div>Algolia search integration</div>
+          <div class="prow"><div class="parr">▸</div>Real-time delivery tracking (maps)</div>
+          <div class="prow"><div class="parr">▸</div>Loyalty points engine</div>
+          <div class="prow"><div class="parr">▸</div>National delivery zone expansion</div>
+          <div class="ptag">Scale</div>
+        </div>
+      </div>
+      <div class="pcol">
+        <div class="pcol-h">
+          <div class="pcol-n">3</div>
+          <div class="pcol-period">Year 2 → 3</div>
+          <div class="pcol-title">xkart.ca Marketplace</div>
+          <div class="pcol-sub">Custom platform · Multi-vendor</div>
+        </div>
+        <div class="pcol-b">
+          <div class="prow"><div class="parr">▸</div>Custom NestJS backend + PostgreSQL</div>
+          <div class="prow"><div class="parr">▸</div>Multi-vendor portal + onboarding</div>
+          <div class="prow"><div class="parr">▸</div>Stripe Connect — vendor payouts</div>
+          <div class="prow"><div class="parr">▸</div>10–15% GMV commission engine</div>
+          <div class="prow"><div class="parr">▸</div>Driver dispatch app (Flutter)</div>
+          <div class="prow"><div class="parr">▸</div>Bengali, Sri Lankan, Pakistani categories</div>
+          <div class="prow"><div class="parr">▸</div>AI-powered product recommendations</div>
+          <div class="ptag">Marketplace</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM DECISION -->
+<section id="platform">
+  <div class="container">
+    <div class="ey gold rv">Platform Analysis</div>
+    <h2 class="rv">Shopify: right for Phase 1,<br>not the long-term answer</h2>
+    <p class="lead rv">Shopify provides the fastest path to a functional D2C storefront. But it has architectural ceilings that matter as KeralaKart scales toward a marketplace model.</p>
+
+    <div class="twocol">
+      <div class="pf-card yes rv">
+        <div class="pf-head">✓ Phase 1 — Shopify strengths</div>
+        <div class="pf-item"><span class="pf-icon">✅</span>3–4 week time-to-market with zero backend engineering</div>
+        <div class="pf-item"><span class="pf-icon">✅</span>Native QBO integration via Synder — automated reconciliation</div>
+        <div class="pf-item"><span class="pf-icon">✅</span>Mature Klaviyo + WATI integrations, production-proven</div>
+        <div class="pf-item"><span class="pf-icon">✅</span>Shop Pay — one-tap checkout with saved addresses</div>
+        <div class="pf-item"><span class="pf-icon">✅</span>Stripe-backed payment processing with Shopify Payments</div>
+        <div class="pf-item"><span class="pf-icon">✅</span>Built-in inventory tracking, fulfilment, and reporting</div>
+      </div>
+      <div class="pf-card no rv d1">
+        <div class="pf-head">✕ Shopify limitations at scale</div>
+        <div class="pf-item"><span class="pf-icon">❌</span>2.4–2.9% transaction fee compounds at high GMV</div>
+        <div class="pf-item"><span class="pf-icon">❌</span>No native multi-vendor marketplace architecture</div>
+        <div class="pf-item"><span class="pf-icon">❌</span>Vajro = WebView shell, not native app performance</div>
+        <div class="pf-item"><span class="pf-icon">❌</span>API rate limits restrict high-frequency integrations</div>
+        <div class="pf-item"><span class="pf-icon">❌</span>Advanced reporting locked behind Shopify Plus tier</div>
+        <div class="pf-item"><span class="pf-icon">❌</span>No path for custom logistics / driver dispatch layer</div>
+      </div>
+    </div>
+
+    <div class="scale-vis rv">
+      <div class="scale-title">📈 Monthly Shopify platform cost as GMV scales</div>
+      <div class="scale-bars">
+        <div class="sbar-row"><div class="sbar-lbl">$20K GMV/mo</div><div class="sbar-track"><div class="sbar-fill" style="width:8%">~$860</div></div><div class="sbar-val" style="color:#15803D">✓ Viable</div></div>
+        <div class="sbar-row"><div class="sbar-lbl">$100K GMV/mo</div><div class="sbar-track"><div class="sbar-fill" style="width:28%">~$3,200</div></div><div class="sbar-val" style="color:#B45309">⚠ Watch fees</div></div>
+        <div class="sbar-row"><div class="sbar-lbl">$300K GMV/mo</div><div class="sbar-track"><div class="sbar-fill" style="width:62%">~$9,100/mo</div></div><div class="sbar-val" style="color:#EA580C">⚡ Migrate trigger</div></div>
+        <div class="sbar-row"><div class="sbar-lbl">$1M+ GMV/mo</div><div class="sbar-track"><div class="sbar-fill" style="width:100%">~$29,000/mo</div></div><div class="sbar-val" style="color:#DC2626">✕ Must exit</div></div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px">Includes plan fee + 2.4–2.9% Shopify Payments transaction fee. Does not include Shopify Plus at $2,300+/mo.</p>
+    </div>
+
+    <div class="shopify-cost-answer rv" style="margin-top:32px;background:linear-gradient(135deg,#FFF7ED,#FFFBF5);border:2px solid #F97316;border-radius:16px;padding:28px 32px">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div style="font-size:28px;flex-shrink:0">💡</div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#C2410C;margin-bottom:6px">Direct answer — Is Shopify expensive long-term?</div>
+          <div style="font-size:17px;font-weight:700;color:#111827;line-height:1.45;margin-bottom:12px">Yes — but only past a specific GMV threshold, and that's exactly when Phase 3 is planned.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+            <div style="background:#fff;border:1px solid #FED7AA;border-radius:10px;padding:14px">
+              <div style="font-size:11px;color:#9CA3AF;font-weight:600;margin-bottom:4px">PHASE 1 CEILING</div>
+              <div style="font-size:20px;font-weight:800;color:#EA580C">$50K<span style="font-size:13px;font-weight:500;color:#6B7280">/mo GMV</span></div>
+              <div style="font-size:11.5px;color:#374151;margin-top:4px">Start headless migration. Transaction fees becoming a meaningful line item.</div>
+            </div>
+            <div style="background:#fff;border:1px solid #FED7AA;border-radius:10px;padding:14px">
+              <div style="font-size:11px;color:#9CA3AF;font-weight:600;margin-bottom:4px">HARD EXIT POINT</div>
+              <div style="font-size:20px;font-weight:800;color:#DC2626">$300K<span style="font-size:13px;font-weight:500;color:#6B7280">/mo GMV</span></div>
+              <div style="font-size:11.5px;color:#374151;margin-top:4px">~$9,100/mo ($109K/yr) in Shopify costs alone. Custom platform ROI is under 12 months.</div>
+            </div>
+            <div style="background:#fff;border:1px solid #BBF7D0;border-radius:10px;padding:14px">
+              <div style="font-size:11px;color:#9CA3AF;font-weight:600;margin-bottom:4px">PHASE 3 SAVES</div>
+              <div style="font-size:20px;font-weight:800;color:#0F6E56">$87K+<span style="font-size:13px;font-weight:500;color:#6B7280">/yr</span></div>
+              <div style="font-size:11.5px;color:#374151;margin-top:4px">Eliminated Shopify fees at $300K GMV/mo. Funds Phase 3 infra within one year.</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:#4B5563;line-height:1.6;border-top:1px solid #FED7AA;padding-top:12px">
+            <strong style="color:#111827">The architecture accounts for this explicitly.</strong> Phase 1 locks in Shopify's fast launch. Phase 2 decouples the frontend (headless) — so when transaction fees cross the pain threshold, the switch to the custom backend (Phase 3) is surgical, not a full rebuild. The 36-month plan is designed so Shopify's cost curve never catches KeralaKart off guard.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOPIFY PLAN SELECTION -->
+<section id="shopifyplan">
+  <div class="container">
+    <div class="ey rv">Shopify Plan Selection</div>
+    <h2 class="rv">Picking the right Shopify plan</h2>
+    <p class="lead rv">Start on Basic. The lower transaction fee on the Shopify plan justifies the upgrade at 50+ orders/day — the math works out clearly.</p>
+
+    <table class="plan-table rv">
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th>Monthly</th>
+          <th>Staff Accounts</th>
+          <th>Transaction Fee</th>
+          <th>Reports</th>
+          <th>Recommended for</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:700">Basic</td>
+          <td>$79 CAD</td>
+          <td>2</td>
+          <td class="mid">2.9%</td>
+          <td>Basic</td>
+          <td class="ok">0–50 orders/day · Launch phase</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700">Shopify</td>
+          <td>$105 CAD</td>
+          <td>5</td>
+          <td class="ok">2.4%</td>
+          <td>Professional</td>
+          <td class="ok">50–200 orders/day · Growth phase</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700">Advanced</td>
+          <td>$399 CAD</td>
+          <td>15</td>
+          <td class="ok">2.1%</td>
+          <td>Advanced + custom</td>
+          <td class="mid">200+ orders/day · Pre-Phase 2</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700">Plus</td>
+          <td>$2,300+ CAD</td>
+          <td>Unlimited</td>
+          <td class="ok">0.15–0.25%</td>
+          <td>Full analytics</td>
+          <td class="bad">Only if staying on Shopify at scale</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="plan-rec rv">
+      <strong>Start on Basic.</strong> Upgrade to Shopify plan when D2C hits 50+ orders/day — the lower transaction fee (2.4% vs 2.9%) alone justifies the upgrade at that volume. Do not jump to Advanced or Plus until it is clearly necessary.
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS -->
+<section id="integrations">
+  <div class="container">
+    <div class="ey rv">Core Integrations</div>
+    <h2 class="rv">Launch-critical integrations</h2>
+    <p class="lead rv">These five integrations must be configured before soft launch. Each is directly tied to a critical business operation — accounting, fulfilment, customer communication.</p>
+
+    <div class="int-grid">
+      <div class="icard rv">
+        <span class="icard-icon">📊</span>
+        <div class="icard-name">Synder → QuickBooks Online</div>
+        <div class="icard-desc">Syncs every Shopify order as a QBO invoice. Maps <code>D2C Sales</code>, <code>Delivery Revenue</code>, and <code>Payment Processing Fees</code> to the correct QBO accounts. Runs daily at 2am. Configure and run a $1 test order before launch.</div>
+        <span class="icard-tag tag-g">Phase 1</span>
+      </div>
+      <div class="icard rv d1">
+        <span class="icard-icon">📧</span>
+        <div class="icard-name">Klaviyo</div>
+        <div class="icard-desc">Triggered automated flows: welcome series (3 emails), abandoned cart (1hr + 24hr), order confirmation, delivery notification, post-delivery review request (3 days), win-back (60 days inactive), restock alert.</div>
+        <span class="icard-tag tag-g">Phase 1</span>
+      </div>
+      <div class="icard rv d2">
+        <span class="icard-icon">💬</span>
+        <div class="icard-name">WATI / Interakt — WhatsApp Business API</div>
+        <div class="icard-desc">Order confirmations and delivery notifications via WhatsApp in parallel with email. Broadcast list for new arrivals, weekend specials, restock alerts. WhatsApp chat widget on site (bottom-right). Migration broadcast with <code>KARAVAN10</code> discount.</div>
+        <span class="icard-tag tag-g">Phase 1</span>
+      </div>
+      <div class="icard rv">
+        <span class="icard-icon">📱</span>
+        <div class="icard-name">Vajro — Mobile App Wrapper</div>
+        <div class="icard-desc">Converts Shopify store to branded iOS + Android app. Push notifications (5× email open rate), App Store + Play Store submission handled by Vajro dashboard. Apple Developer account ($130/yr) + Google Play account ($30 one-time) required. Submit end of Month 2.</div>
+        <span class="icard-tag tag-g">Phase 1</span>
+      </div>
+      <div class="icard rv d1">
+        <span class="icard-icon">📦</span>
+        <div class="icard-name">Inventory Management</div>
+        <div class="icard-desc">Launch: Shopify native inventory tracking. Phase 2: Stocky by Shopify (free) or Cin7 Core. Phase 3 (xkart.ca): Cin7 Core or Brightpearl for multi-location, multi-vendor inventory. Set reorder alerts at 3-week supply for Tier 1 SKUs, 10% safety buffer on counts.</div>
+        <span class="icard-tag tag-ph2">Phase 2 upgrade</span>
+      </div>
+      <div class="icard rv d2">
+        <span class="icard-icon">🔍</span>
+        <div class="icard-name">Algolia Search</div>
+        <div class="icard-desc">Replaces Shopify's native search in Phase 2. Millisecond results with faceted filters, Malayalam + English support, typo tolerance, autocomplete. Syncs product catalogue via Shopify webhooks. Required before native app launch.</div>
+        <span class="icard-tag tag-ph2">Phase 2</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="stack">
+  <div class="container">
+    <div class="ey rv">Tech Stack</div>
+    <h2 class="rv">Full platform technology</h2>
+    <p class="lead rv">Phase 2 and 3 stack — every layer chosen for performance, maintainability, and Canadian infrastructure compliance.</p>
+
+    <div class="stabs rv">
+      <button class="stab on" onclick="sw(this,'fe')">Frontend</button>
+      <button class="stab" onclick="sw(this,'mobile')">Mobile</button>
+      <button class="stab" onclick="sw(this,'be')">Backend</button>
+      <button class="stab" onclick="sw(this,'pay')">Payments</button>
+      <button class="stab" onclick="sw(this,'mkt')">Marketing</button>
+      <button class="stab" onclick="sw(this,'infra')">Infrastructure</button>
+    </div>
+
+    <div id="p-fe" class="spanel on">
+      <div class="tc"><span class="tc-icon">⚡</span><div class="tc-name">Next.js 15</div><div class="tc-desc">App Router, RSC, ISR. Headless Shopify in Phase 2 via Storefront API (GraphQL). Fully custom in Phase 3.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🎨</span><div class="tc-name">Tailwind CSS</div><div class="tc-desc">Brand tokens: <code>#0F6E56</code> green + <code>#BA7517</code> gold. Utility-first — rapid UI iteration without design debt.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🌍</span><div class="tc-name">Vercel</div><div class="tc-desc">Global CDN + edge caching. Zero-config CI/CD on push to <code>main</code>. Automatic preview deployments on PRs.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🔍</span><div class="tc-name">Algolia</div><div class="tc-desc">Instant product search with Malayalam + English. Faceted filters, autocomplete, analytics. Syncs via Shopify webhooks.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🛒</span><div class="tc-name">Shopify Storefront API</div><div class="tc-desc">GraphQL API connecting Next.js frontend to Shopify backend in Phase 2. Products, cart, checkout — no monolith lock-in.</div><span class="tc-tag" style="background:#EFF6FF;color:#1D4ED8">Phase 2 only</span></div>
+      <div class="tc"><span class="tc-icon">🧪</span><div class="tc-name">PostHog</div><div class="tc-desc">Session recordings, feature flags, A/B testing. GDPR-compliant. Self-hostable on AWS Canada for data residency.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+    </div>
+
+    <div id="p-mobile" class="spanel">
+      <div class="tc"><span class="tc-icon">📱</span><div class="tc-name">Flutter + Dart</div><div class="tc-desc">Single codebase → truly native iOS + Android with compiled Dart (no JS bridge). Pixel-perfect UI, smooth 60/120fps animations. Replaces Vajro in Phase 2. OTA logic updates via Remote Config.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🔔</span><div class="tc-name">Firebase Cloud Messaging</div><div class="tc-desc">Push notifications via APNs (iOS) and FCM (Android). Order status, restock alerts, flash promotions. 5× email open rate.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🗺️</span><div class="tc-name">MapLibre / Google Maps SDK</div><div class="tc-desc">Real-time driver GPS tracking displayed to customer during delivery. Integrated with delivery partner webhook payload.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">⚡</span><div class="tc-name">React Query + MMKV</div><div class="tc-desc">Offline-first data caching. MMKV for fast local storage. App remains functional in poor connectivity.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🔐</span><div class="tc-name">expo-local-authentication</div><div class="tc-desc">Face ID / fingerprint biometric login. Removes password friction from repeat purchase flow.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">📸</span><div class="tc-name">Expo Camera + Barcode</div><div class="tc-desc">Barcode scanning for warehouse receiving and inventory counting. Driver app uses camera for proof-of-delivery photos.</div><span class="tc-tag tp3">Phase 3</span></div>
+    </div>
+
+    <div id="p-be" class="spanel">
+      <div class="tc"><span class="tc-icon">🏗️</span><div class="tc-name">NestJS (Node.js)</div><div class="tc-desc">Modular, TypeScript-first backend. Decorator-based DI, guards, interceptors. REST + GraphQL via <code>@nestjs/graphql</code>.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">🐘</span><div class="tc-name">PostgreSQL (RDS)</div><div class="tc-desc">Primary relational store. Row-level tenant isolation for multi-vendor. Read replicas for analytics queries.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">⚡</span><div class="tc-name">Redis (ElastiCache)</div><div class="tc-desc">Session store, cart state, distributed rate limiting, pub/sub for real-time order status events.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">🔷</span><div class="tc-name">Prisma ORM</div><div class="tc-desc">Type-safe queries, schema-first migrations, auto-generated client. Prevents type mismatches between schema and runtime.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">📨</span><div class="tc-name">BullMQ</div><div class="tc-desc">Redis-backed job queues. Order processing, email dispatch, inventory sync, Stripe webhook retries — async, non-blocking.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">🔒</span><div class="tc-name">JWT + OAuth 2.0</div><div class="tc-desc">Stateless auth. Refresh token rotation on mobile. OAuth for vendor portal SSO. Guards on all protected routes.</div><span class="tc-tag tp3">Phase 3</span></div>
+    </div>
+
+    <div id="p-pay" class="spanel">
+      <div class="tc"><span class="tc-icon">💳</span><div class="tc-name">Stripe</div><div class="tc-desc">Cards, Apple Pay, Google Pay. Already under Shopify Payments — Phase 3 migration just removes the Shopify wrapper.</div><span class="tc-tag tall">All Phases</span></div>
+      <div class="tc"><span class="tc-icon">🤝</span><div class="tc-name">Stripe Connect</div><div class="tc-desc">Marketplace payouts. Per-charge commission split (<code>application_fee_amount</code>). Handles KYC for each vendor automatically.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">🏦</span><div class="tc-name">Interac via Flinks</div><div class="tc-desc">Canadian bank-to-bank transfer. Zero per-transaction fee. Meaningful for high-frequency loyal customers.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🚚</span><div class="tc-name">Delivery Partner Webhook</div><div class="tc-desc">Custom webhook integration — Shopify fulfillment event triggers dispatch notification. Phase 3: bidirectional GPS + ETA sync.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🖼️</span><div class="tc-name">Cloudinary CDN</div><div class="tc-desc">Auto WebP conversion, lazy loading, responsive srcsets. Upload original, serve optimised. Fits Shopify via URL transformations.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🗺️</span><div class="tc-name">Route Optimisation API</div><div class="tc-desc">Multi-stop delivery route optimisation. Plugs into driver dispatch in Phase 3 to minimise per-order delivery cost.</div><span class="tc-tag tp3">Phase 3</span></div>
+    </div>
+
+    <div id="p-mkt" class="spanel">
+      <div class="tc"><span class="tc-icon">📧</span><div class="tc-name">Klaviyo</div><div class="tc-desc">Flows: welcome, abandoned cart (1hr + 24hr), order confirm, delivery notify, review request (day 3), win-back (day 60), restock.</div><span class="tc-tag tall">All Phases</span></div>
+      <div class="tc"><span class="tc-icon">💬</span><div class="tc-name">WATI / Interakt</div><div class="tc-desc">WhatsApp Business API. Order + delivery via WhatsApp in addition to email. Broadcast list management. Chat widget on site.</div><span class="tc-tag tall">All Phases</span></div>
+      <div class="tc"><span class="tc-icon">📈</span><div class="tc-name">Mixpanel</div><div class="tc-desc">Product analytics — funnel analysis, retention cohorts, feature adoption. Identifies which SKUs and flows drive repeat purchases.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🎁</span><div class="tc-name">Loyalty Engine</div><div class="tc-desc">$1 = 1 point, 100 = $5 credit. Tier-based: Silver → Gold → Karavan Elite. Points visible in account and app dashboard.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🔗</span><div class="tc-name">Referral Programme</div><div class="tc-desc">Unique referral links, tracked at order creation. $10 credit when referral places first order. Community-driven acquisition.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🔍</span><div class="tc-name">GA4 + Search Console</div><div class="tc-desc">Organic search tracking for Kerala grocery keywords. GSC monitors crawl coverage and Core Web Vitals for storefront.</div><span class="tc-tag tall">All Phases</span></div>
+    </div>
+
+    <div id="p-infra" class="spanel">
+      <div class="tc"><span class="tc-icon">☁️</span><div class="tc-name">AWS ca-central-1</div><div class="tc-desc">RDS PostgreSQL, ElastiCache Redis, S3 + CloudFront, ECS Fargate. Canadian data residency for all customer data.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">🔄</span><div class="tc-name">GitHub Actions</div><div class="tc-desc">CI: lint, type-check, unit tests on every PR. CD: auto-deploy to staging on merge to <code>develop</code>, production on <code>main</code>.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">🐳</span><div class="tc-name">Docker + ECS Fargate</div><div class="tc-desc">Containerised microservices with auto-scaling on CPU/memory thresholds. Zero-downtime rolling deployments.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">🚨</span><div class="tc-name">Sentry</div><div class="tc-desc">Error capture + performance tracing on Next.js, NestJS, and Flutter. Alerting to Slack on P0 errors.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+      <div class="tc"><span class="tc-icon">📊</span><div class="tc-name">Datadog</div><div class="tc-desc">Infrastructure metrics, distributed tracing across services, API latency dashboards, on-call alerting.</div><span class="tc-tag tp3">Phase 3</span></div>
+      <div class="tc"><span class="tc-icon">🛡️</span><div class="tc-name">Cloudflare</div><div class="tc-desc">DDoS mitigation, WAF rules, bot scoring. CDN in front of Vercel + AWS. DNS management for keralakart.ca + xkart.ca.</div><span class="tc-tag tp2">Phase 2 & 3</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="arch">
+  <div class="container">
+    <div class="ey rv">System Architecture</div>
+    <h2 class="rv">Phase 3 — xkart.ca platform diagram</h2>
+    <p class="lead rv">Full request path from client to database to external integrations. Every service boundary is independently deployable.</p>
+
+    <div class="arch-wrap rv">
+      <div style="margin-bottom:18px">
+        <div class="al">Clients</div>
+        <div class="arow">
+          <div class="an nc">Web Browser<small>keralakart.ca</small></div>
+          <div class="an nc">iOS App<small>Flutter</small></div>
+          <div class="an nc">Android App<small>Flutter</small></div>
+          <div class="an nc">Admin Panel<small>Next.js</small></div>
+          <div class="an nc">Vendor Portal<small>Next.js</small></div>
+          <div class="an nc">Driver App<small>Flutter</small></div>
+        </div>
+      </div>
+
+      <div class="aconn"><div class="aconn-line"></div><div class="aconn-text">HTTPS · REST · GraphQL</div><div class="aconn-line"></div></div>
+
+      <div style="margin-bottom:18px">
+        <div class="al">CDN + Frontend</div>
+        <div class="arow">
+          <div class="an nv" style="max-width:150px">Vercel Edge CDN<small>Global cache</small></div>
+          <div class="an nf" style="max-width:190px">Next.js Storefront<small>SSR + ISR + RSC</small></div>
+          <div class="an na" style="max-width:200px">API Gateway (NestJS)<small>Auth · Rate limit · Routing</small></div>
+        </div>
+      </div>
+
+      <div class="aconn"><div class="aconn-line"></div><div class="aconn-text">Internal service calls</div><div class="aconn-line"></div></div>
+
+      <div style="margin-bottom:18px">
+        <div class="al">Microservices</div>
+        <div class="arow">
+          <div class="an ns">Order Service</div>
+          <div class="an ns">Product Service</div>
+          <div class="an ns">User Service</div>
+          <div class="an ns">Delivery Service</div>
+          <div class="an ns">Vendor Service</div>
+          <div class="an ns">Loyalty Service</div>
+        </div>
+      </div>
+
+      <div class="aconn"><div class="aconn-line"></div><div class="aconn-text">Data layer</div><div class="aconn-line"></div></div>
+
+      <div style="margin-bottom:18px">
+        <div class="al">Data</div>
+        <div class="arow">
+          <div class="an nd">PostgreSQL<small>Primary DB</small></div>
+          <div class="an nd">Redis<small>Cache + Sessions</small></div>
+          <div class="an nd">Algolia<small>Search Index</small></div>
+          <div class="an nd">S3 + CDN<small>Media</small></div>
+          <div class="an nd">BullMQ<small>Job Queues</small></div>
+        </div>
+      </div>
+
+      <div class="aconn"><div class="aconn-line"></div><div class="aconn-text">External integrations</div><div class="aconn-line"></div></div>
+
+      <div>
+        <div class="al">Third-Party Services</div>
+        <div class="arow">
+          <div class="an ne">Stripe Connect<small>Payments + Payouts</small></div>
+          <div class="an ne">WATI<small>WhatsApp API</small></div>
+          <div class="an ne">Klaviyo<small>Email / SMS</small></div>
+          <div class="an ne">QuickBooks<small>Accounting</small></div>
+          <div class="an ne">Delivery API<small>Partner webhooks</small></div>
+          <div class="an ne">Firebase<small>Push</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT CATALOGUE -->
+<section id="catalogue">
+  <div class="container">
+    <div class="ey rv">Product Catalogue</div>
+    <h2 class="rv">Category structure & SKU tiers</h2>
+    <p class="lead rv">Collections are structured around how a Kerala household actually shops — not generic product type taxonomy. Tier classification drives inventory strategy.</p>
+
+    <div class="cat-grid">
+      <div class="ccat rv">
+        <div class="ccat-h"><div class="ccat-h-dot"></div><div class="ccat-h-name">Rice &amp; Grains</div><span class="ccat-h-tier tier1">Tier 1 · Karavan</span></div>
+        <div class="ccat-b">Core staple — always in stock. Track inventory, no backorder. Reorder at 3-week supply threshold.</div>
+        <div class="ccat-skus">Matta rice · Red rice · Puttu podi · Idiyappam flour · Rava</div>
+      </div>
+      <div class="ccat rv d1">
+        <div class="ccat-h"><div class="ccat-h-dot"></div><div class="ccat-h-name">Coconut Products</div><span class="ccat-h-tier tier1">Tier 1 · Karavan</span></div>
+        <div class="ccat-b">High-frequency purchase. Featured on homepage. Never allow out-of-stock on Tier 1.</div>
+        <div class="ccat-skus">Coconut milk · Coconut oil · Desiccated coconut</div>
+      </div>
+      <div class="ccat rv">
+        <div class="ccat-h"><div class="ccat-h-dot"></div><div class="ccat-h-name">Spices &amp; Masalas</div><span class="ccat-h-tier tier1">Tier 1 · Karavan</span></div>
+        <div class="ccat-b">Differentiator SKUs — authentic Kerala sourcing. Key SEO category for Canada search traffic.</div>
+        <div class="ccat-skus">Kerala black pepper · Cardamom · Kerala garam masala</div>
+      </div>
+      <div class="ccat rv d1">
+        <div class="ccat-h"><div class="ccat-h-dot"></div><div class="ccat-h-name">Pickles &amp; Chutneys</div><span class="ccat-h-tier tier1">Tier 1 · Karavan</span></div>
+        <div class="ccat-b">High margin, long shelf life. Karavan brand differentiation strongest here.</div>
+        <div class="ccat-skus">Mango pickle · Lime pickle · Fish pickle</div>
+      </div>
+      <div class="ccat rv">
+        <div class="ccat-h"><div class="ccat-h-dot"></div><div class="ccat-h-name">Lentils &amp; Pulses</div><span class="ccat-h-tier tier2">Tier 2 · Weekly JIT</span></div>
+        <div class="ccat-b">Ordered weekly from GTA distributor. Thursday order → Monday fulfilment cycle. Allow backorder.</div>
+        <div class="ccat-skus">Toor dal · Urad dal · Chana dal · Moong dal</div>
+      </div>
+      <div class="ccat rv d1">
+        <div class="ccat-h"><div class="ccat-h-dot"></div><div class="ccat-h-name">Fresh &amp; Frozen</div><span class="ccat-h-tier tier2">Tier 2 · Weekly JIT</span></div>
+        <div class="ccat-b">Cold-chain required. Delivery coordination with partner must happen same-day. Note in checkout.</div>
+        <div class="ccat-skus">Frozen Kerala fish · Frozen vegetables · Banana leaves</div>
+      </div>
+      <div class="ccat rv">
+        <div class="ccat-h"><div class="ccat-h-dot"></div><div class="ccat-h-name">Snacks &amp; Namkeen</div><span class="ccat-h-tier tier1">Tier 1 · Karavan</span></div>
+        <div class="ccat-b">Taxable category (HST applies). Configure Shopify tax codes correctly — snacks are NOT HST-exempt.</div>
+        <div class="ccat-skus">Banana chips · Tapioca chips · Murukku · Chakli</div>
+      </div>
+      <div class="ccat rv d1">
+        <div class="ccat-h"><div class="ccat-h-dot"></div><div class="ccat-h-name">Beverages</div><span class="ccat-h-tier tier3">Tier 3 · On-demand</span></div>
+        <div class="ccat-b">Purchased after order placed. Enable "continue selling when out of stock". Display delivery lead time in product description.</div>
+        <div class="ccat-skus">Malabar tea · Filter coffee powder · Rose milk mix</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="container">
+    <div class="ey rv">Timeline</div>
+    <h2 class="rv">36-Month Build Roadmap</h2>
+
+    <div class="tl">
+      <div class="tl-it rv">
+        <div class="tldot g"></div>
+        <div class="tl-box">
+          <div class="tl-period">May – June 2026 · Phase 1 Launch</div>
+          <div class="tl-title">🛒 keralakart.ca — Soft launch</div>
+          <div class="tl-body">Register <code>keralakart.ca</code> and <code>xkart.ca</code>. Shopify Basic + Impulse theme. Upload 60 Karavan SKUs including Malayalam names, allergens, weight, origin, Veg/Non-Veg badge. Configure Synder → QBO, Klaviyo flows, WATI WhatsApp. GTA shipping zones (<code>M</code>, <code>L</code>, <code>K</code> postal codes). Ontario HST rules with grocery-exempt product categories. Broadcast <code>KARAVAN10</code> to existing WhatsApp contacts.</div>
+          <div class="tl-chips"><span class="chip">Shopify Basic</span><span class="chip">Klaviyo</span><span class="chip">WATI</span><span class="chip">Synder</span><span class="chip">GA4</span></div>
+        </div>
+      </div>
+
+      <div class="tl-it rv">
+        <div class="tldot g"></div>
+        <div class="tl-box">
+          <div class="tl-period">July – September 2026 · Phase 1 Growth</div>
+          <div class="tl-title">📱 Vajro app live · 300 SKUs · GTA expansion</div>
+          <div class="tl-body">Vajro iOS + Android submitted and approved by end of Month 2. Expand catalogue to 300+ SKUs — add Tier 2 JIT products on Thursday/Monday ordering cycle. Launch loyalty programme via Shopify app. Upgrade to Shopify plan at 50+ orders/day (transaction fee drops from 2.9% → 2.4%). Extend delivery zones: Mississauga, Brampton, Vaughan.</div>
+          <div class="tl-chips"><span class="chip">Vajro App</span><span class="chip">300+ SKUs</span><span class="chip">Loyalty</span><span class="chip">GTA Zones</span></div>
+        </div>
+      </div>
+
+      <div class="tl-it rv">
+        <div class="tldot gold"></div>
+        <div class="tl-box">
+          <div class="tl-period">Q4 2026 · Phase 2 Start</div>
+          <div class="tl-title">⚡ Headless Next.js + Flutter app</div>
+          <div class="tl-body">Replace Shopify theme with Next.js 15 storefront connecting via Shopify Storefront GraphQL API. Launch Flutter app (Dart) — replaces Vajro with a truly native experience on both iOS and Android. Algolia integrated for product search with Malayalam support. Real-time delivery tracking via delivery partner API + MapLibre. Expand delivery: Ottawa, Montreal.</div>
+          <div class="tl-chips"><span class="chip gold">Next.js 15</span><span class="chip gold">Flutter</span><span class="chip gold">Algolia</span><span class="chip gold">Live Tracking</span></div>
+        </div>
+      </div>
+
+      <div class="tl-it rv">
+        <div class="tldot gold"></div>
+        <div class="tl-box">
+          <div class="tl-period">Q1–Q2 2027 · Phase 2 Scale</div>
+          <div class="tl-title">🌍 Personalisation · National coverage · Referrals</div>
+          <div class="tl-body">PostHog A/B testing and session recordings. Mixpanel funnel analysis and retention cohorts. Referral programme via unique links tracked at order creation. AI product recommendations (collaborative filtering). National delivery: Vancouver, Calgary. Target 200+ orders/day milestone.</div>
+          <div class="tl-chips"><span class="chip gold">PostHog</span><span class="chip gold">Mixpanel</span><span class="chip gold">Referrals</span><span class="chip gold">National</span></div>
+        </div>
+      </div>
+
+      <div class="tl-it rv">
+        <div class="tldot dk"></div>
+        <div class="tl-box">
+          <div class="tl-period">Q3 2027 · Phase 3 Build</div>
+          <div class="tl-title">🏗️ Custom platform development — xkart.ca</div>
+          <div class="tl-body">6-month build of full custom marketplace. NestJS backend with PostgreSQL, Redis, microservice architecture. Vendor portal (alpha). Stripe Connect for vendor payouts. Bengali grocery onboarded as pilot vendor — validates multi-tenant product schema, commission calculation, and vendor onboarding flow.</div>
+          <div class="tl-chips"><span class="chip dark">NestJS</span><span class="chip dark">PostgreSQL</span><span class="chip dark">Stripe Connect</span><span class="chip dark">Multi-tenant</span></div>
+        </div>
+      </div>
+
+      <div class="tl-it rv">
+        <div class="tldot dk"></div>
+        <div class="tl-box">
+          <div class="tl-period">Q1 2028 · Phase 3 Launch</div>
+          <div class="tl-title">🌐 xkart.ca marketplace goes live</div>
+          <div class="tl-body">Multi-vendor marketplace live — KeralaKart + BengaliKart as pilot storefronts. 10–15% GMV commission active via Stripe Connect <code>application_fee_amount</code>. Driver dispatch app (Flutter) with route optimisation. Shopify fully retired. Sri Lankan and Pakistani categories in vendor onboarding pipeline.</div>
+          <div class="tl-chips"><span class="chip dark">Multi-vendor</span><span class="chip dark">Flutter Driver App</span><span class="chip dark">Route Opt.</span><span class="chip dark">Shopify Retired</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEO -->
+<section id="seo">
+  <div class="container">
+    <div class="ey rv">SEO Strategy</div>
+    <h2 class="rv">Target keywords &amp; quick wins</h2>
+    <p class="lead rv">Page title format: <code>[Product] [Weight] — Buy Online Canada | KeralaKart</code>. URL slugs: <code>/products/kerala-matta-rice-5kg</code>. Every product image needs a descriptive alt tag including 'Kerala'.</p>
+
+    <div class="kw-grid">
+      <div class="kwcard kw-hi rv"><div class="kwcard-q">Kerala grocery Toronto</div><div class="kwbar"><div class="kwfill"></div></div><div class="kwcard-vol"><em>High priority</em> · 500–1,000 searches/mo</div></div>
+      <div class="kwcard kw-hi rv d1"><div class="kwcard-q">Kerala groceries online Canada</div><div class="kwbar"><div class="kwfill"></div></div><div class="kwcard-vol"><em>High priority</em> · 300–600 searches/mo</div></div>
+      <div class="kwcard kw-hi rv"><div class="kwcard-q">Kerala spices online Canada</div><div class="kwbar"><div class="kwfill"></div></div><div class="kwcard-vol"><em>High priority</em> · 400–800 searches/mo</div></div>
+      <div class="kwcard kw-hi rv d1"><div class="kwcard-q">Buy matta rice Toronto</div><div class="kwbar"><div class="kwfill"></div></div><div class="kwcard-vol"><em>High priority</em> · 200–400 searches/mo</div></div>
+      <div class="kwcard kw-md rv"><div class="kwcard-q">Indian grocery delivery Brampton</div><div class="kwbar"><div class="kwfill"></div></div><div class="kwcard-vol"><em>Medium</em> · 1,000–2,000 searches/mo (competitive)</div></div>
+      <div class="kwcard kw-md rv d1"><div class="kwcard-q">Kerala snacks online</div><div class="kwbar"><div class="kwfill"></div></div><div class="kwcard-vol"><em>Medium</em> · 400–700 searches/mo</div></div>
+    </div>
+
+    <div class="seo-wins rv" style="margin-top:28px">
+      <div class="sw"><span class="sw-icon">📍</span><div class="sw-title">Google Business Profile</div><div class="sw-body">Set up immediately. Appears in 'Kerala grocery near me' local searches. Add warehouse/office address, hours, phone, link to keralakart.ca.</div></div>
+      <div class="sw"><span class="sw-icon">✍️</span><div class="sw-title">Blog at Launch</div><div class="sw-body">4 articles: Kerala sadya recipe, spices guide, Karavan import story, new products arriving. Every post links to ≥ 2 product pages.</div></div>
+      <div class="sw"><span class="sw-icon">🖼️</span><div class="sw-title">Image Optimisation</div><div class="sw-body">Compress all product images to under 200KB before uploading. Shopify serves WebP automatically but file size impacts Core Web Vitals.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- XKART -->
+<section id="xkart">
+  <div class="container">
+    <div class="ey rv">Expansion Architecture</div>
+    <h2 class="rv">xkart.ca — multi-ethnic platform vision</h2>
+    <p class="lead rv">KeralaKart is Phase 1. xkart.ca is the umbrella brand. Infrastructure decisions made today should not require a full rebuild when Bengali, Sri Lankan, and Pakistani categories launch.</p>
+
+    <div class="xk-hero rv">
+      <div>
+        <div class="xk-title">xkart.ca<br><span>The next platform</span></div>
+        <div class="xk-desc">Multi-ethnic, multi-vendor grocery marketplace for Canada. KeralaKart is vendor one. The platform is designed so any South Asian grocery brand can onboard as a storefront with their own product catalogue, inventory, and branding.</div>
+        <div class="xk-tags">
+          <span class="xktag">🥥 KeralaKart</span>
+          <span class="xktag">🍚 BengaliKart</span>
+          <span class="xktag">🍜 SriLankanKart</span>
+          <span class="xktag">🫓 PakistaniKart</span>
+        </div>
+      </div>
+      <div class="xk-cols">
+        <div class="xkcol">
+          <div class="xkcol-title">Build now for Phase 3</div>
+          <div class="xkcol-item"><div class="xi-dot"></div>Register xkart.ca immediately</div>
+          <div class="xkcol-item"><div class="xi-dot"></div>Tag products: <code>kerala</code>, <code>bengali</code>, <code>sri-lankan</code></div>
+          <div class="xkcol-item"><div class="xi-dot"></div>QBO classes: <code>D2C-Kerala</code>, <code>D2C-Bengali</code></div>
+          <div class="xkcol-item"><div class="xi-dot"></div>Klaviyo segments by ethnic preference</div>
+          <div class="xkcol-item"><div class="xi-dot"></div>Choose Impulse theme (multi-storefront support)</div>
+        </div>
+        <div class="xkcol">
+          <div class="xkcol-title">Phase 3 capabilities</div>
+          <div class="xkcol-item"><div class="xi-dot"></div>Multi-tenant product schema</div>
+          <div class="xkcol-item"><div class="xi-dot"></div>Commission: 10–15% GMV</div>
+          <div class="xkcol-item"><div class="xi-dot"></div>Stripe Connect vendor payouts</div>
+          <div class="xkcol-item"><div class="xi-dot"></div>Vendor self-onboarding portal</div>
+          <div class="xkcol-item"><div class="xi-dot"></div>Driver dispatch + route optimisation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="xk-vision rv" style="margin-top:24px">
+      <div class="xkv-head">
+        <div class="xkvh">Phase</div>
+        <div class="xkvh">Timeline</div>
+        <div class="xkvh">What Launches</div>
+        <div class="xkvh">Revenue Model</div>
+      </div>
+      <div class="xkv-row">
+        <div class="xkv-cell">Phase 1</div>
+        <div class="xkv-cell">Now → Month 6</div>
+        <div class="xkv-cell">keralakart.ca — Kerala only</div>
+        <div class="xkv-cell">D2C retail margin (2.5–3× landed)</div>
+      </div>
+      <div class="xkv-row">
+        <div class="xkv-cell">Phase 2</div>
+        <div class="xkv-cell">Month 6–18</div>
+        <div class="xkv-cell">Native app · 300+ SKUs · National delivery</div>
+        <div class="xkv-cell">D2C + app-exclusive promotions</div>
+      </div>
+      <div class="xkv-row">
+        <div class="xkv-cell">Phase 3a</div>
+        <div class="xkv-cell">Year 2</div>
+        <div class="xkv-cell">xkart.ca + Bengali grocery</div>
+        <div class="xkv-cell">D2C + marketplace commission</div>
+      </div>
+      <div class="xkv-row">
+        <div class="xkv-cell">Phase 3b</div>
+        <div class="xkv-cell">Year 2–3</div>
+        <div class="xkv-cell">Sri Lankan, Pakistani, Filipino + vendor portal</div>
+        <div class="xkv-cell">10–15% GMV commission + D2C</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LAUNCH CHECKLIST -->
+<section id="checklist">
+  <div class="container">
+    <div class="ey rv">Launch Checklist</div>
+    <h2 class="rv">Week-by-week to soft launch</h2>
+    <p class="lead rv">4-week execution plan. Week 4 ends with a WhatsApp broadcast to all existing customers announcing <code>keralakart.ca</code> + discount code <code>KARAVAN10</code>.</p>
+
+    <div class="cklist">
+      <div class="ckcard rv">
+        <div class="ckcard-title"><span class="ckdot"></span>Week 1–2 · Technical Foundation</div>
+        <div class="cki"><div class="ckbox"></div>Register keralakart.ca + xkart.ca domains (Namecheap / Google Domains)</div>
+        <div class="cki"><div class="ckbox"></div>Set up Shopify Basic plan, connect domain via DNS</div>
+        <div class="cki"><div class="ckbox"></div>Purchase + install Impulse or Prestige theme</div>
+        <div class="cki"><div class="ckbox"></div>Configure brand colours (<code>#0F6E56</code>, <code>#BA7517</code>) and upload logo</div>
+        <div class="cki"><div class="ckbox"></div>Set up Shopify Payments — complete Stripe KYC</div>
+        <div class="cki"><div class="ckbox"></div>Configure GTA shipping zone (M, L, K postal codes) — $7.99 under $79, free above</div>
+        <div class="cki"><div class="ckbox"></div>Set Ontario HST rules — grocery-exempt categories correctly configured</div>
+        <div class="cki"><div class="ckbox"></div>Add warehouse as Shopify location</div>
+      </div>
+
+      <div class="ckcard rv d1">
+        <div class="ckcard-title"><span class="ckdot"></span>Week 2–3 · Catalogue &amp; Integrations</div>
+        <div class="cki"><div class="ckbox"></div>Photograph all Tier 1 Karavan SKUs — min 3 per product (front, back, detail)</div>
+        <div class="cki"><div class="ckbox"></div>Upload 60 SKUs: English + Malayalam title, weight, origin, Veg badge, allergens</div>
+        <div class="cki"><div class="ckbox"></div>Install Synder → connect to QBO, map revenue accounts, run test sync</div>
+        <div class="cki"><div class="ckbox"></div>Install Klaviyo → build welcome flow + abandoned cart (1hr + 24hr triggers)</div>
+        <div class="cki"><div class="ckbox"></div>Set up WATI WhatsApp Business API — order confirm + delivery notification</div>
+        <div class="cki"><div class="ckbox"></div>Install WhatsApp chat widget on site (bottom-right)</div>
+        <div class="cki"><div class="ckbox"></div>Set up GA4 + Google Search Console + Google Business Profile</div>
+        <div class="cki"><div class="ckbox"></div>Configure product SEO: page titles, meta descriptions, alt text, URL handles</div>
+      </div>
+
+      <div class="ckcard rv">
+        <div class="ckcard-title"><span class="ckdot"></span>Week 3–4 · Pre-Launch QA</div>
+        <div class="cki"><div class="ckbox"></div>End-to-end test order: checkout → payment → Shopify fulfil → QBO sync → Klaviyo email</div>
+        <div class="cki"><div class="ckbox"></div>Check all product pages on mobile (70%+ of orders will come from phone)</div>
+        <div class="cki"><div class="ckbox"></div>Verify Synder QBO sync — check invoice mapping and tax handling</div>
+        <div class="cki"><div class="ckbox"></div>Set up discount code <code>KARAVAN10</code> (10% off, single use, first order)</div>
+        <div class="cki"><div class="ckbox"></div>Brief delivery partner — new pickup schedule and order handoff process</div>
+        <div class="cki"><div class="ckbox"></div>Set up Shopify reports: daily sales, inventory levels, fulfillment time</div>
+      </div>
+
+      <div class="ckcard rv d1">
+        <div class="ckcard-title"><span class="ckdot"></span>Week 4 · Soft Launch</div>
+        <div class="cki"><div class="ckbox"></div>Send WhatsApp broadcast to all existing contacts — announce keralakart.ca + KARAVAN10</div>
+        <div class="cki"><div class="ckbox"></div>Post launch announcement on Instagram + Facebook</div>
+        <div class="cki"><div class="ckbox"></div>Share in Kerala community WhatsApp groups across GTA</div>
+        <div class="cki"><div class="ckbox"></div>Monitor first 20 orders: QBO sync correct, delivery confirmed, Klaviyo emails firing</div>
+        <div class="cki"><div class="ckbox"></div>Fix any issues same-day — first impressions are critical in a community market</div>
+        <div class="cki"><div class="ckbox"></div>Start Vajro app setup (submit to App Store + Play Store by end of Month 2)</div>
+        <div class="cki"><div class="ckbox"></div>Create Apple Developer account ($130 CAD/yr) + Google Play account ($30 one-time)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="flogo">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" onerror="this.style.display='none'">
+  </div>
+  <div class="fcopy">KeralaKart.ca · Platform Architecture · May 2026 · Confidential</div>
+  <div class="fcon">
+    <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a>
+    <a href="tel:+966535716437">+966 535 716 437</a>
+    <span>code-ox.com</span>
+  </div>
+</footer>
+
+<script>
+function sw(el,id){
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('p-'+id).classList.add('on');
+}
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')});
+},{threshold:.07,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('s',scrollY>40);
+});
+
+// Animate bars
+const bo=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.sbar-fill').forEach(b=>{
+        const w=b.style.width;b.style.width='0';
+        setTimeout(()=>{b.style.width=w},150);
+      });
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.scale-bars').forEach(el=>bo.observe(el));
+</script>
+</body>
+</html>

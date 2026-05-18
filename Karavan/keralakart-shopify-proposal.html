@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KeralaKart.ca — Shopify Implementation Proposal · Code-Ox Technologies</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#C8CDD6;color:#1A202C;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.page{width:210mm;min-height:297mm;margin:0 auto 24px;position:relative;overflow:hidden;background:#fff;box-shadow:0 4px 28px rgba(0,0,0,0.14);}
+@media print{body{background:none;}.page{margin:0;box-shadow:none;page-break-after:always;break-after:page;}.page:last-child{page-break-after:auto;}}
+@page{size:A4;margin:0;}
+
+/* ═══════════════════════════════
+   COVER PAGE
+═══════════════════════════════ */
+.cover{background:#091827;color:#fff;min-height:297mm;display:flex;flex-direction:column;position:relative;}
+.cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.028) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:1;}
+.cover-glow{position:absolute;width:560px;height:560px;top:-140px;right:-140px;background:radial-gradient(circle,rgba(30,207,192,0.11) 0%,transparent 65%);pointer-events:none;z-index:1;}
+
+/* Cover top bar */
+.cover-topbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:14px 26px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.cover-topbar-left{display:flex;align-items:center;gap:14px;}
+.cover-client-block{}
+.cover-client-name{font-size:13px;font-weight:700;color:#fff;}
+.cover-client-sub{font-size:8.5px;color:rgba(255,255,255,0.38);letter-spacing:0.07em;text-transform:uppercase;margin-top:2px;}
+.cover-vsep{width:1px;height:32px;background:rgba(255,255,255,0.12);}
+.cover-prepby-block{}
+.cover-prepby-label{font-size:8px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:2px;}
+.cover-prepby-name{font-size:13px;font-weight:600;color:#fff;}
+.doc-type-pill{border:1.5px solid #1ECFC0;color:#1ECFC0;font-size:8px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;padding:5px 13px;border-radius:4px;}
+
+/* Cover hero */
+.cover-hero{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;padding:36px 26px 24px;}
+.cover-overline{font-size:8px;font-weight:600;color:rgba(255,255,255,0.35);letter-spacing:0.24em;text-transform:uppercase;margin-bottom:14px;}
+.cover-title{font-size:38px;font-weight:800;line-height:1.06;color:#fff;margin-bottom:10px;}
+.cover-title-accent{color:#1ECFC0;}
+.cover-subtitle{font-size:12px;color:rgba(255,255,255,0.48);line-height:1.68;max-width:460px;margin-bottom:24px;}
+
+.cover-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:30px;}
+.cover-tag{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.10);border-radius:4px;padding:5px 11px;font-size:9.5px;color:rgba(255,255,255,0.6);}
+.cover-tag strong{color:#fff;font-weight:600;}
+
+/* Cover answer cards */
+.cover-answers{position:relative;z-index:2;margin:0 26px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cover-answer-card{background:rgba(255,255,255,0.03);border:1px solid rgba(30,207,192,0.18);border-left:2.5px solid #1ECFC0;border-radius:4px;padding:13px 15px;}
+.cover-answer-q{font-size:7.5px;font-weight:700;color:#1ECFC0;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:5px;}
+.cover-answer-val{font-size:18px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:3px;}
+.cover-answer-val.teal{color:#1ECFC0;}
+.cover-answer-text{font-size:9.5px;color:rgba(255,255,255,0.45);line-height:1.5;}
+
+/* Cover meta strip */
+.cover-meta{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);border-radius:5px;overflow:hidden;margin:0 26px 14px;}
+.cover-meta-item{background:rgba(255,255,255,0.02);padding:11px 14px;}
+.cover-meta-label{font-size:7.5px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:4px;}
+.cover-meta-value{font-size:11px;font-weight:600;color:#fff;}
+.cover-meta-value.teal{color:#1ECFC0;}
+
+/* Cover footer bar */
+.cover-footer{position:relative;z-index:2;border-top:1px solid rgba(255,255,255,0.07);padding:12px 26px;display:flex;align-items:center;gap:14px;}
+.cover-footer img{height:22px;}
+.cover-footer-sep{width:1px;height:14px;background:rgba(255,255,255,0.14);}
+.cover-footer-text{font-size:9px;color:rgba(255,255,255,0.35);}
+.cover-footer-contact{font-size:9px;color:rgba(255,255,255,0.45);margin-left:auto;}
+
+/* ═══════════════════════════════
+   INNER PAGES
+═══════════════════════════════ */
+.inner-page{display:flex;flex-direction:column;min-height:297mm;}
+
+/* Header */
+.inner-header{display:flex;align-items:center;justify-content:space-between;padding:11px 26px;border-bottom:1px solid #E2E8F0;}
+.inner-header img{height:20px;}
+.inner-header-center{font-size:9px;color:#64748B;font-weight:500;}
+.inner-header-right{font-size:9px;color:#94A3B8;}
+
+/* Content */
+.inner-content{flex:1;padding:20px 26px;}
+
+/* Footer */
+.inner-footer{border-top:1px solid #E2E8F0;padding:9px 26px;display:flex;align-items:center;gap:10px;}
+.inner-footer img{height:16px;}
+.inner-footer-sep{width:1px;height:11px;background:#CBD5E1;}
+.inner-footer-text{font-size:7.5px;color:#94A3B8;flex:1;}
+.inner-footer-conf{font-size:7.5px;color:#94A3B8;}
+.inner-footer-page{font-size:8px;color:#64748B;font-weight:600;}
+
+/* ═══════════════════════════════
+   SECTION BANNERS
+═══════════════════════════════ */
+.sec-banner{background:#0D1F2D;color:#fff;border-radius:6px;padding:10px 16px;display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.sec-badge{width:26px;height:26px;min-width:26px;border-radius:50%;background:#1ECFC0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#091827;}
+.sec-banner-sub{font-size:7.5px;color:rgba(255,255,255,0.42);text-transform:uppercase;letter-spacing:0.13em;margin-bottom:1px;}
+.sec-banner-title{font-size:13px;font-weight:700;color:#fff;}
+
+/* ═══════════════════════════════
+   TYPOGRAPHY
+═══════════════════════════════ */
+.sec-label{font-size:8px;font-weight:700;color:#1ECFC0;text-transform:uppercase;letter-spacing:0.18em;margin-bottom:5px;}
+.sec-heading{font-size:18px;font-weight:800;color:#0D1F2D;margin-bottom:7px;line-height:1.18;}
+.sec-intro{font-size:10.5px;color:#475569;line-height:1.72;margin-bottom:14px;}
+.sub-label{font-size:8px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.13em;margin:12px 0 8px;padding-bottom:4px;border-bottom:2px solid #1ECFC0;display:inline-block;}
+
+/* ═══════════════════════════════
+   OVERVIEW TABLE
+═══════════════════════════════ */
+.ov-table{width:100%;border-collapse:collapse;border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:14px;}
+.ov-table td{padding:9px 14px;font-size:10.5px;border-bottom:1px solid #F1F5F9;vertical-align:top;}
+.ov-table tr:last-child td{border-bottom:none;}
+.ov-table td:first-child{font-weight:700;color:#0D1F2D;width:33%;background:#F8FAFC;}
+.ov-price{font-size:17px;font-weight:800;color:#1ECFC0;}
+
+/* ═══════════════════════════════
+   ABOUT GRID
+═══════════════════════════════ */
+.about-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.about-item{border:1px solid #E2E8F0;border-radius:5px;padding:10px 12px;background:#F8FAFC;}
+.about-item-label{font-size:7.5px;font-weight:700;color:#1ECFC0;text-transform:uppercase;letter-spacing:0.14em;margin-bottom:4px;}
+.about-item-val{font-size:10px;font-weight:600;color:#0D1F2D;line-height:1.45;}
+
+/* ═══════════════════════════════
+   STATS ROW
+═══════════════════════════════ */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#E2E8F0;border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:14px;}
+.stats-item{background:#fff;padding:13px 12px;}
+.stats-num{font-size:24px;font-weight:800;color:#0D1F2D;margin-bottom:2px;line-height:1;}
+.stats-num .teal{color:#1ECFC0;}
+.stats-label{font-size:9.5px;font-weight:600;color:#0D1F2D;margin-bottom:2px;}
+.stats-sub{font-size:8px;color:#94A3B8;}
+
+/* ═══════════════════════════════
+   YES/NO CARDS
+═══════════════════════════════ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.yn-card{border-radius:6px;padding:14px 15px;border:1px solid;}
+.yn-card.yes{border-color:#B2EDEA;background:#F0FDFB;}
+.yn-card.no{border-color:#FECACA;background:#FFF5F5;}
+.yn-head{font-size:10px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.yn-card.yes .yn-head{color:#0D9488;}
+.yn-card.no .yn-head{color:#DC2626;}
+.yn-item{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,0.04);font-size:9.5px;color:#374151;line-height:1.5;}
+.yn-item:last-child{border-bottom:none;}
+.yi{flex-shrink:0;margin-top:1px;}
+
+/* ═══════════════════════════════
+   SCOPE GRID
+═══════════════════════════════ */
+.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.scope-card{border:1px solid #E2E8F0;border-radius:6px;padding:13px 14px;background:#F8FAFC;}
+.scope-card-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.scope-card-icon{font-size:16px;}
+.scope-card-title{font-size:11px;font-weight:700;color:#0D1F2D;}
+.srow{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid #F1F5F9;font-size:9.5px;color:#374151;line-height:1.5;}
+.srow:last-child{border-bottom:none;}
+.sdot{width:14px;height:14px;min-width:14px;border-radius:50%;background:#1ECFC0;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.sdot svg{width:7px;height:7px;fill:none;stroke:#091827;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ═══════════════════════════════
+   TIMELINE TABLE
+═══════════════════════════════ */
+.tl-table{width:100%;border-collapse:collapse;border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:14px;}
+.tl-table th{background:#0D1F2D;color:#fff;padding:9px 14px;text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;}
+.tl-table td{padding:9px 14px;border-bottom:1px solid #F1F5F9;font-size:9.5px;color:#374151;vertical-align:top;}
+.tl-table tr:last-child td{border-bottom:none;}
+.tl-table tr:nth-child(even) td{background:#F8FAFC;}
+.tl-week{font-weight:700;color:#0D1F2D;white-space:nowrap;}
+.tl-badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:8px;font-weight:700;}
+.tl-badge.teal{background:#F0FDFB;color:#0D9488;border:1px solid #B2EDEA;}
+.tl-badge.dark{background:#0D1F2D;color:#1ECFC0;}
+.tl-badge.gold{background:#FEF9EE;color:#92670A;border:1px solid #FDE68A;}
+
+/* ═══════════════════════════════
+   DELIVERABLES TABLE
+═══════════════════════════════ */
+.del-table{width:100%;border-collapse:collapse;border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:14px;}
+.del-table th{background:#0D1F2D;color:#fff;padding:8px 14px;text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;}
+.del-table td{padding:8px 14px;border-bottom:1px solid #F1F5F9;font-size:10px;color:#374151;vertical-align:middle;}
+.del-table tr:last-child td{border-bottom:none;}
+.del-table tr:nth-child(odd) td{background:#F8FAFC;}
+.del-check{width:16px;height:16px;border-radius:50%;background:#1ECFC0;display:inline-flex;align-items:center;justify-content:center;}
+.del-check svg{width:8px;height:8px;fill:none;stroke:#091827;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ═══════════════════════════════
+   INVESTMENT TABLE
+═══════════════════════════════ */
+.inv-table{width:100%;border-collapse:collapse;border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:12px;}
+.inv-table th{background:#0D1F2D;color:#fff;padding:10px 16px;text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;}
+.inv-table th:last-child{text-align:right;}
+.inv-table td{padding:10px 16px;border-bottom:1px solid #F1F5F9;font-size:10.5px;color:#374151;vertical-align:top;}
+.inv-table td:last-child{text-align:right;font-weight:600;color:#0D1F2D;white-space:nowrap;}
+.inv-table tr:last-child td{border-bottom:none;}
+.inv-table tr:nth-child(even) td{background:#F8FAFC;}
+.inv-total td{background:#0D1F2D!important;color:#fff!important;font-weight:700;font-size:12px;border:none!important;}
+.inv-total-price{font-size:20px;font-weight:800;color:#1ECFC0;}
+
+/* ═══════════════════════════════
+   PAYMENT CARDS
+═══════════════════════════════ */
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.pay-card{border-radius:7px;padding:18px 20px;position:relative;overflow:hidden;border:1px solid #E2E8F0;}
+.pay-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#1ECFC0;}
+.pay-ms{font-size:8px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#94A3B8;margin-bottom:8px;}
+.pay-amount{font-size:32px;font-weight:800;color:#0D1F2D;line-height:1;margin-bottom:5px;}
+.pay-trigger{font-size:10.5px;font-weight:700;color:#1ECFC0;margin-bottom:4px;}
+.pay-detail{font-size:9.5px;color:#64748B;line-height:1.55;}
+.pay-pct{display:inline-block;margin-top:10px;font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 11px;border-radius:20px;background:#F0FDFB;color:#0D9488;border:1px solid #B2EDEA;}
+
+/* ═══════════════════════════════
+   NOTE BOXES
+═══════════════════════════════ */
+.note-box{border-radius:5px;padding:11px 14px;font-size:10px;line-height:1.65;margin-bottom:12px;}
+.note-box.teal{background:#F0FDFB;border:1px solid #B2EDEA;border-left:3px solid #1ECFC0;}
+.note-box.amber{background:#FFFBF0;border:1px solid #FDE68A;border-left:3px solid #F59E0B;}
+.note-label{font-size:7.5px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:5px;}
+.note-box.teal .note-label{color:#0D9488;}
+.note-box.amber .note-label{color:#92670A;}
+.note-box p{color:#374151;}
+.note-box strong{font-weight:600;color:#0D1F2D;}
+
+/* ═══════════════════════════════
+   UPGRADES TABLE
+═══════════════════════════════ */
+.upg-table{width:100%;border-collapse:collapse;border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:12px;}
+.upg-table th{background:#0D1F2D;color:#fff;padding:8px 14px;text-align:left;font-size:8.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;}
+.upg-table td{padding:9px 14px;border-bottom:1px solid #F1F5F9;font-size:9.5px;color:#374151;vertical-align:top;}
+.upg-table tr:last-child td{border-bottom:none;}
+.upg-table tr:nth-child(even) td{background:#F8FAFC;}
+.upg-name{font-weight:700;color:#0D1F2D;}
+.ph-badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:8px;font-weight:700;}
+.ph-badge.p2{background:#F0FDFB;color:#0D9488;border:1px solid #B2EDEA;}
+.ph-badge.p3{background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE;}
+
+/* ═══════════════════════════════
+   STEPS LIST
+═══════════════════════════════ */
+.step-list{margin-bottom:12px;}
+.step-item{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid #F1F5F9;}
+.step-item:last-child{border-bottom:none;}
+.step-num{width:24px;height:24px;min-width:24px;border-radius:50%;background:#0D1F2D;color:#1ECFC0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin-top:2px;}
+.step-item h5{font-size:10.5px;font-weight:700;color:#0D1F2D;margin-bottom:2px;}
+.step-item p{font-size:9.5px;color:#475569;line-height:1.6;}
+
+/* ═══════════════════════════════
+   CLOSE BLOCK
+═══════════════════════════════ */
+.close-block{background:#0D1F2D;color:#fff;border-radius:6px;padding:20px 22px;margin-top:12px;}
+.close-block h3{font-size:17px;font-weight:800;margin-bottom:8px;line-height:1.2;}
+.close-block h3 .teal{color:#1ECFC0;}
+.close-block p{font-size:10.5px;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:12px;}
+.close-contact{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08);}
+.close-contact-item{font-size:9.5px;color:rgba(255,255,255,0.45);}
+.close-contact-item a{color:#1ECFC0;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     PAGE 1 · COVER
+═══════════════════════════════════════ -->
+<div class="page cover">
+  <div class="cover-grid"></div>
+  <div class="cover-glow"></div>
+
+  <!-- Top bar -->
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <div class="cover-client-block">
+        <div class="cover-client-name">KeralaKart / Karavan</div>
+        <div class="cover-client-sub">Client · GTA Diaspora Grocery · Canada</div>
+      </div>
+      <div class="cover-vsep"></div>
+      <div class="cover-prepby-block">
+        <div class="cover-prepby-label">Prepared by</div>
+        <div class="cover-prepby-name">Code-Ox Technologies</div>
+      </div>
+    </div>
+    <div class="doc-type-pill">Financial Proposal</div>
+  </div>
+
+  <!-- Hero -->
+  <div class="cover-hero">
+    <div class="cover-overline">Shopify E-Commerce · Phase 1 · May 2026</div>
+    <div class="cover-title">
+      Shopify Implementation<br>
+      Proposal for<br>
+      <span class="cover-title-accent">KeralaKart.ca</span>
+    </div>
+    <div class="cover-subtitle">A professional online storefront to replace WhatsApp orders and Interac payments — designed, built, and handed over in 4 weeks. Full Phase 1 scope and financial terms.</div>
+
+    <div class="cover-tags">
+      <div class="cover-tag"><strong>Shopify Basic</strong> Platform</div>
+      <div class="cover-tag"><strong>60+</strong> Karavan SKUs at Launch</div>
+      <div class="cover-tag"><strong>4 Weeks</strong> Kickoff to Live</div>
+      <div class="cover-tag"><strong>GTA</strong> Delivery Zones</div>
+      <div class="cover-tag"><strong>Ontario HST</strong> Configured</div>
+      <div class="cover-tag"><strong>GA4 + Pixel</strong> Analytics</div>
+    </div>
+  </div>
+
+  <!-- Answer cards -->
+  <div class="cover-answers">
+    <div class="cover-answer-card">
+      <div class="cover-answer-q">Total Investment</div>
+      <div class="cover-answer-val teal">USD 1,700</div>
+      <div class="cover-answer-text">One-time implementation fee · Shopify subscription billed separately by Shopify to the client</div>
+    </div>
+    <div class="cover-answer-card">
+      <div class="cover-answer-q">Payment Structure</div>
+      <div class="cover-answer-val">50 / 50</div>
+      <div class="cover-answer-text">USD 850 at kickoff · USD 850 on go-live · No payment before delivery</div>
+    </div>
+  </div>
+
+  <!-- Meta strip -->
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Prepared for</div>
+      <div class="cover-meta-value">KeralaKart / Karavan</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Platform</div>
+      <div class="cover-meta-value teal">Shopify Basic</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Timeline</div>
+      <div class="cover-meta-value">3–4 Weeks</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Date</div>
+      <div class="cover-meta-value">May 2026</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="cover-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="cover-footer-sep"></div>
+    <div class="cover-footer-text">Code-Ox Technologies · www.code-ox.com · May 2026</div>
+    <div class="cover-footer-contact">shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 2 · EXECUTIVE SUMMARY + ABOUT
+═══════════════════════════════════════ -->
+<div class="page">
+<div class="inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-center">KeralaKart.ca — Shopify Implementation Proposal</div>
+    <div class="inner-header-right">May 2026</div>
+  </div>
+  <div class="inner-content">
+
+    <div class="sec-banner">
+      <div class="sec-badge">01</div>
+      <div>
+        <div class="sec-banner-sub">Section 01</div>
+        <div class="sec-banner-title">Executive Summary</div>
+      </div>
+    </div>
+
+    <div class="sec-intro">KeralaKart is an authentic Kerala grocery brand under the Karavan parent company, serving the GTA diaspora community across Canada. Currently operating via WhatsApp orders and Interac payments, the business is taking its first step into professional online commerce. This proposal covers the design, development, and launch of a Shopify e-commerce store — replacing the manual order process and creating a foundation for long-term digital growth.</div>
+
+    <table class="ov-table">
+      <tbody>
+        <tr><td>Client</td><td>KeralaKart / Karavan</td></tr>
+        <tr><td>Project Type</td><td>Shopify E-Commerce Implementation</td></tr>
+        <tr><td>Scope</td><td>Basic e-commerce store — Phase 1</td></tr>
+        <tr><td>Platform</td><td>Shopify Basic</td></tr>
+        <tr><td>Total Investment</td><td><span class="ov-price">USD 1,700</span> &nbsp;— one-time implementation fee</td></tr>
+        <tr><td>Estimated Timeline</td><td>3–4 weeks from project kickoff</td></tr>
+        <tr><td>Prepared by</td><td>Code-Ox Technologies &nbsp;·&nbsp; www.code-ox.com</td></tr>
+      </tbody>
+    </table>
+
+    <div class="stats-row">
+      <div class="stats-item">
+        <div class="stats-num"><span class="teal">1,700</span></div>
+        <div class="stats-label">USD total fee</div>
+        <div class="stats-sub">One-time, all-in</div>
+      </div>
+      <div class="stats-item">
+        <div class="stats-num"><span class="teal">4</span> wk</div>
+        <div class="stats-label">Kickoff to live</div>
+        <div class="stats-sub">Firm timeline</div>
+      </div>
+      <div class="stats-item">
+        <div class="stats-num"><span class="teal">60</span>+</div>
+        <div class="stats-label">Karavan SKUs</div>
+        <div class="stats-sub">At launch</div>
+      </div>
+      <div class="stats-item">
+        <div class="stats-num"><span class="teal">50</span>/50</div>
+        <div class="stats-label">Payment split</div>
+        <div class="stats-sub">Kickoff + go-live</div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="sec-banner">
+      <div class="sec-badge">02</div>
+      <div>
+        <div class="sec-banner-sub">Section 02</div>
+        <div class="sec-banner-title">About Code-Ox Technologies</div>
+      </div>
+    </div>
+
+    <div class="sec-intro">Code-Ox Technologies is a software development and digital transformation company with operations in India, Kuwait, Saudi Arabia, and the UAE. We specialise in Shopify e-commerce builds, Odoo ERP implementations, custom mobile applications, and AI-powered business tools.</div>
+
+    <div class="about-grid">
+      <div class="about-item">
+        <div class="about-item-label">Headquarters</div>
+        <div class="about-item-val">India · GCC regional operations</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-label">Team Size</div>
+        <div class="about-item-val">15+ engineers, designers & architects</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-label">Specialisations</div>
+        <div class="about-item-val">Shopify · Odoo ERP · Flutter · Node.js · AWS</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-label">Clients</div>
+        <div class="about-item-val">SMEs & enterprises — GCC, India, Canada, Ireland</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-label">Shopify Experience</div>
+        <div class="about-item-val">D2C storefronts · Food & grocery · Ethnic retail</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-label">Contact</div>
+        <div class="about-item-val">shabeeb.k@code-ox.com<br>+966 535 716 437</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;·&nbsp; www.code-ox.com</div>
+
+    <div class="inner-footer-page">2 / 7</div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 3 · PROJECT UNDERSTANDING
+═══════════════════════════════════════ -->
+<div class="page">
+<div class="inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-center">KeralaKart.ca — Shopify Implementation Proposal</div>
+    <div class="inner-header-right">May 2026</div>
+  </div>
+  <div class="inner-content">
+
+    <div class="sec-banner">
+      <div class="sec-badge">03</div>
+      <div>
+        <div class="sec-banner-sub">Section 03</div>
+        <div class="sec-banner-title">Project Understanding</div>
+      </div>
+    </div>
+
+    <div class="sub-label">3.1 Current Situation</div>
+    <div class="sec-intro">KeralaKart currently receives orders via WhatsApp, collects payments via Interac e-Transfer, and handles dispatch and follow-up manually. This process has validated customer demand, but it cannot scale and creates unnecessary operational load on the team.</div>
+
+    <div class="sub-label">3.2 What This Project Delivers vs. What's Out of Scope</div>
+    <div class="two-col">
+      <div class="yn-card yes">
+        <div class="yn-head">✓ Phase 1 — Included</div>
+        <div class="yn-item"><span class="yi">✅</span>Professional online store at <strong>keralakart.ca</strong> — browse, cart, checkout independently</div>
+        <div class="yn-item"><span class="yi">✅</span>Shopify Payments — Apple Pay, Google Pay, Shop Pay, credit/debit</div>
+        <div class="yn-item"><span class="yi">✅</span>Up to 60 Karavan SKUs — organised, searchable, with full product data</div>
+        <div class="yn-item"><span class="yi">✅</span>Automated order confirmation & shipping notifications</div>
+        <div class="yn-item"><span class="yi">✅</span>GTA shipping zones + Ontario HST correctly configured</div>
+        <div class="yn-item"><span class="yi">✅</span>Clean admin panel for orders, stock, and product management</div>
+        <div class="yn-item"><span class="yi">✅</span>Admin training + fulfilment SOP document</div>
+      </div>
+      <div class="yn-card no">
+        <div class="yn-head">✕ Out of Scope — Phase 1</div>
+        <div class="yn-item"><span class="yi">❌</span>Mobile app (iOS or Android) — available in Phase 2</div>
+        <div class="yn-item"><span class="yi">❌</span>Klaviyo advanced email/SMS automation flows</div>
+        <div class="yn-item"><span class="yi">❌</span>WhatsApp Business API integration (WATI / Interakt)</div>
+        <div class="yn-item"><span class="yi">❌</span>QuickBooks Online / accounting integration (Synder)</div>
+        <div class="yn-item"><span class="yi">❌</span>Custom theme development — premium theme branded instead</div>
+        <div class="yn-item"><span class="yi">❌</span>Ongoing maintenance retainer — available separately</div>
+      </div>
+    </div>
+
+    <div class="note-box teal">
+      <div class="note-label">Future Growth Path</div>
+      <p>This Phase 1 store is intentionally designed as a launchpad. When KeralaKart is ready to scale — with a mobile app, marketing automation, or a full Odoo ERP backend — Code-Ox will be ready to take the next step. <strong>No rebuild required.</strong></p>
+    </div>
+
+    <!-- Scope starts -->
+    <div class="sec-banner" style="margin-top:14px">
+      <div class="sec-badge">04</div>
+      <div>
+        <div class="sec-banner-sub">Section 04</div>
+        <div class="sec-banner-title">Scope of Work — 4.1 Store Setup & Configuration</div>
+      </div>
+    </div>
+
+    <div class="scope-grid">
+      <div class="scope-card">
+        <div class="scope-card-head"><span class="scope-card-icon">🏗️</span><div><div class="scope-card-title">Shopify & Domain Setup</div></div></div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Shopify Basic plan activation and account setup</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>keralakart.ca domain connected to Shopify</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>xkart.ca domain registered and protected</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Premium theme installed — Impulse or Dawn</div>
+      </div>
+      <div class="scope-card">
+        <div class="scope-card-head"><span class="scope-card-icon">🎨</span><div><div class="scope-card-title">Brand Customisation</div></div></div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>KeralaKart brand palette, logo, and fonts applied</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Homepage layout configured</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Navigation menus: header, footer, mobile</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>About, Contact, Shipping, and Refund Policy pages</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;·&nbsp; www.code-ox.com</div>
+
+    <div class="inner-footer-page">3 / 7</div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 4 · SCOPE CONTINUED
+═══════════════════════════════════════ -->
+<div class="page">
+<div class="inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-center">KeralaKart.ca — Shopify Implementation Proposal</div>
+    <div class="inner-header-right">May 2026</div>
+  </div>
+  <div class="inner-content">
+
+    <div class="sub-label">4.2 Payments, Taxes & Shipping</div>
+    <div class="scope-grid" style="margin-bottom:14px">
+      <div class="scope-card">
+        <div class="scope-card-head"><span class="scope-card-icon">💳</span><div><div class="scope-card-title">Payment Methods</div></div></div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Shopify Payments enabled and Stripe KYC completed</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Apple Pay, Google Pay, and Shop Pay configured</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Credit and debit card checkout enabled</div>
+      </div>
+      <div class="scope-card">
+        <div class="scope-card-head"><span class="scope-card-icon">🚚</span><div><div class="scope-card-title">Tax & Shipping</div></div></div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Ontario HST with grocery-exempt product tax codes</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>GTA zones: free delivery above CAD 79</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Flat rate CAD 7.99 on orders below CAD 79</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Local pickup option configured (if applicable)</div>
+      </div>
+    </div>
+
+    <div class="sub-label">4.3 Product Catalogue</div>
+    <div class="scope-grid" style="margin-bottom:14px">
+      <div class="scope-card">
+        <div class="scope-card-head"><span class="scope-card-icon">🛒</span><div><div class="scope-card-title">SKU Upload — Up to 60</div></div></div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>English + Malayalam product title per SKU</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Description, price, weight, and product images</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Veg/Non-Veg badge, country of origin, allergen info</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>10 collection categories for diaspora shopping</div>
+      </div>
+      <div class="scope-card">
+        <div class="scope-card-head"><span class="scope-card-icon">🔍</span><div><div class="scope-card-title">Product SEO</div></div></div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Page title and meta description per product</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>URL handle: /products/kerala-matta-rice-5kg</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Image alt text with Kerala keyword per product</div>
+      </div>
+    </div>
+
+    <div class="sub-label">4.4 Analytics Integrations</div>
+    <div class="scope-grid" style="margin-bottom:14px">
+      <div class="scope-card">
+        <div class="scope-card-head"><span class="scope-card-icon">📊</span><div><div class="scope-card-title">Analytics Setup</div></div></div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Google Analytics 4 — traffic, orders, conversion tracking</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Google Search Console — search visibility and indexing</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Facebook Pixel — ready for future paid social campaigns</div>
+      </div>
+      <div class="scope-card">
+        <div class="scope-card-head"><span class="scope-card-icon">📧</span><div><div class="scope-card-title">Branded Emails</div></div></div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Order confirmation email — KeralaKart branded</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Shipping notification email — branded template</div>
+        <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Configured via Shopify Email (native, no extra cost)</div>
+      </div>
+    </div>
+
+    <div class="sub-label">4.5 Admin Training & Handover</div>
+    <div class="scope-card" style="margin-bottom:0">
+      <div class="scope-card-head"><span class="scope-card-icon">🎓</span><div><div class="scope-card-title">Full Admin Walkthrough + SOP Document</div></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+        <div>
+          <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Full Shopify admin walkthrough for the team</div>
+          <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>How to add/edit products and update stock</div>
+        </div>
+        <div>
+          <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>How to process orders and issue refunds</div>
+          <div class="srow"><span class="sdot"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span>Fulfilment SOP + 1 post-launch fix round (7 days)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;·&nbsp; www.code-ox.com</div>
+
+    <div class="inner-footer-page">4 / 7</div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 5 · DELIVERABLES & TIMELINE
+═══════════════════════════════════════ -->
+<div class="page">
+<div class="inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-center">KeralaKart.ca — Shopify Implementation Proposal</div>
+    <div class="inner-header-right">May 2026</div>
+  </div>
+  <div class="inner-content">
+
+    <div class="sec-banner">
+      <div class="sec-badge">05</div>
+      <div>
+        <div class="sec-banner-sub">Section 05</div>
+        <div class="sec-banner-title">Deliverables & Project Timeline</div>
+      </div>
+    </div>
+
+    <div class="sub-label">5.1 All Phase 1 Deliverables</div>
+    <table class="del-table" style="margin-bottom:16px">
+      <thead>
+        <tr>
+          <th>Deliverable</th>
+          <th style="width:70px;text-align:center">Phase</th>
+          <th style="width:55px;text-align:center">✓</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Shopify store live on keralakart.ca</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+        <tr><td>xkart.ca domain registered and protected</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+        <tr><td>Premium Shopify theme installed and branded</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+        <tr><td>Up to 60 SKUs uploaded with full product data</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+        <tr><td>10 product collection categories configured</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+        <tr><td>Payments, Ontario HST, and GTA shipping zones configured</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+        <tr><td>GA4, Google Search Console, and Facebook Pixel</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+        <tr><td>Branded order confirmation & shipping notification emails</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+        <tr><td>Admin training and fulfilment SOP document</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+        <tr><td>Post-launch fixes — 1 round within 7 days of go-live</td><td style="text-align:center">Phase 1</td><td style="text-align:center"><span class="del-check"><svg viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="sub-label">5.2 Project Timeline — 4 Weeks</div>
+    <table class="tl-table">
+      <thead>
+        <tr>
+          <th style="width:55px">Week</th>
+          <th>Activities</th>
+          <th style="width:110px">Milestone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tl-week">Week 1</td>
+          <td>Shopify setup, domain connection, theme install, Shopify Payments, Ontario HST, GTA shipping zones, xkart.ca domain registration</td>
+          <td><span class="tl-badge teal">Store skeleton live</span></td>
+        </tr>
+        <tr>
+          <td class="tl-week">Week 2</td>
+          <td>Brand customisation (colours, logo, fonts, homepage), 10 collection categories created, product upload begins</td>
+          <td><span class="tl-badge teal">Brand live</span></td>
+        </tr>
+        <tr>
+          <td class="tl-week">Week 3</td>
+          <td>Complete 60 SKU upload with full data and SEO, GA4 + Search Console + Facebook Pixel, branded emails, end-to-end test order</td>
+          <td><span class="tl-badge teal">Pre-launch ready</span></td>
+        </tr>
+        <tr>
+          <td class="tl-week">Week 4</td>
+          <td>Go-live, WhatsApp broadcast to existing customers, admin training walkthrough, fulfilment SOP handover</td>
+          <td><span class="tl-badge dark">STORE LIVE</span></td>
+        </tr>
+        <tr>
+          <td class="tl-week">Week 4–5</td>
+          <td>Monitor first orders, post-launch fixes (1 round included within 7 days of go-live)</td>
+          <td><span class="tl-badge gold">Phase 1 complete</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;·&nbsp; www.code-ox.com</div>
+
+    <div class="inner-footer-page">5 / 7</div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 6 · INVESTMENT
+═══════════════════════════════════════ -->
+<div class="page">
+<div class="inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-center">KeralaKart.ca — Shopify Implementation Proposal</div>
+    <div class="inner-header-right">May 2026</div>
+  </div>
+  <div class="inner-content">
+
+    <div class="sec-banner">
+      <div class="sec-badge">06</div>
+      <div>
+        <div class="sec-banner-sub">Section 06</div>
+        <div class="sec-banner-title">Investment</div>
+      </div>
+    </div>
+
+    <div class="sub-label">6.1 Implementation Fee</div>
+    <div class="sec-intro">The following is a one-time project fee covering the full Phase 1 Shopify implementation as scoped above. No hourly billing. No hidden extras.</div>
+
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th style="text-align:right;min-width:140px">Investment (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Shopify store setup, domain configuration, theme installation</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Brand customisation — theme, homepage, colours, logo, fonts</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Product catalogue — up to 60 SKUs with full data entry and SEO</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Payments, Ontario HST, and GTA shipping zone configuration</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Analytics integrations — GA4, Google Search Console, Facebook Pixel</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Branded email templates — order confirmation, shipping notification</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Admin training, fulfilment SOP, and post-launch support (7 days)</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>xkart.ca domain registration and protection</td>
+          <td>—</td>
+        </tr>
+        <tr class="inv-total">
+          <td>Total One-Time Implementation Fee</td>
+          <td><span class="inv-total-price">USD 1,700</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box amber">
+      <div class="note-label">Ongoing Costs — Not Included in This Fee</div>
+      <p><strong>Shopify Basic plan</strong> — billed directly by Shopify (~CAD 79/mo). <strong>Domain renewals</strong> — keralakart.ca and xkart.ca billed by the domain registrar. <strong>Shopify theme</strong> — Dawn is free; Impulse is ~USD 380 one-time (to be confirmed before kickoff). These are third-party costs and are not part of Code-Ox's fee.</p>
+    </div>
+
+    <div class="sub-label">6.2 Payment Terms</div>
+    <div class="pay-grid">
+      <div class="pay-card">
+        <div class="pay-ms">Milestone 1 — Project Kickoff</div>
+        <div class="pay-amount">USD 850</div>
+        <div class="pay-trigger">Due before work begins</div>
+        <div class="pay-detail">50% of the total implementation fee. Initiates the project immediately upon receipt. Code-Ox begins setup within 24 hours of payment confirmation.</div>
+        <span class="pay-pct">50% · Kickoff</span>
+      </div>
+      <div class="pay-card">
+        <div class="pay-ms">Milestone 2 — Store Live</div>
+        <div class="pay-amount">USD 850</div>
+        <div class="pay-trigger">Due on go-live</div>
+        <div class="pay-detail">50% of the total implementation fee. Due when keralakart.ca is live and accepting real customer orders. No payment before delivery.</div>
+        <span class="pay-pct">50% · Go-Live</span>
+      </div>
+    </div>
+
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;·&nbsp; www.code-ox.com</div>
+
+    <div class="inner-footer-page">6 / 7</div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 7 · PHASE 2 & NEXT STEPS
+═══════════════════════════════════════ -->
+<div class="page">
+<div class="inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-center">KeralaKart.ca — Shopify Implementation Proposal</div>
+    <div class="inner-header-right">May 2026</div>
+  </div>
+  <div class="inner-content">
+
+    <div class="sec-banner">
+      <div class="sec-badge">07</div>
+      <div>
+        <div class="sec-banner-sub">Section 07</div>
+        <div class="sec-banner-title">What Is Not Included — And What Comes Next</div>
+      </div>
+    </div>
+
+    <div class="sec-intro">Phase 1 is intentionally scoped as a clean, functional launch. The following are available as Phase 2 and 3 upgrades. No rebuild required — every upgrade layers on top of Phase 1 infrastructure.</div>
+
+    <table class="upg-table" style="margin-bottom:16px">
+      <thead>
+        <tr>
+          <th style="width:26%">Upgrade</th>
+          <th>What It Does</th>
+          <th style="width:65px;text-align:center">Phase</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="upg-name">Mobile App (Vajro)</td>
+          <td>Branded iOS & Android app connected to the Shopify store with push notifications (5× email open rate)</td>
+          <td style="text-align:center"><span class="ph-badge p2">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td class="upg-name">Klaviyo Email Flows</td>
+          <td>Automated email/SMS — abandoned cart, win-back, post-delivery review request, restock alerts</td>
+          <td style="text-align:center"><span class="ph-badge p2">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td class="upg-name">WhatsApp Business API</td>
+          <td>Order updates and broadcast campaigns via WhatsApp through WATI or Interakt</td>
+          <td style="text-align:center"><span class="ph-badge p2">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td class="upg-name">QBO Integration (Synder)</td>
+          <td>Automatic sync of all Shopify orders into QuickBooks Online with correct account mapping and fee reconciliation</td>
+          <td style="text-align:center"><span class="ph-badge p2">Phase 2</span></td>
+        </tr>
+        <tr>
+          <td class="upg-name">Odoo ERP Migration</td>
+          <td>Full migration to Odoo Community — inventory, accounting, CRM, and eCommerce in one unified system</td>
+          <td style="text-align:center"><span class="ph-badge p3">Phase 3</span></td>
+        </tr>
+        <tr>
+          <td class="upg-name">xkart.ca Marketplace</td>
+          <td>Expand to Punjabi, Sri Lankan, Pakistani grocery categories under the xkart.ca multi-ethnic brand</td>
+          <td style="text-align:center"><span class="ph-badge p3">Phase 3</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sec-banner">
+      <div class="sec-badge">08</div>
+      <div>
+        <div class="sec-banner-sub">Section 08</div>
+        <div class="sec-banner-title">Next Steps</div>
+      </div>
+    </div>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div><h5>Sign the engagement agreement</h5><p>Confirm the project start date and sign the engagement agreement to lock in scope and timeline.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div><h5>Pay Milestone 1 — USD 850</h5><p>Initiate the project. Code-Ox begins setup within 24 hours of payment confirmation.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div><h5>Provide brand assets</h5><p>Share logo file (PNG/SVG) and product photography — or confirm availability and timeline.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div><h5>Create or share Shopify account access</h5><p>Create a Shopify account at shopify.com — or share collaborator access if already created.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div><h5>Share existing WhatsApp customer contact list</h5><p>Provide the contact list for the go-live WhatsApp broadcast announcing keralakart.ca.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">6</div>
+        <div><h5>Code-Ox Week 1 kickoff — build begins</h5><p>Store build begins immediately. KeralaKart's first online store will be live within 4 weeks.</p></div>
+      </div>
+    </div>
+
+    <div class="close-block">
+      <h3>Ready to launch <span class="teal">KeralaKart.ca</span>?</h3>
+      <p>Code-Ox will handle everything from setup to handover — so the team can focus on what they do best: authentic Kerala groceries for the GTA diaspora community.</p>
+      <div class="close-contact">
+        <div class="close-contact-item">Website: <a href="https://code-ox.com">www.code-ox.com</a></div>
+        <div class="close-contact-item">Email: <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a></div>
+        <div class="close-contact-item">Phone: <a href="tel:+966535716437">+966 535 716 437</a></div>
+        <div class="close-contact-item" style="margin-left:auto;color:rgba(255,255,255,0.25)">May 2026</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;·&nbsp; www.code-ox.com</div>
+
+    <div class="inner-footer-page">7 / 7</div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

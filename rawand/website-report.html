@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Audit Report — rawand.com.sa</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red: #dc2626;
+  --red-bg: #fef2f2;
+  --red-border: #fecaca;
+  --amber: #b45309;
+  --amber-bg: #fffbeb;
+  --amber-border: #fde68a;
+  --blue: #1d4ed8;
+  --blue-bg: #eff6ff;
+  --blue-border: #bfdbfe;
+  --green: #047857;
+  --green-bg: #f0fdf4;
+  --green-border: #bbf7d0;
+  --slate: #475569;
+  --slate-bg: #f8fafc;
+  --slate-border: #e2e8f0;
+  --text: #0f172a;
+  --text-muted: #1e293b;
+  --text-dim: #64748b;
+  --border: #e2e8f0;
+  --sans: 'Inter', -apple-system, sans-serif;
+}
+
+html, body {
+  background: #fff;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── COVER ── */
+.cover { display: flex; flex-direction: column; page-break-after: always; }
+.cover-top { background: var(--text); color: white; padding: 56px 72px 52px; flex-shrink: 0; }
+.cover-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 18px; }
+.cover-title { font-size: 46px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; color: white; margin-bottom: 10px; }
+.cover-domain { font-size: 18px; font-weight: 500; color: rgba(255,255,255,0.55); }
+.cover-desc { font-size: 13.5px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-top: 20px; max-width: 580px; }
+.cover-critical { margin-top: 40px; padding: 22px 26px; background: rgba(220,38,38,0.12); border: 1px solid rgba(220,38,38,0.3); border-radius: 10px; }
+.cover-critical-title { font-size: 12px; font-weight: 800; color: #f87171; margin-bottom: 12px; letter-spacing: 0.3px; }
+.cover-critical-list { display: flex; flex-direction: column; gap: 7px; }
+.cover-critical-item { font-size: 12.5px; color: rgba(255,255,255,0.8); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+.cover-critical-item::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #f87171; flex-shrink: 0; margin-top: 6px; }
+.cover-bottom { background: var(--slate-bg); padding: 36px 72px; display: flex; flex-direction: column; gap: 20px; }
+.cover-meta-row { display: flex; gap: 48px; margin-bottom: 36px; }
+.cov-meta { flex: 1; }
+.cov-meta-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+.cov-meta-val { font-size: 14px; font-weight: 700; color: var(--text); }
+.cover-summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.cov-stat { background: white; padding: 18px 14px; text-align: center; }
+.cov-stat-num { font-size: 26px; font-weight: 900; letter-spacing: -1px; line-height: 1; }
+.cov-stat-num.red   { color: var(--red); }
+.cov-stat-num.amber { color: #d97706; }
+.cov-stat-num.blue  { color: var(--blue); }
+.cov-stat-num.green { color: var(--green); }
+.cov-stat-num.slate { color: var(--slate); }
+.cov-stat-lbl { font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); margin-top: 6px; }
+
+/* ── CONTENT PAGES ── */
+.page { max-width: 900px; margin: 0 auto; padding: 72px 72px 64px; }
+.section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; page-break-after: avoid; }
+.section-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--border); page-break-after: avoid; }
+
+/* ── AUDIT CATEGORIES ── */
+.audit-cat { margin-bottom: 28px; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; page-break-inside: avoid; }
+.audit-cat-header { display: flex; align-items: center; gap: 16px; padding: 14px 20px; background: var(--slate-bg); border-bottom: 1px solid var(--border); }
+.audit-cat-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.icon-red   { background: var(--red-bg); }
+.icon-amber { background: var(--amber-bg); }
+.icon-blue  { background: var(--blue-bg); }
+.icon-green { background: var(--green-bg); }
+.audit-cat-name { font-size: 14px; font-weight: 700; flex: 1; }
+.audit-score-pill { font-size: 13px; font-weight: 800; padding: 4px 14px; border-radius: 20px; }
+.asp-red   { background: var(--red-bg); color: var(--red); border: 1.5px solid var(--red-border); }
+.asp-amber { background: var(--amber-bg); color: var(--amber); border: 1.5px solid var(--amber-border); }
+.asp-blue  { background: var(--blue-bg); color: var(--blue); border: 1.5px solid var(--blue-border); }
+.asp-green { background: var(--green-bg); color: var(--green); border: 1.5px solid var(--green-border); }
+.audit-bar { height: 4px; background: var(--border); }
+.audit-bar-fill { height: 100%; }
+.fill-red   { background: var(--red); }
+.fill-amber { background: #d97706; }
+.fill-blue  { background: var(--blue); }
+.fill-green { background: var(--green); }
+
+.audit-body { padding: 16px 20px; }
+.finding-row { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+.finding-row:last-child { margin-bottom: 0; }
+.finding-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.dot-good    { background: var(--green); }
+.dot-warn    { background: #d97706; }
+.dot-bad     { background: var(--red); }
+.dot-info    { background: var(--blue); }
+.finding-text { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; flex: 1; }
+.finding-text strong { color: var(--text); font-weight: 600; }
+
+/* ── CHECK TABLE ── */
+.check-table { width: 100%; border-collapse: collapse; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.check-table th { background: var(--slate-bg); padding: 9px 16px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); text-align: left; }
+.check-table td { padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 12.5px; vertical-align: middle; }
+.check-table tr:last-child td { border-bottom: none; }
+.check-table tr:nth-child(even) td { background: #fafafa; }
+.chk { width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+.chk-y { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.chk-n { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.chk-p { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+
+/* ── OPPORTUNITY CARDS ── */
+.opp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.opp-card { border: 1.5px solid var(--border); border-radius: 10px; padding: 16px 18px; page-break-inside: avoid; }
+.opp-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.opp-priority { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 20px; letter-spacing: 0.5px; }
+.opp-p1 { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.opp-p2 { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.opp-p3 { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+.opp-title { font-size: 13px; font-weight: 700; }
+.opp-body { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+/* ── INFO BOXES ── */
+.info-box { background: var(--blue-bg); border: 1.5px solid var(--blue-border); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 12.5px; color: #1e40af; line-height: 1.6; }
+.warn-box { background: var(--amber-bg); border: 1.5px solid var(--amber-border); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 12.5px; color: #92400e; line-height: 1.6; }
+.ok-box   { background: var(--green-bg); border: 1.5px solid var(--green-border); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 12.5px; color: #166534; line-height: 1.6; }
+
+/* ── PAGE BREAKDOWN GRID ── */
+.page-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.page-card { border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+.page-card-head { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 700; background: var(--slate-bg); }
+.page-card-url  { padding: 6px 14px; font-size: 10.5px; color: var(--blue); background: white; border-bottom: 1px solid var(--border); font-family: monospace; }
+.page-card-body { padding: 10px 14px; }
+.pcb-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px solid rgba(0,0,0,0.04); font-size: 11.5px; }
+.pcb-row:last-child { border-bottom: none; }
+.pcb-label { color: var(--text-dim); }
+.pcb-val { font-weight: 600; }
+
+/* ── FOOTER ── */
+.footer { max-width: 900px; margin: 0 auto; padding: 24px 72px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; color: var(--text-dim); font-size: 11px; }
+
+@media print {
+  .cover { page-break-after: always; }
+  .page { page-break-after: always; }
+  .page:last-of-type { page-break-after: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     COVER PAGE
+══════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-label">Prepared by Shab.co · Confidential</div>
+    <div class="cover-title">Website Audit Report</div>
+    <div class="cover-domain">rawand.com.sa — Rawand Trading Company</div>
+    <div class="cover-desc">A comprehensive audit of the Rawand Trading Company website covering user experience, conversion rate optimization, content structure, technical performance, and competitive positioning. Based on live site inspection and screenshots captured May 2026.</div>
+
+    <div class="cover-critical">
+      <div class="cover-critical-title">TOP OPPORTUNITIES IDENTIFIED</div>
+      <div class="cover-critical-list">
+        <div class="cover-critical-item">Maintenance Services page has only 1 product listed — a high-value recurring revenue service that is massively undersold digitally</div>
+        <div class="cover-critical-item">No cross-sell or upsell logic — printer buyers are not shown compatible toners; ink buyers are not shown compatible printers</div>
+        <div class="cover-critical-item">Google Ads are running but product listing ads (Google Shopping) and Performance Max are not visible — significant revenue gap</div>
+        <div class="cover-critical-item">Social media icons in footer confirmed (Instagram, X, Snapchat, TikTok, Facebook) but no content strategy linked to them</div>
+        <div class="cover-critical-item">WhatsApp CTA visible but no WhatsApp Business API automation — highest-converting channel in Saudi Arabia running manually</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-meta-row">
+      <div class="cov-meta">
+        <div class="cov-meta-lbl">Client</div>
+        <div class="cov-meta-val">Rawand Trading Company</div>
+      </div>
+      <div class="cov-meta">
+        <div class="cov-meta-lbl">Website</div>
+        <div class="cov-meta-val">rawand.com.sa</div>
+      </div>
+      <div class="cov-meta">
+        <div class="cov-meta-lbl">Platform</div>
+        <div class="cov-meta-val">Zid E-Commerce</div>
+      </div>
+      <div class="cov-meta">
+        <div class="cov-meta-lbl">Location</div>
+        <div class="cov-meta-val">Al-Hawari, Riyadh, KSA</div>
+      </div>
+      <div class="cov-meta">
+        <div class="cov-meta-lbl">Audit Date</div>
+        <div class="cov-meta-val">May 2026</div>
+      </div>
+    </div>
+    <div class="cover-summary">
+      <div class="cov-stat">
+        <div class="cov-stat-num green">✓</div>
+        <div class="cov-stat-lbl">Google Ads Running</div>
+      </div>
+      <div class="cov-stat">
+        <div class="cov-stat-num green">5</div>
+        <div class="cov-stat-lbl">Social Platforms</div>
+      </div>
+      <div class="cov-stat">
+        <div class="cov-stat-num amber">350+</div>
+        <div class="cov-stat-lbl">Products</div>
+      </div>
+      <div class="cov-stat">
+        <div class="cov-stat-num red">0</div>
+        <div class="cov-stat-lbl">WhatsApp API</div>
+      </div>
+      <div class="cov-stat">
+        <div class="cov-stat-num red">1</div>
+        <div class="cov-stat-lbl">Maintenance Products</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — WHAT WE OBSERVED
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-eyebrow">Live Observations</div>
+  <div class="section-title">What We Found — Page by Page</div>
+
+  <div class="ok-box">
+    <strong>Positive Correction from Live Screenshots:</strong> Rawand IS currently running Google Ads and appears as the #1 sponsored result for "hp printer laserjet" in Saudi Arabia. The website also features customer reviews on the homepage, all 5 major social platforms, and a strong Eid Al-Adha promotional campaign — all stronger than initially estimated.
+  </div>
+
+  <!-- Homepage -->
+  <div class="audit-cat">
+    <div class="audit-cat-header">
+      <div class="audit-cat-icon icon-green">🏠</div>
+      <div class="audit-cat-name">Homepage — rawand.com.sa/en-sa/</div>
+      <div class="audit-score-pill asp-blue">6.5/10</div>
+    </div>
+    <div class="audit-bar"><div class="audit-bar-fill fill-blue" style="width:65%"></div></div>
+    <div class="audit-body">
+      <div class="finding-row">
+        <div class="finding-dot dot-good"></div>
+        <div class="finding-text"><strong>Strong visual identity:</strong> Red/white brand is bold, consistent, and professional. Eid Al-Adha seasonal banner is relevant and well-designed — shows active brand management.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-good"></div>
+        <div class="finding-text"><strong>Clear navigation:</strong> All Products, Maintenance Services, Offers & Discounts, Office Equipment, Inks, Office Furniture — logically structured for the buyer's journey.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-good"></div>
+        <div class="finding-text"><strong>Customer reviews section:</strong> Homepage testimonials carousel with 3–5 star Arabic reviews from real customers — excellent social proof. Includes جمعية عمارة بيوت الله (a housing association) confirming B2B buyers.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-good"></div>
+        <div class="finding-text"><strong>Delivery banner:</strong> "خدمة توصيل سريعة — شحن لجميع أنحاء المملكة" prominently shown with branded delivery vehicle imagery — builds purchase confidence.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-good"></div>
+        <div class="finding-text"><strong>"Why choose Rawand" section:</strong> Text copy addressing "Wide range of printers and inks" and "Guaranteed quality at competitive prices" — good for SEO and conversion.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-warn"></div>
+        <div class="finding-text"><strong>Hero banner text not indexed:</strong> The large Arabic Eid text is embedded in an image. Search engines cannot read it. There is no visible H1 tag or text-based headline above the fold.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-warn"></div>
+        <div class="finding-text"><strong>Category icons too small:</strong> The 5 category icons (Scanner, Printers, Copier Machines, Plotter, Inks) are compact tiles. On mobile, these may be hard to tap accurately and don't communicate product value visually.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-bad"></div>
+        <div class="finding-text"><strong>No searchable keyword copy:</strong> "Riyadh", "Saudi Arabia", and brand names (HP, Canon, Xerox) do not appear in any indexable text above the fold — only in product cards below.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Pages -->
+  <div class="audit-cat">
+    <div class="audit-cat-header">
+      <div class="audit-cat-icon icon-amber">📦</div>
+      <div class="audit-cat-name">Product Pages — 350+ Products</div>
+      <div class="audit-score-pill asp-amber">5/10</div>
+    </div>
+    <div class="audit-bar"><div class="audit-bar-fill fill-amber" style="width:50%"></div></div>
+    <div class="audit-body">
+      <div class="finding-row">
+        <div class="finding-dot dot-good"></div>
+        <div class="finding-text"><strong>Pricing clear with discounts:</strong> Original price crossed out with discounted price shown — standard e-commerce best practice. Discount percentages (4.56%, 11.34%) displayed as badges.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-good"></div>
+        <div class="finding-text"><strong>Add to cart button:</strong> Prominent, red CTA button consistent with brand. "Out of stock — notify me" functionality observed.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-good"></div>
+        <div class="finding-text"><strong>Product badges:</strong> "Special Product", "Newly arrived", "Selling fast", "Free shipping" — good urgency and trust signals.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-bad"></div>
+        <div class="finding-text"><strong>No cross-sell / related products:</strong> A customer buying HP toner is not shown the compatible HP printer. A customer buying a printer is not prompted to add toner. This is leaving significant average order value on the table.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-bad"></div>
+        <div class="finding-text"><strong>Thin product descriptions:</strong> Manufacturer spec sheets only. Google cannot differentiate Rawand's product pages from Jarir's or Amazon's for the same product. No unique copy.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-bad"></div>
+        <div class="finding-text"><strong>No product reviews on individual pages:</strong> While the homepage shows testimonials, individual product pages show "لا يوجد تقيمات لهذا المنتج" (no reviews). Google Shopping ranking is affected.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-warn"></div>
+        <div class="finding-text"><strong>Some products out of stock:</strong> Out-of-stock products remain visible and rank-eligible but cannot convert. Consider removing from navigation or adding "back in stock" prioritization.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Maintenance Page -->
+  <div class="audit-cat">
+    <div class="audit-cat-header">
+      <div class="audit-cat-icon icon-red">🔧</div>
+      <div class="audit-cat-name">Maintenance Services Page — rawand.com.sa/en/categories/1518604/</div>
+      <div class="audit-score-pill asp-red">3/10</div>
+    </div>
+    <div class="audit-bar"><div class="audit-bar-fill fill-red" style="width:30%"></div></div>
+    <div class="audit-body">
+      <div class="finding-row">
+        <div class="finding-dot dot-good"></div>
+        <div class="finding-text"><strong>Category description exists:</strong> "Professional maintenance of copiers and printers, where a specialized technician is shown inspecting and repairing..." — good start, but needs expansion.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-bad"></div>
+        <div class="finding-text"><strong>Only 1 product listed at SAR 230:</strong> The maintenance service category — which is one of the highest-value B2B offerings — is represented by a single generic listing. This is Rawand's biggest differentiator and it's completely undersold.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-bad"></div>
+        <div class="finding-text"><strong>No service tiers or packages:</strong> No annual contract, no per-visit pricing, no brand-specific maintenance (HP maintenance vs Xerox maintenance), no response time SLA shown.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-bad"></div>
+        <div class="finding-text"><strong>Not rankable:</strong> Single product page cannot rank for "printer repair Riyadh" or "printer maintenance service Saudi Arabia" without supporting content, FAQ, and multiple service listings.</div>
+      </div>
+      <div class="finding-row">
+        <div class="finding-dot dot-warn"></div>
+        <div class="finding-text"><strong>No contact form or quote request:</strong> Enterprise buyers wanting maintenance contracts need a dedicated inquiry form. "Add to cart" is not the right CTA for a maintenance contract — it should be "Request a Quote" or "Book a Technician".</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — TECHNICAL & UX AUDIT
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-eyebrow">Technical & UX Review</div>
+  <div class="section-title">Website Health Checklist</div>
+
+  <table class="check-table">
+    <thead>
+      <tr>
+        <th>Feature / Element</th>
+        <th style="text-align:center">Status</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>HTTPS / Secure</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>SSL active on rawand.com.sa</td>
+      </tr>
+      <tr>
+        <td><strong>Mobile Responsive</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>Zid platform is mobile-optimized by default</td>
+      </tr>
+      <tr>
+        <td><strong>CDN (Content Delivery)</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>media.zid.store CDN for product images</td>
+      </tr>
+      <tr>
+        <td><strong>Image Lazy Loading</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>data-srcset lazy loading on product images</td>
+      </tr>
+      <tr>
+        <td><strong>GTM / Analytics</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>Google Tag Manager installed</td>
+      </tr>
+      <tr>
+        <td><strong>Meta Pixel (Facebook)</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>Facebook/Instagram Pixel active</td>
+      </tr>
+      <tr>
+        <td><strong>TikTok Pixel</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>TikTok Pixel installed and active</td>
+      </tr>
+      <tr>
+        <td><strong>Snapchat Pixel</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>Snapchat conversion tracking active</td>
+      </tr>
+      <tr>
+        <td><strong>Google Ads (Search)</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>Confirmed: #1 sponsored result for "hp printer laserjet"</td>
+      </tr>
+      <tr>
+        <td><strong>WhatsApp CTA</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>WhatsApp floating button on all pages</td>
+      </tr>
+      <tr>
+        <td><strong>Payment Methods</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>STCPay, Mada, Visa, MC, Apple Pay, Tamara, Tabby</td>
+      </tr>
+      <tr>
+        <td><strong>Buy Now Pay Later</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>Tamara and Tabby BNPL integrated</td>
+      </tr>
+      <tr>
+        <td><strong>Bilingual (EN/AR)</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>/en-sa/ and /ar-sa/ routes active</td>
+      </tr>
+      <tr>
+        <td><strong>Social Media Links</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>Instagram, X, Snapchat, TikTok, Facebook in footer</td>
+      </tr>
+      <tr>
+        <td><strong>VAT Registration</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>VAT #311502085600003 shown in footer</td>
+      </tr>
+      <tr>
+        <td><strong>Commercial Registration</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>CR #1010180244 shown in footer</td>
+      </tr>
+      <tr>
+        <td><strong>Sitemap</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td>3-part XML sitemap (products/categories/pages)</td>
+      </tr>
+      <tr>
+        <td><strong>Google Shopping / PLA</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td>Not visible in product listing ads — major revenue gap</td>
+      </tr>
+      <tr>
+        <td><strong>WhatsApp Business API</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td>Manual WhatsApp only — no automation or broadcast</td>
+      </tr>
+      <tr>
+        <td><strong>Hreflang Tags</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td>Missing — EN/AR versions not linked for Google</td>
+      </tr>
+      <tr>
+        <td><strong>Canonical Tags</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td>Missing on all pages</td>
+      </tr>
+      <tr>
+        <td><strong>Product Reviews (pages)</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td>Homepage has testimonials but product pages show zero reviews</td>
+      </tr>
+      <tr>
+        <td><strong>Cross-sell / Related Products</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td>No upsell or cross-sell on any product page</td>
+      </tr>
+      <tr>
+        <td><strong>Blog Content Hub</strong></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+        <td>Blog exists (linked in footer) but minimal — 5 articles, outdated 2023</td>
+      </tr>
+      <tr>
+        <td><strong>Google Business Profile</strong></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+        <td>Likely exists but optimization level unknown</td>
+      </tr>
+      <tr>
+        <td><strong>Open Graph Tags</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td>Missing — social sharing shows no preview image/title</td>
+      </tr>
+      <tr>
+        <td><strong>Product Schema Markup</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td>LocalBusiness schema only; no Product schema on product pages</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px">
+    <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px;text-align:center">
+      <div style="font-size:28px;font-weight:900;color:var(--green);line-height:1">17</div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-top:4px">Passing Checks</div>
+    </div>
+    <div style="background:var(--red-bg);border:1.5px solid var(--red-border);border-radius:10px;padding:14px 16px;text-align:center">
+      <div style="font-size:28px;font-weight:900;color:var(--red);line-height:1">8</div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin-top:4px">Failing Checks</div>
+    </div>
+    <div style="background:var(--amber-bg);border:1.5px solid var(--amber-border);border-radius:10px;padding:14px 16px;text-align:center">
+      <div style="font-size:28px;font-weight:900;color:var(--amber);line-height:1">3</div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--amber);margin-top:4px">Partial / Unknown</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — COMPETITOR COMPARISON
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-eyebrow">Competitive Analysis</div>
+  <div class="section-title">Rawand vs. Key Competitors</div>
+
+  <div class="info-box">
+    From live Google search, Rawand appears as the <strong>#1 sponsored result</strong> for "hp printer laserjet" — a strong signal that Google Ads are working. The table below compares Rawand against its <strong>direct local competitors in the Riyadh office equipment market</strong> — companies operating in the same niche, targeting the same B2B buyers.
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+    <div style="background:var(--slate-bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px">Competitor 1</div>
+      <div style="font-size:14px;font-weight:800;color:var(--text)">Jarir Bookstore</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:2px">jarir.com · National chain, 60+ stores</div>
+      <div style="margin-top:8px;font-size:11.5px;color:var(--text-dim)"><strong>Strength:</strong> Brand trust, loyalty program, omnichannel presence across all KSA cities.</div>
+      <div style="margin-top:4px;font-size:11.5px;color:var(--text-dim)"><strong>Weakness:</strong> Generalist — not an office equipment specialist. No maintenance service.</div>
+    </div>
+    <div style="background:var(--slate-bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px">Competitor 2</div>
+      <div style="font-size:14px;font-weight:800;color:var(--text)">Azra IT Systems</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:2px">azrait.sa · Riyadh-based IT supplier</div>
+      <div style="margin-top:8px;font-size:11.5px;color:var(--text-dim)"><strong>Strength:</strong> Ranking organically for "printer supplier Riyadh". HP, Ricoh, Kyocera authorized reseller.</div>
+      <div style="margin-top:4px;font-size:11.5px;color:var(--text-dim)"><strong>Weakness:</strong> B2B wholesale only. Weak consumer UX. No BNPL. Limited digital marketing.</div>
+    </div>
+    <div style="background:var(--slate-bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px">Competitor 3</div>
+      <div style="font-size:14px;font-weight:800;color:var(--text)">Al Khorayef Printing</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:2px">alkhorayef.com · Est. 1970, multi-city</div>
+      <div style="margin-top:8px;font-size:11.5px;color:var(--text-dim)"><strong>Strength:</strong> Long-established legacy brand. Branches in Riyadh, Jeddah, Dammam. Enterprise relationships.</div>
+      <div style="margin-top:4px;font-size:11.5px;color:var(--text-dim)"><strong>Weakness:</strong> Old brand with a very weak digital presence. Outdated website, no e-commerce UX.</div>
+    </div>
+  </div>
+
+  <table class="check-table" style="margin-bottom:32px">
+    <thead>
+      <tr>
+        <th>Feature / Capability</th>
+        <th style="text-align:center">Rawand</th>
+        <th style="text-align:center">Jarir</th>
+        <th style="text-align:center">Azra IT</th>
+        <th style="text-align:center">Al Khorayef</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Google Search Ads</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+      </tr>
+      <tr>
+        <td><strong>Google Shopping (PLAs)</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+      </tr>
+      <tr>
+        <td><strong>Online E-Commerce Store</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+      </tr>
+      <tr>
+        <td><strong>Tamara / BNPL Payments</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+      </tr>
+      <tr>
+        <td><strong>Printer &amp; Copier Maintenance</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+      </tr>
+      <tr>
+        <td><strong>Office Equipment Specialist</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+      </tr>
+      <tr>
+        <td><strong>Bilingual Website EN/AR</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+      </tr>
+      <tr>
+        <td><strong>All Major Ink Brands (10+)</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+      </tr>
+      <tr>
+        <td><strong>Office Furniture</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+      </tr>
+      <tr>
+        <td><strong>Riyadh Local Presence</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+      </tr>
+      <tr>
+        <td><strong>WhatsApp Business (API)</strong></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+      </tr>
+      <tr>
+        <td><strong>SEO Content Hub / Blog</strong></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+      </tr>
+      <tr>
+        <td><strong>Product Reviews on Site</strong></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+      </tr>
+      <tr>
+        <td><strong>Plotter / Large Format</strong></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+        <td style="text-align:center"><span class="chk chk-n">✗</span></td>
+        <td style="text-align:center"><span class="chk chk-p">~</span></td>
+        <td style="text-align:center"><span class="chk chk-y">✓</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="ok-box">
+    <strong>Rawand's Position:</strong> Among direct local competitors, Rawand is the only one combining a full e-commerce store + BNPL payments + office furniture + maintenance services. Azra IT and Al Khorayef have the service expertise but lack Rawand's digital UX and payment flexibility. Jarir has the scale but is not an office equipment specialist. <strong>Rawand's gap to close is digital visibility — the product offering already wins.</strong>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 4 — TOP OPPORTUNITIES
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-eyebrow">Growth Opportunities</div>
+  <div class="section-title">Highest-Impact Improvements</div>
+
+  <div class="opp-grid">
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p1">Urgent</div>
+        <div class="opp-title">Launch Google Shopping Campaigns</div>
+      </div>
+      <div class="opp-body">Rawand shows in text ads but NOT in Google Shopping product panels (where Jarir, Amazon, HP Store appear with product images and SAR prices). Google Shopping drives 85% of Google Ads clicks for e-commerce in 2025. Set up Google Merchant Center and submit all 350 products immediately.</div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p1">Urgent</div>
+        <div class="opp-title">WhatsApp Business API Automation</div>
+      </div>
+      <div class="opp-body">WhatsApp is already the most-used contact method on the site. Upgrading to WhatsApp Business API enables: automated quote responses, reorder reminders for ink/toner buyers (every 60–90 days), cart abandonment recovery, and broadcast promotions. 95% open rate vs 2–5% for email.</div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p1">Urgent</div>
+        <div class="opp-title">Expand Maintenance Services Page</div>
+      </div>
+      <div class="opp-body">Currently 1 product at SAR 230. Should be: Annual maintenance contracts (SAR X,XXX/year), per-visit emergency service, brand-specific (HP, Canon, Xerox, Sharp) maintenance packages, multi-machine fleet contracts. Add a "Request a Quote" form. This is Rawand's highest-margin, lowest-competition offering.</div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p1">Urgent</div>
+        <div class="opp-title">Add Cross-Sell to All Product Pages</div>
+      </div>
+      <div class="opp-body">Printer buyers should see compatible toner. Toner buyers should see compatible printers. Copier buyers should see maintenance service. This single change can increase average order value by 20–35%. Zid supports "related products" functionality — configure it for the top 50 SKUs first.</div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p2">High</div>
+        <div class="opp-title">Product Review Collection Campaign</div>
+      </div>
+      <div class="opp-body">Homepage testimonials are great but product pages show zero reviews. WhatsApp all past customers asking for product reviews. Offer a small incentive (5% off next order). Target 100 product reviews in 30 days. This improves Google Shopping ranking, conversion rate, and trust.</div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p2">High</div>
+        <div class="opp-title">Open Graph Tags for Social Sharing</div>
+      </div>
+      <div class="opp-body">When a Rawand product is shared on WhatsApp or Instagram, it shows a blank URL with no image or description. Adding OG meta tags means every shared link shows a product image, name, and price — turning every share into a branded ad. Free to implement, takes 1 day.</div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p2">High</div>
+        <div class="opp-title">Activate Snapchat & TikTok Ads</div>
+      </div>
+      <div class="opp-body">Snapchat (90.7% Saudi penetration) and TikTok (34M+ Saudi users) pixels are installed but no campaigns are running. This is ad spend left on the floor. Awareness campaigns targeting procurement managers and office administrators can fill the top of funnel at low CPM (SAR 10–25).</div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p2">High</div>
+        <div class="opp-title">LinkedIn B2B Lead Generation</div>
+      </div>
+      <div class="opp-body">No LinkedIn presence found for Rawand. 7.1 million Saudi LinkedIn users. Create company page + run Lead Gen Form campaigns targeting Office Managers, Procurement Officers, IT Managers at 50–500 employee companies in Riyadh. "Request a quote for your office fleet" — direct B2B pipeline.</div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p3">Medium</div>
+        <div class="opp-title">Ink/Toner Subscription Model</div>
+      </div>
+      <div class="opp-body">Ink and toner are consumables with predictable reorder cycles (60–90 days). Launch a "Rawand Subscription" — monthly toner delivery for offices with 5+ printers. Reduces customer effort, guarantees Rawand recurring revenue, and creates extreme switching costs. HP does this globally with HP Instant Ink.</div>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-card-head">
+        <div class="opp-priority opp-p3">Medium</div>
+        <div class="opp-title">Seasonal Campaign Infrastructure</div>
+      </div>
+      <div class="opp-body">The Eid Al-Adha banner shows active seasonal marketing. This should be systematized: Ramadan (March/April), Saudi National Day (September), Government fiscal year-end (December), Back to office (September), New Year procurement. Automated email + WhatsApp sequences for each window.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 5 — SUMMARY & NEXT STEPS
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-eyebrow">Summary</div>
+  <div class="section-title">Overall Website Assessment</div>
+
+  <p style="font-size:13.5px;color:var(--text-muted);line-height:1.8;margin-bottom:24px">
+    Rawand Trading Company has built a significantly stronger digital foundation than most Saudi B2B office equipment suppliers. The website is live, bilingual, tracking-enabled, paid-advertising-active, and offers a payment stack that rivals major retailers (including Tamara/Tabby BNPL). The brand identity is strong and consistent.
+  </p>
+  <p style="font-size:13.5px;color:var(--text-muted);line-height:1.8;margin-bottom:32px">
+    The gap is not in the foundation — it is in <strong>activation</strong>. Every channel pixel is installed but most channels have no campaigns. The maintenance service is Rawand's highest-value differentiator and it has essentially one product listed. Google Shopping is absent despite Google Search Ads running. WhatsApp has 95% open rates and Rawand uses it manually.
+  </p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px">
+    <div>
+      <div class="section-eyebrow" style="margin-bottom:12px">What Is Already Working ✓</div>
+      <div style="border:1.5px solid var(--green-border);border-radius:10px;overflow:hidden">
+        <div style="padding:9px 16px;border-bottom:1px solid var(--green-border);font-size:12.5px;background:white;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--green);font-weight:700">✓</span> Google Search Ads — #1 for key queries</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--green-border);font-size:12.5px;background:#f9fef9;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--green);font-weight:700">✓</span> All tracking pixels installed (FB, TikTok, Snap)</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--green-border);font-size:12.5px;background:white;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--green);font-weight:700">✓</span> Tamara + Tabby BNPL — unique advantage</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--green-border);font-size:12.5px;background:#f9fef9;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--green);font-weight:700">✓</span> 5 social platform presence (IG, X, Snap, TikTok, FB)</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--green-border);font-size:12.5px;background:white;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--green);font-weight:700">✓</span> Homepage customer reviews carousel</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--green-border);font-size:12.5px;background:#f9fef9;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--green);font-weight:700">✓</span> Bilingual EN/AR with full product catalog</div>
+        <div style="padding:9px 16px;font-size:12.5px;background:white;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--green);font-weight:700">✓</span> Maintenance services as unique differentiator</div>
+      </div>
+    </div>
+    <div>
+      <div class="section-eyebrow" style="margin-bottom:12px">What Needs Activation ✗</div>
+      <div style="border:1.5px solid var(--red-border);border-radius:10px;overflow:hidden">
+        <div style="padding:9px 16px;border-bottom:1px solid var(--red-border);font-size:12.5px;background:white;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--red);font-weight:700">✗</span> Google Shopping — not appearing in PLAs</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--red-border);font-size:12.5px;background:#fef9f9;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--red);font-weight:700">✗</span> WhatsApp Business API — running manually</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--red-border);font-size:12.5px;background:white;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--red);font-weight:700">✗</span> Snapchat campaigns — pixel installed, nothing running</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--red-border);font-size:12.5px;background:#fef9f9;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--red);font-weight:700">✗</span> TikTok campaigns — pixel installed, nothing running</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--red-border);font-size:12.5px;background:white;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--red);font-weight:700">✗</span> LinkedIn — no company presence found</div>
+        <div style="padding:9px 16px;border-bottom:1px solid var(--red-border);font-size:12.5px;background:#fef9f9;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--red);font-weight:700">✗</span> Cross-sell / product reviews — missing</div>
+        <div style="padding:9px 16px;font-size:12.5px;background:white;color:var(--text-muted);display:flex;gap:10px;align-items:center"><span style="color:var(--red);font-weight:700">✗</span> Maintenance service — 1 product, no packages</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--text);color:white;border-radius:12px;padding:24px 28px">
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:8px">Bottom Line</div>
+    <div style="font-size:16px;font-weight:700;line-height:1.5;margin-bottom:12px">Rawand has more digital infrastructure than it is using. The assets are in place — the strategy and execution are missing.</div>
+    <div style="font-size:12.5px;color:rgba(255,255,255,0.65);line-height:1.7">Activating Google Shopping alone can add 30–50% more revenue from existing ad spend. Deploying WhatsApp Business API doubles conversion on existing inquiries. Expanding the maintenance service into a proper product line creates a recurring revenue stream that competitors cannot copy. The next phase is not about building — it is about turning on what is already there.</div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>Website Audit Report · rawand.com.sa · Rawand Trading Company</div>
+  <div>Prepared by Shab.co · May 2026 · Confidential</div>
+</div>
+
+</body>
+</html>

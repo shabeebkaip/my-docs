@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical Clarification · 5000-Camera Architecture &amp; Concurrent Incident Handling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --bg: #0A0E14;
+    --surface: #131922;
+    --surface-hi: #1A2230;
+    --border: rgba(212,168,75,0.10);
+    --border-strong: rgba(212,168,75,0.25);
+    --gold: #D4A84B;
+    --gold-bright: #F0BD52;
+    --teal: #3BA3A3;
+    --mint: #7FD6B9;
+    --rose: #E87B7B;
+    --amber: #F0B45A;
+    --text-0: #F5F3EE;
+    --text-1: #C8C4B8;
+    --text-2: #9B9683;
+    --text-3: #6B6757;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text-1);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; line-height: 1.65;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 1000px 500px at 20% 0%, rgba(212,168,75,0.04), transparent 70%),
+      radial-gradient(ellipse 800px 500px at 80% 100%, rgba(59,163,163,0.03), transparent 70%);
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none;
+    background-image: radial-gradient(circle at 1px 1px, rgba(212,168,75,0.04) 1px, transparent 0);
+    background-size: 32px 32px; z-index: 0;
+  }
+  section { position: relative; z-index: 1; padding: 80px 0; }
+  section + section { border-top: 1px solid var(--border); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 48px; }
+
+  .eye {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 3.5px;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 24px; display: flex; align-items: center; gap: 14px;
+  }
+  .eye::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--border-strong), transparent);
+  }
+
+  h2.sec {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 42px; font-weight: 400;
+    color: var(--text-0); letter-spacing: -0.02em;
+    line-height: 1.1; margin-bottom: 18px; max-width: 920px;
+  }
+  h2.sec em { color: var(--gold); font-style: italic; font-weight: 300; }
+  .sec-lede {
+    font-size: 16px; color: var(--text-1);
+    max-width: 760px; line-height: 1.6;
+    margin-bottom: 48px;
+  }
+  h3.sub {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 20px; color: var(--text-0); font-weight: 500;
+    margin: 40px 0 14px; letter-spacing: -0.01em;
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  h3.sub .prefix {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--gold);
+    letter-spacing: 2px; font-weight: 400;
+  }
+
+  /* ============== HERO ============== */
+  .hero {
+    min-height: 70vh; display: flex; align-items: center;
+    border-top: none; padding: 80px 0 60px;
+    position: relative;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(circle 700px at 30% 40%, rgba(212,168,75,0.07), transparent 70%),
+      radial-gradient(circle 500px at 75% 60%, rgba(59,163,163,0.05), transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; z-index: 2; width: 100%; }
+  .hero-marker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 4px;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 32px; display: flex; align-items: center; gap: 16px;
+  }
+  .hero-marker::before {
+    content: ''; width: 32px; height: 1px; background: var(--gold);
+  }
+  h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(40px, 5.5vw, 64px);
+    font-weight: 400; line-height: 1.05;
+    color: var(--text-0); letter-spacing: -0.025em;
+    margin-bottom: 28px; max-width: 1000px;
+  }
+  h1 em { color: var(--gold); font-style: italic; font-weight: 300; }
+  .hero-tagline {
+    font-size: 17px; color: var(--text-1); max-width: 760px;
+    margin-bottom: 40px; line-height: 1.55; font-weight: 300;
+  }
+  .hero-meta {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0; padding-top: 28px;
+    border-top: 1px solid var(--border-strong);
+  }
+  .hero-meta-item { padding-right: 32px; border-right: 1px solid var(--border); }
+  .hero-meta-item:last-child { border-right: none; }
+  .hero-meta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--text-3); text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .hero-meta-value {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 16px; color: var(--text-0); font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .hero-meta-value em { color: var(--gold); font-style: italic; }
+
+  /* ============== EXEC SUMMARY ============== */
+  .exec-pair {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 20px; margin-top: 24px;
+  }
+  .exec-card {
+    padding: 28px 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--gold);
+  }
+  .exec-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    color: var(--gold); margin-bottom: 14px; text-transform: uppercase;
+  }
+  .exec-card h4 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 17px; color: var(--text-0); font-weight: 500;
+    margin-bottom: 10px; letter-spacing: -0.005em;
+  }
+  .exec-card p {
+    font-size: 14px; color: var(--text-2); line-height: 1.6;
+  }
+  .exec-card p strong { color: var(--text-0); font-weight: 500; }
+
+  /* ============== ARCHITECTURE LAYERS ============== */
+  .layer-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin-top: 24px;
+  }
+  .layer-card {
+    padding: 24px 22px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: border-color 0.25s ease;
+  }
+  .layer-card:hover { border-color: var(--border-strong); }
+  .layer-tier {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 2px;
+    color: var(--gold); margin-bottom: 14px; text-transform: uppercase;
+  }
+  .layer-card i {
+    font-size: 18px; color: var(--gold);
+    margin-bottom: 14px; display: block;
+  }
+  .layer-card h5 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 15px; color: var(--text-0); font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .layer-card p {
+    font-size: 12.5px; color: var(--text-2); line-height: 1.55;
+  }
+  .layer-card strong { color: var(--text-0); font-weight: 500; }
+
+  /* ============== ARCHITECTURE FRAME ============== */
+  .arch-frame {
+    border: 1px solid var(--border-strong);
+    background: linear-gradient(180deg, rgba(19,25,34,0.9) 0%, rgba(10,14,20,0.6) 100%);
+    padding: 44px 28px 24px; margin-top: 24px; position: relative;
+  }
+  .arch-frame::before {
+    content: 'FIG · 5000-CAM MULTI-REGION FEDERATED';
+    position: absolute; top: 16px; right: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 2px; color: var(--gold);
+  }
+  .arch-frame svg { width: 100%; height: auto; }
+
+  /* ============== INFRA TABLE ============== */
+  .infra-table {
+    margin-top: 24px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    border-radius: 0;
+  }
+  .infra-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .infra-row:last-child { border-bottom: none; }
+  .infra-cell {
+    padding: 18px 22px;
+  }
+  .infra-cell.label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--gold); text-transform: uppercase;
+    border-right: 1px solid var(--border);
+  }
+  .infra-cell.value {
+    font-size: 14px; color: var(--text-1); line-height: 1.55;
+  }
+  .infra-cell.value strong { color: var(--text-0); font-weight: 500; }
+  .infra-cell.value code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--mint);
+    background: rgba(127,214,185,0.08);
+    padding: 2px 6px; border-radius: 2px;
+  }
+
+  /* ============== TECHNICAL ANSWER BLOCK ============== */
+  .tech-block {
+    padding: 36px 36px;
+    background: linear-gradient(135deg, rgba(127,214,185,0.04), rgba(127,214,185,0.01));
+    border: 1px solid var(--border-strong);
+    border-left: 3px solid var(--mint);
+    margin-top: 24px;
+  }
+  .tech-block h4 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 22px; color: var(--text-0); font-weight: 500;
+    margin-bottom: 12px; letter-spacing: -0.01em;
+  }
+  .tech-block .answer-summary {
+    font-size: 17px; color: var(--mint);
+    font-weight: 400; margin-bottom: 24px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+  }
+  .tech-block p {
+    font-size: 14.5px; color: var(--text-1); line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .tech-block p strong { color: var(--text-0); font-weight: 500; }
+  .tech-block code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; color: var(--mint);
+    background: rgba(127,214,185,0.08);
+    padding: 2px 6px; border-radius: 2px;
+  }
+
+  /* Step-by-step technical breakdown */
+  .step-list {
+    margin-top: 32px;
+    counter-reset: step-counter;
+  }
+  .step-item {
+    padding: 24px 0 24px 56px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    counter-increment: step-counter;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-item::before {
+    content: counter(step-counter, decimal-leading-zero);
+    position: absolute; left: 0; top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--gold);
+    letter-spacing: 1.5px;
+    padding: 5px 9px;
+    border: 1px solid var(--border-strong);
+    background: rgba(212,168,75,0.05);
+  }
+  .step-item h5 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 17px; color: var(--text-0); font-weight: 500;
+    margin-bottom: 10px; letter-spacing: -0.005em;
+  }
+  .step-item p {
+    font-size: 14px; color: var(--text-2); line-height: 1.65;
+  }
+  .step-item p strong { color: var(--text-0); font-weight: 500; }
+  .step-item code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--mint);
+    background: rgba(127,214,185,0.06);
+    padding: 1px 5px; border-radius: 2px;
+  }
+
+  /* ============== CONCURRENT FLOW DIAGRAM FRAME ============== */
+  .flow-frame {
+    border: 1px solid var(--border-strong);
+    background: linear-gradient(180deg, rgba(19,25,34,0.9) 0%, rgba(10,14,20,0.6) 100%);
+    padding: 44px 28px 24px; margin-top: 36px; position: relative;
+  }
+  .flow-frame::before {
+    content: 'FIG · CONCURRENT MULTI-INCIDENT DISPATCH';
+    position: absolute; top: 16px; right: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 2px; color: var(--mint);
+  }
+  .flow-frame svg { width: 100%; height: auto; }
+
+  /* ============== STATS STRIP ============== */
+  .stats-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; margin-top: 24px;
+    padding: 32px 0;
+    border-top: 1px solid var(--border-strong);
+    border-bottom: 1px solid var(--border-strong);
+  }
+  .stats-item {
+    padding: 0 26px;
+    border-left: 1px solid var(--border);
+  }
+  .stats-item:first-child { border-left: none; padding-left: 0; }
+  .stats-num {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 40px; font-weight: 300;
+    color: var(--gold); line-height: 1;
+    letter-spacing: -0.03em; margin-bottom: 10px;
+  }
+  .stats-label {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 13px; color: var(--text-0); font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .stats-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 1px;
+    color: var(--text-3); text-transform: uppercase;
+  }
+
+  /* ============== CLOSE ============== */
+  .close {
+    background:
+      radial-gradient(ellipse 700px 350px at 50% 50%, rgba(212,168,75,0.05), transparent 70%),
+      var(--bg);
+    text-align: center;
+    padding: 96px 0;
+  }
+  .close h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(34px, 4.5vw, 48px);
+    font-weight: 400; line-height: 1.1;
+    color: var(--text-0); letter-spacing: -0.02em;
+    margin: 0 auto 20px; max-width: 900px;
+  }
+  .close h2 em { color: var(--gold); font-style: italic; font-weight: 300; }
+  .close p.lede {
+    font-size: 16px; color: var(--text-1);
+    max-width: 720px; margin: 0 auto;
+    line-height: 1.6; font-weight: 300;
+  }
+
+  footer {
+    padding: 28px 0;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--text-3);
+    letter-spacing: 2px; text-align: center;
+    text-transform: uppercase;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .wrap { padding: 0 32px; }
+    section { padding: 60px 0; }
+    h1 { font-size: 40px; }
+    h2.sec { font-size: 32px; }
+    .hero-meta { grid-template-columns: 1fr 1fr; gap: 20px; }
+    .hero-meta-item { border-right: none; padding-right: 0; }
+    .exec-pair { grid-template-columns: 1fr; }
+    .layer-grid { grid-template-columns: 1fr 1fr; }
+    .stats-strip { grid-template-columns: 1fr 1fr; gap: 24px; padding: 24px 0; }
+    .stats-item { border-left: none; padding: 0; }
+    .infra-row { grid-template-columns: 1fr; }
+    .infra-cell.label { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+  @media (max-width: 768px) {
+    .wrap { padding: 0 22px; }
+    h1 { font-size: 32px; }
+    h2.sec { font-size: 26px; }
+    .layer-grid { grid-template-columns: 1fr; }
+    .stats-strip { grid-template-columns: 1fr; }
+    .hero-meta { grid-template-columns: 1fr; }
+    .step-item { padding-left: 0; padding-top: 56px; }
+    .step-item::before { left: 0; top: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== HERO ============== -->
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-marker">Technical Clarification · 5000-Camera Deployment</div>
+    <h1>Architecture &amp; concurrent<br>incident handling, <em>clarified.</em></h1>
+    <p class="hero-tagline">A focused technical brief covering two questions: how the platform's 5000-camera multi-region architecture is structured, and exactly how it handles multiple incidents detected in the same camera, same frame, at the same time.</p>
+
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Scale Tier</div>
+        <div class="hero-meta-value"><em>5000 cameras</em></div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Architecture</div>
+        <div class="hero-meta-value">4-Tier Multi-Region + DR</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Concurrency Model</div>
+        <div class="hero-meta-value"><em>Parallel by design</em></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== 01 · BOTH QUESTIONS, SHORT ANSWERS ============== -->
+<section>
+  <div class="wrap">
+    <div class="eye">01 · The Two Questions, Quick Answers</div>
+    <h2 class="sec">Direct answers first. <em>Detail follows.</em></h2>
+
+    <div class="exec-pair">
+      <div class="exec-card">
+        <div class="exec-num">QUESTION · 01</div>
+        <h4>Can the architecture genuinely handle 5000 cameras?</h4>
+        <p>Yes. The platform uses a <strong>4-tier multi-region federated architecture</strong> with disaster recovery — same code as smaller tiers, with a regional aggregation layer added. ~240 edge nodes distributed across 5 regions, 25 regional aggregators for cross-camera tracking, central GPU cluster for VLM and search, DR site for failover. Each tier scales horizontally without re-architecture.</p>
+      </div>
+      <div class="exec-card">
+        <div class="exec-num">QUESTION · 02</div>
+        <h4>Can multiple incidents in the same frame be captured?</h4>
+        <p>Yes — and this is genuinely a normal case, not an edge case. Modern detection models return <strong>all objects in a frame in a single inference pass</strong>. Each detected object is independently evaluated against all configured rules. Each rule trigger becomes its own atomic event with unique ID, timestamp, and metadata. <strong>No queueing, no race conditions, no missed detections.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== 02 · 5000-CAM ARCHITECTURE OVERVIEW ============== -->
+<section>
+  <div class="wrap">
+    <div class="eye">02 · 5000-Camera Architecture · Overview</div>
+    <h2 class="sec">Four tiers, five regions, <em>one platform.</em></h2>
+    <p class="sec-lede">The 5000-camera tier extends the proven 3-tier architecture used at 1000-2000 cameras with a regional layer for multi-region coordination and a dedicated DR site. The architectural shape stays consistent — what changes is horizontal scaling of node counts and the addition of cross-region synchronisation.</p>
+
+    <div class="layer-grid">
+      <div class="layer-card">
+        <div class="layer-tier">TIER 00 · SOURCE</div>
+        <i class="fas fa-video"></i>
+        <h5>Cameras</h5>
+        <p><strong>5000 IP cameras</strong> across 5 regions. RTSP / ONVIF. Any brand, any age. Existing client infrastructure tapped via sub-stream — no rip-and-replace.</p>
+      </div>
+      <div class="layer-card">
+        <div class="layer-tier">TIER 01 · EDGE</div>
+        <i class="fas fa-microchip"></i>
+        <h5>Edge Fleet</h5>
+        <p><strong>~240 edge nodes</strong> mixed fleet: 140 Jetson AGX Orin Industrial + 100 x86 with RTX 4000 Ada. 18-22 cameras per Jetson, 25-35 per x86. Detection runs at the edge.</p>
+      </div>
+      <div class="layer-card">
+        <div class="layer-tier">TIER 02 · REGIONAL</div>
+        <i class="fas fa-network-wired"></i>
+        <h5>Regional Aggregators</h5>
+        <p><strong>25 aggregators (5 per region)</strong> running A5000 / RTX 4000 Ada with 256 GB RAM each. Cross-camera tracking, event aggregation, regional event buffer.</p>
+      </div>
+      <div class="layer-card">
+        <div class="layer-tier">TIER 03 · CENTRAL</div>
+        <i class="fas fa-server"></i>
+        <h5>Central Cluster</h5>
+        <p><strong>16-20 RTX PRO 6000 Blackwell + 6-8 H200 141GB.</strong> 4-6 TB RAM, 3-5 PB tiered storage. VLM inference, search, training, MLOps. DR site replicates async.</p>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE TOPOLOGY DIAGRAM -->
+    <div class="arch-frame">
+      <svg viewBox="0 0 1100 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <marker id="goldarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#D4A84B"/>
+          </marker>
+        </defs>
+
+        <!-- Tier headers -->
+        <text x="40" y="22" font-family="JetBrains Mono" font-size="10" fill="#5C5A4E" letter-spacing="2">EDGE FLEET · ~240 NODES</text>
+        <text x="340" y="22" font-family="JetBrains Mono" font-size="10" fill="#5C5A4E" letter-spacing="2">REGIONAL · 25 AGGREGATORS</text>
+        <text x="690" y="22" font-family="JetBrains Mono" font-size="10" fill="#5C5A4E" letter-spacing="2">CENTRAL CLUSTER + DR</text>
+
+        <!-- Edge regions stacked -->
+        <g transform="translate(40,40)">
+          <rect x="0" y="0" width="160" height="58" rx="3" fill="rgba(59,163,163,0.1)" stroke="#3BA3A3" stroke-width="1"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Region North</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">55 nodes · 1100 cam</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">Mixed Jetson + RTX</text>
+        </g>
+        <g transform="translate(40,108)">
+          <rect x="0" y="0" width="160" height="58" rx="3" fill="rgba(59,163,163,0.1)" stroke="#3BA3A3" stroke-width="1"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Region East</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">50 nodes · 1000 cam</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">Mixed fleet</text>
+        </g>
+        <g transform="translate(40,176)">
+          <rect x="0" y="0" width="160" height="58" rx="3" fill="rgba(59,163,163,0.1)" stroke="#3BA3A3" stroke-width="1"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Region South</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">50 nodes · 1000 cam</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">Mixed fleet</text>
+        </g>
+        <g transform="translate(40,244)">
+          <rect x="0" y="0" width="160" height="58" rx="3" fill="rgba(59,163,163,0.1)" stroke="#3BA3A3" stroke-width="1"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Region West</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">50 nodes · 1000 cam</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">Mixed fleet</text>
+        </g>
+        <g transform="translate(40,312)">
+          <rect x="0" y="0" width="160" height="58" rx="3" fill="rgba(59,163,163,0.1)" stroke="#3BA3A3" stroke-width="1"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Region Central</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">35 nodes · 900 cam</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">Higher density</text>
+        </g>
+
+        <!-- Regional aggregators -->
+        <g transform="translate(330,40)">
+          <rect x="0" y="0" width="170" height="58" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Aggregators N (5)</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">256 GB RAM each</text>
+        </g>
+        <g transform="translate(330,108)">
+          <rect x="0" y="0" width="170" height="58" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Aggregators E (5)</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">256 GB RAM each</text>
+        </g>
+        <g transform="translate(330,176)">
+          <rect x="0" y="0" width="170" height="58" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Aggregators S (5)</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">256 GB RAM each</text>
+        </g>
+        <g transform="translate(330,244)">
+          <rect x="0" y="0" width="170" height="58" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Aggregators W (5)</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">256 GB RAM each</text>
+        </g>
+        <g transform="translate(330,312)">
+          <rect x="0" y="0" width="170" height="58" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/>
+          <text x="10" y="20" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Aggregators C (5)</text>
+          <text x="10" y="36" font-family="JetBrains Mono" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text>
+          <text x="10" y="50" font-family="JetBrains Mono" font-size="9" fill="#9B9683">256 GB RAM each</text>
+        </g>
+
+        <!-- Primary central -->
+        <g transform="translate(660,55)">
+          <rect x="0" y="0" width="380" height="135" rx="4" fill="rgba(212,168,75,0.08)" stroke="#D4A84B" stroke-width="2"/>
+          <text x="15" y="24" font-family="Bricolage Grotesque" font-size="13" fill="#F5F3EE" font-weight="500">Primary DC (Main Region)</text>
+          <text x="15" y="48" font-family="Inter" font-size="10" fill="#9B9683">16-20 × RTX PRO 6000 Blackwell 96GB</text>
+          <text x="15" y="64" font-family="Inter" font-size="10" fill="#9B9683">6-8 × H200 141GB (training)</text>
+          <text x="15" y="80" font-family="Inter" font-size="10" fill="#9B9683">4-6 TB ECC RAM aggregate</text>
+          <text x="15" y="96" font-family="Inter" font-size="10" fill="#9B9683">200 TB NVMe + 3-5 PB tiered</text>
+          <text x="15" y="116" font-family="JetBrains Mono" font-size="9" fill="#D4A84B">VLM cluster · MLOps · Search · Training</text>
+        </g>
+
+        <!-- DR -->
+        <g transform="translate(660,215)">
+          <rect x="0" y="0" width="380" height="135" rx="4" fill="rgba(212,168,75,0.04)" stroke="#D4A84B" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="15" y="24" font-family="Bricolage Grotesque" font-size="13" fill="#F5F3EE" font-weight="500">DR + Secondary Region</text>
+          <text x="15" y="48" font-family="Inter" font-size="10" fill="#9B9683">8 × RTX PRO 6000 Blackwell + 2 × H200</text>
+          <text x="15" y="64" font-family="Inter" font-size="10" fill="#9B9683">2 TB RAM, 1 PB replicated storage</text>
+          <text x="15" y="80" font-family="Inter" font-size="10" fill="#9B9683">Full failover capability</text>
+          <text x="15" y="96" font-family="Inter" font-size="10" fill="#9B9683">Async replication + streaming events</text>
+          <text x="15" y="116" font-family="JetBrains Mono" font-size="9" fill="#D4A84B">RTO &lt; 1 hr · RPO &lt; 5 min</text>
+        </g>
+
+        <!-- Edge → Regional arrows -->
+        <line x1="200" y1="68" x2="325" y2="68" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#goldarrow)"/>
+        <line x1="200" y1="136" x2="325" y2="136" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#goldarrow)"/>
+        <line x1="200" y1="204" x2="325" y2="204" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#goldarrow)"/>
+        <line x1="200" y1="272" x2="325" y2="272" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#goldarrow)"/>
+        <line x1="200" y1="340" x2="325" y2="340" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#goldarrow)"/>
+
+        <!-- Regional → Central arrows -->
+        <line x1="505" y1="68" x2="655" y2="105" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#goldarrow)"/>
+        <line x1="505" y1="136" x2="655" y2="120" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#goldarrow)"/>
+        <line x1="505" y1="204" x2="655" y2="135" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#goldarrow)"/>
+        <line x1="505" y1="272" x2="655" y2="150" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#goldarrow)"/>
+        <line x1="505" y1="340" x2="655" y2="165" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#goldarrow)"/>
+
+        <!-- Primary → DR replication -->
+        <line x1="850" y1="190" x2="850" y2="215" stroke="#D4A84B" stroke-width="1.5" stroke-dasharray="2,2" opacity="0.8"/>
+        <text x="855" y="206" font-family="JetBrains Mono" font-size="9" fill="#D4A84B">replicate</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============== 03 · INFRASTRUCTURE BREAKDOWN ============== -->
+<section>
+  <div class="wrap">
+    <div class="eye">03 · Infrastructure Breakdown</div>
+    <h2 class="sec">What's deployed, end to end.</h2>
+    <p class="sec-lede">A condensed reference of the physical and software components powering the 5000-camera tier. Detailed BOM with quantities, unit costs, and specifications available separately.</p>
+
+    <div class="infra-table">
+      <div class="infra-row">
+        <div class="infra-cell label">Edge Compute</div>
+        <div class="infra-cell value">
+          <strong>~240 edge nodes</strong> total, mixed deployment.<br>
+          <code>140 × Jetson AGX Orin 64GB</code> (Industrial SKU for ruggedised sites, 18-22 cam each)<br>
+          <code>100 × x86 mini-server + RTX 4000 Ada 20GB</code> (high-density urban sites, 25-35 cam each)
+        </div>
+      </div>
+      <div class="infra-row">
+        <div class="infra-cell label">Regional Aggregators</div>
+        <div class="infra-cell value">
+          <strong>25 aggregator servers</strong>, distributed 5 per region.<br>
+          <code>2U server + RTX A5000 24GB or RTX 4000 Ada</code> · 256 GB DDR5 ECC RAM each.<br>
+          Handle cross-camera tracking, regional event aggregation, regional buffer for WAN outage tolerance.
+        </div>
+      </div>
+      <div class="infra-row">
+        <div class="infra-cell label">Central GPU Cluster</div>
+        <div class="infra-cell value">
+          <strong>Primary site:</strong> <code>16-20 × RTX PRO 6000 Blackwell 96GB</code> (VLM inference) + <code>6-8 × H200 141GB</code> (fine-tuning &amp; training).<br>
+          <strong>DR site:</strong> <code>8 × RTX PRO 6000 Blackwell + 2 × H200</code> with full failover.<br>
+          4-6 TB DDR5 ECC RAM aggregate. RTO &lt; 1 hr · RPO &lt; 5 min.
+        </div>
+      </div>
+      <div class="infra-row">
+        <div class="infra-cell label">Storage</div>
+        <div class="infra-cell value">
+          <strong>3-5 PB tiered storage</strong>, multi-region replicated.<br>
+          200 TB NVMe (hot tier, 24-hour event cache) · 5 PB SAS HDD (30-day continuous, RAID 60) · LTO-9 archive (long-term forensic retention).<br>
+          Geo-distributed object store for cross-region access.
+        </div>
+      </div>
+      <div class="infra-row">
+        <div class="infra-cell label">Networking</div>
+        <div class="infra-cell value">
+          <strong>100/400 GbE backbone</strong>, fully redundant.<br>
+          Spine: <code>4 × 400 GbE switches</code> (Primary + DR). Leaf: <code>25 × 100 GbE 48-port</code>.<br>
+          Inter-region: MPLS or SD-WAN, 1 Gbps redundant per region.
+        </div>
+      </div>
+      <div class="infra-row">
+        <div class="infra-cell label">Power &amp; Cooling</div>
+        <div class="infra-cell value">
+          <strong>38-50 kW total IT load</strong>, split across regions.<br>
+          UPS: <code>5 × 100+ kVA N+1 multi-feed</code> (one per region).<br>
+          Cooling: dedicated DC zone, dual CRAC with hot/cold aisle containment, ~30-45% overhead on IT load depending on climate.
+        </div>
+      </div>
+      <div class="infra-row">
+        <div class="infra-cell label">Physical Footprint</div>
+        <div class="infra-cell value">
+          <strong>18-25 racks</strong> across multi-row deployment, possibly multi-DC.<br>
+          Primary site: 12-15 racks. DR site: 6-10 racks. Regional aggregator co-locations: 1-2 racks per region.
+        </div>
+      </div>
+      <div class="infra-row">
+        <div class="infra-cell label">Software Platform</div>
+        <div class="infra-cell value">
+          <strong>Detection:</strong> RF-DETR, D-FINE, YOLO11/26 (TensorRT INT8). <strong>VLM:</strong> Gemma 4, Qwen3-VL, Llama 4 Scout, InternVL3.5, Mistral Small 4 (on-prem).<br>
+          <strong>Tracking:</strong> BoT-SORT-ReID + CLIP-ReID for cross-camera re-identification.<br>
+          <strong>Data plane:</strong> Frigate (edge NVR), Qdrant (vector search), ClickHouse (event store), PostgreSQL (configuration), MinIO (object storage), Kafka (event bus).<br>
+          <strong>HA stack:</strong> Patroni + etcd (Postgres HA), ClickHouse Keeper, Keepalived + HAProxy.
+        </div>
+      </div>
+      <div class="infra-row">
+        <div class="infra-cell label">Performance Envelope</div>
+        <div class="infra-cell value">
+          <strong>~400K events / day</strong> processed across all regions.<br>
+          Peak alert latency &lt; 100 ms (cross-region adds &lt; 30 ms buffer).<br>
+          ~500 Mbps aggregated edge-to-central bandwidth (regionally buffered).
+        </div>
+      </div>
+      <div class="infra-row">
+        <div class="infra-cell label">Deployment Path</div>
+        <div class="infra-cell value">
+          <strong>36-48 weeks total</strong>, multi-region phased rollout.<br>
+          Region 1 live first (8-12 weeks), then expansion to subsequent regions in parallel-pair waves. DR site activated mid-rollout.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== 04 · CONCURRENT INCIDENT HANDLING · TECHNICAL DEEP-DIVE ============== -->
+<section>
+  <div class="wrap">
+    <div class="eye">04 · Concurrent Incident Handling · Technical Detail</div>
+    <h2 class="sec">Multiple incidents, same frame, same camera. <em>Handled by design.</em></h2>
+    <p class="sec-lede">This is one of the most common technical questions about Vision AI platforms — and it's worth answering properly, not casually. The platform is built around the assumption that multi-object multi-rule scenarios are normal, not edge cases. Here's exactly how it works.</p>
+
+    <div class="tech-block">
+      <h4>The short answer</h4>
+      <div class="answer-summary">Yes. Always. Multiple incidents in the same frame produce multiple independent events — concurrently, atomically, with no missed detections and no race conditions.</div>
+      <p>Modern object detection models — RF-DETR, D-FINE, YOLO11/26 — are <strong>single-pass detectors</strong>. They don't detect "the first object," then "the second object." They take one frame as input and return <strong>all detected objects in a single inference call</strong>, each with its own bounding box, class label, and confidence score.</p>
+      <p>From that point forward, every detected object is treated independently. Each is evaluated against every configured rule in parallel. Each rule trigger becomes its own event. The architecture has no concept of "one event at a time per camera" — it's parallel by default.</p>
+    </div>
+
+    <h3 class="sub"><span class="prefix">04.1</span>Step-by-Step · What Happens When Multiple Incidents Occur in One Frame</h3>
+
+    <div class="step-list">
+      <div class="step-item">
+        <h5>Frame arrives at edge node</h5>
+        <p>A single frame from the camera reaches the edge node at the configured rate (typically 5-15 FPS for AI inference, separate from the recording rate). The frame is timestamped with microsecond precision and passed to the detection pipeline.</p>
+      </div>
+      <div class="step-item">
+        <h5>Detection model runs once, returns all objects</h5>
+        <p>The detection model performs a <strong>single forward pass</strong> on the frame. Output is a list of <code>N</code> detected objects — could be 0, 1, 5, or 50 — each with bounding box coordinates, class (person, vehicle, helmet, weapon, etc.), and confidence score above the configured threshold. This happens in 8-25 ms on Jetson AGX Orin depending on model and frame complexity.</p>
+      </div>
+      <div class="step-item">
+        <h5>Tracker assigns persistent IDs across frames</h5>
+        <p>BoT-SORT-ReID + CLIP-ReID associates each new detection with a previously-tracked object if one matches by motion + appearance. If 5 distinct people are in the frame, you get 5 distinct track IDs. Each person is now a "tracked entity" carrying state across frames — useful for de-duplication later.</p>
+      </div>
+      <div class="step-item">
+        <h5>Rule engine evaluates all objects against all rules in parallel</h5>
+        <p>For each detected object, the rule engine checks every configured rule simultaneously. <strong>Rules don't run sequentially.</strong> A typical evaluation set: <em>"is this person inside polygon zone A?"</em>, <em>"is this person inside polygon zone B?"</em>, <em>"is this person without PPE?"</em>, <em>"is the person count in zone X above threshold?"</em>, <em>"is this person carrying a flagged item?"</em>. Each rule is an independent boolean check, evaluated in microseconds.</p>
+      </div>
+      <div class="step-item">
+        <h5>Each rule trigger becomes an atomic event</h5>
+        <p>Every <code>(object, rule)</code> pair that fires becomes its own event with: <strong>unique event ID (UUID v4)</strong>, source camera ID, frame timestamp (microsecond precision), rule that triggered, object's bounding box, track ID, confidence score, severity category. If 2 people enter restricted zone at once, you get 2 events. If one person triggers both PPE violation AND restricted zone, you get 2 events (different rules). If 3 people fail PPE in the same frame, you get 3 events.</p>
+      </div>
+      <div class="step-item">
+        <h5>Events flow to event bus, downstream consumers process in parallel</h5>
+        <p>Events are written to an internal Kafka event bus. Order is preserved per-camera (FIFO queue per camera ID), but processing across cameras is fully parallel. Downstream consumers — dashboard, alert router, voice agent, chat dispatcher, ERP webhook — subscribe independently. <strong>One slow consumer never blocks the others.</strong></p>
+      </div>
+      <div class="step-item">
+        <h5>Alert clustering for forensic clarity (the subtle part)</h5>
+        <p>If a single tracked person triggers the same rule on consecutive frames at 15 FPS, you'd otherwise get 15 alerts per second — useless. The clustering layer groups events by <code>(track_id, rule_id, time_window)</code> typically over 30-60 seconds. <strong>One logical incident card</strong> appears on the dashboard, with all underlying raw events accessible for forensic review.<br><br>Critical clarification: clustering only applies to the <strong>same object firing the same rule</strong>. Two different people both entering a restricted zone are two different track IDs, two separate clustered incidents — never collapsed into one.</p>
+      </div>
+      <div class="step-item">
+        <h5>Dashboard displays concurrent events with separate cards</h5>
+        <p>Each clustered incident appears as its own card in the live event feed, ordered by severity and timestamp. Operators see exactly what happened: which person, which rule, which camera, which moment, with a thumbnail of the triggering frame. Cards can be acknowledged independently.</p>
+      </div>
+    </div>
+
+    <!-- CONCURRENT FLOW DIAGRAM -->
+    <div class="flow-frame">
+      <svg viewBox="0 0 1100 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <marker id="mintarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#7FD6B9"/>
+          </marker>
+        </defs>
+
+        <!-- Stage labels -->
+        <text x="40" y="22" font-family="JetBrains Mono" font-size="10" fill="#5C5A4E" letter-spacing="2">FRAME (T=0)</text>
+        <text x="240" y="22" font-family="JetBrains Mono" font-size="10" fill="#5C5A4E" letter-spacing="2">DETECTION</text>
+        <text x="440" y="22" font-family="JetBrains Mono" font-size="10" fill="#5C5A4E" letter-spacing="2">RULE ENGINE (PARALLEL)</text>
+        <text x="730" y="22" font-family="JetBrains Mono" font-size="10" fill="#5C5A4E" letter-spacing="2">EVENTS</text>
+        <text x="950" y="22" font-family="JetBrains Mono" font-size="10" fill="#5C5A4E" letter-spacing="2">DASHBOARD</text>
+
+        <!-- Frame box (single input) -->
+        <g transform="translate(40,55)">
+          <rect x="0" y="0" width="160" height="200" rx="3" fill="rgba(59,163,163,0.08)" stroke="#3BA3A3" stroke-width="1.5"/>
+          <text x="14" y="24" font-family="Bricolage Grotesque" font-size="12" fill="#F5F3EE">Single Frame</text>
+          <text x="14" y="44" font-family="JetBrains Mono" font-size="9" fill="#9B9683">Camera 14 · t=14:23:51</text>
+
+          <!-- Mock detected objects -->
+          <rect x="14" y="60" width="140" height="34" rx="2" fill="rgba(127,214,185,0.1)" stroke="#7FD6B9" stroke-width="1"/>
+          <text x="22" y="76" font-family="Inter" font-size="10" fill="#F5F3EE">Person A</text>
+          <text x="22" y="89" font-family="JetBrains Mono" font-size="8" fill="#9B9683">in zone A · no helmet</text>
+
+          <rect x="14" y="102" width="140" height="34" rx="2" fill="rgba(127,214,185,0.1)" stroke="#7FD6B9" stroke-width="1"/>
+          <text x="22" y="118" font-family="Inter" font-size="10" fill="#F5F3EE">Person B</text>
+          <text x="22" y="131" font-family="JetBrains Mono" font-size="8" fill="#9B9683">in zone A · with helmet</text>
+
+          <rect x="14" y="144" width="140" height="34" rx="2" fill="rgba(127,214,185,0.1)" stroke="#7FD6B9" stroke-width="1"/>
+          <text x="22" y="160" font-family="Inter" font-size="10" fill="#F5F3EE">Vehicle V1</text>
+          <text x="22" y="173" font-family="JetBrains Mono" font-size="8" fill="#9B9683">in zone B · idling</text>
+
+          <text x="14" y="195" font-family="JetBrains Mono" font-size="9" fill="#3BA3A3">3 objects detected</text>
+        </g>
+
+        <!-- Detection model arrow -->
+        <line x1="200" y1="155" x2="240" y2="155" stroke="#7FD6B9" stroke-width="1.5" marker-end="url(#mintarrow)"/>
+
+        <!-- Detection model box -->
+        <g transform="translate(245,90)">
+          <rect x="0" y="0" width="170" height="130" rx="3" fill="rgba(212,168,75,0.05)" stroke="#D4A84B" stroke-width="1.5"/>
+          <text x="14" y="22" font-family="Bricolage Grotesque" font-size="12" fill="#F5F3EE">Single-Pass</text>
+          <text x="14" y="38" font-family="Bricolage Grotesque" font-size="12" fill="#F5F3EE">Inference</text>
+          <text x="14" y="62" font-family="JetBrains Mono" font-size="9" fill="#9B9683">RF-DETR + D-FINE</text>
+          <text x="14" y="76" font-family="JetBrains Mono" font-size="9" fill="#9B9683">YOLO11/26 INT8</text>
+          <text x="14" y="100" font-family="Inter" font-size="10" fill="#F5F3EE">→ 3 bboxes returned</text>
+          <text x="14" y="120" font-family="JetBrains Mono" font-size="9" fill="#D4A84B">~12 ms · 1 forward pass</text>
+        </g>
+
+        <!-- arrows to rules -->
+        <line x1="415" y1="155" x2="450" y2="80" stroke="#7FD6B9" stroke-width="1" opacity="0.7" marker-end="url(#mintarrow)"/>
+        <line x1="415" y1="155" x2="450" y2="155" stroke="#7FD6B9" stroke-width="1" opacity="0.7" marker-end="url(#mintarrow)"/>
+        <line x1="415" y1="155" x2="450" y2="230" stroke="#7FD6B9" stroke-width="1" opacity="0.7" marker-end="url(#mintarrow)"/>
+
+        <!-- Rule engine — parallel rules -->
+        <g transform="translate(455,55)">
+          <rect x="0" y="0" width="240" height="36" rx="2" fill="rgba(232,123,123,0.08)" stroke="#E87B7B" stroke-width="1"/>
+          <text x="10" y="16" font-family="JetBrains Mono" font-size="9" fill="#E87B7B">RULE: PPE_HELMET_REQUIRED</text>
+          <text x="10" y="29" font-family="Inter" font-size="10" fill="#F5F3EE">Person A → fires (no helmet)</text>
+        </g>
+        <g transform="translate(455,100)">
+          <rect x="0" y="0" width="240" height="36" rx="2" fill="rgba(232,123,123,0.08)" stroke="#E87B7B" stroke-width="1"/>
+          <text x="10" y="16" font-family="JetBrains Mono" font-size="9" fill="#E87B7B">RULE: ZONE_A_RESTRICTED</text>
+          <text x="10" y="29" font-family="Inter" font-size="10" fill="#F5F3EE">Person A &amp; B both fire</text>
+        </g>
+        <g transform="translate(455,145)">
+          <rect x="0" y="0" width="240" height="36" rx="2" fill="rgba(212,168,75,0.06)" stroke="#D4A84B" stroke-width="1" stroke-opacity="0.5"/>
+          <text x="10" y="16" font-family="JetBrains Mono" font-size="9" fill="#9B9683">RULE: ZONE_B_LOITERING (vehicle)</text>
+          <text x="10" y="29" font-family="Inter" font-size="10" fill="#F5F3EE">Vehicle V1 → fires</text>
+        </g>
+        <g transform="translate(455,190)">
+          <rect x="0" y="0" width="240" height="36" rx="2" fill="rgba(155,150,131,0.05)" stroke="#5C5A4E" stroke-width="1"/>
+          <text x="10" y="16" font-family="JetBrains Mono" font-size="9" fill="#6B6757">RULE: PERSON_COUNT_ZONE_A</text>
+          <text x="10" y="29" font-family="Inter" font-size="10" fill="#9B9683">2 people · below threshold</text>
+        </g>
+        <g transform="translate(455,235)">
+          <rect x="0" y="0" width="240" height="36" rx="2" fill="rgba(155,150,131,0.05)" stroke="#5C5A4E" stroke-width="1"/>
+          <text x="10" y="16" font-family="JetBrains Mono" font-size="9" fill="#6B6757">RULE: WEAPON_DETECTION</text>
+          <text x="10" y="29" font-family="Inter" font-size="10" fill="#9B9683">no weapon · no fire</text>
+        </g>
+
+        <!-- Arrows to events -->
+        <line x1="695" y1="73" x2="730" y2="80" stroke="#7FD6B9" stroke-width="1.2" marker-end="url(#mintarrow)"/>
+        <line x1="695" y1="118" x2="730" y2="135" stroke="#7FD6B9" stroke-width="1.2" marker-end="url(#mintarrow)"/>
+        <line x1="695" y1="163" x2="730" y2="190" stroke="#7FD6B9" stroke-width="1.2" marker-end="url(#mintarrow)"/>
+
+        <!-- Events column - 4 atomic events -->
+        <g transform="translate(735,55)">
+          <rect x="0" y="0" width="200" height="48" rx="2" fill="rgba(232,123,123,0.1)" stroke="#E87B7B" stroke-width="1"/>
+          <text x="10" y="16" font-family="JetBrains Mono" font-size="8" fill="#E87B7B">EVT-001 · uuid-a1b2</text>
+          <text x="10" y="29" font-family="Inter" font-size="10" fill="#F5F3EE">PPE violation · Person A</text>
+          <text x="10" y="42" font-family="JetBrains Mono" font-size="8" fill="#9B9683">conf 0.94 · cam 14 · t+12ms</text>
+        </g>
+        <g transform="translate(735,110)">
+          <rect x="0" y="0" width="200" height="48" rx="2" fill="rgba(232,123,123,0.1)" stroke="#E87B7B" stroke-width="1"/>
+          <text x="10" y="16" font-family="JetBrains Mono" font-size="8" fill="#E87B7B">EVT-002 · uuid-c3d4</text>
+          <text x="10" y="29" font-family="Inter" font-size="10" fill="#F5F3EE">Zone A entry · Person A</text>
+          <text x="10" y="42" font-family="JetBrains Mono" font-size="8" fill="#9B9683">conf 0.97 · cam 14 · t+12ms</text>
+        </g>
+        <g transform="translate(735,165)">
+          <rect x="0" y="0" width="200" height="48" rx="2" fill="rgba(232,123,123,0.1)" stroke="#E87B7B" stroke-width="1"/>
+          <text x="10" y="16" font-family="JetBrains Mono" font-size="8" fill="#E87B7B">EVT-003 · uuid-e5f6</text>
+          <text x="10" y="29" font-family="Inter" font-size="10" fill="#F5F3EE">Zone A entry · Person B</text>
+          <text x="10" y="42" font-family="JetBrains Mono" font-size="8" fill="#9B9683">conf 0.95 · cam 14 · t+12ms</text>
+        </g>
+        <g transform="translate(735,220)">
+          <rect x="0" y="0" width="200" height="48" rx="2" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1"/>
+          <text x="10" y="16" font-family="JetBrains Mono" font-size="8" fill="#F0B45A">EVT-004 · uuid-g7h8</text>
+          <text x="10" y="29" font-family="Inter" font-size="10" fill="#F5F3EE">Loitering · Vehicle V1</text>
+          <text x="10" y="42" font-family="JetBrains Mono" font-size="8" fill="#9B9683">conf 0.89 · cam 14 · t+12ms</text>
+        </g>
+
+        <!-- arrow to dashboard -->
+        <line x1="935" y1="155" x2="965" y2="155" stroke="#7FD6B9" stroke-width="1.5" marker-end="url(#mintarrow)"/>
+
+        <!-- Dashboard -->
+        <g transform="translate(970,75)">
+          <rect x="0" y="0" width="105" height="160" rx="3" fill="rgba(212,168,75,0.06)" stroke="#D4A84B" stroke-width="1.5"/>
+          <text x="10" y="22" font-family="Bricolage Grotesque" font-size="11" fill="#F5F3EE">Live Feed</text>
+          <rect x="8" y="32" width="89" height="22" rx="2" fill="rgba(232,123,123,0.15)"/>
+          <text x="13" y="46" font-family="JetBrains Mono" font-size="8" fill="#E87B7B">EVT-001 PPE</text>
+          <rect x="8" y="58" width="89" height="22" rx="2" fill="rgba(232,123,123,0.15)"/>
+          <text x="13" y="72" font-family="JetBrains Mono" font-size="8" fill="#E87B7B">EVT-002 ZONE-A</text>
+          <rect x="8" y="84" width="89" height="22" rx="2" fill="rgba(232,123,123,0.15)"/>
+          <text x="13" y="98" font-family="JetBrains Mono" font-size="8" fill="#E87B7B">EVT-003 ZONE-A</text>
+          <rect x="8" y="110" width="89" height="22" rx="2" fill="rgba(240,180,90,0.15)"/>
+          <text x="13" y="124" font-family="JetBrains Mono" font-size="8" fill="#F0B45A">EVT-004 LOIT</text>
+          <text x="10" y="148" font-family="JetBrains Mono" font-size="8" fill="#7FD6B9">4 alerts · 1 frame</text>
+        </g>
+
+        <!-- Bottom note -->
+        <text x="40" y="320" font-family="JetBrains Mono" font-size="10" fill="#5C5A4E" letter-spacing="1.5">SINGLE FRAME → 3 OBJECTS DETECTED → 5 RULES EVALUATED IN PARALLEL → 4 ATOMIC EVENTS DISPATCHED → DASHBOARD UPDATES IN REAL TIME</text>
+        <text x="40" y="338" font-family="JetBrains Mono" font-size="9" fill="#9B9683" letter-spacing="1">No queueing · No race conditions · No missed detections · End-to-end latency ~50-100 ms</text>
+      </svg>
+    </div>
+
+    <h3 class="sub"><span class="prefix">04.2</span>Why This Architecture Avoids the Common Failure Modes</h3>
+
+    <div class="step-list">
+      <div class="step-item">
+        <h5>No "first object wins" because detection is single-pass</h5>
+        <p>A common worry with naive systems: <em>"if the model sees the helmet violation first, does it miss the weapon?"</em> The answer is no — modern detectors return all detections from one inference pass. There is no "first" detection.</p>
+      </div>
+      <div class="step-item">
+        <h5>No queueing per camera because rule evaluation is parallelised</h5>
+        <p>Rules are evaluated as independent boolean checks across all detected objects. Five rules across three objects = fifteen parallel evaluations, completed in microseconds. No serial bottleneck.</p>
+      </div>
+      <div class="step-item">
+        <h5>No missed events because the event bus accepts all dispatches atomically</h5>
+        <p>Each rule trigger writes an event to the Kafka bus as an atomic operation. Even if the dashboard or downstream consumer is briefly slow, events accumulate in the bus and are processed in order without loss.</p>
+      </div>
+      <div class="step-item">
+        <h5>No dashboard overload because clustering happens at the right layer</h5>
+        <p>The clustering layer separates "raw events" (every frame's detections, written to the event store for forensics) from "incident cards" (one logical incident per <code>track_id × rule × time-window</code>). The operator sees actionable cards, not a flood of frame-level detections.</p>
+      </div>
+      <div class="step-item">
+        <h5>Cross-camera incidents handled at the Regional layer</h5>
+        <p>If the same person walks across cameras 14 → 15 → 16 in sequence, BoT-SORT-ReID + CLIP-ReID at the Regional Aggregator stitches the track. Cross-camera tracking is a Regional layer responsibility, sitting above per-camera detection — so even concurrent multi-camera incidents are correctly attributed and not double-counted.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== 05 · PERFORMANCE ENVELOPE ============== -->
+<section>
+  <div class="wrap">
+    <div class="eye">05 · Performance Envelope</div>
+    <h2 class="sec">The numbers, <em>across the system.</em></h2>
+    <p class="sec-lede">Real performance metrics from the architecture at 5000-camera scale. These hold across vertical, deployment, and concurrent-load conditions.</p>
+
+    <div class="stats-strip">
+      <div class="stats-item">
+        <div class="stats-num">~12<span style="font-size: 22px">ms</span></div>
+        <div class="stats-label">Detection inference</div>
+        <div class="stats-sub">Single frame · Jetson AGX Orin</div>
+      </div>
+      <div class="stats-item">
+        <div class="stats-num">&lt;100<span style="font-size: 22px">ms</span></div>
+        <div class="stats-label">End-to-end alert latency</div>
+        <div class="stats-sub">Frame to dashboard · safety-critical</div>
+      </div>
+      <div class="stats-item">
+        <div class="stats-num">~400<span style="font-size: 22px">K</span></div>
+        <div class="stats-label">Daily events processed</div>
+        <div class="stats-sub">All cameras · all rules</div>
+      </div>
+      <div class="stats-item">
+        <div class="stats-num">∞</div>
+        <div class="stats-label">Concurrent events per frame</div>
+        <div class="stats-sub">No architectural cap</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CLOSE ============== -->
+<section class="close">
+  <div class="wrap">
+    <h2>Both questions, <em>answered with depth.</em><br>Happy to go deeper on any layer.</h2>
+    <p class="lede">The architecture and the concurrent-detection model are designed for the engineering reality of city-scale deployments — multi-object, multi-rule, multi-camera, multi-region. We can walk through any layer in further detail with your technical team, run live demos against your sample footage, or share specific subsystem documentation on request.</p>
+  </div>
+</section>
+
+<footer>
+  Technical Clarification · 5000-Camera Architecture · Concurrent Incident Handling
+</footer>
+
+</body>
+</html>

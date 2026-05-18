@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Technical Document · 5000-Camera Architecture · Code-Ox × SpectTech</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#D0D5DF;color:#1A202C;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.page{width:210mm;min-height:297mm;margin:0 auto 24px;position:relative;overflow:hidden;background:#fff;box-shadow:0 4px 28px rgba(0,0,0,0.14);}
+@media print{body{background:none;}.page{margin:0;box-shadow:none;page-break-after:always;break-after:page;}}
+@page{size:A4;margin:0;}
+
+/* COVER */
+.cover{background:#091827;color:#fff;min-height:297mm;display:flex;flex-direction:column;position:relative;}
+.cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:1;}
+.cover-glow{position:absolute;width:600px;height:600px;top:-150px;right:-150px;background:radial-gradient(circle,rgba(30,207,192,0.1) 0%,transparent 65%);pointer-events:none;z-index:1;}
+.cover-topbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:14px 26px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.cover-topbar-left{display:flex;align-items:center;gap:14px;}
+.cover-client-name{font-size:13px;font-weight:700;color:#fff;}
+.cover-client-sub{font-size:8.5px;color:rgba(255,255,255,0.4);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;}
+.cover-divider{width:1px;height:30px;background:rgba(255,255,255,0.13);}
+.cover-prepby-label{font-size:8px;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:2px;}
+.cover-prepby-name{font-size:13px;font-weight:600;color:#fff;}
+.doc-type-pill{border:1.5px solid #1ECFC0;color:#1ECFC0;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:5px 12px;border-radius:4px;}
+.cover-hero{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 26px 24px;}
+.cover-overline{font-size:8px;font-weight:600;color:rgba(255,255,255,0.38);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:14px;}
+.cover-title{font-size:36px;font-weight:800;line-height:1.08;color:#fff;margin-bottom:8px;}
+.cover-title-accent{color:#1ECFC0;}
+.cover-subtitle{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.65;max-width:480px;margin-bottom:24px;}
+.cover-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:26px;}
+.cover-tag{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);border-radius:4px;padding:5px 11px;font-size:10px;color:rgba(255,255,255,0.65);}
+.cover-tag strong{color:#fff;font-weight:600;}
+.cover-answers{position:relative;z-index:2;margin:0 26px 14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cover-answer-card{background:rgba(255,255,255,0.03);border:1px solid rgba(30,207,192,0.2);border-left:2px solid #1ECFC0;border-radius:4px;padding:13px 15px;}
+.cover-answer-q{font-size:8px;font-weight:700;color:#1ECFC0;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:5px;}
+.cover-answer-text{font-size:10px;color:rgba(255,255,255,0.6);line-height:1.55;}
+.cover-meta{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);border-radius:5px;overflow:hidden;margin:0 26px 14px;}
+.cover-meta-item{background:rgba(255,255,255,0.02);padding:12px 15px;}
+.cover-meta-label{font-size:8px;color:rgba(255,255,255,0.33);text-transform:uppercase;letter-spacing:0.13em;margin-bottom:4px;}
+.cover-meta-value{font-size:11px;font-weight:600;color:#fff;}
+.cover-meta-value.teal{color:#1ECFC0;}
+.cover-footer{position:relative;z-index:2;border-top:1px solid rgba(255,255,255,0.07);padding:13px 26px;display:flex;align-items:center;gap:14px;}
+.cover-footer img{height:20px;filter:brightness(0) invert(1);}
+.cover-footer-sep{width:1px;height:14px;background:rgba(255,255,255,0.14);}
+.cover-footer-text{font-size:9px;color:rgba(255,255,255,0.38);}
+.cover-footer-contact{font-size:9px;color:rgba(255,255,255,0.5);margin-left:auto;}
+
+/* INNER PAGES */
+.inner-page{display:flex;flex-direction:column;min-height:297mm;}
+.inner-header{display:flex;align-items:center;justify-content:space-between;padding:11px 26px;border-bottom:1px solid #E2E8F0;}
+.inner-header img{height:20px;}
+.inner-header-title{font-size:9px;color:#64748B;}
+.inner-header-ref{font-size:9px;color:#94A3B8;}
+.inner-content{flex:1;padding:20px 26px;}
+.inner-footer{border-top:1px solid #E2E8F0;padding:9px 26px;display:flex;align-items:center;gap:10px;}
+.inner-footer img{height:15px;opacity:0.6;}
+.inner-footer-sep{width:1px;height:11px;background:#CBD5E1;}
+.inner-footer-text{font-size:7.5px;color:#94A3B8;flex:1;}
+.inner-footer-page{font-size:8px;color:#94A3B8;font-weight:500;}
+
+/* TYPOGRAPHY */
+.section-label{font-size:8px;font-weight:700;color:#1ECFC0;text-transform:uppercase;letter-spacing:0.16em;margin-bottom:6px;}
+.section-heading{font-size:20px;font-weight:800;color:#0F172A;margin-bottom:8px;line-height:1.15;}
+.section-intro{font-size:10.5px;color:#475569;line-height:1.72;margin-bottom:14px;}
+
+/* PART BANNER */
+.part-banner{background:#091827;color:#fff;border-radius:6px;padding:11px 16px;display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.part-badge{width:26px;height:26px;min-width:26px;border-radius:50%;background:#1ECFC0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#091827;}
+.part-banner-sub{font-size:7.5px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:1px;}
+.part-banner-title{font-size:12px;font-weight:700;}
+
+/* ANSWER GRID */
+.answer-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.answer-card{border:1px solid #E2E8F0;border-left:3px solid #1ECFC0;border-radius:4px;padding:14px 15px;background:#F8FAFC;}
+.answer-card-q{font-size:7.5px;font-weight:700;color:#1ECFC0;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;}
+.answer-card h4{font-size:11.5px;font-weight:700;color:#0F172A;margin-bottom:7px;line-height:1.3;}
+.answer-card p{font-size:10px;color:#475569;line-height:1.65;}
+.answer-card strong{font-weight:600;color:#0F172A;}
+
+/* TIER GRID */
+.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.tier-card{border:1px solid #E2E8F0;border-radius:6px;padding:13px 14px;background:#F8FAFC;}
+.tier-tag{font-size:7.5px;font-weight:700;color:#1ECFC0;text-transform:uppercase;letter-spacing:0.14em;margin-bottom:7px;}
+.tier-card h5{font-size:11px;font-weight:700;color:#0F172A;margin-bottom:5px;}
+.tier-card p{font-size:10px;color:#475569;line-height:1.6;}
+.tier-card strong{font-weight:600;color:#0F172A;}
+
+/* INFRA TABLE */
+.infra-table{border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:12px;}
+.infra-row{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid #F1F5F9;}
+.infra-row:last-child{border-bottom:none;}
+.infra-lbl{padding:9px 11px;font-size:7.5px;font-weight:700;color:#0D9488;text-transform:uppercase;letter-spacing:0.1em;background:#F0FDFB;border-right:1px solid #E2E8F0;display:flex;align-items:flex-start;line-height:1.4;}
+.infra-val{padding:9px 11px;font-size:9.5px;color:#334155;line-height:1.55;}
+.infra-val strong{font-weight:600;color:#0F172A;}
+.infra-val code{font-family:'Courier New',monospace;font-size:8.5px;color:#0D9488;background:#F0FDFB;padding:1px 4px;border-radius:3px;}
+
+/* TECH BLOCK */
+.tech-block{background:#F0FDFB;border:1px solid #B2EDEA;border-left:3px solid #1ECFC0;border-radius:4px;padding:13px 15px;margin-bottom:12px;}
+.tech-block-label{font-size:7.5px;font-weight:700;color:#0D9488;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:5px;}
+.tech-block-answer{font-size:12px;font-weight:700;color:#0D9488;margin-bottom:8px;line-height:1.3;}
+.tech-block p{font-size:10px;color:#374151;line-height:1.65;margin-bottom:6px;}
+.tech-block p:last-child{margin-bottom:0;}
+.tech-block strong{font-weight:600;color:#0F172A;}
+.tech-block code{font-family:'Courier New',monospace;font-size:8.5px;color:#0D9488;background:rgba(13,148,136,0.1);padding:1px 4px;border-radius:3px;}
+
+/* STEP LIST */
+.step-list{margin-bottom:12px;}
+.step-item{display:grid;grid-template-columns:30px 1fr;gap:9px;padding:9px 0;border-bottom:1px solid #F1F5F9;}
+.step-item:last-child{border-bottom:none;}
+.step-num{width:24px;height:24px;min-width:24px;border-radius:50%;background:#091827;color:#1ECFC0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin-top:2px;}
+.step-item h5{font-size:10.5px;font-weight:700;color:#0F172A;margin-bottom:3px;}
+.step-item p{font-size:9.5px;color:#475569;line-height:1.6;}
+.step-item p strong{font-weight:600;color:#0F172A;}
+.step-item code{font-family:'Courier New',monospace;font-size:8.5px;color:#0D9488;background:#F0FDFB;padding:1px 4px;border-radius:3px;}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#E2E8F0;border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin-bottom:14px;}
+.stats-item{background:#fff;padding:14px 13px;}
+.stats-num{font-size:28px;font-weight:800;color:#0F172A;margin-bottom:3px;line-height:1;}
+.stats-num span{color:#1ECFC0;}
+.stats-label{font-size:9.5px;font-weight:600;color:#0F172A;margin-bottom:3px;}
+.stats-sub{font-size:8px;color:#94A3B8;}
+
+/* DIAGRAM FRAME */
+.diagram-frame{border:1px solid #E2E8F0;border-radius:6px;padding:12px;margin-bottom:12px;background:#0A0E14;}
+.diagram-label{font-size:7.5px;font-weight:700;color:rgba(212,168,75,0.8);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;font-family:'Courier New',monospace;}
+.diagram-frame svg{width:100%;height:auto;}
+
+/* NOTE BOX */
+.note-box{border-radius:5px;padding:10px 13px;font-size:10px;line-height:1.65;margin-bottom:12px;}
+.note-box.teal{background:#F0FDFB;border:1px solid #B2EDEA;border-left:3px solid #1ECFC0;}
+.note-box .note-label{font-size:7.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:5px;color:#0D9488;}
+.note-box p{color:#374151;}
+.note-box strong{font-weight:600;}
+
+/* FAILURE LIST */
+.failure-list{margin-bottom:12px;}
+.failure-item{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid #F1F5F9;}
+.failure-item:last-child{border-bottom:none;}
+.failure-icon{width:24px;height:24px;min-width:24px;border-radius:4px;background:rgba(30,207,192,0.1);display:flex;align-items:center;justify-content:center;margin-top:2px;flex-shrink:0;}
+.failure-item h5{font-size:10.5px;font-weight:700;color:#0F172A;margin-bottom:3px;}
+.failure-item p{font-size:9.5px;color:#475569;line-height:1.6;}
+.failure-item em{color:#0D9488;font-style:italic;}
+.failure-item code{font-family:'Courier New',monospace;font-size:8.5px;color:#0D9488;background:#F0FDFB;padding:1px 4px;border-radius:3px;}
+
+/* CLOSE BLOCK */
+.close-block{background:#091827;color:#fff;border-radius:6px;padding:22px 24px;margin-top:12px;}
+.close-block h3{font-size:18px;font-weight:800;margin-bottom:10px;line-height:1.2;}
+.close-block h3 span{color:#1ECFC0;}
+.close-block p{font-size:10.5px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:14px;}
+.close-contact{display:flex;gap:24px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);}
+.close-contact-item{font-size:10px;color:rgba(255,255,255,0.5);}
+.close-contact-item a{color:#1ECFC0;text-decoration:none;}
+
+.sub-label{font-size:8px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.13em;margin:12px 0 8px;padding-bottom:4px;border-bottom:2px solid #1ECFC0;display:inline-block;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 1 · COVER
+════════════════════════════════════════════ -->
+<div class="page cover">
+  <div class="cover-grid"></div>
+  <div class="cover-glow"></div>
+
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <div>
+        <div class="cover-client-name">SpectTech</div>
+        <div class="cover-client-sub">Client · Vision AI Programme</div>
+      </div>
+      <div class="cover-divider"></div>
+      <div>
+        <div class="cover-prepby-label">Prepared by</div>
+        <div class="cover-prepby-name">Code-Ox Technologies</div>
+      </div>
+    </div>
+    <div class="doc-type-pill">Technical Document</div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">Vision AI Platform · Technical Document</div>
+    <div class="cover-title">
+      5000-Camera <span class="cover-title-accent">Architecture</span><br>
+      &amp; Concurrent Incident<br>Handling
+    </div>
+    <div class="cover-subtitle">This document details how the Code-Ox Vision AI platform is structured for large-scale deployment across 5000 cameras in a multi-region environment, and how it processes multiple simultaneous incidents from a single camera frame — concurrently, atomically, and without data loss.</div>
+    <div class="cover-tags">
+      <div class="cover-tag"><strong>5000</strong> IP Cameras</div>
+      <div class="cover-tag"><strong>4-Tier</strong> Multi-Region</div>
+      <div class="cover-tag"><strong>~240</strong> Edge Nodes</div>
+      <div class="cover-tag"><strong>5 Regions</strong> + DR</div>
+      <div class="cover-tag"><strong>Parallel</strong> by Design</div>
+      <div class="cover-tag"><strong>&lt;100ms</strong> Alert Latency</div>
+    </div>
+  </div>
+
+  <div class="cover-answers">
+    <div class="cover-answer-card">
+      <div class="cover-answer-q">Architecture · Scale</div>
+      <div class="cover-answer-text">The platform uses a 4-tier multi-region federated architecture with disaster recovery. ~240 edge nodes distributed across 5 regions feed into 25 regional aggregators, which connect to a central GPU cluster. Every tier scales horizontally — no architectural changes required as the deployment grows.</div>
+    </div>
+    <div class="cover-answer-card">
+      <div class="cover-answer-q">Concurrency · Incident Handling</div>
+      <div class="cover-answer-text">Modern detection models return all objects in a single inference pass. Each detected object is evaluated against all configured rules in parallel, and every rule trigger produces its own atomic event with a unique ID, timestamp, and full metadata — with no queueing, no race conditions, and no missed detections.</div>
+    </div>
+  </div>
+
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Scale Tier</div>
+      <div class="cover-meta-value teal">5000 Cameras</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Architecture</div>
+      <div class="cover-meta-value">4-Tier Multi-Region</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Concurrency Model</div>
+      <div class="cover-meta-value teal">Parallel by Design</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="cover-meta-label">Date</div>
+      <div class="cover-meta-value">11 May 2026</div>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+    <div class="cover-footer-sep"></div>
+    <div class="cover-footer-text">Code-Ox Technologies · Vision AI Platform</div>
+    <div class="cover-footer-contact">shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 2 · THE TWO QUESTIONS
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-header-title">Technical Document · 5000-Camera Architecture</div>
+      <div class="inner-header-ref">SpectTech · May 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-badge">1</div>
+        <div>
+          <div class="part-banner-sub">Section 01</div>
+          <div class="part-banner-title">Platform Overview · Architecture &amp; Concurrent Incident Handling</div>
+        </div>
+      </div>
+
+      <div class="section-label">Platform Overview</div>
+      <div class="section-heading">A multi-region platform built for scale and precision.</div>
+      <div class="section-intro">The Code-Ox Vision AI platform is engineered to operate at city-scale — 5000 cameras across multiple regions — while simultaneously maintaining sub-100ms alert latency and handling any number of concurrent incidents from the same camera frame. Both capabilities are architectural fundamentals, not add-ons.</div>
+
+      <div class="answer-grid">
+        <div class="answer-card">
+          <div class="answer-card-q">Architecture · Multi-Region Scale</div>
+          <h4>4-Tier Federated Architecture with Disaster Recovery</h4>
+          <p>The platform uses a <strong>4-tier multi-region federated architecture</strong> — the same codebase proven at 1000–2000 cameras, extended with a regional aggregation layer. ~240 edge nodes are distributed across 5 regions, feeding 25 regional aggregators, which connect to a central GPU cluster. A dedicated DR site provides full failover. Every tier scales horizontally without any architectural changes.</p>
+        </div>
+        <div class="answer-card">
+          <div class="answer-card-q">Concurrency · Parallel Incident Processing</div>
+          <h4>All Incidents in a Frame, Captured Simultaneously</h4>
+          <p>The detection pipeline uses <strong>single-pass inference</strong> — all objects in a frame are returned in one forward pass through the model. Each object is then evaluated against all configured rules in parallel. Every rule trigger produces its own <strong>atomic event</strong> with a unique ID, microsecond timestamp, and full metadata. Multiple incidents in the same frame produce multiple independent events — always, by design.</p>
+        </div>
+      </div>
+
+      <div class="note-box teal">
+        <div class="note-label">Design Principle</div>
+        <p>The 5000-camera tier extends the proven 3-tier architecture with a regional coordination layer. Horizontal scaling of node counts and cross-region synchronisation are the only additions — the core detection, rule evaluation, and event dispatch pipeline remains unchanged. Detailed subsystem documentation and BOM available on request.</p>
+      </div>
+
+      <div class="sub-label">Platform Performance at Scale</div>
+
+      <div class="stats-row">
+        <div class="stats-item">
+          <div class="stats-num">~<span>12</span><span style="font-size:14px">ms</span></div>
+          <div class="stats-label">Detection Inference</div>
+          <div class="stats-sub">Single frame · Jetson AGX Orin</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-num">&lt;<span>100</span><span style="font-size:14px">ms</span></div>
+          <div class="stats-label">Alert Latency</div>
+          <div class="stats-sub">Frame to dashboard</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-num">~<span>400</span><span style="font-size:14px">K</span></div>
+          <div class="stats-label">Daily Events</div>
+          <div class="stats-sub">All cameras · all rules</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-num" style="font-size:22px">No Cap</div>
+          <div class="stats-label">Concurrent Events/Frame</div>
+          <div class="stats-sub">No architectural limit</div>
+        </div>
+      </div>
+
+      <div class="note-box teal">
+        <div class="note-label">Concurrency as a Default Behaviour</div>
+        <p>Multi-object, multi-rule detection is the standard operating mode, not a special case. RF-DETR, D-FINE, and YOLO11/26 return every detected object in a single inference call. The rule engine evaluates all objects against all rules simultaneously. There is no serial bottleneck, no priority queue, and no scenario where one detection blocks another.</p>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Code-Ox Technologies · Confidential · shabeeb.k@code-ox.com · +966 535 716 437</div>
+      <div class="inner-footer-page">2 / 9</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 3 · ARCHITECTURE OVERVIEW
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-header-title">Technical Document · 5000-Camera Architecture</div>
+      <div class="inner-header-ref">SpectTech · May 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-badge">2</div>
+        <div>
+          <div class="part-banner-sub">Section 02</div>
+          <div class="part-banner-title">5000-Camera Architecture · Four Tiers, Five Regions, One Platform</div>
+        </div>
+      </div>
+
+      <div class="section-intro">The 5000-camera tier extends the proven 3-tier architecture used at 1000–2000 cameras with a regional layer for multi-region coordination and a dedicated DR site. The architectural shape stays consistent — what changes is horizontal scaling of node counts and the addition of cross-region synchronisation.</div>
+
+      <div class="tier-grid">
+        <div class="tier-card">
+          <div class="tier-tag">Tier 00 · Source</div>
+          <h5>Camera Fleet</h5>
+          <p><strong>5000 IP cameras</strong> across 5 regions. RTSP / ONVIF. Any brand, any age. Existing client infrastructure tapped via sub-stream — no rip-and-replace required. Cameras grouped by region for local processing proximity.</p>
+        </div>
+        <div class="tier-card">
+          <div class="tier-tag">Tier 01 · Edge</div>
+          <h5>Edge Fleet · ~240 Nodes</h5>
+          <p><strong>~240 edge nodes</strong> mixed fleet: 140 × Jetson AGX Orin Industrial (18–22 cam each) + 100 × x86 mini-server with RTX 4000 Ada (25–35 cam each). Detection, tracking, and rule evaluation run entirely at the edge — sub-100ms latency, no WAN dependency for alerting.</p>
+        </div>
+        <div class="tier-card">
+          <div class="tier-tag">Tier 02 · Regional</div>
+          <h5>Regional Aggregators · 25 Servers</h5>
+          <p><strong>25 aggregator servers</strong> (5 per region), each running RTX A5000 / RTX 4000 Ada with 256 GB DDR5 ECC RAM. Responsibilities: cross-camera person re-identification, regional event aggregation, regional event buffer for WAN-outage tolerance, and regional dashboard endpoints.</p>
+        </div>
+        <div class="tier-card">
+          <div class="tier-tag">Tier 03 · Central + DR</div>
+          <h5>Central GPU Cluster + DR</h5>
+          <p><strong>Primary: 16–20 × RTX PRO 6000 Blackwell 96GB + 6–8 × H200 141GB.</strong> 4–6 TB RAM, 3–5 PB tiered storage. VLM inference, semantic search, training, MLOps. <strong>DR site</strong> with 8 × RTX PRO 6000 + 2 × H200. RTO &lt; 1 hr · RPO &lt; 5 min. Async replication + streaming events.</p>
+        </div>
+      </div>
+
+      <div class="sub-label">Architecture Topology Diagram</div>
+
+      <div class="diagram-frame">
+        <div class="diagram-label">FIG · 5000-CAM MULTI-REGION FEDERATED TOPOLOGY</div>
+        <svg viewBox="0 0 1060 370" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="ga" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#D4A84B"/>
+            </marker>
+          </defs>
+          <text x="40" y="20" font-family="Courier New" font-size="10" fill="#5C5A4E" letter-spacing="2">EDGE FLEET · ~240 NODES</text>
+          <text x="330" y="20" font-family="Courier New" font-size="10" fill="#5C5A4E" letter-spacing="2">REGIONAL · 25 AGGREGATORS</text>
+          <text x="660" y="20" font-family="Courier New" font-size="10" fill="#5C5A4E" letter-spacing="2">CENTRAL + DR</text>
+          <!-- Edge regions -->
+          <g transform="translate(40,34)"><rect width="160" height="52" rx="3" fill="rgba(59,163,163,0.12)" stroke="#3BA3A3" stroke-width="1"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Region North</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">55 nodes · 1100 cam</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">Mixed Jetson + RTX</text></g>
+          <g transform="translate(40,96)"><rect width="160" height="52" rx="3" fill="rgba(59,163,163,0.12)" stroke="#3BA3A3" stroke-width="1"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Region East</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">50 nodes · 1000 cam</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">Mixed fleet</text></g>
+          <g transform="translate(40,158)"><rect width="160" height="52" rx="3" fill="rgba(59,163,163,0.12)" stroke="#3BA3A3" stroke-width="1"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Region South</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">50 nodes · 1000 cam</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">Mixed fleet</text></g>
+          <g transform="translate(40,220)"><rect width="160" height="52" rx="3" fill="rgba(59,163,163,0.12)" stroke="#3BA3A3" stroke-width="1"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Region West</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">50 nodes · 1000 cam</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">Mixed fleet</text></g>
+          <g transform="translate(40,282)"><rect width="160" height="52" rx="3" fill="rgba(59,163,163,0.12)" stroke="#3BA3A3" stroke-width="1"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Region Central</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">35 nodes · 900 cam</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">Higher density</text></g>
+          <!-- Regional -->
+          <g transform="translate(320,34)"><rect width="165" height="52" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Aggregators N (5)</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">256 GB RAM each</text></g>
+          <g transform="translate(320,96)"><rect width="165" height="52" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Aggregators E (5)</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">256 GB RAM each</text></g>
+          <g transform="translate(320,158)"><rect width="165" height="52" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Aggregators S (5)</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">256 GB RAM each</text></g>
+          <g transform="translate(320,220)"><rect width="165" height="52" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Aggregators W (5)</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">256 GB RAM each</text></g>
+          <g transform="translate(320,282)"><rect width="165" height="52" rx="3" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1.5"/><text x="10" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Aggregators C (5)</text><text x="10" y="32" font-family="Courier New" font-size="9" fill="#9B9683">A5000 / RTX 4000 Ada</text><text x="10" y="44" font-family="Courier New" font-size="9" fill="#9B9683">256 GB RAM each</text></g>
+          <!-- Primary -->
+          <g transform="translate(648,50)"><rect width="390" height="125" rx="4" fill="rgba(212,168,75,0.08)" stroke="#D4A84B" stroke-width="2"/><text x="14" y="22" font-family="Inter" font-size="12" fill="#F5F3EE" font-weight="600">Primary DC (Main Region)</text><text x="14" y="44" font-family="Courier New" font-size="9" fill="#9B9683">16–20 × RTX PRO 6000 Blackwell 96GB</text><text x="14" y="58" font-family="Courier New" font-size="9" fill="#9B9683">6–8 × H200 141GB (training)</text><text x="14" y="72" font-family="Courier New" font-size="9" fill="#9B9683">4–6 TB ECC RAM · 200 TB NVMe + 3–5 PB tiered</text><text x="14" y="92" font-family="Courier New" font-size="9" fill="#D4A84B">VLM cluster · MLOps · Search · Training</text></g>
+          <!-- DR -->
+          <g transform="translate(648,200)"><rect width="390" height="120" rx="4" fill="rgba(212,168,75,0.04)" stroke="#D4A84B" stroke-width="1.5" stroke-dasharray="4,3"/><text x="14" y="22" font-family="Inter" font-size="12" fill="#F5F3EE" font-weight="600">DR + Secondary Region</text><text x="14" y="44" font-family="Courier New" font-size="9" fill="#9B9683">8 × RTX PRO 6000 Blackwell + 2 × H200</text><text x="14" y="58" font-family="Courier New" font-size="9" fill="#9B9683">2 TB RAM · 1 PB replicated storage</text><text x="14" y="72" font-family="Courier New" font-size="9" fill="#9B9683">Full failover · Async replication + streaming events</text><text x="14" y="92" font-family="Courier New" font-size="9" fill="#D4A84B">RTO &lt; 1 hr · RPO &lt; 5 min</text></g>
+          <!-- Arrows edge→regional -->
+          <line x1="200" y1="60" x2="315" y2="60" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#ga)"/>
+          <line x1="200" y1="122" x2="315" y2="122" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#ga)"/>
+          <line x1="200" y1="184" x2="315" y2="184" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#ga)"/>
+          <line x1="200" y1="246" x2="315" y2="246" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#ga)"/>
+          <line x1="200" y1="308" x2="315" y2="308" stroke="#D4A84B" stroke-width="1" opacity="0.5" marker-end="url(#ga)"/>
+          <!-- Arrows regional→central -->
+          <line x1="485" y1="60" x2="643" y2="95" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#ga)"/>
+          <line x1="485" y1="122" x2="643" y2="110" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#ga)"/>
+          <line x1="485" y1="184" x2="643" y2="125" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#ga)"/>
+          <line x1="485" y1="246" x2="643" y2="140" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#ga)"/>
+          <line x1="485" y1="308" x2="643" y2="155" stroke="#D4A84B" stroke-width="1.5" opacity="0.6" marker-end="url(#ga)"/>
+          <!-- Primary→DR -->
+          <line x1="843" y1="175" x2="843" y2="200" stroke="#D4A84B" stroke-width="1.5" stroke-dasharray="2,2" opacity="0.8"/>
+          <text x="848" y="192" font-family="Courier New" font-size="9" fill="#D4A84B">async replicate</text>
+        </svg>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Code-Ox Technologies · Confidential · shabeeb.k@code-ox.com · +966 535 716 437</div>
+      <div class="inner-footer-page">3 / 9</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 4 · INFRASTRUCTURE BREAKDOWN (1/2)
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-header-title">Technical Document · 5000-Camera Architecture</div>
+      <div class="inner-header-ref">SpectTech · May 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-badge">3</div>
+        <div>
+          <div class="part-banner-sub">Section 03</div>
+          <div class="part-banner-title">Infrastructure Breakdown · What's Deployed, End to End</div>
+        </div>
+      </div>
+
+      <div class="section-intro">A condensed reference of the physical and software components powering the 5000-camera tier. Detailed BOM with quantities, unit costs, and specifications available separately.</div>
+
+      <div class="infra-table">
+        <div class="infra-row">
+          <div class="infra-lbl">Edge Compute</div>
+          <div class="infra-val"><strong>~240 edge nodes</strong> total, mixed deployment.<br>
+          <code>140 × Jetson AGX Orin 64GB</code> Industrial SKU for ruggedised sites, 18–22 cam each.<br>
+          <code>100 × x86 mini-server + RTX 4000 Ada 20GB</code> high-density urban sites, 25–35 cam each.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Regional Aggregators</div>
+          <div class="infra-val"><strong>25 aggregator servers</strong>, 5 per region.<br>
+          <code>2U server + RTX A5000 24GB or RTX 4000 Ada</code> · 256 GB DDR5 ECC RAM each.<br>
+          Cross-camera tracking, regional event aggregation, regional buffer for WAN outage tolerance.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Central GPU Cluster</div>
+          <div class="infra-val"><strong>Primary site:</strong> <code>16–20 × RTX PRO 6000 Blackwell 96GB</code> (VLM inference) + <code>6–8 × H200 141GB</code> (fine-tuning &amp; training).<br>
+          <strong>DR site:</strong> <code>8 × RTX PRO 6000 Blackwell + 2 × H200</code> with full failover.<br>
+          4–6 TB DDR5 ECC RAM aggregate. RTO &lt; 1 hr · RPO &lt; 5 min.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Storage</div>
+          <div class="infra-val"><strong>3–5 PB tiered storage</strong>, multi-region replicated.<br>
+          200 TB NVMe (hot tier, 24-hr event cache) · 5 PB SAS HDD (30-day continuous, RAID 60) · LTO-9 archive (long-term forensic retention).<br>
+          Geo-distributed object store for cross-region access.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Networking</div>
+          <div class="infra-val"><strong>100/400 GbE backbone</strong>, fully redundant.<br>
+          Spine: <code>4 × 400 GbE switches</code> (Primary + DR). Leaf: <code>25 × 100 GbE 48-port</code>.<br>
+          Inter-region: MPLS or SD-WAN, 1 Gbps redundant per region.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Power &amp; Cooling</div>
+          <div class="infra-val"><strong>38–50 kW total IT load</strong>, split across regions.<br>
+          UPS: <code>5 × 100+ kVA N+1 multi-feed</code> (one per region).<br>
+          Cooling: dedicated DC zone, dual CRAC with hot/cold aisle containment, ~30–45% overhead on IT load.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Physical Footprint</div>
+          <div class="infra-val"><strong>18–25 racks</strong> across multi-row deployment, possibly multi-DC.<br>
+          Primary site: 12–15 racks. DR site: 6–10 racks. Regional aggregator co-locations: 1–2 racks per region.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Software Platform</div>
+          <div class="infra-val"><strong>Detection:</strong> RF-DETR, D-FINE, YOLO11/26 (TensorRT INT8). <strong>VLM:</strong> Gemma 4, Qwen3-VL, Llama 4 Scout, InternVL3.5, Mistral Small 4 (on-prem).<br>
+          <strong>Tracking:</strong> BoT-SORT-ReID + CLIP-ReID for cross-camera re-identification.<br>
+          <strong>Data plane:</strong> Frigate · Qdrant · ClickHouse · PostgreSQL · MinIO · Kafka.<br>
+          <strong>HA stack:</strong> Patroni + etcd · ClickHouse Keeper · Keepalived + HAProxy.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Performance Envelope</div>
+          <div class="infra-val"><strong>~400K events / day</strong> processed across all regions.<br>
+          Peak alert latency &lt; 100 ms (cross-region adds &lt; 30 ms buffer).<br>
+          ~500 Mbps aggregated edge-to-central bandwidth (regionally buffered).</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Deployment Path</div>
+          <div class="infra-val"><strong>36–48 weeks total</strong>, multi-region phased rollout.<br>
+          Region 1 live first (8–12 weeks), then expansion to subsequent regions in parallel-pair waves. DR site activated mid-rollout.</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Code-Ox Technologies · Confidential · shabeeb.k@code-ox.com · +966 535 716 437</div>
+      <div class="inner-footer-page">4 / 9</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 5 · CONCURRENT INCIDENT HANDLING
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-header-title">Technical Document · Concurrent Incident Handling</div>
+      <div class="inner-header-ref">SpectTech · May 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-badge">4</div>
+        <div>
+          <div class="part-banner-sub">Section 04</div>
+          <div class="part-banner-title">Concurrent Incident Handling · Multiple Incidents, Same Frame, Same Camera</div>
+        </div>
+      </div>
+
+      <div class="section-intro">This is one of the most common technical questions about Vision AI platforms — and it's worth answering properly, not casually. The platform is built around the assumption that multi-object multi-rule scenarios are normal, not edge cases.</div>
+
+      <div class="tech-block">
+        <div class="tech-block-label">The Short Answer</div>
+        <div class="tech-block-answer">Yes. Always. Multiple incidents in the same frame produce multiple independent events — concurrently, atomically, with no missed detections and no race conditions.</div>
+        <p>Modern object detection models — RF-DETR, D-FINE, YOLO11/26 — are <strong>single-pass detectors</strong>. They don't detect "the first object," then "the second object." They take one frame as input and return <strong>all detected objects in a single inference call</strong>, each with its own bounding box, class label, and confidence score.</p>
+        <p>From that point forward, every detected object is treated independently. Each is evaluated against every configured rule in parallel. Each rule trigger becomes its own event. The architecture has no concept of "one event at a time per camera" — it's parallel by default.</p>
+      </div>
+
+      <div class="sub-label">Step-by-Step · What Happens When Multiple Incidents Occur in One Frame</div>
+
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div>
+            <h5>Frame arrives at edge node</h5>
+            <p>A single frame from the camera reaches the edge node at the configured rate (typically 5–15 FPS for AI inference, separate from the recording rate). The frame is timestamped with microsecond precision and passed to the detection pipeline.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div>
+            <h5>Detection model runs once, returns all objects</h5>
+            <p>The detection model performs a <strong>single forward pass</strong> on the frame. Output is a list of <code>N</code> detected objects — each with bounding box, class (person, vehicle, helmet, weapon, etc.), and confidence score. This happens in <strong>8–25 ms</strong> on Jetson AGX Orin depending on model and frame complexity.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div>
+            <h5>Tracker assigns persistent IDs across frames</h5>
+            <p>BoT-SORT-ReID + CLIP-ReID associates each new detection with a previously-tracked object if one matches by motion + appearance. If 5 distinct people are in the frame, you get 5 distinct track IDs. Each person is a "tracked entity" carrying state across frames — useful for de-duplication later.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div>
+            <h5>Rule engine evaluates all objects against all rules in parallel</h5>
+            <p>For each detected object, the rule engine checks every configured rule simultaneously. <strong>Rules don't run sequentially.</strong> A typical set: <em>is this person in polygon zone A?</em> <em>Is this person without PPE?</em> <em>Is person count above threshold?</em> <em>Is this person carrying a flagged item?</em> Each is an independent boolean check, evaluated in microseconds.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div>
+            <h5>Each rule trigger becomes an atomic event</h5>
+            <p>Every <code>(object, rule)</code> pair that fires becomes its own event with: <strong>unique event ID (UUID v4)</strong>, source camera ID, frame timestamp (microsecond precision), rule triggered, bounding box, track ID, confidence, severity. If 2 people enter restricted zone at once → 2 events. If one person triggers PPE violation AND restricted zone → 2 events (different rules). If 3 people fail PPE in one frame → 3 events.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">6</div>
+          <div>
+            <h5>Events flow to Kafka bus · downstream consumers process in parallel</h5>
+            <p>Events are written to an internal Kafka event bus. Order is preserved per-camera (FIFO per camera ID), but processing across cameras is fully parallel. Downstream consumers — dashboard, alert router, voice agent, chat dispatcher, ERP webhook — subscribe independently. <strong>One slow consumer never blocks the others.</strong></p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">7</div>
+          <div>
+            <h5>Alert clustering for forensic clarity</h5>
+            <p>If a tracked person triggers the same rule on consecutive frames at 15 FPS, you'd get 15 alerts/second — useless. The clustering layer groups events by <code>(track_id, rule_id, time_window)</code> typically 30–60 seconds. <strong>One logical incident card</strong> appears on the dashboard, with all raw events accessible for forensic review. Critical: clustering only applies to <strong>same object × same rule</strong>. Two different people in a restricted zone = two separate clustered incidents — never collapsed into one.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">8</div>
+          <div>
+            <h5>Dashboard displays concurrent events with separate cards</h5>
+            <p>Each clustered incident appears as its own card in the live event feed, ordered by severity and timestamp. Operators see exactly what happened: which person, which rule, which camera, which moment, with a thumbnail of the triggering frame. Cards can be acknowledged independently.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Code-Ox Technologies · Confidential · shabeeb.k@code-ox.com · +966 535 716 437</div>
+      <div class="inner-footer-page">5 / 9</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 6 · CONCURRENT FLOW DIAGRAM
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-header-title">Technical Document · Concurrent Incident Handling</div>
+      <div class="inner-header-ref">SpectTech · May 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="sub-label">Concurrent Multi-Incident Dispatch · Visual Flow</div>
+
+      <div class="diagram-frame">
+        <div class="diagram-label">FIG · SINGLE FRAME → PARALLEL RULE EVALUATION → ATOMIC EVENT DISPATCH</div>
+        <svg viewBox="0 0 1060 330" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="ma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#7FD6B9"/>
+            </marker>
+          </defs>
+          <text x="30" y="18" font-family="Courier New" font-size="10" fill="#5C5A4E" letter-spacing="2">FRAME (T=0)</text>
+          <text x="230" y="18" font-family="Courier New" font-size="10" fill="#5C5A4E" letter-spacing="2">DETECTION</text>
+          <text x="420" y="18" font-family="Courier New" font-size="10" fill="#5C5A4E" letter-spacing="2">RULE ENGINE (PARALLEL)</text>
+          <text x="718" y="18" font-family="Courier New" font-size="10" fill="#5C5A4E" letter-spacing="2">EVENTS</text>
+          <text x="938" y="18" font-family="Courier New" font-size="10" fill="#5C5A4E" letter-spacing="2">DASHBOARD</text>
+          <!-- Frame box -->
+          <g transform="translate(30,30)">
+            <rect width="158" height="185" rx="3" fill="rgba(59,163,163,0.08)" stroke="#3BA3A3" stroke-width="1.5"/>
+            <text x="12" y="20" font-family="Inter" font-size="11" fill="#F5F3EE">Single Frame</text>
+            <text x="12" y="36" font-family="Courier New" font-size="9" fill="#9B9683">Camera 14 · 14:23:51</text>
+            <rect x="12" y="48" width="136" height="30" rx="2" fill="rgba(127,214,185,0.1)" stroke="#7FD6B9" stroke-width="1"/>
+            <text x="20" y="63" font-family="Inter" font-size="10" fill="#F5F3EE">Person A</text>
+            <text x="20" y="75" font-family="Courier New" font-size="8" fill="#9B9683">zone A · no helmet</text>
+            <rect x="12" y="84" width="136" height="30" rx="2" fill="rgba(127,214,185,0.1)" stroke="#7FD6B9" stroke-width="1"/>
+            <text x="20" y="99" font-family="Inter" font-size="10" fill="#F5F3EE">Person B</text>
+            <text x="20" y="111" font-family="Courier New" font-size="8" fill="#9B9683">zone A · with helmet</text>
+            <rect x="12" y="120" width="136" height="30" rx="2" fill="rgba(127,214,185,0.1)" stroke="#7FD6B9" stroke-width="1"/>
+            <text x="20" y="135" font-family="Inter" font-size="10" fill="#F5F3EE">Vehicle V1</text>
+            <text x="20" y="147" font-family="Courier New" font-size="8" fill="#9B9683">zone B · idling</text>
+            <text x="12" y="177" font-family="Courier New" font-size="9" fill="#3BA3A3">3 objects detected</text>
+          </g>
+          <!-- Arrow frame→detection -->
+          <line x1="188" y1="122" x2="228" y2="122" stroke="#7FD6B9" stroke-width="1.5" marker-end="url(#ma)"/>
+          <!-- Detection box -->
+          <g transform="translate(233,68)">
+            <rect width="165" height="110" rx="3" fill="rgba(212,168,75,0.06)" stroke="#D4A84B" stroke-width="1.5"/>
+            <text x="12" y="20" font-family="Inter" font-size="11" fill="#F5F3EE">Single-Pass</text>
+            <text x="12" y="34" font-family="Inter" font-size="11" fill="#F5F3EE">Inference</text>
+            <text x="12" y="56" font-family="Courier New" font-size="9" fill="#9B9683">RF-DETR + D-FINE</text>
+            <text x="12" y="70" font-family="Courier New" font-size="9" fill="#9B9683">YOLO11/26 TRT INT8</text>
+            <text x="12" y="88" font-family="Inter" font-size="10" fill="#F5F3EE">→ 3 bboxes returned</text>
+            <text x="12" y="104" font-family="Courier New" font-size="9" fill="#D4A84B">~12ms · 1 forward pass</text>
+          </g>
+          <!-- Arrows detection→rules -->
+          <line x1="398" y1="122" x2="428" y2="62" stroke="#7FD6B9" stroke-width="1" opacity="0.7" marker-end="url(#ma)"/>
+          <line x1="398" y1="122" x2="428" y2="122" stroke="#7FD6B9" stroke-width="1" opacity="0.7" marker-end="url(#ma)"/>
+          <line x1="398" y1="122" x2="428" y2="182" stroke="#7FD6B9" stroke-width="1" opacity="0.7" marker-end="url(#ma)"/>
+          <!-- Rules -->
+          <g transform="translate(433,40)"><rect width="264" height="32" rx="2" fill="rgba(232,123,123,0.08)" stroke="#E87B7B" stroke-width="1"/><text x="9" y="14" font-family="Courier New" font-size="9" fill="#E87B7B">RULE: PPE_HELMET_REQUIRED</text><text x="9" y="27" font-family="Inter" font-size="10" fill="#F5F3EE">Person A → fires (no helmet)</text></g>
+          <g transform="translate(433,80)"><rect width="264" height="32" rx="2" fill="rgba(232,123,123,0.08)" stroke="#E87B7B" stroke-width="1"/><text x="9" y="14" font-family="Courier New" font-size="9" fill="#E87B7B">RULE: ZONE_A_RESTRICTED</text><text x="9" y="27" font-family="Inter" font-size="10" fill="#F5F3EE">Person A &amp; B both fire</text></g>
+          <g transform="translate(433,120)"><rect width="264" height="32" rx="2" fill="rgba(212,168,75,0.06)" stroke="#D4A84B" stroke-width="1" stroke-opacity="0.5"/><text x="9" y="14" font-family="Courier New" font-size="9" fill="#9B9683">RULE: ZONE_B_LOITERING (vehicle)</text><text x="9" y="27" font-family="Inter" font-size="10" fill="#F5F3EE">Vehicle V1 → fires</text></g>
+          <g transform="translate(433,160)"><rect width="264" height="32" rx="2" fill="rgba(155,150,131,0.05)" stroke="#5C5A4E" stroke-width="1"/><text x="9" y="14" font-family="Courier New" font-size="9" fill="#6B6757">RULE: PERSON_COUNT_ZONE_A</text><text x="9" y="27" font-family="Inter" font-size="10" fill="#9B9683">2 people · below threshold · no fire</text></g>
+          <g transform="translate(433,200)"><rect width="264" height="32" rx="2" fill="rgba(155,150,131,0.05)" stroke="#5C5A4E" stroke-width="1"/><text x="9" y="14" font-family="Courier New" font-size="9" fill="#6B6757">RULE: WEAPON_DETECTION</text><text x="9" y="27" font-family="Inter" font-size="10" fill="#9B9683">no weapon detected · no fire</text></g>
+          <!-- Arrows rules→events -->
+          <line x1="697" y1="56" x2="720" y2="68" stroke="#7FD6B9" stroke-width="1.2" marker-end="url(#ma)"/>
+          <line x1="697" y1="96" x2="720" y2="110" stroke="#7FD6B9" stroke-width="1.2" marker-end="url(#ma)"/>
+          <line x1="697" y1="136" x2="720" y2="155" stroke="#7FD6B9" stroke-width="1.2" marker-end="url(#ma)"/>
+          <!-- Events -->
+          <g transform="translate(725,42)"><rect width="194" height="42" rx="2" fill="rgba(232,123,123,0.1)" stroke="#E87B7B" stroke-width="1"/><text x="9" y="14" font-family="Courier New" font-size="8" fill="#E87B7B">EVT-001 · uuid-a1b2</text><text x="9" y="26" font-family="Inter" font-size="10" fill="#F5F3EE">PPE violation · Person A</text><text x="9" y="38" font-family="Courier New" font-size="8" fill="#9B9683">conf 0.94 · cam14 · t+12ms</text></g>
+          <g transform="translate(725,92)"><rect width="194" height="42" rx="2" fill="rgba(232,123,123,0.1)" stroke="#E87B7B" stroke-width="1"/><text x="9" y="14" font-family="Courier New" font-size="8" fill="#E87B7B">EVT-002 · uuid-c3d4</text><text x="9" y="26" font-family="Inter" font-size="10" fill="#F5F3EE">Zone A entry · Person A</text><text x="9" y="38" font-family="Courier New" font-size="8" fill="#9B9683">conf 0.97 · cam14 · t+12ms</text></g>
+          <g transform="translate(725,142)"><rect width="194" height="42" rx="2" fill="rgba(232,123,123,0.1)" stroke="#E87B7B" stroke-width="1"/><text x="9" y="14" font-family="Courier New" font-size="8" fill="#E87B7B">EVT-003 · uuid-e5f6</text><text x="9" y="26" font-family="Inter" font-size="10" fill="#F5F3EE">Zone A entry · Person B</text><text x="9" y="38" font-family="Courier New" font-size="8" fill="#9B9683">conf 0.95 · cam14 · t+12ms</text></g>
+          <g transform="translate(725,192)"><rect width="194" height="42" rx="2" fill="rgba(240,180,90,0.1)" stroke="#F0B45A" stroke-width="1"/><text x="9" y="14" font-family="Courier New" font-size="8" fill="#F0B45A">EVT-004 · uuid-g7h8</text><text x="9" y="26" font-family="Inter" font-size="10" fill="#F5F3EE">Loitering · Vehicle V1</text><text x="9" y="38" font-family="Courier New" font-size="8" fill="#9B9683">conf 0.89 · cam14 · t+12ms</text></g>
+          <!-- Arrow events→dashboard -->
+          <line x1="919" y1="140" x2="940" y2="140" stroke="#7FD6B9" stroke-width="1.5" marker-end="url(#ma)"/>
+          <!-- Dashboard -->
+          <g transform="translate(945,60)">
+            <rect width="100" height="148" rx="3" fill="rgba(212,168,75,0.06)" stroke="#D4A84B" stroke-width="1.5"/>
+            <text x="9" y="18" font-family="Inter" font-size="11" fill="#F5F3EE">Live Feed</text>
+            <rect x="7" y="26" width="87" height="20" rx="2" fill="rgba(232,123,123,0.15)"/>
+            <text x="12" y="39" font-family="Courier New" font-size="8" fill="#E87B7B">EVT-001 PPE</text>
+            <rect x="7" y="50" width="87" height="20" rx="2" fill="rgba(232,123,123,0.15)"/>
+            <text x="12" y="63" font-family="Courier New" font-size="8" fill="#E87B7B">EVT-002 ZONE-A</text>
+            <rect x="7" y="74" width="87" height="20" rx="2" fill="rgba(232,123,123,0.15)"/>
+            <text x="12" y="87" font-family="Courier New" font-size="8" fill="#E87B7B">EVT-003 ZONE-A</text>
+            <rect x="7" y="98" width="87" height="20" rx="2" fill="rgba(240,180,90,0.15)"/>
+            <text x="12" y="111" font-family="Courier New" font-size="8" fill="#F0B45A">EVT-004 LOIT</text>
+            <text x="9" y="136" font-family="Courier New" font-size="8" fill="#7FD6B9">4 alerts · 1 frame</text>
+          </g>
+          <!-- Bottom note -->
+          <text x="30" y="296" font-family="Courier New" font-size="8.5" fill="#5C5A4E" letter-spacing="1">SINGLE FRAME → 3 OBJECTS DETECTED → 5 RULES EVALUATED IN PARALLEL → 4 ATOMIC EVENTS DISPATCHED → DASHBOARD UPDATES IN REAL TIME</text>
+          <text x="30" y="314" font-family="Courier New" font-size="9" fill="#9B9683" letter-spacing="1">No queueing · No race conditions · No missed detections · End-to-end latency ~50–100 ms</text>
+        </svg>
+      </div>
+
+      <div class="note-box teal">
+        <div class="note-label">Why This Matters for SpectTech</div>
+        <p>In a typical deployment, a safety-critical scenario might involve a person entering a restricted zone <strong>without PPE while also triggering a loitering alert</strong> — all in the same frame. The platform captures and dispatches all three rule violations as separate, independently addressable events. Operators can acknowledge each independently, and forensic review can trace the exact frame that triggered each alert.</p>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Code-Ox Technologies · Confidential · shabeeb.k@code-ox.com · +966 535 716 437</div>
+      <div class="inner-footer-page">6 / 9</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 7 · WHY THIS AVOIDS FAILURE MODES
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-header-title">Technical Document · Failure Mode Analysis</div>
+      <div class="inner-header-ref">SpectTech · May 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-badge" style="font-size:9px;">4.2</div>
+        <div>
+          <div class="part-banner-sub">Section 04.2</div>
+          <div class="part-banner-title">Why This Architecture Avoids the Common Failure Modes</div>
+        </div>
+      </div>
+
+      <div class="section-intro">Five architectural concerns are commonly raised about concurrent incident handling in Vision AI systems. Each has a deliberate design answer — documented here with the specific mechanism that addresses it.</div>
+
+      <div class="failure-list">
+        <div class="failure-item">
+          <div class="failure-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#1ECFC0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h5>No "first object wins" because detection is single-pass</h5>
+            <p>A common concern: <em>"if the model sees the helmet violation first, does it miss the weapon?"</em> The answer is no — modern single-pass detectors return all detections from one inference pass. There is no "first" detection. All objects are returned simultaneously from the same forward pass through the model.</p>
+          </div>
+        </div>
+        <div class="failure-item">
+          <div class="failure-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#1ECFC0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h5>No queueing per camera because rule evaluation is parallelised</h5>
+            <p>Rules are evaluated as independent boolean checks across all detected objects. Five rules across three objects = fifteen parallel evaluations, completed in microseconds. There is no serial bottleneck. The rule engine is stateless per evaluation — no shared mutable state, no lock contention.</p>
+          </div>
+        </div>
+        <div class="failure-item">
+          <div class="failure-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#1ECFC0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h5>No missed events because the event bus accepts all dispatches atomically</h5>
+            <p>Each rule trigger writes an event to the Kafka bus as an atomic operation. Even if the dashboard or downstream consumer is briefly slow, events accumulate in the bus and are processed in order without loss. The bus provides at-least-once delivery with deduplication at the consumer layer via event UUID.</p>
+          </div>
+        </div>
+        <div class="failure-item">
+          <div class="failure-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#1ECFC0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h5>No dashboard overload because clustering happens at the right layer</h5>
+            <p>The clustering layer separates "raw events" (every frame's detections, written to the event store for forensics) from "incident cards" (one logical incident per <code>track_id × rule × time-window</code>). The operator sees actionable cards, not a flood of frame-level detections. The raw event record is always preserved for audit.</p>
+          </div>
+        </div>
+        <div class="failure-item">
+          <div class="failure-icon">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#1ECFC0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <h5>Cross-camera incidents handled at the Regional layer — not double-counted</h5>
+            <p>If the same person walks across cameras 14 → 15 → 16 in sequence, BoT-SORT-ReID + CLIP-ReID at the Regional Aggregator stitches the track. Cross-camera tracking is a Regional layer responsibility, sitting above per-camera detection — so even concurrent multi-camera incidents are correctly attributed and not double-counted.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="part-banner" style="margin-top:14px;">
+        <div class="part-badge">5</div>
+        <div>
+          <div class="part-banner-sub">Section 05</div>
+          <div class="part-banner-title">Performance Envelope · The Numbers, Across the System</div>
+        </div>
+      </div>
+
+      <div class="section-intro">Real performance metrics from the architecture at 5000-camera scale. These hold across vertical, deployment, and concurrent-load conditions.</div>
+
+      <div class="stats-row">
+        <div class="stats-item">
+          <div class="stats-num">~<span>12</span><span style="font-size:14px">ms</span></div>
+          <div class="stats-label">Detection Inference</div>
+          <div class="stats-sub">Single frame · Jetson AGX Orin</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-num">&lt;<span>100</span><span style="font-size:14px">ms</span></div>
+          <div class="stats-label">End-to-End Alert Latency</div>
+          <div class="stats-sub">Frame to dashboard · safety-critical</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-num">~<span>400</span><span style="font-size:14px">K</span></div>
+          <div class="stats-label">Daily Events Processed</div>
+          <div class="stats-sub">All cameras · all rules</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-num" style="font-size:22px">∞</div>
+          <div class="stats-label">Concurrent Events / Frame</div>
+          <div class="stats-sub">No architectural cap</div>
+        </div>
+      </div>
+
+      <div class="note-box teal">
+        <div class="note-label">Latency Decomposition</div>
+        <p><strong>Frame capture → edge inference:</strong> 8–25ms. <strong>Rule evaluation:</strong> &lt;1ms. <strong>Event bus write:</strong> &lt;5ms. <strong>Alert routing → dashboard:</strong> 10–30ms. <strong>Cross-region:</strong> adds &lt;30ms buffer. <strong>Total safety-critical path: &lt;100ms.</strong> Training and VLM workloads are entirely async — they never touch the alerting critical path.</p>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Code-Ox Technologies · Confidential · shabeeb.k@code-ox.com · +966 535 716 437</div>
+      <div class="inner-footer-page">7 / 9</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 8 · CLOSE / NEXT STEPS
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-header-title">Technical Document · Summary &amp; Next Steps</div>
+      <div class="inner-header-ref">SpectTech · May 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-badge">6</div>
+        <div>
+          <div class="part-banner-sub">Summary &amp; Next Steps</div>
+          <div class="part-banner-title">Both Questions, Answered with Depth · Happy to Go Deeper on Any Layer</div>
+        </div>
+      </div>
+
+      <div class="answer-grid">
+        <div class="answer-card">
+          <div class="answer-card-q">Architecture · Summary</div>
+          <h4>4-Tier Multi-Region Federated Architecture with DR</h4>
+          <p>~240 edge nodes across 5 regions. 25 regional aggregators. Central GPU cluster (RTX PRO 6000 Blackwell + H200). Full DR site with RTO &lt; 1 hr and RPO &lt; 5 min. 36–48 week phased regional rollout. The same core platform that operates at 1000 cameras — scaled horizontally, not re-architected.</p>
+        </div>
+        <div class="answer-card">
+          <div class="answer-card-q">Concurrent Handling · Summary</div>
+          <h4>Parallel by Design, No Missed Detections</h4>
+          <p>Single-pass inference returns all detected objects simultaneously. The rule engine evaluates all objects against all rules in parallel. Every rule trigger produces an atomic event. Kafka-backed event bus ensures at-least-once delivery. Alert clustering separates raw events from actionable incident cards without any data loss.</p>
+        </div>
+      </div>
+
+      <div class="sub-label">Available for Further Review</div>
+
+      <div class="infra-table">
+        <div class="infra-row">
+          <div class="infra-lbl">Live Technical Demo</div>
+          <div class="infra-val">Walk through any layer in further detail with your technical team. Run live demos against SpectTech's own sample footage — multi-object, multi-rule, multi-camera scenarios.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Subsystem Documentation</div>
+          <div class="infra-val">Detailed specifications available for: edge node fleet (BOM + specs), regional aggregator configuration, central cluster topology, DR architecture, software stack versions, and HA configurations.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">PoC / Pilot Design</div>
+          <div class="infra-val">Can scope a proof-of-concept deployment covering a representative subset of cameras — designed to validate the concurrent incident handling model and architecture with SpectTech's own infrastructure and use cases.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Integration Architecture</div>
+          <div class="infra-val">API documentation, webhook specifications, and integration architecture for connecting to SpectTech's existing systems — dashboards, ERP, incident management, communication platforms.</div>
+        </div>
+        <div class="infra-row">
+          <div class="infra-lbl">Detailed BOM + Pricing</div>
+          <div class="infra-val">Full Bill of Materials with quantities, unit costs, and deployment timeline available for the 5000-camera tier. Can be scoped to SpectTech's specific regional topology.</div>
+        </div>
+      </div>
+
+      <div class="close-block">
+        <h3>The architecture and concurrent-detection model are designed for <span>city-scale deployments.</span></h3>
+        <p>Multi-object, multi-rule, multi-camera, multi-region — all handled. We can walk through any layer in further detail with your technical team, run live demos against your sample footage, or share specific subsystem documentation on request.</p>
+        <div class="close-contact">
+          <div class="close-contact-item">
+            <strong style="color:#fff;">Code-Ox Technologies</strong>
+          </div>
+          <div class="close-contact-item">
+            <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a>
+          </div>
+          <div class="close-contact-item">
+            <a href="tel:+966535716437">+966 535 716 437</a>
+          </div>
+          <div class="close-contact-item">
+            code-ox.com
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="../burjeel/code-ox-logo.svg" alt="Code-Ox">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Code-Ox Technologies · Confidential · shabeeb.k@code-ox.com · +966 535 716 437</div>
+      <div class="inner-footer-page">8 / 8</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
