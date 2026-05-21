@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Growth Proposal — PCabins Factory</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #dc2626; --red-bg: #fef2f2; --red-border: #fecaca;
+  --amber: #b45309; --amber-bg: #fffbeb; --amber-border: #fde68a;
+  --blue: #1d4ed8; --blue-bg: #eff6ff; --blue-border: #bfdbfe;
+  --green: #047857; --green-bg: #f0fdf4; --green-border: #bbf7d0;
+  --slate: #475569; --slate-bg: #f8fafc; --slate-border: #e2e8f0;
+  --text: #0f172a; --text-muted: #1e293b; --text-dim: #64748b;
+  --border: #e2e8f0; --sans: 'Inter', -apple-system, sans-serif;
+  --brand: #b8750a;
+}
+html, body { background: #fff; color: var(--text); font-family: var(--sans); font-size: 13px; line-height: 1.6; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+/* COVER */
+.cover { display: flex; flex-direction: column; page-break-after: always; }
+.cover-top {
+  background: linear-gradient(135deg, #0f172a 0%, #3d1f02 100%);
+  color: white; padding: 64px 80px 56px; flex-shrink: 0; position: relative; overflow: hidden;
+}
+.cover-top::before { content: ''; position: absolute; right: -80px; top: -80px; width: 360px; height: 360px; border-radius: 50%; background: rgba(184,117,10,0.15); }
+.cover-top::after { content: ''; position: absolute; right: 80px; bottom: -60px; width: 200px; height: 200px; border-radius: 50%; background: rgba(184,117,10,0.08); }
+.cover-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+.cover-brand { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+.cover-brand-dot { width: 10px; height: 10px; border-radius: 50%; background: #f5c067; }
+.cover-brand-name { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.7); }
+.cover-title { font-size: 52px; font-weight: 900; letter-spacing: -2px; line-height: 1.0; color: white; margin-bottom: 12px; position: relative; z-index: 1; }
+.cover-title span { color: #f5c067; }
+.cover-subtitle { font-size: 19px; font-weight: 500; color: rgba(255,255,255,0.55); margin-bottom: 40px; }
+.cover-pillars { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
+.cover-pillar { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7); }
+.cover-stat-row { display: flex; gap: 0; margin-top: 48px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1; }
+.cstat { flex: 1; padding-right: 36px; }
+.cstat:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.1); margin-right: 36px; }
+.cstat-num { font-size: 32px; font-weight: 900; line-height: 1; color: white; letter-spacing: -1px; }
+.cstat-num.accent { color: #f5c067; }
+.cstat-lbl { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 4px; font-weight: 500; }
+.cover-bottom { background: var(--slate-bg); padding: 36px 72px; display: flex; flex-direction: column; gap: 24px; }
+.cover-brief { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 32px; }
+.cbrief-item { background: white; padding: 18px 20px; }
+.cbrief-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+.cbrief-val { font-size: 13px; font-weight: 700; color: var(--text); }
+
+/* PAGES */
+.page { max-width: 1200px; margin: 0 auto; padding: 56px 80px 56px; }
+.section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+.section-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
+
+/* SERVICE BLOCKS */
+.service-block { border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+.service-header { background: var(--slate-bg); padding: 16px 22px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--border); }
+.service-num { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+.service-name { font-size: 15px; font-weight: 800; flex: 1; }
+.service-impact { font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 20px; }
+.service-body { padding: 18px 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.action-item { font-size: 12px; color: var(--text-muted); padding: 6px 10px 6px 22px; background: white; border: 1px solid var(--border); border-radius: 6px; position: relative; line-height: 1.5; }
+.action-item::before { content: '→'; position: absolute; left: 8px; color: var(--text-dim); font-size: 11px; top: 7px; }
+.kpi-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.kpi-pill { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+
+/* FUNNEL TABLE */
+.funnel-table { width: 100%; border-collapse: collapse; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.funnel-table th { background: var(--text); color: white; padding: 10px 14px; font-size: 11px; font-weight: 700; text-align: left; }
+.funnel-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 12.5px; vertical-align: top; }
+.funnel-table tr:last-child td { border-bottom: none; }
+.funnel-table tr:nth-child(even) td { background: #fafafa; }
+
+/* TIMELINE */
+.tl-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+.tl-month { border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+.tl-header { padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.tl-month-num { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2px; }
+.tl-month-name { font-size: 14px; font-weight: 800; }
+.tl-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 0; }
+.tl-week { display: grid; grid-template-columns: 44px 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.tl-week:last-child { border-bottom: none; }
+.tl-wk-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-dim); padding-top: 2px; }
+.tl-tasks { display: flex; flex-direction: column; gap: 4px; }
+.tl-task { font-size: 11.5px; color: var(--text-muted); line-height: 1.4; }
+
+/* KPI TABLE */
+.kpi-table { width: 100%; border-collapse: collapse; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.kpi-table th { background: var(--slate-bg); padding: 9px 14px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); text-align: left; }
+.kpi-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+.kpi-table tr:last-child td { border-bottom: none; }
+.kpi-table tr:nth-child(even) td { background: #fafafa; }
+
+/* CLOSING */
+.closing-items { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+.closing-item { border: 1.5px solid var(--border); border-radius: 12px; padding: 18px; }
+.closing-num { font-size: 32px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px; }
+.closing-label { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+.closing-desc { font-size: 11.5px; color: var(--text-dim); line-height: 1.5; }
+
+/* FOOTER */
+.footer { max-width: 1200px; margin: 0 auto; padding: 24px 80px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; color: var(--text-dim); font-size: 11px; }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  nav { padding: 0 16px !important; font-size: 11px !important; height: 44px !important; }
+  .cover-top { padding: 32px 20px 28px; }
+  .cover-bottom { padding: 24px 20px; }
+  .cover-title { font-size: 30px !important; }
+  .cover-stat-row { flex-direction: column; gap: 16px; }
+  .cstat:not(:last-child) { border-right: none; margin-right: 0; padding-right: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; }
+  .cover-brief { grid-template-columns: 1fr !important; }
+  .page { padding: 28px 18px 32px; }
+  .section-title { font-size: 16px; }
+  .service-body { grid-template-columns: 1fr !important; }
+  .action-grid { grid-template-columns: 1fr !important; }
+  .tl-cols { grid-template-columns: 1fr !important; }
+  .closing-items { grid-template-columns: 1fr !important; }
+  .funnel-table, .kpi-table { display: block; overflow-x: auto; font-size: 11px; }
+  .footer { padding: 16px 18px; flex-direction: column; gap: 4px; text-align: center; }
+}
+
+.view-notice{display:none}
+@media(max-width:768px){
+  .view-notice{display:flex;align-items:center;gap:10px;background:#1e293b;color:rgba(255,255,255,0.9);padding:11px 16px;font-size:12px;font-weight:500;position:sticky;top:44px;z-index:998;border-bottom:1px solid rgba(255,255,255,0.08);font-family:Inter,sans-serif;}
+  .view-notice-close{margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.5);font-size:18px;cursor:pointer;padding:0 4px;line-height:1}
+}
+</style>
+</head>
+<body>
+<div class="view-notice" id="vn"><i data-lucide="monitor" style="width:16px;height:16px"></i> For the best experience, open on a laptop or desktop. <button class="view-notice-close" onclick="document.getElementById('vn').remove()">×</button></div>
+<nav style="position:sticky;top:0;z-index:1000;background:white;border-bottom:1px solid #e2e8f0;padding:0 2rem;height:48px;display:flex;align-items:center;gap:6px;font-family:Inter,sans-serif;font-size:12.5px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:5px;color:#2563eb;text-decoration:none;font-weight:700;padding:4px 10px;border-radius:6px" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='transparent'">← Hub</a>
+  <span style="color:#cbd5e1;font-size:14px">/</span>
+  <a href="index.html" style="color:#64748b;text-decoration:none;font-weight:500">PCabins</a>
+  <span style="color:#cbd5e1;font-size:14px">/</span>
+  <span style="color:#0f172a;font-weight:700">Digital Growth Proposal</span>
+</nav>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-label">Digital Growth Proposal · May 2026</div>
+    <div class="cover-brand">
+      <div class="cover-brand-dot"></div>
+      <div class="cover-brand-name">PCabins Factory (مصنع المنزل المحمول)</div>
+    </div>
+    <div class="cover-title">From Hidden<br>to <span>Market Leader</span></div>
+    <div class="cover-subtitle">20 years of excellence. Time for the market to know it.</div>
+    <div class="cover-pillars">
+      <div class="cover-pillar">SEO & Content</div>
+      <div class="cover-pillar">AI Search (GEO)</div>
+      <div class="cover-pillar">B2B Lead Generation</div>
+      <div class="cover-pillar">Google Business</div>
+      <div class="cover-pillar">WhatsApp API</div>
+      <div class="cover-pillar">Social Media</div>
+      <div class="cover-pillar">ISO Brand Authority</div>
+      <div class="cover-pillar">Client Retention</div>
+    </div>
+    <div class="cover-stat-row">
+      <div class="cstat">
+        <div class="cstat-num accent">3–5x</div>
+        <div class="cstat-lbl">Inbound Lead Growth Target</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-num">90</div>
+        <div class="cstat-lbl">Day Execution Plan</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-num">8</div>
+        <div class="cstat-lbl">Strategic Pillars</div>
+      </div>
+      <div class="cstat">
+        <div class="cstat-num accent">20+</div>
+        <div class="cstat-lbl">Years of Industry Authority</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-brief">
+      <div class="cbrief-item"><div class="cbrief-lbl">Prepared For</div><div class="cbrief-val">PCabins Factory — Al-Malaz, Riyadh, KSA</div></div>
+      <div class="cbrief-item"><div class="cbrief-lbl">Prepared By</div><div class="cbrief-val">Shabeeb · +966535716437</div></div>
+      <div class="cbrief-item"><div class="cbrief-lbl">Date</div><div class="cbrief-val">May 2026</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 1 — SITUATION & OPPORTUNITY -->
+<div class="page">
+  <div class="section-eyebrow">Situation & Opportunity</div>
+  <div class="section-title">Why Now Is the Right Time to Invest in Digital Growth</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div style="background:var(--red-bg);border:1.5px solid var(--red-border);border-radius:12px;padding:22px 24px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:14px">Where PCabins Is Today</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--red)">20+ years experience — but invisible on Google Search</div>
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--red)">Aramco + airport contracts — but no case studies online</div>
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--red)">Triple ISO certification — but not visible above the fold</div>
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--red)">Real product photos present — but zero specs or body copy on product pages</div>
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--red)">SEO score 3.4/10 — competitors winning on weaker credentials</div>
+      </div>
+    </div>
+    <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:12px;padding:22px 24px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:14px">Where PCabins Can Be in 6 Months</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--green)">#1 Google Maps listing for "كبائن جاهزة الرياض"</div>
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--green)">Top 5 organic ranking for prefab cabin keywords</div>
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--green)">3–5x more inbound quote requests per month</div>
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--green)">Recognized as "ISO-certified" supplier of choice in Riyadh</div>
+        <div style="font-size:12.5px;color:var(--text-muted);padding-left:14px;border-left:3px solid var(--green)">Full project portfolio visible — winning corporate RFQs online</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px">
+    <div style="background:white;border:1.5px solid var(--border);border-radius:12px;padding:18px;text-align:center">
+      <div style="font-size:36px;font-weight:900;color:var(--blue);letter-spacing:-2px">SAR 4B+</div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-top:6px">KSA Prefab Construction Market</div>
+    </div>
+    <div style="background:white;border:1.5px solid var(--border);border-radius:12px;padding:18px;text-align:center">
+      <div style="font-size:36px;font-weight:900;color:var(--green);letter-spacing:-2px">18%</div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-top:6px">Annual CAGR Vision 2030 Projects</div>
+    </div>
+    <div style="background:white;border:1.5px solid var(--border);border-radius:12px;padding:18px;text-align:center">
+      <div style="font-size:36px;font-weight:900;color:var(--amber);letter-spacing:-2px">72%</div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-top:6px">B2B Buyers Start Vendor Search Online</div>
+    </div>
+    <div style="background:white;border:1.5px solid var(--border);border-radius:12px;padding:18px;text-align:center">
+      <div style="font-size:36px;font-weight:900;color:var(--red);letter-spacing:-2px">3.4</div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-top:6px">Current SEO Score /10 — Urgent Fix Needed</div>
+    </div>
+  </div>
+
+  <div style="background:var(--slate-bg);border:1.5px solid var(--border);border-radius:12px;padding:22px 26px">
+    <div style="font-size:14px;font-weight:800;margin-bottom:8px">The Core Problem</div>
+    <div style="font-size:13px;color:var(--text-muted);line-height:1.8">PCabins has <strong>everything a B2B buyer needs to choose them</strong> — 20 years of experience, ISO certifications, major corporate clients, a real factory. But competitors with weaker credentials are winning contracts simply because they're easier to find online, their work is visible in photos, and they have testimonials and case studies. This is a solvable problem — and the fixes are mostly low-cost, high-impact. The opportunity is significant.</div>
+  </div>
+</div>
+
+<!-- PAGE 2 — SERVICE BLOCKS (1-4) -->
+<div class="page">
+  <div class="section-eyebrow">Strategic Services</div>
+  <div class="section-title">8-Pillar Digital Growth Plan — Services 1–4</div>
+
+  <!-- Service 1 -->
+  <div class="service-block">
+    <div class="service-header">
+      <div class="service-num" style="background:var(--blue-bg);color:var(--blue)">01</div>
+      <div class="service-name">SEO & Content Marketing</div>
+      <div class="service-impact" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)">Critical Priority</div>
+    </div>
+    <div class="service-body">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">Actions</div>
+        <div class="action-grid">
+          <div class="action-item">Configure Polylang hreflang + fix English URL slugs</div>
+          <div class="action-item">Write English meta titles via RankMath SEO</div>
+          <div class="action-item">Create English product landing pages in Elementor</div>
+          <div class="action-item">Launch bilingual blog (2 articles/month)</div>
+          <div class="action-item">Add LocalBusiness + Product schema via RankMath</div>
+          <div class="action-item">Configure WP Rocket + WebP images → 70+ mobile</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">KPIs (6 months)</div>
+        <div class="kpi-row">
+          <div class="kpi-pill" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">SEO score: 3.4 → 7.5/10</div>
+          <div class="kpi-pill" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">+180% organic traffic</div>
+          <div class="kpi-pill" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">Top 5 for 10 target keywords</div>
+          <div class="kpi-pill" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)">8 blog articles published</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service 2 -->
+  <div class="service-block">
+    <div class="service-header">
+      <div class="service-num" style="background:var(--amber-bg);color:var(--amber)">02</div>
+      <div class="service-name">Google Business Profile & Local SEO</div>
+      <div class="service-impact" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)">Highest ROI Fix</div>
+    </div>
+    <div class="service-body">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">Actions</div>
+        <div class="action-grid">
+          <div class="action-item">Verify & complete GBP listing</div>
+          <div class="action-item">Upload 20+ factory + project photos</div>
+          <div class="action-item">Add ISO certifications to GBP attributes</div>
+          <div class="action-item">Request reviews from 10 existing clients</div>
+          <div class="action-item">Post GBP updates (projects, offers) weekly</div>
+          <div class="action-item">Respond to all reviews within 24 hours</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">KPIs (3 months)</div>
+        <div class="kpi-row">
+          <div class="kpi-pill" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">Top 5 local Maps ranking</div>
+          <div class="kpi-pill" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">20+ Google reviews</div>
+          <div class="kpi-pill" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">4.5★ average rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service 3 -->
+  <div class="service-block">
+    <div class="service-header">
+      <div class="service-num" style="background:var(--green-bg);color:var(--green)">03</div>
+      <div class="service-name">B2B Lead Generation & Corporate Outreach</div>
+      <div class="service-impact" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">High Impact</div>
+    </div>
+    <div class="service-body">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">Actions</div>
+        <div class="action-grid">
+          <div class="action-item">Create downloadable product catalog (PDF)</div>
+          <div class="action-item">Add online quote request form to website</div>
+          <div class="action-item">Build LinkedIn company profile</div>
+          <div class="action-item">Target facility managers at top 50 KSA firms</div>
+          <div class="action-item">Register on Etimad + government tender portals</div>
+          <div class="action-item">Create 3 detailed project case studies</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">KPIs (6 months)</div>
+        <div class="kpi-row">
+          <div class="kpi-pill" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">3x more quote requests/month</div>
+          <div class="kpi-pill" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">500+ LinkedIn followers</div>
+          <div class="kpi-pill" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">2 government tender wins</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service 4 -->
+  <div class="service-block">
+    <div class="service-header">
+      <div class="service-num" style="background:var(--red-bg);color:var(--red)">04</div>
+      <div class="service-name">Website Redesign & Photography</div>
+      <div class="service-impact" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)">Foundation Fix</div>
+    </div>
+    <div class="service-body">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">Actions</div>
+        <div class="action-grid">
+          <div class="action-item">Professional factory photography session</div>
+          <div class="action-item">Add product specs, dimensions & body copy to product pages</div>
+          <div class="action-item">Add ISO certification badge bar above fold</div>
+          <div class="action-item">Add client logo section (Aramco, airports)</div>
+          <div class="action-item">Build product specification pages</div>
+          <div class="action-item">Embed Google Maps on contact page</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">KPIs (4 weeks)</div>
+        <div class="kpi-row">
+          <div class="kpi-pill" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">+40% time-on-site</div>
+          <div class="kpi-pill" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">-60% bounce rate</div>
+          <div class="kpi-pill" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">100+ real photos live</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3 — SERVICE BLOCKS (5-8) -->
+<div class="page">
+  <div class="section-eyebrow">Strategic Services (continued)</div>
+  <div class="section-title">8-Pillar Digital Growth Plan — Services 5–8</div>
+
+  <!-- Service 5 -->
+  <div class="service-block">
+    <div class="service-header">
+      <div class="service-num" style="background:#f0fdf4;color:var(--green)">05</div>
+      <div class="service-name">WhatsApp Business API Automation</div>
+      <div class="service-impact" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">High ROI</div>
+    </div>
+    <div class="service-body">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">Actions</div>
+        <div class="action-grid">
+          <div class="action-item">Set up WhatsApp Business API</div>
+          <div class="action-item">Auto-response for new inquiries (within 1 min)</div>
+          <div class="action-item">Send product catalog on first contact</div>
+          <div class="action-item">Follow-up sequence for pending quotes (Day 1/3/7)</div>
+          <div class="action-item">Broadcast new products to opt-in clients</div>
+          <div class="action-item">Post-delivery satisfaction survey via WA</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">KPIs (3 months)</div>
+        <div class="kpi-row">
+          <div class="kpi-pill" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">95% message open rate</div>
+          <div class="kpi-pill" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">Response time: &lt;2 min</div>
+          <div class="kpi-pill" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">+30% quote-to-contract rate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service 6 -->
+  <div class="service-block">
+    <div class="service-header">
+      <div class="service-num" style="background:#fdf4ff;color:#7c3aed">06</div>
+      <div class="service-name">Social Media Strategy (TikTok, Instagram, Snapchat)</div>
+      <div class="service-impact" style="background:#fdf4ff;color:#7c3aed;border:1px solid #ddd6fe">Brand Awareness</div>
+    </div>
+    <div class="service-body">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">Actions</div>
+        <div class="action-grid">
+          <div class="action-item">Film factory production process (viral content)</div>
+          <div class="action-item">Time-lapse: cabin assembly in 60 seconds</div>
+          <div class="action-item">Before/after project transformation videos</div>
+          <div class="action-item">TikTok: "How a portable cabin is made" series</div>
+          <div class="action-item">Instagram: project gallery + client testimonials</div>
+          <div class="action-item">Snapchat: behind-the-scenes factory tours</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">KPIs (6 months)</div>
+        <div class="kpi-row">
+          <div class="kpi-pill" style="background:#fdf4ff;color:#7c3aed;border:1px solid #ddd6fe">5,000+ Instagram followers</div>
+          <div class="kpi-pill" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">1M+ TikTok views</div>
+          <div class="kpi-pill" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">50+ DM leads/month from social</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service 7 -->
+  <div class="service-block">
+    <div class="service-header">
+      <div class="service-num" style="background:var(--amber-bg);color:var(--amber)">07</div>
+      <div class="service-name">ISO Brand Authority & Trust Building</div>
+      <div class="service-impact" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">Differentiator</div>
+    </div>
+    <div class="service-body">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">Actions</div>
+        <div class="action-grid">
+          <div class="action-item">Create ISO certifications badge page</div>
+          <div class="action-item">Download certificate PDFs on request</div>
+          <div class="action-item">Feature ISO in all marketing materials</div>
+          <div class="action-item">Write article: "Why ISO certification matters"</div>
+          <div class="action-item">Register as certified supplier on Aramco portal</div>
+          <div class="action-item">Apply for Saudi Contractors Authority listing</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">KPIs (6 months)</div>
+        <div class="kpi-row">
+          <div class="kpi-pill" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">Rank for "ISO certified cabin Riyadh"</div>
+          <div class="kpi-pill" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">3+ directory certifications</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service 8 -->
+  <div class="service-block">
+    <div class="service-header">
+      <div class="service-num" style="background:var(--blue-bg);color:var(--blue)">08</div>
+      <div class="service-name">AI Search Visibility (GEO) & ChatGPT Optimization</div>
+      <div class="service-impact" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">Future-Ready</div>
+    </div>
+    <div class="service-body">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">Actions</div>
+        <div class="action-grid">
+          <div class="action-item">Optimize content for AI search answers</div>
+          <div class="action-item">Create "best prefab cabin company Riyadh" content</div>
+          <div class="action-item">Build citations across authoritative directories</div>
+          <div class="action-item">FAQ content targeting AI snippet format</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px">KPIs (6 months)</div>
+        <div class="kpi-row">
+          <div class="kpi-pill" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">Cited in ChatGPT answers</div>
+          <div class="kpi-pill" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)">5+ featured snippets</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4 — FUNNEL & CHANNEL TABLE -->
+<div class="page">
+  <div class="section-eyebrow">Full Funnel Strategy</div>
+  <div class="section-title">Lead Journey from Awareness to Signed Contract</div>
+
+  <table class="funnel-table">
+    <thead>
+      <tr>
+        <th>Funnel Stage</th>
+        <th>Goal</th>
+        <th>Channels</th>
+        <th>Content / Tactic</th>
+        <th>Metric</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:#7c3aed">AWARENESS</strong></td>
+        <td>Get discovered by new prospects</td>
+        <td>Google Search, TikTok, Google Maps, AI Search</td>
+        <td>Blog articles, product pages, factory TikTok videos, GBP posts</td>
+        <td>Impressions, views, map appearances</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--blue)">CONSIDERATION</strong></td>
+        <td>Build trust & educate buyers</td>
+        <td>Website, Instagram, TikTok, WhatsApp</td>
+        <td>Project case studies, ISO page, comparison guides, product specs, client logos</td>
+        <td>Time on site, pages per session, catalog downloads</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--amber)">LEAD CAPTURE</strong></td>
+        <td>Capture contact information</td>
+        <td>Website quote form, WhatsApp, direct call</td>
+        <td>Quote request form, WhatsApp auto-response, downloadable catalog</td>
+        <td>Form submissions, WhatsApp messages, calls</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--green)">CONVERSION</strong></td>
+        <td>Convert lead to signed contract</td>
+        <td>WhatsApp, email, factory visit</td>
+        <td>Follow-up sequence (Day 1/3/7), factory tour invitation, site visit proposal</td>
+        <td>Quote-to-contract ratio, deal value, time-to-close</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--text)">RETENTION</strong></td>
+        <td>Repeat orders & referrals</td>
+        <td>WhatsApp, email, LinkedIn</td>
+        <td>Post-delivery survey, new product announcements, referral program, annual maintenance reminder</td>
+        <td>Repeat order rate, referral leads, NPS score</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-eyebrow" style="margin-top:28px">Channel Priority Matrix</div>
+  <div class="section-title" style="font-size:17px">Which Channels to Prioritize and Why</div>
+
+  <table class="funnel-table">
+    <thead>
+      <tr>
+        <th>Channel</th>
+        <th>Priority</th>
+        <th>Why</th>
+        <th>Investment</th>
+        <th>Expected ROI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Google Business Profile</strong></td>
+        <td><span style="background:var(--red-bg);color:var(--red);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700">Critical</span></td>
+        <td>Free, high intent, local B2B buyers use Maps first</td>
+        <td>Time only</td>
+        <td>Very High — immediate leads</td>
+      </tr>
+      <tr>
+        <td><strong>SEO / Organic Search</strong></td>
+        <td><span style="background:var(--red-bg);color:var(--red);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700">Critical</span></td>
+        <td>Long-term lead machine, compound returns</td>
+        <td>Medium (content creation)</td>
+        <td>High — builds over 90+ days</td>
+      </tr>
+      <tr>
+        <td><strong>WhatsApp Business API</strong></td>
+        <td><span style="background:var(--amber-bg);color:var(--amber);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700">High</span></td>
+        <td>95% open rate, fastest response, preferred in KSA</td>
+        <td>Low (API subscription)</td>
+        <td>High — improves conversion rate</td>
+      </tr>
+      <tr>
+        <td><strong>TikTok / Instagram</strong></td>
+        <td><span style="background:var(--amber-bg);color:var(--amber);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700">High</span></td>
+        <td>Factory content = viral potential, brand discovery</td>
+        <td>Medium (video production)</td>
+        <td>Medium-High — brand awareness + DM leads</td>
+      </tr>
+      <tr>
+        <td><strong>LinkedIn (B2B Outreach)</strong></td>
+        <td><span style="background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700">Medium</span></td>
+        <td>Corporate buyers, facility managers, procurement</td>
+        <td>Medium (content + ads)</td>
+        <td>High for corporate contracts</td>
+      </tr>
+      <tr>
+        <td><strong>Google Search Ads</strong></td>
+        <td><span style="background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700">Optional</span></td>
+        <td>Instant visibility before SEO kicks in</td>
+        <td>Budget required (SAR 3,000+/mo)</td>
+        <td>Good — immediate while SEO builds</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PAGE 5 — 90-DAY TIMELINE -->
+<div class="page">
+  <div class="section-eyebrow">90-Day Execution Timeline</div>
+  <div class="section-title">Week-by-Week Action Plan</div>
+
+  <div class="tl-cols">
+    <div class="tl-month" style="border-color:var(--red-border)">
+      <div class="tl-header" style="background:var(--red-bg)">
+        <div class="tl-month-num" style="color:var(--red)">Month 1</div>
+        <div class="tl-month-name">Foundation & Fixes</div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--red)">W1</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Set up Google Search Console</div>
+            <div class="tl-task">Claim & verify Google Business Profile</div>
+            <div class="tl-task">Add hreflang + canonical tags</div>
+          </div>
+        </div>
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--red)">W2</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Professional photography session (factory + products)</div>
+            <div class="tl-task">Write English meta titles & descriptions</div>
+            <div class="tl-task">Upload 20+ photos to GBP</div>
+          </div>
+        </div>
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--red)">W3</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Add product specs & body copy to all product pages</div>
+            <div class="tl-task">Add ISO badge bar above fold</div>
+            <div class="tl-task">Add quote request form</div>
+          </div>
+        </div>
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--red)">W4</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Install LocalBusiness + Product schema</div>
+            <div class="tl-task">Request 5 Google reviews from clients</div>
+            <div class="tl-task">Submit sitemap to Search Console</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-month" style="border-color:var(--amber-border)">
+      <div class="tl-header" style="background:var(--amber-bg)">
+        <div class="tl-month-num" style="color:var(--amber)">Month 2</div>
+        <div class="tl-month-name">Content & Visibility</div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--amber)">W5</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Launch blog — publish first 2 articles (EN + AR)</div>
+            <div class="tl-task">Create Aramco project case study page</div>
+            <div class="tl-task">Set up WhatsApp Business API</div>
+          </div>
+        </div>
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--amber)">W6</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Build English product landing pages</div>
+            <div class="tl-task">Create Airport project case study</div>
+            <div class="tl-task">Start TikTok content calendar (2 videos/week)</div>
+          </div>
+        </div>
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--amber)">W7</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Add FAQ sections + FAQPage schema</div>
+            <div class="tl-task">Create ISO certifications dedicated page</div>
+            <div class="tl-task">Publish 2 more blog articles</div>
+          </div>
+        </div>
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--amber)">W8</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Optimize page speed (images → WebP)</div>
+            <div class="tl-task">Submit to Kompass Arabia + business directories</div>
+            <div class="tl-task">LinkedIn company page setup</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-month" style="border-color:var(--green-border)">
+      <div class="tl-header" style="background:var(--green-bg)">
+        <div class="tl-month-num" style="color:var(--green)">Month 3</div>
+        <div class="tl-month-name">Authority & Scale</div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--green)">W9</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Review keyword rankings — adjust strategy</div>
+            <div class="tl-task">Target 15+ Google reviews on GBP</div>
+            <div class="tl-task">Run first B2B LinkedIn outreach campaign</div>
+          </div>
+        </div>
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--green)">W10</div>
+          <div class="tl-tasks">
+            <div class="tl-task">Publish 2 more blog articles</div>
+            <div class="tl-task">Internal linking audit + fix</div>
+            <div class="tl-task">Register on Etimad government tender portal</div>
+          </div>
+        </div>
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--green)">W11</div>
+          <div class="tl-tasks">
+            <div class="tl-task">WhatsApp follow-up automation fine-tune</div>
+            <div class="tl-task">TikTok analytics review + top video boost</div>
+            <div class="tl-task">Create downloadable product catalog PDF</div>
+          </div>
+        </div>
+        <div class="tl-week">
+          <div class="tl-wk-label" style="color:var(--green)">W12</div>
+          <div class="tl-tasks">
+            <div class="tl-task">90-day results review + KPI report</div>
+            <div class="tl-task">Plan months 4–6 strategy</div>
+            <div class="tl-task">Client satisfaction survey via WhatsApp</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 6 — KPI TABLE + CLOSING -->
+<div class="page">
+  <div class="section-eyebrow">KPI Dashboard</div>
+  <div class="section-title">10 KPIs — Baseline & Projected Targets</div>
+
+  <div style="background:var(--amber-bg);border:1.5px solid var(--amber-border);border-radius:8px;padding:12px 16px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start">
+    <div style="font-size:16px;flex-shrink:0;margin-top:1px">⚠</div>
+    <div style="font-size:12px;color:#92400e;line-height:1.6"><strong>Projections, Not Guarantees.</strong> All targets are estimated benchmarks based on industry data for similar B2B manufacturing businesses in Saudi Arabia. Actual results depend on implementation timeline, content quality, market conditions, and competitor activity. These figures are directional goals to track progress — not contractual commitments.</div>
+  </div>
+
+  <table class="kpi-table">
+    <thead>
+      <tr>
+        <th>KPI</th>
+        <th>Current Baseline</th>
+        <th>3-Month Projection</th>
+        <th>6-Month Projection</th>
+        <th>Channel</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Monthly Inbound Leads</strong></td>
+        <td style="color:var(--red)">~5 leads/month</td>
+        <td style="color:#d97706">~15 leads/month</td>
+        <td style="color:var(--green)">~25+ leads/month</td>
+        <td>All channels</td>
+      </tr>
+      <tr>
+        <td><strong>Organic Search Traffic</strong></td>
+        <td style="color:var(--red)">Very low (SEO 3.4/10)</td>
+        <td style="color:#d97706">~+50–100% increase</td>
+        <td style="color:var(--green)">~+200–300% increase</td>
+        <td>SEO + Content</td>
+      </tr>
+      <tr>
+        <td><strong>Google Business Profile Views</strong></td>
+        <td style="color:var(--red)">Near zero (not optimized)</td>
+        <td style="color:#d97706">~300–500 views/month</td>
+        <td style="color:var(--green)">~1,000+ views/month</td>
+        <td>Google Maps</td>
+      </tr>
+      <tr>
+        <td><strong>Google Reviews</strong></td>
+        <td style="color:var(--red)">0–2 reviews</td>
+        <td style="color:#d97706">~10–15 reviews</td>
+        <td style="color:var(--green)">~25–30+ reviews</td>
+        <td>GBP</td>
+      </tr>
+      <tr>
+        <td><strong>WhatsApp Response Time</strong></td>
+        <td style="color:var(--red)">Manual / hours</td>
+        <td style="color:var(--green)">Auto / &lt;2 minutes</td>
+        <td style="color:var(--green)">Auto / &lt;1 minute</td>
+        <td>WhatsApp API</td>
+      </tr>
+      <tr>
+        <td><strong>Quote-to-Contract Rate</strong></td>
+        <td style="color:var(--red)">Unknown / untracked</td>
+        <td style="color:#d97706">Track baseline</td>
+        <td style="color:var(--green)">Measurable improvement</td>
+        <td>WhatsApp + CRM</td>
+      </tr>
+      <tr>
+        <td><strong>Website Mobile Speed</strong></td>
+        <td style="color:#d97706">65/100</td>
+        <td style="color:#d97706">70+/100</td>
+        <td style="color:var(--green)">75+/100</td>
+        <td>Technical SEO</td>
+      </tr>
+      <tr>
+        <td><strong>Blog Articles Published</strong></td>
+        <td style="color:var(--red)">0 articles</td>
+        <td style="color:#d97706">~4 articles</td>
+        <td style="color:var(--green)">~10–12 articles</td>
+        <td>Content Marketing</td>
+      </tr>
+      <tr>
+        <td><strong>TikTok / Instagram Followers</strong></td>
+        <td style="color:var(--red)">~490 (Instagram only)</td>
+        <td style="color:#d97706">Measurable growth</td>
+        <td style="color:var(--green)">Significant growth</td>
+        <td>Social Media</td>
+      </tr>
+      <tr>
+        <td><strong>Overall SEO Score</strong></td>
+        <td style="color:var(--red)">3.4/10</td>
+        <td style="color:#d97706">~5.0–5.5/10</td>
+        <td style="color:var(--green)">~7.0–7.5/10</td>
+        <td>SEO + Technical</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-eyebrow" style="margin-top:28px">Next Steps</div>
+  <div class="section-title" style="font-size:17px">How to Get Started</div>
+
+  <div class="closing-items">
+    <div class="closing-item" style="border-color:var(--red-border);background:var(--red-bg)">
+      <div class="closing-num" style="color:var(--red)">01</div>
+      <div class="closing-label">Approve this Proposal</div>
+      <div class="closing-desc">Review and confirm the strategy. Identify which services to prioritize based on budget and timeline. No long-term contract required for Phase 1.</div>
+    </div>
+    <div class="closing-item" style="border-color:var(--amber-border);background:var(--amber-bg)">
+      <div class="closing-num" style="color:var(--amber)">02</div>
+      <div class="closing-label">Schedule Week 1 Kick-Off</div>
+      <div class="closing-desc">Book a factory photography session and access review for Google Search Console + GBP. Week 1 actions are all free-to-implement and deliver immediate impact.</div>
+    </div>
+    <div class="closing-item" style="border-color:var(--green-border);background:var(--green-bg)">
+      <div class="closing-num" style="color:var(--green)">03</div>
+      <div class="closing-label">Begin 90-Day Execution</div>
+      <div class="closing-desc">Monthly progress reports with KPI tracking. Results begin appearing within 30 days (GBP, reviews), full SEO results within 90 days. 3x–5x lead growth in 6 months.</div>
+    </div>
+  </div>
+
+  <div style="background:var(--text);color:white;border-radius:14px;padding:28px 32px;text-align:center">
+    <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Ready to start?</div>
+    <div style="font-size:22px;font-weight:900;color:white;margin-bottom:6px">Let's turn 20 years of excellence into market leadership.</div>
+    <div style="font-size:14px;color:rgba(255,255,255,0.55);margin-bottom:20px">Shabeeb · +966535716437</div>
+    <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+      <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:8px 20px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.8)">WhatsApp</div>
+      <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:8px 20px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.8)">Email</div>
+      <div style="background:#b8750a;border-radius:20px;padding:8px 20px;font-size:12px;font-weight:700;color:white">Book Meeting →</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>Digital Growth Proposal · pcabins.com · PCabins Factory</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span>Shabeeb · +966535716437 · May 2026</span>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){lucide.createIcons();});</script>
+</body>
+</html>

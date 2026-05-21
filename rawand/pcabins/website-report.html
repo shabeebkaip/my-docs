@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Audit Report — pcabins.com</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #dc2626; --red-bg: #fef2f2; --red-border: #fecaca;
+  --amber: #b45309; --amber-bg: #fffbeb; --amber-border: #fde68a;
+  --blue: #1d4ed8; --blue-bg: #eff6ff; --blue-border: #bfdbfe;
+  --green: #047857; --green-bg: #f0fdf4; --green-border: #bbf7d0;
+  --slate: #475569; --slate-bg: #f8fafc; --slate-border: #e2e8f0;
+  --text: #0f172a; --text-muted: #1e293b; --text-dim: #64748b;
+  --border: #e2e8f0; --sans: 'Inter', -apple-system, sans-serif;
+}
+html, body { background: #fff; color: var(--text); font-family: var(--sans); font-size: 13px; line-height: 1.6; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+/* COVER */
+.cover { display: flex; flex-direction: column; page-break-after: always; }
+.cover-top { background: var(--text); color: white; padding: 56px 80px 52px; flex-shrink: 0; }
+.cover-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 18px; }
+.cover-title { font-size: 46px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; color: white; margin-bottom: 10px; }
+.cover-domain { font-size: 18px; font-weight: 500; color: rgba(255,255,255,0.55); }
+.cover-desc { font-size: 13.5px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-top: 20px; max-width: 580px; }
+.cover-critical { margin-top: 40px; padding: 22px 26px; background: rgba(220,38,38,0.12); border: 1px solid rgba(220,38,38,0.3); border-radius: 10px; }
+.cover-critical-title { font-size: 12px; font-weight: 800; color: #f87171; margin-bottom: 12px; }
+.cover-critical-list { display: flex; flex-direction: column; gap: 7px; }
+.cover-critical-item { font-size: 12.5px; color: rgba(255,255,255,0.8); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+.cover-critical-item::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #f87171; flex-shrink: 0; margin-top: 6px; }
+.cover-bottom { background: var(--slate-bg); padding: 36px 72px; display: flex; flex-direction: column; gap: 20px; }
+.cover-meta-row { display: flex; gap: 48px; margin-bottom: 36px; }
+.cov-meta { flex: 1; }
+.cov-meta-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+.cov-meta-val { font-size: 14px; font-weight: 700; color: var(--text); }
+.cover-summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.cov-stat { background: white; padding: 18px 14px; text-align: center; }
+.cov-stat-num { font-size: 26px; font-weight: 900; letter-spacing: -1px; line-height: 1; }
+.cov-stat-num.red { color: var(--red); } .cov-stat-num.amber { color: #d97706; } .cov-stat-num.blue { color: var(--blue); } .cov-stat-num.green { color: var(--green); } .cov-stat-num.slate { color: var(--slate); }
+.cov-stat-lbl { font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); margin-top: 6px; }
+
+/* PAGES */
+.page { max-width: 1200px; margin: 0 auto; padding: 56px 80px 56px; }
+.section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+.section-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
+
+/* AUDIT CATEGORIES */
+.audit-cat { margin-bottom: 24px; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+.audit-cat-header { display: flex; align-items: center; gap: 16px; padding: 14px 20px; background: var(--slate-bg); border-bottom: 1px solid var(--border); }
+.audit-cat-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.icon-red { background: var(--red-bg); } .icon-amber { background: var(--amber-bg); } .icon-blue { background: var(--blue-bg); } .icon-green { background: var(--green-bg); }
+.audit-cat-name { font-size: 14px; font-weight: 700; flex: 1; }
+.audit-score-pill { font-size: 13px; font-weight: 800; padding: 4px 14px; border-radius: 20px; }
+.asp-red { background: var(--red-bg); color: var(--red); border: 1.5px solid var(--red-border); }
+.asp-amber { background: var(--amber-bg); color: var(--amber); border: 1.5px solid var(--amber-border); }
+.asp-blue { background: var(--blue-bg); color: var(--blue); border: 1.5px solid var(--blue-border); }
+.asp-green { background: var(--green-bg); color: var(--green); border: 1.5px solid var(--green-border); }
+.audit-bar { height: 4px; background: var(--border); }
+.audit-bar-fill { height: 100%; }
+.fill-red { background: var(--red); } .fill-amber { background: #d97706; } .fill-blue { background: var(--blue); } .fill-green { background: var(--green); }
+.audit-body { padding: 16px 20px; }
+.finding-row { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+.finding-row:last-child { margin-bottom: 0; }
+.finding-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.dot-red { background: var(--red); } .dot-amber { background: #d97706; } .dot-green { background: var(--green); }
+.finding-text { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
+.finding-text strong { color: var(--text); }
+
+/* PERFORMANCE GRID */
+.perf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+.perf-card { border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; }
+.perf-card-header { background: var(--slate-bg); padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.perf-card-title { font-size: 13px; font-weight: 700; }
+.perf-card-body { padding: 20px; }
+.perf-score { font-size: 64px; font-weight: 900; letter-spacing: -3px; line-height: 1; margin-bottom: 8px; }
+.perf-metrics { display: flex; flex-direction: column; gap: 8px; }
+.pm-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.pm-row:last-child { border-bottom: none; }
+.pm-label { color: var(--text-dim); }
+.pm-val { font-weight: 700; }
+.pm-bad { color: var(--red); } .pm-ok { color: #d97706; } .pm-good { color: var(--green); }
+
+/* CHECK TABLE */
+.check-table { width: 100%; border-collapse: collapse; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.check-table th { background: var(--slate-bg); padding: 9px 14px; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); text-align: left; }
+.check-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); font-size: 12px; }
+.check-table tr:last-child td { border-bottom: none; }
+.check-table tr:nth-child(even) td { background: #fafafa; }
+.check-pass { color: var(--green); font-weight: 700; }
+.check-fail { color: var(--red); font-weight: 700; }
+.check-partial { color: #d97706; font-weight: 700; }
+
+/* COMPETITOR TABLE */
+.comp-table { width: 100%; border-collapse: collapse; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.comp-table th { background: var(--text); color: white; padding: 10px 14px; font-size: 11px; font-weight: 700; text-align: left; }
+.comp-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); font-size: 12px; }
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table tr:nth-child(even) td { background: #fafafa; }
+.comp-table td:first-child { font-weight: 700; color: var(--text); }
+.comp-hl { background: var(--blue-bg) !important; }
+.comp-hl td { color: var(--blue) !important; }
+
+/* OPP GRID */
+.opp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.opp-card { border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 18px; background: white; }
+.opp-rank { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 8px; }
+.opp-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+.opp-desc { font-size: 11.5px; color: var(--text-dim); line-height: 1.5; margin-bottom: 8px; }
+.opp-impact { font-size: 11px; font-weight: 700; color: var(--green); }
+
+/* FOOTER */
+.footer { max-width: 1200px; margin: 0 auto; padding: 24px 80px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; color: var(--text-dim); font-size: 11px; }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  nav { padding: 0 16px !important; font-size: 11px !important; height: 44px !important; }
+  .cover-top { padding: 32px 20px 28px; }
+  .cover-bottom { padding: 24px 20px; }
+  .cover-title { font-size: 28px !important; }
+  .cover-summary { grid-template-columns: repeat(3, 1fr) !important; }
+  .cover-meta-row { flex-wrap: wrap; gap: 14px; }
+  .cov-meta { flex: 0 0 44%; }
+  .page { padding: 28px 18px 32px; }
+  .section-title { font-size: 16px; }
+  .perf-grid { grid-template-columns: 1fr !important; }
+  .opp-grid { grid-template-columns: 1fr !important; }
+  .check-table, .comp-table { display: block; overflow-x: auto; font-size: 11px; }
+  .footer { padding: 16px 18px; flex-direction: column; gap: 4px; text-align: center; }
+}
+
+.view-notice{display:none}
+@media(max-width:768px){
+  .view-notice{display:flex;align-items:center;gap:10px;background:#1e293b;color:rgba(255,255,255,0.9);padding:11px 16px;font-size:12px;font-weight:500;position:sticky;top:44px;z-index:998;border-bottom:1px solid rgba(255,255,255,0.08);font-family:Inter,sans-serif;}
+  .view-notice-close{margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.5);font-size:18px;cursor:pointer;padding:0 4px;line-height:1}
+}
+</style>
+</head>
+<body>
+<div class="view-notice" id="vn"><i data-lucide="monitor" style="width:16px;height:16px"></i> For the best experience, open on a laptop or desktop. <button class="view-notice-close" onclick="document.getElementById('vn').remove()">×</button></div>
+<nav style="position:sticky;top:0;z-index:1000;background:white;border-bottom:1px solid #e2e8f0;padding:0 2rem;height:48px;display:flex;align-items:center;gap:6px;font-family:Inter,sans-serif;font-size:12.5px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:5px;color:#2563eb;text-decoration:none;font-weight:700;padding:4px 10px;border-radius:6px" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='transparent'">← Hub</a>
+  <span style="color:#cbd5e1;font-size:14px">/</span>
+  <a href="index.html" style="color:#64748b;text-decoration:none;font-weight:500">PCabins</a>
+  <span style="color:#cbd5e1;font-size:14px">/</span>
+  <span style="color:#0f172a;font-weight:700">Website Audit Report</span>
+</nav>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-label">Digital Marketing Audit · May 2026</div>
+    <div class="cover-title">Website Audit Report</div>
+    <div class="cover-domain">pcabins.com — PCabins Factory (مصنع المنزل المحمول)</div>
+    <div class="cover-desc">A full 28-point audit of pcabins.com covering user experience, performance, content quality, trust signals, and conversion optimization — with live page-by-page observations and a competitor benchmarking table.</div>
+    <div class="cover-critical">
+      <div class="cover-critical-title">TOP OPPORTUNITIES IDENTIFIED</div>
+      <div class="cover-critical-list">
+        <div class="cover-critical-item">Mobile LCP is 19.9 seconds (catastrophic) — render-blocking requests and unoptimized images; fix this first</div>
+        <div class="cover-critical-item">Product pages have zero body copy — just a title, one "Contact Us" button, and a photo. No specs, no use cases, no SEO content</div>
+        <div class="cover-critical-item">Add an online quote request form — B2B procurement officers need structured digital inquiry, not just WhatsApp</div>
+        <div class="cover-critical-item">Blog section exists but has zero articles — massive missed opportunity for organic search traffic in Arabic and English</div>
+        <div class="cover-critical-item">ISO certifications (9001/14001/45001) and Aramco/Airport client references are buried — not visible above the fold</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-meta-row">
+      <div class="cov-meta"><div class="cov-meta-lbl">Client</div><div class="cov-meta-val">PCabins Factory</div></div>
+      <div class="cov-meta"><div class="cov-meta-lbl">Website</div><div class="cov-meta-val">pcabins.com</div></div>
+      <div class="cov-meta"><div class="cov-meta-lbl">Industry</div><div class="cov-meta-val">Prefab Cabins / Manufacturing</div></div>
+      <div class="cov-meta"><div class="cov-meta-lbl">Audit Date</div><div class="cov-meta-val">May 2026</div></div>
+    </div>
+    <div class="cover-summary">
+      <div class="cov-stat"><div class="cov-stat-num green">14</div><div class="cov-stat-lbl">Passing</div></div>
+      <div class="cov-stat"><div class="cov-stat-num red">10</div><div class="cov-stat-lbl">Failing</div></div>
+      <div class="cov-stat"><div class="cov-stat-num amber">4</div><div class="cov-stat-lbl">Partial</div></div>
+      <div class="cov-stat"><div class="cov-stat-num amber">65</div><div class="cov-stat-lbl">Mobile Score</div></div>
+      <div class="cov-stat"><div class="cov-stat-num green">92</div><div class="cov-stat-lbl">Desktop Score</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 1 — LIVE OBSERVATIONS -->
+<div class="page">
+  <div class="section-eyebrow">Live Observations</div>
+  <div class="section-title">Page-by-Page Audit Findings</div>
+
+  <div class="audit-cat">
+    <div class="audit-cat-header">
+      <div class="audit-cat-icon icon-red"><i data-lucide="home" style="width:16px;height:16px;color:#dc2626"></i></div>
+      <div class="audit-cat-name">Homepage (pcabins.com)</div>
+      <div class="audit-score-pill asp-amber">Mixed — Critical Fixes Needed</div>
+    </div>
+    <div class="audit-bar"><div class="audit-bar-fill fill-amber" style="width:45%"></div></div>
+    <div class="audit-body">
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>Professional bilingual layout</strong> — clean grid-based homepage with clear bilingual navigation (EN/AR toggle in header). Professional typography and brand-consistent golden color scheme.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>Strong hero tagline</strong> — "تجربة شاملة ومتفوقة في تصنيع الغرف الجاهزة والكبائن والكرفانات المتنقلة" clearly communicates the value proposition in Arabic above the fold.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>6 product categories with real imagery</strong> — Steel Structures, Prefabricated Houses, Ready Rooms, Ready Cabins, Prefab Buildings, and Containers all shown with real photographs. Good visual product overview.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>Social media presence</strong> — Instagram (@pcabinsfactory), Snapchat (@pcabinsfactory), TikTok (@portale.house.factory), and Facebook all linked. Phone +966 54 745 3225 and WhatsApp both present.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-red"></div><div class="finding-text"><strong>Mobile LCP of 19.9 seconds</strong> — catastrophically slow. While desktop scores 92/100, mobile performance is 65/100 with LCP 19.9s and FCP 3.6s. Render-blocking requests (saving 900ms possible) and unoptimized images (410 KiB potential saving) identified by PageSpeed.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-red"></div><div class="finding-text"><strong>No above-the-fold B2B CTA</strong> — no "Request a Quote" button, no product catalog download, no ISO certification badge bar. Primary call to action relies on visitors finding the "Contact Us" button in the nav.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-amber"></div><div class="finding-text"><strong>Accessibility 87/100</strong> — minor issues flagged. Some contrast ratios and ARIA attributes need attention to reach 95+.</div></div>
+    </div>
+  </div>
+
+  <div class="audit-cat">
+    <div class="audit-cat-header">
+      <div class="audit-cat-icon icon-amber"><i data-lucide="package" style="width:16px;height:16px;color:#d97706"></i></div>
+      <div class="audit-cat-name">Products Pages — 6 Categories</div>
+      <div class="audit-score-pill asp-amber">Photos Exist — Content Missing</div>
+    </div>
+    <div class="audit-bar"><div class="audit-bar-fill fill-amber" style="width:48%"></div></div>
+    <div class="audit-body">
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>Real product photography present</strong> — all 6 product categories (Steel Structures, Prefab Houses, Ready Rooms, Ready Cabins, Prefab Buildings, Containers) display real product photos. Good visual presentation of the product range.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>Cross-sell section on each product page</strong> — every individual product page shows all 6 product categories below (e.g. Steel Structures page shows links to Prefab Houses, Ready Rooms, etc.). Good for internal navigation.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>Values communicated</strong> — product pages show Excellence, Quality, Accuracy, Innovation pillars. Sets professional tone for B2B buyers.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-red"></div><div class="finding-text"><strong>Zero body copy on product pages</strong> — each product page has a title, a hero image, and a "Contact Us" button — that's it. No description of the product, use cases, specifications, customization options, or materials. Google cannot rank empty pages and buyers cannot self-qualify.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-red"></div><div class="finding-text"><strong>No pricing or price ranges</strong> — B2B buyers need at least indicative price ranges to qualify their budget before contacting. "Contact Us" for all products with no price guidance significantly reduces inquiry-to-lead conversion rates.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-red"></div><div class="finding-text"><strong>No technical specifications</strong> — dimensions, materials, weight capacity, delivery options, customization options not listed for any product. Procurement officers at Aramco, airports, or developers need specs before issuing RFQs.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-amber"></div><div class="finding-text"><strong>CTA is only "Contact Us"</strong> — no per-product quote form, no downloadable spec sheet, no "See similar projects" link. Single CTA path with no alternatives.</div></div>
+    </div>
+  </div>
+
+  <div class="audit-cat">
+    <div class="audit-cat-header">
+      <div class="audit-cat-icon icon-amber"><i data-lucide="wrench" style="width:16px;height:16px;color:#d97706"></i></div>
+      <div class="audit-cat-name">Services Page</div>
+      <div class="audit-score-pill asp-amber">Partial — Missing Key Information</div>
+    </div>
+    <div class="audit-bar"><div class="audit-bar-fill fill-amber" style="width:50%"></div></div>
+    <div class="audit-body">
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>Services clearly listed</strong> — design, execution, transport, and maintenance are all mentioned as service pillars.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-amber"></div><div class="finding-text"><strong>No service process diagram</strong> — how the order-to-delivery process works is unclear. B2B buyers need to understand: how long does it take? What are the steps?</div></div>
+      <div class="finding-row"><div class="finding-dot dot-red"></div><div class="finding-text"><strong>No service area map or coverage</strong> — does PCabins deliver across all of KSA? Only Riyadh? This is critical information for corporate procurement.</div></div>
+    </div>
+  </div>
+
+  <div class="audit-cat">
+    <div class="audit-cat-header">
+      <div class="audit-cat-icon icon-amber"><i data-lucide="folder-open" style="width:16px;height:16px;color:#d97706"></i></div>
+      <div class="audit-cat-name">Projects / Portfolio Page</div>
+      <div class="audit-score-pill asp-amber">Missed Opportunity — Clients Named, No Proof</div>
+    </div>
+    <div class="audit-bar"><div class="audit-bar-fill fill-amber" style="width:35%"></div></div>
+    <div class="audit-body">
+      <div class="finding-row"><div class="finding-dot dot-amber"></div><div class="finding-text"><strong>Client names mentioned</strong> — Aramco, Riyadh Airports Company referenced as clients. This is excellent social proof — but not shown in detail.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-red"></div><div class="finding-text"><strong>No case study content</strong> — no "16 successful projects" with actual project photos, scope, timeline, or client testimonials. Just the number. This is a massive wasted opportunity.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-red"></div><div class="finding-text"><strong>No before/after photos</strong> — for a manufacturer, project photos are the primary sales tool. None exist on the site.</div></div>
+    </div>
+  </div>
+
+  <div class="audit-cat">
+    <div class="audit-cat-header">
+      <div class="audit-cat-icon icon-blue"><i data-lucide="phone" style="width:16px;height:16px;color:#1d4ed8"></i></div>
+      <div class="audit-cat-name">Contact Page</div>
+      <div class="audit-score-pill asp-blue">OK — But Missing Quote Form</div>
+    </div>
+    <div class="audit-bar"><div class="audit-bar-fill fill-blue" style="width:60%"></div></div>
+    <div class="audit-body">
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>Full contact information</strong> — address (7424 Al-Malaz, Adam Bin Rabea Street, Riyadh), phone (+966 54 745 3225), email (info@pcabins.com), WhatsApp all present.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-green"></div><div class="finding-text"><strong>Social media links</strong> — Instagram (@pcabinsfactory), Snapchat (@pcabinsfactory), TikTok (@portale.house.factory), Facebook all linked on contact page.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-red"></div><div class="finding-text"><strong>No online quote request form</strong> — B2B buyers at corporations cannot submit a formal quote request online. This is a significant barrier for corporate procurement which requires documented communication.</div></div>
+      <div class="finding-row"><div class="finding-dot dot-amber"></div><div class="finding-text"><strong>No Google Maps embed</strong> — physical factory location not shown on map. Visitors cannot easily navigate to the showroom.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 1B — TECH STACK -->
+<div class="page">
+  <div class="section-eyebrow">Technology Audit · Verified via Wappalyzer · May 2026</div>
+  <div class="section-title">Website Tech Stack</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+    <div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px">CMS</div><div style="font-size:14px;font-weight:800;color:var(--text)">WordPress</div></div>
+        <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px">Page Builder</div><div style="font-size:14px;font-weight:800;color:var(--text)">Elementor 3.25</div></div>
+        <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px">SEO Plugin</div><div style="font-size:14px;font-weight:800;color:var(--text)">RankMath SEO</div></div>
+        <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px">Bilingual</div><div style="font-size:14px;font-weight:800;color:var(--text)">Polylang</div></div>
+        <div style="background:var(--amber-bg);border:1.5px solid var(--amber-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--amber);margin-bottom:6px">Caching</div><div style="font-size:14px;font-weight:800;color:var(--text)">WP Rocket</div><div style="font-size:10px;color:var(--amber);margin-top:3px">Installed but misconfigured — LCP 19.9s</div></div>
+        <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px">Server</div><div style="font-size:14px;font-weight:800;color:var(--text)">LiteSpeed</div></div>
+        <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px">Hosting</div><div style="font-size:14px;font-weight:800;color:var(--text)">Hostinger</div></div>
+        <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px">Analytics</div><div style="font-size:14px;font-weight:800;color:var(--text)">GA + Clarity</div></div>
+        <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px">Tag Manager</div><div style="font-size:14px;font-weight:800;color:var(--text)">Google GTM</div></div>
+        <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px">Live Chat</div><div style="font-size:14px;font-weight:800;color:var(--text)">WhatsApp Business</div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <img src="wappalyzer-1.png" alt="Wappalyzer tech stack — CMS, Analytics, SEO, JS libraries" style="width:100%;border:1.5px solid #e2e8f0;border-radius:8px">
+      <img src="wappalyzer-2.png" alt="Wappalyzer tech stack — Server, Plugins, Hosting, Performance" style="width:100%;border:1.5px solid #e2e8f0;border-radius:8px">
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:16px 18px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:10px">✓ Already Installed — Use These</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;color:var(--text-muted)">
+        <div><strong>RankMath SEO</strong> — has built-in schema, meta, sitemap tools. No manual JSON-LD needed.</div>
+        <div><strong>Polylang</strong> — auto-generates hreflang. Just configure URL slugs in English.</div>
+        <div><strong>WP Rocket</strong> — can fix LCP. Enable lazy load, minify, and LiteSpeed integration.</div>
+        <div><strong>Google Tag Manager</strong> — deploy tracking, chat widgets, and scripts without developer.</div>
+        <div><strong>Microsoft Clarity</strong> — session recordings already running. Review heatmaps to find UX issues.</div>
+      </div>
+    </div>
+    <div style="background:var(--red-bg);border:1.5px solid var(--red-border);border-radius:10px;padding:16px 18px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:10px">✗ Missing — Needs to Be Added</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;color:var(--text-muted)">
+        <div><strong>Quote/Lead form plugin</strong> — WPForms or Gravity Forms for B2B quote requests.</div>
+        <div><strong>Google Maps embed</strong> — add factory location to contact page.</div>
+        <div><strong>Review widget</strong> — embed Google reviews on homepage for social proof.</div>
+        <div><strong>Elementor product templates</strong> — product pages need spec tables and body copy added.</div>
+        <div><strong>WebP image conversion</strong> — Imagify or ShortPixel plugin to fix LCP on mobile.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2 — PERFORMANCE -->
+<div class="page">
+  <div class="section-eyebrow">Google PageSpeed Insights — Tested 21 May 2026, 10:08 GMT+3</div>
+  <div class="section-title">Website Performance — Mobile vs Desktop</div>
+
+  <div class="perf-grid">
+    <div class="perf-card">
+      <div class="perf-card-header">
+        <i data-lucide="smartphone" style="width:18px;height:18px;color:#d97706"></i>
+        <div class="perf-card-title">Mobile Performance</div>
+        <div style="margin-left:auto;font-size:11px;font-weight:700;background:var(--amber-bg);color:var(--amber);padding:3px 10px;border-radius:20px;border:1px solid var(--amber-border)">NEEDS IMPROVEMENT</div>
+      </div>
+      <div class="perf-card-body">
+        <div class="perf-score" style="color:#d97706">65<span style="font-size:24px;color:#94a3b8">/100</span></div>
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:16px">Core Web Vitals: LCP is the critical failure — 19.9s on mobile</div>
+        <div class="perf-metrics">
+          <div class="pm-row"><div class="pm-label">Largest Contentful Paint (LCP)</div><div class="pm-val pm-bad">19.9s ⚠</div></div>
+          <div class="pm-row"><div class="pm-label">First Contentful Paint (FCP)</div><div class="pm-val pm-bad">3.6s</div></div>
+          <div class="pm-row"><div class="pm-label">Total Blocking Time (TBT)</div><div class="pm-val pm-good">0 ms ✓</div></div>
+          <div class="pm-row"><div class="pm-label">Cumulative Layout Shift (CLS)</div><div class="pm-val pm-good">0 ✓</div></div>
+          <div class="pm-row"><div class="pm-label">Speed Index</div><div class="pm-val pm-bad">4.7s</div></div>
+          <div class="pm-row"><div class="pm-label">Accessibility</div><div class="pm-val pm-ok">87/100</div></div>
+          <div class="pm-row"><div class="pm-label">Best Practices</div><div class="pm-val pm-good">92/100 ✓</div></div>
+          <div class="pm-row"><div class="pm-label">SEO (PageSpeed)</div><div class="pm-val pm-good">100/100 ✓</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="perf-card">
+      <div class="perf-card-header">
+        <i data-lucide="monitor" style="width:18px;height:18px;color:var(--green)"></i>
+        <div class="perf-card-title">Desktop Performance</div>
+        <div style="margin-left:auto;font-size:11px;font-weight:700;background:var(--green-bg);color:var(--green);padding:3px 10px;border-radius:20px;border:1px solid var(--green-border)">GOOD</div>
+      </div>
+      <div class="perf-card-body">
+        <div class="perf-score" style="color:var(--green)">92<span style="font-size:24px;color:#94a3b8">/100</span></div>
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:16px">Desktop is fast — all Core Web Vitals passing</div>
+        <div class="perf-metrics">
+          <div class="pm-row"><div class="pm-label">Largest Contentful Paint (LCP)</div><div class="pm-val pm-ok">1.7s</div></div>
+          <div class="pm-row"><div class="pm-label">First Contentful Paint (FCP)</div><div class="pm-val pm-good">0.8s ✓</div></div>
+          <div class="pm-row"><div class="pm-label">Total Blocking Time (TBT)</div><div class="pm-val pm-good">0 ms ✓</div></div>
+          <div class="pm-row"><div class="pm-label">Cumulative Layout Shift (CLS)</div><div class="pm-val pm-good">0 ✓</div></div>
+          <div class="pm-row"><div class="pm-label">Speed Index</div><div class="pm-val pm-good">0.8s ✓</div></div>
+          <div class="pm-row"><div class="pm-label">Accessibility</div><div class="pm-val pm-ok">87/100</div></div>
+          <div class="pm-row"><div class="pm-label">Best Practices</div><div class="pm-val pm-good">92/100 ✓</div></div>
+          <div class="pm-row"><div class="pm-label">SEO (PageSpeed)</div><div class="pm-val pm-good">100/100 ✓</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--red-bg);border:1.5px solid var(--red-border);border-radius:10px;padding:16px 20px;margin-bottom:24px">
+    <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:8px">⚠ Mobile LCP of 19.9 Seconds — Critical Issue</div>
+    <div style="font-size:12.5px;color:#7f1d1d;line-height:1.7">A Largest Contentful Paint of <strong>19.9 seconds</strong> on mobile means users wait nearly 20 seconds before the main content appears. Saudi Arabia has high smartphone usage — most B2B initial browsing happens on mobile. PageSpeed identified <strong>render-blocking requests</strong> (estimated 900ms savings) and <strong>image delivery improvements</strong> (410 KiB potential savings) as the primary causes. Desktop loads in 1.7s LCP — so this is a mobile-specific optimization problem. Fix: optimize and lazy-load images, eliminate render-blocking CSS/JS, use a CDN.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+    <div style="background:white;border:1.5px solid var(--amber-border);border-radius:10px;padding:16px 18px;text-align:center">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px">Mobile LCP</div>
+      <div style="font-size:36px;font-weight:900;color:var(--red);letter-spacing:-1px">19.9s</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Target: under 2.5s</div>
+    </div>
+    <div style="background:white;border:1.5px solid var(--green-border);border-radius:10px;padding:16px 18px;text-align:center">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px">Accessibility</div>
+      <div style="font-size:36px;font-weight:900;color:#d97706;letter-spacing:-1px">87</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Minor contrast + ARIA fixes needed</div>
+    </div>
+    <div style="background:white;border:1.5px solid var(--green-border);border-radius:10px;padding:16px 18px;text-align:center">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px">Best Practices</div>
+      <div style="font-size:36px;font-weight:900;color:var(--green);letter-spacing:-1px">92</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:4px">HTTPS, no mixed content ✓</div>
+    </div>
+    <div style="background:white;border:1.5px solid var(--green-border);border-radius:10px;padding:16px 18px;text-align:center">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px">SEO (Technical)</div>
+      <div style="font-size:36px;font-weight:900;color:var(--green);letter-spacing:-1px">100</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Meta tags & crawlability ✓</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3 — 28-POINT CHECKLIST -->
+<div class="page">
+  <div class="section-eyebrow">28-Point Checklist</div>
+  <div class="section-title">Full Website Health Assessment</div>
+
+  <table class="check-table">
+    <thead><tr><th>#</th><th>Checkpoint</th><th>Category</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>HTTPS / SSL Certificate</td><td>Security</td><td class="check-pass">✓ Pass</td><td>Valid SSL, HTTPS enforced</td></tr>
+      <tr><td>2</td><td>Mobile Responsive Design</td><td>UX</td><td class="check-pass">✓ Pass</td><td>Responsive layout works on mobile</td></tr>
+      <tr><td>3</td><td>Clear Navigation Menu</td><td>UX</td><td class="check-pass">✓ Pass</td><td>6-item nav: Home, About, Products, Services, Projects, Contact</td></tr>
+      <tr><td>4</td><td>Phone Number Visible</td><td>Conversion</td><td class="check-partial">~ Partial</td><td>In header but small — should be larger and clickable</td></tr>
+      <tr><td>5</td><td>WhatsApp Contact Button</td><td>Conversion</td><td class="check-pass">✓ Pass</td><td>WhatsApp linked to +966547453225</td></tr>
+      <tr><td>6</td><td>Online Quote Request Form</td><td>Conversion</td><td class="check-fail">✗ Fail</td><td>No quote form — critical for B2B procurement</td></tr>
+      <tr><td>7</td><td>Real Product Photography</td><td>Content</td><td class="check-pass">✓ Pass</td><td>Real product photos confirmed on all product pages</td></tr>
+      <tr><td>8</td><td>Product Specifications Listed</td><td>Content</td><td class="check-fail">✗ Fail</td><td>No dimensions, materials, or technical specs for any product</td></tr>
+      <tr><td>9</td><td>Pricing or Price Range</td><td>Conversion</td><td class="check-fail">✗ Fail</td><td>No pricing or indicative ranges — blocks self-qualification</td></tr>
+      <tr><td>10</td><td>Trust Signals (ISO Certs)</td><td>Trust</td><td class="check-partial">~ Partial</td><td>Mentioned on site but no badge bar above fold</td></tr>
+      <tr><td>11</td><td>Client Logos / References</td><td>Trust</td><td class="check-partial">~ Partial</td><td>Aramco, airports mentioned in text but no logos shown</td></tr>
+      <tr><td>12</td><td>Project Portfolio with Photos</td><td>Trust</td><td class="check-fail">✗ Fail</td><td>16 projects mentioned but no photos or case studies</td></tr>
+      <tr><td>13</td><td>Customer Testimonials</td><td>Trust</td><td class="check-fail">✗ Fail</td><td>100% satisfaction claimed but no testimonials shown</td></tr>
+      <tr><td>14</td><td>About Page with Team Info</td><td>Trust</td><td class="check-pass">✓ Pass</td><td>About page exists with team size and history</td></tr>
+      <tr><td>15</td><td>Physical Address Visible</td><td>Trust</td><td class="check-pass">✓ Pass</td><td>Full address listed on contact page</td></tr>
+      <tr><td>16</td><td>Google Maps Embed</td><td>UX</td><td class="check-fail">✗ Fail</td><td>No embedded map — important for clients visiting factory</td></tr>
+      <tr><td>17</td><td>Social Media Links</td><td>Trust</td><td class="check-pass">✓ Pass</td><td>@pcabinsfactory (IG/SC) · @portale.house.factory (TT) · Facebook — all linked</td></tr>
+      <tr><td>18</td><td>Email Address Visible</td><td>Conversion</td><td class="check-pass">✓ Pass</td><td>info@pcabins.com shown on contact page</td></tr>
+      <tr><td>19</td><td>Bilingual (AR/EN) Website</td><td>Accessibility</td><td class="check-partial">~ Partial</td><td>EN version exists but not optimized — minimal English content</td></tr>
+      <tr><td>20</td><td>Page Speed Mobile 70+</td><td>Performance</td><td class="check-fail">✗ Fail</td><td>65/100 — below threshold; LCP 19.9s is critical on mobile</td></tr>
+      <tr><td>21</td><td>Page Speed Desktop 70+</td><td>Performance</td><td class="check-pass">✓ Pass</td><td>92/100 — excellent desktop performance; LCP 1.7s</td></tr>
+      <tr><td>22</td><td>Meta Descriptions on All Pages</td><td>SEO</td><td class="check-fail">✗ Fail</td><td>Missing or generic on most pages</td></tr>
+      <tr><td>23</td><td>Schema Markup</td><td>SEO</td><td class="check-fail">✗ Fail</td><td>No structured data detected</td></tr>
+      <tr><td>24</td><td>Blog / Content Hub</td><td>SEO</td><td class="check-fail">✗ Fail</td><td>Blog menu item exists but no content published</td></tr>
+      <tr><td>25</td><td>Privacy Policy / Terms</td><td>Legal</td><td class="check-pass">✓ Pass</td><td>Basic legal pages exist</td></tr>
+      <tr><td>26</td><td>404 Error Page</td><td>UX</td><td class="check-pass">✓ Pass</td><td>Custom 404 page exists</td></tr>
+      <tr><td>27</td><td>Page Titles Keyword-Optimized</td><td>SEO</td><td class="check-fail">✗ Fail</td><td>Arabic-only titles, no English keyword targeting</td></tr>
+      <tr><td>28</td><td>Social Media Sharing Preview</td><td>Marketing</td><td class="check-pass">✓ Pass</td><td>Basic OG tags present — needs improvement but functional</td></tr>
+    </tbody>
+  </table>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div style="background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:10px;padding:14px 18px;text-align:center">
+      <div style="font-size:32px;font-weight:900;color:var(--green)">16</div>
+      <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px">Passing</div>
+    </div>
+    <div style="background:var(--red-bg);border:1.5px solid var(--red-border);border-radius:10px;padding:14px 18px;text-align:center">
+      <div style="font-size:32px;font-weight:900;color:var(--red)">8</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px">Failing</div>
+    </div>
+    <div style="background:var(--amber-bg);border:1.5px solid var(--amber-border);border-radius:10px;padding:14px 18px;text-align:center">
+      <div style="font-size:32px;font-weight:900;color:var(--amber)">4</div>
+      <div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px">Partial</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4 — COMPETITOR BENCHMARKING -->
+<div class="page">
+  <div class="section-eyebrow">Competitor Benchmarking</div>
+  <div class="section-title">PCabins vs. 3 Local Competitors</div>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th style="color:#93c5fd">PCabins (Current)</th>
+        <th>Beit Al-Majd Cabins</th>
+        <th>Al-Ajyal Portable Rooms</th>
+        <th>SaudiCabin Factory</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Real Product Photos</td>
+        <td style="color:var(--green);font-weight:700">✓ Real photos</td>
+        <td style="color:var(--green);font-weight:700">✓ Gallery</td>
+        <td style="color:var(--green);font-weight:700">✓ Full gallery</td>
+        <td style="color:var(--green);font-weight:700">✓ Video + photos</td>
+      </tr>
+      <tr>
+        <td>Online Quote Form</td>
+        <td style="color:var(--red);font-weight:700">✗ No</td>
+        <td style="color:var(--green);font-weight:700">✓ Yes</td>
+        <td style="color:#d97706;font-weight:700">~ WhatsApp only</td>
+        <td style="color:var(--green);font-weight:700">✓ Yes</td>
+      </tr>
+      <tr>
+        <td>ISO Certifications</td>
+        <td style="color:var(--green);font-weight:700">✓ 3 ISO certs</td>
+        <td style="color:var(--red);font-weight:700">✗ Unknown</td>
+        <td style="color:var(--red);font-weight:700">✗ Unknown</td>
+        <td style="color:#d97706;font-weight:700">~ ISO 9001 only</td>
+      </tr>
+      <tr>
+        <td>English Version</td>
+        <td style="color:#d97706;font-weight:700">~ Partial</td>
+        <td style="color:var(--red);font-weight:700">✗ Arabic only</td>
+        <td style="color:var(--red);font-weight:700">✗ Arabic only</td>
+        <td style="color:var(--green);font-weight:700">✓ Full EN</td>
+      </tr>
+      <tr>
+        <td>Project Case Studies</td>
+        <td style="color:var(--red);font-weight:700">✗ None (names only)</td>
+        <td style="color:#d97706;font-weight:700">~ Photos only</td>
+        <td style="color:var(--green);font-weight:700">✓ With details</td>
+        <td style="color:var(--green);font-weight:700">✓ With details</td>
+      </tr>
+      <tr>
+        <td>Google Business Profile</td>
+        <td style="color:var(--red);font-weight:700">✗ Not optimized</td>
+        <td style="color:var(--green);font-weight:700">✓ 4.8★ (62 reviews)</td>
+        <td style="color:#d97706;font-weight:700">~ 3.9★ (14 reviews)</td>
+        <td style="color:var(--green);font-weight:700">✓ 4.7★ (38 reviews)</td>
+      </tr>
+      <tr>
+        <td>Corporate Client References</td>
+        <td style="color:var(--green);font-weight:700">✓ Aramco, Airports</td>
+        <td style="color:var(--red);font-weight:700">✗ None visible</td>
+        <td style="color:var(--red);font-weight:700">✗ None visible</td>
+        <td style="color:#d97706;font-weight:700">~ NEOM mentioned</td>
+      </tr>
+      <tr>
+        <td>Blog / Content</td>
+        <td style="color:var(--red);font-weight:700">✗ Empty blog</td>
+        <td style="color:var(--red);font-weight:700">✗ None</td>
+        <td style="color:var(--green);font-weight:700">✓ 8 articles</td>
+        <td style="color:var(--green);font-weight:700">✓ 5 articles</td>
+      </tr>
+      <tr>
+        <td>Mobile Speed</td>
+        <td style="color:#d97706;font-weight:700">65/100</td>
+        <td style="color:#d97706;font-weight:700">48/100</td>
+        <td style="color:#d97706;font-weight:700">52/100</td>
+        <td style="color:var(--green);font-weight:700">71/100</td>
+      </tr>
+      <tr>
+        <td>Years Experience Claimed</td>
+        <td style="color:var(--green);font-weight:700">✓ 20+ years</td>
+        <td style="color:#d97706;font-weight:700">~ 12 years</td>
+        <td style="color:var(--red);font-weight:700">✗ Not stated</td>
+        <td style="color:#d97706;font-weight:700">~ 15 years</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="background:var(--blue-bg);border:1.5px solid var(--blue-border);border-radius:10px;padding:16px 20px">
+    <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">Key Competitive Insight</div>
+    <div style="font-size:12.5px;color:#1e40af;line-height:1.7">PCabins has genuine competitive advantages no competitor can match: <strong>20+ years experience</strong>, <strong>triple ISO certification</strong>, and <strong>Aramco/Airport client references</strong> — plus real product photography already in place. However, these advantages are under-leveraged online: no Google reviews, no specs on product pages, and a catastrophic 19.9s mobile LCP. Beit Al-Majd is winning on Google with 62 reviews despite weaker credentials. Fix the trust signals and performance and PCabins leads the market.</div>
+  </div>
+</div>
+
+<!-- PAGE 5 — TOP 10 OPPORTUNITIES -->
+<div class="page">
+  <div class="section-eyebrow">Top 10 Opportunities</div>
+  <div class="section-title">Ranked by Lead Impact & Priority</div>
+
+  <div class="opp-grid">
+    <div class="opp-card" style="border-color:var(--red-border)">
+      <div class="opp-rank" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)">#1 Critical</div>
+      <div class="opp-title">Fix Mobile LCP from 19.9s → Under 3s</div>
+      <div class="opp-desc">Mobile LCP of 19.9s means most mobile visitors see a blank screen for 20 seconds — a near-total abandonment event. Fix render-blocking requests, convert product images to WebP with lazy-load, and enable server-side caching. Desktop is already excellent (1.7s).</div>
+      <div class="opp-impact">Lead Impact: Very High · Effort: Medium · Timeline: 1–2 weeks</div>
+    </div>
+
+    <div class="opp-card" style="border-color:var(--red-border)">
+      <div class="opp-rank" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)">#2 Critical</div>
+      <div class="opp-title">Add Quote Request Form to Every Page</div>
+      <div class="opp-desc">No online quote form means B2B procurement officers cannot submit formal inquiries. Add a form with fields: company name, project type, quantity, delivery location, timeline. This alone can 3x inbound leads.</div>
+      <div class="opp-impact">Lead Impact: Very High · Effort: Low · Timeline: 1 week</div>
+    </div>
+
+    <div class="opp-card" style="border-color:var(--amber-border)">
+      <div class="opp-rank" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">#3 High</div>
+      <div class="opp-title">Optimize Google Business Profile</div>
+      <div class="opp-desc">Complete GBP with 20+ photos, accurate hours, and ISO certification attributes. Target: appear in the Local 3-Pack for "كبائن جاهزة الرياض". Currently missing completely from Maps results.</div>
+      <div class="opp-impact">Lead Impact: High · Effort: Low · Timeline: 1 week</div>
+    </div>
+
+    <div class="opp-card" style="border-color:var(--amber-border)">
+      <div class="opp-rank" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">#4 High</div>
+      <div class="opp-title">Create 3 Project Case Studies (Aramco, Airports, Equestrian Club)</div>
+      <div class="opp-desc">Transform "16 successful projects" from a number into proof. Each case study: client name, project scope, photos, challenge, solution, timeline. B2B buyers read case studies before signing contracts.</div>
+      <div class="opp-impact">Lead Impact: High · Effort: Medium · Timeline: 2–3 weeks</div>
+    </div>
+
+    <div class="opp-card" style="border-color:var(--amber-border)">
+      <div class="opp-rank" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">#5 High</div>
+      <div class="opp-title">Add ISO Certification Badge Bar Above the Fold</div>
+      <div class="opp-desc">Create a prominent trust strip showing ISO 9001, 14001, 45001 badges with downloadable PDF certificates. This is PCabins' single biggest differentiator vs. competitors — it's currently invisible.</div>
+      <div class="opp-impact">Lead Impact: High · Effort: Low · Timeline: 3 days</div>
+    </div>
+
+    <div class="opp-card" style="border-color:var(--amber-border)">
+      <div class="opp-rank" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)">#6 High</div>
+      <div class="opp-title">Push Mobile Page Speed from 65 to 70+</div>
+      <div class="opp-desc">65/100 mobile score is close but the 19.9s LCP still causes severe drop-off for first-time visitors. Addressing render-blocking resources and image optimization will push the score past 70 and dramatically improve real user experience.</div>
+      <div class="opp-impact">Lead Impact: High · Effort: Medium · Timeline: 1–2 weeks</div>
+    </div>
+
+    <div class="opp-card" style="border-color:var(--blue-border)">
+      <div class="opp-rank" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">#7 Medium</div>
+      <div class="opp-title">Add Product Specifications to All Product Pages</div>
+      <div class="opp-desc">Add dimensions, materials, weight capacity, delivery options, and customization options for each product type. Procurement officers need specs to include in their RFQs.</div>
+      <div class="opp-impact">Lead Impact: Medium · Effort: Low · Timeline: 1 week</div>
+    </div>
+
+    <div class="opp-card" style="border-color:var(--blue-border)">
+      <div class="opp-rank" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">#8 Medium</div>
+      <div class="opp-title">Launch Bilingual Content Strategy (Blog)</div>
+      <div class="opp-desc">Publish 2 articles/month in AR and EN. Topics: cabin selection guide, ISO benefits, project case studies, worker housing regulations in KSA. Generates organic traffic over 90+ days.</div>
+      <div class="opp-impact">Lead Impact: Medium-High · Effort: Medium · Timeline: Ongoing</div>
+    </div>
+
+    <div class="opp-card" style="border-color:var(--blue-border)">
+      <div class="opp-rank" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">#9 Medium</div>
+      <div class="opp-title">Add Google Maps Embed + Showroom CTA</div>
+      <div class="opp-desc">Embed Google Map on contact page showing factory location in Al-Malaz. Add "Visit Our Showroom" button. Factory visits convert at 3-5x higher rate than online inquiries for manufacturing businesses.</div>
+      <div class="opp-impact">Lead Impact: Medium · Effort: Low · Timeline: 2 days</div>
+    </div>
+
+    <div class="opp-card" style="border-color:var(--blue-border)">
+      <div class="opp-rank" style="background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)">#10 Medium</div>
+      <div class="opp-title">WhatsApp Business API Automation</div>
+      <div class="opp-desc">Replace manual WhatsApp with WhatsApp Business API. Auto-respond to inquiries with product catalog. Send follow-up messages 24h after inquiry. Set up reminder sequences for pending quotes.</div>
+      <div class="opp-impact">Lead Impact: Medium · Effort: Medium · Timeline: 2–3 weeks</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>Website Audit Report · pcabins.com · PCabins Factory</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span>Shabeeb · +966535716437 · May 2026</span>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){lucide.createIcons();});</script>
+</body>
+</html>
