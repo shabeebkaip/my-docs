@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Kickoff — AIWA × AIKA | Vitality Home Health Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --navy:       #0C2340;
+  --navy-mid:   #173A6A;
+  --navy-light: #254E8C;
+  --teal:       #0A8FAE;
+  --teal-bg:    #EAF6FA;
+  --teal-mid:   rgba(10,143,174,.14);
+  --teal-dark:  #076E86;
+  --green:      #1A7A5A;
+  --green-bg:   #E8F6F1;
+  --gold:       #B87A0A;
+  --gold-bg:    #FDF4E2;
+  --red:        #C0392B;
+  --red-bg:     #FDECEB;
+  --bg:         #EEF2F7;
+  --surface:    #F7FAFD;
+  --white:      #FFFFFF;
+  --border:     #D0DCEA;
+  --border-mid: #B8CCDF;
+  --text:       #0A1E35;
+  --body:       #2D4160;
+  --muted:      #607898;
+  --line:       rgba(12,35,64,.08);
+  --font-h:     'Libre Baskerville', Georgia, serif;
+  --font-b:     'Nunito Sans', system-ui, sans-serif;
+  --shadow-sm:  0 1px 4px rgba(12,35,64,.07),0 4px 16px rgba(12,35,64,.05);
+  --shadow-md:  0 2px 8px rgba(12,35,64,.08),0 8px 28px rgba(12,35,64,.08);
+  --shadow-lg:  0 4px 16px rgba(12,35,64,.10),0 16px 48px rgba(12,35,64,.10);
+}
+
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:var(--font-b)}
+
+/* ── DECK ── */
+#deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+
+/* ── SLIDE ── */
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.4,0,.2,1);
+  transform:translateX(48px);
+  background:var(--surface);
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.prev{opacity:0;transform:translateX(-48px)}
+
+/* subtle texture */
+.slide::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle at 100% 0%,rgba(10,143,174,.035) 0%,transparent 60%),
+                   radial-gradient(circle at 0% 100%,rgba(12,35,64,.03) 0%,transparent 50%);
+}
+
+/* ── TOP BAR ── */
+.topbar{
+  position:absolute;top:0;left:0;right:0;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 44px;
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 1px 6px rgba(12,35,64,.06);
+  z-index:10;
+}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-mark img{height:26px;object-fit:contain}
+.logo-mark span{
+  font-family:var(--font-b);font-size:13px;font-weight:700;
+  color:var(--navy);letter-spacing:.02em;
+}
+.slide-label{
+  font-family:var(--font-b);font-size:11px;font-weight:600;
+  color:var(--muted);letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* ── BODY ── */
+.slide-body{
+  flex:1;display:flex;flex-direction:column;
+  padding:76px 52px 52px;
+  overflow:hidden;
+}
+.overflow-y{overflow-y:auto;flex:1}
+.overflow-y::-webkit-scrollbar{width:4px}
+.overflow-y::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:2px}
+
+/* ── PROGRESS ── */
+#progress{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),var(--navy-light));
+  transition:width .4s ease;z-index:100;
+}
+
+/* ── NAV ── */
+#nav{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:14px;z-index:100;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:32px;padding:7px 14px;
+  box-shadow:var(--shadow-sm);
+}
+.nav-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:transparent;border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;font-size:13px;
+}
+.nav-btn:hover{background:var(--teal-bg);border-color:var(--teal);color:var(--teal)}
+.dots{display:flex;gap:5px;align-items:center}
+.dot{
+  width:6px;height:6px;border-radius:3px;
+  background:var(--border-mid);cursor:pointer;
+  transition:all .28s;
+}
+.dot.on{background:var(--navy);width:18px}
+#slide-num{
+  position:fixed;bottom:24px;right:40px;
+  font-family:var(--font-b);font-size:11px;
+  font-weight:600;color:var(--muted);z-index:100;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:20px;padding:4px 12px;
+  box-shadow:var(--shadow-sm);
+}
+
+/* ── SECTION RULE ── */
+.section-bar{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.section-bar::before{
+  content:'';width:4px;height:22px;border-radius:2px;
+  background:linear-gradient(to bottom,var(--teal),var(--navy-mid));
+  flex-shrink:0;
+}
+.section-bar span{
+  font-family:var(--font-b);font-size:10.5px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--teal-dark);
+}
+
+/* ── TYPOGRAPHY ── */
+h1{font-family:var(--font-h);font-size:clamp(34px,4.5vw,58px);font-weight:700;color:var(--navy);line-height:1.1}
+h2{font-family:var(--font-h);font-size:clamp(22px,2.8vw,34px);font-weight:700;color:var(--navy);line-height:1.22}
+h3{font-family:var(--font-h);font-size:16px;font-weight:700;color:var(--navy)}
+h4{font-family:var(--font-b);font-size:13px;font-weight:700;color:var(--navy);letter-spacing:.01em}
+p{font-family:var(--font-b);font-size:14px;color:var(--body);line-height:1.65}
+.lead{font-size:16px;color:var(--body);line-height:1.6;font-weight:300}
+
+/* ── CARDS ── */
+.card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:12px;padding:20px 22px;
+  box-shadow:var(--shadow-sm);
+}
+.card-teal{border-left:4px solid var(--teal);border-radius:4px 12px 12px 4px;background:var(--teal-bg)}
+.card-navy{border-left:4px solid var(--navy);border-radius:4px 12px 12px 4px;background:var(--surface)}
+.card-green{border-left:4px solid var(--green);border-radius:4px 12px 12px 4px;background:var(--green-bg)}
+.card-gold{border-left:4px solid var(--gold);border-radius:4px 12px 12px 4px;background:var(--gold-bg)}
+.card-red{border-left:4px solid var(--red);border-radius:4px 12px 12px 4px;background:var(--red-bg)}
+
+/* ── BADGE / CHIP ── */
+.badge{
+  display:inline-flex;align-items:center;
+  padding:3px 10px;border-radius:20px;
+  font-family:var(--font-b);font-size:10.5px;font-weight:700;
+  letter-spacing:.04em;white-space:nowrap;
+}
+.badge-teal{background:var(--teal-bg);color:var(--teal-dark);border:1px solid rgba(10,143,174,.25)}
+.badge-navy{background:rgba(12,35,64,.08);color:var(--navy);border:1px solid rgba(12,35,64,.15)}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid rgba(26,122,90,.2)}
+.badge-gold{background:var(--gold-bg);color:var(--gold);border:1px solid rgba(184,122,10,.2)}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid rgba(192,57,43,.2)}
+
+/* ── CHECKLIST ── */
+.checklist{list-style:none;display:flex;flex-direction:column;gap:6px}
+.checklist li{
+  display:flex;align-items:flex-start;gap:9px;
+  font-family:var(--font-b);font-size:13px;color:var(--body);line-height:1.5;
+}
+.checklist li::before{
+  content:'';width:16px;height:16px;border-radius:4px;
+  background:var(--teal-bg);border:1.5px solid var(--teal);
+  flex-shrink:0;margin-top:1px;
+}
+.checklist li small{color:var(--muted);font-size:11.5px}
+
+/* ── STAT ── */
+.stat-val{font-family:var(--font-h);font-size:30px;font-weight:700;color:var(--navy);line-height:1}
+.stat-label{font-family:var(--font-b);font-size:11px;color:var(--muted);margin-top:4px;font-weight:500}
+
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border);margin:14px 0}
+
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:24px}
+.timeline::before{
+  content:'';position:absolute;left:6px;top:10px;bottom:10px;
+  width:2px;background:linear-gradient(to bottom,var(--teal),rgba(12,35,64,.15));
+}
+.tl-item{position:relative;padding:0 0 18px 20px}
+.tl-item::before{
+  content:'';position:absolute;left:-9px;top:6px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--white);border:2.5px solid var(--teal);
+}
+.tl-item:last-child::before{border-color:var(--navy);background:var(--navy)}
+.tl-item:last-child{padding-bottom:0}
+
+/* ── ACTION ROW ── */
+.action-row{
+  display:grid;grid-template-columns:1fr auto auto;
+  align-items:center;gap:12px;
+  padding:9px 14px;border-radius:8px;
+  border:1px solid var(--border);background:var(--white);
+  box-shadow:var(--shadow-sm);
+}
+.action-row+.action-row{margin-top:7px}
+
+/* ── PHASE BLOCK ── */
+.phase{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:14px 18px;border-radius:10px;
+  background:var(--white);border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+.phase-num{
+  width:34px;height:34px;border-radius:8px;
+  background:var(--navy);color:var(--white);
+  font-family:var(--font-b);font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.phase-num.teal{background:var(--teal)}
+.phase-num.gold{background:var(--gold)}
+.phase-num.red{background:var(--red)}
+
+/* ── ROLE CARD ── */
+.role-card{
+  padding:13px 16px;border-radius:10px;
+  background:var(--white);border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+
+/* ── ICON BOX ── */
+.icon-box{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.ib-teal{background:var(--teal-bg)}
+.ib-navy{background:rgba(12,35,64,.08)}
+.ib-green{background:var(--green-bg)}
+.ib-gold{background:var(--gold-bg)}
+
+/* ── ARCH NODE ── */
+.arch-node{
+  padding:10px 14px;border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--white);text-align:center;
+  box-shadow:var(--shadow-sm);
+}
+.arch-node .arch-icon{font-size:18px;margin-bottom:3px}
+.arch-node span{font-family:var(--font-b);font-size:11px;color:var(--muted);display:block}
+
+/* ── Q ITEM ── */
+.q-item{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:10px 14px;border-radius:8px;
+  background:var(--white);border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+}
+.q-num{
+  width:22px;height:22px;border-radius:5px;
+  background:var(--navy);color:var(--white);
+  font-family:var(--font-b);font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+
+/* ══════════════════════════════
+   COVER
+══════════════════════════════ */
+.cover-shell{display:flex;height:100%;flex-direction:column}
+.cover-bar{height:56px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 44px;gap:10px;flex-shrink:0}
+.cover-main{flex:1;display:flex;overflow:hidden}
+.cover-left{
+  width:46%;background:var(--navy);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:52px 52px 52px 52px;
+  position:relative;overflow:hidden;
+}
+.cover-left::before{
+  content:'';position:absolute;top:-80px;right:-80px;
+  width:280px;height:280px;border-radius:50%;
+  background:rgba(10,143,174,.12);
+}
+.cover-left::after{
+  content:'';position:absolute;bottom:-60px;left:-40px;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(10,143,174,.08);
+}
+.cover-right{
+  flex:1;background:var(--surface);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:52px 52px 52px 48px;
+  border-left:1px solid var(--border);
+}
+.cover-ref{
+  display:flex;flex-direction:column;gap:9px;margin-top:28px;
+}
+.cover-ref-row{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-b);font-size:13px;color:var(--body);
+}
+.cover-ref-row strong{color:var(--navy);font-weight:700}
+
+/* ── COVER INFO BLOCK ── */
+.info-block{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:12px;padding:18px 20px;
+  box-shadow:var(--shadow-sm);margin-bottom:12px;
+}
+
+/* ── NOTICE ── */
+.notice{
+  border-radius:8px;padding:11px 14px;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.notice-gold{background:var(--gold-bg);border:1px solid rgba(184,122,10,.2)}
+.notice-teal{background:var(--teal-bg);border:1px solid rgba(10,143,174,.2)}
+.notice-red{background:var(--red-bg);border:1px solid rgba(192,57,43,.18)}
+.notice-navy{background:rgba(12,35,64,.05);border:1px solid rgba(12,35,64,.12)}
+
+/* ── PRINT ── */
+@media print{
+  #nav,#progress,#slide-num{display:none}
+  .slide{position:relative;opacity:1;transform:none;pointer-events:all;page-break-after:always;height:100vh}
+  .slide.prev{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div id="deck">
+
+<!-- ══════════════════════════════
+     SLIDE 1 — COVER
+══════════════════════════════ -->
+<section class="slide active" id="s1">
+  <div style="display:flex;height:100%;flex-direction:column">
+
+    <!-- TOP BAR -->
+    <div style="height:42px;background:#091829;display:flex;align-items:center;padding:0 52px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.06)">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" style="height:14px;filter:brightness(0) invert(1);opacity:.32;margin-right:8px">
+      <span style="font-family:var(--font-b);font-size:10.5px;color:rgba(255,255,255,.28);font-weight:400;letter-spacing:.02em">Presented by Code-ox Technologies</span>
+      <div style="flex:1"></div>
+      <span style="font-family:var(--font-b);font-size:10px;color:rgba(255,255,255,.22);font-weight:600;letter-spacing:.12em;text-transform:uppercase">Implementation Kickoff &nbsp;·&nbsp; 8 June 2026</span>
+    </div>
+
+    <!-- MAIN BODY -->
+    <div style="flex:1;display:flex;overflow:hidden">
+
+      <!-- ══ LEFT PANEL (62%) — Light, Vitality-branded ══ -->
+      <div style="width:62%;background:#F5F7FA;display:flex;flex-direction:column;justify-content:center;padding:52px 64px 52px 56px;position:relative;overflow:hidden;border-right:1px solid #D6E2EE">
+
+        <!-- Teal left accent line -->
+        <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(to bottom,var(--teal) 0%,rgba(10,143,174,.10) 75%,transparent 100%);pointer-events:none"></div>
+
+        <!-- Vitality logo — large, identity anchor, no container -->
+        <img src="vitality%20frre%20background.png" alt="Vitality Home Health Services"
+             style="height:178px;width:auto;object-fit:contain;object-position:left center;display:block;margin-bottom:18px">
+
+        <!-- Subtle accent divider beneath logo — bridges logo to content -->
+        <div style="width:52px;height:1.5px;background:rgba(10,143,174,.40);margin-bottom:22px"></div>
+
+        <!-- Micro label -->
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:18px">
+          <div style="width:22px;height:1px;background:var(--teal);flex-shrink:0"></div>
+          <span style="font-family:var(--font-b);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal-dark);font-weight:700">Implementation Kickoff &nbsp;•&nbsp; 8 June 2026</span>
+        </div>
+
+        <!-- MAIN HEADLINE — deep navy on light, maximum legibility -->
+        <h1 style="font-family:var(--font-h);font-size:clamp(26px,3.2vw,38px);font-weight:700;color:var(--navy);line-height:1.13;letter-spacing:-.02em;margin-bottom:12px">
+          Appointment Booking &<br>Patient Communication<br>Automation
+        </h1>
+
+        <!-- Subheadline — italic serif -->
+        <p style="font-family:var(--font-h);font-size:16px;font-weight:400;font-style:italic;color:var(--body);line-height:1.3;margin-bottom:16px">
+          Implementation Kickoff — Vitality Home Health Services
+        </p>
+
+        <!-- Supporting service line -->
+        <p style="font-family:var(--font-b);font-size:12px;color:var(--muted);line-height:1.6;letter-spacing:.01em;margin-bottom:26px">
+          WhatsApp Automation &nbsp;•&nbsp; AI Voice Reception &nbsp;•&nbsp; Appointment Booking &nbsp;•&nbsp; Patient Reminders
+        </p>
+
+        <!-- PILOT BADGE — soft green treatment for light background -->
+        <div style="background:rgba(26,122,90,.06);border:1px solid rgba(26,122,90,.16);border-left:3px solid #1A7A5A;border-radius:4px 8px 8px 4px;padding:14px 18px">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px">
+            <div style="width:6px;height:6px;border-radius:50%;background:#1A7A5A;flex-shrink:0"></div>
+            <span style="font-family:var(--font-b);font-size:11.5px;color:#1A7A5A;font-weight:700;letter-spacing:.01em">Pilot Workflow Successfully Validated</span>
+          </div>
+          <p style="font-family:var(--font-b);font-size:11px;color:var(--muted);line-height:1.55;padding-left:15px">
+            Appointment flow, patient interaction, and operational workflow successfully demonstrated with Vitality team.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- ══ RIGHT PANEL (38%) — Deep navy, premium dark cards ══ -->
+      <div style="flex:1;background:#0C2340;display:flex;flex-direction:column;justify-content:center;padding:48px 42px;gap:11px">
+
+        <!-- Card 1: Go-Live Target -->
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-top:2px solid rgba(10,143,174,.75);border-radius:10px;padding:22px 24px">
+          <p style="font-family:var(--font-b);font-size:9px;font-weight:700;color:rgba(255,255,255,.38);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px">Go-Live Target</p>
+          <p style="font-family:var(--font-h);font-size:36px;font-weight:700;color:#FFFFFF;line-height:1;letter-spacing:-.02em">8 Weeks</p>
+          <div style="height:1px;background:rgba(255,255,255,.08);margin:12px 0"></div>
+          <p style="font-family:var(--font-b);font-size:12px;color:rgba(255,255,255,.55);font-weight:500">Saudi-Region Cloud Deployment</p>
+          <p style="font-family:var(--font-b);font-size:11px;color:rgba(255,255,255,.30);margin-top:3px">From 8 June 2026</p>
+        </div>
+
+        <!-- Card 2: Implementation Scope -->
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:20px 22px">
+          <p style="font-family:var(--font-b);font-size:9px;font-weight:700;color:rgba(255,255,255,.36);letter-spacing:.14em;text-transform:uppercase;margin-bottom:13px">Implementation Scope</p>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="display:flex;align-items:center;gap:11px">
+              <div style="width:2px;height:14px;background:rgba(10,143,174,.85);border-radius:2px;flex-shrink:0"></div>
+              <p style="font-family:var(--font-b);font-size:12.5px;color:rgba(255,255,255,.80);font-weight:600;line-height:1.2">WhatsApp Automation</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:11px">
+              <div style="width:2px;height:14px;background:rgba(10,143,174,.85);border-radius:2px;flex-shrink:0"></div>
+              <p style="font-family:var(--font-b);font-size:12.5px;color:rgba(255,255,255,.80);font-weight:600;line-height:1.2">AI Voice Reception</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:11px">
+              <div style="width:2px;height:14px;background:rgba(10,143,174,.85);border-radius:2px;flex-shrink:0"></div>
+              <p style="font-family:var(--font-b);font-size:12.5px;color:rgba(255,255,255,.80);font-weight:600;line-height:1.2">Unified Dashboard</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:11px">
+              <div style="width:2px;height:14px;background:rgba(10,143,174,.85);border-radius:2px;flex-shrink:0"></div>
+              <p style="font-family:var(--font-b);font-size:12.5px;color:rgba(255,255,255,.80);font-weight:600;line-height:1.2">Patient Communication Automation</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Implementation Status -->
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:20px 22px">
+          <p style="font-family:var(--font-b);font-size:9px;font-weight:700;color:rgba(255,255,255,.36);letter-spacing:.14em;text-transform:uppercase;margin-bottom:13px">Implementation Status</p>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:14px;line-height:1">✅</span>
+              <p style="font-family:var(--font-b);font-size:12.5px;color:rgba(255,255,255,.80);font-weight:600;line-height:1.2">Pilot Validated</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:14px;line-height:1">✅</span>
+              <p style="font-family:var(--font-b);font-size:12.5px;color:rgba(255,255,255,.80);font-weight:600;line-height:1.2">Workflow Confirmed</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:14px;line-height:1">🚀</span>
+              <p style="font-family:var(--font-b);font-size:12.5px;color:rgba(10,143,174,1);font-weight:700;line-height:1.2">Production Rollout Starting</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 2 — AGENDA
+══════════════════════════════ -->
+<section class="slide" id="s2">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Today's Agenda</span>
+  </div>
+
+  <div style="flex:1;display:flex;overflow:hidden">
+
+    <!-- LEFT: Context panel — dark navy -->
+    <div style="width:32%;background:#0C2340;display:flex;flex-direction:column;justify-content:center;padding:52px 44px;position:relative;overflow:hidden">
+      <div style="position:absolute;bottom:-80px;right:-80px;width:260px;height:260px;border-radius:50%;background:rgba(10,143,174,.07);pointer-events:none"></div>
+      <svg style="position:absolute;bottom:24px;left:28px;opacity:.06;pointer-events:none" width="196" height="172" viewBox="0 0 196 172" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="38" y1="36" x2="98" y2="68" stroke="white" stroke-width="1.2"/>
+        <line x1="98" y1="68" x2="158" y2="36" stroke="white" stroke-width="1.2"/>
+        <line x1="98" y1="68" x2="98" y2="136" stroke="white" stroke-width="1.2"/>
+        <line x1="38" y1="36" x2="22" y2="116" stroke="white" stroke-width="1.2"/>
+        <line x1="22" y1="116" x2="98" y2="136" stroke="white" stroke-width="1.2"/>
+        <line x1="158" y1="36" x2="174" y2="116" stroke="white" stroke-width="1.2"/>
+        <line x1="174" y1="116" x2="98" y2="136" stroke="white" stroke-width="1.2"/>
+        <line x1="98" y1="136" x2="58" y2="162" stroke="white" stroke-width="1.2"/>
+        <line x1="98" y1="136" x2="138" y2="162" stroke="white" stroke-width="1.2"/>
+        <circle cx="38" cy="36" r="7" stroke="white" stroke-width="1.4"/>
+        <circle cx="158" cy="36" r="5.5" stroke="white" stroke-width="1.4"/>
+        <circle cx="98" cy="68" r="9" stroke="white" stroke-width="1.4"/>
+        <circle cx="22" cy="116" r="5.5" stroke="white" stroke-width="1.4"/>
+        <circle cx="174" cy="116" r="5.5" stroke="white" stroke-width="1.4"/>
+        <circle cx="98" cy="136" r="8" stroke="white" stroke-width="1.4"/>
+        <circle cx="58" cy="162" r="4" stroke="white" stroke-width="1.4"/>
+        <circle cx="138" cy="162" r="4" stroke="white" stroke-width="1.4"/>
+        <circle cx="98" cy="68" r="3" fill="white"/>
+        <circle cx="98" cy="136" r="2.5" fill="white"/>
+      </svg>
+
+      <div style="width:36px;height:2px;background:var(--teal);margin-bottom:22px"></div>
+
+      <h2 style="font-family:var(--font-h);font-size:clamp(24px,2.6vw,32px);font-weight:700;color:#FFFFFF;line-height:1.15;letter-spacing:-.01em;margin-bottom:16px">How We'll<br>Align Today</h2>
+
+      <p style="font-family:var(--font-h);font-size:16px;font-style:italic;color:rgba(255,255,255,.48);line-height:1.65;margin-bottom:28px">Today's session aligns both teams on implementation scope, architecture, delivery planning, dependencies, and go-live readiness.</p>
+
+      <div style="display:flex;flex-direction:column;gap:9px;border-top:1px solid rgba(255,255,255,.08);padding-top:24px">
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:13px 16px">
+          <div style="font-family:var(--font-h);font-size:26px;font-weight:700;color:#FFFFFF;line-height:1;margin-bottom:5px">7</div>
+          <div style="font-family:var(--font-b);font-size:12px;color:rgba(255,255,255,.40);font-weight:500">Alignment Areas</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:13px 16px">
+          <div style="font-family:var(--font-h);font-size:26px;font-weight:700;color:rgba(10,143,174,.90);line-height:1;margin-bottom:5px">8 Weeks</div>
+          <div style="font-family:var(--font-b);font-size:12px;color:rgba(255,255,255,.40);font-weight:500">Go-Live Target</div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:13px 16px">
+          <div style="font-family:var(--font-b);font-size:14px;font-weight:700;color:rgba(255,255,255,.75);line-height:1.2;margin-bottom:5px">Technical + Operational</div>
+          <div style="font-family:var(--font-b);font-size:12px;color:rgba(255,255,255,.40);font-weight:500">Kickoff Session Type</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: 3-phase implementation roadmap -->
+    <div style="flex:1;background:#FAFBFC;display:flex;align-items:center;padding:36px 52px 36px 48px;border-left:1px solid var(--border)">
+      <div style="width:100%">
+
+        <!-- ── PHASE 1: ALIGNMENT ── -->
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px">
+          <div style="width:2px;height:36px;background:var(--navy-mid);border-radius:2px;flex-shrink:0;margin-top:3px"></div>
+          <div>
+            <span style="font-family:var(--font-b);font-size:10.5px;font-weight:700;color:var(--navy);letter-spacing:.13em;text-transform:uppercase;display:block;margin-bottom:4px">Phase 1 — Alignment</span>
+            <span style="font-family:var(--font-b);font-size:13px;color:var(--muted)">Establishing shared implementation understanding</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px">
+          <div style="background:#FFFFFF;border:1px solid rgba(12,35,64,.10);border-radius:8px;padding:18px 20px;box-shadow:0 2px 8px rgba(12,35,64,.06),0 1px 2px rgba(12,35,64,.03)">
+            <span style="font-family:var(--font-b);font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px">01</span>
+            <h4 style="font-family:var(--font-h);font-size:14.5px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:6px">Project Scope &<br>Shared Understanding</h4>
+            <p style="font-family:var(--font-b);font-size:13px;color:var(--muted);line-height:1.5">Confirming what will be implemented</p>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid rgba(12,35,64,.10);border-radius:8px;padding:18px 20px;box-shadow:0 2px 8px rgba(12,35,64,.06),0 1px 2px rgba(12,35,64,.03)">
+            <span style="font-family:var(--font-b);font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px">02</span>
+            <h4 style="font-family:var(--font-h);font-size:14.5px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:6px">AIWA × AIKA<br>Solution Scope</h4>
+            <p style="font-family:var(--font-b);font-size:13px;color:var(--muted);line-height:1.5">AIWA, AIKA & operational workflow</p>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid rgba(12,35,64,.10);border-radius:8px;padding:18px 20px;box-shadow:0 2px 8px rgba(12,35,64,.06),0 1px 2px rgba(12,35,64,.03)">
+            <span style="font-family:var(--font-b);font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px">03</span>
+            <h4 style="font-family:var(--font-h);font-size:14.5px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:6px">Architecture &<br>Integrations</h4>
+            <p style="font-family:var(--font-b);font-size:13px;color:var(--muted);line-height:1.5">Nixpend, WhatsApp, STC & SMS</p>
+          </div>
+        </div>
+
+        <!-- Phase connector -->
+        <div style="display:flex;align-items:center;gap:0;padding:10px 0;margin:0 4px">
+          <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(10,143,174,.20))"></div>
+          <div style="width:6px;height:6px;border-radius:50%;border:1.5px solid rgba(10,143,174,.38);flex-shrink:0;margin:0 6px"></div>
+          <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(10,143,174,.20))"></div>
+        </div>
+
+        <!-- ── PHASE 2: DELIVERY READINESS (hero) ── -->
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px">
+          <div style="width:2px;height:36px;background:var(--teal);border-radius:2px;flex-shrink:0;margin-top:3px"></div>
+          <div>
+            <span style="font-family:var(--font-b);font-size:10.5px;font-weight:700;color:var(--teal-dark);letter-spacing:.13em;text-transform:uppercase;display:block;margin-bottom:4px">Phase 2 — Delivery Readiness</span>
+            <span style="font-family:var(--font-b);font-size:13px;color:var(--body)">Planning execution and critical dependencies</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+          <div style="background:#FFFFFF;border:1px solid rgba(12,35,64,.10);border-radius:8px;padding:22px 24px;box-shadow:0 3px 12px rgba(12,35,64,.07),0 1px 3px rgba(12,35,64,.04)">
+            <span style="font-family:var(--font-b);font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:9px">04</span>
+            <h4 style="font-family:var(--font-h);font-size:15.5px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:7px">8-Week Delivery Plan</h4>
+            <p style="font-family:var(--font-b);font-size:13px;color:var(--muted);line-height:1.5">Timeline, milestones & critical dependencies</p>
+          </div>
+          <!-- Card 05 — elevated: operationally critical -->
+          <div style="background:rgba(10,143,174,.05);border:1px solid rgba(10,143,174,.22);border-top:2px solid var(--teal);border-radius:8px;padding:20px 22px;box-shadow:0 2px 10px rgba(10,143,174,.09)">
+            <span style="font-family:var(--font-b);font-size:9.5px;font-weight:800;color:var(--teal-dark);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:9px">05</span>
+            <h4 style="font-family:var(--font-h);font-size:15.5px;font-weight:700;color:var(--teal-dark);line-height:1.3;margin-bottom:7px">Requirements from<br>Vitality Team</h4>
+            <p style="font-family:var(--font-b);font-size:13px;color:var(--body);line-height:1.5">Critical inputs required for go-live</p>
+          </div>
+        </div>
+
+        <!-- Phase connector -->
+        <div style="display:flex;align-items:center;gap:0;padding:10px 0;margin:0 4px">
+          <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(10,143,174,.20))"></div>
+          <div style="width:6px;height:6px;border-radius:50%;border:1.5px solid rgba(10,143,174,.38);flex-shrink:0;margin:0 6px"></div>
+          <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(10,143,174,.20))"></div>
+        </div>
+
+        <!-- ── PHASE 3: GO-LIVE READINESS ── -->
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px">
+          <div style="width:2px;height:36px;background:var(--navy-mid);border-radius:2px;flex-shrink:0;margin-top:3px"></div>
+          <div>
+            <span style="font-family:var(--font-b);font-size:10.5px;font-weight:700;color:var(--navy);letter-spacing:.13em;text-transform:uppercase;display:block;margin-bottom:4px">Phase 3 — Go-Live Readiness</span>
+            <span style="font-family:var(--font-b);font-size:13px;color:var(--muted)">Defining ownership and next actions</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+          <div style="background:#FFFFFF;border:1px solid rgba(12,35,64,.10);border-radius:8px;padding:18px 22px;box-shadow:0 2px 8px rgba(12,35,64,.06),0 1px 2px rgba(12,35,64,.03)">
+            <span style="font-family:var(--font-b);font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px">06</span>
+            <h4 style="font-family:var(--font-h);font-size:14.5px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:6px">Team, Roles<br>& Governance</h4>
+            <p style="font-family:var(--font-b);font-size:13px;color:var(--muted);line-height:1.5">Roles, communication & decision-making</p>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid rgba(12,35,64,.10);border-radius:8px;padding:18px 22px;box-shadow:0 2px 8px rgba(12,35,64,.06),0 1px 2px rgba(12,35,64,.03)">
+            <span style="font-family:var(--font-b);font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px">07</span>
+            <h4 style="font-family:var(--font-h);font-size:14.5px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:6px">Open Items<br>& Next Steps</h4>
+            <p style="font-family:var(--font-b);font-size:13px;color:var(--muted);line-height:1.5">Decisions, owners & immediate actions</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 3 — PROJECT VISION
+══════════════════════════════ -->
+<section class="slide" id="s3">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Project Vision</span>
+  </div>
+  <div class="slide-body" style="justify-content:center">
+    <div class="section-bar"><span>The Why</span></div>
+    <h2 style="margin-bottom:8px">Transforming Home Healthcare in Saudi Arabia</h2>
+    <p class="lead" style="margin-bottom:24px;max-width:650px">Patients deserve seamless 24/7 access. Coordinators deserve fewer missed calls and manual tasks. Vitality deserves to grow without adding headcount.</p>
+    <div class="g3" style="margin-bottom:20px">
+      <div class="card card-red" style="padding:22px">
+        <h3 style="font-size:15px;margin-bottom:7px;color:var(--red)">The Challenge</h3>
+        <p style="font-size:13px">Missed calls after hours, manual booking friction, and no Arabic-first digital channel for home care patients</p>
+      </div>
+      <div class="card card-teal" style="padding:22px">
+        <h3 style="font-size:15px;margin-bottom:7px;color:var(--teal-dark)">The Solution</h3>
+        <p style="font-size:13px">24/7 AI agents on WhatsApp & voice — bilingual Najdi Arabic/English, fully integrated with Nixpend HMS</p>
+      </div>
+      <div class="card card-green" style="padding:22px">
+        <h3 style="font-size:15px;margin-bottom:7px;color:var(--green)">The Outcome</h3>
+        <p style="font-size:13px">More confirmed bookings, zero missed after-hours calls, reduced coordinator workload, happier patients</p>
+      </div>
+    </div>
+    <div class="card" style="padding:18px 24px">
+      <div style="display:flex;gap:0;justify-content:space-around">
+        <div style="text-align:center">
+          <div class="stat-val">24/7</div><div class="stat-label">Patient Availability</div>
+        </div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center">
+          <div class="stat-val">2</div><div class="stat-label">Languages (Ar + En)</div>
+        </div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center">
+          <div class="stat-val" style="color:var(--teal)">8</div><div class="stat-label">Weeks to Go-Live</div>
+        </div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center">
+          <div class="stat-val">3</div><div class="stat-label">Core Modules</div>
+        </div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center">
+          <div class="stat-val" style="color:var(--green)">0</div><div class="stat-label">Extra Headcount Needed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 4 — PLATFORM OVERVIEW
+══════════════════════════════ -->
+<section class="slide" id="s4">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Platform Overview</span>
+  </div>
+  <div class="slide-body" style="justify-content:center">
+    <div class="section-bar"><span>Three Core Components</span></div>
+    <h2 style="margin-bottom:24px">What We're Building</h2>
+    <div class="g3" style="gap:18px;margin-bottom:16px">
+      <div class="card" style="padding:28px 24px;border-top:3px solid var(--teal)">
+        <div style="font-size:34px;margin-bottom:12px">💬</div>
+        <span class="badge badge-teal" style="margin-bottom:12px;display:inline-block">AIWA</span>
+        <h3 style="font-size:20px;margin-bottom:8px;color:var(--teal-dark)">WhatsApp<br>AI Agent</h3>
+        <p style="font-size:13px;margin-bottom:16px">24/7 bilingual patient engagement — booking, documents, campaigns & coordinator handoff.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">
+          <span class="badge badge-teal">Booking</span>
+          <span class="badge badge-teal">Arabic / EN</span>
+          <span class="badge badge-teal">Campaigns</span>
+          <span class="badge badge-teal">Documents</span>
+        </div>
+      </div>
+      <div class="card" style="padding:28px 24px;border-top:3px solid var(--navy)">
+        <div style="font-size:34px;margin-bottom:12px">🎙️</div>
+        <span class="badge badge-navy" style="margin-bottom:12px;display:inline-block">AIKA</span>
+        <h3 style="font-size:20px;margin-bottom:8px">Voice AI<br>Receptionist</h3>
+        <p style="font-size:13px;margin-bottom:16px">24/7 inbound calls in Najdi Arabic & English — booking, reminders & therapist confirmations.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">
+          <span class="badge badge-navy">Voice Booking</span>
+          <span class="badge badge-navy">Reminders</span>
+          <span class="badge badge-navy">Najdi Arabic</span>
+          <span class="badge badge-navy">Outreach</span>
+        </div>
+      </div>
+      <div class="card" style="padding:28px 24px;border-top:3px solid var(--gold)">
+        <div style="font-size:34px;margin-bottom:12px">📊</div>
+        <span class="badge badge-gold" style="margin-bottom:12px;display:inline-block">DASHBOARD</span>
+        <h3 style="font-size:20px;margin-bottom:8px;color:var(--gold)">Unified<br>Command Center</h3>
+        <p style="font-size:13px;margin-bottom:16px">Real-time view of all conversations, bookings, campaigns & escalations across every channel.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">
+          <span class="badge badge-gold">Real-Time</span>
+          <span class="badge badge-gold">Pipeline</span>
+          <span class="badge badge-gold">Analytics</span>
+          <span class="badge badge-gold">Escalations</span>
+        </div>
+      </div>
+    </div>
+    <div class="card card-navy" style="padding:13px 20px;display:flex;align-items:center;justify-content:space-between">
+      <span style="font-family:var(--font-b);font-size:13px;color:var(--body)">All three modules integrate seamlessly with</span>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <span class="badge badge-teal">Nixpend HMS</span>
+        <span class="badge badge-navy">STC SIP Trunk</span>
+        <span class="badge badge-teal">WhatsApp Business API</span>
+        <span class="badge badge-gold">SMS Gateway</span>
+        <span class="badge badge-gold">Payment Gateway</span>
+        <span class="badge badge-navy">Google Maps</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 5 — AIWA
+══════════════════════════════ -->
+<section class="slide" id="s5">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">AIWA — WhatsApp AI Agent</span>
+  </div>
+  <div class="slide-body">
+    <div class="section-bar"><span>Module 01</span></div>
+    <h2 style="margin-bottom:18px">AIWA — WhatsApp AI Agent</h2>
+    <div class="g2" style="gap:11px">
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-teal" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">🌐</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Bilingual Conversations</h4><p style="font-size:12px">Seamless Arabic + English in the same chat. Auto language detection per message.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-teal" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">📅</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Conversational Booking</h4><p style="font-size:12px">Service type, date/time, location via Google Maps — writes directly to Nixpend HMS.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-navy" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">📎</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Document Handling</h4><p style="font-size:12px">Accepts prescriptions, referrals, wound photos (JPEG/PNG/PDF) and routes to coordinators.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-green" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">✅</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Booking Confirmation</h4><p style="font-size:12px">Auto-sends confirmation with therapist name, service, date & time to patient.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-teal" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">📢</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Outbound Marketing Campaigns</h4><p style="font-size:12px">Broadcast promotions & re-engagement by segment (service type, district, visit history).</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-navy" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">👤</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Human Handoff</h4><p style="font-size:12px">Escalates to coordinator on urgent language, complex queries, or explicit request — with full context.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-teal" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">📲</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Multi-Number Support</h4><p style="font-size:12px">Up to 3 WhatsApp Business numbers included — across service lines or geographies.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-green" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">🔄</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Live Dashboard Write-Back</h4><p style="font-size:12px">Every booking milestone updates the Unified Dashboard in real time.</p></div>
+      </div>
+    </div>
+    <div class="notice notice-gold" style="margin-top:12px">
+      <span style="font-size:16px;flex-shrink:0">⚠️</span>
+      <p style="font-size:12.5px;color:var(--gold)"><strong>Recommendation:</strong> A dedicated WhatsApp Business number for AIWA is strongly advised — separate from human-operated Vitality numbers to ensure a consistent AI experience and avoid conversation conflicts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 6 — AIKA
+══════════════════════════════ -->
+<section class="slide" id="s6">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">AIKA — Voice AI Receptionist</span>
+  </div>
+  <div class="slide-body">
+    <div class="section-bar"><span>Module 02</span></div>
+    <h2 style="margin-bottom:18px">AIKA — Voice AI Receptionist</h2>
+    <div class="g2" style="gap:11px">
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-navy" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">🎙️</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">24/7 Inbound Receptionist</h4><p style="font-size:12px">Answers every call in Najdi Arabic & English. No more missed calls, ever.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-navy" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">📅</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Voice Booking</h4><p style="font-size:12px">Conversational booking over the phone — service, location, date, time. Writes to Nixpend HMS.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-teal" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">⏰</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Automated Patient Reminders</h4><p style="font-size:12px">Outbound reminder call 2 hours before every appointment to reduce no-shows.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-green" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">👨‍⚕️</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Therapist Confirmation Calls</h4><p style="font-size:12px">Outbound call to therapist immediately after each new booking. Language auto-detected.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-navy" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">📣</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Voice Campaign Module</h4><p style="font-size:12px">Health check reminders, promotions & follow-ups. Call list, scheduling & retry logic.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-teal" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">📋</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Structured Outcome Capture</h4><p style="font-size:12px">Result per call: interested / not interested / callback requested / booking requested.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-navy" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">📡</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">STC SIP Trunk Integration</h4><p style="font-size:12px">Uses Vitality's existing STC infrastructure. 1 AIKA voice DID included.</p></div>
+      </div>
+      <div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px">
+        <div class="icon-box ib-teal" style="width:34px;height:34px;border-radius:8px;font-size:15px;flex-shrink:0">🔊</div>
+        <div><h4 style="font-size:13px;margin-bottom:3px">Natural Arabic Voice (ElevenLabs)</h4><p style="font-size:12px">Premium Najdi Arabic TTS — warm, natural voice that feels local to every patient.</p></div>
+      </div>
+    </div>
+    <div class="card card-teal" style="margin-top:12px;padding:12px 18px;display:flex;align-items:center;gap:20px">
+      <div><div class="stat-val" style="font-size:22px;color:var(--teal-dark)">15,000</div><div class="stat-label">Voice minutes/year included</div></div>
+      <div style="width:1px;background:rgba(10,143,174,.25);height:36px"></div>
+      <p style="font-size:12.5px">Powered by Vapi + OpenAI/Gemini LLM + ElevenLabs TTS. Saudi-region cloud (AWS Bahrain/KSA).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 7 — DASHBOARD
+══════════════════════════════ -->
+<section class="slide" id="s7">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Unified Dashboard</span>
+  </div>
+  <div class="slide-body" style="justify-content:center">
+    <div class="section-bar"><span>Module 03</span></div>
+    <h2 style="margin-bottom:20px">Unified Command Center</h2>
+    <div class="g3" style="gap:13px;margin-bottom:14px">
+      <div class="card" style="padding:18px">
+        <div style="font-size:24px;margin-bottom:8px">👁️</div>
+        <h4 style="font-size:13px;margin-bottom:4px">Real-Time Activity</h4>
+        <p style="font-size:12.5px">Active WhatsApp conversations & live calls visible in one view. No switching tools.</p>
+      </div>
+      <div class="card" style="padding:18px">
+        <div style="font-size:24px;margin-bottom:8px">🚦</div>
+        <h4 style="font-size:13px;margin-bottom:4px">Booking Pipeline</h4>
+        <p style="font-size:12.5px">Requested → Matched → Confirmed → Reminded → Completed. Full status visibility.</p>
+      </div>
+      <div class="card" style="padding:18px">
+        <div style="font-size:24px;margin-bottom:8px">🗺️</div>
+        <h4 style="font-size:13px;margin-bottom:4px">Therapist View</h4>
+        <p style="font-size:12.5px">Availability, district assignments & current booking load per therapist.</p>
+      </div>
+      <div class="card" style="padding:18px">
+        <div style="font-size:24px;margin-bottom:8px">📊</div>
+        <h4 style="font-size:13px;margin-bottom:4px">Campaign Analytics</h4>
+        <p style="font-size:12.5px">WhatsApp & voice campaign performance — send rates, conversions, outcomes.</p>
+      </div>
+      <div class="card card-teal" style="padding:18px">
+        <div style="font-size:24px;margin-bottom:8px">🚨</div>
+        <h4 style="font-size:13px;margin-bottom:4px;color:var(--teal-dark)">Coordinator Escalation Inbox</h4>
+        <p style="font-size:12.5px">All escalated chats & calls with full conversation context — ready for human takeover.</p>
+      </div>
+      <div class="card" style="padding:18px">
+        <div style="font-size:24px;margin-bottom:8px">📤</div>
+        <h4 style="font-size:13px;margin-bottom:4px">Export & Reporting</h4>
+        <p style="font-size:12.5px">Operational & clinical data export for management review and HMS reconciliation.</p>
+      </div>
+    </div>
+    <div class="notice notice-navy">
+      <span style="font-size:16px;flex-shrink:0">🔒</span>
+      <p style="font-size:12.5px;color:var(--body)">Coordinator accounts included · Saudi-region data residency · AES-256 encryption at rest · TLS 1.2+ in transit · Audit trail on all booking actions</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 8 — ARCHITECTURE
+══════════════════════════════ -->
+<section class="slide" id="s8">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Technical Architecture</span>
+  </div>
+  <div class="slide-body">
+    <div class="section-bar"><span>Integration Map</span></div>
+    <h2 style="margin-bottom:18px">How It All Connects</h2>
+    <div style="display:flex;gap:16px;flex:1;min-height:0">
+      <div style="flex:1;display:flex;flex-direction:column;gap:10px">
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--teal)">
+          <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">PATIENT CHANNELS</h4>
+          <div style="display:flex;gap:8px">
+            <div class="arch-node" style="flex:1"><div class="arch-icon">💬</div><span>WhatsApp Business</span></div>
+            <div class="arch-node" style="flex:1"><div class="arch-icon">📞</div><span>Voice (STC SIP)</span></div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:18px;color:var(--teal)">⇕</div>
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--navy)">
+          <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">AI AGENTS & DASHBOARD</h4>
+          <div style="display:flex;gap:8px">
+            <div class="arch-node" style="flex:1;border-color:rgba(10,143,174,.3)"><div class="arch-icon">💬</div><span>AIWA Agent</span></div>
+            <div class="arch-node" style="flex:1;border-color:rgba(12,35,64,.2)"><div class="arch-icon">🎙️</div><span>AIKA Agent</span></div>
+            <div class="arch-node" style="flex:1;border-color:rgba(184,122,10,.25)"><div class="arch-icon">📊</div><span>Dashboard</span></div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:18px;color:var(--teal)">⇕</div>
+        <div class="card" style="padding:14px 16px;border-top:3px solid var(--gold)">
+          <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">CORE SYSTEM OF RECORD</h4>
+          <div class="arch-node" style="border-color:rgba(184,122,10,.3)"><div class="arch-icon">🏥</div><span>Nixpend HMS — Booking, Therapist, Patient Data</span></div>
+        </div>
+      </div>
+      <div style="width:1px;background:var(--border)"></div>
+      <div style="width:195px;display:flex;flex-direction:column;gap:8px">
+        <h4 style="font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:2px">AI & VOICE STACK</h4>
+        <div class="arch-node"><div class="arch-icon">🧠</div><span>OpenAI / Gemini LLM</span></div>
+        <div class="arch-node"><div class="arch-icon">🔊</div><span>ElevenLabs TTS</span></div>
+        <div class="arch-node"><div class="arch-icon">👂</div><span>Speech-to-Text</span></div>
+        <div class="arch-node"><div class="arch-icon">🤖</div><span>Vapi Agent Framework</span></div>
+        <div class="arch-node"><div class="arch-icon">📡</div><span>Twilio Voice / SMS</span></div>
+        <div class="divider"></div>
+        <h4 style="font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:2px">INFRASTRUCTURE</h4>
+        <div class="arch-node"><div class="arch-icon">☁️</div><span>AWS KSA / Bahrain</span></div>
+        <div class="arch-node"><div class="arch-icon">🔒</div><span>TLS 1.2+ · AES-256</span></div>
+        <div class="arch-node"><div class="arch-icon">🗺️</div><span>Google Maps API</span></div>
+        <div class="arch-node"><div class="arch-icon">📧</div><span>Email (SMTP Relay)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 9 — 8-WEEK PLAN
+══════════════════════════════ -->
+<section class="slide" id="s9">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">8-Week Delivery Plan</span>
+  </div>
+  <div class="slide-body" style="justify-content:center">
+    <div class="section-bar"><span>Delivery Timeline</span></div>
+    <h2 style="margin-bottom:22px">8 Weeks to Go-Live</h2>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="phase">
+        <div class="phase-num teal">01</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <h4>Kickoff & Setup</h4>
+            <span class="badge badge-teal">Week 1</span>
+          </div>
+          <p style="font-size:12.5px">Project kickoff · Nixpend API review & sandbox access · WhatsApp BSP provisioning · SIP trunk config with STC · Saudi-region cloud setup · Requirements freeze · Provider selection (SMS/payment)</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">02</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <h4>Core Build</h4>
+            <span class="badge badge-navy">Weeks 2–5</span>
+          </div>
+          <p style="font-size:12.5px">AIWA WhatsApp agent build · AIKA Voice agent build · Nixpend HMS integration · Unified Dashboard build · Arabic (Najdi) language tuning · Internal QA & testing</p>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num gold">03</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <h4 style="color:var(--gold)">Integration & UAT</h4>
+            <span class="badge badge-gold">Weeks 6–7</span>
+          </div>
+          <p style="font-size:12.5px">SMS & payment gateway integration · End-to-end flow testing · User acceptance testing (UAT) · Bug fixes & refinements · Coordinator onboarding & training (2 × 1hr sessions)</p>
+        </div>
+      </div>
+      <div class="phase" style="border-color:rgba(26,122,90,.25);background:var(--green-bg)">
+        <div class="phase-num" style="background:var(--green)">04</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <h4 style="color:var(--green)">🚀 Go-Live</h4>
+            <span class="badge badge-green">Week 8</span>
+          </div>
+          <p style="font-size:12.5px">Production deployment · Live monitoring & go-live support · Handover documentation · Support handoff to ops team · Weekly status reporting begins</p>
+        </div>
+      </div>
+    </div>
+    <div class="notice notice-gold" style="margin-top:14px">
+      <span style="font-size:16px;flex-shrink:0">⚠️</span>
+      <p style="font-size:12.5px;color:var(--gold)"><strong>Timeline Risk:</strong> The 8-week schedule assumes Day 1 sandbox access to Nixpend HMS, selected SMS/payment gateways, and STC SIP trunk ready. Any delays in these dependencies will directly shift the Go-Live date.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 10 — MILESTONES
+══════════════════════════════ -->
+<section class="slide" id="s10">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Key Milestones</span>
+  </div>
+  <div class="slide-body" style="justify-content:center">
+    <div class="section-bar"><span>Project Milestones</span></div>
+    <h2 style="margin-bottom:22px">Success Checkpoints</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h4 style="font-size:14px">Requirements Freeze + All Sandbox Access</h4>
+          <span class="badge badge-teal">Week 1</span>
+        </div>
+        <p style="font-size:12.5px;margin-top:2px;color:var(--muted)">Master data templates submitted · All third-party access provisioned · SIP trunk config confirmed</p>
+      </div>
+      <div class="tl-item">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h4 style="font-size:14px">AIWA Alpha — WhatsApp Booking Flow Live</h4>
+          <span class="badge badge-teal">Week 3</span>
+        </div>
+        <p style="font-size:12.5px;margin-top:2px;color:var(--muted)">End-to-end WhatsApp booking in Arabic/English writing to Nixpend sandbox confirmed</p>
+      </div>
+      <div class="tl-item">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h4 style="font-size:14px">AIKA Alpha + Nixpend Integration Alpha</h4>
+          <span class="badge badge-navy">Week 4</span>
+        </div>
+        <p style="font-size:12.5px;margin-top:2px;color:var(--muted)">Voice booking over SIP trunk · Nixpend read/write confirmed · Reminder calls functional</p>
+      </div>
+      <div class="tl-item">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h4 style="font-size:14px">Unified Dashboard Build Complete</h4>
+          <span class="badge badge-navy">Week 5</span>
+        </div>
+        <p style="font-size:12.5px;margin-top:2px;color:var(--muted)">Real-time pipeline view · Coordinator inbox · Campaign metrics all visible and functional</p>
+      </div>
+      <div class="tl-item">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h4 style="font-size:14px">Full Integration Test — All Channels</h4>
+          <span class="badge badge-gold">Week 6</span>
+        </div>
+        <p style="font-size:12.5px;margin-top:2px;color:var(--muted)">SMS gateway, payment gateway, email notifications all connected and tested end-to-end</p>
+      </div>
+      <div class="tl-item">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h4 style="font-size:14px">UAT Complete + Coordinator Onboarded</h4>
+          <span class="badge badge-gold">Week 7</span>
+        </div>
+        <p style="font-size:12.5px;margin-top:2px;color:var(--muted)">Vitality UAT sign-off · All issues resolved · Training sessions complete · Go-Live approved</p>
+      </div>
+      <div class="tl-item">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h4 style="font-size:14px;color:var(--green)">🚀 Go-Live — Production Deployment</h4>
+          <span class="badge badge-green">Week 8</span>
+        </div>
+        <p style="font-size:12.5px;margin-top:2px;color:var(--muted)">Live patient traffic · Code-ox on go-live monitoring standby · Handover documentation delivered</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 11 — REQUIREMENTS OVERVIEW
+══════════════════════════════ -->
+<section class="slide" id="s11">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Requirements from Vitality</span>
+  </div>
+  <div class="slide-body" style="justify-content:center">
+    <div class="section-bar"><span>What We Need From You</span></div>
+    <h2 style="margin-bottom:8px">The Go-Live Checklist</h2>
+    <p class="lead" style="margin-bottom:22px;max-width:640px">Every item below sits on the critical path. The earlier Vitality provides these, the sooner we can deliver.</p>
+    <div class="g2" style="gap:12px">
+      <div class="card card-teal" style="display:flex;gap:14px;align-items:flex-start;padding:17px">
+        <div class="icon-box ib-teal">📡</div>
+        <div>
+          <h4 style="margin-bottom:3px">SIP Trunk — STC Telephony</h4>
+          <p style="font-size:12.5px">Server credentials, DID numbers, codec config, firewall rules & STC liaison contact</p>
+          <div style="margin-top:7px"><span class="badge badge-red">Critical — Week 1</span></div>
+        </div>
+      </div>
+      <div class="card card-gold" style="display:flex;gap:14px;align-items:flex-start;padding:17px">
+        <div class="icon-box ib-gold">🏥</div>
+        <div>
+          <h4 style="margin-bottom:3px;color:var(--gold)">Nixpend HMS API</h4>
+          <p style="font-size:12.5px">Full API docs, sandbox URL, credentials, authentication method, all required endpoints</p>
+          <div style="margin-top:7px"><span class="badge badge-red">Critical — Day 1</span></div>
+        </div>
+      </div>
+      <div class="card" style="display:flex;gap:14px;align-items:flex-start;padding:17px">
+        <div class="icon-box ib-teal">💬</div>
+        <div>
+          <h4 style="margin-bottom:3px">WhatsApp, SMS & Payments</h4>
+          <p style="font-size:12.5px">Dedicated WA number decision, SMS provider selection, payment gateway selection & credentials</p>
+          <div style="margin-top:7px"><span class="badge badge-gold">Required — Week 1</span></div>
+        </div>
+      </div>
+      <div class="card" style="display:flex;gap:14px;align-items:flex-start;padding:17px">
+        <div class="icon-box ib-navy">📋</div>
+        <div>
+          <h4 style="margin-bottom:3px">Master Data & Content</h4>
+          <p style="font-size:12.5px">Service catalog, therapist roster, district map, scripts, FAQ, branding assets</p>
+          <div style="margin-top:7px"><span class="badge badge-gold">Required — Week 1</span></div>
+        </div>
+      </div>
+      <div class="card" style="display:flex;gap:14px;align-items:flex-start;padding:17px">
+        <div class="icon-box ib-green">👥</div>
+        <div>
+          <h4 style="margin-bottom:3px;color:var(--green)">Team & System Access</h4>
+          <p style="font-size:12.5px">IT contact, coordinator user list, UAT team, executive sponsor, email relay</p>
+          <div style="margin-top:7px"><span class="badge badge-navy">Required — Week 1</span></div>
+        </div>
+      </div>
+      <div class="card" style="display:flex;gap:14px;align-items:flex-start;padding:17px">
+        <div class="icon-box ib-teal">⚡</div>
+        <div>
+          <h4 style="margin-bottom:3px">Feedback Turnaround Commitment</h4>
+          <p style="font-size:12.5px">24–48 business hour response on all review requests and design approvals throughout build</p>
+          <div style="margin-top:7px"><span class="badge badge-teal">Ongoing — All Phases</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 12 — SIP TRUNK
+══════════════════════════════ -->
+<section class="slide" id="s12">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">SIP Trunk Requirements</span>
+  </div>
+  <div class="slide-body">
+    <div class="section-bar"><span>Telephony — STC Infrastructure</span></div>
+    <h2 style="margin-bottom:6px">SIP Trunk Requirements</h2>
+    <p style="margin-bottom:18px;font-size:13.5px">AIKA connects to Vitality's existing STC SIP trunk. The following must be configured and confirmed before end of Week 1.</p>
+    <div class="g2" style="gap:14px">
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">CONNECTIVITY DETAILS</h4>
+        <ul class="checklist">
+          <li>SIP server hostname or IP address + port number</li>
+          <li>SIP domain / realm</li>
+          <li>SIP transport protocol preference <small>(UDP / TCP / TLS — TLS preferred)</small></li>
+          <li>SIP trunk username & password / authentication credentials</li>
+          <li>Outbound proxy address <small>(if applicable)</small></li>
+          <li>DTMF mode <small>(RFC2833 strongly preferred)</small></li>
+          <li>Supported audio codecs <small>(G.711 µ-law / a-law, G.729 — confirm supported)</small></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">NUMBERS & CAPACITY</h4>
+        <ul class="checklist">
+          <li>DID number(s) to be assigned to AIKA <small>(minimum 1 inbound DID)</small></li>
+          <li>Maximum concurrent call capacity required</li>
+          <li>Call routing rules <small>(business hours vs. after-hours behaviour)</small></li>
+          <li>Existing IVR to be retired or migrated?</li>
+        </ul>
+        <div class="divider"></div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">NETWORK & SECURITY</h4>
+        <ul class="checklist">
+          <li>Firewall IP whitelist — CodeOx cloud IPs must be whitelisted</li>
+          <li>SIP ALG on NAT device <small>(must be disabled for reliable calls)</small></li>
+          <li>QoS / DSCP markings for RTP traffic</li>
+          <li>STC technical contact name + direct number</li>
+        </ul>
+      </div>
+    </div>
+    <div class="notice notice-red" style="margin-top:14px">
+      <span style="font-size:16px;flex-shrink:0">❓</span>
+      <div>
+        <p style="font-size:13px;color:var(--red);font-weight:700;margin-bottom:2px">Open Question for Vitality</p>
+        <p style="font-size:12.5px;color:var(--body)">Has STC already been engaged for this project? STC DID provisioning typically takes <strong>1–2 weeks</strong>. If not yet initiated, this process must begin <strong>today</strong> to avoid delaying the go-live date.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 13 — NIXPEND HMS
+══════════════════════════════ -->
+<section class="slide" id="s13">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Nixpend HMS Integration</span>
+  </div>
+  <div class="slide-body">
+    <div class="section-bar"><span>System of Record — HMS / ERP</span></div>
+    <h2 style="margin-bottom:6px">Nixpend HMS Integration Requirements</h2>
+    <p style="margin-bottom:18px;font-size:13.5px">Nixpend HMS is the core system of record. Every booking from AIWA and AIKA writes back here. We assume REST API — please confirm below.</p>
+    <div class="g2" style="gap:14px">
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">API ACCESS & ENVIRONMENT</h4>
+        <ul class="checklist">
+          <li>Full API documentation <small>(Swagger / OpenAPI spec preferred)</small></li>
+          <li>Sandbox / staging environment URL</li>
+          <li>Sandbox API credentials <small>(username/password or API key)</small></li>
+          <li>Authentication method <small>(OAuth 2.0 / API Key / JWT / Basic Auth?)</small></li>
+          <li>API base URL + versioning format</li>
+          <li>Rate limits and throttling policy</li>
+          <li>Nixpend technical contact for API support queries</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">REQUIRED API ENDPOINTS</h4>
+        <ul class="checklist">
+          <li>Patient lookup / search by phone number or ID</li>
+          <li>Create new patient record</li>
+          <li>Booking creation <small>(service, date, time, patient, therapist)</small></li>
+          <li>Booking update / cancellation</li>
+          <li>Therapist availability query <small>(by date + district)</small></li>
+          <li>Service catalog / service type list</li>
+          <li>District / zone mapping data</li>
+          <li>Booking status read-back</li>
+          <li>Webhook / callback support? <small>(for async status push)</small></li>
+        </ul>
+      </div>
+    </div>
+    <div class="g2" style="gap:12px;margin-top:12px">
+      <div class="notice notice-gold">
+        <span style="font-size:15px;flex-shrink:0">⚠️</span>
+        <p style="font-size:12px;color:var(--body)"><strong style="color:var(--gold)">Assumption:</strong> Standard REST API. If Nixpend uses SOAP, direct DB, or file-based integration, timeline and cost will need revision.</p>
+      </div>
+      <div class="notice notice-teal">
+        <span style="font-size:15px;flex-shrink:0">❓</span>
+        <p style="font-size:12px;color:var(--body)"><strong style="color:var(--teal-dark)">Open Question:</strong> Is Nixpend HMS currently live and operational? Is the sandbox stable and representative of production data?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 14 — COMMS & PAYMENTS
+══════════════════════════════ -->
+<section class="slide" id="s14">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">WhatsApp · SMS · Payment Gateway</span>
+  </div>
+  <div class="slide-body">
+    <div class="section-bar"><span>Third-Party Providers</span></div>
+    <h2 style="margin-bottom:18px">WhatsApp, SMS & Payment Requirements</h2>
+    <div class="g3" style="gap:14px">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card" style="padding:16px;border-top:3px solid var(--teal)">
+          <div style="font-size:22px;margin-bottom:6px">💬</div>
+          <h4 style="font-size:13px;margin-bottom:10px;color:var(--teal-dark)">WhatsApp Business API</h4>
+          <ul class="checklist" style="gap:5px">
+            <li style="font-size:12px">Dedicated phone number for AIWA <small>(new or port existing?)</small></li>
+            <li style="font-size:12px">Meta Business Account (WABA) — existing or create new?</li>
+            <li style="font-size:12px">Business display name for Meta approval</li>
+            <li style="font-size:12px">Business category & description</li>
+            <li style="font-size:12px">Facebook Business Manager access</li>
+            <li style="font-size:12px">Meta Business Verification status</li>
+          </ul>
+        </div>
+        <div class="notice notice-gold">
+          <p style="font-size:11.5px;color:var(--body)"><strong style="color:var(--gold)">Note:</strong> BSP provisioning included. Meta per-conversation fees are NOT — billed by Meta directly to Vitality.</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card" style="padding:16px;border-top:3px solid var(--navy)">
+          <div style="font-size:22px;margin-bottom:6px">📱</div>
+          <h4 style="font-size:13px;margin-bottom:10px">SMS Gateway</h4>
+          <ul class="checklist" style="gap:5px">
+            <li style="font-size:12px">Provider selected? <small>(Unifonic / Taqnyat / Msegat / Infobip)</small></li>
+            <li style="font-size:12px">CITC-registered Arabic Sender ID</li>
+            <li style="font-size:12px">API credentials (key + secret)</li>
+            <li style="font-size:12px">Arabic SMS Unicode support confirmed</li>
+            <li style="font-size:12px">Account active and funded</li>
+          </ul>
+        </div>
+        <div class="notice notice-gold">
+          <p style="font-size:11.5px;color:var(--body)"><strong style="color:var(--gold)">Note:</strong> Integration setup included. Subscription & per-message fees are NOT — charged by provider.</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card" style="padding:16px;border-top:3px solid var(--gold)">
+          <div style="font-size:22px;margin-bottom:6px">💳</div>
+          <h4 style="font-size:13px;margin-bottom:10px;color:var(--gold)">Payment Gateway</h4>
+          <ul class="checklist" style="gap:5px">
+            <li style="font-size:12px">Provider selected? <small>(HyperPay / PayTabs / Moyasar / Checkout.com)</small></li>
+            <li style="font-size:12px">Merchant account active & verified</li>
+            <li style="font-size:12px">Sandbox / test API keys</li>
+            <li style="font-size:12px">Production API keys</li>
+            <li style="font-size:12px">Payment methods <small>(mada, Visa, Apple Pay)</small></li>
+          </ul>
+        </div>
+        <div class="notice notice-gold">
+          <p style="font-size:11.5px;color:var(--body)"><strong style="color:var(--gold)">Note:</strong> Integration setup included. Transaction fees are NOT — charged by gateway provider.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 15 — DATA & CONTENT
+══════════════════════════════ -->
+<section class="slide" id="s15">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Data, Content & Branding</span>
+  </div>
+  <div class="slide-body">
+    <div class="section-bar"><span>Master Data & Content</span></div>
+    <h2 style="margin-bottom:18px">What the AI Needs to Know</h2>
+    <div class="g2" style="gap:14px">
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">MASTER DATA <span style="font-weight:400">(structured spreadsheet / CSV)</span></h4>
+        <ul class="checklist">
+          <li>Full service catalog <small>(service code, Arabic name, English name, description, price)</small></li>
+          <li>Therapist roster <small>(name, specialization, districts, mobile, language preference)</small></li>
+          <li>District / zone map of Riyadh <small>(all coverage areas, Arabic + English names)</small></li>
+          <li>Working hours per service line <small>(incl. weekends & Ramadan schedule)</small></li>
+          <li>2026 KSA public holiday calendar</li>
+          <li>Coordinator contact list <small>(name, role, mobile, WhatsApp number)</small></li>
+          <li>Escalation trigger keywords / scenarios</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:10px">SCRIPTS, BRANDING & CONTENT</h4>
+        <ul class="checklist">
+          <li>Arabic patient greeting script <small>(WhatsApp opening message + voice)</small></li>
+          <li>English patient greeting script</li>
+          <li>Out-of-hours message template <small>(Arabic + English)</small></li>
+          <li>FAQ document <small>(top 20+ common patient questions + answers)</small></li>
+          <li>Escalation handoff message to patient</li>
+          <li>Vitality logo <small>(SVG or PNG, high-resolution)</small></li>
+          <li>Brand color codes <small>(primary & secondary HEX values)</small></li>
+          <li>Tone of voice guidelines <small>(formal/informal, no-go topics)</small></li>
+          <li>Service description copy <small>(used by AI to describe each service)</small></li>
+        </ul>
+      </div>
+    </div>
+    <div class="notice notice-teal" style="margin-top:14px">
+      <span style="font-size:16px;flex-shrink:0">💡</span>
+      <p style="font-size:12.5px;color:var(--body)"><strong style="color:var(--teal-dark)">Templates Provided by CodeOx:</strong> We will share structured data collection templates (Excel + Google Sheets) for service catalog, therapist roster and district mapping after today's meeting. Please return completed within <strong>5 business days</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 16 — TEAM & GOVERNANCE
+══════════════════════════════ -->
+<section class="slide" id="s16">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Team & Governance</span>
+  </div>
+  <div class="slide-body" style="justify-content:center">
+    <div class="section-bar"><span>Contacts & Communication</span></div>
+    <h2 style="margin-bottom:20px">Team Structure & Cadence</h2>
+    <div class="g2" style="gap:16px;margin-bottom:14px">
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--teal-dark);letter-spacing:.08em;margin-bottom:10px">CODE-OX TEAM</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="role-card">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="icon-box ib-navy" style="width:36px;height:36px;border-radius:9px;font-size:16px">👨‍💻</div>
+              <div><h4 style="font-size:13px">Technical Project Lead</h4><p style="font-size:12px;margin-top:1px">shabeeb.k@code-ox.com · +966 53 571 6437</p></div>
+            </div>
+          </div>
+          <div class="role-card">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="icon-box ib-teal" style="width:36px;height:36px;border-radius:9px;font-size:16px">💼</div>
+              <div><h4 style="font-size:13px;color:var(--teal-dark)">Commercial Project Lead</h4><p style="font-size:12px;margin-top:1px">shabeeb.k@code-ox.com · COX-MSA-VTL-2026-001</p></div>
+            </div>
+          </div>
+          <div class="role-card">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="icon-box ib-gold" style="width:36px;height:36px;border-radius:9px;font-size:16px">🛠️</div>
+              <div><h4 style="font-size:13px;color:var(--gold)">Standard Support</h4><p style="font-size:12px;margin-top:1px">Mon–Fri 09:00–18:00 AST · 1-day acknowledgement</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.08em;margin-bottom:10px">VITALITY TEAM — PLEASE CONFIRM NAMES TODAY</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="role-card" style="border-color:rgba(184,122,10,.25)">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="icon-box ib-gold" style="width:36px;height:36px;border-radius:9px;font-size:16px">🎯</div>
+              <div><h4 style="font-size:13px;color:var(--gold)">Executive Sponsor</h4><p style="font-size:12px;margin-top:1px">Final approvals & escalation — Name: ___________</p></div>
+            </div>
+          </div>
+          <div class="role-card">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="icon-box ib-navy" style="width:36px;height:36px;border-radius:9px;font-size:16px">🔌</div>
+              <div><h4 style="font-size:13px">Technical Contact</h4><p style="font-size:12px;margin-top:1px">Nixpend API + STC SIP liaison — Name: ___________</p></div>
+            </div>
+          </div>
+          <div class="role-card">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="icon-box ib-teal" style="width:36px;height:36px;border-radius:9px;font-size:16px">🏥</div>
+              <div><h4 style="font-size:13px;color:var(--teal-dark)">Operations Coordinator</h4><p style="font-size:12px;margin-top:1px">UAT lead & training — Name: ___________</p></div>
+            </div>
+          </div>
+          <div class="role-card">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="icon-box ib-green" style="width:36px;height:36px;border-radius:9px;font-size:16px">🗂️</div>
+              <div><h4 style="font-size:13px;color:var(--green)">IT Contact</h4><p style="font-size:12px;margin-top:1px">Firewall, network & email relay — Name: ___________</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:14px 20px;display:flex;align-items:center;gap:0;justify-content:space-around">
+      <div style="text-align:center"><div class="stat-val" style="font-size:18px;color:var(--teal)">Weekly</div><div class="stat-label">Status updates (Fridays)</div></div>
+      <div style="width:1px;background:var(--border);height:36px"></div>
+      <div style="text-align:center"><div class="stat-val" style="font-size:18px">24–48h</div><div class="stat-label">Feedback turnaround expected</div></div>
+      <div style="width:1px;background:var(--border);height:36px"></div>
+      <div style="text-align:center"><div class="stat-val" style="font-size:18px;color:var(--gold)">Quarterly</div><div class="stat-label">Review meetings post go-live</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 17 — OPEN QUESTIONS
+══════════════════════════════ -->
+<section class="slide" id="s17">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Open Questions</span>
+  </div>
+  <div class="slide-body">
+    <div class="section-bar"><span>Discussion</span></div>
+    <h2 style="margin-bottom:16px">Open Questions for Today</h2>
+    <div class="overflow-y" style="display:flex;flex-direction:column;gap:7px">
+      <div class="q-item"><div class="q-num">1</div><div><strong style="font-size:13px;color:var(--navy)">STC SIP Trunk — Engagement Status</strong><p style="font-size:12.5px;margin-top:2px">Has STC been contacted? What is their provisioning timeline? We may need to start this process today if not already underway.</p></div></div>
+      <div class="q-item"><div class="q-num">2</div><div><strong style="font-size:13px;color:var(--navy)">Nixpend HMS — API Readiness</strong><p style="font-size:12.5px;margin-top:2px">Is the API fully documented and stable? Are there any known limitations or missing endpoints? Is a sandbox environment available immediately?</p></div></div>
+      <div class="q-item"><div class="q-num">3</div><div><strong style="font-size:13px;color:var(--navy)">WhatsApp Number Decision</strong><p style="font-size:12.5px;margin-top:2px">New dedicated number or port an existing Vitality number? Who manages the current WhatsApp presence? Do you have an existing Meta Business Account?</p></div></div>
+      <div class="q-item"><div class="q-num">4</div><div><strong style="font-size:13px;color:var(--navy)">SMS & Payment Gateway — Provider Shortlisted?</strong><p style="font-size:12.5px;margin-top:2px">If not, we recommend Unifonic for SMS and Moyasar or HyperPay for payments — both Saudi-compliant and well-documented.</p></div></div>
+      <div class="q-item"><div class="q-num">5</div><div><strong style="font-size:13px;color:var(--navy)">Outbound Campaign Scope — Week 8 or Phase 2?</strong><p style="font-size:12.5px;margin-top:2px">Are AIWA outbound marketing campaigns and AIKA voice campaigns in scope for the initial go-live, or deferred?</p></div></div>
+      <div class="q-item"><div class="q-num">6</div><div><strong style="font-size:13px;color:var(--navy)">UAT Team — Who is Available Weeks 6–7?</strong><p style="font-size:12.5px;margin-top:2px">We need named technical and operational UAT participants available for thorough testing. Please confirm their availability.</p></div></div>
+      <div class="q-item"><div class="q-num">7</div><div><strong style="font-size:13px;color:var(--navy)">Internal PDPL / Data Privacy Requirements</strong><p style="font-size:12.5px;margin-top:2px">Does Vitality have internal data handling policies we must align with? Any specific patient consent flow or data retention requirements?</p></div></div>
+      <div class="q-item"><div class="q-num">8</div><div><strong style="font-size:13px;color:var(--navy)">Post-Go-Live Monitoring Expectations</strong><p style="font-size:12.5px;margin-top:2px">Is standard business-hours support sufficient, or is Premium 24/7 support required for the first 30 days post-launch?</p></div></div>
+      <div class="q-item"><div class="q-num">9</div><div><strong style="font-size:13px;color:var(--navy)">Communication Channel Preference</strong><p style="font-size:12.5px;margin-top:2px">For day-to-day project coordination — is a shared WhatsApp group preferred, or email + weekly video call?</p></div></div>
+      <div class="q-item"><div class="q-num">10</div><div><strong style="font-size:13px;color:var(--navy)">Go-Live Date — Confirm & Lock</strong><p style="font-size:12.5px;margin-top:2px">We are targeting 8 weeks from today. Are there business events, peak seasons or internal constraints that would affect this target?</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     SLIDE 18 — NEXT STEPS
+══════════════════════════════ -->
+<section class="slide" id="s18">
+  <div class="topbar">
+    <div class="logo-mark"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"><span>Code-ox Technologies</span></div>
+    <span class="slide-label">Next Steps</span>
+  </div>
+  <div class="slide-body" style="justify-content:center">
+    <div class="section-bar"><span>Post-Kickoff Actions</span></div>
+    <h2 style="margin-bottom:18px">What Happens This Week</h2>
+    <div class="g2" style="gap:14px;margin-bottom:12px">
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--teal-dark);letter-spacing:.08em;margin-bottom:9px">CODE-OX ACTIONS</h4>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="action-row"><p style="font-size:12.5px;color:var(--body)">Provision sandbox cloud environment</p><span class="badge badge-teal">Week 1</span><span style="font-size:11px;color:var(--muted)">Tech Lead</span></div>
+          <div class="action-row"><p style="font-size:12.5px;color:var(--body)">Send WhatsApp BSP provisioning checklist</p><span class="badge badge-navy">This week</span><span style="font-size:11px;color:var(--muted)">Tech Lead</span></div>
+          <div class="action-row"><p style="font-size:12.5px;color:var(--body)">Share SIP trunk configuration spec document</p><span class="badge badge-navy">This week</span><span style="font-size:11px;color:var(--muted)">Tech Lead</span></div>
+          <div class="action-row"><p style="font-size:12.5px;color:var(--body)">Share Nixpend API integration questionnaire</p><span class="badge badge-navy">This week</span><span style="font-size:11px;color:var(--muted)">Tech Lead</span></div>
+          <div class="action-row"><p style="font-size:12.5px;color:var(--body)">Send data collection templates (service catalog, roster)</p><span class="badge badge-navy">This week</span><span style="font-size:11px;color:var(--muted)">Comm Lead</span></div>
+          <div class="action-row"><p style="font-size:12.5px;color:var(--body)">Confirm go-live date + weekly sync schedule</p><span class="badge badge-teal">Today</span><span style="font-size:11px;color:var(--muted)">Both</span></div>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.08em;margin-bottom:9px">VITALITY ACTIONS</h4>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="action-row" style="border-color:rgba(192,57,43,.2)"><p style="font-size:12.5px;color:var(--body)">Engage STC for SIP trunk / DID provisioning</p><span class="badge badge-red">TODAY ⚡</span><span style="font-size:11px;color:var(--muted)">IT Contact</span></div>
+          <div class="action-row" style="border-color:rgba(192,57,43,.2)"><p style="font-size:12.5px;color:var(--body)">Share Nixpend API docs + sandbox access</p><span class="badge badge-red">By EOW</span><span style="font-size:11px;color:var(--muted)">Tech Contact</span></div>
+          <div class="action-row" style="border-color:rgba(192,57,43,.2)"><p style="font-size:12.5px;color:var(--body)">Confirm dedicated WhatsApp number decision</p><span class="badge badge-red">By EOW</span><span style="font-size:11px;color:var(--muted)">Ops Lead</span></div>
+          <div class="action-row" style="border-color:rgba(192,57,43,.2)"><p style="font-size:12.5px;color:var(--body)">Confirm SMS & payment gateway selection</p><span class="badge badge-red">By EOW</span><span style="font-size:11px;color:var(--muted)">Ops Lead</span></div>
+          <div class="action-row"><p style="font-size:12.5px;color:var(--body)">Return completed data templates</p><span class="badge badge-gold">Week 1</span><span style="font-size:11px;color:var(--muted)">Ops Lead</span></div>
+          <div class="action-row"><p style="font-size:12.5px;color:var(--body)">Name UAT team participants (Weeks 6–7)</p><span class="badge badge-gold">Week 1</span><span style="font-size:11px;color:var(--muted)">Exec Sponsor</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-teal" style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <h4 style="font-size:14px;margin-bottom:2px">First Weekly Sync</h4>
+        <p style="font-size:12.5px">Date to be confirmed before the end of today's session</p>
+      </div>
+      <div style="text-align:right">
+        <p style="font-size:12.5px;color:var(--teal-dark);font-weight:700">shabeeb.k@code-ox.com</p>
+        <p style="font-size:12px;color:var(--muted)">+966 53 571 6437 · code-ox.com</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<div id="nav">
+  <button class="nav-btn" id="prevBtn" onclick="goTo(current-1)">&#8592;</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="goTo(current+1)">&#8594;</button>
+</div>
+<div id="slide-num"></div>
+
+<script>
+const total = 18;
+let current = 0;
+
+function goTo(n) {
+  n = Math.max(0, Math.min(total - 1, n));
+  if (n === current) return;
+  const slides = document.querySelectorAll('.slide');
+  slides[current].classList.remove('active');
+  slides[current].classList.add('prev');
+  const old = current;
+  current = n;
+  slides[current].classList.add('active');
+  setTimeout(() => slides[old].classList.remove('prev'), 420);
+  update();
+}
+
+function update() {
+  document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+  document.getElementById('slide-num').textContent = (current + 1) + ' / ' + total;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === current));
+  document.getElementById('prevBtn').style.opacity = current === 0 ? '.35' : '1';
+  document.getElementById('nextBtn').style.opacity = current === total - 1 ? '.35' : '1';
+}
+
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' on' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goTo(current - 1); }
+  if (e.key === 'Home') goTo(0);
+  if (e.key === 'End') goTo(total - 1);
+});
+
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) goTo(dx < 0 ? current + 1 : current - 1);
+}, { passive: true });
+
+update();
+</script>
+</body>
+</html>

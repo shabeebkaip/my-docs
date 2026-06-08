@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PATIQ — Traffic & Growth Strategy 2026 | CodeOx</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --paper:#FAF7F2;--paper-deep:#F2EBE0;--paper-warm:#EDE1CE;--cream:#FDFCF9;--parchment:#D9C9AD;
+  --ink:#1A140D;--ink-deep:#0D0804;--ink-body:#3C2E1E;--ink-soft:#5C4835;--ink-muted:#7A6450;
+  --amber:#B86A08;--amber-mid:#D4800F;--amber-lt:#E8A030;--amber-pale:#F5E8CF;
+  --forest:#2A4232;--forest-pale:#D6E8DA;--slate:#5A6880;--slate-pale:#E4E8F0;
+  --gold-rule:rgba(170,120,35,.34);--gold-rule-lt:rgba(170,120,35,.14)
+}
+html,body{height:100%;overflow:hidden;background:var(--paper);font-family:'Inter',sans-serif}
+.deck{position:relative;width:100vw;height:100vh}
+.slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .55s ease,transform .55s ease;transform:translateY(14px) scale(.99);display:flex;flex-direction:column;overflow:hidden}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+.slide.prev{opacity:0;transform:translateY(-14px) scale(.99)}
+.progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--amber),var(--amber-lt));transition:width .4s;z-index:200}
+.slide-counter{position:fixed;top:20px;right:28px;z-index:200;font-size:10px;letter-spacing:3px;color:var(--ink-muted)}
+.nav-container{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:200;display:flex;align-items:center;gap:12px}
+.nav-dots{display:flex;gap:6px}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:rgba(184,106,8,.15);cursor:pointer;transition:all .3s}
+.nav-dot.active{background:var(--amber);width:22px;border-radius:3px}
+.nav-btn{width:34px;height:34px;border-radius:50%;cursor:pointer;background:rgba(184,106,8,.06);border:1px solid rgba(184,106,8,.20);color:var(--amber);font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .3s;user-select:none}
+.nav-btn:hover{background:rgba(184,106,8,.14);border-color:var(--amber)}
+.inner{flex:1;display:flex;flex-direction:column;padding:44px 72px 72px 80px;position:relative;z-index:1}
+.tag{font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:var(--amber);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.tag::before{content:'';display:inline-block;width:2px;height:13px;background:var(--amber);border-radius:2px;flex-shrink:0}
+.heading{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,40px);font-weight:700;color:var(--ink-deep);line-height:1.08;letter-spacing:-.014em;margin-bottom:0}
+.h-row{margin-bottom:28px}
+.body{flex:1;display:flex;flex-direction:column;justify-content:center}
+.a-line{width:30px;height:2px;background:var(--amber);border-radius:2px;margin-bottom:16px}
+.s-rule{height:1px;background:linear-gradient(90deg,var(--gold-rule) 0%,var(--gold-rule-lt) 55%,transparent 100%);margin:18px 0}
+.ghost{position:absolute;font-family:'Playfair Display',serif;font-weight:900;color:rgba(170,120,35,.072);line-height:1;pointer-events:none;user-select:none;z-index:0}
+.c-logo{position:absolute;top:18px;left:28px;z-index:10}
+.c-logo img{height:22px;width:auto;mix-blend-mode:multiply;opacity:.82}
+.bot-line{position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-rule) 20%,var(--gold-rule) 80%,transparent);z-index:10}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.g23{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.badge{display:inline-block;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:3px 11px;border-radius:100px;font-weight:700}
+.b-solid{background:var(--amber);color:#FFF8F0}
+.b-amber{border:1.5px solid rgba(184,106,8,.48);color:var(--amber)}
+.b-ink{border:1.5px solid rgba(26,20,13,.28);color:var(--ink-body)}
+.b-slate{border:1.5px solid rgba(90,104,128,.25);color:var(--slate)}
+.b-forest{border:1.5px solid rgba(42,66,50,.28);color:var(--forest)}
+.stat-num{font-family:'Playfair Display',serif;font-weight:900;color:var(--ink);line-height:.95}
+.stat-num.amber{color:var(--amber)}
+.s-xl{font-size:clamp(42px,5.5vw,68px)}
+.s-xxl{font-size:clamp(58px,8vw,100px)}
+.stat-lbl{font-size:9px;letter-spacing:2.8px;text-transform:uppercase;color:var(--ink-muted);margin-top:7px;display:block}
+.stat-box{padding:20px 0;border-top:2px solid rgba(170,120,35,.26);background:transparent}
+.stat-box.featured{border-top-color:var(--amber)}
+.ba-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(170,120,35,.07)}
+.ba-item:last-child{border-bottom:none}
+.ba-icon{font-size:11px;font-weight:700;flex-shrink:0;width:16px;margin-top:2px}
+.ba-text{font-size:12px;line-height:1.45;color:var(--ink-soft)}
+.aud-card{border-radius:6px;padding:22px 20px;position:relative;overflow:hidden;background:var(--cream);border:1px solid rgba(170,120,35,.22)}
+.aud-ghost{position:absolute;font-family:'Playfair Display',serif;font-weight:900;font-size:110px;right:-6px;bottom:-14px;line-height:1;opacity:.09;pointer-events:none;color:var(--amber)}
+.aud-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;display:block;color:var(--amber)}
+.aud-name{font-family:'Playfair Display',serif;font-size:clamp(16px,1.9vw,22px);font-weight:700;margin-bottom:14px;color:var(--ink)}
+.aud-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.aud-item{font-size:11px;line-height:1.5;padding-left:14px;position:relative;color:var(--ink-body)}
+.aud-item::before{content:'—';position:absolute;left:0;color:var(--amber)}
+.step-card{border-radius:6px;padding:20px;background:var(--cream);border:1px solid rgba(170,120,35,.20);border-top:2px solid var(--amber)}
+.sn{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:rgba(184,106,8,.18);line-height:1;margin-bottom:8px}
+.st{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.sd{font-size:11px;color:var(--ink-soft);line-height:1.6}
+.pillar{border-radius:6px;padding:22px 20px;background:var(--cream);border:1px solid rgba(170,120,35,.22)}
+.p-num{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:rgba(184,106,8,.16);line-height:1;margin-bottom:8px}
+.p-freq{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:var(--amber);color:#FFF8F0;padding:3px 10px;border-radius:100px;margin-bottom:10px;font-weight:700}
+.p-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.p-desc{font-size:11px;color:var(--ink-soft);line-height:1.65}
+.dp-row{display:flex;gap:0;margin-bottom:10px}
+.dp-time{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,52px);font-weight:900;color:rgba(184,106,8,.18);line-height:1;min-width:84px;display:flex;align-items:center;flex-shrink:0}
+.dp-box{flex:1;border-radius:6px;padding:16px 20px}
+.dp-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.dp-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--ink);font-weight:700;margin-bottom:6px}
+.dp-txt{font-size:11px;color:var(--ink-soft);line-height:1.65}
+.m-card{border-radius:6px;padding:16px;background:var(--cream);border:1px solid rgba(170,120,35,.13)}
+.m-tag{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:7px;display:block}
+.m-price{font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:var(--ink);line-height:1;margin-bottom:1px}
+.m-name{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.m-why{font-size:10px;color:var(--ink-soft);line-height:1.55}
+.disc-tile{border-radius:6px;padding:14px;background:var(--cream);border:1px solid rgba(170,120,35,.13);display:flex;gap:11px;align-items:flex-start}
+.disc-ic{width:34px;height:34px;border-radius:6px;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--amber);flex-shrink:0;font-family:'Inter',sans-serif}
+.disc-t{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.disc-d{font-size:10px;color:var(--ink-soft);line-height:1.5}
+.phase{border-radius:6px;padding:22px 20px}
+.ph1{background:var(--cream);border:1px solid rgba(170,120,35,.15)}
+.ph2{background:var(--paper-warm);border:1px solid rgba(170,120,35,.22)}
+.ph3{background:var(--amber)}
+.ph-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.ph1 .ph-lbl,.ph2 .ph-lbl{color:var(--amber)}
+.ph3 .ph-lbl{color:rgba(255,248,240,.65)}
+.ph-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;margin-bottom:14px}
+.ph1 .ph-title,.ph2 .ph-title{color:var(--ink)}
+.ph3 .ph-title{color:#FFF8F0}
+.ph-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.ph-item{font-size:11px;line-height:1.5;padding-left:14px;position:relative}
+.ph1 .ph-item,.ph2 .ph-item{color:var(--ink-soft)}
+.ph3 .ph-item{color:rgba(255,248,240,.82)}
+.ph1 .ph-item::before,.ph2 .ph-item::before{content:'–';position:absolute;left:0;color:var(--amber)}
+.ph3 .ph-item::before{content:'–';position:absolute;left:0;color:rgba(255,248,240,.5)}
+.oc{border-radius:6px;padding:22px 20px}
+.oc-per{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.oc-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--ink);font-weight:700;margin-bottom:12px}
+.oc-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.oc-item{font-size:11px;color:var(--ink-soft);padding-left:16px;position:relative;line-height:1.5}
+.oc-item::before{content:'↑';position:absolute;left:0;color:var(--amber);font-size:10px;top:1px}
+.rc{border-radius:6px;padding:18px 20px;background:var(--cream);border:1px solid rgba(170,120,35,.14)}
+.rc-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--ink);margin-bottom:6px;margin-top:10px}
+.rc-desc{font-size:11px;color:var(--ink-soft);line-height:1.65}
+.q-block{border-left:3px solid var(--amber);padding:13px 18px;background:rgba(184,106,8,.05);border-radius:0 6px 6px 0}
+.q-text{font-family:'Playfair Display',serif;font-size:clamp(12px,1.5vw,16px);font-style:italic;line-height:1.6;color:var(--ink-body)}
+.q-text em{color:var(--amber);font-style:normal;font-weight:600}
+.sr{display:flex;gap:18px;align-items:flex-start;padding:18px 22px;border-radius:6px;background:var(--cream);border:1px solid rgba(170,120,35,.20)}
+.sr-n{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;color:rgba(184,106,8,.20);line-height:1;min-width:42px}
+.sr-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.sr-desc{font-size:11px;color:var(--ink-soft);line-height:1.6}
+.contact-bar{display:flex;justify-content:center;gap:36px;padding-top:16px;margin-top:16px;border-top:1px solid rgba(170,120,35,.12)}
+.c-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-muted);margin-bottom:3px}
+.c-val{font-size:12px;color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter">01 / 18</div>
+<div class="deck" id="deck">
+
+<!-- 01 COVER -->
+<div class="slide active" style="background:linear-gradient(148deg,#F7EFDC 0%,#FAF7F2 55%,#EDE1CE 100%)">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 72% 58% at 14% 75%,rgba(200,140,40,.16) 0%,transparent 55%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 42% at 94% 52%,rgba(200,140,40,.07) 0%,transparent 55%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 100% 22% at 50% 108%,rgba(180,120,30,.12) 0%,transparent 55%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;right:-30px;top:50%;transform:translateY(-52%);font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(130px,18vw,220px);color:rgba(150,105,28,.082);filter:blur(.5px);line-height:1;pointer-events:none;user-select:none;letter-spacing:-.03em;z-index:0">PATIQ</div>
+  <div style="position:absolute;right:-175px;bottom:-175px;width:760px;height:760px;border-radius:50%;border:1px solid rgba(170,120,35,.13);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;right:-65px;bottom:-65px;width:490px;height:490px;border-radius:50%;border:1px solid rgba(170,120,35,.20);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;right:22px;bottom:22px;width:275px;height:275px;border-radius:50%;border:1.5px solid rgba(170,120,35,.28);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;left:-55px;top:-55px;width:230px;height:230px;border-radius:50%;border:1px solid rgba(170,120,35,.12);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(184,106,8,.60) 28%,rgba(184,106,8,.38) 72%,transparent);z-index:1"></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 0 0 80px;position:relative;z-index:1;max-width:840px">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:36px">
+      <div style="width:2px;height:32px;background:linear-gradient(to bottom,var(--amber),rgba(184,106,8,.28));border-radius:2px;flex-shrink:0"></div>
+      <span style="font-size:9px;letter-spacing:4.5px;text-transform:uppercase;color:rgba(184,106,8,.90)">Traffic &amp; Growth Strategy · 2026</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:18px;margin-bottom:42px">
+      <img src="logo.jpg" alt="PATIQ" style="height:clamp(28px,3.2vw,42px);width:auto;display:block;mix-blend-mode:multiply;opacity:.88">
+      <div style="height:1px;width:56px;background:linear-gradient(90deg,rgba(184,106,8,.42),rgba(184,106,8,.05));flex-shrink:0"></div>
+      <span style="font-size:8px;letter-spacing:4px;text-transform:uppercase;color:rgba(184,106,8,.68)">Riyadh, KSA</span>
+    </div>
+    <div style="margin-bottom:26px">
+      <div style="font-family:'Inter',sans-serif;font-size:clamp(12px,1.1vw,15px);font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:rgba(60,46,30,.68);margin-bottom:10px;display:flex;align-items:center;gap:12px">
+        <span>From invisible</span>
+        <span style="display:inline-block;width:20px;height:1px;background:rgba(60,46,30,.18)"></span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:16px">
+        <span style="font-family:'Playfair Display',serif;font-size:clamp(20px,2.3vw,30px);font-style:italic;font-weight:400;color:var(--amber);letter-spacing:.01em;line-height:1;flex-shrink:0">to</span>
+        <span style="font-family:'Playfair Display',serif;font-size:clamp(46px,6.8vw,88px);font-weight:700;color:#0D0804;letter-spacing:-.032em;line-height:.88;text-shadow:0 1px 0 rgba(13,8,4,.08)">unmissable.</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:30px">
+      <div style="width:22px;height:1px;background:rgba(184,106,8,.38);flex-shrink:0"></div>
+      <span style="font-size:11px;color:var(--ink-body);letter-spacing:.10em;font-weight:500">Page Revival &nbsp;·&nbsp; Local Awareness &nbsp;·&nbsp; Foot Traffic</span>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <span class="badge b-amber">Instagram</span>
+      <span class="badge b-amber">Google</span>
+      <span class="badge b-amber">TikTok</span>
+      <span class="badge b-amber">Local Discovery</span>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 80px 44px;position:relative;z-index:1">
+    <div style="position:absolute;top:0;left:80px;right:80px;height:1px;background:rgba(170,120,35,.20)"></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="https://code-ox.com/codeoxlogo.svg" style="height:13px;filter:brightness(0) opacity(.42)" alt="CodeOx">
+      <span style="font-size:10px;color:var(--ink-soft);letter-spacing:.5px">shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</span>
+    </div>
+    <div style="font-size:9px;color:rgba(184,106,8,.65);letter-spacing:.35em;text-transform:uppercase">Riyadh · 2026</div>
+  </div>
+</div>
+
+<!-- 02 SITUATION -->
+<div class="slide" style="background:radial-gradient(ellipse 70% 55% at 25% 30%,rgba(255,248,228,.8) 0%,transparent 65%),var(--paper)">
+  <div class="ghost" style="font-size:300px;right:-20px;bottom:-50px;color:rgba(170,120,35,.022)">4.7</div>
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner" style="padding-bottom:60px">
+
+    <!-- Heading zone -->
+    <div>
+      <div class="tag">The Starting Point</div>
+      <div class="heading">Stronger Foundations Than You Think</div>
+    </div>
+
+    <!-- Full-width rule — gives heading a floor -->
+    <div style="height:1px;background:linear-gradient(90deg,var(--gold-rule) 0%,var(--gold-rule-lt) 55%,transparent 100%);margin:22px 0 28px"></div>
+
+    <!-- Two-column body — top-anchored, not floating -->
+    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:44px;align-items:start">
+
+      <!-- LEFT: Copy -->
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,38px);font-weight:700;color:var(--ink);line-height:1.18;margin-bottom:24px">
+          Great product.<br>Proven ratings.<br><em style="color:var(--amber)">Ready to scale.</em>
+        </div>
+        <div style="border-left:2px solid rgba(184,106,8,.22);padding-left:14px;font-size:13px;color:var(--ink-soft);line-height:1.80">
+          PATIQ already has a 4.7★ rating, a viral TikTok video with <strong style="color:var(--amber)">47,800 views</strong>, and a menu that covers every craving. The product is proven — now we build the audience it deserves.
+        </div>
+      </div>
+
+      <!-- RIGHT: Hero stat + supporting trio -->
+      <div style="display:flex;flex-direction:column;gap:0">
+
+        <!-- Hero: 47.8K -->
+        <div style="padding-bottom:22px">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);margin-bottom:10px;font-weight:600">Viral Proof — Best Video</div>
+          <div style="font-family:'Playfair Display',serif;font-weight:900;color:var(--amber);font-size:clamp(64px,8.5vw,96px);line-height:.88;letter-spacing:-.025em">47.8K</div>
+          <div style="font-size:10px;color:var(--ink-muted);margin-top:10px;letter-spacing:2.5px;text-transform:uppercase">TikTok Views</div>
+        </div>
+
+        <!-- Hero pedestal rule -->
+        <div style="height:1px;background:var(--gold-rule);margin-bottom:22px"></div>
+
+        <!-- Supporting trio -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr)">
+          <div style="padding-right:20px;border-right:1px solid var(--gold-rule-lt)">
+            <div style="font-family:'Playfair Display',serif;font-weight:900;color:var(--ink);font-size:clamp(28px,3.5vw,44px);line-height:.95;letter-spacing:-.02em">4.7<span style="font-size:.52em">★</span></div>
+            <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-muted);margin-top:8px">Google Rating</div>
+          </div>
+          <div style="padding:0 16px;border-right:1px solid var(--gold-rule-lt)">
+            <div style="font-family:'Playfair Display',serif;font-weight:900;color:var(--ink);font-size:clamp(28px,3.5vw,44px);line-height:.95;letter-spacing:-.02em">901</div>
+            <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-muted);margin-top:8px">TikTok Followers</div>
+          </div>
+          <div style="padding-left:16px">
+            <div style="font-family:'Playfair Display',serif;font-weight:900;color:var(--ink);font-size:clamp(28px,3.5vw,44px);line-height:.95;letter-spacing:-.02em">777</div>
+            <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-muted);margin-top:8px">Instagram Followers</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 03 PAGE AUDIT -->
+<div class="slide" style="background:radial-gradient(ellipse 72% 55% at 18% 22%,rgba(255,244,220,.72) 0%,transparent 55%),radial-gradient(ellipse 45% 40% at 88% 82%,rgba(184,106,8,.06) 0%,transparent 60%),var(--paper-deep)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="ghost" style="font-size:clamp(90px,13vw,170px);bottom:-12px;right:20px;letter-spacing:-.04em;opacity:.032">AUDIT</div>
+  <div class="inner" style="padding-bottom:52px">
+
+    <!-- HEADER -->
+    <div class="h-row" style="margin-bottom:14px">
+      <div class="tag">Instagram Audit</div>
+      <div class="heading">Page Audit: Where We Start &amp; Where We Go</div>
+      <div style="font-size:11.5px;color:var(--ink-muted);margin-top:10px;line-height:1.65;max-width:520px;letter-spacing:.008em">Seven audit findings — the gap between where PATIQ stands today and where the strategy takes it.</div>
+    </div>
+    <div style="height:1px;background:linear-gradient(90deg,rgba(170,120,35,.24) 0%,rgba(170,120,35,.07) 50%,transparent 100%);margin-bottom:0"></div>
+
+    <!-- BODY: vertically centered -->
+    <div class="body" style="justify-content:center;padding-top:20px">
+      <div style="display:grid;grid-template-columns:1fr 52px 1fr;gap:0;align-items:stretch;width:100%">
+
+        <!-- ═══ LEFT CARD: Current State ═══ -->
+        <div style="border:1px solid rgba(90,104,128,.16);border-radius:12px;padding:26px 28px;background:rgba(90,104,128,.022);opacity:0.58;display:flex;flex-direction:column">
+          <!-- Card label header -->
+          <div style="margin-bottom:18px">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:11px">
+              <div style="width:6px;height:6px;border-radius:50%;background:rgba(90,104,128,.38);flex-shrink:0"></div>
+              <span style="font-size:8.5px;letter-spacing:3.5px;text-transform:uppercase;color:var(--slate);font-weight:600;font-family:'Inter',sans-serif">Current State</span>
+            </div>
+            <div style="height:1px;background:rgba(90,104,128,.13)"></div>
+          </div>
+          <!-- Items -->
+          <div style="flex:1;display:flex;flex-direction:column">
+            <div class="ba-item" style="border-bottom-color:rgba(90,104,128,.09);padding:9px 0"><span class="ba-icon" style="color:rgba(90,104,128,.5);font-size:9px;font-weight:800;width:14px">✕</span><span class="ba-text" style="color:var(--ink-muted)">Inconsistent photo tones across posts</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(90,104,128,.09);padding:9px 0"><span class="ba-icon" style="color:rgba(90,104,128,.5);font-size:9px;font-weight:800;width:14px">✕</span><span class="ba-text" style="color:var(--ink-muted)">No defined visual direction yet</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(90,104,128,.09);padding:9px 0"><span class="ba-icon" style="color:rgba(90,104,128,.5);font-size:9px;font-weight:800;width:14px">✕</span><span class="ba-text" style="color:var(--ink-muted)">Posts without a grid plan</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(90,104,128,.09);padding:9px 0"><span class="ba-icon" style="color:rgba(90,104,128,.5);font-size:9px;font-weight:800;width:14px">✕</span><span class="ba-text" style="color:var(--ink-muted)">Café interior rarely featured</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(90,104,128,.09);padding:9px 0"><span class="ba-icon" style="color:rgba(90,104,128,.5);font-size:9px;font-weight:800;width:14px">✕</span><span class="ba-text" style="color:var(--ink-muted)">Location not in posts or bio</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(90,104,128,.09);padding:9px 0"><span class="ba-icon" style="color:rgba(90,104,128,.5);font-size:9px;font-weight:800;width:14px">✕</span><span class="ba-text" style="color:var(--ink-muted)">No consistent follow reason</span></div>
+            <div class="ba-item" style="border-bottom:none;padding:9px 0"><span class="ba-icon" style="color:rgba(90,104,128,.5);font-size:9px;font-weight:800;width:14px">✕</span><span class="ba-text" style="color:var(--ink-muted)">No visit or order call-to-action</span></div>
+          </div>
+        </div>
+
+        <!-- ═══ CENTER: Transformation bridge ═══ -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 0">
+          <div style="width:1px;flex:1;background:linear-gradient(to bottom,transparent,rgba(170,120,35,.18) 30%,rgba(170,120,35,.18) 70%,transparent)"></div>
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--amber-pale);border:1.5px solid rgba(184,106,8,.30);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--amber);font-weight:700;flex-shrink:0;margin:12px 0;box-shadow:0 2px 10px rgba(184,106,8,.10)">→</div>
+          <div style="width:1px;flex:1;background:linear-gradient(to bottom,rgba(170,120,35,.18) 35%,transparent)"></div>
+        </div>
+
+        <!-- ═══ RIGHT CARD: With the Strategy ═══ -->
+        <div style="border:1px solid rgba(184,106,8,.22);border-left:2.5px solid var(--amber);border-radius:12px;padding:26px 28px;background:linear-gradient(135deg,rgba(184,106,8,.055) 0%,rgba(184,106,8,.035) 100%);position:relative;overflow:hidden;display:flex;flex-direction:column">
+          <!-- Warm top shimmer -->
+          <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--amber),rgba(184,106,8,.12));pointer-events:none"></div>
+          <!-- Ghost checkmark — aspirational depth -->
+          <div style="position:absolute;font-family:'Playfair Display',serif;font-weight:900;font-size:108px;right:4px;bottom:-14px;color:rgba(184,106,8,.07);pointer-events:none;line-height:1;z-index:0;user-select:none">✓</div>
+          <!-- Card label header -->
+          <div style="margin-bottom:18px;position:relative;z-index:1">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:11px">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0;box-shadow:0 0 6px rgba(184,106,8,.35)"></div>
+              <span style="font-size:8.5px;letter-spacing:3.5px;text-transform:uppercase;color:var(--amber);font-weight:600;font-family:'Inter',sans-serif">With the Strategy</span>
+            </div>
+            <div style="height:1px;background:linear-gradient(90deg,rgba(184,106,8,.28),rgba(184,106,8,.06) 70%,transparent)"></div>
+          </div>
+          <!-- Items -->
+          <div style="flex:1;display:flex;flex-direction:column;position:relative;z-index:1">
+            <div class="ba-item" style="border-bottom-color:rgba(184,106,8,.10);padding:9px 0"><span class="ba-icon" style="color:var(--amber);font-size:11px">✓</span><span class="ba-text" style="color:var(--ink);font-weight:500">Consistent warm color grading</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(184,106,8,.10);padding:9px 0"><span class="ba-icon" style="color:var(--amber);font-size:11px">✓</span><span class="ba-text" style="color:var(--ink);font-weight:500">Art-directed shots every post</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(184,106,8,.10);padding:9px 0"><span class="ba-icon" style="color:var(--amber);font-size:11px">✓</span><span class="ba-text" style="color:var(--ink);font-weight:500">Planned grid — food + space + people</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(184,106,8,.10);padding:9px 0"><span class="ba-icon" style="color:var(--amber);font-size:11px">✓</span><span class="ba-text" style="color:var(--ink);font-weight:500">Show the café — make them want it</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(184,106,8,.10);padding:9px 0"><span class="ba-icon" style="color:var(--amber);font-size:11px">✓</span><span class="ba-text" style="color:var(--ink);font-weight:500">Address + map in every post</span></div>
+            <div class="ba-item" style="border-bottom-color:rgba(184,106,8,.10);padding:9px 0"><span class="ba-icon" style="color:var(--amber);font-size:11px">✓</span><span class="ba-text" style="color:var(--ink);font-weight:500">Weekly content worth following</span></div>
+            <div class="ba-item" style="border-bottom:none;padding:9px 0"><span class="ba-icon" style="color:var(--amber);font-size:11px">✓</span><span class="ba-text" style="color:var(--ink);font-weight:500">"Visit us · Order via WhatsApp" CTA</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 04 MISSION — the one dark slide -->
+<div class="slide" style="background:#1A140D">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 65% 50% at 22% 35%,rgba(240,144,48,.08) 0%,transparent 55%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 82% 72%,rgba(240,144,48,.04) 0%,transparent 50%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58vmin;height:58vmin;border-radius:50%;border:1px solid rgba(240,144,48,.07);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38vmin;height:38vmin;border-radius:50%;border:1px solid rgba(240,144,48,.05);pointer-events:none;z-index:0"></div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px;position:relative;z-index:1">
+    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(232,160,48,.50);margin-bottom:20px">The Mission</div>
+    <div style="font-family:'Playfair Display',serif;font-size:clamp(28px,5.2vw,58px);font-weight:900;color:#FAF7F2;line-height:1.12;margin-bottom:22px;max-width:700px">
+      Make PATIQ the place<br>everyone around it<br><em style="font-style:italic;color:var(--amber-lt)">already knows about.</em>
+    </div>
+    <div style="width:40px;height:1px;background:rgba(232,160,48,.22);margin:0 auto 20px"></div>
+    <div style="font-size:14px;color:rgba(250,247,242,.50);line-height:1.92;max-width:520px">
+      Not luxury positioning.<br>
+      <strong style="color:rgba(250,247,242,.78)">Awareness · Discovery · Foot Traffic</strong><br>
+      from offices, residential streets, and the university crowd.
+    </div>
+  </div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(240,144,48,.18) 20%,rgba(240,144,48,.18) 80%,transparent)"></div>
+</div>
+
+<!-- 05 THREE AUDIENCES -->
+<div class="slide" style="background:radial-gradient(ellipse 70% 55% at 25% 30%,rgba(255,248,228,.8) 0%,transparent 65%),var(--paper)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Audience Strategy</div>
+      <div class="heading">Three Audiences. Three Approaches.</div>
+    </div>
+    <div class="body">
+      <div class="g3">
+        <div class="aud-card">
+          <div class="aud-ghost">I</div>
+          <span class="aud-tag">Already Nearby</span>
+          <div class="aud-name">Office Workers</div>
+          <ul class="aud-list">
+            <li class="aud-item">Daily coffee routine posts</li>
+            <li class="aud-item">Quick lunch specials</li>
+            <li class="aud-item">Group breakfast tray orders</li>
+            <li class="aud-item">WhatsApp order link in bio</li>
+          </ul>
+          <div style="margin-top:14px"><span class="badge b-amber" style="font-size:8px">Immediate Win</span></div>
+        </div>
+        <div class="aud-card" style="background:var(--amber);border-color:transparent">
+          <div class="aud-ghost" style="color:rgba(26,20,13,.12)">II</div>
+          <span class="aud-tag" style="color:rgba(255,248,240,.65)">Within Walking Distance</span>
+          <div class="aud-name" style="color:#FFF8F0">Residential Neighbours</div>
+          <ul class="aud-list">
+            <li class="aud-item" style="color:rgba(255,248,240,.80)">Weekend breakfast content</li>
+            <li class="aud-item" style="color:rgba(255,248,240,.80)">Family gathering boxes</li>
+            <li class="aud-item" style="color:rgba(255,248,240,.80)">Evening atmosphere posts</li>
+            <li class="aud-item" style="color:rgba(255,248,240,.80)">Google "near me" optimisation</li>
+          </ul>
+          <div style="margin-top:14px"><span class="badge" style="background:rgba(26,20,13,.18);color:#FFF8F0;font-size:8px">High Value · Consistent</span></div>
+        </div>
+        <div class="aud-card">
+          <div class="aud-ghost">III</div>
+          <span class="aud-tag">Discovery Audience</span>
+          <div class="aud-name">Students &amp; Youth</div>
+          <ul class="aud-list">
+            <li class="aud-item">Trending food on TikTok &amp; Reels</li>
+            <li class="aud-item">Affordable combos</li>
+            <li class="aud-item">UGC — tag PATIQ to be featured</li>
+            <li class="aud-item">Micro-influencer activation</li>
+          </ul>
+          <div style="margin-top:14px"><span class="badge b-amber" style="font-size:8px">Viral Potential</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 06 PAGE OVERHAUL -->
+<div class="slide" style="background:radial-gradient(ellipse 65% 52% at 20% 28%,rgba(255,244,220,.7) 0%,transparent 58%),var(--paper-deep)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Phase 1 — Week 1 to 2</div>
+      <div class="heading">Fix the Foundation First</div>
+    </div>
+    <div class="body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+        <div>
+          <div class="a-line"></div>
+          <div style="font-family:'Playfair Display',serif;font-size:clamp(20px,2.5vw,32px);font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:18px">
+            Before any new content,<br>fix the <em style="color:var(--amber)">foundation</em>.
+          </div>
+          <div style="font-size:13px;color:var(--ink-soft);line-height:1.78">The first thing a potential customer does is open Instagram. If it looks inconsistent, they move on. <span style="color:var(--amber);font-weight:600">The page must sell before the first visit.</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="step-card">
+            <div class="sn">01</div>
+            <div class="st">Bio Overhaul</div>
+            <div class="sd">Address, hours, WhatsApp, Google Maps — instantly actionable</div>
+          </div>
+          <div class="step-card">
+            <div class="sn">02</div>
+            <div class="st">Highlight Covers</div>
+            <div class="sd">Menu · Location · Hours · Specials · Reviews — all branded</div>
+          </div>
+          <div class="step-card">
+            <div class="sn">03</div>
+            <div class="st">Visual Guide</div>
+            <div class="sd">Color grading, lighting, composition rules — no exceptions</div>
+          </div>
+          <div class="step-card">
+            <div class="sn">04</div>
+            <div class="st">Grid Strategy</div>
+            <div class="sd">First 9 posts planned as a set — intentional, not random</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 07 CONTENT PILLARS -->
+<div class="slide" style="background:radial-gradient(ellipse 70% 55% at 25% 30%,rgba(255,248,228,.8) 0%,transparent 65%),var(--paper)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Content Architecture</div>
+      <div class="heading">Three Pillars. Every Week.</div>
+    </div>
+    <div class="body">
+      <div class="g3" style="margin-bottom:16px">
+        <div class="pillar">
+          <div class="p-num">I</div>
+          <span class="p-freq">Come Here</span>
+          <div class="p-title">Space &amp; Experience</div>
+          <div class="p-desc">Interior, ambiance, different times of day — makes people visualise themselves there before they visit.</div>
+        </div>
+        <div class="pillar" style="background:var(--amber-pale);border-color:rgba(184,106,8,.28)">
+          <div class="p-num">II</div>
+          <span class="p-freq">Try This</span>
+          <div class="p-title">Hero Menu Reveals</div>
+          <div class="p-desc">The croissant box. The truffle penne. The pistachio latte pour. Food content that triggers craving and drives orders.</div>
+        </div>
+        <div class="pillar">
+          <div class="p-num">III</div>
+          <span class="p-freq">People Love Us</span>
+          <div class="p-title">Customer Moments</div>
+          <div class="p-desc">Real reactions, reposted visits, Google review callouts. Social proof turns hesitant followers into first-time guests.</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:6px;background:var(--amber-pale);border:1px solid rgba(184,106,8,.28)">
+          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--amber)">2–3</div>
+          <div><div style="font-size:12px;font-weight:600;color:var(--ink)">Reels / week</div><div style="font-size:10px;color:var(--ink-soft)">Highest discovery reach</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:6px;background:var(--cream);border:1px solid rgba(170,120,35,.15)">
+          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--ink)">2–3</div>
+          <div><div style="font-size:12px;font-weight:600;color:var(--ink)">Carousels / week</div><div style="font-size:10px;color:var(--ink-soft)">Menu showcases &amp; collections</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:6px;background:var(--cream);border:1px solid rgba(170,120,35,.15)">
+          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--ink)">Daily</div>
+          <div><div style="font-size:12px;font-weight:600;color:var(--ink)">Stories</div><div style="font-size:10px;color:var(--ink-soft)">Specials, polls, location stickers</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 08 CONTENT FUNNEL -->
+<div class="slide" style="background:radial-gradient(ellipse 65% 52% at 20% 28%,rgba(255,244,220,.7) 0%,transparent 58%),var(--paper-deep)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Content Strategy</div>
+      <div class="heading">Every Post Has a Job to Do</div>
+    </div>
+    <div class="body">
+      <div style="display:flex;align-items:stretch;gap:0;margin-bottom:16px">
+
+        <!-- Stage 1 -->
+        <div style="flex:1;border-radius:6px 0 0 6px;padding:22px 20px;background:var(--cream);border:1px solid rgba(170,120,35,.15)">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-muted);margin-bottom:6px">Stage 01</div>
+          <div style="font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--ink);margin-bottom:3px">Attract</div>
+          <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);margin-bottom:14px;font-weight:600">Awareness</div>
+          <div style="font-size:11px;color:var(--ink-soft);margin-bottom:14px;line-height:1.65;border-left:2px solid rgba(184,106,8,.18);padding-left:10px">Reach people who have never heard of PATIQ.</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="font-size:11px;color:var(--ink-body);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--amber)">—</span>Reels &amp; trending food videos</div>
+            <div style="font-size:11px;color:var(--ink-body);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--amber)">—</span>Satisfying food ASMR</div>
+            <div style="font-size:11px;color:var(--ink-body);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--amber)">—</span>Cake &amp; pastry reveal clips</div>
+            <div style="font-size:11px;color:var(--ink-body);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--amber)">—</span>Behind-the-scenes kitchen</div>
+          </div>
+          <div style="margin-top:16px;padding:9px 12px;background:var(--amber-pale);border-radius:4px">
+            <div style="font-size:10px;color:var(--ink-muted);margin-bottom:2px;letter-spacing:2px;text-transform:uppercase">Proof</div>
+            <div style="font-size:11px;color:var(--amber);font-weight:600">47.8K views — one video</div>
+          </div>
+        </div>
+
+        <!-- Arrow 1 -->
+        <div style="display:flex;align-items:center;justify-content:center;width:28px;flex-shrink:0;background:linear-gradient(90deg,var(--cream),var(--paper-warm));border-top:1px solid rgba(170,120,35,.13);border-bottom:1px solid rgba(170,120,35,.13)">
+          <span style="font-size:14px;color:var(--amber);opacity:.55">→</span>
+        </div>
+
+        <!-- Stage 2 -->
+        <div style="flex:1;padding:22px 20px;background:var(--paper-warm);border:1px solid rgba(170,120,35,.20);border-left:none;border-right:none">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-muted);margin-bottom:6px">Stage 02</div>
+          <div style="font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--ink);margin-bottom:3px">Build Trust</div>
+          <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);margin-bottom:14px;font-weight:600">Consideration</div>
+          <div style="font-size:11px;color:var(--ink-soft);margin-bottom:14px;line-height:1.65;border-left:2px solid rgba(184,106,8,.28);padding-left:10px">Convince followers PATIQ is worth it.</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="font-size:11px;color:var(--ink-body);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--amber)">—</span>Kitchen process &amp; craft</div>
+            <div style="font-size:11px;color:var(--ink-body);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--amber)">—</span>Chef &amp; team stories</div>
+            <div style="font-size:11px;color:var(--ink-body);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--amber)">—</span>Ingredient quality &amp; sourcing</div>
+            <div style="font-size:11px;color:var(--ink-body);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--amber)">—</span>Customer reactions &amp; reviews</div>
+          </div>
+          <div style="margin-top:16px;padding:9px 12px;background:rgba(184,106,8,.08);border-radius:4px;border-left:2px solid var(--amber)">
+            <div style="font-size:11px;color:var(--ink-soft);font-style:italic">"This is worth paying more for."</div>
+          </div>
+        </div>
+
+        <!-- Arrow 2 -->
+        <div style="display:flex;align-items:center;justify-content:center;width:28px;flex-shrink:0;background:linear-gradient(90deg,var(--paper-warm),var(--amber-pale));border-top:1px solid rgba(170,120,35,.18);border-bottom:1px solid rgba(170,120,35,.18)">
+          <span style="font-size:14px;color:var(--amber);opacity:.70">→</span>
+        </div>
+
+        <!-- Stage 3 -->
+        <div style="flex:1;border-radius:0 6px 6px 0;padding:22px 20px;background:var(--amber)">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,248,240,.58);margin-bottom:6px">Stage 03</div>
+          <div style="font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:#FFF8F0;margin-bottom:3px">Convert</div>
+          <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,248,240,.62);margin-bottom:14px;font-weight:600">Conversion</div>
+          <div style="font-size:11px;color:rgba(255,248,240,.78);margin-bottom:14px;line-height:1.65;border-left:2px solid rgba(255,248,240,.28);padding-left:10px">Turn followers into visiting customers.</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="font-size:11px;color:rgba(255,248,240,.88);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:rgba(255,248,240,.50)">—</span>Hero menu reveals &amp; showcases</div>
+            <div style="font-size:11px;color:rgba(255,248,240,.88);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:rgba(255,248,240,.50)">—</span>Seasonal &amp; limited offers</div>
+            <div style="font-size:11px;color:rgba(255,248,240,.88);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:rgba(255,248,240,.50)">—</span>"Order via WhatsApp" CTA stories</div>
+            <div style="font-size:11px;color:rgba(255,248,240,.88);padding-left:13px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:rgba(255,248,240,.50)">—</span>Visit hooks &amp; first-timer offers</div>
+          </div>
+          <div style="margin-top:16px;padding:9px 12px;background:rgba(26,20,13,.12);border-radius:4px">
+            <div style="font-size:11px;color:rgba(255,248,240,.85);font-weight:600">Goal: walk-in or WhatsApp order</div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Bottom principle -->
+      <div class="q-block">
+        <div class="q-text">People buy <em>emotions</em>, not ingredients. Every post should make someone feel hunger, warmth, urgency, or belonging — then give them a reason to act.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 09 DAYPART -->
+<div class="slide" style="background:radial-gradient(ellipse 65% 52% at 20% 28%,rgba(255,244,220,.7) 0%,transparent 58%),var(--paper-deep)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Traffic Timing</div>
+      <div class="heading">Post When They're Deciding</div>
+    </div>
+    <div class="body">
+      <div class="dp-row">
+        <div class="dp-time">AM</div>
+        <div class="dp-box" style="background:var(--amber-pale);border:1px solid rgba(184,106,8,.26)">
+          <div class="dp-lbl">7 AM – 11 AM · Office &amp; Residents</div>
+          <div class="dp-name">Morning Rush</div>
+          <div class="dp-txt">Coffee rituals · Croissant pulls · Breakfast Tray reveals · "Fresh out of the oven" stories · WhatsApp pre-order CTA</div>
+        </div>
+      </div>
+      <div class="dp-row">
+        <div class="dp-time">PM</div>
+        <div class="dp-box" style="background:var(--cream);border:1px solid rgba(170,120,35,.14)">
+          <div class="dp-lbl">12 PM – 3 PM · Office &amp; Students</div>
+          <div class="dp-name">Lunch &amp; Work Break</div>
+          <div class="dp-txt">Truffle Penne · Lasagne · Fatayer boxes for groups · "Order from the office" · Delivery platform links (Keeta · HungerStation)</div>
+        </div>
+      </div>
+      <div class="dp-row" style="margin-bottom:0">
+        <div class="dp-time">EVE</div>
+        <div class="dp-box" style="background:var(--amber);border:1px solid transparent">
+          <div class="dp-lbl" style="color:rgba(255,248,240,.65)">5 PM – 12 AM · Everyone</div>
+          <div class="dp-name" style="color:#FFF8F0">Evening &amp; Late Night</div>
+          <div class="dp-txt" style="color:rgba(255,248,240,.78)">Café glow · Cold brew pours · Pistachio latte · Gathering boxes · "Still open until midnight" — the softest sell. Make them want to <strong style="color:#FFF8F0">be there</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 09 HERO MENU -->
+<div class="slide" style="background:radial-gradient(ellipse 70% 55% at 25% 30%,rgba(255,248,228,.8) 0%,transparent 65%),var(--paper)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Content Stars</div>
+      <div class="heading">Six Items Built for Social</div>
+    </div>
+    <div class="body">
+      <div class="g23">
+        <div class="m-card"><span class="m-tag">Reel Hero</span><div class="m-price">115</div><div style="font-size:9px;color:var(--ink-muted);margin-bottom:5px">SAR</div><div class="m-name">Patiq Breakfast Tray</div><div class="m-why">Full tray reveal — pastries, eggs, halloumi, fruits. The most photogenic item. Highest AOV.</div></div>
+        <div class="m-card"><span class="m-tag">Box Reveal</span><div class="m-price">47</div><div style="font-size:9px;color:var(--ink-muted);margin-bottom:5px">SAR</div><div class="m-name">Sweet Croissant Box</div><div class="m-why">Chocolate, hazelnut, almond, pecan. Unboxing content is the most shared food format.</div></div>
+        <div class="m-card" style="border-top:2px solid var(--amber)"><span class="m-tag">Premium Dish</span><div class="m-price">62</div><div style="font-size:9px;color:var(--ink-muted);margin-bottom:5px">SAR</div><div class="m-name">Truffle Penne</div><div class="m-why">Close-up truffle pour + plating = high-engagement Reel. Positions PATIQ as serious Italian kitchen.</div></div>
+        <div class="m-card"><span class="m-tag">Drink Reel</span><div class="m-price">27</div><div style="font-size:9px;color:var(--ink-muted);margin-bottom:5px">SAR</div><div class="m-name">Iced Pistachio Latte</div><div class="m-why">Trending across Saudi social. The pour, the colour, the texture — every influencer wants this shot.</div></div>
+        <div class="m-card"><span class="m-tag">Group Order</span><div class="m-price">89</div><div style="font-size:9px;color:var(--ink-muted);margin-bottom:5px">SAR</div><div class="m-name">Rolls Box</div><div class="m-why">Mix rolls spread — the sharing box shot drives group purchase intent and office orders.</div></div>
+        <div class="m-card"><span class="m-tag">Local Identity</span><div class="m-price">27</div><div style="font-size:9px;color:var(--ink-muted);margin-bottom:5px">SAR</div><div class="m-name">Saudi Shaksuka</div><div class="m-why">Culturally resonant. Connects PATIQ to local identity — not just another international café.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 10 LOCAL DISCOVERY -->
+<div class="slide" style="background:radial-gradient(ellipse 65% 52% at 20% 28%,rgba(255,244,220,.7) 0%,transparent 58%),var(--paper-deep)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Zero-Budget Discovery</div>
+      <div class="heading">Get Found Without Paying for Ads</div>
+    </div>
+    <div class="body">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div class="disc-tile">
+          <div class="disc-ic" style="border-radius:50%;font-size:14px;font-weight:700">G</div>
+          <div><div class="disc-t">Google Business</div><div class="disc-d">Optimise menu photos, hours, WhatsApp. Appear in every "café near me" search in Riyadh.</div></div>
+        </div>
+        <div class="disc-tile">
+          <div class="disc-ic" style="font-size:16px">#</div>
+          <div><div class="disc-t">Hashtag Strategy</div><div class="disc-d">Local area tags · food category tags · discovery tags. Free reach from people actively searching.</div></div>
+        </div>
+        <div class="disc-tile">
+          <div class="disc-ic" style="font-size:16px">📍</div>
+          <div><div class="disc-t">Location Tagging</div><div class="disc-d">Every story. Every post. People browsing As Sulimaniyah feeds discover PATIQ — free, unused now.</div></div>
+        </div>
+        <div class="disc-tile" style="border-color:rgba(184,106,8,.28);background:var(--amber-pale)">
+          <div class="disc-ic" style="background:var(--amber);color:#FFF8F0">TK</div>
+          <div><div class="disc-t">TikTok — <span style="color:var(--amber)">Already Viral</span></div><div class="disc-d">PATIQ has <strong style="color:var(--amber)">47.8K views</strong> on one video. Proof the content works. Now post consistently to own local discovery.</div></div>
+        </div>
+        <div class="disc-tile">
+          <div class="disc-ic">SC</div>
+          <div><div class="disc-t">Snapchat Maps</div><div class="disc-d">#1 app by daily time in KSA. Location-tagged stories drive local discovery at zero cost.</div></div>
+        </div>
+        <div class="disc-tile">
+          <div class="disc-ic">DL</div>
+          <div><div class="disc-t">Delivery Profiles</div><div class="disc-d">Keeta &amp; HungerStation rank better photos higher. Professional shots = more orders and visibility.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 11 INFLUENCERS -->
+<div class="slide" style="background:radial-gradient(ellipse 70% 55% at 25% 30%,rgba(255,248,228,.8) 0%,transparent 65%),var(--paper)">
+  <div class="ghost" style="font-size:190px;left:-25px;bottom:-35px">5K</div>
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Earned Reach</div>
+      <div class="heading">Micro-Influencers as Local Megaphones</div>
+    </div>
+    <div class="body">
+      <div class="g2" style="align-items:start">
+        <div>
+          <div class="a-line"></div>
+          <div class="stat-num s-xxl amber" style="margin-bottom:6px">5K–50K</div>
+          <span class="stat-lbl" style="margin-bottom:22px;display:block">Highly engaged local Riyadh followers</span>
+          <div style="font-family:'Playfair Display',serif;font-size:clamp(18px,2.2vw,26px);font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:18px">
+            One trusted voice<br>outperforms <em style="color:var(--amber)">100 paid ads.</em>
+          </div>
+          <div class="q-block">
+            <div class="q-text">Target 5–8 Riyadh micro-influencers monthly. A complimentary meal = permanent content, social proof, and hundreds of new profile visitors.</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="padding:14px 16px;border-radius:6px;background:var(--cream);border:1px solid rgba(170,120,35,.14)">
+            <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px">Riyadh Food Reviewers</div>
+            <div style="font-size:11px;color:var(--ink-soft)">Audiences actively looking for new places to eat</div>
+          </div>
+          <div style="padding:14px 16px;border-radius:6px;background:var(--cream);border:1px solid rgba(170,120,35,.14)">
+            <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px">Coffee &amp; Café Culture</div>
+            <div style="font-size:11px;color:var(--ink-soft)">Daily coffee posters — pistachio latte is their content</div>
+          </div>
+          <div style="padding:14px 16px;border-radius:6px;background:var(--cream);border:1px solid rgba(170,120,35,.14)">
+            <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px">Lifestyle &amp; Morning Routines</div>
+            <div style="font-size:11px;color:var(--ink-soft)">The Patiq Breakfast Tray is made for their content</div>
+          </div>
+          <div style="padding:14px 16px;border-radius:6px;background:var(--amber-pale);border:1px solid rgba(184,106,8,.22)">
+            <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px">Family &amp; Gatherings</div>
+            <div style="font-size:11px;color:var(--ink-soft)">Parents who share weekends — gathering boxes &amp; trays</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 12 SEASONAL -->
+<div class="slide" style="background:radial-gradient(ellipse 65% 52% at 20% 28%,rgba(255,244,220,.7) 0%,transparent 58%),var(--paper-deep)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Traffic Spikes</div>
+      <div class="heading">Seasonal Occasions = Guaranteed Surges</div>
+    </div>
+    <div class="body">
+      <div class="g4" style="margin-bottom:14px">
+        <div style="border-radius:6px;padding:22px 16px;background:var(--cream);border:1px solid rgba(170,120,35,.18);border-top:3px solid var(--amber)">
+          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:rgba(184,106,8,.18);margin-bottom:4px">رمضان</div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;color:var(--ink);margin-bottom:12px;font-weight:700">Ramadan</div>
+          <div style="font-size:11px;color:var(--ink-soft);line-height:1.9">Iftar boxes · Family sets<br>Corporate gifting<br>Late-night dining</div>
+        </div>
+        <div style="border-radius:6px;padding:22px 16px;background:var(--amber);border:1px solid transparent">
+          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:rgba(26,20,13,.14);margin-bottom:4px">عيد</div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;color:#FFF8F0;margin-bottom:12px;font-weight:700">Eid</div>
+          <div style="font-size:11px;color:rgba(255,248,240,.80);line-height:1.9">Gift croissant boxes<br>Family occasion visit<br>Celebration trays</div>
+        </div>
+        <div style="border-radius:6px;padding:22px 16px;background:var(--cream);border:1px solid rgba(170,120,35,.15)">
+          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:rgba(184,106,8,.14);margin-bottom:4px">وطني</div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;color:var(--ink);margin-bottom:12px;font-weight:700">National Day</div>
+          <div style="font-size:11px;color:var(--ink-soft);line-height:1.9">Office gifting packs<br>Themed specials<br>Saudi identity content</div>
+        </div>
+        <div style="border-radius:6px;padding:22px 16px;background:var(--cream);border:1px solid rgba(170,120,35,.15)">
+          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:rgba(184,106,8,.14);margin-bottom:4px">🎓</div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;color:var(--ink);margin-bottom:12px;font-weight:700">Graduations</div>
+          <div style="font-size:11px;color:var(--ink-soft);line-height:1.9">Celebration trays<br>Group bookings<br>Family gatherings</div>
+        </div>
+      </div>
+      <div style="padding:13px 18px;background:var(--amber-pale);border:1px solid rgba(184,106,8,.22);border-radius:6px;display:flex;gap:14px;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:13px;color:var(--amber);font-style:italic;flex-shrink:0">Key Rule</span>
+        <span style="font-size:12px;color:var(--ink-soft)">Start campaign content <span style="color:var(--amber);font-weight:600">3–4 weeks before each occasion</span>. Build anticipation — not just announcement. Early presence wins the season.</span>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 13 OFFER HOOKS -->
+<div class="slide" style="background:radial-gradient(ellipse 70% 55% at 25% 30%,rgba(255,248,228,.8) 0%,transparent 65%),var(--paper)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Traffic Hooks — Pending PATIQ Approval</div>
+      <div class="heading">Offers That Pull First-Timers In</div>
+    </div>
+    <div class="body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="rc" style="border-top:3px solid var(--amber);background:var(--amber-pale);border-color:rgba(184,106,8,.24)">
+          <span class="badge b-solid">Highest Impact</span>
+          <div class="rc-title">Office Building Outreach</div>
+          <div class="rc-desc">Deliver a sample Croissant Box to offices above. Include a card: <em style="color:var(--amber)">"We're downstairs — coffee on us."</em> One visit converts to a daily regular. Zero cost.</div>
+        </div>
+        <div class="rc">
+          <span class="badge b-amber">Office Crowd</span>
+          <div class="rc-title">Corporate Lunch Package</div>
+          <div class="rc-desc">Any pasta or pizza + cold coffee for SAR 45–55. Posted every weekday at 9 AM on Stories — targets the exact lunch-decision moment.</div>
+        </div>
+        <div class="rc">
+          <span class="badge b-amber">Discovery Hook</span>
+          <div class="rc-title">First Visit Welcome</div>
+          <div class="rc-desc"><em style="color:var(--amber)">"Show this story — get a free Americano with your order."</em> Low cost, high conversion. Creates urgency for first-time visitors.</div>
+        </div>
+        <div class="rc">
+          <span class="badge b-amber">UGC Generator</span>
+          <div class="rc-title">Tag to Be Featured</div>
+          <div class="rc-desc">Weekly story: <em style="color:var(--amber)">"Best visit photo wins a Croissant Box."</em> Free content, social proof, new reach. Turns customers into creators.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 14 ROADMAP -->
+<div class="slide" style="background:radial-gradient(ellipse 65% 52% at 20% 28%,rgba(255,244,220,.7) 0%,transparent 58%),var(--paper-deep)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Execution Plan</div>
+      <div class="heading">3-Phase Roadmap to Full Traffic</div>
+    </div>
+    <div class="body">
+      <div class="g3">
+        <div class="phase ph1">
+          <div class="ph-lbl">Phase 01 · Week 1–2</div>
+          <div class="ph-title">Fix the Foundation</div>
+          <ul class="ph-list">
+            <li class="ph-item">Instagram audit and visual reset</li>
+            <li class="ph-item">Bio, links, highlights overhaul</li>
+            <li class="ph-item">Visual guide created</li>
+            <li class="ph-item">Google Business optimised</li>
+            <li class="ph-item">Delivery platform photos updated</li>
+            <li class="ph-item">First 9 posts shot and planned</li>
+            <li class="ph-item">WhatsApp Business set up</li>
+          </ul>
+        </div>
+        <div class="phase ph2">
+          <div class="ph-lbl">Phase 02 · Month 1–2</div>
+          <div class="ph-title">Build Awareness</div>
+          <ul class="ph-list">
+            <li class="ph-item">Consistent 3-pillar content live</li>
+            <li class="ph-item">Daily stories with location tags</li>
+            <li class="ph-item">TikTok &amp; Snapchat activated</li>
+            <li class="ph-item">First 3–5 influencer visits</li>
+            <li class="ph-item">Office building outreach done</li>
+            <li class="ph-item">Hashtag system fully running</li>
+            <li class="ph-item">First offer hook tested</li>
+          </ul>
+        </div>
+        <div class="phase ph3">
+          <div class="ph-lbl">Phase 03 · Month 3–6</div>
+          <div class="ph-title">Drive Traffic</div>
+          <ul class="ph-list">
+            <li class="ph-item">First seasonal campaign active</li>
+            <li class="ph-item">Walk-in growth measurable</li>
+            <li class="ph-item">Community of regulars forming</li>
+            <li class="ph-item">UGC content flowing organically</li>
+            <li class="ph-item">Google "near me" appearing</li>
+            <li class="ph-item">Paid ads layer added</li>
+            <li class="ph-item">Website project begins</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 15 OUTCOMES -->
+<div class="slide" style="background:radial-gradient(ellipse 70% 55% at 25% 30%,rgba(255,248,228,.8) 0%,transparent 65%),var(--paper)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Business Outcomes</div>
+      <div class="heading">What Changes — Month by Month</div>
+    </div>
+    <div class="body">
+      <div class="g3" style="margin-bottom:14px">
+        <div class="oc" style="background:var(--cream);border:1px solid rgba(170,120,35,.14)">
+          <div class="oc-per">Month 1–2 · Foundation</div>
+          <div class="oc-title">Digital Presence</div>
+          <ul class="oc-list">
+            <li class="oc-item">Page looks professional and consistent</li>
+            <li class="oc-item">Google profile in local searches</li>
+            <li class="oc-item">Followers: 777 → 1,500+</li>
+            <li class="oc-item">First influencer posts live</li>
+            <li class="oc-item">Office regulars increasing</li>
+          </ul>
+        </div>
+        <div class="oc" style="background:var(--paper-warm);border:1px solid rgba(170,120,35,.22)">
+          <div class="oc-per">Month 3–4 · Growth</div>
+          <div class="oc-title">Awareness &amp; Traffic</div>
+          <ul class="oc-list">
+            <li class="oc-item">New walk-ins measurably up</li>
+            <li class="oc-item">WhatsApp &amp; DM orders growing</li>
+            <li class="oc-item">Delivery orders rising</li>
+            <li class="oc-item">Residential &amp; student audience discovering</li>
+            <li class="oc-item">Organic UGC appearing</li>
+          </ul>
+        </div>
+        <div class="oc" style="background:var(--amber)">
+          <div class="oc-per" style="color:rgba(255,248,240,.65)">Month 5–6 · Scale</div>
+          <div class="oc-title" style="color:#FFF8F0">Full Traffic</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+            <li style="font-size:11px;color:rgba(255,248,240,.82);padding-left:16px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:rgba(255,248,240,.5);font-size:10px;top:1px">↑</span>Daily walk-ins from new audiences</li>
+            <li style="font-size:11px;color:rgba(255,248,240,.82);padding-left:16px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:rgba(255,248,240,.5);font-size:10px;top:1px">↑</span>Evenings and weekends full</li>
+            <li style="font-size:11px;color:rgba(255,248,240,.82);padding-left:16px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:rgba(255,248,240,.5);font-size:10px;top:1px">↑</span>PATIQ known in the neighbourhood</li>
+            <li style="font-size:11px;color:rgba(255,248,240,.82);padding-left:16px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:rgba(255,248,240,.5);font-size:10px;top:1px">↑</span>Seasonal peaks driving revenue</li>
+            <li style="font-size:11px;color:rgba(255,248,240,.82);padding-left:16px;position:relative;line-height:1.5"><span style="position:absolute;left:0;color:rgba(255,248,240,.5);font-size:10px;top:1px">↑</span>Base ready for paid ads</li>
+          </ul>
+        </div>
+      </div>
+      <div style="padding:12px 20px;background:var(--amber-pale);border:1px solid rgba(184,106,8,.20);border-radius:6px;text-align:center">
+        <span style="font-family:'Playfair Display',serif;font-size:clamp(13px,1.5vw,17px);color:var(--ink)">Goal: PATIQ becomes <em style="color:var(--amber)">the go-to café for everyone within 2km of As Sulimaniyah</em></span>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 16 WEBSITE GAP -->
+<div class="slide" style="background:radial-gradient(ellipse 65% 52% at 20% 28%,rgba(255,244,220,.7) 0%,transparent 58%),var(--paper-deep)">
+  <div class="ghost" style="font-size:260px;right:-20px;bottom:-40px;color:rgba(170,120,35,.032)">patiq</div>
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Critical Gap — CodeOx Recommendation</div>
+      <div class="heading">No Website Is Costing Customers.</div>
+    </div>
+    <div class="body">
+      <div class="g2" style="align-items:start">
+        <div>
+          <div class="a-line"></div>
+          <div style="font-family:'Playfair Display',serif;font-size:clamp(24px,3.2vw,42px);font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:16px">
+            The next big<br>unlock for PATIQ:<br><em style="color:var(--amber)">a website.</em>
+          </div>
+          <div style="font-size:13px;color:var(--ink-soft);line-height:1.78;margin-bottom:16px">PATIQ's 47.8K TikTok video sends curious people searching. Right now there is no website to land on — no menu to browse, no table to book, no story to read. That is a conversion opportunity waiting to be captured.</div>
+          <div class="q-block">
+            <div class="q-text">A website turns every viral video into a <em>booked table or a WhatsApp order</em>. It is the only digital asset PATIQ fully owns.</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);margin-bottom:14px;display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:2px;height:11px;background:var(--amber);border-radius:2px"></span>What a PATIQ website delivers</div>
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div class="disc-tile" style="border-color:transparent;background:transparent;padding:12px 0;border-bottom:1px solid rgba(170,120,35,.10)">
+              <div class="disc-ic">01</div>
+              <div><div class="disc-t">Full Menu with Photos</div><div class="disc-d">Every item browsable before the visit</div></div>
+            </div>
+            <div class="disc-tile" style="border-color:transparent;background:transparent;padding:12px 0;border-bottom:1px solid rgba(170,120,35,.10)">
+              <div class="disc-ic">02</div>
+              <div><div class="disc-t">Location &amp; Hours</div><div class="disc-d">Map, address, opening hours — most searched info</div></div>
+            </div>
+            <div class="disc-tile" style="border-color:transparent;background:transparent;padding:12px 0;border-bottom:1px solid rgba(170,120,35,.10)">
+              <div class="disc-ic">03</div>
+              <div><div class="disc-t">Order &amp; Reserve CTA</div><div class="disc-d">WhatsApp button, delivery links, reservations</div></div>
+            </div>
+            <div class="disc-tile" style="border-color:transparent;background:transparent;padding:12px 0;border-bottom:1px solid rgba(170,120,35,.10)">
+              <div class="disc-ic">04</div>
+              <div><div class="disc-t">Brand Story &amp; Gallery</div><div class="disc-d">Interior + food photos that make people want to visit</div></div>
+            </div>
+            <div class="disc-tile" style="border-color:transparent;background:transparent;padding:12px 0">
+              <div class="disc-ic">05</div>
+              <div><div class="disc-t">Google SEO Boost</div><div class="disc-d">Dramatically improves local search ranking</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 17 PARTNERSHIP MODEL -->
+<div class="slide" style="background:radial-gradient(ellipse 70% 55% at 25% 30%,rgba(255,248,228,.8) 0%,transparent 65%),var(--paper)">
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner">
+    <div class="h-row">
+      <div class="tag">Partnership Model</div>
+      <div class="heading">How CodeOx &amp; PATIQ Work Together</div>
+    </div>
+    <div class="body">
+      <div class="g2" style="gap:20px;align-items:stretch">
+        <div style="border-radius:6px;padding:26px 24px;background:var(--amber-pale);border:1px solid rgba(184,106,8,.26);border-top:3px solid var(--amber);display:flex;flex-direction:column;gap:0">
+          <span class="badge b-solid" style="align-self:flex-start;margin-bottom:14px">CodeOx</span>
+          <div style="font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--ink);margin-bottom:18px">Strategy &amp; Creative Direction</div>
+          <div style="display:flex;flex-direction:column;gap:10px;flex:1">
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#FFF8F0;flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-body);line-height:1.5">Monthly growth strategy &amp; content calendar</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#FFF8F0;flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-body);line-height:1.5">Weekly content briefs for in-house SMM</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#FFF8F0;flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-body);line-height:1.5">Visual direction guide &amp; caption frameworks</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#FFF8F0;flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-body);line-height:1.5">Monthly hero content shoot days</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#FFF8F0;flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-body);line-height:1.5">Performance tracking &amp; strategy adjustments</span></div>
+          </div>
+        </div>
+        <div style="border-radius:6px;padding:26px 24px;background:var(--cream);border:1px solid rgba(170,120,35,.16);display:flex;flex-direction:column;gap:0">
+          <span class="badge b-slate" style="align-self:flex-start;margin-bottom:14px">PATIQ In-House SMM</span>
+          <div style="font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--ink);margin-bottom:18px">Daily Execution</div>
+          <div style="display:flex;flex-direction:column;gap:10px;flex:1">
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:rgba(90,104,128,.12);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--slate);flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-soft);line-height:1.5">Daily stories, quick posts &amp; specials</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:rgba(90,104,128,.12);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--slate);flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-soft);line-height:1.5">Follows CodeOx content calendar and brief</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:rgba(90,104,128,.12);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--slate);flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-soft);line-height:1.5">Community engagement &amp; DM replies</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:rgba(90,104,128,.12);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--slate);flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-soft);line-height:1.5">Provides BTS footage &amp; daily specials info</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><span style="width:20px;height:20px;border-radius:5px;background:rgba(90,104,128,.12);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--slate);flex-shrink:0">→</span><span style="font-size:12px;color:var(--ink-soft);line-height:1.5">Weekly sync with CodeOx for review</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+<!-- 18 NEXT STEPS -->
+<div class="slide" style="background:linear-gradient(152deg,#F5EDD8 0%,#FAF7F2 60%,#EDE1CE 100%)">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 68% 52% at 12% 72%,rgba(200,140,40,.09) 0%,transparent 52%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(184,106,8,.58) 28%,rgba(184,106,8,.36) 72%,transparent);z-index:1"></div>
+  <div class="c-logo"><img src="logo.jpg" alt="PATIQ"></div>
+  <div class="inner" style="position:relative;z-index:1">
+    <div class="h-row">
+      <div class="tag">Moving Forward</div>
+      <div class="heading">Next Steps</div>
+    </div>
+    <div class="body" style="justify-content:center">
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:680px">
+        <div class="sr">
+          <div class="sr-n">01</div>
+          <div><div class="sr-title">Strategy Sign-Off &amp; Scope Confirmation</div><div class="sr-desc">PATIQ management approves the strategy. Confirm scope, content access, and the approval process with the in-house SMM handler.</div></div>
+        </div>
+        <div class="sr">
+          <div class="sr-n">02</div>
+          <div><div class="sr-title">First Shoot Day — Page Reset</div><div class="sr-desc">Schedule the first professional shoot within 7 days of sign-off. Hero food shots, interior ambiance, first 9-post grid. Bio and Google Business overhauled simultaneously.</div></div>
+        </div>
+        <div class="sr" style="background:var(--amber-pale);border-color:rgba(184,106,8,.28);border-top:2px solid var(--amber)">
+          <div class="sr-n" style="color:var(--amber)">03</div>
+          <div><div class="sr-title">Go Live — New PATIQ Identity</div><div class="sr-desc">The new page launches. Consistent content begins. Local discovery channels activated. PATIQ's transformation from invisible to unmissable starts immediately.</div></div>
+        </div>
+      </div>
+      <div class="contact-bar">
+        <div><div class="c-lbl">Client</div><div class="c-val">@patiq.sa — As Sulimaniyah, Riyadh · 053 627 5559</div></div>
+        <div><div class="c-lbl">Strategy Partner</div><div class="c-val">CodeOx · shabeeb.k@code-ox.com · +966 535 716 437</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="bot-line"></div>
+</div>
+
+</div>
+
+<div class="nav-container">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">&#8592;</button>
+  <div class="nav-dots" id="navDots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">&#8594;</button>
+</div>
+
+<script>
+const slides=document.querySelectorAll('.slide'),total=slides.length;
+let cur=0;
+const dotsEl=document.getElementById('navDots');
+for(let i=0;i<total;i++){const d=document.createElement('div');d.className='nav-dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);}
+function update(){
+  slides.forEach((s,i)=>{s.classList.remove('active','prev');if(i===cur)s.classList.add('active');else if(i<cur)s.classList.add('prev');});
+  document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+  document.getElementById('slideCounter').textContent=String(cur+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');
+  document.getElementById('progressBar').style.width=((cur+1)/total*100)+'%';
+}
+function navigate(dir){goTo(Math.max(0,Math.min(total-1,cur+dir)));}
+function goTo(i){cur=i;update();}
+document.addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();navigate(1);}
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();navigate(-1);}
+});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>48)navigate(d>0?1:-1);},{passive:true});
+update();
+</script>
+</body>
+</html>
