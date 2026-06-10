@@ -1,0 +1,2564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Payments, for Abjad — Visual Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,30..100&family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F4EFE4;
+    --paper-2: #ECE6D7;
+    --paper-3: #E3DCC8;
+    --ink: #1A1C19;
+    --ink-2: #3A3D38;
+    --muted: #6E6A60;
+    --rule: #D5CDB9;
+    --rule-2: #C4BBA3;
+    --accent: #B14A2C;
+    --accent-soft: rgba(177, 74, 44, 0.10);
+    --accent-2: #4F6A4A;
+    --accent-2-soft: rgba(79, 106, 74, 0.13);
+    --warn: #A86A1F;
+    --warn-soft: rgba(168, 106, 31, 0.14);
+    --bad: #8B3A26;
+    --bad-soft: rgba(139, 58, 38, 0.10);
+    --serif: 'Fraunces', 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--paper); }
+  body {
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 6% 8%, rgba(177, 74, 44, 0.05) 0%, transparent 32%),
+      radial-gradient(circle at 94% 92%, rgba(79, 106, 74, 0.06) 0%, transparent 38%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--ink); color: var(--paper); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  /* — Top bar — */
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0 22px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--rule);
+  }
+  .top .ar { font-family: var(--serif); font-size: 18px; color: var(--ink); letter-spacing: 0; }
+  .top .meta { display: flex; gap: 28px; }
+  .top .meta b { color: var(--ink); font-weight: 500; }
+
+  /* — Section frame — */
+  section.s {
+    padding: 72px 0;
+    border-top: 1px solid var(--rule);
+    position: relative;
+  }
+  section.s:first-of-type { border-top: none; }
+  .s-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .s-tag .num {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+  .s-title {
+    font-family: var(--serif);
+    font-weight: 350;
+    font-size: clamp(34px, 5vw, 60px);
+    line-height: 1.02;
+    letter-spacing: -0.028em;
+    color: var(--ink);
+    margin-bottom: 12px;
+    max-width: 920px;
+  }
+  .s-title em { font-style: italic; color: var(--accent); }
+  .s-sub {
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.4;
+    color: var(--muted);
+    max-width: 720px;
+    margin-bottom: 36px;
+    font-style: italic;
+  }
+
+  /* — Hero — */
+  .hero { padding: 80px 0 64px; }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 320;
+    font-size: clamp(56px, 11vw, 148px);
+    line-height: 0.9;
+    letter-spacing: -0.038em;
+    color: var(--ink);
+    margin-bottom: 24px;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); font-weight: 300; }
+  .hero-lede {
+    font-family: var(--serif);
+    font-size: 24px;
+    line-height: 1.3;
+    color: var(--ink-2);
+    max-width: 720px;
+    letter-spacing: -0.012em;
+  }
+  .hero-meta {
+    margin-top: 56px;
+    display: flex;
+    gap: 36px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .hero-meta b { color: var(--ink); font-weight: 500; }
+  .hero-flow {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero-flow .dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .hero-flow .line {
+    flex: 0 0 60px;
+    height: 1px;
+    background: var(--rule-2);
+  }
+  .hero-flow .step.now { color: var(--ink); font-weight: 600; }
+
+  /* ============================================
+     2. VERDICT — 5 options at a glance
+     ============================================ */
+  .verdict {
+    display: grid;
+    gap: 14px;
+  }
+  .verdict-row {
+    display: grid;
+    gap: 14px;
+  }
+  .verdict-row.real { grid-template-columns: 2fr 1fr 1fr; }
+  .verdict-row.fake { grid-template-columns: 1fr 1fr; margin-top: 8px; }
+  .v-card {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 28px 26px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px;
+  }
+  .v-card.primary {
+    background: linear-gradient(180deg, var(--paper-2) 0%, var(--accent-2-soft) 100%);
+    border: 2px solid var(--accent-2);
+    border-left: 5px solid var(--accent-2);
+  }
+  .v-card.alt { border-left: 3px solid var(--accent-2); }
+  .v-card.wrong {
+    background: var(--paper-2);
+    border-left: 3px solid var(--accent);
+    opacity: 0.78;
+  }
+  .v-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .v-card.wrong .v-badge { color: var(--accent); }
+  .v-name {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 10px 0 6px;
+  }
+  .v-card.primary .v-name { font-size: 52px; }
+  .v-tag {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .v-meta {
+    display: flex;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    padding-top: 16px;
+    border-top: 1px dashed var(--rule-2);
+  }
+  .v-meta span b { color: var(--ink); font-weight: 600; display: block; font-family: var(--sans); font-size: 13px; letter-spacing: 0; text-transform: none; margin-top: 2px; }
+
+  /* ============================================
+     3. WHAT ABJAD SELLS — Two recurring streams
+     ============================================ */
+  .streams {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    position: relative;
+  }
+  .stream {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 34px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stream-icon {
+    width: 56px; height: 56px;
+    background: var(--accent-2-soft);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+    color: var(--accent-2);
+  }
+  .stream-icon svg { width: 30px; height: 30px; }
+  .stream-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stream-title {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 4px 0 14px;
+  }
+  .stream-price {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--accent);
+    font-style: italic;
+    margin-bottom: 22px;
+  }
+  .stream-price b { font-style: normal; font-weight: 500; font-size: 22px; }
+  .stream-features { display: flex; flex-direction: column; gap: 8px; }
+  .stream-features div {
+    font-size: 14px;
+    color: var(--ink-2);
+    padding-left: 22px;
+    position: relative;
+  }
+  .stream-features div::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--accent-2);
+    font-weight: 700;
+  }
+  .stream-arrow {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--rule-2);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .stream-arrow .recur { font-size: 14px; }
+  .streams-caption {
+    margin-top: 28px;
+    padding: 22px 26px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    border-radius: 2px;
+  }
+  .streams-caption b { color: var(--accent); font-weight: 600; }
+
+  /* ============================================
+     4. SAUDI PAYMENT LANDSCAPE
+     ============================================ */
+  .saudi-chart {
+    display: flex;
+    height: 100px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+  }
+  .saudi-seg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 16px 22px;
+    position: relative;
+    transition: flex-grow 0.3s;
+  }
+  .saudi-seg.mada    { flex: 72; background: var(--accent-2); color: var(--paper); }
+  .saudi-seg.apple   { flex: 12; background: var(--ink); color: var(--paper); }
+  .saudi-seg.tamara  { flex: 7; background: var(--warn); color: var(--paper); }
+  .saudi-seg.stc     { flex: 6; background: var(--accent); color: var(--paper); }
+  .saudi-seg.cards   { flex: 3; background: var(--paper-3); color: var(--ink); }
+  .saudi-seg .pct {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .saudi-seg .lbl {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0.85;
+  }
+  .saudi-legend {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .saudi-legend .item {
+    border-top: 2px solid var(--ink);
+    padding-top: 12px;
+  }
+  .saudi-legend { grid-template-columns: repeat(5, 1fr); }
+  .saudi-legend .item.mada { border-color: var(--accent-2); }
+  .saudi-legend .item.apple { border-color: var(--ink); }
+  .saudi-legend .item.tamara { border-color: var(--warn); }
+  .saudi-legend .item.stc { border-color: var(--accent); }
+  .saudi-legend .item.cards { border-color: var(--rule-2); }
+  .saudi-legend .name { font-weight: 600; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+  .saudi-legend .note { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .saudi-rule {
+    margin-top: 32px;
+    padding: 18px 24px;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .saudi-rule b { font-style: normal; font-weight: 600; color: var(--accent); }
+
+  /* ============================================
+     4b. ZATCA COMPLIANCE
+     ============================================ */
+  .zatca-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+  .zatca-invoice {
+    background: #FBFAF5;
+    border: 1px solid var(--rule);
+    padding: 28px 28px 24px;
+    font-family: var(--mono);
+    color: var(--ink);
+    border-radius: 2px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03), 0 8px 20px -12px rgba(40,30,10,0.12);
+  }
+  .zi-head {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .zi-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .zi-doc {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .zi-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 18px;
+    margin-bottom: 16px;
+    font-size: 11px;
+  }
+  .zi-meta div { display: flex; justify-content: space-between; }
+  .zi-meta span { color: var(--muted); }
+  .zi-meta b { color: var(--ink); font-weight: 600; }
+  .zi-parties {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .zi-party {
+    background: var(--paper-2);
+    padding: 10px 12px;
+    font-size: 11px;
+    line-height: 1.55;
+    border-radius: 2px;
+  }
+  .zi-party .lbl {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .zi-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--rule);
+    font-size: 12px;
+  }
+  .zi-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0 8px;
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 500;
+    border-bottom: 3px double var(--ink);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .zi-foot {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+  }
+  .zi-foot .qr svg { display: block; }
+  .zi-foot .qr-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .zi-foot .qr-label b { color: var(--accent); font-weight: 600; }
+
+  .zatca-reqs {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .zatca-block {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 22px 24px;
+    border-left: 3px solid var(--accent-2);
+  }
+  .zatca-block.phase2 {
+    border-left-color: var(--warn);
+  }
+  .zatca-block-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .zatca-block.phase2 .zatca-block-tag { color: var(--warn); }
+  .zatca-block h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+  .zatca-block ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .zatca-block ul li {
+    font-size: 13px;
+    color: var(--ink-2);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .zatca-block ul li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--accent-2);
+    font-weight: 700;
+  }
+  .zatca-block.phase2 ul li::before { content: "→"; color: var(--warn); }
+
+  .zatca-stack {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 32px 36px;
+    border-radius: 2px;
+  }
+  .zatca-stack-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 22px;
+    font-weight: 700;
+  }
+  .zatca-stack-items {
+    display: grid;
+    grid-template-columns: 1fr 28px 1fr 28px 1fr;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stack-item {
+    background: rgba(244, 239, 228, 0.05);
+    border: 1px solid rgba(244, 239, 228, 0.18);
+    padding: 18px 20px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .stack-role {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244, 239, 228, 0.5);
+    margin-bottom: 8px;
+  }
+  .stack-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    margin-bottom: 4px;
+  }
+  .stack-note {
+    font-size: 11px;
+    color: rgba(244, 239, 228, 0.6);
+    line-height: 1.45;
+  }
+  .stack-plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 300;
+  }
+  .zatca-conclude {
+    padding-top: 20px;
+    border-top: 1px solid rgba(244, 239, 228, 0.15);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 17px;
+    color: rgba(244, 239, 228, 0.88);
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+  }
+  .zatca-conclude b { color: var(--accent); font-style: normal; font-weight: 600; }
+
+  /* ============================================
+     5. TWO CATEGORIES (visual grouping)
+     ============================================ */
+  .categories {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 18px;
+  }
+  .cat {
+    padding: 30px 28px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    position: relative;
+  }
+  .cat.good { background: var(--accent-2-soft); border-top: 4px solid var(--accent-2); }
+  .cat.bad  { background: var(--bad-soft); border-top: 4px solid var(--accent); }
+  .cat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: 700;
+  }
+  .cat.bad .cat-label { color: var(--accent); }
+  .cat-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 6px 0 18px;
+  }
+  .cat-providers {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .chip {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 10px 16px;
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink);
+    border-radius: 3px;
+  }
+  .chip.star {
+    border: 2px solid var(--accent-2);
+    background: var(--paper);
+    font-weight: 500;
+  }
+  .chip.star::before { content: "★ "; color: var(--accent-2); }
+  .cat-line {
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+  .cat-line b { color: var(--ink); }
+  .cat-fit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 14px;
+    margin-top: 14px;
+    border-top: 1px dashed var(--rule-2);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .cat.good .cat-fit { color: var(--accent-2); }
+  .cat.bad .cat-fit { color: var(--accent); }
+  .cat-fit svg { width: 16px; height: 16px; }
+
+  /* ============================================
+     6. ARCHITECTURE MISMATCH — Who owns?
+     ============================================ */
+  .arch-mismatch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .arch-card {
+    padding: 32px 28px;
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+  }
+  .arch-card.good { border-top: 3px solid var(--accent-2); }
+  .arch-card.bad { border-top: 3px solid var(--accent); }
+  .arch-card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: 700;
+  }
+  .arch-card.bad .arch-card-label { color: var(--accent); }
+  .arch-card-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin: 4px 0 22px;
+    color: var(--ink);
+  }
+  .arch-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 18px;
+  }
+  .arch-conclude {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.45;
+    padding-top: 16px;
+    border-top: 1px dashed var(--rule-2);
+  }
+  .arch-conclude b { color: var(--accent-2); }
+  .arch-card.bad .arch-conclude b { color: var(--accent); }
+
+  /* ============================================
+     7. CAPABILITY HEATMAP
+     ============================================ */
+  .heatmap {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 18px;
+  }
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: 2fr repeat(5, 1fr);
+    gap: 6px;
+  }
+  .hm-h {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--rule);
+    font-weight: 500;
+  }
+  .hm-h.first { text-align: left; color: var(--accent); }
+  .hm-h.best { color: var(--accent-2); font-weight: 700; }
+  .hm-h.wrong { color: var(--muted); }
+  .hm-row { display: contents; }
+  .hm-row > .lbl {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    padding: 14px 10px;
+    border-bottom: 1px solid var(--rule);
+    align-self: center;
+  }
+  .hm-cell {
+    padding: 14px 10px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+  .hm-cell .dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--paper);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .hm-cell.yes .dot { background: var(--accent-2); }
+  .hm-cell.partial .dot { background: var(--warn); }
+  .hm-cell.no .dot { background: var(--accent); }
+  .hm-cell.best { background: rgba(79, 106, 74, 0.06); }
+  .hm-cell.wrong-col { background: rgba(110, 110, 110, 0.04); }
+  .hm-legend {
+    margin-top: 18px;
+    display: flex;
+    gap: 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .hm-legend .li { display: flex; align-items: center; gap: 8px; }
+  .hm-legend .dot { width: 12px; height: 12px; border-radius: 50%; }
+
+  /* ============================================
+     8. WHY MOYASAR — Hero card with badges
+     ============================================ */
+  .why-card {
+    background: linear-gradient(135deg, var(--paper-2) 0%, rgba(79, 106, 74, 0.08) 100%);
+    border: 2px solid var(--accent-2);
+    padding: 48px 44px;
+    position: relative;
+  }
+  .why-stamp {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--accent-2);
+    border: 1px solid var(--accent-2);
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-weight: 700;
+  }
+  .why-name {
+    font-family: var(--serif);
+    font-size: clamp(48px, 8vw, 92px);
+    font-weight: 350;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .why-sub {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--muted);
+    font-style: italic;
+    max-width: 600px;
+    margin-bottom: 36px;
+  }
+  .why-badges {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .why-badge {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 22px 18px;
+    border-radius: 2px;
+  }
+  .why-badge-icon {
+    width: 36px; height: 36px;
+    background: var(--accent-2-soft);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent-2);
+    margin-bottom: 12px;
+  }
+  .why-badge-icon svg { width: 20px; height: 20px; }
+  .why-badge h4 {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .why-badge p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .why-alts {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px dashed var(--rule-2);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .why-alt {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .why-alt b {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  /* ============================================
+     9. SYSTEM ARCHITECTURE
+     ============================================ */
+  .arch-system {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 48px 36px;
+    border-radius: 4px;
+    position: relative;
+  }
+  .arch-system svg { width: 100%; height: auto; display: block; }
+  .arch-notes {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .arch-note {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 22px 20px;
+  }
+  .arch-note .l {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .arch-note h4 { font-family: var(--serif); font-size: 18px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .arch-note p { font-size: 13px; color: var(--ink-2); line-height: 1.45; }
+
+  /* ============================================
+     10. THE RETURN TRIP — compressed swim lane
+     ============================================ */
+  .trip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .trip-lane {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 28px 22px;
+  }
+  .trip-lane.good { border-top: 3px solid var(--accent-2); }
+  .trip-lane.bad { border-top: 3px solid var(--accent); }
+  .trip-head { margin-bottom: 22px; }
+  .trip-head .l {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: 700;
+  }
+  .trip-lane.bad .trip-head .l { color: var(--accent); }
+  .trip-head h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin: 4px 0;
+  }
+  .trip-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .trip-step {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+  }
+  .trip-step.bg { background: transparent; border-style: dashed; }
+  .trip-step-icon {
+    width: 32px; height: 32px;
+    background: var(--accent-2-soft);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent-2);
+  }
+  .trip-lane.bad .trip-step-icon { background: var(--accent-soft); color: var(--accent); }
+  .trip-step-icon svg { width: 16px; height: 16px; }
+  .trip-step-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .trip-step-loc {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+  .loc-abjad { background: var(--accent-2-soft); color: var(--accent-2); }
+  .loc-gw    { background: var(--paper-3); color: var(--ink-2); }
+  .loc-zid   { background: var(--bad-soft); color: var(--bad); }
+  .loc-red   { background: var(--warn-soft); color: var(--warn); }
+  .loc-bg    { background: rgba(110,110,110,0.1); color: var(--muted); }
+  .trip-arrow {
+    text-align: center;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 0.5;
+    padding: 2px 0;
+  }
+  .trip-kpis {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .trip-kpi { text-align: center; }
+  .trip-kpi .k {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .trip-kpi .v {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .trip-lane.good .trip-kpi .v { color: var(--accent-2); }
+  .trip-lane.bad .trip-kpi .v { color: var(--accent); }
+
+  /* ============================================
+     11. LIFECYCLE SCENARIOS — 4-card scorecard
+     ============================================ */
+  .scenarios {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .sc-card {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .sc-num {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .sc-num .n {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 7px;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+  }
+  .sc-q {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 22px;
+    max-width: 460px;
+  }
+  .sc-q em { font-style: italic; color: var(--accent); }
+  .sc-versus {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .sc-side { padding: 18px 18px; }
+  .sc-side.good {
+    background: rgba(79, 106, 74, 0.10);
+    border-right: 1px solid var(--rule);
+  }
+  .sc-side.bad { background: rgba(177, 74, 44, 0.06); }
+  .sc-side .who {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .sc-side.good .who { color: var(--accent-2); }
+  .sc-side.bad .who { color: var(--accent); }
+  .sc-side .verb {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .sc-side .desc {
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .sc-metric {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--rule-2);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .sc-metric b {
+    display: block;
+    font-family: var(--sans);
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: 0;
+    text-transform: none;
+    margin-top: 3px;
+    font-weight: 700;
+  }
+  .sc-side.good .sc-metric b { color: var(--accent-2); }
+  .sc-side.bad .sc-metric b { color: var(--accent); }
+
+  /* ============================================
+     12. ROADMAP — Horizontal timeline
+     ============================================ */
+  .timeline {
+    margin: 8px 0;
+    position: relative;
+  }
+  .timeline-rail {
+    height: 4px;
+    background: linear-gradient(to right, var(--accent) 0%, var(--accent-2) 50%, var(--ink) 100%);
+    border-radius: 2px;
+    margin: 38px 0 0;
+    position: relative;
+  }
+  .timeline-phases {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    position: relative;
+    margin-top: -10px;
+  }
+  .tl-phase {
+    padding: 0 20px 24px 0;
+    position: relative;
+  }
+  .tl-phase::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    background: var(--paper);
+    border: 3px solid var(--accent);
+    border-radius: 50%;
+    display: block;
+    margin-bottom: 14px;
+  }
+  .tl-phase.p2::before { border-color: var(--accent-2); }
+  .tl-phase.p3::before { border-color: var(--ink); }
+  .tl-when {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .tl-phase.p2 .tl-when { color: var(--accent-2); }
+  .tl-phase.p3 .tl-when { color: var(--ink); }
+  .tl-name {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin: 4px 0 14px;
+  }
+  .tl-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tl-items div {
+    font-size: 13px;
+    color: var(--ink-2);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .tl-items div::before {
+    content: "›";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ============================================
+     13. RISKS MATRIX
+     ============================================ */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .risk-tile {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .risk-tile::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: var(--accent);
+  }
+  .risk-tile.med::before { background: var(--warn); }
+  .risk-tile.low::before { background: var(--accent-2); }
+  .risk-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .risk-head .n {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .risk-head .level {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .risk-tile.med .risk-head .level { color: var(--warn); }
+  .risk-tile.low .risk-head .level { color: var(--accent-2); }
+  .risk-tile h4 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .risk-tile p {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+  .risk-tile p b { color: var(--accent-2); font-weight: 600; }
+
+  /* ============================================
+     14. SCALE — Branching tree
+     ============================================ */
+  .scale {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 36px 28px;
+    border-radius: 2px;
+  }
+  .scale-core {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .scale-core .now {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .scale-core h3 {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+  .scale-core h3 em { color: var(--accent-2); font-style: italic; }
+  .scale-branches {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    position: relative;
+  }
+  .scale-branch {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 20px;
+    position: relative;
+  }
+  .scale-branch::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    width: 1px;
+    height: 20px;
+    background: var(--rule-2);
+  }
+  .scale-branch .if {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .scale-branch .when {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 14px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .scale-branch .then {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .scale-branch .move {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--accent-2);
+    font-style: italic;
+    line-height: 1.3;
+  }
+
+  /* ============================================
+     15. FINAL DECISION CARD
+     ============================================ */
+  .final-wrap { padding: 100px 0 100px; }
+  .decision {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 64px 56px;
+    border-radius: 4px;
+    position: relative;
+  }
+  .decision-stamp {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    padding: 6px 14px;
+    border-radius: 2px;
+    font-weight: 700;
+    transform: rotate(2deg);
+  }
+  .decision h2 {
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 350;
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+    margin-bottom: 36px;
+    max-width: 800px;
+  }
+  .decision h2 em { font-style: italic; color: var(--accent); }
+  .decision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 28px;
+  }
+  .decision-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 22px;
+    align-items: baseline;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .decision-item:last-child { border-bottom: none; }
+  .decision-item .verb {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .decision-item .what {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.3;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .decision-item .what b { color: var(--accent); font-weight: 500; }
+  .decision-next {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: rgba(244, 239, 228, 0.55);
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .decision-next b { color: var(--paper); font-weight: 500; }
+
+  /* — Footer — */
+  footer.fn {
+    border-top: 1px solid var(--rule);
+    padding: 28px 0 50px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 900px) {
+    .wrap { padding: 0 20px; }
+    .top { padding: 16px 0; flex-wrap: wrap; gap: 12px; }
+    .top .meta { gap: 16px; }
+    .verdict-row.real, .verdict-row.fake { grid-template-columns: 1fr; }
+    .streams, .categories, .arch-mismatch, .trip, .scenarios { grid-template-columns: 1fr; }
+    .saudi-legend { grid-template-columns: repeat(2, 1fr) !important; }
+    .zatca-grid { grid-template-columns: 1fr; }
+    .zatca-stack-items { grid-template-columns: 1fr; }
+    .stack-plus { transform: rotate(90deg); padding: 8px 0; }
+    .why-badges { grid-template-columns: repeat(2, 1fr); }
+    .why-alts { grid-template-columns: 1fr; }
+    .arch-notes, .timeline-phases, .risk-grid { grid-template-columns: 1fr; }
+    .scale-branches { grid-template-columns: 1fr 1fr; }
+    .scale-branch::before { display: none; }
+    .heatmap { overflow-x: auto; }
+    .heatmap-grid { min-width: 600px; }
+    .decision { padding: 40px 28px; }
+    .decision-stamp { top: 16px; right: 16px; }
+    .decision-item { grid-template-columns: 1fr; gap: 4px; }
+  }
+  @media print {
+    body { background: white; }
+    .top, footer.fn { display: none; }
+    section.s { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ───────────────── TOP BAR ───────────────── -->
+  <div class="top">
+    <div class="ar">عَبجَد · <span style="font-family: var(--mono); font-size:12px; letter-spacing:0.06em;">ABJAD</span></div>
+    <div class="meta">
+      <span><b>For</b> Abjad leadership</span>
+      <span><b>Scan time</b> 2 min</span>
+      <span><b>v.</b> 2.0 · visual</span>
+    </div>
+  </div>
+
+  <!-- ───────────────── 1. HERO ───────────────── -->
+  <header class="hero">
+    <div class="hero-eyebrow">Payment strategy · Saudi Arabia · Visualised</div>
+    <h1>Payments,<br>for <em>Abjad.</em></h1>
+    <p class="hero-lede">
+      One decision determines whether Abjad's subscription business runs <em>on rails</em> — or stitches itself together every month.
+    </p>
+    <div class="hero-meta">
+      <span><b>Question</b> Which payment platform should Abjad use?</span>
+      <span><b>Answer</b> Moyasar — SAMA-licensed, ZATCA-ready, visualized below.</span>
+    </div>
+  </header>
+
+  <!-- ───────────────── 2. VERDICT AT A GLANCE ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">01</span>The verdict, at a glance</div>
+    <h2 class="s-title">Five options. <em>One answer.</em></h2>
+    <p class="s-sub">Three are real payment gateways. Two are ecommerce platforms — wrong category for a subscription SaaS.</p>
+
+    <div class="verdict">
+      <div class="verdict-row real">
+        <div class="v-card primary">
+          <div>
+            <div class="v-badge">★ Primary · Build on this</div>
+            <div class="v-name">Moyasar</div>
+            <div class="v-tag">Modern, Saudi-native, built for SaaS subscriptions.</div>
+          </div>
+          <div class="v-meta">
+            <span>Pricing<b>≈ 2.75% + 1 SAR</b></span>
+            <span>Best for<b>SaaS from day 1</b></span>
+            <span>Saudi-first<b>Yes</b></span>
+          </div>
+        </div>
+        <div class="v-card alt">
+          <div>
+            <div class="v-badge">Alt · Scale upgrade</div>
+            <div class="v-name">HyperPay</div>
+            <div class="v-tag">Enterprise-trusted; for very high volume.</div>
+          </div>
+          <div class="v-meta">
+            <span>Pricing<b>≈ 2.5–3% (neg.)</b></span>
+            <span>Best for<b>Enterprise scale</b></span>
+          </div>
+        </div>
+        <div class="v-card alt">
+          <div>
+            <div class="v-badge">Alt · GCC play</div>
+            <div class="v-name">Tap</div>
+            <div class="v-tag">Best if expanding beyond Saudi soon.</div>
+          </div>
+          <div class="v-meta">
+            <span>Pricing<b>≈ 2.75%</b></span>
+            <span>Best for<b>Multi-country GCC</b></span>
+          </div>
+        </div>
+      </div>
+      <div class="verdict-row fake">
+        <div class="v-card wrong">
+          <div>
+            <div class="v-badge">✗ Wrong category</div>
+            <div class="v-name">Zid</div>
+            <div class="v-tag">Saudi Shopify. Built to sell products, not run a SaaS.</div>
+          </div>
+          <div class="v-meta">
+            <span>Type<b>Ecommerce platform</b></span>
+            <span>Fit for Abjad<b>None</b></span>
+          </div>
+        </div>
+        <div class="v-card wrong">
+          <div>
+            <div class="v-badge">✗ Wrong category</div>
+            <div class="v-name">Salla</div>
+            <div class="v-tag">Same as Zid. Storefronts, not gateways.</div>
+          </div>
+          <div class="v-meta">
+            <span>Type<b>Ecommerce platform</b></span>
+            <span>Fit for Abjad<b>None</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 3. WHAT ABJAD SELLS ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">02</span>What Abjad sells</div>
+    <h2 class="s-title">Two recurring streams. <em>One business model.</em></h2>
+    <p class="s-sub">Abjad isn't a store. It's a subscription SaaS with two distinct buyer types.</p>
+
+    <div class="streams">
+      <div class="stream">
+        <div class="stream-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21v-1a8 8 0 0116 0v1"/>
+          </svg>
+        </div>
+        <div class="stream-name">Teacher Premium</div>
+        <h3 class="stream-title">Boost & Visibility</h3>
+        <div class="stream-price"><b>SAR 60</b> / mo <span style="opacity:.55; font-size:14px;">· 300/6mo · 480/yr</span></div>
+        <div class="stream-features">
+          <div>Top of search results</div>
+          <div>"Premium Teacher" badge</div>
+          <div>3× more profile views</div>
+          <div>Priority in school inquiries</div>
+        </div>
+        <div class="stream-arrow"><span class="recur">↻</span> Auto-renews · all durations</div>
+      </div>
+      <div class="stream">
+        <div class="stream-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21V9l5-4 5 4v12"/>
+            <path d="M13 13h8v8h-8"/>
+            <path d="M16 16v2M19 16v2"/>
+          </svg>
+        </div>
+        <div class="stream-name">School Plan</div>
+        <h3 class="stream-title">Full Database Access</h3>
+        <div class="stream-price"><b>SAR 1,300</b> / mo <span style="opacity:.55; font-size:14px;">· 7,300/6mo · 13,000/yr · excl. VAT</span></div>
+        <div class="stream-features">
+          <div>Unlimited candidate searches</div>
+          <div>Full profile & contact details</div>
+          <div>Multi-seat team accounts</div>
+          <div>5-day free trial · 3 CVs visible</div>
+        </div>
+        <div class="stream-arrow"><span class="recur">↻</span> Auto-renews · all durations</div>
+      </div>
+    </div>
+
+    <div class="streams-caption">
+      Both streams depend on <b>silent monthly renewal.</b> If renewal breaks, the business breaks. The gateway determines whether renewal is one job that runs automatically — or seven things that have to work together.
+    </div>
+  </section>
+
+  <!-- ───────────────── 4. SAUDI PAYMENT LANDSCAPE ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">03</span>How Saudis actually pay</div>
+    <h2 class="s-title">A gateway without Mada <em>isn't a gateway.</em></h2>
+    <p class="s-sub">The Saudi payment mix is unlike anywhere else. Any platform that doesn't fluently support all four rails is disqualified at checkout.</p>
+
+    <div class="saudi-chart" aria-label="Distribution of payment methods in Saudi Arabia">
+      <div class="saudi-seg mada">
+        <div class="pct">72%</div>
+        <div class="lbl">Mada</div>
+      </div>
+      <div class="saudi-seg apple">
+        <div class="pct">12%</div>
+        <div class="lbl">Apple Pay</div>
+      </div>
+      <div class="saudi-seg tamara">
+        <div class="pct">7%</div>
+        <div class="lbl">Tamara</div>
+      </div>
+      <div class="saudi-seg stc">
+        <div class="pct">6%</div>
+        <div class="lbl">STC</div>
+      </div>
+      <div class="saudi-seg cards">
+        <div class="pct">3%</div>
+        <div class="lbl">Credit</div>
+      </div>
+    </div>
+
+    <div class="saudi-legend">
+      <div class="item mada">
+        <div class="name">Mada</div>
+        <div class="note">National debit network. The everyday rail.</div>
+      </div>
+      <div class="item apple">
+        <div class="name">Apple Pay</div>
+        <div class="note">One of the highest adoption rates worldwide.</div>
+      </div>
+      <div class="item tamara">
+        <div class="name">Tamara · BNPL</div>
+        <div class="note">Pay-in-installments. Big lever for SAR 1,300+ school plans.</div>
+      </div>
+      <div class="item stc">
+        <div class="name">STC Pay</div>
+        <div class="note">Dominant wallet, especially younger users.</div>
+      </div>
+      <div class="item cards">
+        <div class="name">Visa / MC</div>
+        <div class="note">Present but secondary in Saudi.</div>
+      </div>
+    </div>
+
+    <div class="saudi-rule">
+      Moyasar, HyperPay, and Tap each support all five <b>natively</b>, including Tamara BNPL. Zid and Salla support them too — but through their checkout, not yours.
+    </div>
+  </section>
+
+  <!-- ───────────────── 4. ZATCA COMPLIANCE ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">04</span>The other Saudi reality · ZATCA</div>
+    <h2 class="s-title">Every invoice must clear <em>ZATCA.</em></h2>
+    <p class="s-sub">Saudi e-invoicing law mandates a specific format, fields, signature, QR code, and 6-year archival. Whoever generates the invoice has to comply — and many ecommerce platforms don't, for B2B.</p>
+
+    <div class="zatca-grid">
+      <div class="zatca-invoice" aria-label="Sample ZATCA-compliant invoice">
+        <div class="zi-head">
+          <div class="zi-name">Abjad Platform</div>
+          <div class="zi-doc">Standard Tax Invoice · فاتورة ضريبية</div>
+        </div>
+        <div class="zi-meta">
+          <div><span>Invoice #</span><b>INV-2026-00145</b></div>
+          <div><span>UUID</span><b>8a3f20…</b></div>
+          <div><span>Date · Greg</span><b>2026-06-11</b></div>
+          <div><span>Date · Hijri</span><b>1447-12-25</b></div>
+        </div>
+        <div class="zi-parties">
+          <div class="zi-party">
+            <div class="lbl">Seller</div>
+            <div>Abjad Platform</div>
+            <div>VAT 31XXXXXXXX3</div>
+            <div>CR 1018XXXXX</div>
+            <div>Riyadh, KSA</div>
+          </div>
+          <div class="zi-party">
+            <div class="lbl">Buyer · B2B</div>
+            <div>[School Name]</div>
+            <div>VAT 31XXXXXXXX4</div>
+            <div>[School Address]</div>
+          </div>
+        </div>
+        <div class="zi-line">
+          <span>School Plan — Monthly</span><span>1,300.00 SAR</span>
+        </div>
+        <div class="zi-line">
+          <span>VAT (15%)</span><span>195.00 SAR</span>
+        </div>
+        <div class="zi-total">
+          <span>Total</span><span>1,495.00 SAR</span>
+        </div>
+        <div class="zi-foot">
+          <div class="qr">
+            <svg viewBox="0 0 60 60" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="0" width="60" height="60" fill="#1A1C19"/>
+              <rect x="5" y="5" width="16" height="16" fill="#F4EFE4"/>
+              <rect x="8" y="8" width="10" height="10" fill="#1A1C19"/>
+              <rect x="11" y="11" width="4" height="4" fill="#F4EFE4"/>
+              <rect x="39" y="5" width="16" height="16" fill="#F4EFE4"/>
+              <rect x="42" y="8" width="10" height="10" fill="#1A1C19"/>
+              <rect x="45" y="11" width="4" height="4" fill="#F4EFE4"/>
+              <rect x="5" y="39" width="16" height="16" fill="#F4EFE4"/>
+              <rect x="8" y="42" width="10" height="10" fill="#1A1C19"/>
+              <rect x="11" y="45" width="4" height="4" fill="#F4EFE4"/>
+              <rect x="25" y="8" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="30" y="8" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="25" y="13" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="30" y="18" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="25" y="25" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="30" y="25" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="35" y="25" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="25" y="30" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="35" y="30" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="40" y="30" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="45" y="30" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="25" y="35" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="30" y="35" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="40" y="35" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="25" y="42" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="30" y="45" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="35" y="42" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="40" y="42" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="45" y="45" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="50" y="42" width="3" height="3" fill="#F4EFE4"/>
+              <rect x="50" y="35" width="3" height="3" fill="#F4EFE4"/>
+            </svg>
+          </div>
+          <div class="qr-label">
+            <div><b>ZATCA QR code</b></div>
+            <div>+ Cryptographic stamp (CSID)</div>
+            <div>+ Digital signature</div>
+            <div>+ 6-year archival required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="zatca-reqs">
+        <div class="zatca-block">
+          <div class="zatca-block-tag">Phase 1 · Now</div>
+          <h3>Generate & archive</h3>
+          <ul>
+            <li>XML invoice format</li>
+            <li>QR code on every invoice</li>
+            <li>Hijri + Gregorian dates</li>
+            <li>VAT (15%) auto-calculated</li>
+            <li>6-year mandatory archival</li>
+          </ul>
+        </div>
+        <div class="zatca-block phase2">
+          <div class="zatca-block-tag">Phase 2 · Real-time</div>
+          <h3>Push to ZATCA live</h3>
+          <ul>
+            <li>Real-time API submission</li>
+            <li>CSID cryptographic stamp</li>
+            <li>Required for B2B (Standard Tax Invoice)</li>
+            <li>Live validation by ZATCA portal</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="zatca-stack">
+      <div class="zatca-stack-label">The recommended ZATCA-ready stack</div>
+      <div class="zatca-stack-items">
+        <div class="stack-item">
+          <div>
+            <div class="stack-role">Charge & rails</div>
+            <div class="stack-name">Moyasar</div>
+          </div>
+          <div class="stack-note">SAMA-licensed, ZATCA-ready</div>
+        </div>
+        <div class="stack-plus">+</div>
+        <div class="stack-item">
+          <div>
+            <div class="stack-role">Invoice engine</div>
+            <div class="stack-name">Wafiq SDK</div>
+          </div>
+          <div class="stack-note">ZATCA Phase 2 certified XML generation</div>
+        </div>
+        <div class="stack-plus">+</div>
+        <div class="stack-item">
+          <div>
+            <div class="stack-role">Archival</div>
+            <div class="stack-name">AWS S3 · KSA</div>
+          </div>
+          <div class="stack-note">6-year retention, PDPL-compliant residency</div>
+        </div>
+      </div>
+      <div class="zatca-conclude">
+        <b>Zid and Salla generate their own invoice templates.</b> They can meet Simplified Tax Invoice (B2C) — but the full B2B Standard Tax Invoice that schools need is Abjad's job, not theirs. With a gateway, Abjad controls the invoice format end-to-end.
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 5. TWO CATEGORIES ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">05</span>The category split</div>
+    <h2 class="s-title">Different games, <em>not different vendors.</em></h2>
+    <p class="s-sub">Before "which provider," the real question: which category does this problem belong to?</p>
+
+    <div class="categories">
+      <div class="cat good">
+        <div class="cat-label">Payment infrastructure</div>
+        <h3 class="cat-title">Built for SaaS</h3>
+        <div class="cat-providers">
+          <span class="chip star">Moyasar</span>
+          <span class="chip">HyperPay</span>
+          <span class="chip">Tap</span>
+        </div>
+        <p class="cat-line">Abjad owns the checkout, the customer relationship, and the subscription record. Gateway handles cards, bank rails, and compliance — invisibly.</p>
+        <div class="cat-fit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+          Fits Abjad
+        </div>
+      </div>
+      <div class="cat bad">
+        <div class="cat-label">Ecommerce platforms</div>
+        <h3 class="cat-title">Built for stores</h3>
+        <div class="cat-providers">
+          <span class="chip">Zid</span>
+          <span class="chip">Salla</span>
+        </div>
+        <p class="cat-line">They run the storefront, the checkout, and the customer account. You list "subscriptions" as products and live inside their system.</p>
+        <div class="cat-fit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          Wrong category
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 6. ARCHITECTURE MISMATCH ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">06</span>Who owns the customer?</div>
+    <h2 class="s-title">Where Abjad sits <em>in the picture.</em></h2>
+    <p class="s-sub">In one architecture, Abjad is the center. In the other, Abjad is downstream of someone else's store.</p>
+
+    <div class="arch-mismatch">
+      <div class="arch-card good">
+        <div class="arch-card-label">With a payment gateway</div>
+        <h3 class="arch-card-title">Abjad is the center.</h3>
+        <svg class="arch-svg" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrG" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L8,5 L0,10 z" fill="#4F6A4A"/></marker>
+          </defs>
+          <!-- User -->
+          <circle cx="200" cy="40" r="22" fill="#F4EFE4" stroke="#4F6A4A" stroke-width="2"/>
+          <text x="200" y="46" text-anchor="middle" font-family="Inter" font-size="11" fill="#1A1C19" font-weight="600">User</text>
+          <!-- Abjad center box (large, central) -->
+          <rect x="100" y="100" width="200" height="80" fill="#4F6A4A" stroke="#4F6A4A" stroke-width="2" rx="4"/>
+          <text x="200" y="132" text-anchor="middle" font-family="Fraunces" font-size="20" fill="#F4EFE4" font-weight="500">ABJAD</text>
+          <text x="200" y="152" text-anchor="middle" font-family="Inter" font-size="10" fill="#F4EFE4" opacity="0.8">checkout · subscription · invoice</text>
+          <text x="200" y="168" text-anchor="middle" font-family="Inter" font-size="9" fill="#F4EFE4" opacity="0.6" font-style="italic">customer relationship lives here</text>
+          <!-- Moyasar (small, side) -->
+          <rect x="280" y="210" width="100" height="40" fill="#ECE6D7" stroke="#B14A2C" stroke-width="1.5" rx="3"/>
+          <text x="330" y="235" text-anchor="middle" font-family="Inter" font-size="11" fill="#1A1C19" font-weight="600">Moyasar</text>
+          <text x="330" y="247" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#6E6A60">rails only</text>
+          <!-- Bank -->
+          <rect x="20" y="210" width="80" height="40" fill="#ECE6D7" stroke="#6E6A60" stroke-width="1" rx="3"/>
+          <text x="60" y="235" text-anchor="middle" font-family="Inter" font-size="11" fill="#1A1C19">Bank</text>
+          <!-- Arrows -->
+          <line x1="200" y1="62" x2="200" y2="100" stroke="#4F6A4A" stroke-width="2" marker-end="url(#arrG)"/>
+          <line x1="280" y1="180" x2="320" y2="210" stroke="#4F6A4A" stroke-width="2" marker-end="url(#arrG)"/>
+          <line x1="280" y1="225" x2="100" y2="225" stroke="#4F6A4A" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrG)"/>
+        </svg>
+        <div class="arch-conclude"><b>You own:</b> checkout, brand, subscription, customer data, pricing logic.</div>
+      </div>
+      <div class="arch-card bad">
+        <div class="arch-card-label">With an ecommerce platform</div>
+        <h3 class="arch-card-title">Abjad sits on the side.</h3>
+        <svg class="arch-svg" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrB" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L8,5 L0,10 z" fill="#B14A2C"/></marker>
+          </defs>
+          <!-- User -->
+          <circle cx="200" cy="40" r="22" fill="#F4EFE4" stroke="#B14A2C" stroke-width="2"/>
+          <text x="200" y="46" text-anchor="middle" font-family="Inter" font-size="11" fill="#1A1C19" font-weight="600">User</text>
+          <!-- Zid center box -->
+          <rect x="100" y="100" width="200" height="80" fill="#B14A2C" stroke="#B14A2C" stroke-width="2" rx="4"/>
+          <text x="200" y="132" text-anchor="middle" font-family="Fraunces" font-size="20" fill="#F4EFE4" font-weight="500">ZID / SALLA</text>
+          <text x="200" y="152" text-anchor="middle" font-family="Inter" font-size="10" fill="#F4EFE4" opacity="0.8">checkout · order · invoice</text>
+          <text x="200" y="168" text-anchor="middle" font-family="Inter" font-size="9" fill="#F4EFE4" opacity="0.6" font-style="italic">customer relationship lives here</text>
+          <!-- Abjad (small, side) -->
+          <rect x="20" y="210" width="100" height="40" fill="#ECE6D7" stroke="#6E6A60" stroke-width="1.5" rx="3" stroke-dasharray="3,2"/>
+          <text x="70" y="232" text-anchor="middle" font-family="Inter" font-size="11" fill="#1A1C19" font-weight="600">Abjad</text>
+          <text x="70" y="245" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#6E6A60">downstream</text>
+          <!-- Bank -->
+          <rect x="280" y="210" width="100" height="40" fill="#ECE6D7" stroke="#6E6A60" stroke-width="1" rx="3"/>
+          <text x="330" y="235" text-anchor="middle" font-family="Inter" font-size="11" fill="#1A1C19">Bank</text>
+          <!-- Arrows -->
+          <line x1="200" y1="62" x2="200" y2="100" stroke="#B14A2C" stroke-width="2" marker-end="url(#arrB)"/>
+          <line x1="280" y1="180" x2="320" y2="210" stroke="#B14A2C" stroke-width="2" marker-end="url(#arrB)"/>
+          <line x1="120" y1="225" x2="100" y2="180" stroke="#6E6A60" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrB)"/>
+          <text x="50" y="200" font-family="JetBrains Mono" font-size="8" fill="#6E6A60">webhooks</text>
+        </svg>
+        <div class="arch-conclude"><b>They own:</b> checkout, brand, customer account, subscription record. You get webhooks.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 7. CAPABILITY HEATMAP ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">07</span>Capability heatmap</div>
+    <h2 class="s-title">Same question, <em>asked 10 ways.</em></h2>
+    <p class="s-sub">The criteria that actually matter for a subscription SaaS in Saudi Arabia.</p>
+
+    <div class="heatmap">
+      <div class="heatmap-grid">
+        <div class="hm-h first">Criterion</div>
+        <div class="hm-h best">Moyasar</div>
+        <div class="hm-h">HyperPay</div>
+        <div class="hm-h">Tap</div>
+        <div class="hm-h wrong">Zid</div>
+        <div class="hm-h wrong">Salla</div>
+
+        <div class="hm-row">
+          <div class="lbl">Built for SaaS subscriptions</div>
+          <div class="hm-cell yes best"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+        </div>
+        <div class="hm-row">
+          <div class="lbl">Mada · Apple Pay · STC Pay native</div>
+          <div class="hm-cell yes best"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell partial wrong-col"><span class="dot">~</span></div>
+          <div class="hm-cell partial wrong-col"><span class="dot">~</span></div>
+        </div>
+        <div class="hm-row">
+          <div class="lbl">Tokenization (saved cards)</div>
+          <div class="hm-cell yes best"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+        </div>
+        <div class="hm-row">
+          <div class="lbl">Custom Abjad-branded checkout</div>
+          <div class="hm-cell yes best"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+        </div>
+        <div class="hm-row">
+          <div class="lbl">Webhook reliability</div>
+          <div class="hm-cell yes best"><span class="dot">✓</span></div>
+          <div class="hm-cell partial"><span class="dot">~</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell partial wrong-col"><span class="dot">~</span></div>
+          <div class="hm-cell partial wrong-col"><span class="dot">~</span></div>
+        </div>
+        <div class="hm-row">
+          <div class="lbl">Developer experience</div>
+          <div class="hm-cell yes best"><span class="dot">✓</span></div>
+          <div class="hm-cell partial"><span class="dot">~</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell wrong-col">—</div>
+          <div class="hm-cell wrong-col">—</div>
+        </div>
+        <div class="hm-row">
+          <div class="lbl">Saudi SAMA licensed</div>
+          <div class="hm-cell yes best"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell yes wrong-col"><span class="dot">✓</span></div>
+          <div class="hm-cell yes wrong-col"><span class="dot">✓</span></div>
+        </div>
+        <div class="hm-row">
+          <div class="lbl">Transparent pricing</div>
+          <div class="hm-cell yes best"><span class="dot">✓</span></div>
+          <div class="hm-cell partial"><span class="dot">~</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+        </div>
+        <div class="hm-row">
+          <div class="lbl">Multi-country (GCC) ready</div>
+          <div class="hm-cell partial best"><span class="dot">~</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+        </div>
+        <div class="hm-row">
+          <div class="lbl">Low lock-in risk</div>
+          <div class="hm-cell yes best"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell yes"><span class="dot">✓</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+          <div class="hm-cell no wrong-col"><span class="dot">✗</span></div>
+        </div>
+      </div>
+      <div class="hm-legend">
+        <div class="li"><span class="dot" style="background:var(--accent-2)"></span> Strong</div>
+        <div class="li"><span class="dot" style="background:var(--warn)"></span> Partial / dated</div>
+        <div class="li"><span class="dot" style="background:var(--accent)"></span> Missing / wrong fit</div>
+        <div class="li">— Not applicable</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 8. WHY MOYASAR (Hero card) ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">08</span>The winner, in one card</div>
+    <h2 class="s-title">Why Moyasar, <em>specifically.</em></h2>
+    <p class="s-sub">The right shape for Abjad as it exists today — and reversible if scale or geography shifts later.</p>
+
+    <div class="why-card">
+      <div class="why-stamp">★ RECOMMENDED · V1</div>
+      <div class="why-name">Moyasar</div>
+      <div class="why-sub">Saudi-founded, SAMA-licensed, modern API, subscription-native.</div>
+
+      <div class="why-badges">
+        <div class="why-badge">
+          <div class="why-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 7v6c0 5 4 8 9 9 5-1 9-4 9-9V7l-9-5z"/></svg>
+          </div>
+          <h4>Saudi-first</h4>
+          <p>Mada, Apple Pay, STC Pay are core — not afterthoughts.</p>
+        </div>
+        <div class="why-badge">
+          <div class="why-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h4>Modern API</h4>
+          <p>Stripe-class developer experience. Days to integrate, not weeks.</p>
+        </div>
+        <div class="why-badge">
+          <div class="why-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-9-9"/><polyline points="21 3 21 9 15 9"/></svg>
+          </div>
+          <h4>Subscription-native</h4>
+          <p>Saved cards, recurring charges, webhooks — built in.</p>
+        </div>
+        <div class="why-badge">
+          <div class="why-badge-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><text x="12" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="currentColor" stroke="none">$</text></svg>
+          </div>
+          <h4>Transparent pricing</h4>
+          <p>≈ 2.75% + 1 SAR. No hidden fees. Easy unit-economics.</p>
+        </div>
+      </div>
+
+      <div class="why-alts">
+        <div class="why-alt">
+          <b>When HyperPay would win instead</b>
+          High volume at launch, marketplace-style payment splits, or existing banking relationship.
+        </div>
+        <div class="why-alt">
+          <b>When Tap would win instead</b>
+          GCC expansion (UAE, Kuwait, Bahrain) within the first 12 months.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 9. SYSTEM ARCHITECTURE ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">09</span>How it fits Abjad</div>
+    <h2 class="s-title">The system, <em>drawn.</em></h2>
+    <p class="s-sub">Abjad owns the subscription. Moyasar owns the bank rails. Clean separation.</p>
+
+    <div class="arch-system">
+      <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrW" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L8,5 L0,10 z" fill="#C49A4F"/></marker>
+          <marker id="arrR" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L8,5 L0,10 z" fill="#B14A2C"/></marker>
+        </defs>
+        <!-- User -->
+        <rect x="40" y="40" width="180" height="80" fill="#3A3D38" stroke="#9DC0A0" stroke-width="1.5" rx="4"/>
+        <text x="130" y="72" text-anchor="middle" font-family="Fraunces" font-size="18" fill="#E8E3D5" font-weight="500">User</text>
+        <text x="130" y="92" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#8E8B82">browser / mobile</text>
+        <text x="130" y="108" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#8E8B82">on abjad.com</text>
+
+        <!-- Abjad Frontend -->
+        <rect x="280" y="40" width="220" height="80" fill="#3A3D38" stroke="#9DC0A0" stroke-width="1.5" rx="4"/>
+        <text x="390" y="72" text-anchor="middle" font-family="Fraunces" font-size="18" fill="#E8E3D5" font-weight="500">Abjad Frontend</text>
+        <text x="390" y="92" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#8E8B82">Next.js · Abjad-branded</text>
+        <text x="390" y="108" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#8E8B82">Moyasar iframe inside</text>
+
+        <!-- Abjad Backend -->
+        <rect x="280" y="160" width="220" height="120" fill="#1F2320" stroke="#9DC0A0" stroke-width="2" rx="4"/>
+        <text x="390" y="190" text-anchor="middle" font-family="Fraunces" font-size="18" fill="#E8E3D5" font-weight="500">Abjad Backend</text>
+        <text x="390" y="212" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#9DC0A0">subscription engine</text>
+        <text x="390" y="228" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#9DC0A0">payments service</text>
+        <text x="390" y="244" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#9DC0A0">webhook handler</text>
+        <text x="390" y="266" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#8E8B82" font-style="italic">source of truth</text>
+
+        <!-- Moyasar -->
+        <rect x="600" y="40" width="220" height="240" fill="#3A3D38" stroke="#D88060" stroke-width="2" rx="4"/>
+        <text x="710" y="72" text-anchor="middle" font-family="Fraunces" font-size="18" fill="#E8E3D5" font-weight="500">Moyasar</text>
+        <text x="710" y="92" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#D88060">tokenize card</text>
+        <text x="710" y="112" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#D88060">execute charge</text>
+        <text x="710" y="132" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#D88060">recurring charges</text>
+        <text x="710" y="160" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#8E8B82">─ bank rails ─</text>
+        <text x="710" y="184" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#8E8B82">Mada</text>
+        <text x="710" y="204" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#8E8B82">Apple Pay</text>
+        <text x="710" y="224" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#8E8B82">STC Pay</text>
+        <text x="710" y="244" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#8E8B82">Visa / Mastercard</text>
+        <text x="710" y="266" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#D88060" font-style="italic">handles PCI</text>
+
+        <!-- Database -->
+        <rect x="280" y="320" width="220" height="40" fill="#3A3D38" stroke="#9DC0A0" stroke-width="1.5" rx="4"/>
+        <text x="390" y="346" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#9DC0A0">▼ Abjad DB · subscriptions, invoices</text>
+
+        <!-- Email -->
+        <rect x="880" y="160" width="100" height="60" fill="#3A3D38" stroke="#9DC0A0" stroke-width="1" rx="4"/>
+        <text x="930" y="186" text-anchor="middle" font-family="Inter" font-size="12" fill="#E8E3D5">Receipt</text>
+        <text x="930" y="204" text-anchor="middle" font-family="Inter" font-size="12" fill="#E8E3D5">Email</text>
+
+        <!-- Arrows -->
+        <!-- User → Frontend -->
+        <line x1="220" y1="80" x2="280" y2="80" stroke="#C49A4F" stroke-width="2" marker-end="url(#arrW)"/>
+        <!-- Frontend → Backend -->
+        <line x1="390" y1="120" x2="390" y2="160" stroke="#C49A4F" stroke-width="2" marker-end="url(#arrW)"/>
+        <!-- Backend → Moyasar (charge) -->
+        <line x1="500" y1="200" x2="600" y2="120" stroke="#C49A4F" stroke-width="2" marker-end="url(#arrW)"/>
+        <text x="540" y="155" font-family="JetBrains Mono" font-size="9" fill="#C49A4F">charge</text>
+        <!-- Moyasar → Backend (webhook) -->
+        <line x1="600" y1="220" x2="500" y2="260" stroke="#B14A2C" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrR)"/>
+        <text x="540" y="255" font-family="JetBrains Mono" font-size="9" fill="#B14A2C">webhook</text>
+        <!-- Backend → DB -->
+        <line x1="390" y1="280" x2="390" y2="320" stroke="#C49A4F" stroke-width="2" marker-end="url(#arrW)"/>
+        <!-- Backend → Email -->
+        <line x1="500" y1="190" x2="880" y2="190" stroke="#C49A4F" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrW)"/>
+      </svg>
+    </div>
+
+    <div class="arch-notes">
+      <div class="arch-note">
+        <div class="l">Note 01</div>
+        <h4>No raw card data in Abjad</h4>
+        <p>Card is tokenized in Moyasar's iframe. PCI scope stays at SAQ-A — the lightest tier.</p>
+      </div>
+      <div class="arch-note">
+        <div class="l">Note 02</div>
+        <h4>Webhooks drive state</h4>
+        <p>Subscription status set by webhooks. Reconciliation cron catches any missed deliveries.</p>
+      </div>
+      <div class="arch-note">
+        <div class="l">Note 03</div>
+        <h4>Abjad's DB is source of truth</h4>
+        <p>Entitlements live in Abjad, not Moyasar. The gateway stays replaceable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 10. THE RETURN TRIP ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">10</span>The return trip</div>
+    <h2 class="s-title">After the payment — <em>where is the user?</em></h2>
+    <p class="s-sub">Every payment is a round trip. Who controls the screen during it, and what Abjad learns when the user comes back, decides everything.</p>
+
+    <div class="trip">
+      <div class="trip-lane good">
+        <div class="trip-head">
+          <div class="l">★ With Moyasar</div>
+          <h3>User never really leaves Abjad.</h3>
+        </div>
+        <div class="trip-steps">
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M5 21v-1a7 7 0 0114 0v1"/></svg></div>
+            <div class="trip-step-label">User picks a plan</div>
+            <div class="trip-step-loc loc-abjad">Abjad</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><line x1="3" y1="11" x2="21" y2="11"/></svg></div>
+            <div class="trip-step-label">Card form appears in-page</div>
+            <div class="trip-step-loc loc-abjad">Abjad</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+            <div class="trip-step-label">Card tokenized securely</div>
+            <div class="trip-step-loc loc-gw">Moyasar</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <div class="trip-step-label">Subscription created</div>
+            <div class="trip-step-loc loc-abjad">Abjad</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v8M4.5 9.5l7.5 8 7.5-8M3 21h18"/></svg></div>
+            <div class="trip-step-label">"Welcome to Pro" page</div>
+            <div class="trip-step-loc loc-abjad">Abjad</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step bg">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6L12 13 2 6m20 0a2 2 0 00-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6z"/></svg></div>
+            <div class="trip-step-label">Webhook confirms charge</div>
+            <div class="trip-step-loc loc-bg">Background</div>
+          </div>
+        </div>
+        <div class="trip-kpis">
+          <div class="trip-kpi"><div class="k">On 3rd-party site</div><div class="v">0s</div></div>
+          <div class="trip-kpi"><div class="k">Identity</div><div class="v">Held</div></div>
+          <div class="trip-kpi"><div class="k">Data back</div><div class="v">All</div></div>
+        </div>
+      </div>
+
+      <div class="trip-lane bad">
+        <div class="trip-head">
+          <div class="l">With Zid / Salla</div>
+          <h3>User leaves Abjad. Comes back. Hope it works.</h3>
+        </div>
+        <div class="trip-steps">
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M5 21v-1a7 7 0 0114 0v1"/></svg></div>
+            <div class="trip-step-label">User clicks "Subscribe"</div>
+            <div class="trip-step-loc loc-abjad">Abjad</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M14 10l7-7M10 14L4 20"/></svg></div>
+            <div class="trip-step-label">Redirected to Zid (with user_id in URL)</div>
+            <div class="trip-step-loc loc-red">Leaving</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><line x1="3" y1="11" x2="21" y2="11"/></svg></div>
+            <div class="trip-step-label">Card entered on Zid's checkout</div>
+            <div class="trip-step-loc loc-zid">Zid</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+            <div class="trip-step-label">Zid shows success screen</div>
+            <div class="trip-step-loc loc-zid">Zid</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H3v6M10 14l-7 7M15 21h6v-6M14 10l7-7"/></svg></div>
+            <div class="trip-step-label">Redirected back to Abjad with order_id</div>
+            <div class="trip-step-loc loc-red">Returning</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+            <div class="trip-step-label">Abjad calls Zid API to verify & map user</div>
+            <div class="trip-step-loc loc-abjad">Abjad</div>
+          </div>
+          <div class="trip-arrow">↓</div>
+          <div class="trip-step bg">
+            <div class="trip-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div>
+            <div class="trip-step-label">Hope webhook arrives + ID still matches</div>
+            <div class="trip-step-loc loc-bg">Fragile</div>
+          </div>
+        </div>
+        <div class="trip-kpis">
+          <div class="trip-kpi"><div class="k">On 3rd-party site</div><div class="v">30s+</div></div>
+          <div class="trip-kpi"><div class="k">Identity</div><div class="v">Threaded</div></div>
+          <div class="trip-kpi"><div class="k">Data back</div><div class="v">Partial</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 11. LIFECYCLE SCENARIOS ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">11</span>Lifecycle scenarios</div>
+    <h2 class="s-title">The same pattern, <em>four more times.</em></h2>
+    <p class="s-sub">A SaaS subscription doesn't happen once. Renewals, failures, refunds, upgrades — each repeats the same architectural choice.</p>
+
+    <div class="scenarios">
+      <div class="sc-card">
+        <div class="sc-num"><span class="n">SC.01</span> Auto-renewal</div>
+        <div class="sc-q">Day 30 arrives. What does the user <em>have to do?</em></div>
+        <div class="sc-versus">
+          <div class="sc-side good">
+            <div class="who">★ Moyasar</div>
+            <div class="verb">Nothing.</div>
+            <div class="desc">Saved token charges silently in the background. User gets a receipt email.</div>
+            <div class="sc-metric">User actions<b>0 clicks</b></div>
+          </div>
+          <div class="sc-side bad">
+            <div class="who">Zid / Salla</div>
+            <div class="verb">Re-buy.</div>
+            <div class="desc">Limited subscription product handles renewal — but Abjad is downstream of their logic.</div>
+            <div class="sc-metric">Control over experience<b>Limited</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sc-card">
+        <div class="sc-num"><span class="n">SC.02</span> Failed payment</div>
+        <div class="sc-q">Renewal charge fails. <em>Does the customer come back?</em></div>
+        <div class="sc-versus">
+          <div class="sc-side good">
+            <div class="who">★ Moyasar</div>
+            <div class="verb">Recovered.</div>
+            <div class="desc">Webhook fires, dunning workflow retries on day 3, 7, 14. Polite email, graceful downgrade.</div>
+            <div class="sc-metric">Recovery rate<b>30–50%</b></div>
+          </div>
+          <div class="sc-side bad">
+            <div class="who">Zid / Salla</div>
+            <div class="verb">Silent churn.</div>
+            <div class="desc">One email, then nothing. User must revisit Zid to update card. Many never do.</div>
+            <div class="sc-metric">Revenue lost / year<b>5–15%</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sc-card">
+        <div class="sc-num"><span class="n">SC.03</span> Cancellation</div>
+        <div class="sc-q">A school cancels. <em>Where does the work happen?</em></div>
+        <div class="sc-versus">
+          <div class="sc-side good">
+            <div class="who">★ Moyasar</div>
+            <div class="verb">One click.</div>
+            <div class="desc">Abjad admin turns auto-renew off. Access continues until period ends (no-refund policy).</div>
+            <div class="sc-metric">Systems touched<b>One · Abjad</b></div>
+          </div>
+          <div class="sc-side bad">
+            <div class="who">Zid / Salla</div>
+            <div class="verb">Two systems.</div>
+            <div class="desc">Cancel the subscription in Zid's admin. Sync state back to Abjad. Hope webhook fires.</div>
+            <div class="sc-metric">Systems touched<b>Two · drift risk</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sc-card">
+        <div class="sc-num"><span class="n">SC.04</span> Plan upgrade</div>
+        <div class="sc-q">School upgrades Basic → Pro on day 15. <em>What gets charged?</em></div>
+        <div class="sc-versus">
+          <div class="sc-side good">
+            <div class="who">★ Moyasar</div>
+            <div class="verb">Prorated.</div>
+            <div class="desc">Abjad calculates the difference, charges saved token, unlocks Pro instantly.</div>
+            <div class="sc-metric">User clicks<b>2</b></div>
+          </div>
+          <div class="sc-side bad">
+            <div class="who">Zid / Salla</div>
+            <div class="verb">Cancel + re-buy.</div>
+            <div class="desc">Cancel old order in Zid, create new order, manual proration. Confusing receipts.</div>
+            <div class="sc-metric">User clicks<b>6+</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 12. RISKS ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">12</span>Risks · held</div>
+    <h2 class="s-title">No integration is risk-free. <em>These are managed.</em></h2>
+    <p class="s-sub">Each risk has a known shape and a known mitigation.</p>
+
+    <div class="risk-grid">
+      <div class="risk-tile low">
+        <div class="risk-head"><span class="n">R.01</span><span class="level">Low</span></div>
+        <h4>PCI compliance scope</h4>
+        <p>Abjad never touches raw cards. Moyasar's iframe keeps us at <b>SAQ-A — lightest tier</b>.</p>
+      </div>
+      <div class="risk-tile med">
+        <div class="risk-head"><span class="n">R.02</span><span class="level">Medium</span></div>
+        <h4>Webhook delivery failure</h4>
+        <p>Idempotent handlers + <b>15-min reconciliation cron</b> polling Moyasar for missed events.</p>
+      </div>
+      <div class="risk-tile low">
+        <div class="risk-head"><span class="n">R.03</span><span class="level">Low</span></div>
+        <h4>Gateway downtime</h4>
+        <p>Existing access continues (entitlements in Abjad DB). Failed renewals <b>retry on schedule</b>.</p>
+      </div>
+      <div class="risk-tile med">
+        <div class="risk-head"><span class="n">R.04</span><span class="level">Medium</span></div>
+        <h4>Chargebacks & disputes</h4>
+        <p>Clear ToS refund policy. <b>Automated suspension</b> on chargeback. One-click finance flow.</p>
+      </div>
+      <div class="risk-tile low">
+        <div class="risk-head"><span class="n">R.05</span><span class="level">Low</span></div>
+        <h4>Vendor lock-in</h4>
+        <p>Subscription state in Abjad DB. Migration = <b>re-tokenize cards once</b>. Bounded effort.</p>
+      </div>
+      <div class="risk-tile low">
+        <div class="risk-head"><span class="n">R.06</span><span class="level">Low</span></div>
+        <h4>Fraud & abuse</h4>
+        <p>Moyasar 3-D Secure handles most cases. Abjad adds <b>velocity limits per account</b>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 13. SCALE FORWARD ───────────────── -->
+  <section class="s">
+    <div class="s-tag"><span class="num">13</span>Scale forward</div>
+    <h2 class="s-title">If the business changes, <em>the architecture bends.</em></h2>
+    <p class="s-sub">Today's choice handles tomorrow's growth without re-architecting.</p>
+
+    <div class="scale">
+      <div class="scale-core">
+        <div class="now">Today</div>
+        <h3>Abjad on <em>Moyasar</em> · Saudi · SaaS launch</h3>
+      </div>
+      <div class="scale-branches">
+        <div class="scale-branch">
+          <div class="if">If</div>
+          <div class="when">Volume grows 10×</div>
+          <div class="then">Then</div>
+          <div class="move">Renegotiate, or move to HyperPay</div>
+        </div>
+        <div class="scale-branch">
+          <div class="if">If</div>
+          <div class="when">GCC expansion (UAE, Kuwait…)</div>
+          <div class="then">Then</div>
+          <div class="move">Add Tap Payments alongside</div>
+        </div>
+        <div class="scale-branch">
+          <div class="if">If</div>
+          <div class="when">Marketplace / payment splits</div>
+          <div class="then">Then</div>
+          <div class="move">Move to HyperPay Wallet</div>
+        </div>
+        <div class="scale-branch">
+          <div class="if">If</div>
+          <div class="when">Enterprise contracts & POs</div>
+          <div class="then">Then</div>
+          <div class="move">Extend Abjad invoicing module</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── 15. DECISION CARD ───────────────── -->
+  <div class="final-wrap">
+    <div class="decision">
+      <div class="decision-stamp">DECISION</div>
+      <h2>Build the business on <em>infrastructure</em> — not on someone else's storefront.</h2>
+      <div class="decision-list">
+        <div class="decision-item">
+          <span class="verb">Start with</span>
+          <span class="what"><b>Moyasar</b> · primary gateway for v1</span>
+        </div>
+        <div class="decision-item">
+          <span class="verb">Keep ready</span>
+          <span class="what"><b>HyperPay</b> · upgrade path if enterprise scale arrives</span>
+        </div>
+        <div class="decision-item">
+          <span class="verb">Keep ready</span>
+          <span class="what"><b>Tap Payments</b> · for the GCC expansion play</span>
+        </div>
+        <div class="decision-item">
+          <span class="verb">Decline</span>
+          <span class="what"><b>Zid &amp; Salla</b> · wrong category for a subscription SaaS</span>
+        </div>
+      </div>
+      <div class="decision-next">
+        <span><b>Next step</b> Sign off and begin Moyasar merchant onboarding</span>
+        <span><b>For</b> Abjad leadership</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="fn">
+    <span>Abjad · Payments Strategy v2 · visual</span>
+    <span>عَبجَد · المملكة العربية السعودية</span>
+    <span>Internal · not for distribution</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
