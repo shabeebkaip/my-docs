@@ -1,0 +1,3985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeOx · Presales Command Center — Live Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --bg-cream: #faf8f3;
+    --bg-paper: #ffffff;
+    --bg-tint: #f3efe5;
+    --bg-grid: #ede7d7;
+    --navy: #0a1628;
+    --navy-mid: #14233d;
+    --navy-soft: #1d2f4d;
+    --gold: #b8924c;
+    --gold-soft: #d4b574;
+    --gold-pale: #f0e3c4;
+    --teal: #2d6a5c;
+    --teal-soft: #5d9a8c;
+    --slate: #1a1f36;
+    --slate-2: #475569;
+    --slate-3: #6b7480;
+    --slate-4: #94a3b8;
+    --border: #d6d0bf;
+    --border-soft: #e8e3d8;
+    --success: #2d6a5c;
+    --warn: #a45c2a;
+    --danger: #a83232;
+    --amber: #c47b2a;
+    --info: #2563eb;
+    --purple: #6d3aab;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-cream);
+    color: var(--slate);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  /* SLIDE */
+  .slide {
+    min-height: 100vh;
+    padding: 60px 64px 80px;
+    scroll-snap-align: start;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    background-image:
+      linear-gradient(var(--bg-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-position: -1px -1px;
+  }
+  .slide.dark {
+    background-color: var(--navy);
+    background-image:
+      linear-gradient(rgba(184,146,76,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(184,146,76,0.06) 1px, transparent 1px);
+    color: var(--bg-cream);
+  }
+  .slide.alt {
+    background-color: var(--bg-tint);
+  }
+  .slide-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* HEADER OVERLAYS */
+  .frame-top {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 18px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 50; pointer-events: none;
+  }
+  .frame-top > * { pointer-events: auto; }
+  .frame-logo img { height: 26px; }
+  .frame-meta {
+    display: flex; gap: 14px; align-items: center;
+  }
+  .progress-bar {
+    position: fixed; top: 0; left: 0;
+    height: 3px; background: var(--gold);
+    width: 0%; transition: width 0.18s;
+    z-index: 60;
+  }
+  .slide-counter {
+    background: rgba(10,22,40,0.92);
+    color: var(--gold-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    padding: 6px 12px;
+    border-radius: 2px;
+  }
+  .nav-dots {
+    position: fixed;
+    bottom: 22px;
+    left: 50%; transform: translateX(-50%);
+    display: flex; gap: 6px;
+    background: rgba(10,22,40,0.85);
+    padding: 9px 14px;
+    border-radius: 30px;
+    z-index: 50;
+    max-width: calc(100vw - 80px);
+    overflow-x: auto;
+  }
+  .nav-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(214,208,191,0.4);
+    cursor: pointer; flex-shrink: 0;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .nav-dot:hover { background: rgba(214,208,191,0.7); transform: scale(1.3); }
+  .nav-dot.active { background: var(--gold-soft); transform: scale(1.3); }
+
+  /* TYPOGRAPHY */
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .eyebrow .step-num {
+    background: var(--navy);
+    color: var(--gold-soft);
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+  .dark .eyebrow .step-num {
+    background: var(--gold);
+    color: var(--navy);
+  }
+  h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    font-size: 64px;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    color: var(--navy);
+    margin-bottom: 20px;
+    max-width: 1000px;
+  }
+  h1 em { font-style: normal; color: var(--gold); font-weight: 600; }
+  .dark h1 { color: var(--bg-cream); }
+  .dark h1 em { color: var(--gold-soft); }
+  h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+    margin-bottom: 16px;
+    max-width: 980px;
+  }
+  h2 em { font-style: normal; color: var(--gold); font-weight: 600; }
+  .dark h2 { color: var(--bg-cream); }
+  .dark h2 em { color: var(--gold-soft); }
+  .lead {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--slate-2);
+    max-width: 800px;
+    margin-bottom: 8px;
+  }
+  .dark .lead { color: rgba(250,248,243,0.78); }
+  .caption {
+    font-size: 14px;
+    color: var(--slate-3);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-top: 14px;
+  }
+  .dark .caption { color: var(--gold-soft); }
+
+  /* SLIDE LAYOUTS */
+  .layout-split {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .layout-stack { display: flex; flex-direction: column; gap: 28px; align-items: center; text-align: center; }
+  .layout-stack h1, .layout-stack h2 { text-align: center; max-width: 900px; }
+  .layout-stack .lead { text-align: center; max-width: 720px; }
+
+  /* COVER */
+  .cover-brand {
+    position: absolute;
+    top: 60px; left: 64px;
+  }
+  .cover-brand img { height: 32px; }
+  .cover-meta {
+    position: absolute;
+    top: 60px; right: 64px;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--gold);
+    line-height: 1.7;
+  }
+  .cover-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 92px;
+    font-weight: 500;
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    color: var(--navy);
+    max-width: 1100px;
+  }
+  .cover-title em { font-style: normal; color: var(--gold); font-weight: 600; }
+  .cover-subtitle {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 26px;
+    color: var(--slate-2);
+    font-weight: 400;
+    max-width: 760px;
+    line-height: 1.4;
+  }
+  .cover-chips {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .cover-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.7);
+    padding: 8px 14px;
+    border-radius: 30px;
+    color: var(--slate-2);
+  }
+  .cover-author {
+    position: absolute;
+    bottom: 70px; left: 64px;
+    display: flex; flex-direction: column;
+    gap: 4px;
+  }
+  .cover-author-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+  }
+  .cover-author-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--navy);
+  }
+
+  /* MOCKUP WINDOW */
+  .window {
+    background: var(--bg-paper);
+    border-radius: 10px;
+    box-shadow:
+      0 20px 60px -20px rgba(10,22,40,0.25),
+      0 8px 30px -10px rgba(10,22,40,0.12);
+    overflow: hidden;
+    border: 1px solid var(--border-soft);
+    width: 100%;
+    position: relative;
+  }
+  .window-bar {
+    background: linear-gradient(to bottom, #f5f0e3 0%, #ede6d2 100%);
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .window-dots {
+    display: flex; gap: 6px;
+  }
+  .window-dot {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .window-dot.r { background: #e07057; }
+  .window-dot.y { background: #e0b94e; }
+  .window-dot.g { background: #5fa980; }
+  .window-url {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid var(--border-soft);
+    flex: 1;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--slate-3);
+    margin-left: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .window-url i { color: var(--success); font-size: 10px; }
+  .window-body {
+    padding: 24px;
+    background: var(--bg-paper);
+  }
+
+  /* APP LAYOUT MOCKUP */
+  .app {
+    display: grid;
+    grid-template-columns: 50px 220px 1fr 280px;
+    background: var(--bg-paper);
+    height: 540px;
+    font-size: 12px;
+  }
+  .app-rail {
+    background: var(--navy);
+    border-right: 1px solid var(--navy-soft);
+    padding: 14px 0;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .app-rail-logo {
+    width: 28px; height: 28px;
+    background: var(--gold);
+    border-radius: 6px;
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-family: 'Bricolage Grotesque', sans-serif;
+    margin-bottom: 8px;
+  }
+  .app-rail-icon {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    color: rgba(255,255,255,0.45);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .app-rail-icon.active {
+    background: rgba(184,146,76,0.18);
+    color: var(--gold-soft);
+  }
+  .app-side {
+    background: #fbf9f3;
+    border-right: 1px solid var(--border-soft);
+    padding: 16px 14px;
+  }
+  .app-side-h {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--slate-3);
+    margin-bottom: 10px;
+  }
+  .app-side-item {
+    padding: 7px 10px;
+    border-radius: 5px;
+    color: var(--slate-2);
+    margin-bottom: 3px;
+    font-size: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .app-side-item.active {
+    background: var(--gold-pale);
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .app-side-item i { color: var(--slate-3); font-size: 11px; width: 14px; }
+  .app-side-item.active i { color: var(--gold); }
+  .app-main {
+    padding: 18px 22px;
+    background: var(--bg-paper);
+    overflow-y: hidden;
+  }
+  .app-side-r {
+    background: linear-gradient(180deg, #fcfaf4 0%, #faf8f3 100%);
+    border-left: 1px solid var(--border-soft);
+    padding: 16px 14px;
+  }
+
+  /* APP HEADER ROW */
+  .app-h-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px;
+  }
+  .app-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .app-title small {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--slate-3);
+    font-weight: 400;
+    margin-left: 8px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--bg-paper);
+    color: var(--navy);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-primary {
+    background: var(--navy);
+    color: var(--bg-cream);
+    border-color: var(--navy);
+  }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+  }
+  .btn-tag {
+    display: inline-flex; gap: 4px;
+    background: var(--gold-pale);
+    color: var(--gold);
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* BOQ TABLE */
+  .boq-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .boq-table th {
+    text-align: left;
+    padding: 8px 10px;
+    background: var(--bg-tint);
+    color: var(--slate-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+  .boq-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--border-soft);
+    color: var(--slate);
+    font-size: 11.5px;
+  }
+  .boq-table tr:hover td {
+    background: rgba(184,146,76,0.04);
+  }
+  .boq-table tr.row-highlight td {
+    background: rgba(184,146,76,0.10);
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+  .badge-success { background: rgba(45,106,92,0.14); color: var(--success); }
+  .badge-warn { background: rgba(196,123,42,0.14); color: var(--amber); }
+  .badge-danger { background: rgba(168,50,50,0.12); color: var(--danger); }
+  .badge-info { background: rgba(37,99,235,0.10); color: var(--info); }
+  .badge-mute { background: var(--bg-tint); color: var(--slate-3); }
+
+  /* CHAT BUBBLES */
+  .chat-stack { display: flex; flex-direction: column; gap: 10px; }
+  .chat-row {
+    display: flex; gap: 8px;
+    align-items: flex-end;
+  }
+  .chat-row.right { justify-content: flex-end; }
+  .chat-avatar {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--gold-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .chat-bubble {
+    max-width: 220px;
+    padding: 8px 12px;
+    border-radius: 12px 12px 12px 4px;
+    font-size: 11.5px;
+    line-height: 1.45;
+    background: var(--gold-pale);
+    color: var(--navy);
+  }
+  .chat-row.right .chat-bubble {
+    background: var(--navy);
+    color: var(--bg-cream);
+    border-radius: 12px 12px 4px 12px;
+  }
+
+  /* AI SUGGESTION CARDS */
+  .ai-card {
+    background: var(--bg-paper);
+    border: 1px solid var(--border-soft);
+    border-left: 3px solid var(--gold);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+  }
+  .ai-card-h {
+    display: flex; gap: 8px; align-items: center;
+    margin-bottom: 4px;
+  }
+  .ai-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    background: var(--navy);
+    color: var(--gold-soft);
+    padding: 1px 5px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+  }
+  .ai-card-h strong {
+    font-size: 11px;
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .ai-card-b {
+    font-size: 11px;
+    color: var(--slate-2);
+    line-height: 1.45;
+  }
+
+  /* GAUGE */
+  .gauge {
+    width: 140px; height: 140px;
+    position: relative;
+    margin: 0 auto;
+  }
+  .gauge-ring {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(var(--success) 0deg 79deg, var(--bg-tint) 79deg 360deg);
+    display: flex; align-items: center; justify-content: center;
+    transform: rotate(-90deg);
+  }
+  .gauge-inner {
+    width: 100px; height: 100px;
+    background: var(--bg-paper);
+    border-radius: 50%;
+    transform: rotate(90deg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .gauge-val {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--success);
+    line-height: 1;
+  }
+  .gauge-lbl {
+    font-size: 9px;
+    color: var(--slate-3);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
+    position: relative;
+    margin-top: 30px;
+  }
+  .flow::before {
+    content: '';
+    position: absolute;
+    top: 28px; left: 4%; right: 4%;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold) 0%, var(--gold-soft) 50%, var(--gold) 100%);
+    z-index: 0;
+  }
+  .flow-node {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 10px;
+    position: relative; z-index: 1;
+  }
+  .flow-circ {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--bg-paper);
+    border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--navy);
+    font-size: 18px;
+    box-shadow: 0 4px 14px -4px rgba(184,146,76,0.4);
+  }
+  .flow-label {
+    font-size: 11px;
+    text-align: center;
+    color: var(--slate);
+    font-weight: 600;
+    line-height: 1.3;
+    max-width: 100px;
+  }
+  .flow-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--slate-3);
+    text-align: center;
+    letter-spacing: 0.08em;
+  }
+
+  /* TOOL ICONS COLLAGE (BEFORE) */
+  .tools-collage {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    max-width: 600px;
+  }
+  .tool-icon {
+    background: var(--bg-paper);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 18px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    box-shadow: 0 4px 14px -4px rgba(10,22,40,0.08);
+    transform: rotate(var(--rot, 0deg));
+    opacity: 0.78;
+  }
+  .tool-icon i { font-size: 28px; }
+  .tool-icon .tool-name {
+    font-size: 11px; color: var(--slate-3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ti-excel i { color: #1f6e43; }
+  .ti-outlook i { color: #0a5fb8; }
+  .ti-word i { color: #185abd; }
+  .ti-pdf i { color: #c14e4e; }
+  .ti-folder i { color: #c98a2a; }
+  .ti-whatsapp i { color: #25d366; }
+  .ti-sp i { color: #036ac4; }
+  .ti-phone i { color: #5d6873; }
+
+  /* EMAIL INBOX */
+  .inbox {
+    background: var(--bg-paper);
+    border-radius: 8px;
+    box-shadow: 0 8px 28px -8px rgba(10,22,40,0.15);
+    border: 1px solid var(--border-soft);
+    overflow: hidden;
+  }
+  .inbox-hd {
+    background: linear-gradient(to right, #0a5fb8, #0a4a8c);
+    color: white;
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex; gap: 10px; align-items: center;
+  }
+  .inbox-row {
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--border-soft);
+    display: grid;
+    grid-template-columns: 24px 200px 1fr 50px;
+    gap: 14px;
+    align-items: center;
+    font-size: 12px;
+  }
+  .inbox-row.new { background: rgba(37,99,235,0.05); border-left: 3px solid var(--info); }
+  .inbox-row.new .ir-from { font-weight: 700; color: var(--navy); }
+  .inbox-row.new .ir-subj { font-weight: 600; color: var(--navy); }
+  .inbox-row i.fa-circle { color: var(--info); font-size: 7px; }
+  .inbox-row .ir-from { color: var(--slate-2); }
+  .inbox-row .ir-subj { color: var(--slate-2); }
+  .inbox-row .ir-subj .attach { font-size: 10px; color: var(--slate-3); margin-left: 8px; }
+  .inbox-row .ir-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--slate-3);
+    text-align: right;
+  }
+
+  /* PDF / DROPZONE */
+  .dropzone {
+    background: var(--bg-paper);
+    border: 2px dashed var(--gold);
+    border-radius: 12px;
+    padding: 40px 36px;
+    text-align: center;
+    box-shadow: inset 0 0 40px rgba(184,146,76,0.04);
+  }
+  .dropzone i {
+    font-size: 36px; color: var(--gold); margin-bottom: 16px;
+  }
+  .dropzone-h {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .dropzone-sub {
+    font-size: 13px; color: var(--slate-2);
+  }
+  .dropzone-files {
+    margin-top: 22px;
+    display: flex; flex-direction: column;
+    gap: 6px; text-align: left;
+    max-width: 280px; margin-left: auto; margin-right: auto;
+  }
+  .drop-file {
+    background: var(--bg-tint);
+    border-radius: 5px;
+    padding: 7px 12px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; color: var(--navy);
+  }
+  .drop-file i { color: var(--gold); font-size: 12px; }
+  .drop-file .file-size {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--slate-3);
+  }
+
+  /* PDF MOCKUP */
+  .pdf-mock {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 22px;
+    font-size: 10px;
+    line-height: 1.45;
+    color: var(--slate);
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .pdf-mock::before {
+    content: 'TENDER — RIYADH DC PHASE 2';
+    position: absolute;
+    top: 8px; right: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--slate-4);
+    letter-spacing: 0.1em;
+  }
+  .pdf-line {
+    height: 5px;
+    background: var(--border-soft);
+    margin-bottom: 4px;
+    border-radius: 1px;
+  }
+  .pdf-line.short { width: 60%; }
+  .pdf-line.mid { width: 78%; }
+  .pdf-line.highlight {
+    background: rgba(184,146,76,0.35);
+    border: 1px solid var(--gold);
+    height: 14px;
+  }
+  .pdf-h {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--navy);
+    margin: 10px 0 8px;
+  }
+  .pdf-section { margin-bottom: 14px; }
+
+  /* EXTRACTION ARROW */
+  .extract-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    font-size: 24px;
+    position: relative;
+  }
+  .extract-arrow::before {
+    content: 'AI';
+    position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    background: var(--gold);
+    color: var(--navy);
+    padding: 1px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+
+  /* DOCUMENT MOCKUP — for MoS / Tech Report / Compliance */
+  .doc-mock {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 28px 32px;
+    box-shadow: 0 18px 50px -18px rgba(10,22,40,0.2);
+    position: relative;
+    height: 480px;
+    overflow: hidden;
+  }
+  .doc-corner {
+    position: absolute; top: 0; right: 0;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 4px 10px;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+  }
+  .doc-h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .doc-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--slate-3);
+    margin-bottom: 20px;
+    letter-spacing: 0.1em;
+  }
+  .doc-section { margin-bottom: 16px; }
+  .doc-section-h {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .doc-section-h::before {
+    content: counter(docsec, decimal) ".";
+    counter-increment: docsec;
+    color: var(--gold);
+    margin-right: 6px;
+  }
+  .doc-mock { counter-reset: docsec; }
+  .doc-line { height: 4px; background: var(--border-soft); margin-bottom: 4px; border-radius: 1px; }
+  .doc-line.short { width: 60%; }
+  .doc-line.mid { width: 80%; }
+
+  /* SLD SVG container */
+  .sld-mock {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+    box-shadow: 0 18px 50px -18px rgba(10,22,40,0.2);
+    height: 480px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* COMPLIANCE TABLE */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .comp-table th,
+  .comp-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border-soft);
+    text-align: left;
+    vertical-align: top;
+  }
+  .comp-table th {
+    background: var(--bg-tint);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate-2);
+    font-weight: 600;
+  }
+  .comp-clause {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--slate);
+    font-weight: 600;
+  }
+  .comp-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .comp-icon.yes { background: rgba(45,106,92,0.14); color: var(--success); }
+  .comp-icon.partial { background: rgba(196,123,42,0.14); color: var(--amber); }
+  .comp-icon.no { background: rgba(168,50,50,0.12); color: var(--danger); }
+
+  /* GANTT */
+  .gantt {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px;
+    box-shadow: 0 18px 50px -18px rgba(10,22,40,0.2);
+  }
+  .gantt-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 0;
+  }
+  .gantt-row.header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+  }
+  .gantt-label {
+    font-size: 11px;
+    color: var(--slate);
+    font-weight: 500;
+  }
+  .gantt-bar-track {
+    position: relative;
+    height: 18px;
+    background: var(--bg-tint);
+    border-radius: 3px;
+  }
+  .gantt-weeks {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--slate-3);
+    letter-spacing: 0.05em;
+  }
+  .gantt-weeks span { text-align: center; }
+  .gantt-bar {
+    position: absolute;
+    top: 3px; bottom: 3px;
+    background: var(--gold);
+    border-radius: 3px;
+    display: flex; align-items: center;
+    padding: 0 6px;
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .gantt-bar.teal { background: var(--teal); color: white; }
+  .gantt-bar.navy { background: var(--navy); color: var(--bg-cream); }
+  .gantt-bar.amber { background: var(--amber); color: white; }
+
+  /* SUBMISSION PACK FAN */
+  .pack {
+    display: flex; justify-content: center; align-items: center;
+    height: 460px;
+    position: relative;
+  }
+  .pack-card {
+    width: 200px; height: 270px;
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 14px 40px -10px rgba(10,22,40,0.2);
+    padding: 18px;
+    position: absolute;
+    transform-origin: bottom center;
+    display: flex; flex-direction: column;
+  }
+  .pack-card-h {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .pack-card-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--slate-3);
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+  }
+  .pack-card-band {
+    height: 4px; background: var(--gold);
+    width: 40px; margin-bottom: 12px;
+  }
+  .pack-card .pdf-line { height: 3px; margin-bottom: 3px; }
+  .pack-card .doc-line { height: 3px; margin-bottom: 3px; }
+  .pack-icon {
+    margin-top: auto;
+    font-size: 26px;
+    color: var(--gold);
+    align-self: flex-end;
+  }
+
+  /* PHONE MOCKUP */
+  .phone-row { display: flex; justify-content: center; gap: 28px; align-items: center; }
+  .phone {
+    width: 260px; height: 530px;
+    background: #1a1a1a;
+    border-radius: 36px;
+    padding: 14px;
+    box-shadow: 0 24px 60px -16px rgba(10,22,40,0.4);
+    position: relative;
+  }
+  .phone-notch {
+    position: absolute;
+    top: 14px; left: 50%; transform: translateX(-50%);
+    width: 88px; height: 22px;
+    background: #1a1a1a;
+    border-radius: 0 0 16px 16px;
+    z-index: 2;
+  }
+  .phone-screen {
+    width: 100%; height: 100%;
+    background: var(--bg-paper);
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 36px 16px 20px;
+    position: relative;
+  }
+  .phone-status {
+    position: absolute; top: 0; left: 0; right: 0;
+    padding: 9px 22px;
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 600;
+    color: var(--navy);
+  }
+  .phone-h {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 14px;
+  }
+  .phone-offline {
+    background: rgba(45,106,92,0.14);
+    color: var(--success);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-bottom: 14px;
+  }
+  .phone-form-row {
+    background: #fafafa;
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+  }
+  .phone-form-label {
+    font-size: 9px;
+    color: var(--slate-3);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .phone-form-val {
+    font-size: 13px;
+    color: var(--navy); font-weight: 600;
+  }
+  .phone-btn {
+    background: var(--navy);
+    color: var(--bg-cream);
+    text-align: center;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 13px; font-weight: 600;
+    margin-top: 14px;
+  }
+  .phone-rtl { direction: rtl; }
+  .phone-toggle {
+    display: flex; gap: 4px; align-items: center;
+    background: var(--gold-pale);
+    border-radius: 30px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--navy); font-weight: 600;
+    width: max-content;
+    margin-bottom: 12px;
+  }
+  .phone-toggle .knob {
+    width: 22px; height: 22px;
+    background: var(--gold); border-radius: 50%;
+    transition: transform 0.2s;
+  }
+
+  /* DASHBOARD */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .dash-kpi {
+    background: var(--bg-paper);
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .dash-kpi-l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--slate-3);
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+  }
+  .dash-kpi-v {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 26px; font-weight: 600;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .dash-kpi-d {
+    font-size: 11px;
+    margin-top: 4px;
+    color: var(--success);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .dash-kpi-d.bad { color: var(--danger); }
+  .dash-2 {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 14px;
+  }
+  .dash-card {
+    background: var(--bg-paper);
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .dash-card-h {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .dash-card-h small {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--slate-3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .chart-bars {
+    display: flex; gap: 10px; align-items: flex-end;
+    height: 130px;
+  }
+  .chart-bar {
+    flex: 1;
+    background: var(--gold-pale);
+    border-radius: 3px 3px 0 0;
+    position: relative;
+    display: flex; align-items: flex-end; justify-content: center;
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 600;
+    padding-bottom: 4px;
+  }
+  .chart-bar.tall { background: var(--gold); color: var(--navy); }
+  .chart-bar::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: -18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--slate-3);
+    font-weight: 400;
+  }
+  .funnel-row {
+    display: flex; align-items: center;
+    gap: 10px; margin-bottom: 6px;
+    font-size: 11px;
+  }
+  .funnel-bar {
+    height: 22px;
+    background: var(--navy);
+    border-radius: 3px;
+    display: flex; align-items: center;
+    padding-left: 8px;
+    color: var(--bg-cream);
+    font-weight: 600;
+    font-size: 11px;
+  }
+  .funnel-bar.s2 { background: var(--gold); color: var(--navy); width: 75%; }
+  .funnel-bar.s3 { background: var(--teal); color: white; width: 50%; }
+  .funnel-bar.s4 { background: var(--amber); color: white; width: 30%; }
+  .funnel-bar.s5 { background: var(--success); color: white; width: 18%; }
+  .funnel-lbl {
+    width: 110px; color: var(--slate-2);
+    font-size: 11px;
+  }
+
+  /* REVISION DIFF */
+  .diff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .diff-side {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .diff-hd {
+    background: var(--bg-tint);
+    padding: 8px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--navy);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-soft);
+    display: flex; justify-content: space-between;
+  }
+  .diff-hd small { color: var(--slate-3); font-weight: 400; }
+  .diff-row {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 11px;
+    display: grid;
+    grid-template-columns: 30px 1fr 70px;
+    gap: 8px;
+    color: var(--slate);
+  }
+  .diff-row.added { background: rgba(45,106,92,0.08); }
+  .diff-row.added::before {
+    content: '+';
+    color: var(--success); font-weight: 700;
+    text-align: center;
+  }
+  .diff-row.removed { background: rgba(168,50,50,0.06); }
+  .diff-row.removed::before {
+    content: '−';
+    color: var(--danger); font-weight: 700;
+    text-align: center;
+  }
+  .diff-row.changed { background: rgba(196,123,42,0.06); }
+  .diff-row.changed::before {
+    content: '~';
+    color: var(--amber); font-weight: 700;
+    text-align: center;
+  }
+  .diff-row.unchanged::before { content: '·'; color: var(--slate-4); text-align: center; }
+  .diff-price { text-align: right; font-family: 'JetBrains Mono', monospace; }
+
+  /* TIME COMPARE */
+  .time-compare {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 32px;
+    align-items: center;
+    margin-top: 36px;
+  }
+  .time-side {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    text-align: center;
+  }
+  .time-side.before { background: var(--bg-tint); }
+  .time-l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--slate-3);
+    margin-bottom: 12px;
+  }
+  .time-before .time-l { color: var(--danger); }
+  .time-after .time-l { color: var(--success); }
+  .time-v {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 72px; font-weight: 500;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .time-side.after .time-v { color: var(--success); }
+  .time-u { font-size: 16px; color: var(--slate-3); }
+  .time-arrow {
+    font-size: 36px;
+    color: var(--gold);
+    text-align: center;
+  }
+
+  /* GRID OF 10 PILLARS */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-top: 36px;
+  }
+  .pillar {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    padding: 16px 14px;
+    border-radius: 4px;
+  }
+  .pillar-n {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.16em;
+    margin-bottom: 6px;
+  }
+  .pillar-t {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+
+  /* CONTACT BLOCK */
+  .closing {
+    text-align: center;
+  }
+  .closing h1 { text-align: center; margin: 0 auto 24px; }
+  .closing-card {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px 44px;
+    max-width: 560px;
+    margin: 36px auto 0;
+    text-align: left;
+    box-shadow: 0 18px 50px -18px rgba(10,22,40,0.15);
+  }
+  .closing-card .cl-l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-bottom: 8px;
+  }
+  .closing-card h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .closing-card p {
+    font-size: 14px;
+    color: var(--slate-2);
+    margin-bottom: 14px;
+  }
+  .closing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .cl-info { font-size: 13px; color: var(--slate); }
+  .cl-info strong {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; color: var(--slate-3);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 4px; font-weight: 600;
+  }
+
+  /* PILL TIMING */
+  .timing-pill {
+    position: absolute;
+    top: 60px; right: 64px;
+    background: var(--navy);
+    color: var(--gold-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 8px 14px;
+    border-radius: 30px;
+    letter-spacing: 0.12em;
+    display: flex; gap: 8px; align-items: center;
+    z-index: 4;
+  }
+  .timing-pill .dot {
+    width: 6px; height: 6px;
+    background: var(--gold-soft);
+    border-radius: 50%;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 0.4; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* HELPER */
+  .col { display: flex; flex-direction: column; gap: 14px; }
+  .row { display: flex; gap: 14px; align-items: stretch; }
+  .grow { flex: 1; }
+  .center { display: flex; align-items: center; justify-content: center; }
+  .mb-32 { margin-bottom: 32px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .layout-split { grid-template-columns: 1fr; gap: 32px; }
+    h1 { font-size: 44px; }
+    .cover-title { font-size: 56px; }
+    .slide { padding: 80px 32px; }
+    .frame-top { padding: 12px 18px; }
+    .app { grid-template-columns: 40px 160px 1fr; }
+    .app-side-r { display: none; }
+    .pillars { grid-template-columns: repeat(2, 1fr); }
+    .dash-grid { grid-template-columns: repeat(2, 1fr); }
+    .vertical-grid { grid-template-columns: 1fr !important; }
+    .kin-headline { font-size: 56px !important; }
+    .kin-final { font-size: 56px !important; }
+    .kin-stats { font-size: 18px !important; }
+    .kin-tools { font-size: 14px !important; }
+    .kin-warn { font-size: 38px !important; }
+  }
+
+  /* ============== KINETIC INTRO (Day in the Life) ============== */
+  .kinetic {
+    overflow: hidden;
+    background-color: var(--navy) !important;
+    background-image:
+      linear-gradient(rgba(184,146,76,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(184,146,76,0.05) 1px, transparent 1px) !important;
+  }
+  .kinetic::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 22% 30%, rgba(184,146,76,0.18) 0%, transparent 55%),
+      radial-gradient(circle at 78% 72%, rgba(45,106,92,0.16) 0%, transparent 55%),
+      radial-gradient(circle at 50% 50%, rgba(168,50,50,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .kinetic .slide-inner {
+    min-height: 72vh;
+    position: relative;
+  }
+  .kin {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: calc(100% - 64px);
+    max-width: 1100px;
+    padding: 0 32px;
+    text-align: center;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    color: var(--bg-cream);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .kin em { font-style: normal; color: var(--gold-soft); font-weight: 600; }
+  .kin .red { color: #f48f7d; font-weight: 600; }
+  .kin-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    letter-spacing: 0.36em;
+    color: var(--gold);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .kin-headline { font-size: 104px; line-height: 0.98; }
+  .kin-stats {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 30px;
+    letter-spacing: 0.14em;
+    color: var(--gold-soft);
+    font-weight: 500;
+  }
+  .kin-stats .sep { color: var(--gold); margin: 0 14px; }
+  .kin-stats .big { color: var(--bg-cream); font-size: 1.2em; }
+  .kin-tools {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    letter-spacing: 0.16em;
+    color: rgba(250,248,243,0.55);
+    font-weight: 400;
+  }
+  .kin-tools .strike { text-decoration: line-through; opacity: 0.55; }
+  .kin-tools .sep { color: var(--gold); margin: 0 10px; opacity: 0.6; }
+  .kin-warn { font-size: 64px; line-height: 1.04; }
+  .kin-final { font-size: 108px; line-height: 0.98; font-weight: 600; }
+  .kin-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    letter-spacing: 0.32em;
+    color: var(--gold-soft);
+    margin-top: 28px;
+    text-transform: uppercase;
+  }
+  .kin-skip {
+    position: absolute;
+    bottom: 90px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    color: var(--gold-soft);
+    opacity: 0;
+    text-transform: uppercase;
+    display: flex; gap: 10px; align-items: center;
+    z-index: 5;
+  }
+  .kin-skip i { animation: bounce 1.6s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0);} 50% { transform: translateY(4px); } }
+
+  @keyframes kinPass {
+    0%   { opacity: 0; transform: translate(-50%, calc(-50% + 22px)); }
+    13%  { opacity: 1; transform: translate(-50%, -50%); }
+    82%  { opacity: 1; transform: translate(-50%, -50%); }
+    100% { opacity: 0; transform: translate(-50%, calc(-50% - 22px)); }
+  }
+  @keyframes kinHold {
+    0%   { opacity: 0; transform: translate(-50%, calc(-50% + 24px)) scale(0.94); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  @keyframes kinSub {
+    0%   { opacity: 0; }
+    100% { opacity: 0.85; }
+  }
+
+  .kinetic.replay .kin-1 { animation: kinPass 1.7s 0.4s forwards; }
+  .kinetic.replay .kin-2 { animation: kinPass 1.7s 2.0s forwards; }
+  .kinetic.replay .kin-3 { animation: kinPass 1.9s 3.5s forwards; }
+  .kinetic.replay .kin-4 { animation: kinPass 1.9s 5.2s forwards; }
+  .kinetic.replay .kin-5 { animation: kinPass 1.9s 7.0s forwards; }
+  .kinetic.replay .kin-6 { animation: kinHold 1.3s 8.8s forwards; }
+  .kinetic.replay .kin-skip { animation: kinSub 0.6s 10.2s forwards; }
+
+  /* ============== VERTICAL VARIANTS GRID ============== */
+  .vertical-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 32px;
+  }
+  .vertical-card {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    box-shadow: 0 8px 22px -8px rgba(10,22,40,0.08);
+  }
+  .vertical-card-h {
+    display: grid;
+    grid-template-columns: 38px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .vc-icon {
+    width: 38px; height: 38px;
+    background: var(--gold-pale);
+    color: var(--gold);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+  .vc-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .vc-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+  .vertical-card .boq-table { font-size: 11px; }
+  .vertical-card .boq-table th { padding: 6px 8px; font-size: 9px; }
+  .vertical-card .boq-table td { padding: 8px 8px; font-size: 11.5px; }
+  .vertical-card .boq-table td:last-child {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .universal-footer {
+    margin-top: 28px;
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 18px 24px;
+    display: flex; gap: 18px; align-items: center;
+  }
+  .universal-footer .uf-i {
+    font-size: 26px; color: var(--gold);
+  }
+  .universal-footer .uf-t {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+    font-size: 15px;
+  }
+  .universal-footer .uf-d {
+    font-size: 13px;
+    color: var(--slate-2);
+    line-height: 1.5;
+  }
+
+  /* ============== MULTI-DOCUMENT INGESTION + UNDERSTANDING ============== */
+  .upload-file {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(184,146,76,0.2);
+    border-radius: 6px;
+    padding: 9px 12px;
+    margin-bottom: 7px;
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+  .upload-file i {
+    font-size: 18px;
+    color: var(--gold-soft);
+  }
+  .upload-file .uf-name {
+    font-size: 12px;
+    color: var(--bg-cream);
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .upload-file .uf-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(250,248,243,0.5);
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+  .classify-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 10px;
+    align-items: flex-start;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    padding: 9px 12px;
+    margin-bottom: 7px;
+  }
+  .cls-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    align-self: flex-start;
+  }
+  .cls-tender { background: rgba(168,50,50,0.28); color: #f4a094; }
+  .cls-scope  { background: rgba(37,99,235,0.28); color: #93b7ff; }
+  .cls-boq    { background: rgba(184,146,76,0.32); color: var(--gold-soft); }
+  .cls-draw   { background: rgba(45,106,92,0.32); color: #8acabe; }
+  .cls-spec   { background: rgba(109,58,171,0.32); color: #c9a1f0; }
+  .cls-email  { background: rgba(196,123,42,0.30); color: #f0a868; }
+  .cls-vendor { background: rgba(45,106,92,0.28); color: #8acabe; }
+  .cls-photo  { background: rgba(94,108,128,0.32); color: #c8d4e3; }
+  .cls-name {
+    font-size: 12px;
+    color: var(--bg-cream);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .cls-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(250,248,243,0.5);
+    letter-spacing: 0.08em;
+    margin-top: 3px;
+  }
+  .multi-center {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px;
+    text-align: center;
+    position: relative;
+  }
+  .multi-brain {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 6px 20px -6px rgba(184,146,76,0.6);
+  }
+  .multi-brain i { font-size: 16px; }
+  .multi-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+  }
+  .multi-arrows {
+    display: flex; flex-direction: column;
+    gap: 4px; color: var(--gold-soft);
+    font-size: 18px;
+    opacity: 0.6;
+  }
+  .multi-arrows i:nth-child(2) { animation: bounce 1.6s 0.3s infinite; }
+  .multi-arrows i:nth-child(3) { animation: bounce 1.6s 0.6s infinite; }
+
+  .insight-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .insight-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(184,146,76,0.3);
+    border-left: 3px solid var(--gold-soft);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .insight-h {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--gold-soft);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .insight-h i { font-size: 11px; }
+  .insight-card .insight-t {
+    font-size: 13px;
+    color: var(--bg-cream);
+    font-weight: 600;
+    margin-bottom: 4px;
+    line-height: 1.35;
+  }
+  .insight-card .insight-d {
+    font-size: 12px;
+    color: rgba(250,248,243,0.78);
+    line-height: 1.5;
+  }
+
+  /* ============== PRICING CASCADE ============== */
+  .price-cascade {
+    display: grid;
+    grid-template-columns: 1fr 22px 1fr 22px 1fr 22px 1fr 22px 1fr;
+    gap: 0;
+    align-items: stretch;
+    margin-top: 32px;
+  }
+  .price-source {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .price-source.featured {
+    border: 2px solid var(--gold);
+    box-shadow: 0 10px 30px -10px rgba(184,146,76,0.35);
+  }
+  .featured-ribbon {
+    position: absolute;
+    top: -10px; right: 12px;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+  .ps-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.16em;
+    margin-bottom: 8px;
+  }
+  .ps-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    margin-bottom: 10px;
+  }
+  .ps-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .ps-subname {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .ps-speed {
+    font-size: 9px;
+    padding: 2px 7px;
+    align-self: flex-start;
+    margin-bottom: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.08em;
+    border-radius: 3px;
+  }
+  .ps-desc {
+    font-size: 11.5px;
+    color: var(--slate-2);
+    line-height: 1.5;
+    margin-bottom: 10px;
+    flex-grow: 1;
+  }
+  .ps-eg {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: var(--slate-3);
+    line-height: 1.4;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .cascade-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 14px;
+  }
+  .price-output {
+    margin-top: 28px;
+    background: var(--navy);
+    color: var(--bg-cream);
+    border-radius: 8px;
+    padding: 22px 28px;
+  }
+  .po-line { display: flex; gap: 18px; align-items: center; }
+  .po-line > i { font-size: 26px; color: var(--gold-soft); }
+  .po-h { font-family: 'Bricolage Grotesque'; font-size: 17px; font-weight: 600; margin-bottom: 4px; color: var(--bg-cream); }
+  .po-d { font-size: 13px; color: rgba(250,248,243,0.78); line-height: 1.5; }
+
+  /* ============== AIKA + AIWA CHANNELS GRID ============== */
+  .channels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr 1fr;
+    gap: 22px;
+    margin-top: 30px;
+    align-items: stretch;
+  }
+  .channel { display: flex; flex-direction: column; }
+  .channel-h { text-align: center; margin-bottom: 14px; }
+  .channel-icon {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    margin: 0 auto 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .channel-name {
+    font-family: 'Bricolage Grotesque';
+    font-size: 17px; font-weight: 600;
+    color: var(--navy);
+  }
+  .channel-product {
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+  .channel-body {
+    background: var(--bg-paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 10px 28px -10px rgba(10,22,40,0.15);
+    overflow: hidden;
+    flex: 1;
+    display: flex; flex-direction: column;
+  }
+
+  /* WhatsApp */
+  .ch-hd-wa {
+    background: #075e54;
+    color: white;
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px;
+  }
+  .wa-avatar {
+    width: 30px; height: 30px;
+    background: #128c7e;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+  }
+  .wa-name { font-size: 12px; font-weight: 600; }
+  .wa-status { font-size: 9px; opacity: 0.75; }
+  .wa-conversation {
+    background: #efeae2;
+    padding: 12px;
+    flex: 1;
+    display: flex; flex-direction: column;
+    gap: 7px;
+    min-height: 280px;
+  }
+  .wa-msg {
+    max-width: 85%;
+    padding: 6px 9px 4px;
+    border-radius: 7px;
+    font-size: 10.5px;
+    line-height: 1.45;
+    color: #303030;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  }
+  .wa-out { background: #dcf8c6; align-self: flex-end; border-bottom-right-radius: 2px; }
+  .wa-in  { background: #fff;    align-self: flex-start; border-bottom-left-radius: 2px; }
+  .wa-time { font-size: 8.5px; color: #888; margin-left: 6px; display: inline-block; margin-top: 2px; }
+
+  /* Email mini */
+  .em-row {
+    padding: 7px 14px;
+    font-size: 11px;
+    color: var(--slate-2);
+    border-bottom: 1px solid var(--border-soft);
+    display: flex; gap: 8px;
+  }
+  .em-row .em-l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--slate-3);
+    letter-spacing: 0.1em;
+    width: 42px;
+    flex-shrink: 0;
+  }
+  .em-row strong { color: var(--navy); font-weight: 600; }
+  .em-body-mini {
+    padding: 12px 14px;
+    font-size: 11px;
+    color: var(--slate);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .em-body-mini p { margin-bottom: 6px; max-width: none; font-size: 11px; }
+  .em-body-mini ul { padding-left: 16px; margin-bottom: 6px; }
+  .em-body-mini ul li { font-size: 11px; margin-bottom: 2px; }
+  .em-reply {
+    background: var(--bg-tint);
+    padding: 10px 14px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .em-reply-h {
+    font-family: 'JetBrains Mono';
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--success);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .em-reply p { font-size: 11px; color: var(--slate); line-height: 1.45; margin: 0; max-width: none; }
+  .em-reply mark {
+    background: rgba(184,146,76,0.3);
+    padding: 1px 4px;
+    border-radius: 2px;
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  /* Voice */
+  .voice-mock {
+    background: linear-gradient(180deg, #0a1628 0%, #14233d 100%) !important;
+    color: var(--bg-cream);
+  }
+  .vc-call-hd {
+    padding: 14px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .vc-avatar {
+    width: 34px; height: 34px;
+    background: var(--gold);
+    color: var(--navy);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .vc-name { font-family: 'Bricolage Grotesque'; font-size: 13px; font-weight: 600; }
+  .vc-num { font-family: 'JetBrains Mono'; font-size: 9.5px; opacity: 0.65; margin-top: 2px; }
+  .vc-time {
+    font-family: 'JetBrains Mono';
+    font-size: 11px;
+    color: var(--gold-soft);
+    margin-left: auto;
+    background: rgba(184,146,76,0.15);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .vc-status {
+    text-align: center;
+    font-family: 'JetBrains Mono';
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: #f48f7d;
+    padding: 8px;
+    text-transform: uppercase;
+  }
+  .rec-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: #f44336;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: blink 1.4s infinite;
+  }
+  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity: 0.3; } }
+  .vc-transcript {
+    padding: 8px 12px;
+    flex: 1;
+    display: flex; flex-direction: column;
+    gap: 7px;
+  }
+  .vc-line {
+    font-size: 10px;
+    line-height: 1.45;
+    color: rgba(250,248,243,0.88);
+  }
+  .vc-speaker {
+    font-family: 'JetBrains Mono';
+    font-size: 8.5px;
+    letter-spacing: 0.1em;
+    padding: 2px 5px;
+    border-radius: 2px;
+    margin-right: 5px;
+    font-weight: 700;
+    display: inline-block;
+  }
+  .vc-speaker.aika { background: var(--gold); color: var(--navy); }
+  .vc-speaker.vendor { background: rgba(255,255,255,0.15); color: var(--bg-cream); }
+  .vc-foot {
+    font-family: 'JetBrains Mono';
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--gold-soft);
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 12px;
+    text-transform: uppercase;
+  }
+
+  /* Channels result strip */
+  .channels-result {
+    margin-top: 26px;
+    background: var(--navy);
+    color: var(--bg-cream);
+    border-radius: 8px;
+    padding: 20px 28px;
+    display: grid;
+    grid-template-columns: 1.4fr repeat(4, 1fr);
+    gap: 22px;
+    align-items: center;
+  }
+  .cr-h {
+    font-family: 'JetBrains Mono';
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .cr-t {
+    font-family: 'Bricolage Grotesque';
+    font-size: 16px; font-weight: 600;
+    color: var(--bg-cream);
+    line-height: 1.3;
+  }
+  .cr-kpi-l {
+    font-family: 'JetBrains Mono';
+    font-size: 9px;
+    color: rgba(250,248,243,0.6);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .cr-kpi-v {
+    font-family: 'Bricolage Grotesque';
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold-soft);
+  }
+
+  @media (max-width: 1100px) {
+    .price-cascade { grid-template-columns: 1fr; }
+    .cascade-arrow { transform: rotate(90deg); padding: 6px 0; }
+    .channels-grid { grid-template-columns: 1fr; }
+    .channels-result { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="frame-top">
+  <div class="frame-logo"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"></div>
+  <div class="frame-meta">
+    <span class="slide-counter"><span id="counter">01</span> / <span id="total">25</span></span>
+  </div>
+</div>
+
+<!-- ===================================================== -->
+<!-- SLIDE 00 — KINETIC INTRO (Day in the Life)             -->
+<!-- ===================================================== -->
+<section class="slide kinetic dark" data-step="00">
+  <div class="slide-inner">
+    <div class="kin kin-1 kin-eyebrow">09:00 · Monday Morning</div>
+    <div class="kin kin-2 kin-headline">A tender lands.</div>
+    <div class="kin kin-3 kin-stats"><span class="big">200</span> lines <span class="sep">·</span> <span class="big">5</span> vendors <span class="sep">·</span> <span class="big">3</span> days</div>
+    <div class="kin kin-4 kin-tools">Excel <span class="sep">·</span> Outlook <span class="sep">·</span> Word <span class="sep">·</span> SharePoint <span class="sep">·</span> WhatsApp <span class="sep">·</span> Phone</div>
+    <div class="kin kin-5 kin-warn">By Thursday — <span class="red">Rev 4. Exhausted.</span></div>
+    <div class="kin kin-6 kin-final">What if it took <em>one&nbsp;hour?</em>
+      <div class="kin-sub">⌘ The Presales Command Center</div>
+    </div>
+  </div>
+  <div class="kin-skip">scroll to begin <i class="fas fa-arrow-down"></i></div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 01 — COVER                                       -->
+<!-- ===================================================== -->
+<section class="slide" data-step="01">
+  <div class="cover-brand"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"></div>
+  <div class="cover-meta">
+    LIVE WALKTHROUGH<br>
+    15 JUNE 2026<br>
+    PREPARED BY CODEOX
+  </div>
+  <div class="slide-inner">
+    <div style="margin-bottom: 28px;" class="eyebrow"><span class="step-num">DEMO</span> The Presales Command Center</div>
+    <h1 class="cover-title">From tender to submission, in <em>under one hour.</em></h1>
+    <p class="cover-subtitle">Watch a presales engineer take a raw RFQ, generate the BOQ, build a quotation, and ship the full technical & commercial submission pack — all on a single screen.</p>
+    <div class="cover-chips">
+      <span class="cover-chip">AI-native</span>
+      <span class="cover-chip">Multi-ERP</span>
+      <span class="cover-chip">EN / AR Bilingual</span>
+      <span class="cover-chip">KSA-ready</span>
+      <span class="cover-chip">Mobile + Offline</span>
+    </div>
+  </div>
+  <div class="cover-author">
+    <span class="cover-author-label">Presenter</span>
+    <span class="cover-author-name">CodeOx · Software & AI Engineering</span>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 02 — THE PROMISE                                 -->
+<!-- ===================================================== -->
+<section class="slide alt" data-step="02">
+  <div class="slide-inner layout-stack">
+    <div class="eyebrow"><span class="step-num">THE PROMISE</span> What this product does, in four numbers</div>
+    <h1>One workspace. One hour. <em>One submission pack.</em></h1>
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 44px; width: 100%; max-width: 1100px;">
+      <div style="background: var(--bg-paper); border:1px solid var(--border); border-radius: 10px; padding: 32px 24px; text-align:center;">
+        <div style="font-family: 'Bricolage Grotesque'; font-size: 60px; font-weight: 600; color: var(--gold); line-height:1;">1<small style="font-size:24px;color:var(--slate-3);"> hour</small></div>
+        <div style="font-family: 'JetBrains Mono'; font-size: 10px; color: var(--slate-3); margin-top: 14px; letter-spacing:0.12em; text-transform: uppercase;">vs. 1–3 days today</div>
+      </div>
+      <div style="background: var(--bg-paper); border:1px solid var(--border); border-radius: 10px; padding: 32px 24px; text-align:center;">
+        <div style="font-family: 'Bricolage Grotesque'; font-size: 60px; font-weight: 600; color: var(--gold); line-height:1;">1<small style="font-size:24px;color:var(--slate-3);"> screen</small></div>
+        <div style="font-family: 'JetBrains Mono'; font-size: 10px; color: var(--slate-3); margin-top: 14px; letter-spacing:0.12em; text-transform: uppercase;">vs. 12+ tools today</div>
+      </div>
+      <div style="background: var(--bg-paper); border:1px solid var(--border); border-radius: 10px; padding: 32px 24px; text-align:center;">
+        <div style="font-family: 'Bricolage Grotesque'; font-size: 60px; font-weight: 600; color: var(--gold); line-height:1;">7</div>
+        <div style="font-family: 'JetBrains Mono'; font-size: 10px; color: var(--slate-3); margin-top: 14px; letter-spacing:0.12em; text-transform: uppercase;">documents generated, one click</div>
+      </div>
+      <div style="background: var(--bg-paper); border:1px solid var(--border); border-radius: 10px; padding: 32px 24px; text-align:center;">
+        <div style="font-family: 'Bricolage Grotesque'; font-size: 60px; font-weight: 600; color: var(--gold); line-height:1;">100%</div>
+        <div style="font-family: 'JetBrains Mono'; font-size: 10px; color: var(--slate-3); margin-top: 14px; letter-spacing:0.12em; text-transform: uppercase;">revision audit trail</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 03 — WORKFLOW MAP                                -->
+<!-- ===================================================== -->
+<section class="slide" data-step="03">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">THE WORKFLOW</span> The path from RFQ to PO</div>
+    <h2>The eight stages an engineer moves through — <em>without leaving the app.</em></h2>
+    <div class="flow">
+      <div class="flow-node"><div class="flow-circ"><i class="fas fa-inbox"></i></div><div class="flow-label">Tender Lands</div><div class="flow-sub">01 · INTAKE</div></div>
+      <div class="flow-node"><div class="flow-circ"><i class="fas fa-magnifying-glass-chart"></i></div><div class="flow-label">AI Extracts</div><div class="flow-sub">02 · PARSE</div></div>
+      <div class="flow-node"><div class="flow-circ"><i class="fas fa-table-cells"></i></div><div class="flow-label">BOQ Built</div><div class="flow-sub">03 · STRUCTURE</div></div>
+      <div class="flow-node"><div class="flow-circ"><i class="fas fa-tag"></i></div><div class="flow-label">Vendors Matched</div><div class="flow-sub">04 · PRICE</div></div>
+      <div class="flow-node"><div class="flow-circ"><i class="fas fa-wand-magic-sparkles"></i></div><div class="flow-label">AI Copilot</div><div class="flow-sub">05 · OPTIMIZE</div></div>
+      <div class="flow-node"><div class="flow-circ"><i class="fas fa-file-export"></i></div><div class="flow-label">Docs Generated</div><div class="flow-sub">06 · OUTPUT</div></div>
+      <div class="flow-node"><div class="flow-circ"><i class="fas fa-code-branch"></i></div><div class="flow-label">Revisions Tracked</div><div class="flow-sub">07 · ITERATE</div></div>
+      <div class="flow-node"><div class="flow-circ"><i class="fas fa-paper-plane"></i></div><div class="flow-label">Submitted</div><div class="flow-sub">08 · SHIP</div></div>
+    </div>
+    <p class="caption" style="margin-top:48px; text-align:center;">Every stage below is shown live in the following slides.</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 04 — BEFORE (THE PAIN)                           -->
+<!-- ===================================================== -->
+<section class="slide alt" data-step="04">
+  <div class="slide-inner layout-split">
+    <div>
+      <div class="eyebrow"><span class="step-num">BEFORE</span> The day you don't want</div>
+      <h2>Today, one quotation touches <em>12 tools and 8 hours.</em></h2>
+      <p class="lead">An engineer opens 12 browser tabs to build a single quotation. The senior engineer's vendor prices live in their head. SharePoint folders are version-numbered by humans. Each revision is a guess about what the previous one contained.</p>
+      <div style="margin-top:28px; display:flex; gap: 28px;">
+        <div>
+          <div style="font-family:'Bricolage Grotesque'; font-size:38px; font-weight:600; color: var(--danger);">8h</div>
+          <div style="font-size: 12px; color: var(--slate-3); font-family: 'JetBrains Mono'; letter-spacing: 0.1em; text-transform: uppercase;">avg. quote prep</div>
+        </div>
+        <div>
+          <div style="font-family:'Bricolage Grotesque'; font-size:38px; font-weight:600; color: var(--danger);">5</div>
+          <div style="font-size: 12px; color: var(--slate-3); font-family: 'JetBrains Mono'; letter-spacing: 0.1em; text-transform: uppercase;">avg. revisions / job</div>
+        </div>
+        <div>
+          <div style="font-family:'Bricolage Grotesque'; font-size:38px; font-weight:600; color: var(--danger);">~7%</div>
+          <div style="font-size: 12px; color: var(--slate-3); font-family: 'JetBrains Mono'; letter-spacing: 0.1em; text-transform: uppercase;">BOQ error rate</div>
+        </div>
+      </div>
+    </div>
+    <div class="tools-collage">
+      <div class="tool-icon ti-excel" style="--rot:-4deg;"><i class="fas fa-file-excel"></i><span class="tool-name">Excel</span></div>
+      <div class="tool-icon ti-outlook" style="--rot:3deg;"><i class="fas fa-envelope"></i><span class="tool-name">Outlook</span></div>
+      <div class="tool-icon ti-word" style="--rot:-2deg;"><i class="fas fa-file-word"></i><span class="tool-name">Word</span></div>
+      <div class="tool-icon ti-pdf" style="--rot:4deg;"><i class="fas fa-file-pdf"></i><span class="tool-name">PDFs</span></div>
+      <div class="tool-icon ti-sp" style="--rot:2deg;"><i class="fab fa-microsoft"></i><span class="tool-name">SharePoint</span></div>
+      <div class="tool-icon ti-whatsapp" style="--rot:-3deg;"><i class="fab fa-whatsapp"></i><span class="tool-name">WhatsApp</span></div>
+      <div class="tool-icon ti-folder" style="--rot:3deg;"><i class="fas fa-folder-open"></i><span class="tool-name">Shared drive</span></div>
+      <div class="tool-icon ti-phone" style="--rot:-4deg;"><i class="fas fa-phone"></i><span class="tool-name">Calls</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 05 — STEP 1: TENDER LANDS                        -->
+<!-- ===================================================== -->
+<section class="slide" data-step="05">
+  <div class="slide-inner layout-split">
+    <div>
+      <div class="eyebrow"><span class="step-num">STEP 01</span> Tender lands in the inbox</div>
+      <h2>The trigger: an email, a SharePoint drop, or a drag-drop.</h2>
+      <p class="lead">An RFQ arrives — usually as an email with PDFs, Excel BOQ, drawings, and a deadline. The Command Center watches the inbox you configure and pulls every tender automatically.</p>
+      <p class="caption">⏱ Engineer time: 0 minutes</p>
+    </div>
+    <div>
+      <div class="inbox">
+        <div class="inbox-hd"><i class="fas fa-inbox"></i> Presales Inbox · presales@wecaretech.com</div>
+        <div class="inbox-row new">
+          <i class="fas fa-circle"></i>
+          <span class="ir-from">Hitachi Energy KSA</span>
+          <span class="ir-subj">RFQ — Riyadh DC Phase 2 Networking & CCTV<span class="attach"><i class="fas fa-paperclip"></i> 4 files</span></span>
+          <span class="ir-time">09:42</span>
+        </div>
+        <div class="inbox-row">
+          <i class="fas fa-circle-check" style="color:var(--slate-4); font-size: 9px;"></i>
+          <span class="ir-from">Mafaheem Contracting</span>
+          <span class="ir-subj">Rev-3 quotation feedback</span>
+          <span class="ir-time">08:18</span>
+        </div>
+        <div class="inbox-row">
+          <i class="fas fa-circle-check" style="color:var(--slate-4); font-size: 9px;"></i>
+          <span class="ir-from">Site Technology</span>
+          <span class="ir-subj">Site visit confirmation — fiber project</span>
+          <span class="ir-time">Yesterday</span>
+        </div>
+        <div class="inbox-row">
+          <i class="fas fa-circle-check" style="color:var(--slate-4); font-size: 9px;"></i>
+          <span class="ir-from">ATMATA Rubber Factory</span>
+          <span class="ir-subj">PO confirmation — WCT-NS-2026-014-R02</span>
+          <span class="ir-time">Yesterday</span>
+        </div>
+        <div class="inbox-row">
+          <i class="fas fa-circle-check" style="color:var(--slate-4); font-size: 9px;"></i>
+          <span class="ir-from">Datwyler Middle East</span>
+          <span class="ir-subj">Updated pricelist — Q3 2026</span>
+          <span class="ir-time">2 days ago</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 06 — STEP 2: DROP THE PACKAGE                    -->
+<!-- ===================================================== -->
+<section class="slide alt" data-step="06">
+  <div class="slide-inner layout-split">
+    <div>
+      <div class="eyebrow"><span class="step-num">STEP 02</span> Drop everything you have</div>
+      <h2>Scope, BOQ, drawings, emails, instructions — <em>any mix, any format.</em></h2>
+      <p class="lead">RFQs are messy. Some engineers start with just a scope-of-work Word doc. Some start with the client's Excel BOQ. Most have a forwarded email, drawings, vendor pricelists, even photos. Drop everything. The AI figures out what each file is and what to do with it.</p>
+      <div style="margin-top: 18px; display: flex; gap: 22px; flex-wrap: wrap;">
+        <div><div style="font-family:'Bricolage Grotesque'; font-size:26px; font-weight:600; color: var(--navy);">9+</div><div style="font-size:11px; color: var(--slate-3); font-family:'JetBrains Mono'; letter-spacing: 0.1em; text-transform: uppercase;">file types supported</div></div>
+        <div><div style="font-family:'Bricolage Grotesque'; font-size:26px; font-weight:600; color: var(--navy);">EN + AR</div><div style="font-size:11px; color: var(--slate-3); font-family:'JetBrains Mono'; letter-spacing: 0.1em; text-transform: uppercase;">native, no translation step</div></div>
+        <div><div style="font-family:'Bricolage Grotesque'; font-size:26px; font-weight:600; color: var(--navy);">∞</div><div style="font-size:11px; color: var(--slate-3); font-family:'JetBrains Mono'; letter-spacing: 0.1em; text-transform: uppercase;">no upload size cap</div></div>
+      </div>
+      <p class="caption">⏱ Engineer time: 12 seconds · the messier, the better</p>
+    </div>
+    <div>
+      <div class="dropzone">
+        <i class="fas fa-cloud-arrow-up"></i>
+        <div class="dropzone-h">Drop your tender package</div>
+        <div class="dropzone-sub">PDF · Word · Excel · DWG · Image · Email · ZIP — EN or AR</div>
+        <div class="dropzone-files" style="max-width: 340px;">
+          <div class="drop-file">
+            <i class="fas fa-file-pdf"></i>
+            <span>RFQ-RYD-DC2.pdf</span>
+            <span class="file-size">4.2 MB · 47p</span>
+          </div>
+          <div class="drop-file">
+            <i class="fas fa-file-word"></i>
+            <span>Scope-of-Work.docx</span>
+            <span class="file-size">186 KB</span>
+          </div>
+          <div class="drop-file">
+            <i class="fas fa-file-excel"></i>
+            <span>BOQ_Template_client.xlsx</span>
+            <span class="file-size">218 KB</span>
+          </div>
+          <div class="drop-file">
+            <i class="fas fa-image"></i>
+            <span>floor-plans-RYDC2.dwg</span>
+            <span class="file-size">2.8 MB · 3 sheets</span>
+          </div>
+          <div class="drop-file">
+            <i class="fas fa-file-pdf"></i>
+            <span>Technical-spec-AR.pdf</span>
+            <span class="file-size">1.1 MB · AR</span>
+          </div>
+          <div class="drop-file">
+            <i class="fas fa-envelope"></i>
+            <span>RE-Inquiry-Hitachi.eml</span>
+            <span class="file-size">forwarded</span>
+          </div>
+          <div class="drop-file">
+            <i class="fas fa-file-pdf"></i>
+            <span>Datwyler-pricelist-Q3.pdf</span>
+            <span class="file-size">vendor</span>
+          </div>
+          <div class="drop-file">
+            <i class="fas fa-images"></i>
+            <span>site-photos.zip</span>
+            <span class="file-size">14 images</span>
+          </div>
+          <div class="drop-file">
+            <i class="fas fa-file-lines"></i>
+            <span>compliance-req.pdf</span>
+            <span class="file-size">8 pages</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 06b — MULTI-DOCUMENT UNDERSTANDING               -->
+<!-- ===================================================== -->
+<section class="slide dark" data-step="06b">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 03</span> Multi-document understanding</div>
+    <h2>The AI doesn't read one file. <em>It reads everything you dropped — and reasons across them.</em></h2>
+    <p class="lead" style="margin-bottom:28px;">Every file gets classified, parsed, and cross-checked against every other file. Scope says one thing, BOQ says another, drawing implies a third — the AI surfaces the conflicts before they cost you the bid.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 160px 1fr; gap: 24px; align-items: stretch;">
+      <!-- LEFT: uploaded files raw -->
+      <div>
+        <div style="font-family:'JetBrains Mono'; font-size:11px; color:var(--gold-soft); letter-spacing:0.16em; text-transform:uppercase; margin-bottom:14px; display:flex; gap:8px; align-items:center;">
+          <i class="fas fa-arrow-down-from-line"></i> Uploaded · 9 files · 4 formats
+        </div>
+        <div class="upload-file"><i class="fas fa-file-pdf"></i><div><div class="uf-name">RFQ-RYD-DC2.pdf</div><div class="uf-meta">47 pages · EN</div></div></div>
+        <div class="upload-file"><i class="fas fa-file-word"></i><div><div class="uf-name">Scope-of-Work.docx</div><div class="uf-meta">12 pages · EN</div></div></div>
+        <div class="upload-file"><i class="fas fa-file-excel"></i><div><div class="uf-name">BOQ_template_client.xlsx</div><div class="uf-meta">38 rows · partial</div></div></div>
+        <div class="upload-file"><i class="fas fa-image"></i><div><div class="uf-name">floor-plans.dwg</div><div class="uf-meta">3 sheets · CAD</div></div></div>
+        <div class="upload-file"><i class="fas fa-file-pdf"></i><div><div class="uf-name">tech-spec-AR.pdf</div><div class="uf-meta">22 pages · AR</div></div></div>
+        <div class="upload-file"><i class="fas fa-envelope"></i><div><div class="uf-name">RE_Inquiry.eml</div><div class="uf-meta">forwarded</div></div></div>
+        <div class="upload-file"><i class="fas fa-file-pdf"></i><div><div class="uf-name">Datwyler-pricelist.pdf</div><div class="uf-meta">vendor · Q3</div></div></div>
+        <div class="upload-file"><i class="fas fa-images"></i><div><div class="uf-name">site-photos.zip</div><div class="uf-meta">14 images</div></div></div>
+        <div class="upload-file"><i class="fas fa-file-lines"></i><div><div class="uf-name">compliance-req.pdf</div><div class="uf-meta">8 pages</div></div></div>
+      </div>
+
+      <!-- CENTER: AI reasoning -->
+      <div class="multi-center">
+        <div class="multi-arrows" style="margin-bottom:6px;"><i class="fas fa-arrow-right-long"></i><i class="fas fa-arrow-right-long"></i><i class="fas fa-arrow-right-long"></i></div>
+        <div class="multi-brain"><i class="fas fa-brain"></i> AI Reasoning</div>
+        <div class="multi-sub">Vision + LLM<br>Cross-Document</div>
+        <div style="font-size:10px; color: rgba(250,248,243,0.5); font-family:'JetBrains Mono'; letter-spacing:0.1em; margin-top:8px;">~22 seconds</div>
+        <div class="multi-arrows" style="margin-top:6px;"><i class="fas fa-arrow-right-long"></i><i class="fas fa-arrow-right-long"></i><i class="fas fa-arrow-right-long"></i></div>
+      </div>
+
+      <!-- RIGHT: classified output -->
+      <div>
+        <div style="font-family:'JetBrains Mono'; font-size:11px; color:var(--gold-soft); letter-spacing:0.16em; text-transform:uppercase; margin-bottom:14px; display:flex; gap:8px; align-items:center;">
+          <i class="fas fa-check-double"></i> Classified · Extracted · Indexed
+        </div>
+        <div class="classify-row">
+          <span class="cls-tag cls-tender">TENDER</span>
+          <div><div class="cls-name">Commercial terms, deadline (Thu), payment 30/50/20</div><div class="cls-meta">RFQ §1–3</div></div>
+        </div>
+        <div class="classify-row">
+          <span class="cls-tag cls-scope">SCOPE</span>
+          <div><div class="cls-name">3 floors + parking · 47 zones · 24/7 monitoring</div><div class="cls-meta">Scope-of-Work.docx</div></div>
+        </div>
+        <div class="classify-row">
+          <span class="cls-tag cls-boq">BOQ</span>
+          <div><div class="cls-name">38 line items, qty + spec extracted, gaps flagged</div><div class="cls-meta">Excel + RFQ §4 merged</div></div>
+        </div>
+        <div class="classify-row">
+          <span class="cls-tag cls-draw">DRAWING</span>
+          <div><div class="cls-name">Rack positions, cable routes, 60 outdoor mount points</div><div class="cls-meta">floor-plans.dwg</div></div>
+        </div>
+        <div class="classify-row">
+          <span class="cls-tag cls-spec">SPECS</span>
+          <div><div class="cls-name">PoE++, IK10, LSZH, IP66 — bilingual cross-checked</div><div class="cls-meta">tech-spec-AR · §3</div></div>
+        </div>
+        <div class="classify-row">
+          <span class="cls-tag cls-email">CONTEXT</span>
+          <div><div class="cls-name">PM contact, urgency tone, prior project ref</div><div class="cls-meta">.eml header + body</div></div>
+        </div>
+        <div class="classify-row">
+          <span class="cls-tag cls-vendor">PRICE</span>
+          <div><div class="cls-name">Updated Datwyler Q3 pricing auto-merged to catalog</div><div class="cls-meta">vendor pricelist</div></div>
+        </div>
+        <div class="classify-row">
+          <span class="cls-tag cls-photo">SITE</span>
+          <div><div class="cls-name">Existing cable trays, ceiling height, finish quality</div><div class="cls-meta">14 photos · GPS</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cross-document insights -->
+    <div style="margin-top: 28px;">
+      <div style="font-family:'JetBrains Mono'; font-size:11px; color: var(--gold); letter-spacing:0.18em; text-transform:uppercase; margin-bottom: 14px; display:flex; align-items:center; gap:10px;">
+        <i class="fas fa-link"></i> Cross-document insights — found by reasoning across files
+      </div>
+      <div class="insight-row">
+        <div class="insight-card">
+          <div class="insight-h"><i class="fas fa-triangle-exclamation"></i> Coverage gap</div>
+          <div class="insight-t">BOQ short by ~15 cameras.</div>
+          <div class="insight-d">Scope says all 3 floors + parking. BOQ has 45 cameras. Drawings show 60 outdoor mount points. Either upsell coverage or clarify with client.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-h"><i class="fas fa-circle-exclamation"></i> Spec conflict</div>
+          <div class="insight-t">PoE++ in RFQ, PoE+ in spec-AR.</div>
+          <div class="insight-d">RFQ §3.4 mandates 802.3bt (90W). Tech-spec-AR says 802.3at (30W). AI flagged for engineer to confirm with client before pricing.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-h"><i class="fas fa-clock"></i> Timeline risk</div>
+          <div class="insight-t">Lead-time = deadline.</div>
+          <div class="insight-d">Tender response deadline: Thursday. Datwyler Cat 6A lead time: 14 days. Mobilization needs early PO — auto-noted in proposal.</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="caption" style="margin-top: 24px; text-align: center;">⌘ Same logic if the engineer started with just a scope-of-work · or just a BOQ · or just an email</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 07 — STEP 3: AI READS                            -->
+<!-- ===================================================== -->
+<section class="slide dark" data-step="07">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 03</span> AI reads the tender — in seconds</div>
+    <h2>The vision model walks the PDF page by page. <em>Arabic and English, native.</em></h2>
+    <p class="lead" style="margin-bottom:36px;">Every line item, every clause, every spec sheet — extracted into structured records, with a confidence score and a source-page link for audit.</p>
+
+    <div style="display:grid; grid-template-columns: 1fr 80px 1.4fr; gap:24px; align-items:center;">
+      <div class="pdf-mock">
+        <div class="pdf-section">
+          <div class="pdf-h">Section 4 — Bill of Quantities</div>
+          <div class="pdf-line mid"></div>
+          <div class="pdf-line"></div>
+          <div class="pdf-line short"></div>
+        </div>
+        <div class="pdf-section">
+          <div class="pdf-line highlight"></div>
+          <div class="pdf-line highlight"></div>
+          <div class="pdf-line highlight"></div>
+          <div class="pdf-line highlight"></div>
+        </div>
+        <div class="pdf-section">
+          <div class="pdf-h">Section 5 — Technical Compliance</div>
+          <div class="pdf-line"></div>
+          <div class="pdf-line mid"></div>
+          <div class="pdf-line"></div>
+          <div class="pdf-line short"></div>
+        </div>
+      </div>
+      <div class="extract-arrow">
+        <i class="fas fa-arrow-right-long"></i>
+      </div>
+      <div style="background:var(--bg-paper); color: var(--slate); border-radius:8px; padding:18px;">
+        <table class="boq-table">
+          <thead>
+            <tr><th>#</th><th>Description</th><th>Qty</th><th>Unit</th><th>Conf.</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1.1</td><td>IP Camera, 4K, IR, IK10</td><td>45</td><td>EA</td><td><span class="badge badge-success">98%</span></td></tr>
+            <tr><td>1.2</td><td>Access Control, RFID + biometric</td><td>12</td><td>EA</td><td><span class="badge badge-success">96%</span></td></tr>
+            <tr><td>2.1</td><td>Network Switch, 48-port PoE+</td><td>8</td><td>EA</td><td><span class="badge badge-success">99%</span></td></tr>
+            <tr><td>2.2</td><td>UPS, 10kVA Online, Rack</td><td>3</td><td>EA</td><td><span class="badge badge-warn">82%</span></td></tr>
+            <tr><td>3.1</td><td>Cat 6A UTP Cable, LSZH</td><td>3,000</td><td>M</td><td><span class="badge badge-success">97%</span></td></tr>
+            <tr><td>3.2</td><td>Fiber Cable, SM 24-strand</td><td>1,200</td><td>M</td><td><span class="badge badge-success">95%</span></td></tr>
+            <tr><td>4.1</td><td>22U Rack Cabinet w/ accessories</td><td>4</td><td>EA</td><td><span class="badge badge-warn">88%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="caption" style="margin-top:32px;">⏱ Engineer time: 0 minutes · 38 lines extracted · 4 flagged for review</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 08 — STEP 4: BOQ WORKSPACE                       -->
+<!-- ===================================================== -->
+<section class="slide" data-step="08">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 04</span> The Command Center workspace</div>
+    <h2>One screen. Everything. <em>Live.</em></h2>
+
+    <div class="window" style="margin-top: 28px;">
+      <div class="window-bar">
+        <div class="window-dots"><div class="window-dot r"></div><div class="window-dot y"></div><div class="window-dot g"></div></div>
+        <div class="window-url"><i class="fas fa-lock"></i> app.commandcenter.sa / projects / RYD-DC2 / quote / R00</div>
+      </div>
+      <div class="window-body" style="padding: 0;">
+        <div class="app">
+          <div class="app-rail">
+            <div class="app-rail-logo">⌘</div>
+            <div class="app-rail-icon"><i class="fas fa-grip"></i></div>
+            <div class="app-rail-icon active"><i class="fas fa-file-lines"></i></div>
+            <div class="app-rail-icon"><i class="fas fa-folder"></i></div>
+            <div class="app-rail-icon"><i class="fas fa-users"></i></div>
+            <div class="app-rail-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="app-rail-icon" style="margin-top:auto;"><i class="fas fa-gear"></i></div>
+          </div>
+          <div class="app-side">
+            <div class="app-side-h">Input & Context</div>
+            <div class="app-side-item active"><i class="fas fa-envelope"></i> Customer Inquiry</div>
+            <div class="app-side-item"><i class="fas fa-arrow-up-from-bracket"></i> BOQ Upload</div>
+            <div class="app-side-item"><i class="fas fa-file-lines"></i> Tender Documents</div>
+            <div class="app-side-item"><i class="fas fa-clipboard-list"></i> RFQ Details</div>
+            <div class="app-side-item"><i class="fas fa-building"></i> Project Info</div>
+
+            <div class="app-side-h" style="margin-top:18px;">Documents</div>
+            <div class="app-side-item"><i class="fas fa-file-pdf"></i> RFQ-RYD-DC2.pdf</div>
+            <div class="app-side-item"><i class="fas fa-file-excel"></i> BOQ_Template.xlsx</div>
+            <div class="app-side-item"><i class="fas fa-image"></i> floor-plans.dwg</div>
+          </div>
+          <div class="app-main">
+            <div class="app-h-row">
+              <div class="app-title">Riyadh DC Phase 2 — Networking & CCTV<small>WCT-PRE-2026-018-R00 · Draft</small></div>
+              <div style="display:flex; gap:8px;">
+                <span class="btn"><i class="fas fa-code-branch"></i> R00</span>
+                <span class="btn"><i class="fas fa-share"></i> Share</span>
+                <span class="btn btn-gold"><i class="fas fa-bolt"></i> Generate Suite</span>
+              </div>
+            </div>
+            <table class="boq-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>Item</th><th>Brand</th><th>Qty</th><th>Unit Price</th><th>Total</th><th>Margin</th><th>Vendor</th><th>Lead</th><th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1.1</td><td>IP Camera 4K IR IK10</td><td>Axis P3277-LV</td><td>45</td><td>SAR 1,820</td><td>SAR 81,900</td><td><span style="color:var(--success);font-weight:600;">22%</span></td><td>Axis Direct</td><td>In stock</td><td><span class="badge badge-success">Verified</span></td></tr>
+                <tr><td>1.2</td><td>Access Control, RFID+Bio</td><td>HID Signo</td><td>12</td><td>SAR 1,300</td><td>SAR 15,600</td><td><span style="color:var(--amber);font-weight:600;">18%</span></td><td>HID KSA</td><td>2 weeks</td><td><span class="badge badge-warn">Pending</span></td></tr>
+                <tr class="row-highlight"><td>2.1</td><td>Network Switch 48-port PoE+</td><td>Cisco C9300</td><td>8</td><td>SAR 24,500</td><td>SAR 196,000</td><td><span style="color:var(--success);font-weight:600;">25%</span></td><td>Cisco Gold</td><td>4 weeks</td><td><span class="badge badge-info">Optimal</span></td></tr>
+                <tr><td>2.2</td><td>UPS 10kVA Online Rack</td><td>Vertiv Liebert</td><td>3</td><td>SAR 18,200</td><td>SAR 54,600</td><td><span style="color:var(--success);font-weight:600;">20%</span></td><td>Vertiv</td><td>1 week</td><td><span class="badge badge-success">Verified</span></td></tr>
+                <tr><td>3.1</td><td>Cat 6A UTP Cable LSZH</td><td>Datwyler</td><td>3,000</td><td>SAR 12.5</td><td>SAR 37,500</td><td><span style="color:var(--success);font-weight:600;">28%</span></td><td>Datwyler</td><td>1 week</td><td><span class="badge badge-success">Verified</span></td></tr>
+                <tr><td>3.2</td><td>Fiber SM 24-strand</td><td>Commscope</td><td>1,200</td><td>SAR 18.2</td><td>SAR 21,840</td><td><span style="color:var(--amber);font-weight:600;">15%</span></td><td>Commscope</td><td>4 weeks</td><td><span class="badge badge-warn">Review</span></td></tr>
+                <tr><td>4.1</td><td>22U Rack Cabinet</td><td>Toten</td><td>4</td><td>SAR 4,800</td><td>SAR 19,200</td><td><span style="color:var(--success);font-weight:600;">30%</span></td><td>Toten</td><td>In stock</td><td><span class="badge badge-success">Verified</span></td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid var(--border-soft);">
+              <div style="font-size:11px; color:var(--slate-3); font-family:'JetBrains Mono', monospace;">38 LINES · 7 SECTIONS</div>
+              <div style="display:flex; gap:18px; font-size:12px;">
+                <div><span style="color:var(--slate-3);">Subtotal:</span> <strong>SAR 426,640</strong></div>
+                <div><span style="color:var(--slate-3);">VAT 15%:</span> <strong>SAR 63,996</strong></div>
+                <div><span style="color:var(--slate-3);">Total:</span> <strong style="color:var(--gold);">SAR 490,636</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="app-side-r">
+            <div class="app-side-h">AI Presales Intelligence</div>
+            <div class="ai-card">
+              <div class="ai-card-h"><span class="ai-pill">AI</span><strong>Margin alert</strong></div>
+              <div class="ai-card-b">Line 3.2 fiber margin at 15% — below 18% benchmark. 2 alt vendors available.</div>
+            </div>
+            <div class="ai-card">
+              <div class="ai-card-h"><span class="ai-pill">AI</span><strong>Scope gap</strong></div>
+              <div class="ai-card-b">No patch panels or keystone modules included. Hitachi BOQ §4.7 requires them.</div>
+            </div>
+            <div class="ai-card">
+              <div class="ai-card-h"><span class="ai-pill">AI</span><strong>Compliance</strong></div>
+              <div class="ai-card-b">Cisco C9300 meets IEEE 802.3bt PoE++ spec. Compliance auto-verified.</div>
+            </div>
+            <div class="ai-card">
+              <div class="ai-card-h"><span class="ai-pill">AI</span><strong>Faster delivery?</strong></div>
+              <div class="ai-card-b">Aruba CX 6300 equivalent · 2-week lead vs 4. Margin +3%.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top: 22px;">⏱ 1 minute in. BOQ is live, margins are visible, AI is already coaching.</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 09 — STEP 5: CLARIFYING Q&A                      -->
+<!-- ===================================================== -->
+<section class="slide alt" data-step="09">
+  <div class="slide-inner layout-split">
+    <div>
+      <div class="eyebrow"><span class="step-num">STEP 05</span> Clarifying questions, contextual</div>
+      <h2>The copilot asks <em>only what it doesn't know.</em></h2>
+      <p class="lead">Site conditions, soil type, mounting, compliance level — the small details that change pricing. The AI asks them in plain language, the engineer answers in one tap. No long forms.</p>
+      <p class="caption">⏱ Engineer time: 90 seconds</p>
+    </div>
+    <div style="background: var(--bg-paper); border:1px solid var(--border); border-radius: 14px; padding: 22px; box-shadow: 0 14px 36px -10px rgba(10,22,40,0.15);">
+      <div style="font-family: 'JetBrains Mono'; font-size: 10px; color: var(--gold); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px;">⌘ COMMAND CENTER COPILOT</div>
+      <div class="chat-stack">
+        <div class="chat-row">
+          <div class="chat-avatar">AI</div>
+          <div class="chat-bubble">Is the fiber cable installed in soil, in conduit, or in a tray?</div>
+        </div>
+        <div class="chat-row right">
+          <div class="chat-bubble">Soil</div>
+          <div class="chat-avatar" style="background:var(--gold); color:var(--navy);">SA</div>
+        </div>
+        <div class="chat-row">
+          <div class="chat-avatar">AI</div>
+          <div class="chat-bubble">Got it. Is the soil rocky or typical?</div>
+        </div>
+        <div class="chat-row right">
+          <div class="chat-bubble">Rocky</div>
+          <div class="chat-avatar" style="background:var(--gold); color:var(--navy);">SA</div>
+        </div>
+        <div class="chat-row">
+          <div class="chat-avatar">AI</div>
+          <div class="chat-bubble">Added rock-cutting allowance (+SAR 12/m) and updated lead time. Anything else for the fiber section?</div>
+        </div>
+        <div class="chat-row right">
+          <div class="chat-bubble">All good</div>
+          <div class="chat-avatar" style="background:var(--gold); color:var(--navy);">SA</div>
+        </div>
+        <div class="chat-row">
+          <div class="chat-avatar">AI</div>
+          <div class="chat-bubble">BOQ updated. Next: confirm CCTV mounting height for cable allowance? <span style="font-size:10px;opacity:0.7;">Auto-detected from floor-plans</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 09b — PRICING CASCADE: WHERE THE PRICE COMES FROM -->
+<!-- ===================================================== -->
+<section class="slide" data-step="09b">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 06</span> Pricing intelligence — never one source</div>
+    <h2>Where does the price come from? <em>Five sources, in priority order.</em></h2>
+    <p class="lead">The AI tries each source until it gets a price with high enough confidence. Every quote line is stamped with its source, confidence score, and validity window. The engineer always sees the receipts.</p>
+
+    <div class="price-cascade">
+      <div class="price-source">
+        <div class="ps-num">01</div>
+        <div class="ps-icon" style="background: rgba(184,146,76,0.15); color: var(--gold);"><i class="fas fa-database"></i></div>
+        <div class="ps-name">Internal Catalog</div>
+        <span class="ps-speed badge-success">INSTANT</span>
+        <div class="ps-desc">Vendor pricelists you've imported. PDF / Excel auto-parsed. Validity dates tracked, expiries flagged.</div>
+        <div class="ps-eg">e.g. Datwyler Q3 pricelist, Cisco GPL, Vertiv KSA list</div>
+      </div>
+      <div class="cascade-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="price-source">
+        <div class="ps-num">02</div>
+        <div class="ps-icon" style="background: rgba(45,106,92,0.18); color: var(--teal);"><i class="fas fa-clock-rotate-left"></i></div>
+        <div class="ps-name">Past Quotations</div>
+        <span class="ps-speed badge-success">INSTANT</span>
+        <div class="ps-desc">Mined from your historical jobs. Time-decayed and inflation-adjusted. Shows last-paid + spread.</div>
+        <div class="ps-eg">e.g. "Same SKU sold to Mafaheem 6 months ago at SAR 12.10"</div>
+      </div>
+      <div class="cascade-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="price-source">
+        <div class="ps-num">03</div>
+        <div class="ps-icon" style="background: rgba(37,99,235,0.15); color: var(--info);"><i class="fas fa-plug-circle-bolt"></i></div>
+        <div class="ps-name">Distributor API</div>
+        <span class="ps-speed badge-info">SECONDS</span>
+        <div class="ps-desc">Live feeds from connected distributors with REST/EDI access. Stock + price + lead time.</div>
+        <div class="ps-eg">e.g. Ingram Micro, TD SYNNEX, Westcon, Redington, Mindware</div>
+      </div>
+      <div class="cascade-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="price-source featured">
+        <div class="featured-ribbon">CODEOX</div>
+        <div class="ps-num">04</div>
+        <div class="ps-icon" style="background: rgba(168,50,50,0.15); color: var(--danger);"><i class="fas fa-headset"></i></div>
+        <div class="ps-name">AIKA &amp; AIWA Outreach</div>
+        <div class="ps-subname">Voice · WhatsApp · Email</div>
+        <span class="ps-speed badge-warn">MINUTES</span>
+        <div class="ps-desc">When item isn't in catalog or price is stale, our voice agent (AIKA) and chat agent (AIWA) reach the vendor directly. Replies parsed automatically.</div>
+        <div class="ps-eg">SIP trunk · WhatsApp Business · Outlook / Gmail</div>
+      </div>
+      <div class="cascade-arrow"><i class="fas fa-arrow-right"></i></div>
+      <div class="price-source">
+        <div class="ps-num">05</div>
+        <div class="ps-icon" style="background: rgba(109,58,171,0.15); color: var(--purple);"><i class="fas fa-chart-line"></i></div>
+        <div class="ps-name">Benchmark Network</div>
+        <span class="ps-speed badge-success">INSTANT</span>
+        <div class="ps-desc">Opt-in. Anonymized cross-tenant pricing benchmarks. Used to sanity-check, never as primary source.</div>
+        <div class="ps-eg">"Peers paid SAR 22–25/m for this item over last 30 days"</div>
+      </div>
+    </div>
+
+    <div class="price-output">
+      <div class="po-line">
+        <i class="fas fa-tag"></i>
+        <div>
+          <div class="po-h">Every price stamped: source · confidence · validity · alternates ready</div>
+          <div class="po-d">The engineer can see exactly why SAR 12.50/m is on the BOQ. Catalog import 28 days ago? AIWA WhatsApp reply 2 hours ago? Past quotation from Mafaheem? All visible, all auditable, all replaceable in one click.</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="caption" style="margin-top: 18px; text-align: center;">⌘ The senior engineer's price knowledge — now permanent, queryable, and shared across the team</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 09c — AIKA & AIWA: THREE CHANNELS TO VENDORS     -->
+<!-- ===================================================== -->
+<section class="slide alt" data-step="09c">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 06+</span> AIKA &amp; AIWA · when not in catalog</div>
+    <h2>The agents reach every vendor — <em>voice, WhatsApp, email.</em></h2>
+    <p class="lead">CodeOx's existing voice agent <strong>AIKA</strong> connects to your SIP trunk and places real phone calls. <strong>AIWA</strong> talks to vendors on WhatsApp Business and email. All three channels write back into the same catalog, with parsed prices, lead times, and validity periods.</p>
+
+    <div class="channels-grid">
+      <!-- WHATSAPP via AIWA -->
+      <div class="channel">
+        <div class="channel-h">
+          <div class="channel-icon" style="background:rgba(37,211,102,0.16); color:#25d366;"><i class="fab fa-whatsapp"></i></div>
+          <div class="channel-name">WhatsApp Business</div>
+          <div class="channel-product">⌘ Powered by AIWA</div>
+        </div>
+        <div class="channel-body">
+          <div class="ch-hd-wa">
+            <div class="wa-avatar">D</div>
+            <div>
+              <div class="wa-name">Datwyler ME · Sales</div>
+              <div class="wa-status">online</div>
+            </div>
+            <i class="fas fa-phone" style="margin-left:auto;"></i>
+          </div>
+          <div class="wa-conversation">
+            <div class="wa-msg wa-out">RFQ — 3,000 m Cat 6A CU 7702 LSZH<br>Project: Riyadh DC Phase 2<br>Required on site: 30 Jul<br>Need best price + lead time 🙏<span class="wa-time">14:22 ✓✓</span></div>
+            <div class="wa-msg wa-in">Hi! Checking stock at Jeddah hub...<span class="wa-time">14:31</span></div>
+            <div class="wa-msg wa-in">SAR 12.50/m · 1 week ex Jeddah · 30 days validity. Send PI?<span class="wa-time">14:38</span></div>
+            <div class="wa-msg wa-out">Yes please, send PI. Shukran!<span class="wa-time">14:39 ✓✓</span></div>
+            <div class="wa-msg wa-in">📎 PI_Datwyler_3000m.pdf<span class="wa-time">14:42</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMAIL via AIWA -->
+      <div class="channel">
+        <div class="channel-h">
+          <div class="channel-icon" style="background:rgba(37,99,235,0.15); color:#2563eb;"><i class="fas fa-envelope"></i></div>
+          <div class="channel-name">Email</div>
+          <div class="channel-product">⌘ Powered by AIWA</div>
+        </div>
+        <div class="channel-body">
+          <div class="em-row"><span class="em-l">From</span><span>buyer@wecaretech.cc</span></div>
+          <div class="em-row"><span class="em-l">To</span><span>sales@datwyler-me.com</span></div>
+          <div class="em-row"><span class="em-l">Subj</span><span><strong>RFQ — Cat 6A 3000m Riyadh DC P2</strong></span></div>
+          <div class="em-body-mini">
+            <p>Dear Datwyler Team,</p>
+            <p>We're preparing a quote for Hitachi Energy's Riyadh DC Phase 2. Please confirm pricing and lead time for:</p>
+            <ul>
+              <li>3,000 m CU 7702 4P (Cat 6A LSZH)</li>
+              <li>Delivery to Riyadh</li>
+              <li>Required: 30 Jul 2026</li>
+            </ul>
+            <p>Best,<br>WeCare Presales <em style="color:var(--slate-3);">(AI-assisted)</em></p>
+          </div>
+          <div class="em-reply">
+            <div class="em-reply-h">▼ VENDOR REPLY · 2h LATER · PARSED</div>
+            <p>Confirmed: <mark>SAR 12.50/m · 1 wk lead · 30 days validity.</mark> Proforma invoice attached. 10% advance, balance on delivery.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VOICE via AIKA -->
+      <div class="channel">
+        <div class="channel-h">
+          <div class="channel-icon" style="background:rgba(168,50,50,0.15); color:#a83232;"><i class="fas fa-phone-volume"></i></div>
+          <div class="channel-name">Voice Call (SIP)</div>
+          <div class="channel-product">⌘ Powered by AIKA</div>
+        </div>
+        <div class="channel-body voice-mock">
+          <div class="vc-call-hd">
+            <div class="vc-avatar">C</div>
+            <div>
+              <div class="vc-name">Cisco Saudi · Sales</div>
+              <div class="vc-num">+966 11 234 5678</div>
+            </div>
+            <div class="vc-time">03:24</div>
+          </div>
+          <div class="vc-status"><span class="rec-dot"></span> Live · Transcribing</div>
+          <div class="vc-transcript">
+            <div class="vc-line"><span class="vc-speaker aika">AIKA</span>Hi, this is AIKA from WeCare Tech. May I get pricing for 8 × Cisco C9300-48UXM for a Riyadh project?</div>
+            <div class="vc-line"><span class="vc-speaker vendor">Vendor</span>Sure, one moment...</div>
+            <div class="vc-line"><span class="vc-speaker vendor">Vendor</span>8 units, SAR 24,500 each, 4-week lead from Dubai.</div>
+            <div class="vc-line"><span class="vc-speaker aika">AIKA</span>Thank you. Could you also send the offer by email for our records?</div>
+            <div class="vc-line"><span class="vc-speaker vendor">Vendor</span>Yes, sending now.</div>
+            <div class="vc-line"><span class="vc-speaker aika">AIKA</span>Appreciated. Validity 30 days?</div>
+            <div class="vc-line"><span class="vc-speaker vendor">Vendor</span>30 days, confirmed.</div>
+          </div>
+          <div class="vc-foot">⌘ SIP TRUNK · TRANSCRIPT SAVED</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results strip -->
+    <div class="channels-result">
+      <div>
+        <div class="cr-h">⌘ Parsed by AIKA + AIWA · merged into one catalog entry</div>
+        <div class="cr-t">3 channels · 3 vendors · 1 catalog row updated · 1 BOQ line populated.</div>
+      </div>
+      <div>
+        <div class="cr-kpi-l">Datwyler</div>
+        <div class="cr-kpi-v">SAR 12.50/m</div>
+      </div>
+      <div>
+        <div class="cr-kpi-l">Lead time</div>
+        <div class="cr-kpi-v">1 week</div>
+      </div>
+      <div>
+        <div class="cr-kpi-l">Cisco quote</div>
+        <div class="cr-kpi-v">24,500 ea</div>
+      </div>
+      <div>
+        <div class="cr-kpi-l">Confidence</div>
+        <div class="cr-kpi-v">98%</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+      <div style="background: var(--bg-paper); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px;">
+        <div style="font-family: 'JetBrains Mono'; font-size: 10px; color: var(--gold); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 4px;"><i class="fas fa-language"></i> Bilingual outreach</div>
+        <div style="font-size: 12px; color: var(--slate-2); line-height: 1.5;">AIWA writes Arabic to Saudi vendors, English to international ones. AIKA speaks both — auto-detected per number.</div>
+      </div>
+      <div style="background: var(--bg-paper); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px;">
+        <div style="font-family: 'JetBrains Mono'; font-size: 10px; color: var(--gold); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 4px;"><i class="fas fa-shield-halved"></i> Approval gate</div>
+        <div style="font-size: 12px; color: var(--slate-2); line-height: 1.5;">Engineer can require approval before any outreach. Or set auto-send for trusted vendors and trusted item categories.</div>
+      </div>
+      <div style="background: var(--bg-paper); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px;">
+        <div style="font-family: 'JetBrains Mono'; font-size: 10px; color: var(--gold); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 4px;"><i class="fas fa-recycle"></i> Reusable</div>
+        <div style="font-size: 12px; color: var(--slate-2); line-height: 1.5;">Same AIKA + AIWA infrastructure can later handle customer support, lead qualification, AMC renewals. One platform, many use cases.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 10 — STEP 6: VENDOR INTELLIGENCE                 -->
+<!-- ===================================================== -->
+<section class="slide" data-step="10">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 06</span> Vendor intelligence on every line</div>
+    <h2>Every item shows <em>every vendor</em> — current price, lead time, compatibility.</h2>
+    <p class="lead">No more "let me ask the senior engineer". The platform's vendor catalog is auto-built from your past quotations and the vendor pricelists you import. Validity dates and lead times are live.</p>
+
+    <div style="margin-top: 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+      <!-- Vendor cards for one line item -->
+      <div style="background:var(--bg-paper); border:1px solid var(--border); border-radius:8px; padding:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div style="font-family:'Bricolage Grotesque'; font-weight:600; font-size:15px; color:var(--navy);">Cisco Catalyst 9300</div>
+          <span class="badge badge-success">Preferred</span>
+        </div>
+        <div style="font-size:12px; color:var(--slate-3); margin-bottom:14px;">via Cisco Gold Partner KSA</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Unit Price</div><div style="font-weight:600; font-size:15px; color:var(--navy);">SAR 24,500</div></div>
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Margin</div><div style="font-weight:600; font-size:15px; color:var(--success);">25%</div></div>
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Lead Time</div><div style="font-weight:600; font-size:15px; color:var(--slate);">4 weeks</div></div>
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Price Valid</div><div style="font-weight:600; font-size:15px; color:var(--slate);">28 days</div></div>
+        </div>
+      </div>
+      <div style="background:var(--bg-paper); border:1px solid var(--border); border-radius:8px; padding:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div style="font-family:'Bricolage Grotesque'; font-weight:600; font-size:15px; color:var(--navy);">Aruba CX 6300</div>
+          <span class="badge badge-info">Faster</span>
+        </div>
+        <div style="font-size:12px; color:var(--slate-3); margin-bottom:14px;">via Aruba Saudi Distributor</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Unit Price</div><div style="font-weight:600; font-size:15px; color:var(--navy);">SAR 22,800</div></div>
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Margin</div><div style="font-weight:600; font-size:15px; color:var(--success);">28%</div></div>
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Lead Time</div><div style="font-weight:600; font-size:15px; color:var(--success);">2 weeks</div></div>
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Price Valid</div><div style="font-weight:600; font-size:15px; color:var(--slate);">45 days</div></div>
+        </div>
+      </div>
+      <div style="background:var(--bg-paper); border:1px solid var(--border); border-radius:8px; padding:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div style="font-family:'Bricolage Grotesque'; font-weight:600; font-size:15px; color:var(--navy);">Huawei S6730</div>
+          <span class="badge badge-mute">Alternate</span>
+        </div>
+        <div style="font-size:12px; color:var(--slate-3); margin-bottom:14px;">via Huawei Enterprise KSA</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Unit Price</div><div style="font-weight:600; font-size:15px; color:var(--navy);">SAR 19,400</div></div>
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Margin</div><div style="font-weight:600; font-size:15px; color:var(--success);">31%</div></div>
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Lead Time</div><div style="font-weight:600; font-size:15px; color:var(--slate);">3 weeks</div></div>
+          <div><div style="font-size:10px; color:var(--slate-3); font-family:'JetBrains Mono'; text-transform:uppercase;">Status</div><div style="font-weight:600; font-size:13px; color:var(--amber);">Spec mismatch</div></div>
+        </div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top:32px; text-align:center;">⌘ Switch vendor on any line — margins, lead times, and totals recalculate live.</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 10b — UNIVERSAL · ANY VERTICAL                    -->
+<!-- ===================================================== -->
+<section class="slide" data-step="10b">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">UNIVERSAL</span> Same workflow. Any vertical.</div>
+    <h2>The Command Center is built for <em>any BOQ-driven business.</em></h2>
+    <p class="lead">Swap the product catalog and document templates — the workflow re-applies instantly. Below: the same BOQ workspace, rendered for four KSA verticals where the presales pain is identical.</p>
+
+    <div class="vertical-grid">
+      <!-- ICT / DC -->
+      <div class="vertical-card">
+        <div class="vertical-card-h">
+          <div class="vc-icon"><i class="fas fa-server"></i></div>
+          <div>
+            <div class="vc-tag">ICT / DATA CENTRE</div>
+            <div class="vc-title">Networking · CCTV · Fiber · DC Fit-Out</div>
+          </div>
+          <span class="badge badge-success">Anchor — WeCare</span>
+        </div>
+        <table class="boq-table">
+          <thead><tr><th>Item</th><th>Brand</th><th>Qty</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>IP Camera 4K IR IK10</td><td>Axis P3277-LV</td><td>45</td><td>SAR 81,900</td></tr>
+            <tr><td>Switch 48-port PoE+</td><td>Cisco C9300</td><td>8</td><td>SAR 196,000</td></tr>
+            <tr><td>UPS 10kVA Online</td><td>Vertiv Liebert</td><td>3</td><td>SAR 54,600</td></tr>
+            <tr><td>Cat 6A UTP LSZH</td><td>Datwyler 7702</td><td>3,000 m</td><td>SAR 37,500</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MEP -->
+      <div class="vertical-card">
+        <div class="vertical-card-h">
+          <div class="vc-icon"><i class="fas fa-fan"></i></div>
+          <div>
+            <div class="vc-tag">MEP CONTRACTING</div>
+            <div class="vc-title">HVAC · Electrical · Plumbing · Fire</div>
+          </div>
+          <span class="badge badge-info">Phase 2</span>
+        </div>
+        <table class="boq-table">
+          <thead><tr><th>Item</th><th>Brand</th><th>Qty</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>Chiller 200TR Air-Cooled</td><td>Carrier 30XA</td><td>2</td><td>SAR 1,840,000</td></tr>
+            <tr><td>AHU 10,000 CFM VFD</td><td>Daikin Skyair</td><td>6</td><td>SAR 412,000</td></tr>
+            <tr><td>Chilled Water Pump 50m³/h</td><td>Grundfos NB80</td><td>4</td><td>SAR 168,000</td></tr>
+            <tr><td>LV Panel 1600A</td><td>Schneider Prisma</td><td>1</td><td>SAR 92,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Solar EPC -->
+      <div class="vertical-card">
+        <div class="vertical-card-h">
+          <div class="vc-icon"><i class="fas fa-solar-panel"></i></div>
+          <div>
+            <div class="vc-tag">SOLAR EPC</div>
+            <div class="vc-title">PV · Inverters · Racking · BoS</div>
+          </div>
+          <span class="badge badge-info">Phase 3</span>
+        </div>
+        <table class="boq-table">
+          <thead><tr><th>Item</th><th>Brand</th><th>Qty</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>PV Module Mono 550W</td><td>Jinko Tiger Neo</td><td>4,800</td><td>SAR 3,144,000</td></tr>
+            <tr><td>String Inverter 75kW</td><td>Huawei SUN2000</td><td>36</td><td>SAR 612,000</td></tr>
+            <tr><td>Racking Ground-Mount</td><td>NEXTracker NX</td><td>120 str.</td><td>SAR 280,000</td></tr>
+            <tr><td>DC Cable 6mm² Solar</td><td>Top Cable PV-1F</td><td>12,000 m</td><td>SAR 78,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- AV / Smart Building -->
+      <div class="vertical-card">
+        <div class="vertical-card-h">
+          <div class="vc-icon"><i class="fas fa-display"></i></div>
+          <div>
+            <div class="vc-tag">AV / SMART BUILDING</div>
+            <div class="vc-title">Displays · Control · Audio · Conferencing</div>
+          </div>
+          <span class="badge badge-info">Phase 3</span>
+        </div>
+        <table class="boq-table">
+          <thead><tr><th>Item</th><th>Brand</th><th>Qty</th><th>Total</th></tr></thead>
+          <tbody>
+            <tr><td>4K Interactive Display 86"</td><td>Samsung WAC</td><td>12</td><td>SAR 312,000</td></tr>
+            <tr><td>Video Codec UC Pro</td><td>Crestron UC-MMX30</td><td>12</td><td>SAR 218,400</td></tr>
+            <tr><td>Ceiling Mic Array</td><td>Shure MXA920</td><td>12</td><td>SAR 156,000</td></tr>
+            <tr><td>Control Processor</td><td>Crestron RMC4</td><td>12</td><td>SAR 92,400</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="universal-footer">
+      <i class="fas fa-arrows-left-right-to-line uf-i"></i>
+      <div>
+        <div class="uf-t">The workflow is identical across all four verticals.</div>
+        <div class="uf-d">BOQ ingestion → AI extraction → Catalog match → Margin overlay → Document generation → Revisions → Submission. Only the <strong>catalog</strong> and <strong>templates</strong> change per industry. Onboarding a new vertical = a vendor catalog import and a branded template pack.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 11 — STEP 7: MARGIN GAUGE                        -->
+<!-- ===================================================== -->
+<section class="slide alt" data-step="11">
+  <div class="slide-inner layout-split">
+    <div>
+      <div class="eyebrow"><span class="step-num">STEP 07</span> Profitability is no longer post-mortem</div>
+      <h2>Live margin. Per line. <em>And total.</em></h2>
+      <p class="lead">A real-time gauge sits beside the BOQ. Move a vendor — the gauge moves. Add a line — the gauge moves. Compare against the historical benchmark for similar jobs.</p>
+      <p class="caption">⏱ Saves managers ~3 days per won job in post-deal reconciliation</p>
+    </div>
+    <div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div style="background:var(--bg-paper); border:1px solid var(--border); border-radius: 12px; padding: 28px 20px; text-align:center;">
+          <div style="font-family:'JetBrains Mono'; font-size: 10px; color: var(--slate-3); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 16px;">Current Quote Margin</div>
+          <div class="gauge">
+            <div class="gauge-ring">
+              <div class="gauge-inner">
+                <div class="gauge-val">22%</div>
+                <div class="gauge-lbl">Healthy</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 12px; color:var(--slate-2); margin-top: 18px;">SAR 426,640 base · SAR 93,861 gross margin</div>
+        </div>
+        <div style="background:var(--bg-paper); border:1px solid var(--border); border-radius: 12px; padding: 28px 20px; text-align:center;">
+          <div style="font-family:'JetBrains Mono'; font-size: 10px; color: var(--slate-3); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 16px;">Historical Benchmark</div>
+          <div class="gauge">
+            <div class="gauge-ring" style="background:conic-gradient(var(--slate-3) 0deg 65deg, var(--bg-tint) 65deg 360deg);">
+              <div class="gauge-inner">
+                <div class="gauge-val" style="color:var(--slate-3);">18%</div>
+                <div class="gauge-lbl">Similar jobs</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size: 12px; color:var(--slate-2); margin-top: 18px;">Avg. across 14 networking + CCTV jobs since Jan 2026</div>
+        </div>
+      </div>
+      <div style="margin-top: 22px; background: var(--navy); color: var(--bg-cream); padding: 16px 20px; border-radius: 8px; display:flex; gap: 14px; align-items:center;">
+        <i class="fas fa-trophy" style="color: var(--gold-soft); font-size:18px;"></i>
+        <div>
+          <div style="font-size:13px; font-weight:600;">Win probability: High</div>
+          <div style="font-size:11px; color: rgba(250,248,243,0.7);">Margin healthy, lead times reasonable, full compliance — 78% projected win.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 12 — STEP 8: COPILOT SUGGESTIONS                 -->
+<!-- ===================================================== -->
+<section class="slide" data-step="12">
+  <div class="slide-inner layout-split">
+    <div>
+      <div class="eyebrow"><span class="step-num">STEP 08</span> The senior engineer in everyone's ear</div>
+      <h2>Copilot suggestions — <em>proactive, not waiting to be asked.</em></h2>
+      <p class="lead">The AI watches the BOQ as it is built. It notices missing scope, suggests upsell, surfaces cheaper or faster alternatives, and flags compliance risk before the quote leaves the building.</p>
+      <p class="caption">⏱ Each suggestion = up to 4 hours of "what did we forget" debugging later</p>
+    </div>
+    <div>
+      <div class="ai-card" style="border-left-color: var(--success);">
+        <div class="ai-card-h"><span class="ai-pill" style="background: var(--success);">SCOPE</span><strong>Missing: patch panels & keystones</strong></div>
+        <div class="ai-card-b">RFQ §4.7 requires 24-port patch panels per rack and keystone modules per camera. Not currently in BOQ. Estimated value: SAR 18,400.</div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-card-h"><span class="ai-pill">VENDOR</span><strong>Aruba CX 6300 is 2 weeks faster</strong></div>
+        <div class="ai-card-b">Same spec compliance as Cisco C9300, SAR 1,700 cheaper per unit, lead time 2 weeks vs 4. Margin +3%.</div>
+      </div>
+      <div class="ai-card" style="border-left-color: var(--amber);">
+        <div class="ai-card-h"><span class="ai-pill" style="background:var(--amber);">RISK</span><strong>Fiber margin below benchmark</strong></div>
+        <div class="ai-card-b">Line 3.2 at 15% vs 18% benchmark. Local Saudi supplier "FOSC" offers SM 24-strand at 12% lower with 1-week delivery.</div>
+      </div>
+      <div class="ai-card" style="border-left-color: var(--info);">
+        <div class="ai-card-h"><span class="ai-pill" style="background:var(--info);">UPSELL</span><strong>Suggest service line: AMC</strong></div>
+        <div class="ai-card-b">Client has 4 prior DC jobs. 3 of 4 attached annual maintenance contracts (15% of CAPEX). Suggest adding AMC line: SAR ~73,600/year.</div>
+      </div>
+      <div class="ai-card" style="border-left-color: var(--purple);">
+        <div class="ai-card-h"><span class="ai-pill" style="background:var(--purple);">COMPLIANCE</span><strong>Tender clause 6.2.3 — SAR-only quote</strong></div>
+        <div class="ai-card-b">Hitachi requires SAR-only pricing with VAT separated. Auto-applied. ZATCA QR ready for invoicing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 13 — STEP 9: MAKE SLD                            -->
+<!-- ===================================================== -->
+<section class="slide dark" data-step="13">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 09</span> One click — Make SLD</div>
+    <h2>Single Line Diagram. <em>Engineer-grade.</em> From the BOQ.</h2>
+    <p class="lead" style="margin-bottom:24px;">The system reads the network and power BOQ items, derives topology, and renders a clean SLD. Editable. Annotation-ready. Exportable as PDF, DWG, or SVG.</p>
+
+    <div style="display:grid; grid-template-columns: 280px 1fr; gap: 28px; align-items: center;">
+      <div>
+        <div style="background: var(--gold); color: var(--navy); padding: 18px 22px; border-radius:8px; font-family:'Bricolage Grotesque'; font-size:18px; font-weight:600; display:flex; align-items:center; gap:12px; box-shadow: 0 8px 24px -6px rgba(184,146,76,0.5);">
+          <i class="fas fa-bolt"></i> Make SLD
+        </div>
+        <div style="margin-top:18px; background: rgba(255,255,255,0.05); padding: 14px 16px; border-radius:6px; border-left:3px solid var(--gold-soft);">
+          <div style="font-size:11px; color: var(--gold-soft); font-family:'JetBrains Mono'; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom:6px;">⏱ 18 seconds</div>
+          <div style="font-size:14px; color: var(--bg-cream); line-height:1.5;">From button click to a finished diagram. Re-runs in 4s after any BOQ edit.</div>
+        </div>
+        <ul style="margin-top:22px; padding-left: 18px; font-size: 13px; color: rgba(250,248,243,0.8); line-height: 1.8;">
+          <li>Auto-derived topology</li>
+          <li>Current & wattage tags</li>
+          <li>Editable in canvas</li>
+          <li>PDF / DWG / SVG export</li>
+        </ul>
+      </div>
+      <div class="sld-mock" style="height: 420px;">
+        <svg viewBox="0 0 720 380" style="width:100%; height:100%;" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L0,8 L6,4 z" fill="#0a1628"/>
+            </marker>
+          </defs>
+          <!-- Utility -->
+          <g>
+            <circle cx="80" cy="60" r="22" fill="#fff" stroke="#b8924c" stroke-width="2.5"/>
+            <text x="80" y="65" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" font-weight="700" fill="#0a1628">UTILITY</text>
+            <text x="80" y="100" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6b7480">SEC Grid · 400V</text>
+          </g>
+          <line x1="80" y1="82" x2="80" y2="140" stroke="#0a1628" stroke-width="2" marker-end="url(#arr)"/>
+          <!-- MDB -->
+          <g>
+            <rect x="40" y="140" width="80" height="50" fill="#fff" stroke="#0a1628" stroke-width="2" rx="3"/>
+            <text x="80" y="158" text-anchor="middle" font-family="Bricolage Grotesque" font-size="11" font-weight="700" fill="#0a1628">MDB</text>
+            <text x="80" y="174" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#6b7480">100A 4P</text>
+          </g>
+          <line x1="80" y1="190" x2="80" y2="220" stroke="#0a1628" stroke-width="1.5"/>
+          <line x1="80" y1="220" x2="640" y2="220" stroke="#0a1628" stroke-width="1.5"/>
+          <!-- Branches -->
+          <line x1="170" y1="220" x2="170" y2="260" stroke="#0a1628" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="330" y1="220" x2="330" y2="260" stroke="#0a1628" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="490" y1="220" x2="490" y2="260" stroke="#0a1628" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="640" y1="220" x2="640" y2="260" stroke="#0a1628" stroke-width="1.5" marker-end="url(#arr)"/>
+          <!-- UPS -->
+          <g>
+            <rect x="125" y="260" width="90" height="42" fill="#f0e3c4" stroke="#b8924c" stroke-width="2" rx="3"/>
+            <text x="170" y="278" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" font-weight="700" fill="#0a1628">UPS 10kVA</text>
+            <text x="170" y="293" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#6b7480">Vertiv · 3 units</text>
+          </g>
+          <!-- Network rack -->
+          <g>
+            <rect x="285" y="260" width="90" height="42" fill="#fff" stroke="#0a1628" stroke-width="2" rx="3"/>
+            <text x="330" y="278" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" font-weight="700" fill="#0a1628">NET RACK</text>
+            <text x="330" y="293" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#6b7480">22U · 4 cabinets</text>
+          </g>
+          <!-- CCTV -->
+          <g>
+            <rect x="445" y="260" width="90" height="42" fill="#fff" stroke="#0a1628" stroke-width="2" rx="3"/>
+            <text x="490" y="278" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" font-weight="700" fill="#0a1628">CCTV PoE</text>
+            <text x="490" y="293" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#6b7480">45 cams · 720W</text>
+          </g>
+          <!-- Access -->
+          <g>
+            <rect x="595" y="260" width="90" height="42" fill="#fff" stroke="#0a1628" stroke-width="2" rx="3"/>
+            <text x="640" y="278" text-anchor="middle" font-family="Bricolage Grotesque" font-size="10" font-weight="700" fill="#0a1628">ACCESS</text>
+            <text x="640" y="293" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#6b7480">12 doors</text>
+          </g>
+          <!-- DBs -->
+          <line x1="170" y1="302" x2="170" y2="335" stroke="#0a1628" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="330" y1="302" x2="330" y2="335" stroke="#0a1628" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="490" y1="302" x2="490" y2="335" stroke="#0a1628" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line x1="640" y1="302" x2="640" y2="335" stroke="#0a1628" stroke-width="1.5" marker-end="url(#arr)"/>
+          <g>
+            <rect x="138" y="335" width="64" height="32" fill="#fff" stroke="#475569" stroke-width="1.5" rx="2"/>
+            <text x="170" y="355" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#1a1f36">DC LOADS</text>
+          </g>
+          <g>
+            <rect x="298" y="335" width="64" height="32" fill="#fff" stroke="#475569" stroke-width="1.5" rx="2"/>
+            <text x="330" y="355" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#1a1f36">SWITCHES</text>
+          </g>
+          <g>
+            <rect x="458" y="335" width="64" height="32" fill="#fff" stroke="#475569" stroke-width="1.5" rx="2"/>
+            <text x="490" y="355" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#1a1f36">CAMS</text>
+          </g>
+          <g>
+            <rect x="608" y="335" width="64" height="32" fill="#fff" stroke="#475569" stroke-width="1.5" rx="2"/>
+            <text x="640" y="355" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#1a1f36">READERS</text>
+          </g>
+          <!-- Title -->
+          <text x="360" y="30" text-anchor="middle" font-family="Bricolage Grotesque" font-size="14" font-weight="600" fill="#0a1628">SINGLE LINE DIAGRAM — Riyadh DC Phase 2</text>
+          <text x="360" y="48" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#6b7480">Generated automatically from BOQ · WCT-PRE-2026-018-R00</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 14 — STEP 10: MAKE METHOD OF STATEMENT           -->
+<!-- ===================================================== -->
+<section class="slide" data-step="14">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 10</span> One click — Make Method of Statement</div>
+    <h2>A complete MoS. <em>Drafted, formatted, branded.</em></h2>
+
+    <div style="display:grid; grid-template-columns: 280px 1fr; gap: 28px; align-items: center; margin-top: 18px;">
+      <div>
+        <div style="background: var(--navy); color: var(--bg-cream); padding: 18px 22px; border-radius:8px; font-family:'Bricolage Grotesque'; font-size:18px; font-weight:600; display:flex; align-items:center; gap:12px;">
+          <i class="fas fa-clipboard-list" style="color:var(--gold-soft);"></i> Make Method of Statement
+        </div>
+        <ul style="margin-top:22px; padding-left: 18px; font-size: 13.5px; color: var(--slate-2); line-height: 1.85;">
+          <li>Scope of works</li>
+          <li>Site mobilization plan</li>
+          <li>Tools & equipment list</li>
+          <li>Safety / HSE protocol</li>
+          <li>Step-by-step installation procedure</li>
+          <li>Quality assurance & testing plan</li>
+          <li>Handover checklist</li>
+        </ul>
+        <div style="margin-top: 22px; background: var(--gold-pale); border-left: 3px solid var(--gold); padding: 12px 14px; font-size: 12px; color: var(--navy);">
+          <strong>Output:</strong> Word (.docx) or PDF · EN or AR · WeCare-branded
+        </div>
+      </div>
+      <div class="doc-mock">
+        <div class="doc-corner">MoS · v1</div>
+        <div class="doc-h1">Method of Statement</div>
+        <div class="doc-meta">PROJECT: RIYADH DC PHASE 2 · CLIENT: HITACHI ENERGY · REF: WCT-MOS-2026-018 · 15 JUN 2026</div>
+        <div class="doc-section">
+          <div class="doc-section-h">Scope of Works</div>
+          <div class="doc-line"></div>
+          <div class="doc-line mid"></div>
+          <div class="doc-line short"></div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-h">Site Mobilization</div>
+          <div class="doc-line mid"></div>
+          <div class="doc-line"></div>
+          <div class="doc-line short"></div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-h">Tools & Equipment</div>
+          <div class="doc-line"></div>
+          <div class="doc-line short"></div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-h">Safety & HSE</div>
+          <div class="doc-line"></div>
+          <div class="doc-line mid"></div>
+          <div class="doc-line short"></div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-h">Installation Procedure</div>
+          <div class="doc-line mid"></div>
+          <div class="doc-line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 15 — STEP 11: MAKE TECHNICAL REPORT              -->
+<!-- ===================================================== -->
+<section class="slide alt" data-step="15">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 11</span> One click — Make Technical Report</div>
+    <h2>The full technical proposal. <em>Cover to datasheet.</em></h2>
+
+    <div style="display:grid; grid-template-columns: 280px 1fr; gap: 28px; align-items: center; margin-top: 18px;">
+      <div>
+        <div style="background: var(--navy); color: var(--bg-cream); padding: 18px 22px; border-radius:8px; font-family:'Bricolage Grotesque'; font-size:18px; font-weight:600; display:flex; align-items:center; gap:12px;">
+          <i class="fas fa-file-lines" style="color:var(--gold-soft);"></i> Make Technical Report
+        </div>
+        <ul style="margin-top:22px; padding-left: 18px; font-size: 13.5px; color: var(--slate-2); line-height: 1.85;">
+          <li>Cover & client introduction</li>
+          <li>Executive summary</li>
+          <li>Solution architecture</li>
+          <li>Detailed scope &  approach</li>
+          <li>Technical specifications</li>
+          <li>Vendor datasheets attached</li>
+          <li>Project team & responsibilities</li>
+          <li>References & past projects</li>
+        </ul>
+        <div style="margin-top: 22px; background: var(--gold-pale); border-left: 3px solid var(--gold); padding: 12px 14px; font-size: 12px; color: var(--navy);">
+          <strong>Output:</strong> Word (.docx) with embedded SLD + datasheets · 25–60 pages typical
+        </div>
+      </div>
+      <div class="doc-mock" style="height: 460px;">
+        <div class="doc-corner">TECH PROPOSAL</div>
+        <div style="background: var(--navy); color: var(--bg-cream); margin: -28px -32px 20px; padding: 22px 32px; display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <div style="font-family:'JetBrains Mono'; font-size:10px; color:var(--gold-soft); letter-spacing:0.12em;">TECHNICAL PROPOSAL · CONFIDENTIAL</div>
+            <div style="font-family:'Bricolage Grotesque'; font-size:22px; font-weight:600; margin-top:6px;">Riyadh Data Centre Phase 2</div>
+            <div style="font-size:12px; color: rgba(250,248,243,0.7); margin-top:4px;">Networking & CCTV Infrastructure</div>
+          </div>
+          <div style="font-family:'JetBrains Mono'; font-size:10px; color:var(--gold-soft); text-align:right;">CLIENT<br><span style="color:var(--bg-cream); font-size:13px;">HITACHI ENERGY KSA</span></div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-h">Executive Summary</div>
+          <div class="doc-line mid"></div>
+          <div class="doc-line"></div>
+          <div class="doc-line short"></div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-h">Solution Architecture</div>
+          <div style="background: var(--bg-tint); border-radius:4px; padding: 14px; height: 70px; display:flex; align-items:center; justify-content:center;">
+            <svg viewBox="0 0 240 60" style="width:100%; height: 100%;">
+              <rect x="10" y="22" width="40" height="18" fill="#fff" stroke="#0a1628" stroke-width="1" rx="2"/>
+              <text x="30" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#0a1628">MDB</text>
+              <line x1="50" y1="31" x2="80" y2="31" stroke="#0a1628" stroke-width="1"/>
+              <rect x="80" y="22" width="40" height="18" fill="#f0e3c4" stroke="#b8924c" stroke-width="1" rx="2"/>
+              <text x="100" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#0a1628">UPS</text>
+              <line x1="120" y1="31" x2="150" y2="31" stroke="#0a1628" stroke-width="1"/>
+              <rect x="150" y="22" width="40" height="18" fill="#fff" stroke="#0a1628" stroke-width="1" rx="2"/>
+              <text x="170" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="7" fill="#0a1628">RACK</text>
+              <line x1="190" y1="31" x2="220" y2="31" stroke="#0a1628" stroke-width="1"/>
+              <rect x="220" y="22" width="20" height="18" fill="#fff" stroke="#0a1628" stroke-width="1" rx="2"/>
+            </svg>
+          </div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-h">Detailed Scope</div>
+          <div class="doc-line"></div>
+          <div class="doc-line mid"></div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-h">Technical Specifications</div>
+          <div class="doc-line short"></div>
+          <div class="doc-line mid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 16 — STEP 12: COMPLIANCE MATRIX                  -->
+<!-- ===================================================== -->
+<section class="slide" data-step="16">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 12</span> One click — Make Compliance Matrix</div>
+    <h2>Clause by clause. <em>Defensible. Auditable.</em></h2>
+    <p class="lead">The #1 cause of tender disqualification is missing or vague compliance answers. The system reads every tender clause, matches against the proposed BOQ, and renders a per-clause response with reference to source documents.</p>
+
+    <div style="margin-top: 32px; background: var(--bg-paper); border: 1px solid var(--border); border-radius: 8px; padding: 22px; box-shadow: 0 14px 36px -10px rgba(10,22,40,0.1);">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th style="width:90px;">Clause</th>
+            <th style="width:280px;">Requirement</th>
+            <th style="width:80px;">Status</th>
+            <th>Response</th>
+            <th style="width:100px;">Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="comp-clause">3.2.1</span></td>
+            <td>IP cameras must be 4K, IK10 rated, with IR illumination</td>
+            <td><span class="comp-icon yes"><i class="fas fa-check"></i></span> <span style="font-size:10px;color:var(--success);font-weight:600;">COMPLY</span></td>
+            <td>Axis P3277-LV. 4K @ 30fps, IK10, integrated IR up to 40m. Datasheet attached.</td>
+            <td><span style="font-family:'JetBrains Mono';font-size:10px;color:var(--info);">BOQ §1.1</span></td>
+          </tr>
+          <tr>
+            <td><span class="comp-clause">3.4.7</span></td>
+            <td>Network switches must support 802.3bt PoE++ (90W per port)</td>
+            <td><span class="comp-icon yes"><i class="fas fa-check"></i></span> <span style="font-size:10px;color:var(--success);font-weight:600;">COMPLY</span></td>
+            <td>Cisco C9300-48UXM. 802.3bt PoE++ supported on all 48 ports.</td>
+            <td><span style="font-family:'JetBrains Mono';font-size:10px;color:var(--info);">BOQ §2.1</span></td>
+          </tr>
+          <tr>
+            <td><span class="comp-clause">4.1.2</span></td>
+            <td>Cat 6A cable to be LSZH-jacketed, supporting 10G up to 100m</td>
+            <td><span class="comp-icon yes"><i class="fas fa-check"></i></span> <span style="font-size:10px;color:var(--success);font-weight:600;">COMPLY</span></td>
+            <td>Datwyler CU 7702 4P. LSZH. 10GBASE-T verified to 100m.</td>
+            <td><span style="font-family:'JetBrains Mono';font-size:10px;color:var(--info);">BOQ §3.1</span></td>
+          </tr>
+          <tr>
+            <td><span class="comp-clause">4.3.5</span></td>
+            <td>Fiber cable to be SM with mechanical and rodent protection for soil burial</td>
+            <td><span class="comp-icon partial"><i class="fas fa-circle-exclamation"></i></span> <span style="font-size:10px;color:var(--amber);font-weight:600;">PARTIAL</span></td>
+            <td>Commscope SM 24-strand armored. Rodent protection upgrade quoted as optional (+SAR 1.8/m).</td>
+            <td><span style="font-family:'JetBrains Mono';font-size:10px;color:var(--info);">BOQ §3.2</span></td>
+          </tr>
+          <tr>
+            <td><span class="comp-clause">5.2.1</span></td>
+            <td>UPS to provide minimum 15 minutes runtime at full load</td>
+            <td><span class="comp-icon yes"><i class="fas fa-check"></i></span> <span style="font-size:10px;color:var(--success);font-weight:600;">COMPLY</span></td>
+            <td>Vertiv Liebert APS 10kVA. 18 min full load with extended battery cabinet.</td>
+            <td><span style="font-family:'JetBrains Mono';font-size:10px;color:var(--info);">BOQ §2.2</span></td>
+          </tr>
+          <tr>
+            <td><span class="comp-clause">7.1.3</span></td>
+            <td>All pricing to be SAR-only, VAT separately stated, ZATCA-compliant</td>
+            <td><span class="comp-icon yes"><i class="fas fa-check"></i></span> <span style="font-size:10px;color:var(--success);font-weight:600;">COMPLY</span></td>
+            <td>Quotation issued in SAR. VAT 15% listed separately. ZATCA Phase 2 QR included.</td>
+            <td><span style="font-family:'JetBrains Mono';font-size:10px;color:var(--info);">Quote PDF</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption" style="margin-top:24px; text-align:center;">⏱ 42 clauses processed in 22 seconds · Each row clickable → opens source page in tender PDF</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 17 — STEP 13: PROJECT TIMELINE                   -->
+<!-- ===================================================== -->
+<section class="slide alt" data-step="17">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 13</span> One click — Project Timeline</div>
+    <h2>A Gantt that's grounded in <em>real vendor lead times.</em></h2>
+    <p class="lead">The system uses each line item's lead time + standard install duration per category to build a defensible schedule. Editable, exportable to MS Project / Primavera, and shown to the client as a Gantt.</p>
+
+    <div class="gantt" style="margin-top: 32px;">
+      <div class="gantt-row header">
+        <div></div>
+        <div class="gantt-weeks">
+          <span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span>
+        </div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Mobilization</div>
+        <div class="gantt-bar-track"><div class="gantt-bar navy" style="left:0%; width:14%;">Site setup</div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Procurement</div>
+        <div class="gantt-bar-track"><div class="gantt-bar amber" style="left:8%; width:32%;">Vendor POs · lead times</div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Cabling — UTP</div>
+        <div class="gantt-bar-track"><div class="gantt-bar gold" style="left:25%; width:22%;">Pulling & termination</div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Cabling — Fiber</div>
+        <div class="gantt-bar-track"><div class="gantt-bar gold" style="left:32%; width:20%;">Trenching & splicing</div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Active Eqpt Install</div>
+        <div class="gantt-bar-track"><div class="gantt-bar teal" style="left:48%; width:16%;">Switch & UPS rack-mount</div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">CCTV Install</div>
+        <div class="gantt-bar-track"><div class="gantt-bar teal" style="left:54%; width:18%;">Camera mount & config</div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Access Control</div>
+        <div class="gantt-bar-track"><div class="gantt-bar teal" style="left:58%; width:14%;">Readers & controllers</div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Testing & Comm.</div>
+        <div class="gantt-bar-track"><div class="gantt-bar amber" style="left:72%; width:18%;">Fluke / functional</div></div>
+      </div>
+      <div class="gantt-row">
+        <div class="gantt-label">Handover</div>
+        <div class="gantt-bar-track"><div class="gantt-bar navy" style="left:88%; width:12%;">Docs & training</div></div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top: 24px; text-align:center;">⌘ Drag any bar to re-time. Dependencies recompute automatically.</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 18 — STEP 14: GENERATE PRESENTATION              -->
+<!-- ===================================================== -->
+<section class="slide" data-step="18">
+  <div class="slide-inner layout-split">
+    <div>
+      <div class="eyebrow"><span class="step-num">STEP 14</span> One click — Generate Presentation</div>
+      <h2>Client-ready slide deck. <em>Branded. Bilingual.</em></h2>
+      <p class="lead">For the final client pitch meeting, the system builds a 10–15 slide presentation: cover, scope, solution architecture, timeline, references, team, commercial summary, next steps. Editable PPTX or PDF.</p>
+      <p class="caption">⏱ 24 seconds end-to-end · WeCare branding applied</p>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+      <!-- Mini slides -->
+      <div style="background:var(--navy); color:var(--bg-cream); border-radius:6px; padding:18px; aspect-ratio:16/10; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 8px 20px -6px rgba(10,22,40,0.3);">
+        <div style="font-family:'JetBrains Mono'; font-size:8px; color:var(--gold-soft); letter-spacing:0.16em;">01 · COVER</div>
+        <div>
+          <div style="font-family:'Bricolage Grotesque'; font-size:18px; font-weight:500; line-height:1;">Riyadh DC Phase 2</div>
+          <div style="font-size:10px; color:var(--gold-soft); margin-top:6px;">Networking & CCTV Proposal</div>
+        </div>
+      </div>
+      <div style="background:var(--bg-paper); border:1px solid var(--border); border-radius:6px; padding:14px; aspect-ratio:16/10; box-shadow:0 8px 20px -6px rgba(10,22,40,0.1);">
+        <div style="font-family:'JetBrains Mono'; font-size:8px; color:var(--gold); letter-spacing:0.16em; margin-bottom:6px;">02 · SCOPE</div>
+        <div style="font-family:'Bricolage Grotesque'; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:8px;">Project Scope</div>
+        <div class="doc-line" style="height:3px;"></div>
+        <div class="doc-line short" style="height:3px;"></div>
+        <div class="doc-line mid" style="height:3px;"></div>
+        <div class="doc-line" style="height:3px;"></div>
+      </div>
+      <div style="background:var(--bg-paper); border:1px solid var(--border); border-radius:6px; padding:14px; aspect-ratio:16/10; box-shadow:0 8px 20px -6px rgba(10,22,40,0.1);">
+        <div style="font-family:'JetBrains Mono'; font-size:8px; color:var(--gold); letter-spacing:0.16em; margin-bottom:6px;">03 · ARCHITECTURE</div>
+        <div style="font-family:'Bricolage Grotesque'; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:6px;">Solution Diagram</div>
+        <svg viewBox="0 0 200 50" style="width:100%;">
+          <rect x="10" y="18" width="34" height="14" fill="#fff" stroke="#0a1628" rx="2"/>
+          <line x1="44" y1="25" x2="70" y2="25" stroke="#0a1628"/>
+          <rect x="70" y="18" width="34" height="14" fill="#f0e3c4" stroke="#b8924c" rx="2"/>
+          <line x1="104" y1="25" x2="130" y2="25" stroke="#0a1628"/>
+          <rect x="130" y="18" width="34" height="14" fill="#fff" stroke="#0a1628" rx="2"/>
+          <line x1="164" y1="25" x2="190" y2="25" stroke="#0a1628"/>
+        </svg>
+      </div>
+      <div style="background:var(--bg-paper); border:1px solid var(--border); border-radius:6px; padding:14px; aspect-ratio:16/10; box-shadow:0 8px 20px -6px rgba(10,22,40,0.1);">
+        <div style="font-family:'JetBrains Mono'; font-size:8px; color:var(--gold); letter-spacing:0.16em; margin-bottom:6px;">04 · TIMELINE</div>
+        <div style="font-family:'Bricolage Grotesque'; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:8px;">Schedule</div>
+        <div style="height:5px; background:var(--gold); width:30%; margin-bottom:3px; border-radius:2px;"></div>
+        <div style="height:5px; background:var(--amber); width:50%; margin-bottom:3px; border-radius:2px;"></div>
+        <div style="height:5px; background:var(--teal); width:70%; margin-bottom:3px; border-radius:2px;"></div>
+        <div style="height:5px; background:var(--navy); width:90%; border-radius:2px;"></div>
+      </div>
+      <div style="background:var(--bg-paper); border:1px solid var(--border); border-radius:6px; padding:14px; aspect-ratio:16/10; box-shadow:0 8px 20px -6px rgba(10,22,40,0.1);">
+        <div style="font-family:'JetBrains Mono'; font-size:8px; color:var(--gold); letter-spacing:0.16em; margin-bottom:6px;">05 · COMMERCIAL</div>
+        <div style="font-family:'Bricolage Grotesque'; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:8px;">Pricing</div>
+        <div style="font-family:'Bricolage Grotesque'; font-size:20px; font-weight:600; color:var(--gold);">SAR 490,636</div>
+        <div style="font-size:9px; color:var(--slate-3); font-family:'JetBrains Mono';">incl. VAT 15%</div>
+      </div>
+      <div style="background:var(--navy); color:var(--bg-cream); border-radius:6px; padding:14px; aspect-ratio:16/10; display:flex; flex-direction:column; justify-content:center; align-items:center; box-shadow:0 8px 20px -6px rgba(10,22,40,0.3);">
+        <div style="font-family:'JetBrains Mono'; font-size:8px; color:var(--gold-soft); letter-spacing:0.16em; margin-bottom:8px;">+10 MORE SLIDES</div>
+        <div style="font-family:'Bricolage Grotesque'; font-size:14px; font-weight:500;">Team · References · Q&A · Thank You</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 19 — STEP 15: REVISION DIFF                      -->
+<!-- ===================================================== -->
+<section class="slide dark" data-step="19">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 15</span> Every revision, tracked & diff-able</div>
+    <h2>R03 → R04. <em>What actually changed?</em></h2>
+    <p class="lead" style="margin-bottom:24px;">Every revision is a locked, immutable snapshot. Open any two side-by-side. See what was added, removed, or repriced. A mandatory reason is captured at revision creation.</p>
+
+    <div class="diff">
+      <div class="diff-side">
+        <div class="diff-hd">R03 — 12 Jun 2026 <small>Total: SAR 462,750</small></div>
+        <div class="diff-row unchanged"><span class="comp-clause">1.1</span><span>IP Camera 4K · 45 EA</span><span class="diff-price">81,900</span></div>
+        <div class="diff-row removed"><span class="comp-clause">1.2</span><span>Access Control · 10 EA (basic)</span><span class="diff-price">11,500</span></div>
+        <div class="diff-row unchanged"><span class="comp-clause">2.1</span><span>Network Switch · 8 EA</span><span class="diff-price">196,000</span></div>
+        <div class="diff-row unchanged"><span class="comp-clause">2.2</span><span>UPS 10kVA · 3 EA</span><span class="diff-price">54,600</span></div>
+        <div class="diff-row changed"><span class="comp-clause">3.1</span><span>Cat 6A · 2,800 m</span><span class="diff-price">35,000</span></div>
+        <div class="diff-row unchanged"><span class="comp-clause">3.2</span><span>Fiber SM 24str · 1,200 m</span><span class="diff-price">21,840</span></div>
+        <div class="diff-row unchanged"><span class="comp-clause">4.1</span><span>22U Rack · 4 EA</span><span class="diff-price">19,200</span></div>
+      </div>
+      <div class="diff-side">
+        <div class="diff-hd">R04 — 15 Jun 2026 <small style="color:var(--gold-soft);">Active · SAR 490,636</small></div>
+        <div class="diff-row unchanged"><span class="comp-clause">1.1</span><span>IP Camera 4K · 45 EA</span><span class="diff-price">81,900</span></div>
+        <div class="diff-row added"><span class="comp-clause">1.2</span><span>Access Control RFID+Bio · 12 EA</span><span class="diff-price">15,600</span></div>
+        <div class="diff-row unchanged"><span class="comp-clause">2.1</span><span>Network Switch · 8 EA</span><span class="diff-price">196,000</span></div>
+        <div class="diff-row unchanged"><span class="comp-clause">2.2</span><span>UPS 10kVA · 3 EA</span><span class="diff-price">54,600</span></div>
+        <div class="diff-row changed"><span class="comp-clause">3.1</span><span>Cat 6A · 3,000 m</span><span class="diff-price">37,500</span></div>
+        <div class="diff-row unchanged"><span class="comp-clause">3.2</span><span>Fiber SM 24str · 1,200 m</span><span class="diff-price">21,840</span></div>
+        <div class="diff-row unchanged"><span class="comp-clause">4.1</span><span>22U Rack · 4 EA</span><span class="diff-price">19,200</span></div>
+      </div>
+    </div>
+    <div style="margin-top: 20px; background: rgba(255,255,255,0.05); padding: 14px 18px; border-radius:6px; font-size: 13px; color: rgba(250,248,243,0.85); border-left: 3px solid var(--gold-soft);">
+      <strong style="color: var(--gold-soft); font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;">Change Reason · R04</strong><br>
+      Client added two access doors; upgraded readers to RFID + biometric. Cat 6A length adjusted from drawing rev-B. ATC Lead: Khalid Al-Qahtani.
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 20 — STEP 16: SUBMISSION PACK                    -->
+<!-- ===================================================== -->
+<section class="slide" data-step="20">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 16</span> One submission pack — everything bundled</div>
+    <h2>Seven artifacts. <em>One zipped, branded package.</em></h2>
+    <p class="lead">Every output, every revision, signed-off and bundled. Mail it to the client, drop it in SharePoint, push it to your CRM, or share via secure link with expiry.</p>
+
+    <div class="pack" style="margin-top: 28px;">
+      <div class="pack-card" style="transform: translateX(-330px) rotate(-12deg);">
+        <div class="pack-card-band"></div>
+        <div class="pack-card-h">Quotation</div>
+        <div class="pack-card-sub">PDF · WCT-PRE-2026-018-R04</div>
+        <div class="pdf-line"></div><div class="pdf-line short"></div><div class="pdf-line mid"></div>
+        <div class="pdf-line"></div><div class="pdf-line"></div>
+        <div class="pack-icon"><i class="fas fa-file-pdf"></i></div>
+      </div>
+      <div class="pack-card" style="transform: translateX(-220px) rotate(-7deg);">
+        <div class="pack-card-band" style="background:#1f6e43;"></div>
+        <div class="pack-card-h">BOQ Pricing</div>
+        <div class="pack-card-sub">Excel · Internal & client</div>
+        <div class="doc-line"></div><div class="doc-line mid"></div><div class="doc-line"></div><div class="doc-line short"></div>
+        <div class="pack-icon" style="color:#1f6e43;"><i class="fas fa-file-excel"></i></div>
+      </div>
+      <div class="pack-card" style="transform: translateX(-110px) rotate(-3deg);">
+        <div class="pack-card-band" style="background:#185abd;"></div>
+        <div class="pack-card-h">Technical Proposal</div>
+        <div class="pack-card-sub">Word · 38 pages</div>
+        <div class="doc-line"></div><div class="doc-line"></div><div class="doc-line mid"></div><div class="doc-line short"></div>
+        <div class="pack-icon" style="color:#185abd;"><i class="fas fa-file-word"></i></div>
+      </div>
+      <div class="pack-card" style="transform: translateX(0) rotate(0deg); z-index:5;">
+        <div class="pack-card-band"></div>
+        <div class="pack-card-h">Compliance Matrix</div>
+        <div class="pack-card-sub">Excel · 42 clauses</div>
+        <div class="doc-line"></div><div class="doc-line mid"></div><div class="doc-line"></div><div class="doc-line"></div>
+        <div class="pack-icon"><i class="fas fa-clipboard-check"></i></div>
+      </div>
+      <div class="pack-card" style="transform: translateX(110px) rotate(3deg);">
+        <div class="pack-card-band" style="background:#185abd;"></div>
+        <div class="pack-card-h">Method of Statement</div>
+        <div class="pack-card-sub">Word · WCT-MOS-2026-018</div>
+        <div class="doc-line"></div><div class="doc-line mid"></div><div class="doc-line"></div><div class="doc-line short"></div>
+        <div class="pack-icon" style="color:#185abd;"><i class="fas fa-clipboard-list"></i></div>
+      </div>
+      <div class="pack-card" style="transform: translateX(220px) rotate(7deg);">
+        <div class="pack-card-band"></div>
+        <div class="pack-card-h">Single Line Diagram</div>
+        <div class="pack-card-sub">PDF + DWG · Page A3</div>
+        <div class="doc-line short"></div><div class="doc-line mid"></div><div class="doc-line"></div><div class="doc-line short"></div>
+        <div class="pack-icon"><i class="fas fa-diagram-project"></i></div>
+      </div>
+      <div class="pack-card" style="transform: translateX(330px) rotate(12deg);">
+        <div class="pack-card-band" style="background:#c14e4e;"></div>
+        <div class="pack-card-h">Client Presentation</div>
+        <div class="pack-card-sub">PPTX · 15 slides</div>
+        <div class="doc-line"></div><div class="doc-line short"></div><div class="doc-line mid"></div>
+        <div class="pack-icon" style="color:#c14e4e;"><i class="fas fa-file-powerpoint"></i></div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top: 12px; text-align:center;">⌘ All 7 documents · Generated · Signed · Bundled · ~38 seconds</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 21 — STEP 17: MOBILE / OFFLINE                   -->
+<!-- ===================================================== -->
+<section class="slide alt" data-step="21">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 17</span> Site mode — mobile, offline, bilingual</div>
+    <h2>Quote from <em>the rooftop, the basement, the desert.</em></h2>
+    <p class="lead">Site engineers quote on-the-spot from iOS or Android. The catalog is locally cached. No internet? No problem. Sync happens automatically when reception returns.</p>
+
+    <div class="phone-row" style="margin-top:24px;">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:42</span><span>📶 5G · LDB ✓</span></div>
+          <div class="phone-h">⌘ Quick Quote</div>
+          <div class="phone-offline"><i class="fas fa-database"></i> Local DB Active · Offline OK</div>
+          <div class="phone-form-row">
+            <div class="phone-form-label">Customer</div>
+            <div class="phone-form-val">Hitachi Energy KSA</div>
+          </div>
+          <div class="phone-form-row">
+            <div class="phone-form-label">Item</div>
+            <div class="phone-form-val">Fiber Cable SM 24str</div>
+          </div>
+          <div class="phone-form-row">
+            <div class="phone-form-label">Quantity</div>
+            <div class="phone-form-val">1,200 m</div>
+          </div>
+          <div class="phone-form-row">
+            <div class="phone-form-label">Unit Price (live)</div>
+            <div class="phone-form-val" style="color: var(--gold);">SAR 18.20</div>
+          </div>
+          <div class="phone-btn">Save & Sync Later</div>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen phone-rtl">
+          <div class="phone-status" style="direction:ltr;"><span>9:42</span><span>📶 5G</span></div>
+          <div class="phone-toggle" style="direction:ltr; margin-right:auto;">
+            <span>EN</span><div class="knob"></div><span>AR</span>
+          </div>
+          <div class="phone-h">⌘ عرض سعر سريع</div>
+          <div class="phone-form-row">
+            <div class="phone-form-label" style="font-family: 'Inter';">العميل</div>
+            <div class="phone-form-val">هيتاشي إنرجي السعودية</div>
+          </div>
+          <div class="phone-form-row">
+            <div class="phone-form-label" style="font-family: 'Inter';">الصنف</div>
+            <div class="phone-form-val">كابل ألياف 24 خصلة أحادي</div>
+          </div>
+          <div class="phone-form-row">
+            <div class="phone-form-label" style="font-family: 'Inter';">الكمية</div>
+            <div class="phone-form-val">1٬200 متر</div>
+          </div>
+          <div class="phone-form-row">
+            <div class="phone-form-label" style="font-family: 'Inter';">السعر</div>
+            <div class="phone-form-val" style="color: var(--gold);">18.20 ر.س</div>
+          </div>
+          <div class="phone-btn">إنشاء عرض سعر</div>
+        </div>
+      </div>
+    </div>
+    <p class="caption" style="margin-top: 28px; text-align:center;">⌘ Full bilingual — RTL/LTR auto, Arabic OCR, Hijri / Gregorian dual dates</p>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 22 — STEP 18: PIPELINE & ANALYTICS               -->
+<!-- ===================================================== -->
+<section class="slide" data-step="22">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">STEP 18</span> Pipeline & Analytics</div>
+    <h2>What your salesperson sees. <em>What your CEO sees.</em></h2>
+
+    <div style="margin-top: 28px;">
+      <div class="dash-grid">
+        <div class="dash-kpi">
+          <div class="dash-kpi-l">Open Pipeline</div>
+          <div class="dash-kpi-v">SAR 14.2M</div>
+          <div class="dash-kpi-d"><i class="fas fa-arrow-up"></i> +22% vs last month</div>
+        </div>
+        <div class="dash-kpi">
+          <div class="dash-kpi-l">Win Rate (90d)</div>
+          <div class="dash-kpi-v">38%</div>
+          <div class="dash-kpi-d"><i class="fas fa-arrow-up"></i> +6 pts</div>
+        </div>
+        <div class="dash-kpi">
+          <div class="dash-kpi-l">Avg. Cycle Time</div>
+          <div class="dash-kpi-v">4.2d</div>
+          <div class="dash-kpi-d"><i class="fas fa-arrow-down"></i> −63% vs Q1</div>
+        </div>
+        <div class="dash-kpi">
+          <div class="dash-kpi-l">Avg. Quote Margin</div>
+          <div class="dash-kpi-v">21.5%</div>
+          <div class="dash-kpi-d"><i class="fas fa-arrow-up"></i> +3.1 pts</div>
+        </div>
+      </div>
+      <div class="dash-2">
+        <div class="dash-card">
+          <div class="dash-card-h">Pipeline funnel <small>Last 90 days</small></div>
+          <div>
+            <div class="funnel-row"><div class="funnel-lbl">New Lead</div><div class="funnel-bar" style="width:100%;">48 · SAR 22M</div></div>
+            <div class="funnel-row"><div class="funnel-lbl">Qualified</div><div class="funnel-bar s2">36 · SAR 16M</div></div>
+            <div class="funnel-row"><div class="funnel-lbl">Quote Sent</div><div class="funnel-bar s3">28 · SAR 14M</div></div>
+            <div class="funnel-row"><div class="funnel-lbl">Negotiation</div><div class="funnel-bar s4">16 · SAR 7M</div></div>
+            <div class="funnel-row"><div class="funnel-lbl">Won</div><div class="funnel-bar s5">11 · SAR 4.2M</div></div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-h">Quotes per engineer <small>Month</small></div>
+          <div class="chart-bars">
+            <div class="chart-bar" data-label="Khalid" style="height:60%;">18</div>
+            <div class="chart-bar tall" data-label="Sara" style="height:100%;">31</div>
+            <div class="chart-bar" data-label="Mohammed" style="height:70%;">22</div>
+            <div class="chart-bar" data-label="Fahad" style="height:55%;">16</div>
+            <div class="chart-bar" data-label="Nour" style="height:80%;">25</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 23 — BEFORE vs AFTER                             -->
+<!-- ===================================================== -->
+<section class="slide dark" data-step="23">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">RESULT</span> Same engineer. Same project. New day.</div>
+    <h2>The 8-hour day becomes the <em>45-minute task.</em></h2>
+
+    <div class="time-compare">
+      <div class="time-side time-before before">
+        <div class="time-l">Before</div>
+        <div class="time-v">8h 12m</div>
+        <div class="time-u">per quotation</div>
+        <div style="margin-top: 24px; padding-top: 18px; border-top:1px solid var(--border); font-size: 12px; color: var(--slate-2); line-height: 1.7; text-align:left;">
+          <div>↳ 90 min on BOQ assembly</div>
+          <div>↳ 60 min vendor pricing calls</div>
+          <div>↳ 50 min compliance write-up</div>
+          <div>↳ 75 min PDF/Word formatting</div>
+          <div>↳ 40 min method statement</div>
+          <div>↳ 30 min revision merge</div>
+          <div>↳ Plus interruptions, context-switches, errors</div>
+        </div>
+      </div>
+      <div class="time-arrow"><i class="fas fa-arrow-right-long"></i></div>
+      <div class="time-side time-after after">
+        <div class="time-l">After</div>
+        <div class="time-v">45 min</div>
+        <div class="time-u">per quotation</div>
+        <div style="margin-top: 24px; padding-top: 18px; border-top:1px solid var(--border); font-size: 12px; color: var(--slate-2); line-height: 1.7; text-align:left;">
+          <div>↳ 0 min on intake (auto)</div>
+          <div>↳ 8 min reviewing AI extraction</div>
+          <div>↳ 6 min answering copilot Qs</div>
+          <div>↳ 12 min adjusting margins / vendor</div>
+          <div>↳ 4 min reviewing compliance</div>
+          <div>↳ 5 min reviewing generated documents</div>
+          <div>↳ 10 min final QA & client send</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 32px; text-align:center; font-family: 'Bricolage Grotesque'; font-size: 22px; color: var(--gold-soft); font-weight: 500;">
+      ~89% faster · ~7× engineer throughput
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 24 — 10 PILLARS RECAP                            -->
+<!-- ===================================================== -->
+<section class="slide" data-step="24">
+  <div class="slide-inner">
+    <div class="eyebrow"><span class="step-num">RECAP</span> The product, in ten pillars</div>
+    <h2>Every capability you just saw — <em>numbered.</em></h2>
+    <div class="pillars">
+      <div class="pillar"><div class="pillar-n">PILLAR 01</div><div class="pillar-t">Unified BOQ Workspace</div></div>
+      <div class="pillar"><div class="pillar-n">PILLAR 02</div><div class="pillar-t">Tender Document Understanding</div></div>
+      <div class="pillar"><div class="pillar-n">PILLAR 03</div><div class="pillar-t">Vendor & Product Catalog</div></div>
+      <div class="pillar"><div class="pillar-n">PILLAR 04</div><div class="pillar-t">AI Quote Engineer (Copilot)</div></div>
+      <div class="pillar"><div class="pillar-n">PILLAR 05</div><div class="pillar-t">Revision Mgmt & Audit Trail</div></div>
+      <div class="pillar"><div class="pillar-n">PILLAR 06</div><div class="pillar-t">One-Click Submission Suite</div></div>
+      <div class="pillar"><div class="pillar-n">PILLAR 07</div><div class="pillar-t">Margin & Alternatives Overlay</div></div>
+      <div class="pillar"><div class="pillar-n">PILLAR 08</div><div class="pillar-t">ERP / CRM Connectors</div></div>
+      <div class="pillar"><div class="pillar-n">PILLAR 09</div><div class="pillar-t">Mobile + Offline Site Mode</div></div>
+      <div class="pillar"><div class="pillar-n">PILLAR 10</div><div class="pillar-t">Pipeline & Analytics</div></div>
+    </div>
+    <div style="margin-top:48px; text-align:center; font-size:15px; color:var(--slate-2);">
+      Anchored on a single architecture — Next.js · Express · Postgres · Vercel AI Gateway · KSA data residency.
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SLIDE 25 — CLOSING                                     -->
+<!-- ===================================================== -->
+<section class="slide dark closing" data-step="25">
+  <div class="slide-inner">
+    <div class="eyebrow" style="justify-content:center;"><span class="step-num">END</span> Let's run it on your tenders next.</div>
+    <h1>The next demo is <em>with your team, your tenders, your branding.</em></h1>
+    <div class="closing-card">
+      <div class="cl-l">Next step</div>
+      <h3>One 60-minute live session</h3>
+      <p>Bring three of your last RFQs. We run them through the platform in front of your team — your BOQ, your branding, your vendor list. You see the workflow on your data.</p>
+      <div class="closing-grid">
+        <div class="cl-info">
+          <strong>Contact</strong>
+          Shabeeb K.<br>
+          CodeOx
+        </div>
+        <div class="cl-info">
+          <strong>Reach</strong>
+          shabeeb.k@code-ox.com<br>
+          +966 53 571 6437
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 60px; opacity: 0.6;">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" style="height:28px; filter: brightness(0) invert(1);">
+    </div>
+  </div>
+</section>
+
+<div class="nav-dots" id="navDots"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const navDots = document.getElementById('navDots');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progress');
+  const totalEl = document.getElementById('total');
+  if (totalEl) totalEl.textContent = String(total).padStart(2, '0');
+
+  // Build dots
+  slides.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'nav-dot';
+    d.onclick = () => s.scrollIntoView({behavior: 'smooth'});
+    navDots.appendChild(d);
+  });
+  const dots = document.querySelectorAll('.nav-dot');
+
+  // Track active
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = Array.from(slides).indexOf(e.target);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        counter.textContent = String(idx + 1).padStart(2, '0');
+        progressBar.style.width = ((idx + 1) / total * 100) + '%';
+        if (e.target.classList.contains('kinetic')) {
+          e.target.classList.remove('replay');
+          void e.target.offsetWidth;
+          e.target.classList.add('replay');
+        }
+      }
+    });
+  }, {threshold: 0.5});
+  slides.forEach(s => observer.observe(s));
+
+  // Keyboard nav
+  document.addEventListener('keydown', (e) => {
+    const cur = Array.from(slides).findIndex(s => {
+      const r = s.getBoundingClientRect();
+      return r.top >= -100 && r.top <= window.innerHeight / 2;
+    });
+    if (cur < 0) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      if (cur < total - 1) slides[cur + 1].scrollIntoView({behavior: 'smooth'});
+    }
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (cur > 0) slides[cur - 1].scrollIntoView({behavior: 'smooth'});
+    }
+    if (e.key === 'Home') { e.preventDefault(); slides[0].scrollIntoView({behavior:'smooth'}); }
+    if (e.key === 'End') { e.preventDefault(); slides[total-1].scrollIntoView({behavior:'smooth'}); }
+  });
+</script>
+
+</body>
+</html>
