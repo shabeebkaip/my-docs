@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ladies Beauty Salon — Odoo 19 Implementation Docs</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --odoo-purple: #714B67;
+    --odoo-purple-bg: #F5EFF3;
+    --bg: #FBFAF7;
+    --surface: #FFFFFF;
+    --border: #E5E0E3;
+    --text: #2D2D2D;
+    --muted: #6B6B6B;
+    --sans: 'Roboto', sans-serif;
+    --mono: 'Roboto Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; display: flex; flex-direction: column; }
+
+  .header { padding: 22px 48px; border-bottom: 3px solid var(--odoo-purple); background: var(--surface); display: flex; align-items: center; gap: 16px; }
+  .odoo-mark { display: flex; align-items: center; gap: 8px; }
+  .odoo-bubble { width: 32px; height: 32px; background: var(--odoo-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 14px; }
+  .odoo-wordmark { font-weight: 700; font-size: 18px; color: var(--odoo-purple); letter-spacing: -0.5px; }
+  .divider { width: 1px; height: 28px; background: var(--border); }
+  .header-tag { font-size: 0.72rem; color: var(--muted); font-family: var(--mono); }
+  .header-meta { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .header-badge { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-family: var(--mono); background: var(--odoo-purple-bg); border: 1px solid rgba(113,75,103,0.2); color: var(--odoo-purple); padding: 5px 12px; border-radius: 20px; }
+  .header-badge img { height: 14px; filter: brightness(0); opacity: 0.6; }
+
+  .main { flex: 1; padding: 48px; max-width: 1100px; width: 100%; margin: 0 auto; }
+  .intro-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--odoo-purple); font-family: var(--mono); margin-bottom: 14px; }
+  .intro h1 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 900; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 16px; }
+  .intro h1 span { color: var(--odoo-purple); }
+  .intro-desc { font-size: 0.95rem; color: var(--muted); line-height: 1.8; max-width: 620px; margin-bottom: 36px; }
+
+  .section-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin: 36px 0 16px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+  .doc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s; }
+  .doc-card:hover { border-color: var(--odoo-purple); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(113,75,103,0.12); }
+  .card-top { display: flex; align-items: flex-start; gap: 14px; }
+  .card-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--odoo-purple-bg); color: var(--odoo-purple); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; font-weight: 700; }
+  .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .card-subtitle { font-size: 0.72rem; color: var(--muted); font-family: var(--mono); }
+  .card-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .card-footer { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .card-tag { font-size: 0.62rem; font-family: var(--mono); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); color: var(--muted); background: var(--bg); }
+  .card-arrow { margin-left: auto; color: var(--odoo-purple); font-size: 0.95rem; }
+
+  .footer { padding: 16px 48px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; font-size: 0.7rem; color: var(--muted); font-family: var(--mono); background: var(--surface); }
+  .footer img { height: 13px; filter: brightness(0); opacity: 0.45; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="odoo-mark">
+    <div class="odoo-bubble">O</div>
+    <div class="odoo-wordmark">odoo</div>
+  </div>
+  <div class="divider"></div>
+  <div class="header-tag">ladies beauty salon · implementation</div>
+  <div class="header-meta">
+    <span class="header-badge">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      CodeOx
+    </span>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="intro">
+    <div class="intro-eyebrow">Odoo 19 Enterprise · Discovery Stage</div>
+    <h1>Ladies Beauty Salon —<br><span>Implementation Workspace.</span></h1>
+    <p class="intro-desc">
+      Discovery, scoping and proposal artifacts for a 4-user Odoo 19 Enterprise rollout covering Accounting, CRM, Sales, Electronic Invoicing (ZATCA Phase 1 &amp; 2), and POS. Custom modules: shift-locked user access, dynamic discount dashboard, and an employee commission engine.
+    </p>
+  </div>
+
+  <div class="section-label">Discovery</div>
+  <div class="doc-grid">
+    <a class="doc-card" href="/ladies-salon/discovery-questionnaire.html">
+      <div class="card-top">
+        <div class="card-icon">?</div>
+        <div>
+          <div class="card-title">Discovery Questionnaire</div>
+          <div class="card-subtitle">discovery-questionnaire.html · June 2026</div>
+        </div>
+      </div>
+      <div class="card-desc">~60 structured questions across 13 sections — covers business overview, transaction volume, POS hardware, shifts, discount &amp; commission logic, ZATCA, customer DB, accounting, hosting, training and commercial context. Used to scope and price the implementation accurately.</div>
+      <div class="card-footer">
+        <span class="card-tag">Questionnaire</span>
+        <span class="card-tag">13 Sections</span>
+        <span class="card-tag">Pre-quote</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+<div class="footer">
+  <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+  <span>·</span>
+  <span>CodeOx Technologies · Odoo Implementation Partner</span>
+  <span style="margin-left:auto">·</span>
+  <span id="footer-date"></span>
+</div>
+
+<script>
+  document.getElementById('footer-date').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+</script>
+</body>
+</html>
