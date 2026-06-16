@@ -120,7 +120,6 @@
     opacity: 0.7;
   }
   .topbar-progress {
-    margin-left: auto;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -583,6 +582,40 @@
     font-weight: 600;
   }
 
+  /* "Or write your own…" inline input after a chip group */
+  .q-other {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 4px;
+  }
+  .q-other-prefix {
+    font-size: 13px;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .q-other-input {
+    flex: 1;
+    border: none;
+    border-bottom: 1px dashed var(--line);
+    background: transparent;
+    padding: 5px 0 6px;
+    font-size: 13px;
+    font-family: var(--sans);
+    color: var(--ink);
+    transition: border-color 0.15s;
+  }
+  .q-other-input:focus {
+    outline: none;
+    border-bottom: 1.5px solid var(--odoo-purple);
+  }
+  .q-other-input::placeholder {
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
   /* Inline two-column layout for short inputs */
   .q-grid-2 {
     display: grid;
@@ -908,6 +941,13 @@
     .q { break-inside: avoid; page-break-inside: avoid; }
     .section { break-inside: auto; }
   }
+
+  /* Language switcher */
+  .lang-switch { margin-left: auto; display: inline-flex; border: 1px solid var(--line); border-radius: 100px; overflow: hidden; font-size: 12px; }
+  .lang-switch a { padding: 5px 12px; color: var(--ink-muted); text-decoration: none; font-weight: 600; transition: all 0.12s; }
+  .lang-switch a:hover { background: var(--odoo-purple-bg); color: var(--odoo-purple); text-decoration: none; }
+  .lang-switch a.active { background: var(--odoo-purple); color: #fff; }
+
 </style>
 </head>
 <body>
@@ -924,6 +964,10 @@
   <div class="topbar-divider"></div>
   <div class="topbar-codeox">
     <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+  </div>
+  <div class="lang-switch">
+    <a href="discovery-questionnaire.html" class="active">EN</a>
+    <a href="discovery-questionnaire-ar.html">عربي</a>
   </div>
   <div class="topbar-progress">
     <span class="topbar-save-status" id="saveStatus">Saved locally</span>
@@ -966,7 +1010,7 @@
 
     <div class="hero-cta-row">
       <a href="#snapshot" class="btn btn-primary">Let's go →</a>
-      <a href="mailto:mubaris@code-ox.com?subject=Prefer%20a%20call%20instead%20%E2%80%94%20Odoo%20Discovery" class="btn btn-ghost">Prefer a quick call instead?</a>
+      <a href="mailto:shabeeb.k@code-ox.com?subject=Prefer%20a%20call%20instead%20%E2%80%94%20Odoo%20Discovery" class="btn btn-ghost">Prefer a quick call instead?</a>
     </div>
     <div class="hero-meta-line">
       <strong>No wrong answers.</strong> &nbsp; "Don't know" and "Not sure yet" are perfectly fine — we'll cover those in the discovery call.
@@ -1008,17 +1052,10 @@
       <input type="text" class="input" name="salon_name" placeholder="e.g., Glamour Ladies Salon">
     </div>
 
-    <div class="q-grid-2">
-      <div class="q" data-q>
-        <div class="q-text">Owner — name &amp; mobile</div>
-        <div class="q-why"><strong>Why:</strong> So we know who to reach out to.</div>
-        <input type="text" class="input" name="owner" placeholder="Name · +966 5X XXX XXXX">
-      </div>
-      <div class="q" data-q>
-        <div class="q-text">Day-to-day manager (if not you)</div>
-        <div class="q-why"><strong>Why:</strong> Often the person we'll work with most closely. Skip if it's you.</div>
-        <input type="text" class="input" name="accountant" placeholder="Name · +966 5X XXX XXXX">
-      </div>
+    <div class="q" data-q>
+      <div class="q-text">Owner — name &amp; mobile</div>
+      <div class="q-why"><strong>Why:</strong> So we know who to reach out to.</div>
+      <input type="text" class="input" name="owner" placeholder="Name · +966 5X XXX XXXX">
     </div>
 
     <div class="q" data-q>
@@ -1031,6 +1068,10 @@
         <label class="chip"><input type="radio" name="branch_count" value="6+"><span class="chip-label">6 or more</span></label>
         <label class="chip"><input type="radio" name="branch_count" value="planning"><span class="chip-label">1 now, planning to expand</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="branch_count_other" placeholder="Or describe your structure…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1041,6 +1082,10 @@
         <label class="chip"><input type="radio" name="years_operating" value="<2"><span class="chip-label">Less than 2 years</span></label>
         <label class="chip"><input type="radio" name="years_operating" value="2-5"><span class="chip-label">2–5 years</span></label>
         <label class="chip"><input type="radio" name="years_operating" value="5+"><span class="chip-label">5+ years</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="years_operating_other" placeholder="Or tell us in your own words…">
       </div>
     </div>
 
@@ -1053,6 +1098,10 @@
         <label class="chip"><input type="radio" name="staff_count" value="10-20"><span class="chip-label">10–20</span></label>
         <label class="chip"><input type="radio" name="staff_count" value="20+"><span class="chip-label">More than 20</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="staff_count_other" placeholder="Or the exact number if you know it…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1064,6 +1113,10 @@
         <label class="chip"><input type="radio" name="golive" value="by Eid"><span class="chip-label">Before next Eid</span></label>
         <label class="chip"><input type="radio" name="golive" value="year-end"><span class="chip-label">By end of year</span></label>
         <label class="chip"><input type="radio" name="golive" value="flexible"><span class="chip-label">Flexible — when ready</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="golive_other" placeholder="Or a specific date…">
       </div>
     </div>
   </div>
@@ -1107,6 +1160,10 @@
         <label class="chip"><input type="checkbox" name="pain_points" value="No marketing"><span class="chip-label">📣 No proper way to message customers</span></label>
         <label class="chip"><input type="checkbox" name="pain_points" value="Manual everything"><span class="chip-label">✍️ Everything is still manual</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="pain_points_other" placeholder="Anything else frustrating? Add it here…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1121,6 +1178,10 @@
         <label class="chip"><input type="radio" name="top_pain" value="Real reports"><span class="chip-label">Real reports, not Excel chaos</span></label>
         <label class="chip"><input type="radio" name="top_pain" value="Bring back customers"><span class="chip-label">Bring customers back</span></label>
         <label class="chip"><input type="radio" name="top_pain" value="Look pro"><span class="chip-label">Look more professional</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="top_pain_other" placeholder="Or describe your top pain in your own words…">
       </div>
     </div>
 
@@ -1152,6 +1213,10 @@
         <label class="chip"><input type="radio" name="daily_customers" value="100+"><span class="chip-label">100+</span></label>
         <label class="chip"><input type="radio" name="daily_customers" value="varies"><span class="chip-label">Varies a lot</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="daily_customers_other" placeholder="Or a specific number / pattern…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1164,6 +1229,10 @@
         <label class="chip"><input type="radio" name="avg_ticket" value="600+"><span class="chip-label">SAR 600+</span></label>
         <label class="chip"><input type="radio" name="avg_ticket" value="varies"><span class="chip-label">All over the place</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="avg_ticket_other" placeholder="Or be specific…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1174,6 +1243,10 @@
         <label class="chip"><input type="radio" name="service_count" value="30-80"><span class="chip-label">30–80</span></label>
         <label class="chip"><input type="radio" name="service_count" value="80-150"><span class="chip-label">80–150</span></label>
         <label class="chip"><input type="radio" name="service_count" value="150+"><span class="chip-label">150+</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="service_count_other" placeholder="Or a specific count…">
       </div>
     </div>
 
@@ -1186,6 +1259,10 @@
         <label class="chip"><input type="radio" name="retail" value="Full line"><span class="chip-label">Yes — full retail line</span></label>
         <label class="chip"><input type="radio" name="retail" value="Future"><span class="chip-label">Planning to start</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="retail_other" placeholder="Anything to add?">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1196,6 +1273,10 @@
         <label class="chip"><input type="radio" name="packages" value="Occasionally"><span class="chip-label">Occasionally (bridal etc.)</span></label>
         <label class="chip"><input type="radio" name="packages" value="No"><span class="chip-label">No — à-la-carte only</span></label>
         <label class="chip"><input type="radio" name="packages" value="Future"><span class="chip-label">Want to start offering</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="packages_other" placeholder="Tell us about them…">
       </div>
     </div>
   </div>
@@ -1221,6 +1302,10 @@
         <label class="chip"><input type="radio" name="promo_frequency" value="Weekly"><span class="chip-label">Weekly</span></label>
         <label class="chip"><input type="radio" name="promo_frequency" value="Constant"><span class="chip-label">All the time</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="promo_frequency_other" placeholder="Anything to add?">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1232,6 +1317,10 @@
         <label class="chip"><input type="radio" name="pays_commission" value="Informal"><span class="chip-label">Sometimes, informally</span></label>
         <label class="chip"><input type="radio" name="pays_commission" value="No"><span class="chip-label">No — fixed salary only</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="pays_commission_other" placeholder="Anything to add?">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1242,6 +1331,10 @@
         <label class="chip"><input type="radio" name="commission_today" value="Excel"><span class="chip-label">Excel sheet</span></label>
         <label class="chip"><input type="radio" name="commission_today" value="POS"><span class="chip-label">Through current POS</span></label>
         <label class="chip"><input type="radio" name="commission_today" value="None"><span class="chip-label">Not really tracked</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="commission_today_other" placeholder="Anything to add?">
       </div>
     </div>
 
@@ -1255,6 +1348,10 @@
         <label class="chip"><input type="checkbox" name="discount_pain" value="Can't track impact"><span class="chip-label">Can't see if promos actually work</span></label>
         <label class="chip"><input type="checkbox" name="discount_pain" value="No control"><span class="chip-label">No central control</span></label>
         <label class="chip"><input type="checkbox" name="discount_pain" value="None"><span class="chip-label">No major pain — works fine</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="discount_pain_other" placeholder="Other pain we should know? Add here…">
       </div>
     </div>
   </div>
@@ -1280,6 +1377,10 @@
         <label class="chip"><input type="radio" name="customer_records" value="Paper"><span class="chip-label">On paper / appointment book</span></label>
         <label class="chip"><input type="radio" name="customer_records" value="None"><span class="chip-label">Don't keep any</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="customer_records_other" placeholder="Anything to add?">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1292,6 +1393,10 @@
         <label class="chip"><input type="radio" name="customer_count" value="10k+"><span class="chip-label">10,000+</span></label>
         <label class="chip"><input type="radio" name="customer_count" value="unsure"><span class="chip-label">Honestly, no idea</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="customer_count_other" placeholder="Or an exact number…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1303,6 +1408,10 @@
         <label class="chip"><input type="radio" name="marketing_now" value="Regularly"><span class="chip-label">Regularly — SMS or email</span></label>
         <label class="chip"><input type="radio" name="marketing_now" value="Want to"><span class="chip-label">Want to start</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="marketing_now_other" placeholder="Tell us more…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1312,6 +1421,10 @@
         <label class="chip"><input type="radio" name="loyalty" value="Day 1"><span class="chip-label">Want it from Day 1</span></label>
         <label class="chip"><input type="radio" name="loyalty" value="Future"><span class="chip-label">Future phase is fine</span></label>
         <label class="chip"><input type="radio" name="loyalty" value="No"><span class="chip-label">Not really interested</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="loyalty_other" placeholder="Anything to add?">
       </div>
     </div>
 
@@ -1327,6 +1440,10 @@
         <label class="chip"><input type="checkbox" name="customer_wishes" value="Referral rewards"><span class="chip-label">Referral rewards</span></label>
         <label class="chip"><input type="checkbox" name="customer_wishes" value="VIP segmentation"><span class="chip-label">VIP / segmentation</span></label>
         <label class="chip"><input type="checkbox" name="customer_wishes" value="None"><span class="chip-label">None right now — basics first</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="customer_wishes_other" placeholder="Other wishes? Add here…">
       </div>
     </div>
   </div>
@@ -1351,6 +1468,10 @@
         <label class="chip"><input type="radio" name="zatca_phase" value="Phase 2 live"><span class="chip-label">Already on Phase 2</span></label>
         <label class="chip"><input type="radio" name="zatca_phase" value="Not sure"><span class="chip-label">Honestly, not sure</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="zatca_phase_other" placeholder="Anything to add?">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1360,6 +1481,10 @@
         <label class="chip"><input type="radio" name="vat_registered" value="Yes"><span class="chip-label">Yes</span></label>
         <label class="chip"><input type="radio" name="vat_registered" value="No"><span class="chip-label">No</span></label>
         <label class="chip"><input type="radio" name="vat_registered" value="In process"><span class="chip-label">In process</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="vat_registered_other" placeholder="Anything to add?">
       </div>
     </div>
 
@@ -1372,6 +1497,10 @@
         <label class="chip"><input type="radio" name="accountant_setup" value="Self"><span class="chip-label">No — I handle it myself</span></label>
         <label class="chip"><input type="radio" name="accountant_setup" value="Looking"><span class="chip-label">Looking for one</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="accountant_setup_other" placeholder="Tell us more…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1381,6 +1510,10 @@
         <label class="chip"><input type="radio" name="audit" value="Yes"><span class="chip-label">Yes, annually</span></label>
         <label class="chip"><input type="radio" name="audit" value="No"><span class="chip-label">No</span></label>
         <label class="chip"><input type="radio" name="audit" value="Want to"><span class="chip-label">Not now, but want to start</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="audit_other" placeholder="Anything to add?">
       </div>
     </div>
   </div>
@@ -1410,6 +1543,10 @@
         <label class="chip"><input type="checkbox" name="why_now" value="Lost money"><span class="chip-label">💸 Lost too much money manually</span></label>
         <label class="chip"><input type="checkbox" name="why_now" value="Look pro"><span class="chip-label">✨ Want a more professional setup</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="why_now_other" placeholder="Other reason pushing the decision? Add here…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1423,6 +1560,10 @@
         <label class="chip"><input type="radio" name="budget" value="120K+"><span class="chip-label">SAR 120K+</span></label>
         <label class="chip"><input type="radio" name="budget" value="prefer_call"><span class="chip-label">Prefer to discuss on call</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="budget_other" placeholder="Or be specific…">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1434,6 +1575,10 @@
         <label class="chip"><input type="radio" name="decision_maker" value="Finance"><span class="chip-label">Finance / accountant</span></label>
         <label class="chip"><input type="radio" name="decision_maker" value="Board"><span class="chip-label">Board / partners</span></label>
       </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="decision_maker_other" placeholder="Other?">
+      </div>
     </div>
 
     <div class="q" data-q>
@@ -1443,6 +1588,10 @@
         <label class="chip"><input type="radio" name="other_providers" value="Yes"><span class="chip-label">Yes — comparing options</span></label>
         <label class="chip"><input type="radio" name="other_providers" value="No"><span class="chip-label">No — you're the first</span></label>
         <label class="chip"><input type="radio" name="other_providers" value="Research"><span class="chip-label">Doing research first</span></label>
+      </div>
+      <div class="q-other">
+        <span class="q-other-prefix">✏️</span>
+        <input type="text" class="q-other-input" name="other_providers_other" placeholder="Tell us more (no names needed)…">
       </div>
     </div>
 
@@ -1456,12 +1605,12 @@
   <!-- ─── COMPLETE / SUBMIT ─── -->
   <div class="complete-card" id="complete">
     <div class="complete-eyebrow">You're done — what happens next</div>
-    <h2 class="complete-title">Send us your answers, and our Managing Director will personally call within 24 hours.</h2>
+    <h2 class="complete-title">Send us your answers, and Shabeeb will personally call within 24 hours.</h2>
     <p class="complete-text">
-      Your responses are still saved locally in your browser. Tap "Send My Answers" — they go straight to our Managing Director. He'll review, schedule a 30-min call to cover anything you left as "Not sure," and turn this into a structured proposal within 3 working days.
+      Your responses are still saved locally in your browser. Tap "Send My Answers" — they go straight to Shabeeb. He'll review, schedule a 30-min call to cover anything you left as "Not sure," and turn this into a structured proposal within 3 working days.
     </p>
     <div class="complete-actions">
-      <button class="btn btn-light" id="emailBtn">→ Send my answers to Mubaris</button>
+      <button class="btn btn-light" id="emailBtn">→ Send my answers to Shabeeb</button>
       <button class="btn btn-line" id="downloadBtn">⬇ Download my copy (.txt)</button>
       <button class="btn btn-line" id="printBtn">🖨 Print this page</button>
       <button class="btn btn-line" id="resetBtn">↻ Reset form</button>
@@ -1473,7 +1622,7 @@
     <div class="next-eyebrow">What happens after you submit</div>
     <div class="next-title">A clear, no-surprises rollout — from your answers to your go-live.</div>
     <ol class="next-list">
-      <li class="next-item"><div class="next-item-body"><strong>Within 24 hours</strong> — Mubaris reviews your responses and books a 30–45 min discovery call to clarify any "Not sure" answers.</div></li>
+      <li class="next-item"><div class="next-item-body"><strong>Within 24 hours</strong> — Shabeeb reviews your responses personally and books a 30–45 min discovery call to clarify any "Not sure" answers.</div></li>
       <li class="next-item"><div class="next-item-body"><strong>Within 3 working days</strong> — A formal proposal lands in your inbox: itemised scope, fixed pricing per workstream, timeline, clear inclusions and exclusions.</div></li>
       <li class="next-item"><div class="next-item-body"><strong>On acceptance</strong> — Service agreement signed, kick-off meeting in the same week.</div></li>
       <li class="next-item"><div class="next-item-body"><strong>Project kick-off</strong> — Discovery workshop, detailed solution design, sprint plan, first build sprint begins.</div></li>
@@ -1483,12 +1632,12 @@
 
   <!-- SIGNOFF -->
   <div class="signoff">
-    <div class="signoff-avatar">M</div>
+    <div class="signoff-avatar">S</div>
     <div class="signoff-text">
       <strong>Your CodeOx Contact</strong>
-      <div class="signoff-name">Mubaris</div>
-      <div class="signoff-title-line">Managing Director · CodeOx Technologies LLP · Odoo Implementation Partner</div>
-      <div class="signoff-contact-line"><a href="mailto:mubaris@code-ox.com">mubaris@code-ox.com</a> &nbsp;·&nbsp; All replies within one business day.</div>
+      <div class="signoff-name">Shabeeb K</div>
+      <div class="signoff-title-line">Founder · CodeOx Technologies · Riyadh, Saudi Arabia</div>
+      <div class="signoff-contact-line"><a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a> &nbsp;·&nbsp; <a href="tel:+966535716437">+966 535 716 437</a> &nbsp;·&nbsp; All replies within one business day.</div>
     </div>
   </div>
 
@@ -1640,7 +1789,7 @@
   function composeEmailBody() {
     const data = saveAnswers();
     const sections = [
-      ['ABOUT THE SALON', ['salon_name','owner','accountant','branch_count','years_operating','staff_count','golive']],
+      ['ABOUT THE SALON', ['salon_name','owner','branch_count','years_operating','staff_count','golive']],
       ['01 PAIN POINTS — WHAT IS FRUSTRATING THEM', ['pain_points','top_pain','recent_pain']],
       ['02 DAILY OPERATIONS', ['daily_customers','avg_ticket','service_count','retail','packages']],
       ['03 DISCOUNTS & COMMISSIONS TODAY', ['promo_frequency','pays_commission','commission_today','discount_pain']],
@@ -1657,10 +1806,16 @@
       let hasAny = false;
       keys.forEach(k => {
         const v = data[k];
-        if (v === undefined || v === '' || (Array.isArray(v) && v.length === 0)) return;
-        hasAny = true;
-        const display = Array.isArray(v) ? v.join(', ') : v;
-        body += '  • ' + k.replace(/_/g,' ') + ': ' + display + '\n';
+        if (v !== undefined && v !== '' && !(Array.isArray(v) && v.length === 0)) {
+          hasAny = true;
+          const display = Array.isArray(v) ? v.join(', ') : v;
+          body += '  • ' + k.replace(/_/g,' ') + ': ' + display + '\n';
+        }
+        const otherVal = data[k + '_other'];
+        if (otherVal && String(otherVal).trim()) {
+          hasAny = true;
+          body += '    ↳ in their own words: ' + otherVal + '\n';
+        }
       });
       if (!hasAny) body += '  (no answers in this section)\n';
       body += '\n';
@@ -1695,12 +1850,12 @@
       <h2 class="complete-title">Your answers are with our team.</h2>
       <p class="complete-text">
         We've received your discovery responses${salon ? ' for <strong style="color:#fff">' + salon + '</strong>' : ''}.
-        Mubaris will review them personally and reach out within one business day to schedule a 30-min discovery call.
+        Shabeeb will review them personally and reach out within one business day to schedule a 30-min discovery call.
         A copy of the submission stays saved in your browser in case you'd like to refer to it.
       </p>
       <div class="complete-actions">
         <button class="btn btn-light" id="downloadBtn2">⬇ Download my copy (.txt)</button>
-        <a class="btn btn-line" href="mailto:mubaris@code-ox.com">✉ Anything to add? Email Mubaris</a>
+        <a class="btn btn-line" href="mailto:shabeeb.k@code-ox.com">✉ Anything to add? Email Shabeeb</a>
       </div>
     `;
     card.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1751,7 +1906,7 @@
     }
 
     // Fallback: open mailto with the body pre-filled
-    const mailto = `mailto:mubaris@code-ox.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:shabeeb.k@code-ox.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
     if (!WEB3FORMS_KEY) showToast('Opening your email app…');
   }
