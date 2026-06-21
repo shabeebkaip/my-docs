@@ -1,748 +1,767 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>عرض مالي — مركز أندل هاندز للتجميل · COX-LS-FP-2026-001</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Roboto:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════
-   DESIGN TOKENS
-═══════════════════════════════════════════ */
-:root {
-  --purple:      #714B67;
-  --purple-dark: #5C3A53;
-  --purple-bg:   #F5EFF3;
-  --purple-tint: #FAF5F8;
-  --teal:        #017E84;
-  --teal-bg:     #E5F4F4;
-  --amber:       #B8860B;
-  --amber-bg:    #FFF7E0;
-  --green:       #1E6B3C;
-  --green-bg:    #E8F5ED;
-  --green-mid:   #2D7A4F;
-  --red:         #A0303A;
-  --red-bg:      #FBE9EC;
-  --bg:          #F8F6F4;
-  --surface:     #FFFFFF;
-  --border:      #E2DDE0;
-  --border-soft: #EDE9EB;
-  --text:        #1A1A1A;
-  --text-soft:   #3A3A3A;
-  --muted:       #6B6B6B;
-  --faint:       #9A9A9A;
-  --ar: 'Tajawal', sans-serif;
-  --en: 'Roboto', sans-serif;
-  --mono: 'Roboto Mono', monospace;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: #BFC0CB;
+  color: #1A202C;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
-/* ═══════════════════════════════════════════
-   RESET & BASE
-═══════════════════════════════════════════ */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: var(--ar); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+/* ── A4 Page ── */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+}
 
-/* ═══════════════════════════════════════════
-   PRINT
-═══════════════════════════════════════════ */
 @media print {
-  body { background: #fff; font-size: 11pt; }
-  .no-print { display: none !important; }
-  .page-break { page-break-after: always; break-after: page; }
-  .page-break-before { page-break-before: always; break-before: page; }
-  .avoid-break { page-break-inside: avoid; break-inside: avoid; }
-  section { page-break-inside: auto; }
-  .cover-wrap { min-height: auto; padding: 60px 40px; }
-  .proposal-wrap { padding: 24px 40px; }
+  body { background: none; }
+  .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
 }
-@media screen {
-  .page-break { border-top: 3px dashed #ccc; margin: 60px 0; position: relative; }
-  .page-break::before { content: "— صفحة جديدة / New Page —"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--bg); padding: 0 16px; font-size: 11px; color: var(--faint); font-family: var(--mono); }
+@page { size: A4; margin: 0; }
+
+/* ══════════════════════════════════════════
+   COLORS
+══════════════════════════════════════════ */
+:root {
+  --dark:    #1A0F2E;     /* deep purple-navy for cover */
+  --accent:  #C084FC;     /* light purple — readable on dark */
+  --purple:  #714B67;     /* Odoo purple — on light bg */
+  --purple2: #5C3A53;     /* darker purple */
+  --navy:    #1E1A2E;     /* table headers */
+  --green:   #059669;
+  --green-bg:#ECFDF5;
+  --amber:   #D97706;
+  --amber-bg:#FFFBEB;
+  --teal:    #0891B2;
+  --border:  #E2E8F0;
+  --surface2:#F8F9FC;
+  --text:    #0F172A;
+  --muted:   #475569;
+  --dim:     #94A3B8;
+  --sans-ar: 'Tajawal', sans-serif;
+  --sans-en: 'Inter', sans-serif;
 }
 
-/* ═══════════════════════════════════════════
-   SHARED HEADER / FOOTER
-═══════════════════════════════════════════ */
-.doc-header {
-  background: var(--surface);
-  border-bottom: 3px solid var(--purple);
-  padding: 18px 48px;
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+/* ══════════════════════════════════════════
+   ███ COVER PAGE ███
+══════════════════════════════════════════ */
+.cover {
+  background: var(--dark);
+  color: #fff;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
-.logo-mark { display: flex; align-items: center; gap: 10px; }
-.logo-bubble { width: 30px; height: 30px; background: var(--purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 13px; font-family: var(--en); }
-.logo-name { font-weight: 800; font-size: 17px; color: var(--purple); font-family: var(--en); letter-spacing: -0.4px; }
-.hdr-divider { width: 1px; height: 26px; background: var(--border); }
-.hdr-tag { font-size: 0.7rem; color: var(--muted); font-family: var(--mono); }
-.hdr-right { margin-right: auto; margin-left: 0; }
-.hdr-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 0.68rem; font-family: var(--mono);
-  background: var(--purple-bg); border: 1px solid rgba(113,75,103,0.2);
-  color: var(--purple); padding: 5px 12px; border-radius: 20px;
+/* subtle grid overlay */
+.cover-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none; z-index: 1;
 }
-.hdr-badge img { height: 13px; filter: brightness(0); opacity: 0.55; }
-
-.doc-footer {
-  background: var(--surface); border-top: 1px solid var(--border);
-  padding: 16px 48px;
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  font-size: 0.68rem; color: var(--muted); font-family: var(--mono);
+/* purple accent bar */
+.cover-bar {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(180deg, var(--accent) 0%, rgba(192,132,252,0.15) 100%);
+  z-index: 3;
 }
-.doc-footer img { height: 12px; filter: brightness(0); opacity: 0.4; }
-.doc-footer a { color: var(--purple); text-decoration: none; }
-.doc-footer .ft-right { margin-right: auto; display: flex; gap: 14px; }
-
-/* ═══════════════════════════════════════════
-   COVER PAGE
-═══════════════════════════════════════════ */
-.cover-wrap {
-  min-height: 88vh;
-  background: linear-gradient(160deg, #2E1828 0%, var(--purple-dark) 40%, var(--purple) 100%);
-  padding: 80px 64px 60px;
-  display: flex; flex-direction: column; justify-content: space-between;
-  position: relative; overflow: hidden;
+/* top bar */
+.cover-topbar {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px 16px 34px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
-.cover-wrap::before {
-  content: '';
-  position: absolute; top: -120px; left: -120px;
-  width: 500px; height: 500px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.03);
-  pointer-events: none;
-}
-.cover-wrap::after {
-  content: '';
-  position: absolute; bottom: -80px; right: -80px;
-  width: 380px; height: 380px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.03);
-  pointer-events: none;
-}
-.cover-top { position: relative; z-index: 1; }
-.cover-eyebrow {
-  font-family: var(--mono); font-size: 0.65rem; font-weight: 600;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: rgba(255,255,255,0.5); margin-bottom: 18px;
-}
-.cover-client-name {
-  font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 900;
-  color: rgba(255,255,255,0.92); margin-bottom: 8px; line-height: 1.2;
-}
-.cover-client-en {
-  font-family: var(--en); font-size: 0.95rem; font-weight: 400;
-  color: rgba(255,255,255,0.5); margin-bottom: 40px;
-}
-.cover-title-ar {
-  font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900;
-  color: #fff; line-height: 1.15; margin-bottom: 8px;
-}
-.cover-subtitle-ar {
-  font-size: 1.1rem; font-weight: 500;
-  color: rgba(255,255,255,0.65); margin-bottom: 0;
-}
-
-.cover-badges {
-  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px;
-}
+.cover-topbar-left { display: flex; align-items: center; gap: 14px; }
+.cover-client-name  { font-size: 13px; font-weight: 700; color: #fff; font-family: var(--sans-ar); }
+.cover-client-sub   { font-size: 9px; color: rgba(255,255,255,0.38); letter-spacing: 0.07em; text-transform: uppercase; margin-top: 2px; }
+.cover-sep          { width: 1px; height: 30px; background: rgba(255,255,255,0.12); }
+.cover-logo-wrap img { height: 18px; filter: brightness(0) invert(1); opacity: 0.8; }
 .cover-badge {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.85);
-  padding: 8px 18px; border-radius: 24px;
-  font-size: 0.78rem; font-weight: 500;
+  border: 1.5px solid var(--accent); color: var(--accent);
+  font-size: 8.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 4px;
 }
+/* hero */
+.cover-hero {
+  position: relative; z-index: 2; flex: 1;
+  display: flex; flex-direction: column;
+  padding: 36px 28px 0 34px;
+}
+.cover-overline {
+  font-size: 8.5px; font-weight: 600; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px;
+  font-family: var(--sans-ar);
+}
+.cover-title {
+  font-size: 40px; font-weight: 900; line-height: 1.06; color: #fff; margin-bottom: 8px;
+  font-family: var(--sans-ar);
+}
+.cover-title-accent { color: var(--accent); }
+.cover-subtitle {
+  font-size: 12px; color: rgba(255,255,255,0.48); line-height: 1.7;
+  max-width: 360px; margin-bottom: 28px; font-family: var(--sans-ar);
+}
+.cover-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 32px; }
+.cover-tag {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 4px; padding: 5px 12px;
+  font-size: 9.5px; color: rgba(255,255,255,0.62);
+}
+.cover-tag strong { color: #fff; font-weight: 600; }
 
-.cover-bottom {
-  position: relative; z-index: 1;
-  display: flex; align-items: flex-end; justify-content: space-between;
-  flex-wrap: wrap; gap: 20px;
+/* ref box */
+.cover-ref-box {
+  position: relative; z-index: 2;
+  margin: 0 28px 14px 34px;
+  background: rgba(192,132,252,0.07); border: 1px solid rgba(192,132,252,0.22);
+  border-radius: 6px;
+  display: grid; grid-template-columns: repeat(4,1fr); overflow: hidden;
 }
-.cover-meta-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+.cover-ref-item {
+  padding: 14px 16px;
+  border-right: 1px solid rgba(192,132,252,0.12);
 }
-.cover-meta-item .cm-label {
-  font-family: var(--mono); font-size: 0.58rem; font-weight: 700;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: rgba(255,255,255,0.4); margin-bottom: 4px;
-}
-.cover-meta-item .cm-value {
-  font-size: 0.88rem; font-weight: 600; color: rgba(255,255,255,0.9);
-}
-.cover-meta-item .cm-value.mono { font-family: var(--mono); font-size: 0.78rem; }
-.cover-logo-white { display: flex; align-items: center; gap: 8px; }
-.cover-logo-white .logo-bubble-white {
-  width: 36px; height: 36px; background: rgba(255,255,255,0.15);
-  border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  color: #fff; font-weight: 900; font-size: 15px; font-family: var(--en);
-}
-.cover-logo-white .logo-text {
-  font-family: var(--en); font-weight: 700; font-size: 16px;
-  color: rgba(255,255,255,0.8);
-}
-.cover-logo-white .logo-sub {
-  font-family: var(--mono); font-size: 0.6rem;
-  color: rgba(255,255,255,0.4); margin-top: 2px;
-}
+.cover-ref-item:last-child { border-right: none; }
+.cri-label { font-size: 8px; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 5px; }
+.cri-value { font-size: 11px; font-weight: 600; color: #fff; }
+.cri-value.acc { color: var(--accent); }
 
-/* ═══════════════════════════════════════════
-   PROPOSAL BODY WRAPPER
-═══════════════════════════════════════════ */
-.proposal-wrap { max-width: 1040px; margin: 0 auto; padding: 48px 48px; }
+/* total banner */
+.cover-total {
+  position: relative; z-index: 2;
+  margin: 0 28px 14px 34px;
+  background: var(--accent);
+  border-radius: 6px; padding: 16px 22px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ct-left .ct-label { font-size: 9px; font-weight: 700; color: rgba(30,10,50,0.6); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; font-family: var(--sans-ar); }
+.ct-left .ct-amount { font-size: 28px; font-weight: 900; color: var(--dark); line-height: 1; }
+.ct-left .ct-sub { font-size: 10px; color: rgba(30,10,50,0.55); margin-top: 3px; font-family: var(--sans-ar); }
+.ct-right { text-align: right; }
+.ct-right .ct-yr2-label { font-size: 9px; color: rgba(30,10,50,0.5); margin-bottom: 3px; font-family: var(--sans-ar); }
+.ct-right .ct-yr2-amount { font-size: 14px; font-weight: 700; color: var(--dark); }
 
-/* ═══════════════════════════════════════════
-   SECTION HEADER
-═══════════════════════════════════════════ */
-.sec {
-  margin-bottom: 44px;
+/* note bar */
+.cover-note {
+  position: relative; z-index: 2;
+  margin: 0 28px 20px 34px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 5px; padding: 11px 16px;
+  display: flex; align-items: flex-start; gap: 12px;
 }
-.sec-head {
-  display: flex; align-items: baseline; gap: 14px;
-  border-bottom: 2px solid var(--purple);
-  padding-bottom: 14px; margin-bottom: 24px;
-}
-.sec-num {
-  font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
-  background: var(--purple-bg); color: var(--purple);
-  padding: 4px 10px; border-radius: 4px; letter-spacing: 0.06em;
-  white-space: nowrap;
-}
-.sec-title { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.01em; }
-.sec-tag {
-  margin-right: auto; font-size: 0.62rem; font-family: var(--mono);
-  color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em;
-}
-/* LTR section tag */
-.ltr .sec-tag { margin-left: auto; margin-right: 0; }
+.cn-label { font-size: 8px; font-weight: 700; color: var(--accent); letter-spacing: 0.13em; text-transform: uppercase; white-space: nowrap; margin-top: 1px; min-width: 50px; }
+.cn-text { font-size: 10px; color: rgba(255,255,255,0.48); line-height: 1.65; font-family: var(--sans-ar); }
 
-/* ═══════════════════════════════════════════
-   CARDS & SURFACES
-═══════════════════════════════════════════ */
-.card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 24px 28px; margin-bottom: 12px;
+/* cover footer */
+.cover-footer {
+  position: relative; z-index: 2;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 14px 28px 14px 34px;
+  display: flex; align-items: center; gap: 14px;
 }
-.card-grid-2 {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;
+.cover-footer img { height: 16px; filter: brightness(0) invert(1); opacity: 0.7; }
+.cf-sep { width: 1px; height: 13px; background: rgba(255,255,255,0.12); }
+.cf-text { font-size: 9px; color: rgba(255,255,255,0.35); }
+.cf-text a { color: var(--accent); text-decoration: none; }
+
+/* ══════════════════════════════════════════
+   ███ INNER PAGES ███
+══════════════════════════════════════════ */
+.inner { display: flex; flex-direction: column; min-height: 297mm; }
+
+.inner-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 26px;
+  border-bottom: 1px solid var(--border);
+  background: #FAFBFC;
 }
-.card-grid-3 {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px;
+.inner-hdr img { height: 14px; }
+.inner-hdr-title { font-size: 9px; color: #64748B; font-family: var(--sans-ar); }
+.inner-hdr-ref   { font-size: 9px; color: #94A3B8; font-family: 'Inter', sans-serif; }
+
+.inner-body { flex: 1; padding: 22px 26px; }
+
+.inner-ftr {
+  border-top: 1px solid var(--border); padding: 10px 26px;
+  display: flex; align-items: center; gap: 10px; background: #FAFBFC;
 }
-@media (max-width: 700px) {
-  .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+.inner-ftr img { height: 12px; opacity: 0.4; }
+.if-sep { width: 1px; height: 11px; background: #CBD5E1; }
+.if-text { font-size: 8px; color: #94A3B8; flex: 1; }
+.if-page { font-size: 8.5px; color: #94A3B8; font-weight: 500; }
+
+/* ── Section header ── */
+.sec-hdr {
+  background: var(--navy); border-radius: 7px;
+  padding: 14px 18px 14px 22px; margin-bottom: 16px;
+  page-break-inside: avoid; position: relative; overflow: hidden;
 }
+.sec-hdr::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+  background: linear-gradient(to bottom, var(--accent), #7C3AED);
+}
+.sec-eyebrow { font-size: 6.5px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+.sec-title-main { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px; font-family: var(--sans-ar); }
+.sec-desc { font-size: 8px; color: rgba(255,255,255,0.48); line-height: 1.6; max-width: 500px; font-family: var(--sans-ar); }
+
+/* ── Sub heading ── */
+.sub-h {
+  font-size: 9.5px; font-weight: 700; color: var(--text);
+  margin: 14px 0 8px; display: flex; align-items: center; gap: 8px;
+  font-family: var(--sans-ar);
+}
+.sub-h::before { content: ''; width: 3px; height: 13px; background: var(--purple); border-radius: 2px; flex-shrink: 0; }
+
+/* ── Prose ── */
+.prose { font-size: 9px; color: var(--muted); line-height: 1.75; margin-bottom: 10px; font-family: var(--sans-ar); }
+.prose strong { color: var(--text); font-weight: 600; }
+
+/* ── KPI row ── */
+.kpi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
 .kpi-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 20px 22px;
-  border-right: 4px solid var(--purple);
+  border: 1px solid var(--border); border-radius: 7px; padding: 13px 14px;
+  border-top: 3px solid var(--purple); page-break-inside: avoid;
 }
-.ltr .kpi-card { border-right: none; border-left: 4px solid var(--purple); }
-.kpi-label {
-  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.16em;
-  text-transform: uppercase; color: var(--faint); font-family: var(--mono);
-  margin-bottom: 6px;
-}
-.kpi-value { font-size: 1.5rem; font-weight: 900; color: var(--purple); font-family: var(--en); line-height: 1; margin-bottom: 4px; }
-.kpi-sub { font-size: 0.78rem; color: var(--muted); }
+.kpi-label { font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim); margin-bottom: 5px; font-family: var(--sans-ar); }
+.kpi-value { font-size: 20px; font-weight: 800; color: var(--purple); line-height: 1; font-family: 'Inter', sans-serif; }
+.kpi-sub { font-size: 8px; color: var(--muted); margin-top: 4px; font-family: var(--sans-ar); }
 
-/* ═══════════════════════════════════════════
-   TABLES
-═══════════════════════════════════════════ */
-.tbl-wrap {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; overflow: hidden; margin-bottom: 16px;
+/* ── Objective cards ── */
+.obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.obj-card {
+  border: 1px solid var(--border); border-radius: 6px; padding: 11px 13px;
+  page-break-inside: avoid;
 }
-.tbl-wrap table { width: 100%; border-collapse: collapse; }
-.tbl-wrap th {
-  background: var(--purple-bg); color: var(--purple);
-  font-weight: 700; font-size: 0.68rem; font-family: var(--mono);
-  text-transform: uppercase; letter-spacing: 0.12em;
-  padding: 13px 18px; text-align: right;
-}
-.ltr .tbl-wrap th { text-align: left; }
-.tbl-wrap td {
-  padding: 13px 18px; font-size: 0.9rem; color: var(--text-soft);
-  border-bottom: 1px solid var(--border-soft); vertical-align: top;
-}
-.tbl-wrap tr:last-child td { border-bottom: none; }
-.tbl-wrap tr:nth-child(even) td { background: #FAFAF8; }
-.tbl-num { font-family: var(--en); font-weight: 600; color: var(--text); text-align: left; }
-.ltr .tbl-num { text-align: right; }
+.obj-num { font-size: 8px; font-weight: 700; color: var(--purple); font-family: 'Inter', sans-serif; margin-bottom: 4px; letter-spacing: 0.05em; }
+.obj-title { font-size: 9px; font-weight: 700; color: var(--text); margin-bottom: 4px; font-family: var(--sans-ar); }
+.obj-body { font-size: 8px; color: var(--muted); line-height: 1.6; font-family: var(--sans-ar); }
 
-/* Total row */
-.tbl-total { background: var(--green-bg) !important; }
-.tbl-total td {
-  font-weight: 800; color: var(--green) !important;
-  border-bottom: none !important; font-size: 0.95rem;
-}
-.tbl-total .tbl-num { font-size: 1.05rem; color: var(--green) !important; }
-
-/* Subtotal row */
-.tbl-sub { background: #F0EBF5 !important; }
-.tbl-sub td { font-weight: 700; color: var(--purple) !important; border-bottom: 1px solid var(--border) !important; }
-.tbl-sub .tbl-num { color: var(--purple) !important; }
-
-/* ═══════════════════════════════════════════
-   PHASE CARDS (SCOPE)
-═══════════════════════════════════════════ */
-.phase-list { display: flex; flex-direction: column; gap: 12px; }
+/* ── Phase list ── */
+.phase-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
 .phase-item {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 18px 22px;
-  display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start;
+  border: 1px solid var(--border); border-radius: 6px; padding: 11px 13px;
+  display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start;
+  page-break-inside: avoid;
 }
-.phase-badge {
+.phase-num {
   background: var(--purple); color: #fff;
-  font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
-  padding: 6px 12px; border-radius: 6px; white-space: nowrap;
-  letter-spacing: 0.06em;
+  font-size: 8px; font-weight: 700; padding: 4px 9px; border-radius: 4px;
+  white-space: nowrap; font-family: 'Inter', sans-serif;
 }
-.phase-name { font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; }
-.phase-desc { font-size: 0.85rem; color: var(--text-soft); line-height: 1.65; }
-.phase-bullets { list-style: none; margin-top: 10px; }
-.phase-bullets li {
-  font-size: 0.83rem; color: var(--muted); padding: 3px 0;
-  padding-right: 14px; position: relative;
+.phase-title { font-size: 9px; font-weight: 700; color: var(--text); margin-bottom: 4px; font-family: var(--sans-ar); }
+.phase-body { font-size: 8px; color: var(--muted); line-height: 1.6; font-family: var(--sans-ar); }
+.phase-items { list-style: none; margin-top: 6px; display: flex; flex-direction: column; gap: 3px; }
+.phase-items li {
+  font-size: 7.5px; color: var(--muted); line-height: 1.5;
+  display: flex; align-items: flex-start; gap: 6px; font-family: var(--sans-ar);
 }
-.phase-bullets li::before { content: '—'; position: absolute; right: 0; color: var(--purple); }
-.ltr .phase-bullets li { padding-right: 0; padding-left: 14px; }
-.ltr .phase-bullets li::before { right: auto; left: 0; }
+.phase-items li::before { content: '—'; color: var(--purple); flex-shrink: 0; font-weight: 700; font-family: 'Inter'; }
 
-/* ═══════════════════════════════════════════
-   TIMELINE
-═══════════════════════════════════════════ */
-.timeline { display: flex; flex-direction: column; gap: 0; }
-.tl-item {
-  display: grid; grid-template-columns: 120px auto 1fr;
-  gap: 0; align-items: stretch;
-}
-.tl-week {
-  font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
-  color: var(--purple); padding: 14px 18px 14px 0;
-  text-align: left;
-  display: flex; align-items: center;
-}
-.ltr .tl-week { text-align: right; padding: 14px 0 14px 18px; }
-.tl-dot-col {
-  display: flex; flex-direction: column; align-items: center;
-  padding: 0 16px;
-}
-.tl-dot {
-  width: 12px; height: 12px;
-  background: var(--purple); border-radius: 50%;
-  flex-shrink: 0; margin-top: 18px;
-}
-.tl-line {
-  flex: 1; width: 2px; background: var(--border);
-}
-.tl-item:last-child .tl-line { display: none; }
-.tl-content {
-  padding: 12px 0 20px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; padding: 12px 16px; margin-bottom: 8px;
-}
-.tl-content-ph { font-weight: 700; font-size: 0.9rem; margin-bottom: 3px; }
-.tl-content-sub { font-size: 0.8rem; color: var(--muted); }
+/* ── Two columns ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 
-/* ═══════════════════════════════════════════
-   INFO BOXES
-═══════════════════════════════════════════ */
-.info-box {
-  border-radius: 8px; padding: 14px 18px;
-  font-size: 0.85rem; line-height: 1.65; margin-bottom: 10px;
-  border-right: 4px solid;
+/* ── Note box ── */
+.note-box {
+  border-radius: 5px; padding: 11px 14px;
+  font-size: 9px; line-height: 1.65; margin-bottom: 12px;
+  page-break-inside: avoid;
 }
-.ltr .info-box { border-right: none; border-left: 4px solid; }
-.info-green { background: var(--green-bg); border-color: var(--green-mid); color: #1A4D30; }
-.info-amber { background: var(--amber-bg); border-color: var(--amber); color: #5A3E00; }
-.info-teal  { background: var(--teal-bg);  border-color: var(--teal);  color: #024C50; }
-.info-purple { background: var(--purple-bg); border-color: var(--purple); color: var(--purple-dark); }
+.note-box.purple { background: #F5EFF3; border: 1px solid rgba(113,75,103,0.2); border-left: 3px solid var(--purple); }
+.note-box.amber  { background: var(--amber-bg); border: 1px solid #FDE68A; border-left: 3px solid var(--amber); }
+.note-box.green  { background: var(--green-bg); border: 1px solid #A7F3D0; border-left: 3px solid var(--green); }
+.note-box .nb-label { font-size: 7.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 5px; }
+.note-box.purple .nb-label { color: var(--purple); }
+.note-box.amber  .nb-label { color: var(--amber); }
+.note-box.green  .nb-label { color: var(--green); }
+.note-box p { color: #374151; font-family: var(--sans-ar); }
 
-/* ═══════════════════════════════════════════
-   PAYMENT TIMELINE
-═══════════════════════════════════════════ */
-.payment-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-}
-@media (max-width: 640px) { .payment-grid { grid-template-columns: 1fr; } }
-.payment-step {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 20px 18px; text-align: center;
-}
-.pay-num {
-  font-family: var(--en); font-size: 2rem; font-weight: 900;
-  color: var(--purple); line-height: 1;
-}
-.pay-label { font-size: 0.75rem; font-weight: 700; color: var(--muted); margin: 6px 0 4px; }
-.pay-when { font-size: 0.82rem; color: var(--text-soft); line-height: 1.5; }
+/* ── Deliverables ── */
+.deliv-col { border: 1px solid var(--border); border-radius: 6px; padding: 13px 14px; }
+.deliv-head { font-size: 8px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 9px; font-family: var(--sans-ar); }
+.deliv-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.deliv-list li { font-size: 8px; color: var(--muted); display: flex; align-items: flex-start; gap: 7px; line-height: 1.5; font-family: var(--sans-ar); }
+.deliv-list li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 9px; flex-shrink: 0; }
 
-/* ═══════════════════════════════════════════
-   ACCEPTANCE BLOCK
-═══════════════════════════════════════════ */
-.accept-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+/* ── Assumption list ── */
+.assum-list { list-style: none; margin-bottom: 12px; }
+.assum-list li {
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 8px 10px; border-bottom: 1px solid #F1F5F9;
+  font-size: 8.5px; color: var(--muted); line-height: 1.55; font-family: var(--sans-ar);
 }
-@media (max-width: 640px) { .accept-grid { grid-template-columns: 1fr; } }
-.sig-box {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 24px;
-}
-.sig-box-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-family: var(--mono); margin-bottom: 16px; }
-.sig-line { border-bottom: 1.5px solid var(--border); margin: 28px 0 8px; }
-.sig-field-label { font-size: 0.7rem; color: var(--faint); font-family: var(--mono); }
-.sig-name-val { font-size: 0.88rem; font-weight: 600; color: var(--text-soft); margin-top: 4px; }
+.assum-list li:first-child { border-top: 1px solid #F1F5F9; }
+.assum-list li:nth-child(even) { background: #FAFBFD; }
+.assum-icon { width: 15px; height: 15px; min-width: 15px; border-radius: 3px; background: #F1F5F9; border: 1px solid #CBD5E1; display: flex; align-items: center; justify-content: center; font-size: 9px; color: var(--purple); margin-top: 1px; flex-shrink: 0; }
 
-/* ═══════════════════════════════════════════
-   UTILITY
-═══════════════════════════════════════════ */
-.pill {
-  display: inline-block;
-  background: var(--purple-bg); color: var(--purple);
-  border: 1px solid rgba(113,75,103,0.18);
-  padding: 3px 10px; border-radius: 12px;
-  font-size: 0.75rem; font-weight: 500; margin: 2px 3px 2px 0;
-}
-.pill.green { background: var(--green-bg); color: var(--green); border-color: rgba(30,107,60,0.2); }
-.divider-sm { border: none; border-top: 1px solid var(--border-soft); margin: 20px 0; }
-.label-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
-.body-text { font-size: 0.92rem; color: var(--text-soft); line-height: 1.8; }
-.body-text p { margin-bottom: 12px; }
-.note { font-size: 0.78rem; color: var(--muted); font-style: italic; margin-top: 6px; }
-.spec-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;
-}
-.spec-item { display: flex; gap: 8px; align-items: baseline; font-size: 0.85rem; }
-.spec-dot { color: var(--purple); font-weight: 700; }
-.spec-label { color: var(--muted); }
-.spec-val { font-weight: 600; color: var(--text); margin-right: 4px; }
+/* ── Scope in/out ── */
+.scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.scope-box { border-radius: 6px; padding: 12px 14px; page-break-inside: avoid; }
+.scope-in  { background: rgba(5,150,105,0.04); border: 1px solid rgba(5,150,105,0.2); }
+.scope-out { background: rgba(217,119,6,0.04); border: 1px solid rgba(217,119,6,0.2); }
+.scope-head { font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px; font-family: var(--sans-ar); }
+.scope-in  .scope-head { color: var(--green); }
+.scope-out .scope-head { color: var(--amber); }
+.scope-ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.scope-ul li { font-size: 7.5px; color: var(--muted); display: flex; align-items: flex-start; gap: 6px; line-height: 1.5; font-family: var(--sans-ar); }
+.scope-in  li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+.scope-out li::before { content: '✗'; color: var(--amber); font-weight: 700; flex-shrink: 0; }
 
-/* ═══════════════════════════════════════════
-   LTR (ENGLISH SECTION)
-═══════════════════════════════════════════ */
-.ltr {
-  direction: ltr;
-  font-family: var(--en);
-  text-align: left;
+/* ══════════════════════════════════════════
+   ███ FINANCIAL TABLE ███
+══════════════════════════════════════════ */
+.fin-table { width: 100%; border-collapse: collapse; font-size: 9.5px; margin-bottom: 12px; direction: ltr; }
+.fin-table thead th {
+  background: var(--navy); color: #fff;
+  padding: 10px 12px; text-align: left;
+  font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
 }
-.ltr .tbl-wrap th { text-align: left; }
-.ltr .kpi-card { border-right: none; border-left: 4px solid var(--purple); }
-.ltr .sec-tag { margin-left: auto; margin-right: 0; }
-.ltr .phase-bullets li::before { right: auto; left: 0; }
-.ltr .info-box { border-right: none; border-left: 4px solid; }
-.ltr .hdr-right { margin-left: auto; margin-right: 0; }
-.ltr .ft-right { margin-left: auto; margin-right: 0; }
-.ltr .doc-header { direction: ltr; font-family: var(--en); }
-.ltr-header { direction: ltr; }
+.fin-table thead th:last-child { text-align: right; }
+.fin-table tbody tr { border-bottom: 1px solid #EEF2F7; }
+.fin-table tbody tr:nth-child(even) { background: #F8FAFC; }
+.fin-table tbody td { padding: 9px 12px; color: var(--muted); vertical-align: top; line-height: 1.5; text-align: left; }
+.fin-table tbody td:last-child { text-align: right; font-weight: 700; color: var(--text); white-space: nowrap; font-family: 'Inter', sans-serif; }
+.fin-table .item-name { font-weight: 600; color: var(--text); display: block; margin-bottom: 2px; }
+.fin-table .item-desc { font-size: 8.5px; color: var(--muted); }
+.fin-table .tag-pill {
+  display: inline-block; padding: 2px 9px; border-radius: 20px;
+  font-size: 8px; font-weight: 600; border: 1px solid;
+}
+.tp-once  { border-color: #C7D2FE; color: #4338CA; background: #EEF2FF; }
+.tp-annual { border-color: #BBF7D0; color: #15803D; background: #F0FDF4; }
+.tp-est   { border-color: #FDE68A; color: #B45309; background: #FFFBEB; }
 
-/* section intro para */
-.intro-para {
-  background: var(--purple-tint); border: 1px solid rgba(113,75,103,0.12);
-  border-radius: 10px; padding: 18px 22px;
-  font-size: 0.92rem; color: var(--text-soft); line-height: 1.85;
-  margin-bottom: 24px;
+/* subtotal rows */
+.fin-table .sub-row td { background: #F0ECF4; border-top: 1.5px solid #D8CCDC; font-weight: 700; font-size: 9.5px; color: var(--purple2); }
+.fin-table .sub-row td:last-child { color: var(--purple); font-size: 11px; font-family: 'Inter', sans-serif; }
+/* total row */
+.fin-table .total-row td { background: var(--navy); color: #fff; font-size: 11px; font-weight: 700; border: none; padding: 12px 12px; }
+.fin-table .total-row td:last-child { color: var(--accent); font-size: 14px; font-family: 'Inter', sans-serif; }
+/* spec sub-table */
+.spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.spec-card { border: 1px solid var(--border); border-radius: 6px; padding: 11px 13px; page-break-inside: avoid; }
+.spec-card-title { font-size: 8.5px; font-weight: 700; color: var(--text); margin-bottom: 6px; font-family: var(--sans-ar); }
+.spec-card-sub { font-size: 7.5px; color: var(--dim); margin-bottom: 8px; font-family: var(--sans-ar); }
+.spec-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #F1F5F9; font-size: 8px; }
+.spec-row:last-child { border-bottom: none; }
+.spec-row .sk { color: var(--muted); font-family: var(--sans-ar); }
+.spec-row .sv { font-weight: 600; color: var(--text); font-family: 'Inter', sans-serif; font-size: 8.5px; }
+
+/* ══════════════════════════════════════════
+   ███ PAYMENT & SIGN-OFF ███
+══════════════════════════════════════════ */
+.payment-steps { display: flex; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; margin-bottom: 14px; page-break-inside: avoid; }
+.payment-step { flex: 1; padding: 14px 13px; border-right: 1px solid var(--border); text-align: center; }
+.payment-step:last-child { border-right: none; }
+.ps-pct { font-size: 22px; font-weight: 900; color: var(--purple); line-height: 1; font-family: 'Inter', sans-serif; margin-bottom: 4px; }
+.ps-label { font-size: 7.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; font-family: var(--sans-ar); }
+.ps-trigger { font-size: 8px; color: var(--muted); line-height: 1.5; margin-bottom: 4px; font-family: var(--sans-ar); }
+.ps-amount { font-size: 11px; font-weight: 700; color: var(--text); font-family: 'Inter', sans-serif; }
+
+/* timeline table */
+.tl-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 12px; }
+.tl-table thead th { background: var(--navy); color: #fff; padding: 9px 12px; text-align: left; font-size: 7.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.tl-table tbody tr { border-bottom: 1px solid #EEF2F7; }
+.tl-table tbody tr:nth-child(even) { background: #F8FAFC; }
+.tl-table tbody td { padding: 8px 12px; color: var(--muted); vertical-align: middle; font-family: var(--sans-ar); }
+.tl-table tbody td strong { color: var(--text); }
+.tl-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--purple); color: #fff;
+  font-size: 9px; font-weight: 800; margin-right: 8px;
+  font-family: 'Inter', sans-serif;
 }
 
-/* validity badge */
+/* sign-off */
+.signoff {
+  border: 1.5px solid var(--border); border-radius: 6px;
+  overflow: hidden; margin-top: 14px; page-break-inside: avoid;
+}
+.signoff-hdr {
+  background: var(--navy); color: #fff;
+  padding: 10px 16px; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; font-family: var(--sans-ar);
+}
+.signoff-body { padding: 16px; background: #FAFBFC; }
+.signoff-statement { font-size: 9.5px; color: #374151; line-height: 1.65; margin-bottom: 18px; font-style: italic; font-family: var(--sans-ar); }
+.signoff-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.signoff-col-hdr {
+  font-size: 8.5px; font-weight: 700; color: var(--text);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 12px; padding-bottom: 5px;
+  border-bottom: 2px solid var(--purple);
+  font-family: var(--sans-ar);
+}
+.sig-field { margin-bottom: 13px; }
+.sig-field-label { font-size: 8px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; font-family: var(--sans-ar); }
+.sig-field-val { font-size: 9px; color: var(--text); margin-bottom: 4px; font-family: var(--sans-ar); }
+.sig-line { border-bottom: 1.5px solid #CBD5E1; height: 28px; }
+
+/* ── validity ── */
 .validity-card {
-  background: linear-gradient(135deg, var(--purple-bg) 0%, #F0E8EE 100%);
-  border: 2px solid rgba(113,75,103,0.25); border-radius: 14px;
-  padding: 24px 28px; text-align: center;
+  background: #F5EFF3; border: 2px solid rgba(113,75,103,0.22);
+  border-radius: 8px; padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; page-break-inside: avoid;
 }
-.validity-num { font-family: var(--en); font-size: 3rem; font-weight: 900; color: var(--purple); line-height: 1; }
-.validity-unit { font-size: 1rem; font-weight: 600; color: var(--purple); margin-top: 4px; }
-.validity-date { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-top: 8px; }
+.vc-num { font-size: 36px; font-weight: 900; color: var(--purple); line-height: 1; font-family: 'Inter', sans-serif; }
+.vc-unit { font-size: 11px; font-weight: 600; color: var(--purple); margin-top: 2px; font-family: var(--sans-ar); }
+.vc-detail { font-size: 9px; color: var(--muted); font-family: var(--sans-ar); }
+.vc-range { font-size: 10px; font-weight: 600; color: var(--text); font-family: 'Inter', sans-serif; }
+
+/* section hr */
+.sec-hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+/* arabic RTL overrides */
+.ar-page { direction: rtl; }
+.ar-page .inner-hdr { flex-direction: row-reverse; }
+.ar-page .sec-hdr::before { left: auto; right: 0; }
+.ar-page .sub-h::before { order: 999; }
+.ar-page .sub-h { flex-direction: row-reverse; justify-content: flex-end; }
+.ar-page .phase-items li::before { order: -1; }
+.ar-page .phase-item { direction: rtl; }
+.ar-page .deliv-list li { direction: rtl; }
+.ar-page .assum-list li { direction: rtl; }
+.ar-page .scope-ul li { direction: rtl; }
+.ar-page .cover-bar { left: auto; right: 0; }
+.ar-page .cover-topbar { flex-direction: row-reverse; }
+.ar-page .cover-topbar-left { flex-direction: row-reverse; }
+.ar-page .cover-hero { direction: rtl; }
+.ar-page .cover-subtitle { direction: rtl; }
+.ar-page .cover-note { flex-direction: row-reverse; }
+.ar-page .cover-footer { flex-direction: row-reverse; }
+.ar-page .inner-ftr { flex-direction: row-reverse; }
+/* AR total banner flip */
+.ar-page .ct-right { text-align: left; }
+.ar-page .ct-left { direction: rtl; }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     SHARED HEADER
-═══════════════════════════════════════════ -->
-<div class="doc-header">
-  <div class="logo-mark">
-    <div class="logo-bubble">C</div>
-    <div class="logo-name">CodeOx</div>
-  </div>
-  <div class="hdr-divider"></div>
-  <div class="hdr-tag">عرض مالي · Financial Proposal</div>
-  <div class="hdr-right">
-    <span class="hdr-badge">
-      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
-      COX-LS-FP-2026-001
-    </span>
-  </div>
-</div>
+<!-- ════════════════════════════════════════════════════
+     ARABIC SECTION — العربية
+════════════════════════════════════════════════════ -->
 
-<!-- ═══════════════════════════════════════════
-     COVER PAGE
-═══════════════════════════════════════════ -->
-<div class="cover-wrap">
-  <div class="cover-top">
-    <div class="cover-eyebrow">عرض مالي احترافي · Professional Financial Proposal</div>
-    <div class="cover-client-name">مركز أندل هاندز للتجميل</div>
-    <div class="cover-client-en">Andel Hands Beauty Centre</div>
-    <div class="cover-title-ar">تنفيذ نظام<br>أودو 19 إنتربرايز</div>
-    <div class="cover-subtitle-ar">Odoo 19 Enterprise ERP Implementation</div>
-    <div class="cover-badges">
-      <span class="cover-badge">☁ LightNode KSA — Riyadh</span>
-      <span class="cover-badge">💬 WhatsApp Business API</span>
-      <span class="cover-badge">📊 4 مستخدمين · 4 Users</span>
-      <span class="cover-badge">✔ ZATCA Phase 2 Ready</span>
-    </div>
-  </div>
-  <div class="cover-bottom">
-    <div class="cover-meta-grid">
-      <div class="cover-meta-item">
-        <div class="cm-label">المرجع · Ref</div>
-        <div class="cm-value mono">COX-LS-FP-2026-001</div>
-      </div>
-      <div class="cover-meta-item">
-        <div class="cm-label">التاريخ · Date</div>
-        <div class="cm-value mono">21 June 2026</div>
-      </div>
-      <div class="cover-meta-item">
-        <div class="cm-label">صالح حتى · Valid Until</div>
-        <div class="cm-value mono">21 July 2026</div>
-      </div>
-      <div class="cover-meta-item">
-        <div class="cm-label">مقدَّم إلى · Prepared For</div>
-        <div class="cm-value">محمد · Mohammed</div>
-      </div>
-      <div class="cover-meta-item">
-        <div class="cm-label">الجهة المُعِدَّة · Prepared By</div>
-        <div class="cm-value">CodeOx Technologies</div>
-      </div>
-      <div class="cover-meta-item">
-        <div class="cm-label">النوع · Type</div>
-        <div class="cm-value">عرض مالي شامل</div>
-      </div>
-    </div>
-    <div class="cover-logo-white">
-      <div class="logo-bubble-white">C</div>
+<!-- AR PAGE 1: COVER -->
+<div class="page ar-page">
+<div class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-bar"></div>
+
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
       <div>
-        <div class="logo-text">CodeOx</div>
-        <div class="logo-sub">code-ox.com</div>
+        <div class="cover-client-name">مركز أندل هاندز للتجميل</div>
+        <div class="cover-client-sub">Andel Hands Beauty Centre</div>
+      </div>
+      <div class="cover-sep"></div>
+      <div class="cover-logo-wrap">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
       </div>
     </div>
+    <span class="cover-badge">عرض مالي · Financial Proposal</span>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">كود أوكس للتقنية · Odoo Implementation Partner · 2026</div>
+    <div class="cover-title">عرض مالي<br><span class="cover-title-accent">أودو 19 إنتربرايز</span></div>
+    <div class="cover-subtitle">تحول رقمي شامل لعمليات الصالون — نقطة بيع، محاسبة، ولاء، وتسويق واتساب على خوادم الرياض</div>
+    <div class="cover-tags">
+      <span class="cover-tag">☁ <strong>LightNode Premium</strong> · الرياض</span>
+      <span class="cover-tag">💬 <strong>WhatsApp Business API</strong></span>
+      <span class="cover-tag">👤 <strong>4 مستخدمين</strong> · Enterprise</span>
+      <span class="cover-tag">✔ ZATCA Phase 2</span>
+      <span class="cover-tag">⭐ برنامج الولاء من اليوم الأول</span>
+    </div>
+  </div>
+
+  <div class="cover-ref-box">
+    <div class="cover-ref-item">
+      <div class="cri-label">رقم المرجع</div>
+      <div class="cri-value acc">COX-LS-FP-2026-001</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cri-label">التاريخ</div>
+      <div class="cri-value">21 يونيو 2026</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cri-label">مُقدَّم إلى</div>
+      <div class="cri-value">محمد · مركز أندل هاندز</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cri-label">صالح حتى</div>
+      <div class="cri-value">21 يوليو 2026</div>
+    </div>
+  </div>
+
+  <div class="cover-total">
+    <div class="ct-left">
+      <div class="ct-label">إجمالي استثمار السنة الأولى</div>
+      <div class="ct-amount">24,491 ر.س</div>
+      <div class="ct-sub">شامل التنفيذ + الاشتراكات + الاستضافة + واتساب</div>
+    </div>
+    <div class="ct-right">
+      <div class="ct-yr2-label">التكرار السنوي (من السنة الثانية)</div>
+      <div class="ct-yr2-amount">5,991 ر.س / سنة</div>
+    </div>
+  </div>
+
+  <div class="cover-note">
+    <span class="cn-label">ملاحظة</span>
+    <span class="cn-text">إجمالي السنة الأولى (24,491 ر.س) يقع ضمن الميزانية المشار إليها البالغة أقل من 30,000 ر.س. جميع الأسعار حصرية لهذا العرض وخاضعة لضريبة القيمة المضافة 15%.</span>
+  </div>
+
+  <div class="cover-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="cf-sep"></div>
+    <div class="cf-text">CodeOx Technologies &nbsp;·&nbsp; <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a> &nbsp;·&nbsp; +966 53 571 6437 &nbsp;·&nbsp; code-ox.com</div>
   </div>
 </div>
+</div>
 
-<!-- ═══════════════════════════════════════════
-     ██████ ARABIC SECTION ██████
-═══════════════════════════════════════════ -->
-<div class="proposal-wrap">
+<!-- AR PAGE 2: EXECUTIVE SUMMARY + OBJECTIVES -->
+<div class="page ar-page">
+<div class="inner">
+  <div class="inner-hdr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="inner-hdr-title">عرض مالي — مركز أندل هاندز للتجميل</div>
+    <div class="inner-hdr-ref">COX-LS-FP-2026-001</div>
+  </div>
+  <div class="inner-body">
 
-  <!-- 01 EXECUTIVE SUMMARY -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">01</div>
-      <div class="sec-title">الملخص التنفيذي</div>
-      <div class="sec-tag">Executive Summary</div>
+    <div class="sec-hdr">
+      <div class="sec-eyebrow">Section 01 · Arabic</div>
+      <div class="sec-title-main">الملخص التنفيذي وأهداف المشروع</div>
+      <div class="sec-desc">نظرة شاملة على الحل المقترح والقيمة التي سيحققها لمركز أندل هاندز للتجميل</div>
     </div>
-    <div class="intro-para">
-      تتشرف شركة <strong>كود أوكس للتقنية</strong> بتقديم هذا العرض المالي الشامل لتنفيذ نظام <strong>أودو 19 إنتربرايز</strong> في مركز أندل هاندز للتجميل. يُعدّ هذا النظام حلاً متكاملاً يُحوّل العمليات اليومية من العمل اليدوي والورقي إلى بيئة رقمية ذكية ومتصلة، تُمكّن الإدارة من اتخاذ قراراتها بناءً على بيانات حقيقية وآنية.
-      <br><br>
-      يشمل الحل المقترح: نقطة البيع، المحاسبة والتقارير المالية، إدارة علاقات العملاء، برنامج الولاء، تكامل واتساب للتسويق الرقمي، والاستضافة على خوادم مخصصة في الرياض — كل ذلك بتكلفة إجمالية للسنة الأولى تُناسب الميزانية المُحددة.
+
+    <div class="sub-h">الملخص التنفيذي</div>
+    <div class="prose">
+      تتشرف <strong>شركة كود أوكس للتقنية</strong> بتقديم هذا العرض المالي الشامل لتنفيذ نظام <strong>أودو 19 إنتربرايز</strong> في مركز أندل هاندز للتجميل. يُحوّل هذا النظام العمليات اليومية من البيئة اليدوية الورقية إلى منظومة رقمية متكاملة تُمكّن الإدارة من اتخاذ قراراتها بناءً على بيانات حقيقية وآنية.
+    </div>
+    <div class="prose">
+      يشمل الحل المقترح: نقطة بيع متخصصة للصالونات، محاسبة ذكية متوافقة مع زاتكا، إدارة علاقات عملاء، برنامج ولاء من اليوم الأول، تكامل واتساب بيزنس للتسويق، واستضافة مخصصة في الرياض — كل ذلك بتكلفة إجمالية أقل من 25,000 ر.س للسنة الأولى.
     </div>
 
-    <div class="card-grid-3">
+    <div class="kpi-row">
       <div class="kpi-card">
         <div class="kpi-label">استثمار السنة الأولى</div>
         <div class="kpi-value">24,491</div>
-        <div class="kpi-sub">ريال سعودي · شامل الإعداد</div>
+        <div class="kpi-sub">ريال سعودي · كل شيء مشمول</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">تكرار سنوي (السنة 2+)</div>
+        <div class="kpi-label">التكرار السنوي (س2+)</div>
         <div class="kpi-value">5,991</div>
         <div class="kpi-sub">ريال سعودي · اشتراكات فقط</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">مدة التنفيذ</div>
         <div class="kpi-value">8</div>
-        <div class="kpi-sub">أسابيع · من الإعداد حتى التشغيل</div>
+        <div class="kpi-sub">أسابيع حتى التشغيل الفعلي</div>
       </div>
     </div>
-  </div>
 
-  <!-- 02 PROJECT OBJECTIVES -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">02</div>
-      <div class="sec-title">أهداف المشروع</div>
-      <div class="sec-tag">Project Objectives</div>
-    </div>
-    <div class="card">
-      <div class="phase-list">
-        <div class="phase-item">
-          <div class="phase-badge">01</div>
-          <div>
-            <div class="phase-name">رقمنة العمليات اليومية</div>
-            <div class="phase-desc">استبدال السجلات الورقية بنقطة بيع متكاملة تُسجّل كل معاملة، تُصدر الفواتير الإلكترونية، وتُدير العمليات اليومية بدقة.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">02</div>
-          <div>
-            <div class="phase-name">بناء قاعدة بيانات العملاء</div>
-            <div class="phase-desc">إنشاء سجل شامل لكل عميل يتضمن تاريخ الزيارات، الخدمات، والإنفاق — مع برنامج ولاء يبدأ من اليوم الأول.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">03</div>
-          <div>
-            <div class="phase-name">ضبط العمولات والخصومات</div>
-            <div class="phase-desc">أتمتة احتساب العمولات التدرجية للموظفين، وتطبيق حدود الخصم لكل كاشير مع نظام موافقة للحالات الاستثنائية.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">04</div>
-          <div>
-            <div class="phase-name">التسويق عبر واتساب</div>
-            <div class="phase-desc">إطلاق حملات تسويق موجّهة عبر واتساب بيزنس API — عروض الميلاد، تذكير بالمواعيد، إيصالات رقمية.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">05</div>
-          <div>
-            <div class="phase-name">الامتثال الضريبي (زاتكا)</div>
-            <div class="phase-desc">إعداد الفوترة الإلكترونية وفق متطلبات المرحلة الثانية من زاتكا، مع ربط ضريبة القيمة المضافة 15% تلقائياً.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">06</div>
-          <div>
-            <div class="phase-name">الاستضافة المحلية الآمنة</div>
-            <div class="phase-desc">تشغيل النظام على خادم مخصص في الرياض (LightNode) لضمان السرعة والأمان والامتثال لمتطلبات البيانات المحلية.</div>
-          </div>
-        </div>
+    <div class="sec-hr"></div>
+    <div class="sub-h">أهداف المشروع الستة</div>
+
+    <div class="obj-grid">
+      <div class="obj-card">
+        <div class="obj-num">01 — رقمنة العمليات</div>
+        <div class="obj-title">استبدال الورق بنقطة بيع متكاملة</div>
+        <div class="obj-body">تسجيل كل معاملة رقمياً، إصدار فواتير إلكترونية فورية، والتخلص من التسريب المالي.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num">02 — قاعدة بيانات العملاء</div>
+        <div class="obj-title">بناء الملفات من الصفر</div>
+        <div class="obj-body">التقاط رقم هاتف كل عميلة عند الدفع لبناء قاعدة بيانات متكاملة تُشغَّل بها حملات الولاء.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num">03 — ضبط العمولات والخصومات</div>
+        <div class="obj-title">أتمتة الحسابات اليدوية</div>
+        <div class="obj-body">محرك عمولات تدرجية آلي وحدود خصم لكل كاشير مع نظام موافقة للحالات الاستثنائية.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num">04 — تسويق واتساب</div>
+        <div class="obj-title">حملات موجّهة عبر WhatsApp API</div>
+        <div class="obj-body">إيصالات رقمية، عروض الميلاد، تذكير بالمواعيد — كلها تلقائية ومرتبطة بقاعدة البيانات.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num">05 — الامتثال الضريبي (زاتكا)</div>
+        <div class="obj-title">فوترة إلكترونية المرحلة الثانية</div>
+        <div class="obj-body">تفعيل e-invoicing وفق متطلبات زاتكا مع ربط ضريبة القيمة المضافة 15% تلقائياً.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num">06 — استضافة محلية آمنة</div>
+        <div class="obj-title">خادم مخصص في الرياض</div>
+        <div class="obj-body">أداء أعلى، بيانات داخل المملكة، وامتثال لمتطلبات الخصوصية السعودية.</div>
       </div>
     </div>
-  </div>
 
-  <!-- 03 SCOPE OF WORK -->
-  <div class="sec">
-    <div class="sec-head">
-      <div class="sec-num">03</div>
-      <div class="sec-title">نطاق العمل</div>
-      <div class="sec-tag">Scope of Work</div>
+  </div>
+  <div class="inner-ftr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="if-sep"></div>
+    <div class="if-text">CodeOx Technologies · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">الصفحة 2 / 9</div>
+  </div>
+</div>
+</div>
+
+<!-- AR PAGE 3: SCOPE OF WORK -->
+<div class="page ar-page">
+<div class="inner">
+  <div class="inner-hdr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="inner-hdr-title">نطاق العمل — المراحل التفصيلية</div>
+    <div class="inner-hdr-ref">COX-LS-FP-2026-001</div>
+  </div>
+  <div class="inner-body">
+
+    <div class="sec-hdr">
+      <div class="sec-eyebrow">Section 02 · Scope of Work</div>
+      <div class="sec-title-main">نطاق العمل — 6 مراحل</div>
+      <div class="sec-desc">خطة تنفيذ منهجية من تحليل المتطلبات حتى التشغيل الفعلي</div>
     </div>
+
     <div class="phase-list">
-
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">المرحلة 1</div>
+      <div class="phase-item">
+        <div class="phase-num">المرحلة 1</div>
         <div>
-          <div class="phase-name">الاستكشاف وتحليل المتطلبات</div>
-          <div class="phase-desc">مراجعة معمّقة للعمليات الحالية وتحديد الفجوات بين الواقع والنظام المطلوب.</div>
-          <ul class="phase-bullets">
+          <div class="phase-title">الاستكشاف وتحليل المتطلبات</div>
+          <div class="phase-body">مراجعة معمّقة للعمليات الحالية وتحديد الفجوات وتصميم هيكل الحل.</div>
+          <ul class="phase-items">
             <li>جلسة مراجعة العمليات التشغيلية مع الإدارة</li>
             <li>تحليل الفجوات وتوثيق المتطلبات</li>
             <li>تصميم هيكل الحل وخريطة الوحدات</li>
-            <li>جمع بيانات قائمة الخدمات (عربي/إنجليزي) والأسعار</li>
+            <li>جمع بيانات قائمة الخدمات (عربي/إنجليزي، الأسعار، المدد)</li>
           </ul>
         </div>
       </div>
-
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">المرحلة 2</div>
+      <div class="phase-item">
+        <div class="phase-num">المرحلة 2</div>
         <div>
-          <div class="phase-name">إعداد وتهيئة أودو</div>
-          <div class="phase-desc">تثبيت وتهيئة جميع وحدات النظام المطلوبة وفق متطلبات المركز.</div>
-          <ul class="phase-bullets">
-            <li>إعداد بيانات الشركة والمعلومات الأساسية</li>
-            <li>تهيئة نقطة البيع (أودو POS) بواجهة مناسبة للصالون</li>
-            <li>إعداد وحدة المحاسبة ودليل الحسابات السعودي</li>
-            <li>تهيئة إدارة علاقات العملاء (CRM)</li>
-            <li>إعداد صلاحيات المستخدمين وأدوار الكاشير والمدير</li>
+          <div class="phase-title">إعداد وتهيئة أودو</div>
+          <div class="phase-body">تثبيت وتهيئة جميع وحدات النظام المطلوبة وفق متطلبات المركز.</div>
+          <ul class="phase-items">
+            <li>إعداد الشركة والبيانات الأساسية</li>
+            <li>تهيئة نقطة البيع (POS) بواجهة مناسبة للصالون</li>
+            <li>إعداد المحاسبة ودليل الحسابات السعودي</li>
+            <li>تهيئة CRM وإدارة قاعدة العملاء</li>
+            <li>إعداد صلاحيات المستخدمين (كاشير، مدير، محاسب)</li>
             <li>تهيئة برنامج الولاء وآليات الاستحقاق</li>
             <li>إعداد محرك العمولات التدرجية المخصص</li>
-            <li>تفعيل وحدة الفوترة الإلكترونية (زاتكا)</li>
+            <li>تفعيل الفوترة الإلكترونية (زاتكا)</li>
           </ul>
         </div>
       </div>
-
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">المرحلة 3</div>
+      <div class="phase-item">
+        <div class="phase-num">المرحلة 3</div>
         <div>
-          <div class="phase-name">نقل البيانات</div>
-          <div class="phase-desc">استيراد البيانات الأساسية والتحقق من صحتها قبل التشغيل الفعلي.</div>
-          <ul class="phase-bullets">
+          <div class="phase-title">نقل البيانات</div>
+          <div class="phase-body">استيراد البيانات الأساسية والتحقق منها قبل التشغيل.</div>
+          <ul class="phase-items">
             <li>استيراد قائمة الخدمات والأسعار</li>
             <li>إعداد بيانات الموظفين وهياكل العمولات</li>
             <li>التحقق من صحة البيانات واعتمادها</li>
           </ul>
         </div>
       </div>
-
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">المرحلة 4</div>
+      <div class="phase-item">
+        <div class="phase-num">المرحلة 4</div>
         <div>
-          <div class="phase-name">تكامل واتساب بيزنس API</div>
-          <div class="phase-desc">ربط النظام بمنصة واتساب بيزنس لتفعيل التسويق الرقمي الموجّه.</div>
-          <ul class="phase-bullets">
+          <div class="phase-title">تكامل واتساب بيزنس API</div>
+          <div class="phase-body">ربط النظام بمنصة واتساب بيزنس لتفعيل التسويق الرقمي الموجّه.</div>
+          <ul class="phase-items">
             <li>إعداد وتفعيل حساب واتساب بيزنس API</li>
             <li>تصميم نماذج الرسائل التسويقية المعتمدة من ميتا</li>
-            <li>ربط النظام بأودو لإرسال الإيصالات والتذكيرات</li>
-            <li>إعداد سيناريوهات الحملات التسويقية (ترحيب، ميلاد، عروض)</li>
+            <li>ربط النظام بأودو للإيصالات والتذكيرات التلقائية</li>
+            <li>إعداد سيناريوهات الحملات (ترحيب، ميلاد، إعادة تفعيل)</li>
           </ul>
         </div>
       </div>
-
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">المرحلة 5</div>
+      <div class="phase-item">
+        <div class="phase-num">المرحلة 5</div>
         <div>
-          <div class="phase-name">التدريب</div>
-          <div class="phase-desc">تدريب الفريق على الاستخدام الكامل للنظام قبل الإطلاق.</div>
-          <ul class="phase-bullets">
-            <li>تدريب المدير والمحاسب على الوحدات الإدارية والمالية</li>
-            <li>تدريب الكاشيرين على نقطة البيع والخصومات</li>
+          <div class="phase-title">التدريب</div>
+          <div class="phase-body">تدريب الفريق على الاستخدام الكامل للنظام قبل الإطلاق (3 أيام).</div>
+          <ul class="phase-items">
+            <li>تدريب المدير والمحاسب على الوحدات المالية والتقارير</li>
+            <li>تدريب الكاشيرين على نقطة البيع وآليات الخصم</li>
             <li>تدريب المشرف على تقارير العمولات والأداء</li>
-            <li>توثيق دليل المستخدم بالعربية</li>
           </ul>
         </div>
       </div>
-
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">المرحلة 6</div>
+      <div class="phase-item">
+        <div class="phase-num">المرحلة 6</div>
         <div>
-          <div class="phase-name">الاختبار والتشغيل الفعلي</div>
-          <div class="phase-desc">اختبار شامل للنظام قبل الإطلاق الرسمي مع دعم مكثف في أيام التشغيل الأولى.</div>
-          <ul class="phase-bullets">
-            <li>اختبار القبول من المستخدم (UAT)</li>
-            <li>نشر النظام في بيئة الإنتاج</li>
-            <li>الدعم المكثف خلال أول أسبوعين من التشغيل (Hypercare)</li>
+          <div class="phase-title">الاختبار والتشغيل الفعلي</div>
+          <div class="phase-body">اختبار شامل ونشر رسمي مع دعم مكثف في الأسبوعين الأولين.</div>
+          <ul class="phase-items">
+            <li>اختبار القبول من المستخدم (UAT) مع اعتماد رسمي</li>
+            <li>نشر النظام في بيئة الإنتاج على الخادم السعودي</li>
+            <li>دعم Hypercare المكثف خلال أول أسبوعين من التشغيل</li>
             <li>جلسة مراجعة ما بعد الإطلاق</li>
           </ul>
         </div>
       </div>
-
     </div>
+
   </div>
+  <div class="inner-ftr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="if-sep"></div>
+    <div class="if-text">CodeOx Technologies · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">الصفحة 3 / 9</div>
+  </div>
+</div>
+</div>
 
-  <!-- 04 DELIVERABLES -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">04</div>
-      <div class="sec-title">المخرجات</div>
-      <div class="sec-tag">Deliverables</div>
-    </div>
-    <div class="card-grid-2">
-      <div class="card">
-        <div class="phase-name" style="margin-bottom:10px;">مخرجات التقنية</div>
-        <ul class="phase-bullets">
+<!-- AR PAGE 4: DELIVERABLES + ASSUMPTIONS + EXCLUSIONS -->
+<div class="page ar-page">
+<div class="inner">
+  <div class="inner-hdr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="inner-hdr-title">المخرجات · الافتراضات · الاستثناءات</div>
+    <div class="inner-hdr-ref">COX-LS-FP-2026-001</div>
+  </div>
+  <div class="inner-body">
+
+    <div class="sub-h">المخرجات</div>
+    <div class="two-col">
+      <div class="deliv-col">
+        <div class="deliv-head">مخرجات تقنية</div>
+        <ul class="deliv-list">
           <li>نظام أودو 19 Enterprise مُهيَّأ بالكامل</li>
           <li>نقطة بيع احترافية مخصصة للصالون</li>
           <li>وحدة محاسبة جاهزة للتدقيق المالي</li>
           <li>تكامل واتساب بيزنس API مُفعَّل</li>
           <li>برنامج الولاء وإدارة العملاء</li>
           <li>فوترة إلكترونية متوافقة مع زاتكا</li>
-          <li>خادم مُهيَّأ في الرياض مع SSL وNginx</li>
+          <li>خادم Riyadh مُهيَّأ بالكامل مع SSL</li>
         </ul>
       </div>
-      <div class="card">
-        <div class="phase-name" style="margin-bottom:10px;">مخرجات المشروع</div>
-        <ul class="phase-bullets">
-          <li>وثيقة نطاق العمل المعتمدة</li>
+      <div class="deliv-col">
+        <div class="deliv-head">مخرجات وثائق المشروع</div>
+        <ul class="deliv-list">
+          <li>وثيقة نطاق العمل المعتمدة (SoW)</li>
           <li>دليل المستخدم بالعربية</li>
           <li>محاضر جلسات التدريب</li>
           <li>تقرير اختبار القبول (UAT)</li>
@@ -751,887 +770,708 @@ body { background: var(--bg); color: var(--text); font-family: var(--ar); line-h
         </ul>
       </div>
     </div>
+
+    <div class="sec-hr"></div>
+    <div class="sub-h">الافتراضات</div>
+    <ul class="assum-list">
+      <li><span class="assum-icon">→</span>يُوفّر العميل مُمثّلاً أساسياً متاحاً طوال ساعات العمل خلال المشروع</li>
+      <li><span class="assum-icon">→</span>تُقدَّم بيانات قائمة الخدمات والأسعار خلال أول أسبوع من المشروع</li>
+      <li><span class="assum-icon">→</span>يُوافق العميل على نماذج رسائل واتساب وفق متطلبات ميتا</li>
+      <li><span class="assum-icon">→</span>رسوم اشتراك أودو Enterprise تُدفع مباشرة من العميل إلى أودو S.A.</li>
+      <li><span class="assum-icon">→</span>رسوم LightNode وواتساب تكاليف مباشرة يدفعها العميل شهرياً</li>
+      <li><span class="assum-icon">→</span>مدة التدريب الإجمالية: 3 أيام عمل</li>
+    </ul>
+
+    <div class="sub-h">نطاق الشمول والاستثناءات</div>
+    <div class="scope-grid">
+      <div class="scope-box scope-in">
+        <div class="scope-head">مشمول في هذا العرض ✓</div>
+        <ul class="scope-ul">
+          <li>نقطة البيع + المحاسبة + زاتكا</li>
+          <li>إدارة علاقات العملاء (CRM)</li>
+          <li>برنامج الولاء من اليوم الأول</li>
+          <li>محرك العمولات التدرجية المخصص</li>
+          <li>تكامل واتساب بيزنس API</li>
+          <li>الاستضافة على LightNode Premium</li>
+          <li>التدريب (3 أيام) + دليل عربي</li>
+          <li>دعم Hypercare أسبوعان</li>
+        </ul>
+      </div>
+      <div class="scope-box scope-out">
+        <div class="scope-head">خارج نطاق هذا العرض ✗</div>
+        <ul class="scope-ul">
+          <li>الحجز الإلكتروني عبر الإنترنت (مرحلة 2)</li>
+          <li>إدارة المخزون (المركز خدمات فقط)</li>
+          <li>أجهزة POS وطابعات الإيصال</li>
+          <li>الدعم التقني بعد Hypercare</li>
+          <li>الباقات والمحافظ المدفوعة مسبقاً</li>
+          <li>تدريب إضافي خارج 3 أيام</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note-box amber">
+      <div class="nb-label">ملاحظة مهمة</div>
+      <p>جميع البنود خارج النطاق يمكن إضافتها في مرحلة لاحقة بعقد منفصل. تواصلوا مع فريقنا لأي استفسارات.</p>
+    </div>
+
   </div>
-
-  <!-- 05 ASSUMPTIONS -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">05</div>
-      <div class="sec-title">الافتراضات</div>
-      <div class="sec-tag">Assumptions</div>
-    </div>
-    <div class="card">
-      <ul class="phase-bullets">
-        <li>يُوفّر العميل مُمثّلاً أساسياً متاحاً للتواصل خلال ساعات العمل</li>
-        <li>تُقدَّم بيانات قائمة الخدمات والأسعار خلال أول أسبوع من المشروع</li>
-        <li>يُوافق العميل على نماذج رسائل واتساب وفق متطلبات ميتا</li>
-        <li>تتضمن رسوم اشتراك أودو Enterprise ما يدفعه العميل مباشرة إلى أودو</li>
-        <li>تُعدّ رسوم LightNode وواتساب بمثابة تكاليف مباشرة يدفعها العميل شهرياً</li>
-        <li>مدة التدريب الإجمالية: 3 أيام (ساعات نظام)</li>
-        <li>النظام يعمل على الشبكة المحلية ومن خلال متصفح الإنترنت</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 06 EXCLUSIONS -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">06</div>
-      <div class="sec-title">الاستثناءات</div>
-      <div class="sec-tag">Exclusions</div>
-    </div>
-    <div class="info-box info-amber">
-      <strong>ملاحظة:</strong> العناصر التالية خارج نطاق هذا العرض ويمكن إضافتها في مرحلة مستقبلية بتسعير منفصل.
-    </div>
-    <div class="card">
-      <ul class="phase-bullets">
-        <li>وحدة الحجز الإلكتروني عبر الإنترنت (تُضاف في المرحلة 2)</li>
-        <li>وحدة إدارة المخزون (المركز يعمل بخدمات فقط — لا منتجات)</li>
-        <li>تكامل أجهزة POS (أجهزة الكاشير، طابعات الإيصال — تُحدَّد منفصلاً)</li>
-        <li>الدعم التقني بعد فترة Hypercare (يمكن إضافة عقد صيانة)</li>
-        <li>الباقات والمحافظ المدفوعة مسبقاً (تُعالَج في المرحلة 3)</li>
-        <li>التدريب خارج النطاق المُحدَّد (3 أيام)</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 07 TIMELINE -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">07</div>
-      <div class="sec-title">الجدول الزمني للمشروع</div>
-      <div class="sec-tag">Project Timeline · 8 Weeks</div>
-    </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:120px;">الأسبوع</th>
-            <th>المرحلة</th>
-            <th style="width:200px;">النشاط الرئيسي</th>
-            <th style="width:120px;">الحالة</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="tbl-num">الأسبوع 1–2</td>
-            <td><strong>الاستكشاف والتحليل</strong></td>
-            <td>مراجعة العمليات، جمع البيانات، تصميم الحل</td>
-            <td><span class="pill">مرحلة 1</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">الأسبوع 3–5</td>
-            <td><strong>إعداد وتهيئة النظام</strong></td>
-            <td>تثبيت أودو، إعداد وحدات POS والمحاسبة والCRM والولاء</td>
-            <td><span class="pill">مرحلة 2</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">الأسبوع 4–5</td>
-            <td><strong>نقل البيانات</strong></td>
-            <td>استيراد قوائم الخدمات والموظفين والعمولات</td>
-            <td><span class="pill">مرحلة 3</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">الأسبوع 5–6</td>
-            <td><strong>تكامل واتساب API</strong></td>
-            <td>ربط واتساب، إعداد النماذج، اختبار الإرسال</td>
-            <td><span class="pill">مرحلة 4</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">الأسبوع 6–7</td>
-            <td><strong>التدريب</strong></td>
-            <td>تدريب الإدارة، المحاسب، الكاشيرين</td>
-            <td><span class="pill">مرحلة 5</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">الأسبوع 7–8</td>
-            <td><strong>الاختبار والتشغيل</strong></td>
-            <td>UAT، نشر الإنتاج، الدعم المكثف</td>
-            <td><span class="pill green">مرحلة 6 · Go-Live</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="info-box info-teal">
-      <strong>تنبيه:</strong> قد تتداخل المراحل لتسريع التسليم. يبدأ الجدول الزمني من تاريخ استلام الدفعة الأولى وتوقيع العقد.
-    </div>
-  </div>
-
-  <!-- 08 COMMERCIAL PROPOSAL -->
-  <div class="sec">
-    <div class="sec-head">
-      <div class="sec-num">08</div>
-      <div class="sec-title">العرض التجاري</div>
-      <div class="sec-tag">Commercial Proposal</div>
-    </div>
-
-    <!-- Server specs card -->
-    <div class="card avoid-break" style="margin-bottom:16px;">
-      <div class="phase-name" style="margin-bottom:4px;">تفاصيل الخادم — LightNode Premium · الرياض، المملكة العربية السعودية</div>
-      <div class="note" style="margin-bottom:12px;">خادم مخصص بأعلى مواصفات في منطقة الرياض</div>
-      <div class="spec-grid">
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">8 GB</span><span class="spec-label">ذاكرة DDR4</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">4 vCPU</span><span class="spec-label">معالج عالي التردد</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">50 GB</span><span class="spec-label">تخزين NVMe SSD</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">3 TB</span><span class="spec-label">باقة البيانات الشهرية</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">Ubuntu Linux</span><span class="spec-label">نظام التشغيل</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">الرياض</span><span class="spec-label">موقع مركز البيانات</span></div>
-      </div>
-    </div>
-
-    <!-- WhatsApp info card -->
-    <div class="card avoid-break" style="margin-bottom:16px;">
-      <div class="phase-name" style="margin-bottom:4px;">تفاصيل واتساب بيزنس API — تسعير التسويق</div>
-      <div class="note" style="margin-bottom:12px;">أسعار ميتا الرسمية · السوق السعودي · الريال السعودي</div>
-      <div class="spec-grid">
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">0.1877 ر.س</span><span class="spec-label">تكلفة رسالة تسويقية</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">500 رسالة</span><span class="spec-label">تقدير شهري (المرحلة الأولى)</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">93.85 ر.س</span><span class="spec-label">تقدير شهري</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">1,126.20 ر.س</span><span class="spec-label">تقدير سنوي</span></div>
-      </div>
-    </div>
-
-    <!-- Main pricing table -->
-    <div class="tbl-wrap avoid-break">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>البند</th>
-            <th>الوصف</th>
-            <th>النوع</th>
-            <th style="width:130px;">التكلفة (ر.س)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="tbl-num">1</td>
-            <td><strong>تنفيذ أودو 19</strong></td>
-            <td>رسوم التنفيذ الشاملة: الإعداد، التهيئة، نقل البيانات، التدريب، الاختبار، والتشغيل</td>
-            <td><span class="pill">مرة واحدة</span></td>
-            <td class="tbl-num" style="font-family:var(--en); font-weight:700;">18,000.00</td>
-          </tr>
-          <tr>
-            <td class="tbl-num">2</td>
-            <td><strong>ترخيص أودو Enterprise</strong></td>
-            <td>اشتراك 4 مستخدمين سنوياً — يُدفع مباشرة لأودو</td>
-            <td><span class="pill">سنوي</span></td>
-            <td class="tbl-num" style="font-family:var(--en); font-weight:700;">3,619.11</td>
-          </tr>
-          <tr>
-            <td class="tbl-num">3</td>
-            <td><strong>خادم LightNode Premium</strong></td>
-            <td>استضافة مخصصة في الرياض · 8GB RAM · 4 vCPU · 50GB NVMe · $27.7/شهر</td>
-            <td><span class="pill">سنوي</span></td>
-            <td class="tbl-num" style="font-family:var(--en); font-weight:700;">1,246.50</td>
-          </tr>
-          <tr>
-            <td class="tbl-num">4</td>
-            <td><strong>إعداد واتساب بيزنس API</strong></td>
-            <td>رسوم إعداد الحساب وتكامل النظام مع أودو</td>
-            <td><span class="pill">مرة واحدة</span></td>
-            <td class="tbl-num" style="font-family:var(--en); font-weight:700;">500.00</td>
-          </tr>
-          <tr>
-            <td class="tbl-num">5</td>
-            <td><strong>رسائل واتساب التسويقية</strong></td>
-            <td>تقدير سنوي بمعدل 500 رسالة/شهر × 0.1877 ر.س (تسعير ميتا الرسمي)</td>
-            <td><span class="pill">سنوي تقديري</span></td>
-            <td class="tbl-num" style="font-family:var(--en); font-weight:700;">1,126.20</td>
-          </tr>
-          <tr class="tbl-sub">
-            <td colspan="4" style="font-weight:800;">إجمالي المدفوعات لمرة واحدة</td>
-            <td class="tbl-num" style="font-family:var(--en);">18,500.00</td>
-          </tr>
-          <tr class="tbl-sub">
-            <td colspan="4" style="font-weight:800;">إجمالي الاشتراكات السنوية</td>
-            <td class="tbl-num" style="font-family:var(--en);">5,991.81</td>
-          </tr>
-          <tr class="tbl-total">
-            <td colspan="4" style="font-size:1rem;">🏆 إجمالي الاستثمار — السنة الأولى</td>
-            <td class="tbl-num" style="font-family:var(--en); font-size:1.15rem;">24,491.81</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card-grid-2" style="margin-top:14px;">
-      <div class="info-box info-green" style="margin-bottom:0;">
-        <strong>✓ ضمن الميزانية:</strong> إجمالي السنة الأولى (24,491 ر.س) يقع ضمن الميزانية المُشار إليها البالغة أقل من 30,000 ر.س.
-      </div>
-      <div class="info-box info-teal" style="margin-bottom:0;">
-        <strong>ℹ ملاحظة:</strong> جميع الأسعار بالريال السعودي وحصرية لهذا العرض. رسوم واتساب تقديرية وتتغير وفق عدد الرسائل الفعلية.
-      </div>
-    </div>
-
-    <div class="note" style="margin-top:12px; text-align:center;">
-      * جميع الأسعار لا تشمل ضريبة القيمة المضافة 15% — ستُضاف عند إصدار الفاتورة الرسمية.
-    </div>
-  </div>
-
-  <!-- 09 PAYMENT TERMS -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">09</div>
-      <div class="sec-title">شروط الدفع</div>
-      <div class="sec-tag">Payment Terms</div>
-    </div>
-    <div class="payment-grid">
-      <div class="payment-step">
-        <div class="pay-num">50%</div>
-        <div class="pay-label">الدفعة الأولى</div>
-        <div class="pay-when">عند توقيع العقد<br><strong style="font-family:var(--en);">9,000 ر.س</strong></div>
-      </div>
-      <div class="payment-step">
-        <div class="pay-num">30%</div>
-        <div class="pay-label">الدفعة الثانية</div>
-        <div class="pay-when">عند اعتماد اختبار UAT<br><strong style="font-family:var(--en);">5,400 ر.س</strong></div>
-      </div>
-      <div class="payment-step">
-        <div class="pay-num">20%</div>
-        <div class="pay-label">الدفعة النهائية</div>
-        <div class="pay-when">عند التشغيل الفعلي (Go-Live)<br><strong style="font-family:var(--en);">3,600 ر.س</strong></div>
-      </div>
-    </div>
-    <div class="info-box info-purple" style="margin-top:14px;">
-      <strong>طريقة الدفع:</strong> تحويل بنكي — يتضمن العقد تفاصيل الحساب البنكي لشركة كود أوكس للتقنية. يتم دفع رسوم الاشتراك السنوي (أودو + LightNode + واتساب) مباشرة من العميل لكل جهة على حدة.
-    </div>
-  </div>
-
-  <!-- 10 VALIDITY -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">10</div>
-      <div class="sec-title">صلاحية العرض</div>
-      <div class="sec-tag">Proposal Validity</div>
-    </div>
-    <div style="text-align:center; margin-bottom:20px;">
-      <div class="validity-card" style="display:inline-block; min-width:250px;">
-        <div class="validity-num">30</div>
-        <div class="validity-unit">يوماً</div>
-        <div class="validity-date">صالح من 21 يونيو 2026 حتى 21 يوليو 2026</div>
-      </div>
-    </div>
-    <div class="info-box info-amber">
-      هذا العرض صالح لمدة <strong>30 يوماً</strong> من تاريخ إصداره. بعد انتهاء الصلاحية، تحتفظ شركة كود أوكس للتقنية بحق مراجعة الأسعار وفق ظروف السوق وتكاليف الترخيص.
-    </div>
-  </div>
-
-  <!-- 11 ACCEPTANCE -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">11</div>
-      <div class="sec-title">قبول العرض والتوقيع</div>
-      <div class="sec-tag">Acceptance &amp; Signature</div>
-    </div>
-    <div class="intro-para">
-      بالتوقيع أدناه، يُقرّ العميل بموافقته على جميع بنود هذا العرض المالي وشروطه، ويُفوّض شركة كود أوكس للتقنية بالمضي قُدُماً في تنفيذ المشروع وفق النطاق والجدول الزمني المُحدَّدين.
-    </div>
-    <div class="accept-grid">
-      <div class="sig-box">
-        <div class="sig-box-title">العميل · Client</div>
-        <div class="sig-field-label">الاسم الكامل</div>
-        <div class="sig-name-val">محمد (مالك مركز أندل هاندز للتجميل)</div>
-        <div class="sig-line"></div>
-        <div class="sig-field-label">التوقيع</div>
-        <div class="sig-line" style="margin-top: 40px;"></div>
-        <div class="sig-field-label">التاريخ</div>
-        <div class="sig-line"></div>
-        <div class="sig-field-label">الختم الرسمي (اختياري)</div>
-        <div style="height:60px;"></div>
-      </div>
-      <div class="sig-box" style="border-right: 4px solid var(--purple);">
-        <div class="sig-box-title">الجهة المُنفِّذة · Implementing Partner</div>
-        <div class="sig-field-label">الاسم الكامل</div>
-        <div class="sig-name-val">شركة كود أوكس للتقنية</div>
-        <div class="sig-line"></div>
-        <div class="sig-field-label">التوقيع المفوّض</div>
-        <div class="sig-line" style="margin-top: 40px;"></div>
-        <div class="sig-field-label">التاريخ</div>
-        <div class="sig-line"></div>
-        <div class="sig-field-label">الختم الرسمي</div>
-        <div style="height:60px;"></div>
-      </div>
-    </div>
-  </div>
-
-</div><!-- end proposal-wrap (Arabic) -->
-
-<!-- ═══════════════════════════════════════════
-     FOOTER (Arabic)
-═══════════════════════════════════════════ -->
-<div class="doc-footer">
-  <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
-  <span>·</span>
-  <span>CodeOx Technologies · Odoo Implementation Partner</span>
-  <div class="ft-right">
-    <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a>
-    <span>·</span>
-    <a href="tel:+966535716437">+966 53 571 6437</a>
-    <span>·</span>
-    <span>COX-LS-FP-2026-001 · 21 Jun 2026</span>
+  <div class="inner-ftr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="if-sep"></div>
+    <div class="if-text">CodeOx Technologies · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">الصفحة 4 / 9</div>
   </div>
 </div>
-
-<!-- ═══════════════════════════════════════════
-     PAGE BREAK
-═══════════════════════════════════════════ -->
-<div class="page-break"></div>
-
-<!-- ═══════════════════════════════════════════
-     ENGLISH HEADER
-═══════════════════════════════════════════ -->
-<div class="doc-header ltr-header" style="direction:ltr; font-family:var(--en);">
-  <div class="logo-mark">
-    <div class="logo-bubble">C</div>
-    <div class="logo-name">CodeOx</div>
-  </div>
-  <div class="hdr-divider"></div>
-  <div class="hdr-tag">Financial Proposal · English Version</div>
-  <div style="margin-left:auto;">
-    <span class="hdr-badge">
-      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
-      COX-LS-FP-2026-001
-    </span>
-  </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     ██████ ENGLISH SECTION ██████
-═══════════════════════════════════════════ -->
-<div class="proposal-wrap ltr">
+<!-- AR PAGE 5: COMMERCIAL PROPOSAL -->
+<div class="page ar-page">
+<div class="inner">
+  <div class="inner-hdr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="inner-hdr-title">العرض التجاري — الجدول المالي</div>
+    <div class="inner-hdr-ref">COX-LS-FP-2026-001</div>
+  </div>
+  <div class="inner-body">
 
-  <!-- Section heading -->
-  <div style="text-align:center; margin-bottom:36px; padding: 28px; background: var(--purple-bg); border-radius:14px; border: 1px solid rgba(113,75,103,0.2);">
-    <div style="font-family:var(--mono); font-size:0.65rem; letter-spacing:0.2em; color:var(--muted); text-transform:uppercase; margin-bottom:10px;">Financial Proposal · English Version</div>
-    <div style="font-size:1.6rem; font-weight:900; color:var(--purple);">Andel Hands Beauty Centre</div>
-    <div style="font-size:1rem; color:var(--muted); margin-top:6px;">Odoo 19 Enterprise ERP Implementation</div>
+    <div class="sec-hdr">
+      <div class="sec-eyebrow">Section 03 · Commercial Proposal</div>
+      <div class="sec-title-main">العرض التجاري الشامل</div>
+      <div class="sec-desc">تفاصيل كاملة لجميع بنود التكلفة للسنة الأولى والاشتراكات السنوية المتكررة</div>
+    </div>
+
+    <!-- Spec cards -->
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-card-title">خادم LightNode Premium · الرياض</div>
+        <div class="spec-card-sub">أعلى مواصفات في مركز بيانات الرياض</div>
+        <div class="spec-row"><span class="sk">الذاكرة</span><span class="sv">8 GB DDR4</span></div>
+        <div class="spec-row"><span class="sk">المعالج</span><span class="sv">4 vCPU High-Freq</span></div>
+        <div class="spec-row"><span class="sk">التخزين</span><span class="sv">50 GB NVMe SSD</span></div>
+        <div class="spec-row"><span class="sk">النطاق الترددي</span><span class="sv">3 TB / شهر</span></div>
+        <div class="spec-row"><span class="sk">الموقع</span><span class="sv">الرياض، المملكة العربية السعودية</span></div>
+        <div class="spec-row"><span class="sk">السعر</span><span class="sv">$27.7 / شهر (= 103.88 ر.س)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-card-title">واتساب بيزنس API — تسعير التسويق</div>
+        <div class="spec-card-sub">أسعار ميتا الرسمية · السوق السعودي · الريال السعودي</div>
+        <div class="spec-row"><span class="sk">تكلفة رسالة تسويقية</span><span class="sv">0.1877 ر.س</span></div>
+        <div class="spec-row"><span class="sk">التقدير الشهري</span><span class="sv">500 رسالة</span></div>
+        <div class="spec-row"><span class="sk">التكلفة الشهرية</span><span class="sv">93.85 ر.س</span></div>
+        <div class="spec-row"><span class="sk">التكلفة السنوية</span><span class="sv">1,126.20 ر.س</span></div>
+        <div class="spec-row"><span class="sk">سعر الصرف USD/SAR</span><span class="sv">1 $ = 3.75 ر.س</span></div>
+        <div class="spec-row"><span class="sk">إعداد وتكامل API</span><span class="sv">500 ر.س (مرة واحدة)</span></div>
+      </div>
+    </div>
+
+    <!-- Main financial table -->
+    <table class="fin-table">
+      <thead>
+        <tr>
+          <th style="width:30px;">#</th>
+          <th>البند</th>
+          <th style="width:90px;">النوع</th>
+          <th style="width:110px;">التكلفة (ر.س)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            <span class="item-name">تنفيذ أودو 19 Enterprise</span>
+            <span class="item-desc">رسوم التنفيذ الشاملة: إعداد، تهيئة، نقل بيانات، تدريب، اختبار، تشغيل — 6 مراحل</span>
+          </td>
+          <td><span class="tag-pill tp-once">مرة واحدة</span></td>
+          <td>18,000.00</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>
+            <span class="item-name">ترخيص أودو Enterprise · 4 مستخدمين</span>
+            <span class="item-desc">اشتراك سنوي · يُدفع مباشرة لأودو S.A.</span>
+          </td>
+          <td><span class="tag-pill tp-annual">سنوي</span></td>
+          <td>3,619.11</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>
+            <span class="item-name">خادم LightNode Premium · الرياض</span>
+            <span class="item-desc">8GB RAM · 4 vCPU · 50GB NVMe · $27.7/شهر × 12 = $332.4 × 3.75</span>
+          </td>
+          <td><span class="tag-pill tp-annual">سنوي</span></td>
+          <td>1,246.50</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>
+            <span class="item-name">إعداد وتكامل واتساب بيزنس API</span>
+            <span class="item-desc">إنشاء الحساب، التحقق من ميتا، وربط النظام بأودو</span>
+          </td>
+          <td><span class="tag-pill tp-once">مرة واحدة</span></td>
+          <td>500.00</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>
+            <span class="item-name">رسائل واتساب التسويقية</span>
+            <span class="item-desc">تقدير سنوي · 500 رسالة/شهر × 0.1877 ر.س (السعر الرسمي لميتا، السوق السعودي)</span>
+          </td>
+          <td><span class="tag-pill tp-est">سنوي تقديري</span></td>
+          <td>1,126.20</td>
+        </tr>
+        <tr class="sub-row">
+          <td colspan="3">إجمالي المدفوعات لمرة واحدة (تنفيذ + إعداد واتساب)</td>
+          <td>18,500.00</td>
+        </tr>
+        <tr class="sub-row">
+          <td colspan="3">إجمالي الاشتراكات والرسوم السنوية</td>
+          <td>5,991.81</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="3">🏆 إجمالي استثمار السنة الأولى</td>
+          <td>24,491.81</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box green">
+      <div class="nb-label">ضمن الميزانية ✓</div>
+      <p>إجمالي السنة الأولى <strong>24,491 ر.س</strong> يقع ضمن الميزانية المشار إليها (أقل من 30,000 ر.س). التكرار السنوي من السنة الثانية: <strong>5,991 ر.س فقط</strong>.</p>
+    </div>
+    <div class="note-box amber">
+      <div class="nb-label">ملاحظة ضريبية</div>
+      <p>جميع الأسعار لا تشمل ضريبة القيمة المضافة 15% — ستُضاف عند إصدار الفاتورة الرسمية. رسوم واتساب تقديرية وتتغير وفق عدد الرسائل الفعلية.</p>
+    </div>
+
+  </div>
+  <div class="inner-ftr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="if-sep"></div>
+    <div class="if-text">CodeOx Technologies · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">الصفحة 5 / 9</div>
+  </div>
+</div>
+</div>
+
+<!-- AR PAGE 6: PAYMENT + TIMELINE + ACCEPTANCE -->
+<div class="page ar-page">
+<div class="inner">
+  <div class="inner-hdr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="inner-hdr-title">شروط الدفع · الجدول الزمني · قبول العرض</div>
+    <div class="inner-hdr-ref">COX-LS-FP-2026-001</div>
+  </div>
+  <div class="inner-body">
+
+    <div class="sub-h">شروط الدفع</div>
+    <div class="payment-steps">
+      <div class="payment-step">
+        <div class="ps-pct">50%</div>
+        <div class="ps-label">الدفعة الأولى</div>
+        <div class="ps-trigger">عند توقيع العقد</div>
+        <div class="ps-amount">9,000 ر.س</div>
+      </div>
+      <div class="payment-step">
+        <div class="ps-pct">30%</div>
+        <div class="ps-label">الدفعة الثانية</div>
+        <div class="ps-trigger">عند اعتماد اختبار UAT</div>
+        <div class="ps-amount">5,400 ر.س</div>
+      </div>
+      <div class="payment-step">
+        <div class="ps-pct">20%</div>
+        <div class="ps-label">الدفعة النهائية</div>
+        <div class="ps-trigger">عند التشغيل الفعلي Go-Live</div>
+        <div class="ps-amount">3,600 ر.س</div>
+      </div>
+    </div>
+    <div class="note-box purple">
+      <div class="nb-label">طريقة الدفع</div>
+      <p>تحويل بنكي — تفاصيل الحساب البنكي مرفقة في العقد. رسوم الاشتراك السنوي (أودو + LightNode + واتساب) تُدفع مباشرة من العميل لكل جهة.</p>
+    </div>
+
+    <div class="sec-hr"></div>
+    <div class="sub-h">الجدول الزمني — 8 أسابيع</div>
+    <table class="tl-table">
+      <thead>
+        <tr>
+          <th>الفترة</th>
+          <th>المرحلة</th>
+          <th>الأنشطة الرئيسية</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="tl-badge">1</span>أسبوع 1–2</td><td><strong>الاستكشاف والتحليل</strong></td><td>مراجعة العمليات، جمع البيانات، تصميم الحل</td></tr>
+        <tr><td><span class="tl-badge">2</span>أسبوع 3–5</td><td><strong>إعداد وتهيئة النظام</strong></td><td>POS، محاسبة، CRM، ولاء، عمولات، زاتكا</td></tr>
+        <tr><td><span class="tl-badge">3</span>أسبوع 4–5</td><td><strong>نقل البيانات</strong></td><td>استيراد الخدمات، الموظفين، هياكل العمولات</td></tr>
+        <tr><td><span class="tl-badge">4</span>أسبوع 5–6</td><td><strong>تكامل واتساب API</strong></td><td>إعداد الحساب، النماذج، الربط بأودو</td></tr>
+        <tr><td><span class="tl-badge">5</span>أسبوع 6–7</td><td><strong>التدريب</strong></td><td>تدريب الإدارة، المحاسب، الكاشيرين</td></tr>
+        <tr><td><span class="tl-badge">6</span>أسبوع 7–8</td><td><strong>الاختبار والتشغيل</strong></td><td>UAT، نشر الإنتاج، Hypercare</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sec-hr"></div>
+    <div class="sub-h">صلاحية العرض</div>
+    <div class="validity-card">
+      <div>
+        <div class="vc-num">30</div>
+        <div class="vc-unit">يوماً</div>
+      </div>
+      <div class="vc-detail">
+        <div class="vc-range">21 يونيو — 21 يوليو 2026</div>
+        <div style="font-size:8px; color:#94A3B8; margin-top:4px; font-family:var(--sans-ar);">بعد انتهاء الصلاحية تحتفظ كود أوكس بحق مراجعة الأسعار</div>
+      </div>
+    </div>
+
+    <div class="sub-h">قبول العرض والتوقيع</div>
+    <div class="signoff">
+      <div class="signoff-hdr">بالتوقيع أدناه يُقرّ العميل بموافقته على جميع بنود هذا العرض المالي ويُفوّض كود أوكس للمضي في التنفيذ</div>
+      <div class="signoff-body">
+        <div class="signoff-cols">
+          <div>
+            <div class="signoff-col-hdr">العميل · Client</div>
+            <div class="sig-field">
+              <div class="sig-field-label">الاسم</div>
+              <div class="sig-field-val">محمد — مالك مركز أندل هاندز للتجميل</div>
+            </div>
+            <div class="sig-field">
+              <div class="sig-field-label">التوقيع</div>
+              <div class="sig-line"></div>
+            </div>
+            <div class="sig-field">
+              <div class="sig-field-label">التاريخ</div>
+              <div class="sig-line"></div>
+            </div>
+          </div>
+          <div>
+            <div class="signoff-col-hdr">الجهة المُنفِّذة · CodeOx Technologies</div>
+            <div class="sig-field">
+              <div class="sig-field-label">الاسم</div>
+              <div class="sig-field-val">شركة كود أوكس للتقنية</div>
+            </div>
+            <div class="sig-field">
+              <div class="sig-field-label">التوقيع المفوّض</div>
+              <div class="sig-line"></div>
+            </div>
+            <div class="sig-field">
+              <div class="sig-field-label">التاريخ</div>
+              <div class="sig-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="inner-ftr">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="if-sep"></div>
+    <div class="if-text">CodeOx Technologies · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">الصفحة 6 / 9</div>
+  </div>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════
+     ENGLISH SECTION — ENGLISH
+════════════════════════════════════════════════════ -->
+
+<!-- EN PAGE 7: COVER -->
+<div class="page" style="direction:ltr; font-family:'Inter',sans-serif;">
+<div class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-bar"></div>
+
+  <div class="cover-topbar" style="direction:ltr;">
+    <div class="cover-topbar-left">
+      <div>
+        <div class="cover-client-name" style="font-family:'Inter',sans-serif;">Andel Hands Beauty Centre</div>
+        <div class="cover-client-sub">مركز أندل هاندز للتجميل</div>
+      </div>
+      <div class="cover-sep"></div>
+      <div class="cover-logo-wrap">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      </div>
+    </div>
+    <span class="cover-badge">Financial Proposal · English Version</span>
   </div>
 
-  <!-- 01 EXECUTIVE SUMMARY -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">01</div>
-      <div class="sec-title">Executive Summary</div>
-      <div class="sec-tag">ملخص تنفيذي</div>
+  <div class="cover-hero" style="direction:ltr;">
+    <div class="cover-overline" style="font-family:'Inter',sans-serif;">CodeOx Technologies · Odoo Implementation Partner · 2026</div>
+    <div class="cover-title" style="font-family:'Inter',sans-serif;">Financial<br><span class="cover-title-accent">Proposal</span></div>
+    <div class="cover-subtitle" style="font-family:'Inter',sans-serif; direction:ltr;">Odoo 19 Enterprise ERP Implementation for Andel Hands Beauty Centre — POS, Accounting, Loyalty, WhatsApp Marketing on a Riyadh-based server.</div>
+    <div class="cover-tags">
+      <span class="cover-tag">☁ <strong>LightNode Premium</strong> · Riyadh, KSA</span>
+      <span class="cover-tag">💬 <strong>WhatsApp Business API</strong></span>
+      <span class="cover-tag">👤 <strong>4 Users</strong> · Enterprise</span>
+      <span class="cover-tag">✔ ZATCA Phase 2 Ready</span>
+      <span class="cover-tag">⭐ Day-1 Loyalty Program</span>
     </div>
-    <div class="intro-para">
-      CodeOx Technologies is pleased to present this comprehensive Financial Proposal for the implementation of <strong>Odoo 19 Enterprise</strong> at Andel Hands Beauty Centre. The proposed solution will transform the salon's current manual, paper-based operations into a fully integrated digital platform — enabling data-driven management, automated commissions, customer loyalty, and targeted WhatsApp marketing campaigns.
-      <br><br>
-      The solution is hosted on a dedicated Premium server at LightNode's Riyadh data center, ensuring compliance with Saudi data residency requirements and delivering optimal performance for the local user base.
+  </div>
+
+  <div class="cover-ref-box" style="direction:ltr;">
+    <div class="cover-ref-item">
+      <div class="cri-label">Reference</div>
+      <div class="cri-value acc">COX-LS-FP-2026-001</div>
     </div>
-    <div class="card-grid-3">
+    <div class="cover-ref-item">
+      <div class="cri-label">Date</div>
+      <div class="cri-value">21 June 2026</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cri-label">Prepared For</div>
+      <div class="cri-value">Mohammed · Andel Hands</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cri-label">Valid Until</div>
+      <div class="cri-value">21 July 2026</div>
+    </div>
+  </div>
+
+  <div class="cover-total" style="direction:ltr;">
+    <div class="ct-left">
+      <div class="ct-label" style="font-family:'Inter',sans-serif;">Total Year 1 Investment</div>
+      <div class="ct-amount">SAR 24,491</div>
+      <div class="ct-sub" style="font-family:'Inter',sans-serif;">Implementation + Licenses + Hosting + WhatsApp</div>
+    </div>
+    <div class="ct-right">
+      <div class="ct-yr2-label" style="font-family:'Inter',sans-serif;">Annual Recurring (Year 2+)</div>
+      <div class="ct-yr2-amount">SAR 5,991 / year</div>
+    </div>
+  </div>
+
+  <div class="cover-note" style="direction:ltr;">
+    <span class="cn-label">Note</span>
+    <span class="cn-text" style="font-family:'Inter',sans-serif;">Year 1 total of SAR 24,491 falls within the stated budget of less than SAR 30,000. All prices are exclusive of 15% VAT. WhatsApp charges are estimates based on 500 messages/month.</span>
+  </div>
+
+  <div class="cover-footer" style="direction:ltr;">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="cf-sep"></div>
+    <div class="cf-text">CodeOx Technologies &nbsp;·&nbsp; <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a> &nbsp;·&nbsp; +966 53 571 6437 &nbsp;·&nbsp; code-ox.com</div>
+  </div>
+</div>
+</div>
+
+<!-- EN PAGE 8: EXECUTIVE SUMMARY + OBJECTIVES + SCOPE -->
+<div class="page" style="direction:ltr; font-family:'Inter',sans-serif;">
+<div class="inner">
+  <div class="inner-hdr" style="direction:ltr;">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="inner-hdr-title" style="font-family:'Inter',sans-serif;">Financial Proposal — Andel Hands Beauty Centre</div>
+    <div class="inner-hdr-ref">COX-LS-FP-2026-001</div>
+  </div>
+  <div class="inner-body" style="direction:ltr;">
+
+    <div class="sec-hdr">
+      <div class="sec-eyebrow">Section 01 · English</div>
+      <div class="sec-title-main" style="font-family:'Inter',sans-serif;">Executive Summary &amp; Project Objectives</div>
+      <div class="sec-desc" style="font-family:'Inter',sans-serif;">Overview of the proposed solution and the value it delivers to Andel Hands Beauty Centre</div>
+    </div>
+
+    <div class="sub-h" style="font-family:'Inter',sans-serif;">Executive Summary</div>
+    <div class="prose" style="font-family:'Inter',sans-serif;">
+      <strong>CodeOx Technologies</strong> is pleased to present this Financial Proposal for the implementation of <strong>Odoo 19 Enterprise</strong> at Andel Hands Beauty Centre. The proposed solution transforms the salon's current manual, paper-based operations into a fully integrated digital platform — enabling data-driven management, automated commissions, customer loyalty, and targeted WhatsApp marketing campaigns from Day 1.
+    </div>
+
+    <div class="kpi-row">
       <div class="kpi-card">
-        <div class="kpi-label">Year 1 Investment</div>
+        <div class="kpi-label" style="font-family:'Inter',sans-serif;">Year 1 Investment</div>
         <div class="kpi-value">24,491</div>
-        <div class="kpi-sub">SAR · All-inclusive first year</div>
+        <div class="kpi-sub" style="font-family:'Inter',sans-serif;">SAR · All-inclusive first year</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Annual Recurring (Y2+)</div>
+        <div class="kpi-label" style="font-family:'Inter',sans-serif;">Annual Recurring (Y2+)</div>
         <div class="kpi-value">5,991</div>
-        <div class="kpi-sub">SAR · Subscriptions only</div>
+        <div class="kpi-sub" style="font-family:'Inter',sans-serif;">SAR · Subscriptions only</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Go-Live Target</div>
+        <div class="kpi-label" style="font-family:'Inter',sans-serif;">Go-Live Target</div>
         <div class="kpi-value">8</div>
-        <div class="kpi-sub">Weeks from contract signing</div>
+        <div class="kpi-sub" style="font-family:'Inter',sans-serif;">Weeks from contract signing</div>
       </div>
     </div>
-  </div>
 
-  <!-- 02 PROJECT OBJECTIVES -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">02</div>
-      <div class="sec-title">Project Objectives</div>
-      <div class="sec-tag">أهداف المشروع</div>
-    </div>
-    <div class="card">
-      <div class="phase-list">
-        <div class="phase-item">
-          <div class="phase-badge">01</div>
-          <div>
-            <div class="phase-name">Digitize Daily Operations</div>
-            <div class="phase-desc">Replace paper-based records with a fully integrated POS that captures every transaction, issues e-invoices, and manages daily workflows with precision.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">02</div>
-          <div>
-            <div class="phase-name">Build a Customer Database</div>
-            <div class="phase-desc">Create comprehensive customer profiles including visit history, services, and spending — with a loyalty program active from Day 1.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">03</div>
-          <div>
-            <div class="phase-name">Control Commissions & Discounts</div>
-            <div class="phase-desc">Automate tiered staff commission calculations and enforce cashier discount limits with an approval workflow for exceptions.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">04</div>
-          <div>
-            <div class="phase-name">WhatsApp Marketing Automation</div>
-            <div class="phase-desc">Launch targeted outbound marketing campaigns via WhatsApp Business API — birthday offers, appointment reminders, digital receipts.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">05</div>
-          <div>
-            <div class="phase-name">ZATCA Phase 2 Compliance</div>
-            <div class="phase-desc">Implement e-invoicing as required by ZATCA Phase 2, with 15% VAT applied automatically at point of sale.</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-badge">06</div>
-          <div>
-            <div class="phase-name">Secure Local Cloud Hosting</div>
-            <div class="phase-desc">Run the system on a dedicated Premium VPS in Riyadh (LightNode) for maximum performance, security, and local data compliance.</div>
-          </div>
-        </div>
+    <div class="sec-hr"></div>
+    <div class="sub-h" style="font-family:'Inter',sans-serif;">Project Objectives</div>
+    <div class="obj-grid">
+      <div class="obj-card">
+        <div class="obj-num" style="font-family:'Inter',sans-serif;">01 — Digitize Operations</div>
+        <div class="obj-title" style="font-family:'Inter',sans-serif;">Replace paper with integrated POS</div>
+        <div class="obj-body" style="font-family:'Inter',sans-serif;">Record every transaction digitally, issue instant e-invoices, and eliminate financial leakage.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num" style="font-family:'Inter',sans-serif;">02 — Customer Database</div>
+        <div class="obj-title" style="font-family:'Inter',sans-serif;">Build customer records from scratch</div>
+        <div class="obj-body" style="font-family:'Inter',sans-serif;">Capture phone numbers at checkout to build a CRM database powering loyalty and campaigns.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num" style="font-family:'Inter',sans-serif;">03 — Commission &amp; Discount Control</div>
+        <div class="obj-title" style="font-family:'Inter',sans-serif;">Automate tiered commission engine</div>
+        <div class="obj-body" style="font-family:'Inter',sans-serif;">Tiered commissions automated and cashier discount limits enforced with approval workflows.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num" style="font-family:'Inter',sans-serif;">04 — WhatsApp Marketing</div>
+        <div class="obj-title" style="font-family:'Inter',sans-serif;">Targeted campaigns via WhatsApp API</div>
+        <div class="obj-body" style="font-family:'Inter',sans-serif;">Digital receipts, birthday offers, appointment reminders — all automated and data-driven.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num" style="font-family:'Inter',sans-serif;">05 — ZATCA Compliance</div>
+        <div class="obj-title" style="font-family:'Inter',sans-serif;">Phase 2 e-invoicing</div>
+        <div class="obj-body" style="font-family:'Inter',sans-serif;">E-invoicing configured per ZATCA Phase 2 requirements with 15% VAT applied automatically.</div>
+      </div>
+      <div class="obj-card">
+        <div class="obj-num" style="font-family:'Inter',sans-serif;">06 — Local Cloud Hosting</div>
+        <div class="obj-title" style="font-family:'Inter',sans-serif;">Dedicated server in Riyadh</div>
+        <div class="obj-body" style="font-family:'Inter',sans-serif;">Higher performance, data residency in KSA, and compliance with Saudi privacy requirements.</div>
       </div>
     </div>
-  </div>
 
-  <!-- 03 SCOPE OF WORK -->
-  <div class="sec">
-    <div class="sec-head">
-      <div class="sec-num">03</div>
-      <div class="sec-title">Scope of Work</div>
-      <div class="sec-tag">نطاق العمل</div>
-    </div>
+    <div class="sec-hr"></div>
+    <div class="sub-h" style="font-family:'Inter',sans-serif;">Scope of Work Summary — 6 Phases</div>
     <div class="phase-list">
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">Phase 1</div>
+      <div class="phase-item" style="direction:ltr;">
+        <div class="phase-num">Phase 1</div>
         <div>
-          <div class="phase-name">Discovery &amp; Requirement Analysis</div>
-          <div class="phase-desc">In-depth review of current operations to identify gaps and design the optimal solution architecture.</div>
-          <ul class="phase-bullets">
-            <li>Business process review session with management</li>
-            <li>Gap analysis and requirements documentation</li>
-            <li>Solution architecture and module mapping</li>
-            <li>Service catalogue data collection (Arabic/English, prices, durations)</li>
-          </ul>
+          <div class="phase-title" style="font-family:'Inter',sans-serif;">Discovery &amp; Requirement Analysis</div>
+          <div class="phase-body" style="font-family:'Inter',sans-serif;">Business process review, gap analysis, solution design, and service catalogue collection.</div>
         </div>
       </div>
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">Phase 2</div>
+      <div class="phase-item" style="direction:ltr;">
+        <div class="phase-num">Phase 2</div>
         <div>
-          <div class="phase-name">Odoo Configuration &amp; Setup</div>
-          <div class="phase-desc">Installation and configuration of all required Odoo modules tailored to the salon's workflow.</div>
-          <ul class="phase-bullets">
-            <li>Company setup and master data configuration</li>
-            <li>Salon-flavored POS setup</li>
-            <li>Accounting module with Saudi chart of accounts</li>
-            <li>CRM and customer master configuration</li>
-            <li>User roles and permission setup (Cashier, Manager, Accountant, Admin)</li>
-            <li>Loyalty program mechanics and rules configuration</li>
-            <li>Custom tiered commission engine setup</li>
-            <li>ZATCA e-invoicing module configuration</li>
-          </ul>
+          <div class="phase-title" style="font-family:'Inter',sans-serif;">Odoo Configuration &amp; Setup</div>
+          <div class="phase-body" style="font-family:'Inter',sans-serif;">POS, Accounting (KSA CoA), CRM, Loyalty, tiered commission engine, user roles, ZATCA e-invoicing.</div>
         </div>
       </div>
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">Phase 3</div>
+      <div class="phase-item" style="direction:ltr;">
+        <div class="phase-num">Phase 3</div>
         <div>
-          <div class="phase-name">Data Migration</div>
-          <div class="phase-desc">Import and validate all master data before go-live.</div>
-          <ul class="phase-bullets">
-            <li>Service catalogue import (items, prices, duration)</li>
-            <li>Staff onboarding and commission structure setup</li>
-            <li>Data validation and sign-off</li>
-          </ul>
+          <div class="phase-title" style="font-family:'Inter',sans-serif;">Data Migration</div>
+          <div class="phase-body" style="font-family:'Inter',sans-serif;">Service catalogue import, staff setup, commission structure configuration, and validation.</div>
         </div>
       </div>
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">Phase 4</div>
+      <div class="phase-item" style="direction:ltr;">
+        <div class="phase-num">Phase 4</div>
         <div>
-          <div class="phase-name">WhatsApp Business API Integration</div>
-          <div class="phase-desc">Full integration of WhatsApp Business API for digital receipts and outbound marketing.</div>
-          <ul class="phase-bullets">
-            <li>WhatsApp Business API account setup and verification</li>
-            <li>Meta-approved message template design</li>
-            <li>Odoo integration for automated receipts and reminders</li>
-            <li>Marketing campaign scenario setup (welcome, birthday, re-engagement)</li>
-          </ul>
+          <div class="phase-title" style="font-family:'Inter',sans-serif;">WhatsApp Business API Integration</div>
+          <div class="phase-body" style="font-family:'Inter',sans-serif;">API account setup, Meta-approved template design, Odoo integration for automated receipts and marketing campaigns.</div>
         </div>
       </div>
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">Phase 5</div>
+      <div class="phase-item" style="direction:ltr;">
+        <div class="phase-num">Phase 5</div>
         <div>
-          <div class="phase-name">User Training</div>
-          <div class="phase-desc">Comprehensive hands-on training for all user roles before go-live.</div>
-          <ul class="phase-bullets">
-            <li>Administrator and accountant training (accounting, VAT, reports)</li>
-            <li>Cashier training (POS, discounts, loyalty)</li>
-            <li>Manager training (commission reports, dashboard, KPIs)</li>
-            <li>Arabic user manual delivery</li>
-          </ul>
+          <div class="phase-title" style="font-family:'Inter',sans-serif;">User Training (3 days)</div>
+          <div class="phase-body" style="font-family:'Inter',sans-serif;">Admin, accountant, cashier, and manager training sessions with Arabic user manual delivery.</div>
         </div>
       </div>
-      <div class="phase-item avoid-break">
-        <div class="phase-badge">Phase 6</div>
+      <div class="phase-item" style="direction:ltr;">
+        <div class="phase-num">Phase 6</div>
         <div>
-          <div class="phase-name">UAT &amp; Go-Live</div>
-          <div class="phase-desc">Full system testing, production deployment, and intensive post-launch support.</div>
-          <ul class="phase-bullets">
-            <li>User acceptance testing (UAT) with client sign-off</li>
-            <li>Production environment deployment</li>
-            <li>Hypercare support for the first two weeks of live operation</li>
-            <li>Post-launch review session</li>
-          </ul>
+          <div class="phase-title" style="font-family:'Inter',sans-serif;">UAT &amp; Go-Live</div>
+          <div class="phase-body" style="font-family:'Inter',sans-serif;">User acceptance testing, production deployment, and 2-week Hypercare support post-launch.</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 04 DELIVERABLES -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">04</div>
-      <div class="sec-title">Deliverables</div>
-      <div class="sec-tag">المخرجات</div>
+  </div>
+  <div class="inner-ftr" style="direction:ltr;">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="if-sep"></div>
+    <div class="if-text" style="font-family:'Inter',sans-serif;">CodeOx Technologies · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">Page 8 / 9</div>
+  </div>
+</div>
+</div>
+
+<!-- EN PAGE 9: COMMERCIAL PROPOSAL + PAYMENT + ACCEPTANCE -->
+<div class="page" style="direction:ltr; font-family:'Inter',sans-serif;">
+<div class="inner">
+  <div class="inner-hdr" style="direction:ltr;">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="inner-hdr-title" style="font-family:'Inter',sans-serif;">Commercial Proposal · Payment Terms · Acceptance</div>
+    <div class="inner-hdr-ref">COX-LS-FP-2026-001</div>
+  </div>
+  <div class="inner-body" style="direction:ltr;">
+
+    <div class="sec-hdr">
+      <div class="sec-eyebrow">Section 02 · Commercial Proposal</div>
+      <div class="sec-title-main" style="font-family:'Inter',sans-serif;">Commercial Proposal &amp; Financial Summary</div>
+      <div class="sec-desc" style="font-family:'Inter',sans-serif;">Full cost breakdown for Year 1 and annual recurring subscriptions</div>
     </div>
-    <div class="card-grid-2">
-      <div class="card">
-        <div class="phase-name" style="margin-bottom:10px;">Technical Deliverables</div>
-        <ul class="phase-bullets">
-          <li>Fully configured Odoo 19 Enterprise system</li>
-          <li>Salon-tailored POS interface</li>
-          <li>Accounting module ready for audit</li>
-          <li>Active WhatsApp Business API integration</li>
-          <li>Loyalty program and customer management</li>
-          <li>ZATCA-compliant e-invoicing</li>
-          <li>Configured Riyadh server with SSL and Nginx</li>
-        </ul>
+
+    <!-- Spec cards -->
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-card-title" style="font-family:'Inter',sans-serif;">LightNode Premium Server · Riyadh, KSA</div>
+        <div class="spec-card-sub" style="font-family:'Inter',sans-serif;">High-performance dedicated VPS in Riyadh data center</div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">RAM</span><span class="sv">8 GB DDR4</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">CPU</span><span class="sv">4 vCPU High-Frequency</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">Storage</span><span class="sv">50 GB NVMe SSD</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">Bandwidth</span><span class="sv">3 TB / month</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">Location</span><span class="sv">Riyadh, Saudi Arabia</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">Price</span><span class="sv">$27.7/mo → SAR 103.88</span></div>
       </div>
-      <div class="card">
-        <div class="phase-name" style="margin-bottom:10px;">Project Deliverables</div>
-        <ul class="phase-bullets">
-          <li>Signed Scope of Work document</li>
-          <li>Arabic-language user manual</li>
-          <li>Training session records</li>
-          <li>UAT sign-off report</li>
-          <li>System credentials and configuration files</li>
-          <li>Post-go-live support plan</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- 05 ASSUMPTIONS -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">05</div>
-      <div class="sec-title">Assumptions</div>
-      <div class="sec-tag">الافتراضات</div>
-    </div>
-    <div class="card">
-      <ul class="phase-bullets">
-        <li>Client provides a primary point of contact available during business hours throughout the project</li>
-        <li>Service catalogue data (names, prices, durations) is provided within the first week of the project</li>
-        <li>Client approves WhatsApp message templates in accordance with Meta's content guidelines</li>
-        <li>Odoo Enterprise subscription fees are paid directly by the client to Odoo S.A.</li>
-        <li>LightNode server and WhatsApp conversation fees are direct costs billed to the client monthly</li>
-        <li>Total training allocation: 3 working days</li>
-        <li>System will be accessed via web browser on the local network and remotely over the internet</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 06 EXCLUSIONS -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">06</div>
-      <div class="sec-title">Exclusions</div>
-      <div class="sec-tag">الاستثناءات</div>
-    </div>
-    <div class="info-box info-amber">
-      <strong>Note:</strong> The following items are outside the scope of this proposal and can be quoted separately for a future phase.
-    </div>
-    <div class="card">
-      <ul class="phase-bullets">
-        <li>Online appointment booking module (Phase 2 addition)</li>
-        <li>Inventory management module (salon is services-only — no retail products)</li>
-        <li>POS hardware (cashier terminals, receipt printers, cash drawers — quoted separately)</li>
-        <li>Technical support after the Hypercare period (maintenance contract available on request)</li>
-        <li>Prepaid packages and customer wallet module (Phase 3)</li>
-        <li>Training sessions beyond the agreed 3-day allocation</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 07 TIMELINE -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">07</div>
-      <div class="sec-title">Project Timeline</div>
-      <div class="sec-tag">الجدول الزمني · 8 Weeks</div>
-    </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:120px;">Week</th>
-            <th>Phase</th>
-            <th>Key Activities</th>
-            <th style="width:120px;">Tag</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="tbl-num">Weeks 1–2</td>
-            <td><strong>Discovery &amp; Analysis</strong></td>
-            <td>Process review, data collection, solution design</td>
-            <td><span class="pill">Phase 1</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">Weeks 3–5</td>
-            <td><strong>Odoo Configuration</strong></td>
-            <td>POS, Accounting, CRM, Loyalty, Commission Engine, ZATCA setup</td>
-            <td><span class="pill">Phase 2</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">Weeks 4–5</td>
-            <td><strong>Data Migration</strong></td>
-            <td>Service catalogue, staff, commission structures import</td>
-            <td><span class="pill">Phase 3</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">Weeks 5–6</td>
-            <td><strong>WhatsApp API Integration</strong></td>
-            <td>Account setup, template approval, Odoo connection, campaign configuration</td>
-            <td><span class="pill">Phase 4</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">Weeks 6–7</td>
-            <td><strong>User Training</strong></td>
-            <td>Admin, accountant, cashier, and manager training sessions</td>
-            <td><span class="pill">Phase 5</span></td>
-          </tr>
-          <tr>
-            <td class="tbl-num">Weeks 7–8</td>
-            <td><strong>UAT &amp; Go-Live</strong></td>
-            <td>Acceptance testing, production launch, Hypercare support</td>
-            <td><span class="pill green">Phase 6 · Go-Live</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- 08 COMMERCIAL PROPOSAL -->
-  <div class="sec">
-    <div class="sec-head">
-      <div class="sec-num">08</div>
-      <div class="sec-title">Commercial Proposal</div>
-      <div class="sec-tag">العرض التجاري</div>
-    </div>
-
-    <!-- Server specs -->
-    <div class="card avoid-break" style="margin-bottom:16px;">
-      <div class="phase-name" style="margin-bottom:4px;">Hosting — LightNode Premium · Riyadh, Saudi Arabia</div>
-      <div class="note" style="margin-bottom:12px;">Dedicated high-performance VPS in the Riyadh data center</div>
-      <div class="spec-grid">
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">8 GB</span><span class="spec-label">DDR4 RAM</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">4 vCPU</span><span class="spec-label">High-Frequency Processor</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">50 GB</span><span class="spec-label">NVMe SSD Storage</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">3 TB</span><span class="spec-label">Monthly Bandwidth</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">Ubuntu Linux</span><span class="spec-label">Operating System</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">Riyadh, KSA</span><span class="spec-label">Data Center Location</span></div>
+      <div class="spec-card">
+        <div class="spec-card-title" style="font-family:'Inter',sans-serif;">WhatsApp Business API — Marketing Pricing</div>
+        <div class="spec-card-sub" style="font-family:'Inter',sans-serif;">Official Meta pricing · Saudi Arabia · SAR currency</div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">Per marketing conversation</span><span class="sv">SAR 0.1877</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">Est. monthly volume</span><span class="sv">500 messages</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">Monthly cost estimate</span><span class="sv">SAR 93.85</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">Annual cost estimate</span><span class="sv">SAR 1,126.20</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">Exchange rate</span><span class="sv">1 USD = 3.75 SAR</span></div>
+        <div class="spec-row"><span class="sk" style="font-family:'Inter',sans-serif;">API setup &amp; integration</span><span class="sv">SAR 500 (one-time)</span></div>
       </div>
     </div>
 
-    <!-- WhatsApp specs -->
-    <div class="card avoid-break" style="margin-bottom:16px;">
-      <div class="phase-name" style="margin-bottom:4px;">WhatsApp Business API — Marketing Pricing</div>
-      <div class="note" style="margin-bottom:12px;">Official Meta pricing · Saudi Arabia Market · SAR currency</div>
-      <div class="spec-grid">
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">SAR 0.1877</span><span class="spec-label">per marketing conversation</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">500 messages</span><span class="spec-label">estimated monthly volume</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">SAR 93.85</span><span class="spec-label">estimated monthly cost</span></div>
-        <div class="spec-item"><span class="spec-dot">●</span><span class="spec-val">SAR 1,126.20</span><span class="spec-label">estimated annual cost</span></div>
-      </div>
+    <table class="fin-table" style="font-family:'Inter',sans-serif;">
+      <thead>
+        <tr>
+          <th style="width:30px;">#</th>
+          <th>Line Item</th>
+          <th style="width:90px;">Type</th>
+          <th style="width:120px;">Cost (SAR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            <span class="item-name">Odoo 19 Enterprise Implementation</span>
+            <span class="item-desc">Full implementation fee: setup, configuration, data migration, training, testing, go-live — 6 phases</span>
+          </td>
+          <td><span class="tag-pill tp-once">One-Time</span></td>
+          <td>18,000.00</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>
+            <span class="item-name">Odoo Enterprise License · 4 Users</span>
+            <span class="item-desc">Annual subscription · paid directly to Odoo S.A.</span>
+          </td>
+          <td><span class="tag-pill tp-annual">Annual</span></td>
+          <td>3,619.11</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>
+            <span class="item-name">LightNode Premium Server · Riyadh</span>
+            <span class="item-desc">8GB RAM · 4 vCPU · 50GB NVMe · $27.7/month × 12 × 3.75 SAR/USD</span>
+          </td>
+          <td><span class="tag-pill tp-annual">Annual</span></td>
+          <td>1,246.50</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>
+            <span class="item-name">WhatsApp Business API Setup &amp; Integration</span>
+            <span class="item-desc">Account creation, Meta verification, and Odoo integration</span>
+          </td>
+          <td><span class="tag-pill tp-once">One-Time</span></td>
+          <td>500.00</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>
+            <span class="item-name">WhatsApp Marketing Messages</span>
+            <span class="item-desc">Annual estimate · 500 msgs/month × SAR 0.1877 (official Meta rate, Saudi Arabia market)</span>
+          </td>
+          <td><span class="tag-pill tp-est">Annual Est.</span></td>
+          <td>1,126.20</td>
+        </tr>
+        <tr class="sub-row">
+          <td colspan="3" style="font-family:'Inter',sans-serif;">One-Time Fees Sub-Total</td>
+          <td>18,500.00</td>
+        </tr>
+        <tr class="sub-row">
+          <td colspan="3" style="font-family:'Inter',sans-serif;">Annual Recurring Sub-Total</td>
+          <td>5,991.81</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="3" style="font-family:'Inter',sans-serif;">🏆 Total First-Year Investment</td>
+          <td>24,491.81</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box green">
+      <div class="nb-label" style="font-family:'Inter',sans-serif;">Within Budget ✓</div>
+      <p style="font-family:'Inter',sans-serif;">Year 1 total of <strong>SAR 24,491</strong> is within the stated budget of less than SAR 30,000. Annual recurring from Year 2 onwards is only <strong>SAR 5,991</strong>. All prices exclude 15% VAT.</p>
     </div>
 
-    <!-- Pricing table -->
-    <div class="tbl-wrap avoid-break">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:40px;">#</th>
-            <th>Line Item</th>
-            <th>Description</th>
-            <th style="width:110px;">Type</th>
-            <th style="width:140px;">Cost (SAR)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="tbl-num">1</td>
-            <td><strong>Odoo 19 Implementation</strong></td>
-            <td>Full implementation fee: setup, configuration, data migration, training, testing, and go-live support</td>
-            <td><span class="pill">One-Time</span></td>
-            <td class="tbl-num" style="font-weight:700;">18,000.00</td>
-          </tr>
-          <tr>
-            <td class="tbl-num">2</td>
-            <td><strong>Odoo Enterprise License</strong></td>
-            <td>4-user annual subscription — paid directly to Odoo S.A.</td>
-            <td><span class="pill">Annual</span></td>
-            <td class="tbl-num" style="font-weight:700;">3,619.11</td>
-          </tr>
-          <tr>
-            <td class="tbl-num">3</td>
-            <td><strong>LightNode Premium Server</strong></td>
-            <td>Dedicated hosting in Riyadh · 8GB RAM · 4 vCPU · 50GB NVMe · $27.7/month × 12</td>
-            <td><span class="pill">Annual</span></td>
-            <td class="tbl-num" style="font-weight:700;">1,246.50</td>
-          </tr>
-          <tr>
-            <td class="tbl-num">4</td>
-            <td><strong>WhatsApp API Setup &amp; Integration</strong></td>
-            <td>Account creation, Meta verification, and Odoo integration setup fee</td>
-            <td><span class="pill">One-Time</span></td>
-            <td class="tbl-num" style="font-weight:700;">500.00</td>
-          </tr>
-          <tr>
-            <td class="tbl-num">5</td>
-            <td><strong>WhatsApp Marketing Messages</strong></td>
-            <td>Annual estimate at 500 messages/month × SAR 0.1877 (official Meta rate for Saudi Arabia)</td>
-            <td><span class="pill">Annual Est.</span></td>
-            <td class="tbl-num" style="font-weight:700;">1,126.20</td>
-          </tr>
-          <tr class="tbl-sub">
-            <td colspan="4" style="font-weight:800;">One-Time Fees Sub-Total</td>
-            <td class="tbl-num">18,500.00</td>
-          </tr>
-          <tr class="tbl-sub">
-            <td colspan="4" style="font-weight:800;">Annual Recurring Sub-Total</td>
-            <td class="tbl-num">5,991.81</td>
-          </tr>
-          <tr class="tbl-total">
-            <td colspan="4" style="font-size:1rem;">🏆 Total First-Year Investment</td>
-            <td class="tbl-num" style="font-size:1.15rem;">24,491.81</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card-grid-2" style="margin-top:14px;">
-      <div class="info-box info-green" style="margin-bottom:0;">
-        <strong>✓ Within Budget:</strong> The total Year 1 cost of SAR 24,491 falls comfortably within the stated budget of less than SAR 30,000.
-      </div>
-      <div class="info-box info-teal" style="margin-bottom:0;">
-        <strong>ℹ Note:</strong> WhatsApp costs are estimates based on 500 messages/month. Actual charges depend on campaign volume. Server cost converted at USD 1 = SAR 3.75.
-      </div>
-    </div>
-    <div class="note" style="margin-top:12px; text-align:center;">
-      * All prices are exclusive of 15% VAT — applicable VAT will be added to the official invoice.
-    </div>
-  </div>
-
-  <!-- 09 PAYMENT TERMS -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">09</div>
-      <div class="sec-title">Payment Terms</div>
-      <div class="sec-tag">شروط الدفع</div>
-    </div>
-    <div class="payment-grid">
+    <div class="sec-hr"></div>
+    <div class="sub-h" style="font-family:'Inter',sans-serif;">Payment Terms</div>
+    <div class="payment-steps" style="direction:ltr;">
       <div class="payment-step">
-        <div class="pay-num">50%</div>
-        <div class="pay-label">First Installment</div>
-        <div class="pay-when">Upon contract signing<br><strong>SAR 9,000</strong></div>
+        <div class="ps-pct">50%</div>
+        <div class="ps-label" style="font-family:'Inter',sans-serif;">First Installment</div>
+        <div class="ps-trigger" style="font-family:'Inter',sans-serif;">Upon contract signing</div>
+        <div class="ps-amount">SAR 9,000</div>
       </div>
       <div class="payment-step">
-        <div class="pay-num">30%</div>
-        <div class="pay-label">Second Installment</div>
-        <div class="pay-when">Upon UAT sign-off<br><strong>SAR 5,400</strong></div>
+        <div class="ps-pct">30%</div>
+        <div class="ps-label" style="font-family:'Inter',sans-serif;">Second Installment</div>
+        <div class="ps-trigger" style="font-family:'Inter',sans-serif;">Upon UAT sign-off</div>
+        <div class="ps-amount">SAR 5,400</div>
       </div>
       <div class="payment-step">
-        <div class="pay-num">20%</div>
-        <div class="pay-label">Final Installment</div>
-        <div class="pay-when">Upon Go-Live<br><strong>SAR 3,600</strong></div>
+        <div class="ps-pct">20%</div>
+        <div class="ps-label" style="font-family:'Inter',sans-serif;">Final Installment</div>
+        <div class="ps-trigger" style="font-family:'Inter',sans-serif;">Upon Go-Live</div>
+        <div class="ps-amount">SAR 3,600</div>
       </div>
     </div>
-    <div class="info-box info-purple" style="margin-top:14px;">
-      <strong>Payment Method:</strong> Bank transfer to CodeOx Technologies (account details included in the contract). Annual subscription fees for Odoo, LightNode, and WhatsApp are paid directly by the client to each respective provider.
-    </div>
-  </div>
 
-  <!-- 10 VALIDITY -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">10</div>
-      <div class="sec-title">Validity of Proposal</div>
-      <div class="sec-tag">صلاحية العرض</div>
-    </div>
-    <div style="text-align:center; margin-bottom:20px;">
-      <div class="validity-card" style="display:inline-block; min-width:250px;">
-        <div class="validity-num">30</div>
-        <div class="validity-unit">Days</div>
-        <div class="validity-date">Valid from 21 June 2026 through 21 July 2026</div>
+    <div class="sec-hr"></div>
+    <div class="sub-h" style="font-family:'Inter',sans-serif;">Acceptance &amp; Signature</div>
+    <div class="signoff">
+      <div class="signoff-hdr" style="font-family:'Inter',sans-serif;">By signing below, the Client authorizes CodeOx Technologies to proceed with implementation as defined in this proposal</div>
+      <div class="signoff-body">
+        <div class="signoff-cols">
+          <div>
+            <div class="signoff-col-hdr" style="font-family:'Inter',sans-serif;">Client</div>
+            <div class="sig-field">
+              <div class="sig-field-label" style="font-family:'Inter',sans-serif;">Full Name</div>
+              <div class="sig-field-val" style="font-family:'Inter',sans-serif;">Mohammed — Owner, Andel Hands Beauty Centre</div>
+            </div>
+            <div class="sig-field">
+              <div class="sig-field-label" style="font-family:'Inter',sans-serif;">Signature</div>
+              <div class="sig-line"></div>
+            </div>
+            <div class="sig-field">
+              <div class="sig-field-label" style="font-family:'Inter',sans-serif;">Date</div>
+              <div class="sig-line"></div>
+            </div>
+          </div>
+          <div>
+            <div class="signoff-col-hdr" style="font-family:'Inter',sans-serif;">CodeOx Technologies</div>
+            <div class="sig-field">
+              <div class="sig-field-label" style="font-family:'Inter',sans-serif;">Company</div>
+              <div class="sig-field-val" style="font-family:'Inter',sans-serif;">CodeOx Technologies</div>
+            </div>
+            <div class="sig-field">
+              <div class="sig-field-label" style="font-family:'Inter',sans-serif;">Authorized Signatory</div>
+              <div class="sig-line"></div>
+            </div>
+            <div class="sig-field">
+              <div class="sig-field-label" style="font-family:'Inter',sans-serif;">Date</div>
+              <div class="sig-line"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="info-box info-amber">
-      This proposal is valid for <strong>30 days</strong> from the date of issuance. After expiry, CodeOx Technologies reserves the right to revise pricing in line with market conditions and licensing cost changes.
-    </div>
-  </div>
 
-  <!-- 11 ACCEPTANCE -->
-  <div class="sec avoid-break">
-    <div class="sec-head">
-      <div class="sec-num">11</div>
-      <div class="sec-title">Acceptance &amp; Signature</div>
-      <div class="sec-tag">قبول العرض</div>
-    </div>
-    <div class="intro-para">
-      By signing below, the Client acknowledges agreement to all terms and conditions set forth in this Financial Proposal, and authorizes CodeOx Technologies to proceed with the implementation project as described in the defined scope, timeline, and commercial terms above.
-    </div>
-    <div class="accept-grid">
-      <div class="sig-box">
-        <div class="sig-box-title">Client · العميل</div>
-        <div class="sig-field-label">Full Name</div>
-        <div class="sig-name-val">Mohammed — Owner, Andel Hands Beauty Centre</div>
-        <div class="sig-line"></div>
-        <div class="sig-field-label">Signature</div>
-        <div class="sig-line" style="margin-top: 40px;"></div>
-        <div class="sig-field-label">Date</div>
-        <div class="sig-line"></div>
-        <div class="sig-field-label">Official Stamp (Optional)</div>
-        <div style="height:60px;"></div>
-      </div>
-      <div class="sig-box" style="border-left: 4px solid var(--purple);">
-        <div class="sig-box-title">Implementing Partner · الجهة المُنفِّذة</div>
-        <div class="sig-field-label">Company Name</div>
-        <div class="sig-name-val">CodeOx Technologies</div>
-        <div class="sig-line"></div>
-        <div class="sig-field-label">Authorized Signatory</div>
-        <div class="sig-line" style="margin-top: 40px;"></div>
-        <div class="sig-field-label">Date</div>
-        <div class="sig-line"></div>
-        <div class="sig-field-label">Official Stamp</div>
-        <div style="height:60px;"></div>
-      </div>
-    </div>
   </div>
-
-</div><!-- end proposal-wrap (English) -->
-
-<!-- ENGLISH FOOTER -->
-<div class="doc-footer" style="direction:ltr; font-family:var(--en);">
-  <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
-  <span>·</span>
-  <span>CodeOx Technologies · Odoo Implementation Partner · code-ox.com</span>
-  <div style="margin-left:auto; display:flex; gap:14px;">
-    <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a>
-    <span>·</span>
-    <a href="tel:+966535716437">+966 53 571 6437</a>
-    <span>·</span>
-    <span>COX-LS-FP-2026-001 · 21 Jun 2026</span>
+  <div class="inner-ftr" style="direction:ltr;">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    <div class="if-sep"></div>
+    <div class="if-text" style="font-family:'Inter',sans-serif;">CodeOx Technologies · shabeeb.k@code-ox.com · +966 53 571 6437 · code-ox.com</div>
+    <div class="if-page">Page 9 / 9</div>
   </div>
+</div>
 </div>
 
 </body>
