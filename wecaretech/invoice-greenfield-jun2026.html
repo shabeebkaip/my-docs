@@ -3,289 +3,284 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invoice — WeCare Tech / GreenField Solutions</title>
+<title>Invoice INV-WCT-2026-001 — WeCare Tech</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #C8CAD4;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #f4f6f9;
-    color: #1a1f2e;
-    padding: 40px 20px;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+/* ── A4 Page ── */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
 
-  .page {
-    max-width: 820px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 32px rgba(0,0,0,0.10);
-    overflow: hidden;
-  }
+@media print {
+  body { background: none; }
+  .page { margin: 0; box-shadow: none; }
+}
+@page { size: A4; margin: 0; }
 
-  /* ── Header ── */
-  .header {
-    background: #0a0c14;
-    padding: 36px 48px 28px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-  }
-  .header-left { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-  .logo { height: 36px; }
-  .from-info { color: #94a3b8; font-size: 12.5px; line-height: 1.7; margin-top: 4px; }
-  .from-info a { color: #00C8FF; text-decoration: none; }
+/* ── Top accent bar ── */
+.page::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #0a0c14 0%, #00C8FF 55%, #7dd3fc 100%);
+  z-index: 10;
+}
 
-  .invoice-meta { text-align: right; }
-  .invoice-meta .label {
-    color: #00C8FF;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .invoice-meta h1 {
-    color: #ffffff;
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    margin-top: 2px;
-  }
-  .invoice-meta .inv-number {
-    font-family: 'JetBrains Mono', monospace;
-    color: #64748b;
-    font-size: 13px;
-    margin-top: 6px;
-  }
-  .inv-dates { margin-top: 12px; }
-  .inv-dates div { color: #94a3b8; font-size: 12px; line-height: 1.8; }
-  .inv-dates span { color: #e2e8f0; font-weight: 500; }
+/* ── Header ── */
+.hdr {
+  background: #0a0c14;
+  padding: 14px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.hdr img { height: 18px; filter: brightness(0) invert(1); opacity: 0.9; }
+.hdr-badge {
+  border: 1px solid rgba(0,200,255,0.45); color: #00C8FF;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  padding: 5px 13px; border-radius: 4px;
+}
 
-  .rsy { height: 0.8em; vertical-align: middle; display: inline; }
-  .rsy-inv { height: 0.8em; vertical-align: middle; display: inline; filter: invert(1); }
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(135deg, #0a0c14 0%, #0c1e38 60%, #0e2848 100%);
+  padding: 20px 28px 18px;
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-end; }
+.hero-eyebrow { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.4); margin-bottom: 5px; letter-spacing: 0.03em; }
+.hero-title { font-size: 28px; font-weight: 900; color: #fff; line-height: 1.1; }
+.hero-title span { color: #00C8FF; }
+.hero-right { text-align: right; }
+.hero-inv { font-family: monospace; font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 0.04em; }
+.hero-date { font-size: 13px; font-weight: 700; color: #fff; margin-top: 4px; }
 
-  /* ── Bill To ── */
-  .bill-section {
-    padding: 28px 48px;
-    display: flex;
-    gap: 48px;
-    border-bottom: 1px solid #e8ecf3;
-    background: #fafbfd;
-  }
-  .bill-block { flex: 1; }
-  .bill-block .bl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #94a3b8; margin-bottom: 8px; }
-  .bill-block .bv { font-size: 14.5px; font-weight: 600; color: #1a1f2e; line-height: 1.5; }
-  .bill-block .bsub { font-size: 12.5px; color: #64748b; margin-top: 2px; line-height: 1.6; }
+/* ── Body ── */
+.body { flex: 1; padding: 18px 28px 14px; }
 
-  /* ── Table ── */
-  .section { padding: 32px 48px; }
-  .section-title {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #94a3b8;
-    margin-bottom: 14px;
-  }
+/* ── Meta row ── */
+.meta-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  margin-bottom: 14px;
+}
+.meta-card {
+  border: 1px solid #EEF2F7; border-radius: 6px; padding: 9px 11px;
+  border-top: 3px solid #00C8FF;
+}
+.mc-label { font-size: 8px; font-weight: 700; color: #94A3B8; margin-bottom: 4px; letter-spacing: 0.07em; }
+.mc-value { font-size: 11.5px; font-weight: 700; color: #0F172A; display: flex; align-items: center; gap: 4px; }
+.mc-value img { height: 0.85em; }
+.mc-sub { font-size: 9px; color: #64748b; margin-top: 2px; }
 
-  table { width: 100%; border-collapse: collapse; }
+/* ── KPI row ── */
+.kpi-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  margin-bottom: 14px;
+}
+.kpi-card {
+  border: 1px solid #EEF2F7; border-radius: 7px; padding: 11px 13px;
+  border-left: 4px solid #00C8FF;
+}
+.kpi-label { font-size: 9px; font-weight: 700; color: #94A3B8; margin-bottom: 4px; }
+.kpi-value { font-size: 20px; font-weight: 900; color: #00C8FF; line-height: 1; display: flex; align-items: center; gap: 4px; }
+.kpi-value img { height: 0.75em; }
+.kpi-value.green { color: #15803d; }
+.kpi-sub { font-size: 9px; color: #64748B; margin-top: 3px; }
 
-  .items-table thead tr {
-    background: #0a0c14;
-    color: #94a3b8;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .items-table thead th { padding: 11px 14px; text-align: left; }
-  .items-table thead th.r { text-align: right; white-space: nowrap; }
+/* ── Section label ── */
+.sec-label {
+  font-size: 9px; font-weight: 700; color: #00C8FF;
+  margin-bottom: 8px; margin-top: 14px;
+  display: flex; align-items: center; gap: 8px; letter-spacing: 0.07em;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: #EEF2F7; }
 
-  .items-table tbody tr { border-bottom: 1px solid #e8ecf3; }
-  .items-table tbody tr:last-child { border-bottom: none; }
-  .items-table tbody td { padding: 14px 14px; font-size: 13.5px; vertical-align: top; }
-  .items-table tbody td:first-child { width: 40%; }
-  .items-table tbody td.r { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 13px; white-space: nowrap; }
-  .items-table tbody td .desc { font-weight: 600; color: #1a1f2e; }
-  .items-table tbody td .sub { color: #64748b; font-size: 12px; margin-top: 3px; }
+/* ── Pricing table ── */
+.ptable { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 4px; }
+.ptable thead th {
+  background: #0a0c14; color: #94a3b8;
+  padding: 9px 12px; text-align: left;
+  font-size: 8.5px; font-weight: 700; letter-spacing: 0.07em;
+}
+.ptable thead th.r { text-align: right; white-space: nowrap; }
+.ptable tbody tr { border-bottom: 1px solid #EEF2F7; }
+.ptable tbody td { padding: 11px 12px; color: #475569; vertical-align: middle; }
+.ptable tbody td.r { text-align: right; font-weight: 700; color: #0F172A; white-space: nowrap; }
+.item-name { font-weight: 700; color: #0F172A; font-size: 10.5px; display: block; margin-bottom: 3px; }
+.item-note { font-size: 8.5px; color: #94A3B8; }
+.ptable .row-total td {
+  background: #0a0c14; color: #94a3b8;
+  font-size: 8.5px; font-weight: 700; letter-spacing: 0.07em;
+  padding: 11px 12px; border: none;
+  text-align: right;
+}
+.ptable .row-total td.amt {
+  color: #00C8FF; font-size: 15px; font-weight: 900;
+  white-space: nowrap; display: flex; align-items: center; justify-content: flex-end; gap: 4px;
+}
+.ptable .row-total td.amt img { height: 0.75em; filter: invert(1); }
 
-  /* ── Timesheet ── */
-  .ts-table thead tr {
-    background: #f1f5f9;
-    font-size: 11px;
-    color: #64748b;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .ts-table thead th { padding: 9px 12px; text-align: left; }
-  .ts-table thead th.r { text-align: right; }
-  .ts-table tbody tr { border-bottom: 1px solid #f1f5f9; }
-  .ts-table tbody tr.day-header td {
-    background: #f8fafc;
-    font-weight: 700;
-    font-size: 12px;
-    color: #1a1f2e;
-    padding: 8px 12px;
-    letter-spacing: 0.03em;
-  }
-  .ts-table tbody td { padding: 8px 12px; font-size: 12.5px; color: #374151; }
-  .ts-table tbody td.r { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #64748b; }
-  .ts-table tbody td.dur { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #374151; text-align: right; font-weight: 500; }
-  .ts-table .day-total td { background: #eff6ff; font-weight: 600; font-size: 12px; color: #1e40af; }
-  .ts-table .grand-total td { background: #0a0c14; color: #e2e8f0; font-weight: 700; font-size: 12.5px; }
-  .ts-table .grand-total td.dur { color: #00C8FF; }
+/* ── USD note ── */
+.usd-note { text-align: right; font-size: 8.5px; color: #94a3b8; margin-top: 4px; margin-bottom: 14px; }
 
-  /* ── Totals ── */
-  .totals-wrap {
-    padding: 0 48px 32px;
-    display: flex;
-    justify-content: flex-end;
-  }
-  .totals-box { width: 300px; }
-  .totals-box .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e8ecf3; font-size: 13.5px; }
-  .totals-box .row .k { color: #64748b; }
-  .totals-box .row .v { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
-  .totals-box .total-row {
-    display: flex; justify-content: space-between;
-    padding: 14px 16px; margin-top: 8px;
-    background: #0a0c14; border-radius: 8px;
-  }
-  .totals-box .total-row .k { color: #94a3b8; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-  .totals-box .total-row .v { color: #00C8FF; font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; }
-  .totals-box .sar-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 16px; margin-top: 6px;
-    background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0;
-  }
-  .totals-box .sar-row .k { color: #15803d; font-size: 11.5px; font-weight: 600; }
-  .totals-box .sar-row .v { color: #15803d; font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; }
+/* ── Timesheet ── */
+.ts-table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
+.ts-table thead th {
+  background: #f8fafc; color: #64748b;
+  padding: 7px 10px; text-align: left;
+  font-size: 8.5px; font-weight: 700; letter-spacing: 0.06em;
+  border-bottom: 1px solid #e2e8f0;
+}
+.ts-table thead th.r { text-align: right; }
+.ts-table tbody tr { border-bottom: 1px solid #f1f5f9; }
+.ts-table tbody td { padding: 6px 10px; color: #475569; }
+.ts-table tbody td.r { text-align: right; font-family: monospace; color: #64748b; }
+.ts-table tbody td.dur { text-align: right; font-family: monospace; font-weight: 600; color: #374151; }
+.ts-table .day-hdr td {
+  background: #0a0c14; color: rgba(255,255,255,0.85);
+  font-size: 8.5px; font-weight: 700; padding: 6px 10px; border: none;
+}
+.ts-table .day-tot td { background: #eff6ff; color: #1e40af; font-weight: 700; }
+.ts-table .day-tot td.dur { text-align: right; font-family: monospace; background: #eff6ff; color: #1d4ed8; }
+.ts-table .grand td { background: #0a0c14; color: #e2e8f0; font-weight: 700; }
+.ts-table .grand td.dur { color: #00C8FF; text-align: right; font-family: monospace; }
 
-  /* ── Notes ── */
-  .notes { padding: 0 48px 32px; }
-  .notes .note-box {
-    background: #fafbfd;
-    border: 1px solid #e8ecf3;
-    border-radius: 8px;
-    padding: 16px 20px;
-    font-size: 12.5px;
-    color: #64748b;
-    line-height: 1.7;
-  }
-  .notes .note-box strong { color: #374151; }
+/* ── Riyal symbol ── */
+.rsy   { height: 0.8em; vertical-align: middle; display: inline; }
+.rsy-w { height: 0.8em; vertical-align: middle; display: inline; filter: invert(1); }
 
-  /* ── Footer ── */
-  .footer {
-    background: #0a0c14;
-    padding: 20px 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  .footer img { height: 22px; opacity: 0.8; }
-  .footer .fc { color: #475569; font-size: 11.5px; line-height: 1.6; text-align: right; }
-  .footer .fc a { color: #00C8FF; text-decoration: none; }
-
-  @media print {
-    @page { size: A4; margin: 0; }
-    html, body { height: 100%; margin: 0; padding: 0; background: #fff; }
-    body { padding: 0; transform: scale(0.82); transform-origin: top left; width: calc(100% / 0.82); }
-    .page { box-shadow: none; border-radius: 0; }
-  }
+/* ── Footer ── */
+.ftr {
+  background: #F8FAFC; border-top: 1px solid #E2E8F0;
+  padding: 9px 28px;
+  display: flex; align-items: center; gap: 10px;
+}
+.ftr-logo { height: 13px; opacity: 0.45; filter: brightness(0); }
+.ftr-sep { width: 1px; height: 12px; background: #CBD5E1; }
+.ftr-text { font-size: 8.5px; color: #94A3B8; flex: 1; }
+.ftr-text a { color: #0891b2; text-decoration: none; }
+.ftr-ref { font-size: 8px; color: #94A3B8; }
 </style>
 </head>
 <body>
+
 <div class="page">
 
   <!-- Header -->
-  <div class="header">
-    <div class="header-left">
-      <img class="logo" src="code-ox-logo.svg" alt="CodeOx">
-      <div class="from-info">
-        Shabeeb K &nbsp;·&nbsp; <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a><br>
-        +966 535 716 437 &nbsp;·&nbsp; <a href="https://code-ox.com">code-ox.com</a>
+  <div class="hdr">
+    <img src="code-ox-logo.svg" alt="CodeOx">
+    <div class="hdr-badge">INVOICE</div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">Website Development &amp; Deployment · greenfieldsolutions.tech · June 2026</div>
+        <div class="hero-title">Invoice <span>WeCare Tech</span></div>
       </div>
-    </div>
-    <div class="invoice-meta">
-      <div class="label">Invoice</div>
-      <h1>Invoice</h1>
-      <div class="inv-number">INV-WCT-2026-001</div>
-      <div class="inv-dates">
-        <div>Issued &nbsp; <span>25 June 2026</span></div>
+      <div class="hero-right">
+        <div class="hero-inv">INV-WCT-2026-001</div>
+        <div class="hero-date">25 June 2026</div>
       </div>
     </div>
   </div>
 
-  <!-- Bill To -->
-  <div class="bill-section">
-    <div class="bill-block">
-      <div class="bl">Billed To</div>
-      <div class="bv">WeCare Tech</div>
-      <div class="bsub">
-        greenfieldsolutions.tech<br>
-        Kingdom of Saudi Arabia
-      </div>
-    </div>
-    <div class="bill-block">
-      <div class="bl">Project</div>
-      <div class="bv">Website Development &amp; Deployment</div>
-      <div class="bsub">
-        greenfieldsolutions.tech<br>
-        June 2026
-      </div>
-    </div>
-    <div class="bill-block">
-      <div class="bl">Rate</div>
-      <div class="bv"><img src="riyal.png" class="rsy" alt="﷼">93.75 / hr</div>
-      <div class="bsub">$25 USD</div>
-    </div>
-  </div>
+  <!-- Body -->
+  <div class="body">
 
-  <!-- Line Items -->
-  <div class="section">
-    <div class="section-title">Line Items</div>
-    <table class="items-table">
+    <!-- Meta -->
+    <div class="meta-row">
+      <div class="meta-card">
+        <div class="mc-label">BILLED TO</div>
+        <div class="mc-value">WeCare Tech</div>
+        <div class="mc-sub">greenfieldsolutions.tech · KSA</div>
+      </div>
+      <div class="meta-card">
+        <div class="mc-label">INVOICE DATE</div>
+        <div class="mc-value">25 June 2026</div>
+        <div class="mc-sub">INV-WCT-2026-001</div>
+      </div>
+      <div class="meta-card">
+        <div class="mc-label">RATE</div>
+        <div class="mc-value"><img src="riyal.png" class="rsy" alt="﷼"> 93.75 / hr</div>
+        <div class="mc-sub">$25 USD · SAR ×3.75</div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Hours</div>
+        <div class="kpi-value">11.24</div>
+        <div class="kpi-sub">Jun 19–20, 2026 · 2 sessions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Amount Due</div>
+        <div class="kpi-value"><img src="riyal.png" class="rsy" alt="﷼"> 1,053.75</div>
+        <div class="kpi-sub">Equivalent: $281.00 USD</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Tax</div>
+        <div class="kpi-value green">0%</div>
+        <div class="kpi-sub">No VAT applied</div>
+      </div>
+    </div>
+
+    <!-- Line Items -->
+    <div class="sec-label">LINE ITEMS</div>
+    <table class="ptable">
       <thead>
         <tr>
           <th>Description</th>
           <th class="r">Hours</th>
           <th class="r">Rate</th>
-          <th class="r">Amount (<img src="riyal.png" class="rsy-inv" alt="﷼">)</th>
+          <th class="r">Amount</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <div class="desc">Website Development &amp; Deployment</div>
-            <div class="sub">greenfieldsolutions.tech — Home page build &amp; deployment — Jun 19–20, 2026</div>
+            <span class="item-name">Website Development &amp; Deployment</span>
+            <span class="item-note">greenfieldsolutions.tech — Home page build &amp; deployment — Jun 19–20, 2026</span>
           </td>
           <td class="r">11.24</td>
-          <td class="r"><img src="riyal.png" class="rsy" alt="﷼">93.75</td>
-          <td class="r"><img src="riyal.png" class="rsy" alt="﷼">1,053.75</td>
+          <td class="r"><img src="riyal.png" class="rsy" alt="﷼"> 93.75</td>
+          <td class="r"><img src="riyal.png" class="rsy" alt="﷼"> 1,053.75</td>
+        </tr>
+        <tr class="row-total">
+          <td colspan="3">TOTAL DUE</td>
+          <td class="amt"><img src="riyal.png" class="rsy-w" alt="﷼"> 1,053.75</td>
         </tr>
       </tbody>
     </table>
-  </div>
+    <div class="usd-note">Equivalent: $281.00 USD</div>
 
-  <!-- Totals -->
-  <div class="totals-wrap">
-    <div class="totals-box">
-      <div class="row"><span class="k">Subtotal</span><span class="v"><img src="riyal.png" class="rsy" alt="﷼">1,053.75</span></div>
-      <div class="row"><span class="k">Tax (0%)</span><span class="v"><img src="riyal.png" class="rsy" alt="﷼">0.00</span></div>
-      <div class="total-row"><span class="k">Total Due</span><span class="v"><img src="riyal.png" class="rsy-inv" alt="﷼">1,053.75</span></div>
-      <div class="sar-row"><span class="k">Equivalent in USD (÷3.75)</span><span class="v">$281.00</span></div>
-    </div>
-  </div>
-
-  <!-- Timesheet -->
-  <div class="section" style="padding-top:0">
-    <div class="section-title">Timesheet Breakdown</div>
+    <!-- Timesheet -->
+    <div class="sec-label">TIMESHEET BREAKDOWN</div>
     <table class="ts-table">
       <thead>
         <tr>
@@ -297,70 +292,69 @@
       </thead>
       <tbody>
         <!-- Fri 19 Jun -->
-        <tr class="day-header"><td colspan="4">Friday, 19 June 2026</td></tr>
+        <tr class="day-hdr"><td colspan="4">Friday, 19 June 2026</td></tr>
         <tr>
           <td>Website Development – Home page</td>
-          <td class="r">8:47 PM</td>
-          <td class="r">9:47 PM</td>
+          <td class="r">8:47 PM</td><td class="r">9:47 PM</td>
           <td class="dur">1:00:26</td>
         </tr>
-        <tr class="day-total">
-          <td colspan="3" style="text-align:right;padding-right:12px;">Day total</td>
-          <td class="dur" style="background:#eff6ff;color:#1e40af;">1:00:26</td>
+        <tr class="day-tot">
+          <td colspan="3" style="text-align:right;padding-right:10px;">Day total</td>
+          <td class="dur">1:00:26</td>
         </tr>
 
         <!-- Sat 20 Jun -->
-        <tr class="day-header"><td colspan="4">Saturday, 20 June 2026</td></tr>
+        <tr class="day-hdr"><td colspan="4">Saturday, 20 June 2026</td></tr>
         <tr>
           <td>Website Development – Deployment</td>
-          <td class="r">6:31 PM</td>
-          <td class="r">6:39 PM</td>
+          <td class="r">6:31 PM</td><td class="r">6:39 PM</td>
           <td class="dur">0:07:56</td>
         </tr>
         <tr>
           <td>Website Development – Home page</td>
-          <td class="r">12:00 AM</td>
-          <td class="r">5:32 AM</td>
+          <td class="r">12:00 AM</td><td class="r">5:32 AM</td>
           <td class="dur">5:32:54</td>
         </tr>
         <tr>
           <td>Website Development – Home page</td>
-          <td class="r">12:55 PM</td>
-          <td class="r">1:44 PM</td>
+          <td class="r">12:55 PM</td><td class="r">1:44 PM</td>
           <td class="dur">0:49:19</td>
         </tr>
         <tr>
           <td>Website Development – Home page</td>
-          <td class="r">1:45 PM</td>
-          <td class="r">2:00 PM</td>
+          <td class="r">1:45 PM</td><td class="r">2:00 PM</td>
           <td class="dur">0:15:00</td>
         </tr>
         <tr>
           <td>Website Development – Home page</td>
-          <td class="r">3:02 PM</td>
-          <td class="r">6:31 PM</td>
+          <td class="r">3:02 PM</td><td class="r">6:31 PM</td>
           <td class="dur">3:28:34</td>
         </tr>
-        <tr>
-          <td>Website Development – Deployment</td>
-          <td class="r">6:31 PM</td>
-          <td class="r">6:39 PM</td>
-          <td class="dur">0:07:56</td>
-        </tr>
-        <tr class="day-total">
-          <td colspan="3" style="text-align:right;padding-right:12px;">Day total</td>
-          <td class="dur" style="background:#eff6ff;color:#1e40af;">10:13:43</td>
+        <tr class="day-tot">
+          <td colspan="3" style="text-align:right;padding-right:10px;">Day total</td>
+          <td class="dur">10:13:43</td>
         </tr>
 
         <!-- Grand Total -->
-        <tr class="grand-total">
-          <td colspan="3" style="text-align:right;padding-right:12px;color:#94a3b8;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;">Grand Total</td>
+        <tr class="grand">
+          <td colspan="3" style="text-align:right;padding-right:10px;font-size:8.5px;letter-spacing:0.07em;text-transform:uppercase;color:#94a3b8;">Grand Total</td>
           <td class="dur">11:14:09</td>
         </tr>
       </tbody>
     </table>
+
   </div>
 
+  <!-- Footer -->
+  <div class="ftr">
+    <img src="code-ox-logo.svg" alt="CodeOx" class="ftr-logo">
+    <div class="ftr-sep"></div>
+    <div class="ftr-text">
+      shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;·&nbsp;
+      <a href="https://code-ox.com">code-ox.com</a>
+    </div>
+    <div class="ftr-ref">INV-WCT-2026-001 · 25 Jun 2026</div>
+  </div>
 
 </div>
 </body>
