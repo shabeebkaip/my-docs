@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Implementation Services Agreement — Code-OX Technologies LLP &amp; Angel Hands Beauty Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1B2A5C;
+    --navy-70: #4A5A8A;
+    --navy-20: #D0D5E8;
+    --ink:     #0D0D1A;
+    --ink-60:  #4A4A5A;
+    --paper:   #FFFFFF;
+    --line:    rgba(27,42,92,0.18);
+    --serif:   'Cormorant Garamond', Georgia, serif;
+    --sans:    'Outfit', system-ui, sans-serif;
+  }
+
+  html { font-size: 14px; }
+
+  body {
+    font-family: var(--sans);
+    background: #CBD5E1;
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  /* ─── PAGE ─── */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    background: var(--paper);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.18);
+  }
+
+  /* ─── WATERMARK ─── */
+  .page-watermark {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://code-ox.com/codeoxlogo.svg');
+    background-size: 68%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.028;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─── */
+  .page-header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px 14px;
+    border-bottom: 2px solid var(--navy);
+  }
+  .page-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .page-header img.header-logo {
+    height: 34px;
+    width: auto;
+  }
+  .header-vdiv {
+    width: 1px;
+    height: 28px;
+    background: var(--navy-20);
+  }
+  .header-client-name {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.04em;
+  }
+  .page-header-right {
+    text-align: right;
+    font-size: 0.65rem;
+    color: var(--navy-70);
+    font-family: var(--sans);
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+  .page-header-right strong {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--navy);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── FOOTER ─── */
+  .page-footer {
+    position: relative;
+    z-index: 10;
+    margin-top: auto;
+    border-top: 2px solid var(--navy);
+    padding: 10px 28px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-address {
+    font-size: 0.62rem;
+    color: var(--navy-70);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+  .footer-address a { color: var(--navy); text-decoration: none; }
+  .footer-page-num {
+    font-size: 0.62rem;
+    color: var(--navy-70);
+    font-family: var(--sans);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* ─── BODY CONTENT ─── */
+  .page-body {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    padding: 20px 36px 16px;
+  }
+
+  /* ─── COVER PAGE ─── */
+  .cover-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px 48px 24px;
+    min-height: 240mm;
+  }
+  .cover-tag {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--navy);
+    border: 1.5px solid var(--navy);
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+  }
+  .cover-title {
+    font-family: var(--serif);
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.18;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .cover-subtitle {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--navy-70);
+    font-style: italic;
+    margin-bottom: 32px;
+    line-height: 1.4;
+  }
+  .cover-divider {
+    width: 60px;
+    height: 3px;
+    background: var(--navy);
+    border-radius: 2px;
+    margin-bottom: 36px;
+  }
+  .cover-parties {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+  .cover-party {
+    border-left: 3px solid var(--navy);
+    padding: 12px 16px;
+    background: rgba(27,42,92,0.04);
+    border-radius: 0 6px 6px 0;
+  }
+  .cover-party-role {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .cover-party-name {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .cover-party-detail {
+    font-size: 0.67rem;
+    color: var(--ink-60);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .cover-meta-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .cover-meta-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--navy-70);
+    margin-bottom: 2px;
+  }
+  .cover-meta-value {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .cover-meta-value small {
+    display: block;
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    color: var(--navy-70);
+    font-weight: 400;
+    margin-top: 2px;
+    font-style: normal;
+  }
+
+  /* ─── SECTION HEADINGS ─── */
+  .section-num {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 14px;
+    border-bottom: 1.5px solid var(--navy-20);
+    padding-bottom: 8px;
+    line-height: 1.25;
+  }
+  .clause-title {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 14px 0 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  p, li {
+    font-size: 0.78rem;
+    color: var(--ink-60);
+    line-height: 1.75;
+    margin-bottom: 8px;
+  }
+  strong { color: var(--ink); }
+  ul, ol { padding-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+  .clause-block { margin-bottom: 16px; }
+  .clause-block p:last-child { margin-bottom: 0; }
+
+  /* ─── SCHEDULE TABLE ─── */
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    margin: 10px 0 16px;
+  }
+  .schedule-table th {
+    background: var(--navy);
+    color: #fff;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.67rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .schedule-table td {
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--navy-20);
+    color: var(--ink-60);
+    vertical-align: top;
+  }
+  .schedule-table tr:last-child td { border-bottom: none; }
+  .schedule-table tr:nth-child(even) td { background: rgba(27,42,92,0.03); }
+  .schedule-table td strong { color: var(--ink); }
+  .schedule-table .total-row td {
+    background: rgba(27,42,92,0.08) !important;
+    font-weight: 600;
+    color: var(--ink);
+    border-top: 2px solid var(--navy);
+  }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    border-left: 3px solid var(--navy);
+    background: rgba(27,42,92,0.05);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0;
+    font-size: 0.76rem;
+    color: var(--ink-60);
+  }
+  .callout strong { color: var(--navy); }
+
+  /* ─── MODULE GRID ─── */
+  .module-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 10px 0 14px;
+  }
+  .module-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--navy-20);
+    border-radius: 6px;
+    padding: 7px 12px;
+    background: rgba(27,42,92,0.02);
+  }
+  .module-dot {
+    width: 7px; height: 7px;
+    background: var(--navy);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .module-chip span {
+    font-size: 0.72rem;
+    color: var(--ink-60);
+    font-weight: 500;
+  }
+
+  /* ─── PHASE BLOCK ─── */
+  .phase-block {
+    border: 1px solid var(--navy-20);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .phase-header {
+    background: var(--navy);
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .phase-num {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .phase-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    flex: 1;
+  }
+  .phase-weeks {
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.55);
+    white-space: nowrap;
+  }
+  .phase-body {
+    padding: 8px 14px 10px;
+  }
+  .phase-body ul { margin-bottom: 0; padding-left: 16px; }
+  .phase-body li {
+    font-size: 0.73rem;
+    color: var(--ink-60);
+    line-height: 1.65;
+    margin-bottom: 3px;
+  }
+
+  /* ─── TWO-COLUMN UTILITY ─── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin: 8px 0 14px;
+  }
+
+  /* ─── SIGNATURE BLOCK ─── */
+  .sig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 16px;
+  }
+  .sig-block {
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px 14px;
+    background: rgba(27,42,92,0.02);
+  }
+  .sig-party-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }
+  .sig-party-name {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  .sig-blank {
+    height: 70px;
+    border-bottom: 1.5px solid var(--ink-60);
+    margin: 0 0 6px;
+  }
+  .sig-meta {
+    font-size: 0.64rem;
+    color: var(--ink-60);
+    line-height: 1.6;
+  }
+  .sig-meta span { display: block; }
+
+  /* ─── PRINT ─── */
+  @media print {
+    @page { size: A4; margin: 0; }
+    html, body { margin: 0; padding: 0; background: white; }
+    .page {
+      width: 210mm !important;
+      height: 297mm !important;
+      min-height: unset !important;
+      max-height: 297mm !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      page-break-after: always !important;
+      break-after: page !important;
+      break-inside: avoid !important;
+      overflow: hidden !important;
+    }
+    .page:last-child {
+      page-break-after: avoid !important;
+      break-after: avoid !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — COVER
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">
+      <strong>Confidential &amp; Legally Binding</strong>
+      Implementation Services Agreement
+    </div>
+  </div>
+
+  <div class="page-body cover-body">
+    <div class="cover-tag">Master Services Agreement</div>
+    <div class="cover-title">Implementation Services Agreement</div>
+    <div class="cover-subtitle">Odoo 19 Enterprise · Ladies Beauty Salon Digital Transformation</div>
+    <div class="cover-divider"></div>
+
+    <div class="cover-parties">
+      <div class="cover-party">
+        <div class="cover-party-role">Service Provider</div>
+        <div class="cover-party-name">Code-OX Technologies LLP</div>
+        <div class="cover-party-detail">
+          UAQ Business Centre, Westhill<br>
+          Kozhikode, Kerala, India — 673005<br>
+          shabeeb.k@code-ox.com · www.code-ox.com
+        </div>
+      </div>
+      <div class="cover-party">
+        <div class="cover-party-role">Client</div>
+        <div class="cover-party-name">Angel Hands Beauty Centre</div>
+        <div class="cover-party-detail">
+          Saudi Arabia<br>
+          Owner: Mohammed<br>
+          +966 50 192 5565
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-meta-row">
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Effective Date</div>
+        <div class="cover-meta-value">1 July 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Implementation Fee</div>
+        <div class="cover-meta-value">SAR 18,000<small>One-Time · Payable to CodeOx</small></div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Reference</div>
+        <div class="cover-meta-value">COX-LS-2026-001<small>Odoo 19 Enterprise Implementation</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: <a href="https://www.code-ox.com">www.code-ox.com</a> &nbsp;|&nbsp;
+      Email: <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a>
+    </div>
+    <div class="footer-page-num">Page 1</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — RECITALS & DEFINITIONS
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">Implementation Services Agreement</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-num">01 &nbsp;·&nbsp; Preamble</div>
+    <div class="section-title">Recitals &amp; Parties</div>
+
+    <div class="clause-block">
+      <p>This Implementation Services Agreement (the <strong>"Agreement"</strong>) is entered into as of <strong>1 July 2026</strong> (the <strong>"Effective Date"</strong>) by and between:</p>
+      <p><strong>Code-OX Technologies LLP</strong>, a limited liability partnership duly registered and incorporated under the laws of India, having its registered office at UAQ Business Centre, Westhill, Kozhikode, Kerala — 673005, India (hereinafter referred to as the <strong>"Service Provider"</strong> or <strong>"Code-OX"</strong>); and</p>
+      <p><strong>Angel Hands Beauty Centre</strong>, a ladies beauty salon business having its principal place of operation in Saudi Arabia, represented by its owner <strong>Mohammed</strong> (hereinafter referred to as the <strong>"Client"</strong> or <strong>"Angel Hands"</strong>).</p>
+      <p>Code-OX and Angel Hands are each referred to herein individually as a <strong>"Party"</strong> and collectively as the <strong>"Parties"</strong>.</p>
+      <p><strong>WHEREAS</strong>, Angel Hands operates an established ladies beauty salon with 20+ staff across one branch in Saudi Arabia, currently managing operations manually — including paper-based commissions, cash-register point of sale, manual discount tracking, no centralised customer database, and Excel-based reporting — and is desirous of implementing a comprehensive Enterprise Resource Planning (ERP) system to digitise and automate its operations; and</p>
+      <p><strong>WHEREAS</strong>, Code-OX is engaged in the business of ERP implementation, software development and digital products, is an Odoo partner, and has presented the Financial Proposal (ref: COX-LS-FP-2026-001) and the Discovery Response (ref: COX-LS-ODOO-DQ-2026-001), each of which has been accepted by Angel Hands as the basis for this Agreement;</p>
+      <p><strong>NOW, THEREFORE</strong>, in consideration of the mutual covenants set out herein, the Parties agree as follows.</p>
+    </div>
+
+    <div class="clause-block">
+      <div class="section-num" style="margin-top:18px">02 &nbsp;·&nbsp; Definitions</div>
+      <div class="section-title">Defined Terms</div>
+
+      <div class="clause-title">2.1 &nbsp; Services</div>
+      <p><strong>"Services"</strong> means the Odoo 19 Enterprise implementation services to be performed by Code-OX under this Agreement, comprising the six (6) phases described in Schedule A.</p>
+
+      <div class="clause-title">2.2 &nbsp; Deliverables</div>
+      <p><strong>"Deliverables"</strong> means all configured Odoo modules, custom development artefacts, data-migration outputs, training materials, documentation, and any other tangible work product produced by Code-OX in performing the Services.</p>
+
+      <div class="clause-title">2.3 &nbsp; Go-Live Date</div>
+      <p><strong>"Go-Live Date"</strong> means the date on which the configured Odoo 19 Enterprise system is deployed to the production server, accepted by Angel Hands in writing, and made live for daily business operations.</p>
+
+      <div class="clause-title">2.4 &nbsp; UAT · UAT Sign-Off</div>
+      <p><strong>"User Acceptance Testing"</strong> or <strong>"UAT"</strong> means the structured testing period during which Angel Hands validates the configured system against agreed requirements. <strong>"UAT Sign-Off"</strong> means the written confirmation by Angel Hands that the system satisfactorily meets all agreed requirements, triggering the second payment milestone.</p>
+
+      <div class="clause-title">2.5 &nbsp; Implementation Fee</div>
+      <p><strong>"Implementation Fee"</strong> means the fixed, one-time fee of <strong>SAR 18,000</strong> payable by Angel Hands to Code-OX for the Services as set out in Schedule B.</p>
+
+      <div class="clause-title">2.6 &nbsp; Third-Party Costs</div>
+      <p><strong>"Third-Party Costs"</strong> means all fees payable directly by Angel Hands to third-party vendors — including the Odoo Enterprise licence, LightNode server hosting, and WhatsApp Business API messaging fees — which are outside the Implementation Fee and payable separately by Angel Hands.</p>
+
+      <div class="clause-title">2.7 &nbsp; Support Period</div>
+      <p><strong>"Support Period"</strong> means the period of three (3) calendar months immediately following the Go-Live Date during which Code-OX shall provide complimentary bug-fix and minor adjustment support as described in Section 7.</p>
+
+      <div class="clause-title">2.8 &nbsp; Confidential Information &amp; Intellectual Property</div>
+      <p><strong>"Confidential Information"</strong> means any non-public information disclosed by either Party to the other, including business data, customer records, financial information, source code, pricing, and any information reasonably understood to be confidential. <strong>"Intellectual Property"</strong> or <strong>"IP"</strong> means all configurations, custom code, development artefacts, written materials and original works of authorship produced under this Agreement.</p>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: www.code-ox.com &nbsp;|&nbsp;
+      Email: shabeeb.k@code-ox.com
+    </div>
+    <div class="footer-page-num">Page 2</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — SCHEDULE A · SCOPE OF WORK (PHASES 1–3)
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">Implementation Services Agreement</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-num">03 &nbsp;·&nbsp; Schedule A</div>
+    <div class="section-title">Scope of Work — Implementation Phases</div>
+
+    <p>Code-OX shall implement <strong>Odoo 19 Enterprise</strong> for Angel Hands Beauty Centre across six (6) phases. The following Odoo modules are in scope:</p>
+
+    <div class="module-grid">
+      <div class="module-chip"><div class="module-dot"></div><span>Point of Sale (POS)</span></div>
+      <div class="module-chip"><div class="module-dot"></div><span>CRM &amp; Customer Database</span></div>
+      <div class="module-chip"><div class="module-dot"></div><span>Loyalty Program</span></div>
+      <div class="module-chip"><div class="module-dot"></div><span>Commission Management</span></div>
+      <div class="module-chip"><div class="module-dot"></div><span>Discount Approval Governance</span></div>
+      <div class="module-chip"><div class="module-dot"></div><span>Accounting &amp; Invoicing</span></div>
+      <div class="module-chip"><div class="module-dot"></div><span>ZATCA Phase 2 e-Invoicing</span></div>
+      <div class="module-chip"><div class="module-dot"></div><span>Employees &amp; HR</span></div>
+      <div class="module-chip"><div class="module-dot"></div><span>WhatsApp Marketing Integration</span></div>
+      <div class="module-chip"><div class="module-dot"></div><span>Online Booking (Appointments)</span></div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">Phase 01</span>
+        <span class="phase-name">Project Kick-Off &amp; Requirements Finalisation</span>
+        <span class="phase-weeks">Weeks 1 – 2</span>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>Stakeholder alignment session with Mohammed and all department leads</li>
+          <li>Final requirements sign-off — module configuration decisions, commission tier structures, discount policy rules</li>
+          <li>System architecture design — server topology, user roles and access matrix (4 licensed users)</li>
+          <li>Data inventory — identify existing customer records, services catalogue, and financial data for migration</li>
+          <li>Project plan with agreed milestones, testing windows, and go-live target date</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">Phase 02</span>
+        <span class="phase-name">System Setup &amp; Module Configuration</span>
+        <span class="phase-weeks">Weeks 3 – 5</span>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>Odoo 19 Enterprise installation on LightNode Premium Server (Riyadh: 8 GB RAM, 4 vCPU, 50 GB NVMe)</li>
+          <li>Company settings, Saudi Arabia localisation, VAT (15%) configuration, and multi-currency setup</li>
+          <li>Point of Sale configuration — payment methods (cash, card, mada), receipt templates, service catalogue with pricing</li>
+          <li>CRM setup — customer profiles, visit history tracking, segmentation tags for the salon's target demographic</li>
+          <li>Loyalty program configuration — point earn/redemption rules, tier thresholds, reward catalogue</li>
+          <li>Employee profiles, job positions, and working-time calendars for 20+ staff</li>
+          <li>Accounting chart of accounts, VAT journal entries, and bank reconciliation settings</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">Phase 03</span>
+        <span class="phase-name">Customisation &amp; Integration Development</span>
+        <span class="phase-weeks">Weeks 6 – 8</span>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li><strong>Tiered commission engine</strong> — custom configuration or module build to calculate commissions per stylist per service tier, replacing paper-based tracking</li>
+          <li><strong>Discount governance workflow</strong> — cashier-initiated discount requests routed to manager approval before application at POS, with audit trail</li>
+          <li><strong>ZATCA Phase 2 e-invoicing</strong> — integration of certified ZATCA e-invoicing connector, QR code generation, and Fatoora portal compliance</li>
+          <li><strong>WhatsApp Business API integration</strong> — automated booking confirmations, appointment reminders, promotional campaign messaging (via approved WhatsApp channel)</li>
+          <li><strong>Online booking (Appointments module)</strong> — customer-facing booking link or widget, service-slot configuration, staff availability calendar</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: www.code-ox.com &nbsp;|&nbsp;
+      Email: shabeeb.k@code-ox.com
+    </div>
+    <div class="footer-page-num">Page 3</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 4 — SCHEDULE A (CONT.) · PHASES 4–6
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">Implementation Services Agreement</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-num">03 &nbsp;·&nbsp; Schedule A (Cont.)</div>
+    <div class="section-title">Scope of Work — Phases 4 to 6</div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">Phase 04</span>
+        <span class="phase-name">Data Migration</span>
+        <span class="phase-weeks">Weeks 9 – 10</span>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>Customer database migration — import existing customer records (name, contact, visit history where available) into Odoo CRM</li>
+          <li>Services catalogue migration — full list of services, packages, and pricing loaded into Odoo POS and Appointments</li>
+          <li>Employee data import — staff profiles, roles, and commission rate structures</li>
+          <li>Accounting opening balances — trial balance, outstanding receivables/payables as at migration cut-off date</li>
+          <li>Data validation — Code-OX runs reconciliation checks and Angel Hands signs off on migrated data accuracy</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">Phase 05</span>
+        <span class="phase-name">User Acceptance Testing &amp; Training</span>
+        <span class="phase-weeks">Weeks 11 – 12</span>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>Full UAT session — all configured modules tested against agreed requirements by Angel Hands' team</li>
+          <li>Bug remediation — all issues identified during UAT addressed by Code-OX within agreed resolution windows</li>
+          <li>Role-specific training sessions:
+            <ul>
+              <li>POS cashiers — daily transactions, discount request flow, loyalty redemption at POS</li>
+              <li>Stylists — commission visibility, appointment module</li>
+              <li>Manager — reporting dashboard, discount approval queue, commission review</li>
+              <li>Accountant — invoicing, VAT returns, ZATCA e-invoice workflow</li>
+            </ul>
+          </li>
+          <li>Recorded training video delivered to Angel Hands for future staff onboarding</li>
+          <li>UAT Sign-Off — written confirmation from Mohammed that all modules meet requirements, triggering Milestone 2 payment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="phase-num">Phase 06</span>
+        <span class="phase-name">Go-Live &amp; Hypercare Support</span>
+        <span class="phase-weeks">Weeks 13 – 14 + 30 days</span>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>Production cutover — switch from staging to live server; DNS and domain configuration if applicable</li>
+          <li>Go-live day on-site or remote support — Code-OX representative available for the first live operating day</li>
+          <li>Hypercare period of <strong>30 calendar days</strong> post Go-Live — priority response to operational issues, configuration adjustments, and staff confidence building</li>
+          <li>Final technical handover documentation — system architecture, admin credentials, backup procedures, Odoo admin guide</li>
+          <li>Go-Live acceptance confirmed in writing by Mohammed, triggering Milestone 3 payment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Reference:</strong> The detailed scope reflects the Financial Proposal (ref: COX-LS-FP-2026-001, dated 21 June 2026) and the Discovery Response (ref: COX-LS-ODOO-DQ-2026-001, dated 17 June 2026), both of which are incorporated into this Agreement by reference. In the event of conflict between those documents and this Agreement, this Agreement shall prevail.
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: www.code-ox.com &nbsp;|&nbsp;
+      Email: shabeeb.k@code-ox.com
+    </div>
+    <div class="footer-page-num">Page 4</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 5 — EXCLUSIONS & CLIENT RESPONSIBILITIES
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">Implementation Services Agreement</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-num">04 &nbsp;·&nbsp; Exclusions &amp; Client Responsibilities</div>
+    <div class="section-title">What's Outside Scope &amp; What Angel Hands Provides</div>
+
+    <div class="clause-title">4.1 &nbsp; Out of Scope — Available Separately</div>
+    <p>The following sit outside the scope of this Agreement and may be picked up under a separate written engagement when Angel Hands is ready:</p>
+    <ul>
+      <li><strong>Additional Odoo modules</strong> not listed in Section 3 — e.g., multi-branch consolidation, advanced payroll, fleet management, or manufacturing — available as Change Requests</li>
+      <li><strong>Third-party software licences</strong> — Odoo Enterprise subscription, LightNode server fees, and WhatsApp API messaging costs are paid directly by Angel Hands to the respective vendors (see Schedule B, Section 5.2)</li>
+      <li><strong>ZATCA Phase 1 compliance remediation</strong>, if any existing invoicing is non-compliant prior to go-live — this Agreement covers Phase 2 e-invoicing for all new invoices from Go-Live forward</li>
+      <li><strong>Payroll processing and WPS integration</strong> — salary disbursement, Wage Protection System filing, and GOSI contributions are outside scope unless added by Change Request</li>
+      <li><strong>Custom mobile app</strong> development for customer-facing booking or loyalty — the implemented online booking is web-based via Odoo Appointments</li>
+      <li><strong>Paid advertising campaigns</strong> — WhatsApp message content creation and campaign management beyond system configuration are billed separately</li>
+      <li><strong>Ongoing system administration, hosting management</strong> — after the Support Period, ongoing server management, Odoo upgrades and AMC services are covered under a separate Annual Maintenance Contract</li>
+    </ul>
+
+    <div class="clause-title">4.2 &nbsp; Client Responsibilities</div>
+    <p>To enable on-time delivery across all six phases, Angel Hands agrees to:</p>
+    <ul>
+      <li>Appoint <strong>Mohammed (or a nominated deputy)</strong> as the single authorised point of contact for decisions and approvals throughout the project</li>
+      <li>Make key staff members available for requirements sessions, UAT, and training within the agreed phase schedule — non-availability shall shift the affected milestone by the equivalent number of working days</li>
+      <li>Provide existing data for migration in a clean, consolidated format (Excel or CSV) within five (5) business days of the Phase 4 kick-off date</li>
+      <li>Provide admin access to the LightNode server environment once provisioned, and to any existing systems (POS, accounting software) required for data extraction</li>
+      <li>Provide written UAT Sign-Off or a consolidated list of UAT issues within five (5) business days of each test cycle; absence of written objection or issues by that date shall constitute sign-off on tested items</li>
+      <li>Procure the Odoo Enterprise licence (4 users, annual subscription) and the LightNode server subscription directly with the respective vendors before Phase 2 begins — Code-OX will guide procurement but the contracts and payments are the Client's</li>
+      <li>Register and activate the WhatsApp Business API account (or provide admin access to an existing account) before Phase 3 integration begins</li>
+      <li>Obtain a ZATCA certification certificate and ensure the business commercial registration and VAT number details are correct before ZATCA Phase 2 integration in Phase 3</li>
+      <li>Make timely payments as per the milestone schedule in Section 5.1 — project progression is contingent on payment of each preceding milestone</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Decision velocity:</strong> Where any approval cycle or data delivery runs longer than the windows above, the affected deliverable shifts by the equivalent number of working days — no penalty, no fee adjustment. The intent is to keep both sides accountable to the cadence without punishing reasonable real-life delays.
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: www.code-ox.com &nbsp;|&nbsp;
+      Email: shabeeb.k@code-ox.com
+    </div>
+    <div class="footer-page-num">Page 5</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 6 — SCHEDULE B · FEES & PAYMENT
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">Implementation Services Agreement</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-num">05 &nbsp;·&nbsp; Schedule B</div>
+    <div class="section-title">Fees, Payment &amp; Financial Terms</div>
+
+    <div class="clause-title">5.1 &nbsp; Implementation Fee — Milestone Payment Schedule</div>
+    <p>In consideration of the Services under Schedule A, Angel Hands shall pay Code-OX a fixed, one-time Implementation Fee of <strong>SAR 18,000 (Saudi Arabian Riyals Eighteen Thousand only)</strong>, payable in three (3) milestones:</p>
+
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>Milestone</th>
+          <th>Trigger Event</th>
+          <th>Amount (SAR)</th>
+          <th>%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>M1 — Commencement</strong></td>
+          <td>Signing of this Agreement and project kick-off</td>
+          <td><strong>SAR 9,000</strong></td>
+          <td>50%</td>
+        </tr>
+        <tr>
+          <td><strong>M2 — UAT Sign-Off</strong></td>
+          <td>Written UAT Sign-Off from Angel Hands confirming system meets requirements</td>
+          <td><strong>SAR 5,400</strong></td>
+          <td>30%</td>
+        </tr>
+        <tr>
+          <td><strong>M3 — Go-Live</strong></td>
+          <td>System deployed to production and written Go-Live acceptance from Angel Hands</td>
+          <td><strong>SAR 3,600</strong></td>
+          <td>20%</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="2"><strong>Implementation Fee — Total</strong></td>
+          <td><strong>SAR 18,000</strong></td>
+          <td><strong>100%</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="clause-title">5.2 &nbsp; Third-Party Costs (Paid Directly by Angel Hands)</div>
+    <p>The following costs are payable by Angel Hands <strong>directly to the respective third-party vendors</strong> and are <em>not</em> included in the SAR 18,000 Implementation Fee:</p>
+
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Vendor</th>
+          <th>Type</th>
+          <th>Est. Cost (SAR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Odoo 19 Enterprise Licence — 4 Users</strong></td>
+          <td>Odoo S.A.</td>
+          <td>Annual</td>
+          <td>3,619.11</td>
+        </tr>
+        <tr>
+          <td><strong>LightNode Premium Server — Riyadh</strong><br><small style="color:#888">8 GB RAM · 4 vCPU · 50 GB NVMe · $27.7/month</small></td>
+          <td>LightNode</td>
+          <td>Annual</td>
+          <td>1,246.50</td>
+        </tr>
+        <tr>
+          <td><strong>WhatsApp Business API — Marketing Messages</strong><br><small style="color:#888">Est. 500 messages/month × SAR 0.1877 (Meta pricing, KSA)</small></td>
+          <td>Meta (WhatsApp)</td>
+          <td>Est. Annual</td>
+          <td>1,126.20</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="3"><strong>Third-Party Costs — Year 1 Total (Estimate)</strong></td>
+          <td><strong>SAR 5,991.81</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="clause-title">5.3 &nbsp; Invoicing, Currency &amp; Payment Method</div>
+    <ul>
+      <li>Milestone invoices are issued upon the trigger event and payable within <strong>ten (10) business days</strong> of issuance</li>
+      <li>All Implementation Fees quoted and payable in <strong>Saudi Arabian Riyals (SAR)</strong></li>
+      <li>Payment by bank transfer to the account details specified by Code-OX in writing</li>
+      <li>Project progression to the next phase is contingent on receipt of the current milestone payment</li>
+    </ul>
+
+    <div class="clause-title">5.4 &nbsp; Taxes</div>
+    <p>All Implementation Fees are <strong>exclusive of Saudi VAT (15%)</strong>. VAT will be reflected on the invoice at the prevailing rate where applicable. WhatsApp API costs are estimated based on 500 messages/month at current Meta pricing for Saudi Arabia — actual costs vary with usage. Each Party remains responsible for its own income-tax obligations.</p>
+
+    <div class="clause-title">5.5 &nbsp; Late Payment</div>
+    <p>If an invoice remains outstanding beyond its due date, Code-OX will reach out to resolve the matter promptly. Where a payment remains unresolved after <strong>ten (10) business days of written notice</strong>, Code-OX may suspend work on the project until the overdue amount is settled — with no extension of the project timeline for the suspended period.</p>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: www.code-ox.com &nbsp;|&nbsp;
+      Email: shabeeb.k@code-ox.com
+    </div>
+    <div class="footer-page-num">Page 6</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 7 — POST-LAUNCH SUPPORT, TERM & TERMINATION
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">Implementation Services Agreement</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-num">06 &nbsp;·&nbsp; Post-Launch Support</div>
+    <div class="section-title">Three-Month Complimentary Support</div>
+
+    <div class="clause-title">6.1 &nbsp; Support Period</div>
+    <p>Code-OX shall provide Angel Hands with <strong>three (3) calendar months of complimentary post-launch support</strong> commencing on the Go-Live Date. The 30-day Hypercare period in Phase 6 is included within and forms the first month of this Support Period.</p>
+
+    <div class="clause-title">6.2 &nbsp; Scope of Complimentary Support</div>
+    <ul>
+      <li><strong>Bug fixes</strong> — correction of any defect or non-conformity in the configured system attributable to Code-OX's implementation</li>
+      <li><strong>Minor configuration adjustments</strong> — small changes to POS settings, commission rate adjustments, loyalty rule tweaks, user permissions</li>
+      <li><strong>Functional clarifications</strong> — guidance on how to use configured features, via email or video call</li>
+      <li><strong>Critical issue escalation</strong> — if the system goes down or a critical function fails, Code-OX prioritises resolution within one (1) business day of notification</li>
+    </ul>
+
+    <div class="clause-title">6.3 &nbsp; Outside the Complimentary Support Scope</div>
+    <ul>
+      <li>New modules, new customisations, or new integrations not in Schedule A</li>
+      <li>Issues arising from changes made to the system by Angel Hands or a third party after handover</li>
+      <li>Server infrastructure outages caused by LightNode or force majeure events</li>
+      <li>Issues arising from WhatsApp API policy changes or Meta platform updates</li>
+    </ul>
+
+    <div class="clause-title">6.4 &nbsp; Extended Support</div>
+    <p>Upon expiry of the Support Period, continued support may be procured under a separate Annual Maintenance Contract (AMC) at rates agreed in writing. Code-OX will present an AMC proposal to Angel Hands no later than one (1) month before the Support Period ends.</p>
+
+    <div class="section-num" style="margin-top:20px">07 &nbsp;·&nbsp; Term &amp; Termination</div>
+    <div class="section-title">Duration &amp; Termination Rights</div>
+
+    <div class="clause-title">7.1 &nbsp; Term</div>
+    <p>This Agreement commences on the Effective Date and continues until the later of (i) completion of all six (6) implementation phases; or (ii) expiry of the three-month Support Period — unless terminated earlier in accordance with this Section.</p>
+
+    <div class="clause-title">7.2 &nbsp; Termination for Cause</div>
+    <p>Either Party may terminate this Agreement upon written notice if the other Party commits a material breach and does not remedy it within <strong>fourteen (14) calendar days</strong> of written notification. The notifying Party will always attempt to resolve the matter in good faith before exercising this right.</p>
+
+    <div class="clause-title">7.3 &nbsp; Termination for Convenience</div>
+    <p>Angel Hands may terminate this Agreement for convenience upon <strong>thirty (30) days' written notice</strong>. In such event, Angel Hands shall pay (a) all amounts owing for Milestones already triggered; and (b) a reasonable charge for work-in-progress completed since the last triggered Milestone, calculated in proportion to the phase progress achieved. Code-OX shall deliver all work product and Deliverables completed to date within fifteen (15) business days of the termination date.</p>
+
+    <div class="clause-title">7.4 &nbsp; Effect of Termination</div>
+    <p>Upon termination: (i) outstanding amounts are settled within fifteen (15) business days; (ii) Code-OX delivers all Deliverables produced and paid for; (iii) each Party returns or securely deletes the other's Confidential Information; and (iv) Sections 8 (IP), 9 (Confidentiality), 10 (Warranties) and 11 (General Provisions) survive termination.</p>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: www.code-ox.com &nbsp;|&nbsp;
+      Email: shabeeb.k@code-ox.com
+    </div>
+    <div class="footer-page-num">Page 7</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 8 — IP, CONFIDENTIALITY, WARRANTIES, LIABILITY
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">Implementation Services Agreement</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-num">08 &nbsp;·&nbsp; Intellectual Property</div>
+    <div class="section-title">Ownership, Licensing &amp; Change Requests</div>
+
+    <div class="clause-title">8.1 &nbsp; Client IP</div>
+    <p>Angel Hands retains all ownership rights to its existing intellectual property — including its name, trademarks, logos, customer data, business data and any content supplied to Code-OX for the Services. Code-OX is granted a non-exclusive licence to use such assets solely for performing the Services under this Agreement.</p>
+
+    <div class="clause-title">8.2 &nbsp; Deliverable Ownership</div>
+    <p>Upon Code-OX's receipt of the full Implementation Fee (SAR 18,000), all Deliverables produced specifically for Angel Hands under this Agreement — including custom module configurations, custom development code, data migration scripts, training materials and documentation — shall become the exclusive property of Angel Hands. Odoo's own source code and third-party components remain subject to their respective licences.</p>
+
+    <div class="clause-title">8.3 &nbsp; Code-OX Proprietary Materials</div>
+    <p>Code-OX retains ownership of all pre-existing tools, internal templates, methodologies, and proprietary know-how used in delivering the Services. Angel Hands receives a perpetual, royalty-free, non-exclusive licence to use those incorporated elements for operating its Odoo system.</p>
+
+    <div class="clause-title">8.4 &nbsp; Change Requests</div>
+    <p>Any scope additions — additional modules, new customisations, additional training sessions — shall be documented in a short Change Request setting out additional effort, fee impact, and timeline. Work on the change item begins once Angel Hands countersigns the Change Request.</p>
+
+    <div class="section-num" style="margin-top:18px">09 &nbsp;·&nbsp; Confidentiality</div>
+    <div class="section-title">Non-Disclosure Obligations</div>
+
+    <div class="clause-title">9.1 &nbsp; Mutual Confidentiality</div>
+    <p>Each Party agrees to keep all Confidential Information of the other Party strictly confidential, not to disclose it to any third party without prior written consent, and to use it solely for the purposes of this Agreement. These obligations survive termination for <strong>three (3) years</strong>. Angel Hands' customer data shall be treated as strictly confidential by Code-OX at all times and used solely to configure and migrate data within the agreed system.</p>
+
+    <div class="section-num" style="margin-top:18px">10 &nbsp;·&nbsp; Warranties &amp; Limitation of Liability</div>
+    <div class="section-title">Standards of Service &amp; Liability Cap</div>
+
+    <div class="clause-title">10.1 &nbsp; Service Warranty</div>
+    <p>Code-OX warrants that the Services shall be performed with reasonable skill, care and diligence in accordance with prevailing ERP implementation standards, and that the Deliverables shall substantially conform to the agreed scope in Schedule A. Code-OX's sole obligation in the event of a breach of this warranty during the Support Period shall be to remedy the non-conformity at no additional cost.</p>
+
+    <div class="clause-title">10.2 &nbsp; Third-Party Platform Disclaimer</div>
+    <p>Code-OX shall not be liable for defects, outages, licence changes, pricing changes, or policy changes of third-party platforms — including Odoo S.A., LightNode, Meta (WhatsApp), ZATCA, or any other vendor. Where such a platform issue materially affects the Services, Code-OX shall notify Angel Hands promptly and use commercially reasonable efforts to mitigate.</p>
+
+    <div class="clause-title">10.3 &nbsp; Limitation of Liability</div>
+    <p>Code-OX's total aggregate liability to Angel Hands in connection with this Agreement is capped at the <strong>total Implementation Fee actually paid by Angel Hands at the time the claim arises</strong>. Neither Party shall be responsible for indirect or consequential losses — such as lost profits, lost revenue, lost business opportunity, or reputational harm.</p>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: www.code-ox.com &nbsp;|&nbsp;
+      Email: shabeeb.k@code-ox.com
+    </div>
+    <div class="footer-page-num">Page 8</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 9 — GENERAL PROVISIONS
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">Implementation Services Agreement</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-num">11 &nbsp;·&nbsp; General Provisions</div>
+    <div class="section-title">Governing Law &amp; Miscellaneous</div>
+
+    <div class="clause-title">11.1 &nbsp; Independent Contractor</div>
+    <p>Code-OX is and shall remain an independent contractor. Nothing in this Agreement creates an employment relationship, agency, joint venture or partnership between the Parties. Code-OX's personnel are not employees of Angel Hands and are not entitled to any employee benefits from Angel Hands.</p>
+
+    <div class="clause-title">11.2 &nbsp; Governing Law &amp; Dispute Resolution</div>
+    <p>This Agreement is governed by the laws of <strong>India</strong>. If a dispute arises, the Parties commit to <strong>thirty (30) days of good-faith discussion</strong> at senior level first. Any unresolved dispute shall be referred to a sole arbitrator under the <strong>Arbitration and Conciliation Act, 1996</strong>, seated in <strong>Kochi (Ernakulam), Kerala</strong>, conducted in English. The courts at Ernakulam retain supervisory jurisdiction.</p>
+
+    <div class="clause-title">11.3 &nbsp; Non-Solicitation</div>
+    <p>For the duration of the engagement and <strong>twelve (12) months afterwards</strong>, neither Party will directly solicit the other Party's team members who worked on this engagement, except by mutual written agreement. Ordinary public job postings are unaffected.</p>
+
+    <div class="clause-title">11.4 &nbsp; Force Majeure</div>
+    <p>Neither Party shall be in breach of this Agreement or liable for any failure to perform its obligations if such failure results from circumstances beyond its reasonable control — including acts of God, natural disaster, pandemic, war, civil unrest, government restrictions, or sustained failure of essential third-party services. The affected Party shall notify the other promptly and both Parties shall cooperate to mitigate the impact.</p>
+
+    <div class="clause-title">11.5 &nbsp; Entire Agreement &amp; Amendments</div>
+    <p>This Agreement, together with the Financial Proposal (COX-LS-FP-2026-001) and the Discovery Response (COX-LS-ODOO-DQ-2026-001) referenced herein, constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior discussions, representations and understandings, whether written or oral. Any amendment must be in writing and signed by authorised representatives of both Parties.</p>
+
+    <div class="clause-title">11.6 &nbsp; Notices</div>
+    <p>Formal notices may be sent by email (with acknowledgement) or by registered post to the addresses on the cover page. Either Party may update its notice address by writing to the other.</p>
+
+    <div class="clause-title">11.7 &nbsp; Portfolio Rights</div>
+    <p>Code-OX may reference Angel Hands Beauty Centre as a client in its portfolio, case studies and marketing materials, provided that no Confidential Information or customer data is disclosed and the brand is represented accurately. Code-OX will share any case-study content with Angel Hands for review prior to publication.</p>
+
+    <div class="clause-title">11.8 &nbsp; Assignment</div>
+    <p>Neither Party may assign its rights or obligations under this Agreement without the prior written consent of the other Party, except in the event of a merger or acquisition upon written notice.</p>
+
+    <div class="clause-title">11.9 &nbsp; Severability</div>
+    <p>If any provision of this Agreement is found invalid, illegal or unenforceable, it shall be modified to the minimum extent necessary, and the remaining provisions shall continue in full force.</p>
+
+    <div class="clause-title">11.10 &nbsp; Counterparts &amp; Electronic Signatures</div>
+    <p>This Agreement may be executed in counterparts. Electronic signatures and signed PDF counterparts exchanged by email shall be deemed valid and binding under the Information Technology Act, 2000.</p>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: www.code-ox.com &nbsp;|&nbsp;
+      Email: shabeeb.k@code-ox.com
+    </div>
+    <div class="footer-page-num">Page 9</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 10 — SIGNATURES
+══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-watermark"></div>
+  <div class="page-header">
+    <div class="page-header-left">
+      <img class="header-logo" src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX Technologies">
+      <span class="header-vdiv"></span>
+      <span class="header-client-name">Angel Hands Beauty Centre</span>
+    </div>
+    <div class="page-header-right">Implementation Services Agreement</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-num">12 &nbsp;·&nbsp; Execution</div>
+    <div class="section-title">Signatures &amp; Execution</div>
+
+    <p><strong>IN WITNESS WHEREOF</strong>, the Parties have executed this Implementation Services Agreement as of the Effective Date first written above. Each Party confirms that the signatory below has full authority to execute this Agreement on behalf of that Party and to legally bind it to all terms herein.</p>
+
+    <div class="callout" style="margin: 16px 0 24px;">
+      By signing below, both Parties confirm their agreement to the terms set out in this Implementation Services Agreement and its Schedules (A: Scope of Work, B: Fees &amp; Payment).
+    </div>
+
+    <div class="sig-grid">
+
+      <!-- Code-OX -->
+      <div class="sig-block">
+        <div class="sig-party-label">Service Provider</div>
+        <div class="sig-party-name">Code-OX Technologies LLP</div>
+
+        <div class="sig-blank"></div>
+
+        <div class="sig-meta">
+          <span><strong>Name:</strong> Shabeeb K</span>
+          <span style="margin-top:4px;"><strong>Title:</strong> Managing Partner, Code-OX Technologies LLP</span>
+          <span style="margin-top:4px;"><strong>Date:</strong> 1 July 2026</span>
+          <span style="margin-top:6px;"><strong>Address:</strong> UAQ Business Centre, Westhill, Kozhikode, Kerala, India — 673005</span>
+          <span><strong>Email:</strong> shabeeb.k@code-ox.com</span>
+          <span><strong>Phone:</strong> +966 535 716 437</span>
+        </div>
+      </div>
+
+      <!-- Angel Hands -->
+      <div class="sig-block">
+        <div class="sig-party-label">Client</div>
+        <div class="sig-party-name">Angel Hands Beauty Centre</div>
+
+        <div class="sig-blank"></div>
+
+        <div class="sig-meta">
+          <span><strong>Name:</strong> ________________________________</span>
+          <span style="margin-top:6px;"><strong>Title / Role:</strong> ________________________________</span>
+          <span style="margin-top:6px;"><strong>Date:</strong> ________________________________</span>
+          <span style="margin-top:6px;"><strong>Mobile:</strong> +966 50 192 5565</span>
+          <span><strong>Address:</strong> Saudi Arabia</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 36px; border-top: 1px solid rgba(27,42,92,0.15); padding-top: 16px;">
+      <p style="font-size:0.64rem; color: #4A4A5A; text-align:center; line-height:1.6;">
+        This Agreement is governed by the laws of the Republic of India &nbsp;·&nbsp; Effective: 1 July 2026 &nbsp;·&nbsp; Ref: COX-LS-2026-001<br>
+        Type: Odoo 19 Enterprise Implementation Agreement &nbsp;·&nbsp; Implementation Fee: SAR 18,000 &nbsp;·&nbsp; Client: Angel Hands Beauty Centre, Saudi Arabia<br>
+        <em>This document is confidential and intended solely for the Parties named herein.</em>
+      </p>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-address">
+      UAQ Business Centre, Westhill, Kozhikode, Kerala, India 673005 &nbsp;|&nbsp;
+      Web: www.code-ox.com &nbsp;|&nbsp;
+      Email: shabeeb.k@code-ox.com
+    </div>
+    <div class="footer-page-num">Page 10</div>
+  </div>
+</div>
+
+
+</body>
+</html>
