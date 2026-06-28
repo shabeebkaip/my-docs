@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRTG Vendor Response Analysis — NMS-BRD-2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:       #1D4ED8;
+  --blue-dark:  #0F2057;
+  --blue-light: #DBEAFE;
+  --blue-mid:   #3B82F6;
+  --ink:        #0F172A;
+  --ink-soft:   #475569;
+  --border:     #E2E8F0;
+  --bg-stripe:  #F8FAFC;
+  --yes:        #166534; --yes-bg:   #DCFCE7;
+  --warn:       #92400E; --warn-bg:  #FEF3C7;
+  --no:         #B91C1C; --no-bg:    #FEE2E2;
+  --red-flag:   #7F1D1D; --red-bg:   #FEF2F2;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #CBD5E1;
+  color: var(--ink);
+  font-size: 10px;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+@media print {
+  body { background: none; }
+  .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+}
+@page { size: A4; margin: 0; }
+
+/* ── COVER ── */
+.cover {
+  background: #fff;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  border-top: 5px solid var(--blue-dark);
+}
+.cover-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 36px;
+  border-bottom: 1px solid var(--border);
+}
+.cover-topbar-label { font-size: 9px; font-weight: 600; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; }
+.cover-doc-pill {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--blue-dark); border: 1.5px solid var(--blue-dark);
+  padding: 4px 12px; border-radius: 3px;
+}
+.cover-hero { flex: 1; padding: 44px 36px 28px; display: flex; flex-direction: column; justify-content: center; }
+.cover-overline {
+  font-size: 8.5px; font-weight: 700; color: var(--blue-mid);
+  letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px;
+}
+.cover-internal-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #FFFBEB; border: 1px solid #FDE68A;
+  border-radius: 3px; padding: 5px 12px; margin-bottom: 20px;
+  font-size: 8px; font-weight: 700; color: #92400E; letter-spacing: 0.08em; text-transform: uppercase;
+  width: fit-content;
+}
+.cover-title {
+  font-size: 30px; font-weight: 700; line-height: 1.2; color: var(--ink); margin-bottom: 12px;
+  border-bottom: 2px solid var(--blue-dark); padding-bottom: 14px; max-width: 460px;
+}
+.cover-subtitle {
+  font-size: 10.5px; color: var(--ink-soft); line-height: 1.7; max-width: 460px; margin-bottom: 28px;
+}
+.cover-meta {
+  border: 1px solid var(--border); border-radius: 4px; overflow: hidden; max-width: 460px;
+}
+.cover-meta-item { display: grid; grid-template-columns: 140px 1fr; border-bottom: 1px solid var(--border); }
+.cover-meta-item:last-child { border-bottom: none; }
+.cover-meta-label { font-size: 9px; font-weight: 600; color: var(--ink-soft); background: #F8FAFC; padding: 8px 12px; border-right: 1px solid var(--border); }
+.cover-meta-value { font-size: 9px; font-weight: 500; color: var(--ink); padding: 8px 12px; }
+.cover-meta-value.accent { color: var(--blue-dark); font-weight: 700; }
+.cover-meta-value.warn { color: #92400E; font-weight: 700; }
+
+.cover-verdict {
+  margin-top: 24px; border-radius: 5px; padding: 14px 16px;
+  background: #FEF3C7; border: 1px solid #FDE68A; border-left: 4px solid #D97706;
+  max-width: 460px;
+}
+.cover-verdict-label { font-size: 7.5px; font-weight: 700; color: #92400E; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 5px; }
+.cover-verdict-text { font-size: 9.5px; color: #78350F; line-height: 1.65; }
+
+.cover-footer {
+  border-top: 1px solid var(--border); margin-top: auto;
+  padding: 12px 36px;
+  display: flex; align-items: center; gap: 12px;
+}
+.cover-footer-sep { width: 1px; height: 10px; background: var(--border); }
+.cover-footer-text { font-size: 8px; color: var(--ink-soft); }
+
+/* ── INNER PAGES ── */
+.inner-page { display: flex; flex-direction: column; min-height: 297mm; }
+.inner-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 24px; border-bottom: 1px solid var(--border);
+  background: #FAFBFC; flex-shrink: 0;
+}
+.inner-header-title { font-size: 8.5px; color: #64748B; font-weight: 500; }
+.inner-header-ref   { font-size: 8.5px; color: #94A3B8; }
+.inner-content { flex: 1; padding: 20px 24px 16px; }
+.inner-footer {
+  border-top: 1px solid var(--border); padding: 9px 24px;
+  display: flex; align-items: center; gap: 9px;
+  background: #FAFBFC; flex-shrink: 0;
+}
+.inner-footer-sep  { width: 1px; height: 10px; background: #CBD5E1; }
+.inner-footer-text { font-size: 7.5px; color: #94A3B8; flex: 1; }
+.inner-footer-page { font-size: 8px; color: #94A3B8; font-weight: 600; }
+
+/* ── SECTION HEADINGS ── */
+.part-banner {
+  background: var(--blue-dark); color: #fff;
+  border-radius: 5px; padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.part-num {
+  width: 24px; height: 24px; min-width: 24px; border-radius: 50%;
+  background: var(--blue-mid); display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; color: #fff;
+}
+.part-sub   { font-size: 7.5px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.1em; }
+.part-title { font-size: 12px; font-weight: 700; }
+
+.sub-heading { display: flex; align-items: center; gap: 9px; margin: 14px 0 8px; }
+.sub-badge { background: var(--blue-dark); color: #fff; font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 3px; }
+.sub-title { font-size: 11px; font-weight: 700; color: var(--ink); }
+.section-hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+/* ── TABLES ── */
+.doc-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 12px; }
+.doc-table thead th {
+  background: var(--blue-dark); color: #fff;
+  padding: 7px 9px; text-align: left; font-size: 7.5px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.doc-table tbody tr:nth-child(even) { background: var(--bg-stripe); }
+.doc-table tbody td { padding: 7px 9px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+.doc-table tbody td.id-col { font-size: 8px; font-weight: 700; color: var(--blue-mid); white-space: nowrap; width: 54px; }
+
+/* ── STATUS BADGES ── */
+.badge { display: inline-block; font-size: 7.5px; font-weight: 700; padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+.badge-yes    { background: var(--yes-bg);  color: var(--yes);  }
+.badge-partial { background: var(--warn-bg); color: var(--warn); }
+.badge-no     { background: var(--no-bg);   color: var(--no);   }
+.badge-ask    { background: #EFF6FF; color: var(--blue); }
+
+/* ── NOTE BOXES ── */
+.note-box { border-radius: 5px; padding: 10px 12px; font-size: 9px; line-height: 1.65; margin-bottom: 10px; }
+.note-box .note-label { font-size: 7px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 5px; }
+.note-red   { background: var(--red-bg); border: 1px solid #FECACA; border-left: 3px solid #DC2626; }
+.note-red .note-label { color: #B91C1C; }
+.note-warn  { background: var(--warn-bg); border: 1px solid #FDE68A; border-left: 3px solid #D97706; }
+.note-warn .note-label { color: #92400E; }
+.note-blue  { background: #EFF6FF; border: 1px solid #BFDBFE; border-left: 3px solid var(--blue); }
+.note-blue .note-label { color: var(--blue); }
+.note-green { background: #F0FDF4; border: 1px solid #BBF7D0; border-left: 3px solid #16A34A; }
+.note-green .note-label { color: #15803D; }
+.note-box p { color: #374151; margin-bottom: 0; }
+.note-box strong { font-weight: 600; }
+
+/* ── SCORE SUMMARY ── */
+.score-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 14px; }
+.score-card { border: 1px solid var(--border); border-radius: 5px; padding: 10px 12px; text-align: center; }
+.score-card-num { font-size: 22px; font-weight: 800; margin-bottom: 2px; }
+.score-card-label { font-size: 7.5px; color: var(--ink-soft); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.score-green { color: var(--yes); border-top: 3px solid var(--yes); }
+.score-warn  { color: var(--warn); border-top: 3px solid #D97706; }
+.score-red   { color: var(--no); border-top: 3px solid var(--no); }
+.score-blue  { color: var(--blue); border-top: 3px solid var(--blue); }
+
+/* Q list */
+.q-list { list-style: none; padding: 0; }
+.q-list li { display: flex; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 9px; line-height: 1.6; color: var(--ink-soft); }
+.q-list li:last-child { border-bottom: none; }
+.q-num { font-size: 8px; font-weight: 800; color: var(--blue-dark); background: var(--blue-light); width: 20px; height: 20px; min-width: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+.q-list strong { color: var(--ink); font-weight: 600; }
+
+/* two col */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 — COVER -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-topbar">
+      <div class="cover-topbar-label">IT Infrastructure · Network Procurement Office</div>
+      <div class="cover-doc-pill">Vendor Response Analysis</div>
+    </div>
+    <div class="cover-hero">
+      <div class="cover-overline">Initial Evaluation · NMS-BRD-2026</div>
+      <div class="cover-internal-badge">⚠ Internal Use Only — Do Not Share with Vendor</div>
+      <div class="cover-title">PRTG Network Monitor<br>Vendor Response Analysis</div>
+      <div class="cover-subtitle">
+        Initial-stage assessment of the vendor submission received from Paessler / PRTG reseller. Cross-referenced against BRD NMS-BRD-2026 Must Have and Should Have requirements. For internal evaluation and decision-making only.
+      </div>
+      <div class="cover-meta">
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Vendor</div>
+          <div class="cover-meta-value accent">Paessler AG (PRTG Network Monitor)</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Submission Type</div>
+          <div class="cover-meta-value">Cover letter + Fact Sheet + Product Brochure</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">BRD Reference</div>
+          <div class="cover-meta-value">NMS-BRD-2026 · v2.0</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Analysis Date</div>
+          <div class="cover-meta-value">June 2026</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Analysed By</div>
+          <div class="cover-meta-value">CodeOx Technologies</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Stage</div>
+          <div class="cover-meta-value accent">Initial Review — Pre-Shortlist</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Must Have Coverage</div>
+          <div class="cover-meta-value warn">~68% confirmed · 4 gaps · 1 critical conflict</div>
+        </div>
+        <div class="cover-meta-item">
+          <div class="cover-meta-label">Preliminary Verdict</div>
+          <div class="cover-meta-value warn">Proceed with Clarifications — Not Ready for POC Yet</div>
+        </div>
+      </div>
+
+      <div class="cover-verdict">
+        <div class="cover-verdict-label">Summary Finding</div>
+        <div class="cover-verdict-text">
+          PRTG covers the majority of performance monitoring and alerting requirements. However, the vendor submission contains a <strong>critical factual conflict on topology mapping</strong> — the proposal claims dynamic L2/L3 network maps, while Paessler's own official fact sheet explicitly states PRTG does NOT include layer 2/3 topology auto-mapping. Additionally, no commercial proposal or pricing was submitted, AD/LDAP and SAML authentication are unaddressed, NCA ECC 2018 compliance posture is absent, and the license tier required for 1,000 nodes is unspecified. <strong>7 clarification questions must be answered before shortlisting for POC.</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div class="cover-footer-text">PRTG Vendor Analysis · NMS-BRD-2026 · June 2026</div>
+      <div class="cover-footer-sep"></div>
+      <div class="cover-footer-text">Internal Use Only — CodeOx Advisory</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2 — Submission Overview + BRD Compliance Matrix (Must Have) -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <div class="inner-header-title">PRTG Vendor Response Analysis — NMS-BRD-2026</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">1</div>
+        <div><div class="part-sub">Section 1</div><div class="part-title">Submission Overview</div></div>
+      </div>
+
+      <div class="note-box note-blue" style="margin-bottom:12px;">
+        <div class="note-label">Documents Received</div>
+        <p>Three documents submitted: (1) cover letter / pitch narrative from local reseller, (2) PRTG Network Monitor Fact Sheet — Paessler official, dated 2015 (version 434699/EN/20150320), (3) PRTG Network Monitor product brochure — Paessler official, dated November 2021 (007802/EN/20211115). <strong>No commercial/pricing proposal was included. No formal BRD compliance matrix was provided.</strong></p>
+      </div>
+
+      <table class="doc-table" style="margin-bottom:14px;">
+        <thead><tr><th>Attribute</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Vendor / Product</td><td>Paessler AG — PRTG Network Monitor</td></tr>
+          <tr><td style="font-weight:600;">Submission Channel</td><td>Local reseller / partner (Paessler authorised distributor)</td></tr>
+          <tr><td style="font-weight:600;">Document Age</td><td>Fact sheet: 2015. Brochure: November 2021. No current 2025/2026 datasheet provided.</td></tr>
+          <tr><td style="font-weight:600;">Pricing Submitted</td><td style="color:var(--no);font-weight:700;">No — commercial proposal absent</td></tr>
+          <tr><td style="font-weight:600;">BRD Compliance Matrix</td><td style="color:var(--no);font-weight:700;">Not provided — vendor did not complete requirements matrix</td></tr>
+          <tr><td style="font-weight:600;">License Tier Proposed</td><td style="color:var(--warn);font-weight:600;">Not specified — PRTG 500 / 1000 / 2500 / 5000 / XL1 / Enterprise Monitor options not clarified</td></tr>
+          <tr><td style="font-weight:600;">KSA / GCC Support Mentioned</td><td style="color:var(--warn);font-weight:600;">Partial — reseller referenced Riyadh & Jeddah sites but no formal support SLA or Arabic support confirmed</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">2</div>
+        <div><div class="part-sub">Section 2</div><div class="part-title">BRD Must Have — Compliance Status</div></div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-card score-green"><div class="score-card-num">22</div><div class="score-card-label">Confirmed ✅</div></div>
+        <div class="score-card score-warn"><div class="score-card-num">9</div><div class="score-card-label">Partial / Unconfirmed ⚠</div></div>
+        <div class="score-card score-red"><div class="score-card-num">4</div><div class="score-card-label">Not Addressed ❌</div></div>
+        <div class="score-card score-blue"><div class="score-card-num">1</div><div class="score-card-label">Critical Conflict 🚨</div></div>
+      </div>
+
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th style="width:52px;">BRD Ref</th>
+            <th>Requirement</th>
+            <th style="width:100px;">Status</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="id-col">FR-01</td><td>Automated ICMP ping sweep / device discovery</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Auto-discovery confirmed in all documents</td></tr>
+          <tr><td class="id-col">FR-02</td><td>SNMP v1/v2c/v3 polling with configurable credentials</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Confirmed in proposal and brochure</td></tr>
+          <tr><td class="id-col">FR-03</td><td>CDP/LLDP neighbor discovery</td><td><span class="badge badge-partial">⚠ Unconfirmed</span></td><td>Not explicitly confirmed in any document. PRTG has SNMP-based neighbor discovery but native CDP/LLDP parsing needs clarification.</td></tr>
+          <tr><td class="id-col">FR-04</td><td>Custom MIB file import</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>"Flexible and easy import of MIB data files" — brochure p.5</td></tr>
+          <tr><td class="id-col">FR-06</td><td>Scheduled recurring discovery scans</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Auto-discovery scheduling confirmed</td></tr>
+          <tr><td class="id-col">FR-08</td><td>Bulk device import via CSV</td><td><span class="badge badge-partial">⚠ Unconfirmed</span></td><td>Not mentioned in any submitted document. Needs clarification.</td></tr>
+          <tr><td class="id-col">FR-09</td><td>SNMP polling — CPU, memory, interface metrics</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>CPU, memory, interface monitoring confirmed</td></tr>
+          <tr><td class="id-col">FR-10</td><td>Per-interface metrics: in/out rate, error rate, discard rate</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Interface traffic and bandwidth monitoring confirmed</td></tr>
+          <tr><td class="id-col">FR-11</td><td>Real-time up/down status with color-coded indicators</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Confirmed via dashboard screenshots and brochure</td></tr>
+          <tr><td class="id-col">FR-12</td><td>ICMP round-trip latency per device</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>PING sensor confirmed in brochure</td></tr>
+          <tr><td class="id-col">FR-14</td><td>WMI polling for Windows servers</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>WMI confirmed in proposal and brochure</td></tr>
+          <tr><td class="id-col">FR-15</td><td>SNMP trap reception and correlation</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>SNMP traps confirmed in proposal</td></tr>
+          <tr><td class="id-col">FR-17</td><td>NetFlow v9 ingestion and processing</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>NetFlow, jFlow, sFlow, IPFIX all confirmed</td></tr>
+          <tr><td class="id-col">FR-18</td><td>sFlow support</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Confirmed in proposal and brochure</td></tr>
+          <tr><td class="id-col">FR-19</td><td>IPFIX support</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Confirmed in proposal and brochure</td></tr>
+          <tr><td class="id-col">FR-20</td><td>Top-N bandwidth consumers by interface</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Top bandwidth consumers confirmed in proposal</td></tr>
+          <tr><td class="id-col">FR-24</td><td>Threshold-based alerting on SNMP metrics</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Threshold alerting is core PRTG feature</td></tr>
+          <tr><td class="id-col">FR-26</td><td>Email alert notifications</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Email notifications confirmed in proposal and brochure</td></tr>
+          <tr><td class="id-col">FR-27</td><td>SMS notifications</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>SMS confirmed in proposal</td></tr>
+          <tr><td class="id-col">FR-28</td><td>SNMP trap forwarding / outbound traps</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>SNMP trap support confirmed</td></tr>
+          <tr><td class="id-col">FR-34</td><td>Manual drag-and-drop map editor</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>"Drag &amp; drop map editor" confirmed in brochure p.5</td></tr>
+          <tr><td class="id-col">FR-35</td><td>Custom NOC dashboards</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>NOC displays and dashboard builder confirmed</td></tr>
+          <tr><td class="id-col">FR-40</td><td>Drag-and-drop dashboard builder</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Confirmed via brochure and screenshots</td></tr>
+          <tr><td class="id-col">FR-42</td><td>Scheduled reports (PDF, Excel, HTML)</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>"Delivery as HTML, PDF, or CSV" — brochure p.5</td></tr>
+          <tr><td class="id-col">FR-44</td><td>Historical performance reports</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>"Historic monitoring data stored in original intervals" confirmed</td></tr>
+          <tr><td class="id-col">FR-47</td><td>REST API for device and sensor data</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>"Fully featured API" confirmed in brochure p.5</td></tr>
+          <tr><td class="id-col">FR-50</td><td>Syslog event ingestion</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>Syslog monitoring confirmed in proposal</td></tr>
+          <tr><td class="id-col">FR-51</td><td>Email gateway (SMTP) for alert delivery</td><td><span class="badge badge-yes">✅ Confirmed</span></td><td>"Integrated mail server" confirmed in brochure p.5</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <div class="inner-footer-text">Internal Use Only — CodeOx Advisory · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 2 of 4</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3 — Gaps, Red Flags -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <div class="inner-header-title">PRTG Vendor Response Analysis — NMS-BRD-2026</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">3</div>
+        <div><div class="part-sub">Section 3</div><div class="part-title">Gaps &amp; Unconfirmed Requirements</div></div>
+      </div>
+
+      <table class="doc-table" style="margin-bottom:14px;">
+        <thead>
+          <tr>
+            <th style="width:52px;">BRD Ref</th>
+            <th>Requirement</th>
+            <th style="width:100px;">Status</th>
+            <th>Gap Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id-col">FR-31 / 32</td>
+            <td>L2 &amp; L3 topology auto-discovery and maps</td>
+            <td><span class="badge badge-no">🚨 CONFLICT</span></td>
+            <td><strong>Critical:</strong> Proposal claims "Dynamic network maps / Infrastructure topology views." Official Paessler fact sheet (p.2) explicitly states: <em>"PRTG does not include network management such as… layer 2 or layer 3 topologies, auto-mapping."</em> Reseller is overselling. Must be clarified formally.</td>
+          </tr>
+          <tr>
+            <td class="id-col">FR-48</td>
+            <td>Active Directory / LDAP user authentication</td>
+            <td><span class="badge badge-no">❌ Not Addressed</span></td>
+            <td>Not mentioned anywhere in the submission. PRTG does support LDAP integration in newer versions but vendor did not confirm. BRD marks this as Could Have — still requires clarification.</td>
+          </tr>
+          <tr>
+            <td class="id-col">FR-49</td>
+            <td>SAML 2.0 Single Sign-On</td>
+            <td><span class="badge badge-no">❌ Not Addressed</span></td>
+            <td>No mention in proposal or product documents. PRTG Enterprise Monitor may support SAML — vendor must confirm.</td>
+          </tr>
+          <tr>
+            <td class="id-col">FR-53</td>
+            <td>RBAC with custom roles</td>
+            <td><span class="badge badge-partial">⚠ Unconfirmed</span></td>
+            <td>Not addressed in submission. PRTG has basic user groups and access rights but full RBAC with custom roles was not confirmed.</td>
+          </tr>
+          <tr>
+            <td class="id-col">FR-29</td>
+            <td>Alert escalation policies</td>
+            <td><span class="badge badge-partial">⚠ Unconfirmed</span></td>
+            <td>Proposal mentions "escalated automatically based on severity" but no detail on escalation tiers, time-based escalation, or on-call schedule support provided.</td>
+          </tr>
+          <tr>
+            <td class="id-col">FR-08</td>
+            <td>Bulk device import via CSV</td>
+            <td><span class="badge badge-partial">⚠ Unconfirmed</span></td>
+            <td>Not mentioned. PRTG supports API-based bulk add but CSV import is not a confirmed native feature.</td>
+          </tr>
+          <tr>
+            <td class="id-col">FR-13</td>
+            <td>Raw performance data retention ≥90 days</td>
+            <td><span class="badge badge-partial">⚠ Unconfirmed</span></td>
+            <td>Brochure confirms raw data is stored ("not summarized") but no specific retention period stated. Storage sizing and retention policy must be confirmed.</td>
+          </tr>
+          <tr>
+            <td class="id-col">FR-52</td>
+            <td>ITSM integration (ServiceNow webhook/REST)</td>
+            <td><span class="badge badge-partial">⚠ Unconfirmed</span></td>
+            <td>REST API confirmed but ServiceNow-specific integration not mentioned. PRTG uses webhook/REST only — no native certified ServiceNow connector (BRD already notes this as acceptable).</td>
+          </tr>
+          <tr>
+            <td class="id-col">NFR-14–19</td>
+            <td>NCA ECC 2018 compliance posture</td>
+            <td><span class="badge badge-no">❌ Not Addressed</span></td>
+            <td>Zero mention of NCA ECC 2018, ISO 27001, or data residency in any submitted document. BRD Section 10 marks NCA ECC as <strong>Mandatory.</strong></td>
+          </tr>
+          <tr>
+            <td class="id-col">NFR-05–09</td>
+            <td>Scalability — 1,000 nodes / Windows server OS</td>
+            <td><span class="badge badge-partial">⚠ Unconfirmed</span></td>
+            <td>License tier not specified. For 1,000 nodes at ~5–8 sensors/device = 5,000–8,000 sensors. PRTG XL1 (10,000 sensor limit) or Enterprise Monitor is required. Vendor did not state which. Windows Server OS required for core — confirm against pre-provisioned VM OS.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">4</div>
+        <div><div class="part-sub">Section 4</div><div class="part-title">Red Flags</div></div>
+      </div>
+
+      <div class="note-box note-red">
+        <div class="note-label">🚨 Red Flag 1 — Topology Claim Contradicts Official Product Documentation</div>
+        <p>The reseller's cover letter claims PRTG provides <em>"Dynamic network maps"</em> and <em>"Infrastructure topology views."</em> The official Paessler fact sheet — from Paessler themselves — explicitly states: <strong>"PRTG does not include network management such as configuration management, layer 2 or layer 3 topologies, auto-mapping."</strong> This is a direct contradiction. The BRD (FR-31/32) requires automatic L2/L3 topology discovery as a <strong>Should Have</strong>. If the reseller cannot demonstrate this feature in a POC, it is a scoring gap. Do not accept the proposal claim without a live demo.</p>
+      </div>
+
+      <div class="note-box note-red">
+        <div class="note-label">🚨 Red Flag 2 — No Commercial Proposal Submitted</div>
+        <p>The BRD (Section 12) requires a commercial proposal including 3-year TCO, license model, and support SLA. None of this was submitted. PRTG licensing is sensor-based — for 1,000 nodes the correct SKU is <strong>PRTG XL1 (~USD 15–20K one-time + 25% annual) or PRTG Enterprise Monitor (subscription)</strong>. Without a formal quote, commercial evaluation cannot proceed.</p>
+      </div>
+
+      <div class="note-box note-warn">
+        <div class="note-label">⚠ Red Flag 3 — Outdated Supporting Documents</div>
+        <p>The Paessler fact sheet submitted is dated <strong>March 2015</strong> — over 10 years old. The product brochure is from <strong>November 2021</strong>. PRTG has evolved significantly since these documents. The current version is PRTG 24.x. Vendor should provide current 2025/2026 product datasheets and licensing information.</p>
+      </div>
+
+      <div class="note-box note-warn">
+        <div class="note-label">⚠ Red Flag 4 — Windows Server Only Core Deployment</div>
+        <p>All official documents confirm PRTG core server runs on <strong>Windows Server only</strong>. The BRD specifies a pre-provisioned VM — if that VM is Linux-based, PRTG cannot be installed. Confirm VM OS with the infrastructure team before proceeding. Remote probes can run on Linux but the core server cannot.</p>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <div class="inner-footer-text">Internal Use Only — CodeOx Advisory · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 3 of 4</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4 — Clarification Questions + Verdict -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <div class="inner-header-title">PRTG Vendor Response Analysis — NMS-BRD-2026</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">5</div>
+        <div><div class="part-sub">Section 5</div><div class="part-title">Clarification Questions — To Send to Vendor</div></div>
+      </div>
+
+      <p style="font-size:9px;color:var(--ink-soft);margin-bottom:10px;">The following questions must be answered in writing before PRTG can be shortlisted for POC. Send to the reseller and require a formal written response within 5 business days.</p>
+
+      <ul class="q-list">
+        <li>
+          <div class="q-num">1</div>
+          <div><strong>Topology Mapping (FR-31/32):</strong> Your proposal references "Dynamic network maps" and "Infrastructure topology views." The official Paessler fact sheet states PRTG does NOT include L2/L3 topology auto-mapping. Please clarify: Does PRTG automatically discover and render Layer 2 and Layer 3 network topology from CDP/LLDP data? If not, what topology visualisation is actually provided? Provide screenshots from a live environment.</div>
+        </li>
+        <li>
+          <div class="q-num">2</div>
+          <div><strong>License Tier &amp; Sensor Count (NFR-06):</strong> For 1,000 monitored nodes with approximately 5–8 sensors per device, the estimated sensor count is 5,000–8,000 sensors. Which PRTG license tier are you proposing (PRTG 5000, XL1, or Enterprise Monitor)? Please provide a formal commercial quotation including Year 1 license cost, annual maintenance for Years 2 and 3, and total 3-year TCO.</div>
+        </li>
+        <li>
+          <div class="q-num">3</div>
+          <div><strong>NCA ECC 2018 Compliance (BRD Section 10):</strong> Our environment is subject to Saudi Arabia's NCA Essential Cybersecurity Controls 2018. Please confirm your compliance posture against NCA ECC controls relevant to monitoring tools — specifically data residency (all data on-premises), encrypted credential storage, audit logging, and access control. Provide any applicable compliance documentation.</div>
+        </li>
+        <li>
+          <div class="q-num">4</div>
+          <div><strong>Deployment OS (NFR environment):</strong> PRTG core server is documented as Windows Server only. Our pre-provisioned VM environment — please confirm whether PRTG core server can be deployed on a Windows Server VM and confirm supported Windows Server versions (2019/2022). Provide minimum vCPU, RAM, and storage specifications for 1,000 nodes.</div>
+        </li>
+        <li>
+          <div class="q-num">5</div>
+          <div><strong>Active Directory / LDAP Authentication (FR-48):</strong> Does PRTG support Active Directory or LDAP-based user authentication? If yes, which PRTG version introduced this and is it available in the license tier you are proposing?</div>
+        </li>
+        <li>
+          <div class="q-num">6</div>
+          <div><strong>KSA Regional Support (NFR):</strong> Who is the authorised PRTG reseller / support partner in the Kingdom of Saudi Arabia? What are the local support SLA tiers available? Is Arabic-language support available? Provide references from at least one KSA or GCC healthcare or government organisation currently running PRTG.</div>
+        </li>
+        <li>
+          <div class="q-num">7</div>
+          <div><strong>CDP/LLDP Discovery (FR-03):</strong> Does PRTG natively parse CDP and LLDP data from Cisco switches to discover and map neighbour relationships? If yes, please confirm the specific sensor or method used, and whether this populates the device inventory automatically or requires manual configuration.</div>
+        </li>
+      </ul>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">6</div>
+        <div><div class="part-sub">Section 6</div><div class="part-title">Preliminary Assessment &amp; Next Step</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="note-box note-green">
+            <div class="note-label">✅ PRTG Strengths (vs. BRD)</div>
+            <p>Strong core monitoring — SNMP v1/v2c/v3, NetFlow/sFlow/IPFIX, WMI, ICMP all confirmed. Dashboard builder, scheduled reports, REST API, and multi-site remote probe architecture are solid. 150,000+ global installations and 27-year track record provide confidence. Healthcare sector listed as a target vertical. Fast time-to-value post-installation.</p>
+          </div>
+
+          <div class="note-box note-warn">
+            <div class="note-label">⚠ PRTG Weaknesses (vs. BRD)</div>
+            <p>Windows Server only for core. No native L2/L3 topology auto-mapping (reseller claim is inaccurate). No native ServiceNow connector (webhook only). NCA ECC compliance not addressed. License tier not specified. KSA local support not formally confirmed. Outdated documents submitted.</p>
+          </div>
+        </div>
+        <div>
+          <div class="note-box note-blue">
+            <div class="note-label">📋 Recommended Next Action</div>
+            <p>
+              <strong>Step 1:</strong> Send the 7 clarification questions above to the reseller. Set a 5 business day deadline for written responses.<br><br>
+              <strong>Step 2:</strong> On receipt of answers, re-evaluate the topology mapping claim. If PRTG cannot demonstrate L2/L3 auto-discovery in a live demo, downgrade this gap in the BRD scoring.<br><br>
+              <strong>Step 3:</strong> Request a commercial quotation — PRTG XL1 or Enterprise Monitor for 1,000 nodes, 3-year TCO.<br><br>
+              <strong>Step 4:</strong> Confirm VM OS compatibility before any POC scheduling.<br><br>
+              <strong>Do NOT shortlist for POC</strong> until written answers to Q1 (topology), Q2 (pricing), and Q3 (NCA ECC) are received.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <table class="doc-table" style="margin-top:4px;">
+        <thead><tr><th>#</th><th>Evaluation Criterion (BRD Sec 11)</th><th style="width:80px;">Weight</th><th style="width:100px;">Preliminary Score</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">1</td><td>Functional Coverage — Must Have requirements met natively</td><td style="text-align:center;">30%</td><td><span class="badge badge-partial">~68% — Pending</span></td></tr>
+          <tr><td class="id-col">2</td><td>Scalability &amp; Performance (1,000 nodes)</td><td style="text-align:center;">15%</td><td><span class="badge badge-yes">Strong</span></td></tr>
+          <tr><td class="id-col">3</td><td>Security &amp; Compliance (NCA ECC 2018)</td><td style="text-align:center;">15%</td><td><span class="badge badge-no">Not Assessed</span></td></tr>
+          <tr><td class="id-col">4</td><td>Total Cost of Ownership — 3-year</td><td style="text-align:center;">15%</td><td><span class="badge badge-no">Not Submitted</span></td></tr>
+          <tr><td class="id-col">5</td><td>Vendor Stability &amp; Roadmap</td><td style="text-align:center;">10%</td><td><span class="badge badge-yes">Strong — 27 yrs</span></td></tr>
+          <tr><td class="id-col">6</td><td>Migration &amp; Transition Ease</td><td style="text-align:center;">8%</td><td><span class="badge badge-yes">Good</span></td></tr>
+          <tr><td class="id-col">7</td><td>Support Quality — KSA / MENA presence</td><td style="text-align:center;">7%</td><td><span class="badge badge-partial">Unconfirmed</span></td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <div class="inner-footer-text">Internal Use Only — CodeOx Advisory · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 4 of 4</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
