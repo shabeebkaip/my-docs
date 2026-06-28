@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odoo 19 CRM Proposal — FranchiseMe</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple:       #6D28D9;
+  --purple-dark:  #3B0764;
+  --purple-mid:   #8B5CF6;
+  --purple-light: #EDE9FE;
+  --purple-pale:  #F5F3FF;
+  --green:        #059669;
+  --green-bg:     #D1FAE5;
+  --amber:        #D97706;
+  --amber-bg:     #FEF3C7;
+  --red:          #B91C1C;
+  --ink:          #0F172A;
+  --ink-soft:     #475569;
+  --border:       #E2E8F0;
+  --bg-stripe:    #F8FAFC;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #CBD5E1;
+  color: var(--ink);
+  font-size: 10px;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+@media print {
+  body { background: none; }
+  .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+}
+@page { size: A4; margin: 0; }
+
+/* ── COVER ── */
+.cover {
+  background: #fff;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  border-top: 5px solid var(--purple-dark);
+  padding: 36px 40px 32px;
+}
+
+.cover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+.cover-logo-area { display: flex; flex-direction: column; gap: 4px; }
+.logo-tagline { font-size: 8.5px; color: var(--ink-soft); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 4px; }
+
+.cover-date-badge {
+  background: var(--purple-pale);
+  border: 1px solid var(--purple-light);
+  border-radius: 6px;
+  padding: 6px 12px;
+  text-align: right;
+}
+.cover-date-badge .label { font-size: 7.5px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.5px; }
+.cover-date-badge .val   { font-size: 10px; font-weight: 600; color: var(--purple-dark); }
+
+.cover-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 0 24px; }
+
+.cover-tag {
+  display: inline-block;
+  background: var(--purple-light);
+  color: var(--purple-dark);
+  font-size: 8px; font-weight: 700;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 4px;
+  margin-bottom: 16px; width: fit-content;
+}
+
+.cover-title {
+  font-size: 32px; font-weight: 900;
+  color: var(--purple-dark);
+  line-height: 1.1; letter-spacing: -1.2px;
+  margin-bottom: 10px;
+}
+
+.cover-subtitle {
+  font-size: 11.5px; color: var(--ink-soft);
+  font-weight: 400; margin-bottom: 28px; line-height: 1.6;
+}
+
+.cover-divider { width: 56px; height: 3px; background: var(--purple-mid); border-radius: 2px; margin-bottom: 28px; }
+
+/* credential callout */
+.cover-cred {
+  background: var(--purple-pale);
+  border: 1px solid var(--purple-light);
+  border-left: 4px solid var(--purple);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  font-size: 9px;
+  color: var(--purple-dark);
+  line-height: 1.6;
+}
+.cover-cred strong { font-weight: 700; }
+
+.cover-meta-table { width: 100%; border-collapse: collapse; }
+.cover-meta-table td { padding: 7.5px 12px; font-size: 9.5px; border-bottom: 1px solid var(--border); }
+.cover-meta-table td:first-child { width: 34%; color: var(--ink-soft); font-weight: 500; background: var(--bg-stripe); }
+.cover-meta-table td:last-child { color: var(--ink); font-weight: 600; }
+.cover-meta-table tr:first-child td { border-top: 1px solid var(--border); }
+
+.cover-footer-note {
+  margin-top: auto; padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 7.5px; color: var(--ink-soft); line-height: 1.5;
+}
+
+/* ── INNER PAGES ── */
+.inner-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 13px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--purple-pale);
+  flex-shrink: 0;
+}
+.inner-header-title { font-size: 8px; font-weight: 700; color: var(--purple-dark); letter-spacing: 0.3px; }
+.inner-header-sub   { font-size: 7.5px; color: var(--ink-soft); }
+
+.inner-footer {
+  margin-top: auto;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 28px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.inner-footer-left  { font-size: 7.5px; color: var(--ink-soft); }
+.inner-footer-page  { font-size: 7.5px; color: var(--ink-soft); font-weight: 600; }
+.inner-footer-right { font-size: 7.5px; color: var(--purple-dark); font-weight: 600; }
+
+.content { flex: 1; padding: 22px 28px; display: flex; flex-direction: column; gap: 18px; }
+
+/* ── HEADINGS ── */
+.section-title {
+  font-size: 12.5px; font-weight: 800; color: var(--purple-dark);
+  letter-spacing: -0.3px; padding-bottom: 7px;
+  border-bottom: 2px solid var(--purple-light);
+  margin-bottom: 10px;
+}
+.section-title span {
+  display: inline-block; background: var(--purple-dark); color: #fff;
+  font-size: 7.5px; font-weight: 700; padding: 2px 7px; border-radius: 10px;
+  margin-right: 7px; vertical-align: middle; letter-spacing: 0.3px;
+}
+
+/* ── PIPELINE FLOW ── */
+.pipeline-flow {
+  display: flex; align-items: stretch; gap: 0;
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+
+.pipe-stage {
+  flex: 1; padding: 10px 8px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+  position: relative;
+  background: #fff;
+}
+.pipe-stage:last-child { border-right: none; }
+.pipe-stage.won { background: var(--green-bg); }
+.pipe-stage.lost { background: #FEE2E2; }
+
+.pipe-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--purple-light); color: var(--purple-dark);
+  font-size: 8px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 5px;
+}
+.pipe-stage.won .pipe-num  { background: var(--green-bg); color: var(--green); }
+.pipe-stage.lost .pipe-num { background: #FEE2E2; color: var(--red); }
+
+.pipe-label { font-size: 8px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.pipe-sub   { font-size: 7px; color: var(--ink-soft); margin-top: 3px; line-height: 1.3; }
+
+/* ── PAIN / SOLUTION TABLE ── */
+.pain-table { width: 100%; border-collapse: collapse; }
+.pain-table th {
+  padding: 7px 10px; text-align: left; font-size: 8px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border);
+}
+.pain-table th:first-child { color: var(--red); width: 40%; }
+.pain-table th:last-child  { color: var(--green); }
+.pain-table td { padding: 8px 10px; font-size: 8.5px; vertical-align: top; border-bottom: 1px solid var(--border); line-height: 1.5; }
+.pain-table tr:nth-child(even) td { background: var(--bg-stripe); }
+.pain-table td:first-child { color: var(--ink-soft); }
+.pain-table td:last-child  { color: var(--ink); font-weight: 500; }
+.pain-table td:last-child::before { content: '→ '; color: var(--purple-mid); font-weight: 700; }
+
+/* ── TEAM MAP ── */
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.team-card {
+  border: 1px solid var(--border); border-radius: 8px; padding: 10px;
+  background: #fff; text-align: center;
+}
+.team-icon { font-size: 18px; margin-bottom: 5px; }
+.team-name { font-size: 8.5px; font-weight: 700; color: var(--purple-dark); }
+.team-role { font-size: 7.5px; color: var(--ink-soft); margin-top: 3px; line-height: 1.4; }
+.team-arrow { display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--purple-mid); font-weight: 700; }
+
+/* ── INTEGRATION CARDS ── */
+.int-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.int-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.int-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px; font-size: 9.5px; font-weight: 700; color: #fff;
+}
+.int-header.whatsapp { background: #128C7E; }
+.int-header.email    { background: #1D4ED8; }
+
+.int-body { padding: 10px 12px; }
+.int-body ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.int-body ul li { font-size: 8.5px; color: var(--ink-soft); padding-left: 12px; position: relative; line-height: 1.4; }
+.int-body ul li::before { content: '›'; position: absolute; left: 0; color: var(--purple-mid); font-weight: 700; }
+
+.ksa-note {
+  background: #FFF7ED;
+  border: 1px solid #FED7AA;
+  border-left: 4px solid var(--amber);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-size: 8.5px;
+  color: #92400E;
+  line-height: 1.5;
+}
+.ksa-note strong { font-weight: 700; }
+
+/* ── FEATURE GRID ── */
+.feat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.feat-card { border: 1px solid var(--border); border-radius: 7px; padding: 10px 12px; }
+.feat-card-title { font-size: 9px; font-weight: 700; color: var(--purple-dark); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.feat-list { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.feat-list li { font-size: 8px; color: var(--ink-soft); padding-left: 11px; position: relative; line-height: 1.4; }
+.feat-list li::before { content: '›'; position: absolute; left: 0; color: var(--purple-mid); font-weight: 700; }
+
+/* ── OPTIONS ── */
+.opts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.opt-card { border-radius: 10px; overflow: hidden; border: 1.5px solid var(--border); }
+.opt-card.rec { border-color: var(--purple); }
+.opt-head { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.opt-head.rec-h { background: var(--purple-dark); }
+.opt-badge { display: inline-block; font-size: 7px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; margin-bottom: 4px; }
+.badge-r { background: var(--purple-mid); color: #fff; }
+.badge-c { background: #E2E8F0; color: var(--ink-soft); }
+.opt-name { font-size: 14px; font-weight: 800; color: var(--purple-dark); letter-spacing: -0.3px; }
+.opt-name.w { color: #fff; }
+.opt-tag { font-size: 8px; color: var(--ink-soft); margin-top: 2px; }
+.opt-tag.w { color: rgba(255,255,255,0.7); }
+.opt-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 9px; }
+.cost-row { display: flex; gap: 7px; }
+.cost-item { flex: 1; background: var(--bg-stripe); border: 1px solid var(--border); border-radius: 6px; padding: 7px 9px; }
+.cost-item .cl { font-size: 7px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.4px; }
+.cost-item .cv { font-size: 9.5px; font-weight: 700; color: var(--purple-dark); margin-top: 2px; }
+.opt-items { display: flex; flex-direction: column; gap: 4px; }
+.oi { font-size: 8px; color: var(--ink-soft); padding-left: 14px; position: relative; line-height: 1.4; }
+.oi::before { position: absolute; left: 0; font-weight: 700; }
+.oi.pro::before { content: '✓'; color: var(--green); }
+.oi.con::before { content: '○'; color: var(--amber); }
+.cond-box { background: var(--amber-bg); border: 1px solid #FDE68A; border-radius: 6px; padding: 8px 10px; font-size: 8px; color: #92400E; line-height: 1.5; }
+
+/* ── COMPARE TABLE ── */
+.cmp-table { width: 100%; border-collapse: collapse; font-size: 8.5px; }
+.cmp-table th { background: var(--purple-dark); color: #fff; padding: 7px 10px; text-align: left; font-weight: 600; font-size: 8px; }
+.cmp-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.cmp-table tr:nth-child(even) td { background: var(--bg-stripe); }
+.cmp-table td:first-child { font-weight: 600; color: var(--ink); width: 30%; }
+.cmp-table td.y  { color: var(--green); font-weight: 600; }
+.cmp-table td.p  { color: var(--amber); font-weight: 600; }
+.cmp-table td.n  { color: var(--red);   font-weight: 600; }
+
+/* ── REC BOX ── */
+.rec-box { background: var(--purple-dark); color: #fff; border-radius: 10px; padding: 16px 20px; }
+.rec-title { font-size: 11px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 6px; }
+.rec-body  { font-size: 8.5px; color: rgba(255,255,255,0.82); line-height: 1.6; margin-bottom: 12px; }
+.rec-steps { display: flex; flex-direction: column; gap: 6px; }
+.rec-step  { display: flex; align-items: flex-start; gap: 10px; }
+.step-num  { width: 18px; height: 18px; border-radius: 50%; background: var(--purple-mid); color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-text { font-size: 8.5px; color: rgba(255,255,255,0.85); line-height: 1.5; padding-top: 1px; }
+.step-text strong { color: #fff; }
+
+/* ── PILL ROW ── */
+.pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pill { background: var(--purple-light); color: var(--purple-dark); font-size: 8px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+
+/* ── STATS BAR ── */
+.stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.stat-item { padding: 12px 14px; text-align: center; border-right: 1px solid var(--border); }
+.stat-item:last-child { border-right: none; }
+.stat-num  { font-size: 20px; font-weight: 900; color: var(--purple-dark); letter-spacing: -1px; }
+.stat-lbl  { font-size: 8px; color: var(--ink-soft); margin-top: 2px; line-height: 1.4; }
+
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     PAGE 1 — COVER
+     ════════════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+
+    <div class="cover-header">
+      <div class="cover-logo-area">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" style="height:30px; margin-bottom:4px;">
+        <div class="logo-tagline">Digital Transformation Partner</div>
+      </div>
+      <div class="cover-date-badge">
+        <div class="label">Prepared</div>
+        <div class="val">28 June 2026</div>
+      </div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-tag">Odoo 19 CRM — Solution Proposal</div>
+      <div class="cover-title">Grow More Brands.<br>Lose Zero Leads.</div>
+      <div class="cover-subtitle">
+        A purpose-built CRM proposal for FranchiseMe — showing how Odoo 19 transforms<br>
+        your consultation pipeline, team assignments, WhatsApp, and email into one system.
+      </div>
+      <div class="cover-divider"></div>
+
+      <div class="cover-cred">
+        <strong>FranchiseMe</strong> is the only consulting firm in Saudi Arabia and the Gulf region with two
+        <strong>Certified Franchise Executive (CFE)</strong> holders — the highest credential awarded by the
+        International Franchise Association. A firm of this calibre needs a CRM that matches its professional
+        standing. Odoo 19 delivers exactly that.
+      </div>
+
+      <table class="cover-meta-table">
+        <tr><td>Client</td>           <td>FranchiseMe — Franchise Consulting &amp; Brand Development, KSA</td></tr>
+        <tr><td>Prepared by</td>      <td>CodeOx · shabeeb.k@code-ox.com · +966 535 716 437</td></tr>
+        <tr><td>Platform</td>         <td>Odoo 19 CRM (Latest Release)</td></tr>
+        <tr><td>Team Size</td>        <td>5 Users (Sales &amp; Development Representatives)</td></tr>
+        <tr><td>Core Modules</td>     <td>CRM · WhatsApp (Discuss) · Email Marketing · Contacts</td></tr>
+        <tr><td>Options Presented</td><td>Option 1: Odoo Online &nbsp;|&nbsp; Option 2: Odoo Custom</td></tr>
+        <tr><td>Document Ref</td>     <td>FM-CRM-2026-01 · Version 1.0</td></tr>
+      </table>
+    </div>
+
+    <div class="cover-footer-note">
+      This document is prepared exclusively for FranchiseMe and is confidential. Pricing and timelines are indicative pending a formal
+      discovery session. &copy; 2026 CodeOx. All rights reserved. &nbsp;·&nbsp; code-ox.com
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 2 — YOUR BUSINESS ON ODOO
+     ════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="inner-header-title">How Odoo 19 CRM Fits the FranchiseMe Business</div>
+    <div class="inner-header-sub">FM-CRM-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <!-- Pipeline Stages -->
+    <div>
+      <div class="section-title"><span>01</span>Your Brand Journey — as a CRM Pipeline</div>
+      <p style="font-size:8.5px; color:var(--ink-soft); margin-bottom:10px; line-height:1.5;">
+        Every brand that requests a free consultation enters your pipeline. Odoo 19 tracks each brand from first contact
+        to active franchise client — nothing is lost in WhatsApp chats or email inboxes.
+      </p>
+      <div class="pipeline-flow">
+        <div class="pipe-stage">
+          <div class="pipe-num">1</div>
+          <div class="pipe-label">New Inquiry</div>
+          <div class="pipe-sub">Free consultation request received</div>
+        </div>
+        <div class="pipe-stage">
+          <div class="pipe-num">2</div>
+          <div class="pipe-label">Consultation Scheduled</div>
+          <div class="pipe-sub">Meeting booked, rep assigned</div>
+        </div>
+        <div class="pipe-stage">
+          <div class="pipe-num">3</div>
+          <div class="pipe-label">Consultation Done</div>
+          <div class="pipe-sub">Notes logged, proposal needed</div>
+        </div>
+        <div class="pipe-stage">
+          <div class="pipe-num">4</div>
+          <div class="pipe-label">Proposal Sent</div>
+          <div class="pipe-sub">Franchise model proposal delivered</div>
+        </div>
+        <div class="pipe-stage">
+          <div class="pipe-num">5</div>
+          <div class="pipe-label">Negotiation</div>
+          <div class="pipe-sub">Contract terms under discussion</div>
+        </div>
+        <div class="pipe-stage won">
+          <div class="pipe-num">6</div>
+          <div class="pipe-label">Won — Active</div>
+          <div class="pipe-sub">Brand development begins</div>
+        </div>
+        <div class="pipe-stage lost">
+          <div class="pipe-num">7</div>
+          <div class="pipe-label">Lost</div>
+          <div class="pipe-sub">Reason captured for analysis</div>
+        </div>
+      </div>
+      <p style="font-size:7.5px; color:var(--ink-soft); margin-top:6px;">These stages are fully customisable in Odoo — rename, add, or reorder to match your exact process.</p>
+    </div>
+
+    <!-- Pain Points vs Odoo -->
+    <div>
+      <div class="section-title"><span>02</span>Your Current Challenges — Solved by Odoo 19</div>
+      <table class="pain-table">
+        <thead>
+          <tr>
+            <th>Without a CRM (Today)</th>
+            <th>With Odoo 19 CRM</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Free consultation requests arrive by WhatsApp, email, or website — no single place to see them all</td>
+            <td>All inquiries land in one CRM inbox. Odoo auto-creates a lead from each email or web form submission</td>
+          </tr>
+          <tr>
+            <td>Assigning leads to one of the 5 reps is done manually by WhatsApp message — easy to forget</td>
+            <td>Auto round-robin or manual assignment in one click. Each rep sees only their own pipeline</td>
+          </tr>
+          <tr>
+            <td>WhatsApp conversations with brands are on personal phones — history is lost if an employee leaves</td>
+            <td>Send WhatsApp directly from the CRM lead record. Full conversation history saved against the brand forever</td>
+          </tr>
+          <tr>
+            <td>No visibility on how many leads are stuck, how long at each stage, or which rep is overloaded</td>
+            <td>Live dashboard shows pipeline by stage, rep workload, conversion rate, and average deal time</td>
+          </tr>
+          <tr>
+            <td>Follow-up reminders are sticky notes or WhatsApp messages to yourself — things fall through</td>
+            <td>Schedule a call, meeting, or email follow-up on any lead. Odoo notifies the rep when it's due</td>
+          </tr>
+          <tr>
+            <td>When a client asks "where are we on the proposal?" — the rep has to search through chats</td>
+            <td>Every email, WhatsApp, note, and document is on the brand's CRM record — one click to answer</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Team Map -->
+    <div>
+      <div class="section-title"><span>03</span>FranchiseMe's 4 Teams — Mapped to Odoo</div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-icon">🏗️</div>
+          <div class="team-name">Development Team</div>
+          <div class="team-role">Manages franchise model leads. Owns the CRM pipeline from Consultation to Won.</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">🛠️</div>
+          <div class="team-name">Support Team</div>
+          <div class="team-role">Handles admin tasks on active client records. Logs calls and updates lead status.</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">✍️</div>
+          <div class="team-name">Content Team</div>
+          <div class="team-role">Attaches reports &amp; materials to the brand record. Emails sent from the CRM.</div>
+        </div>
+        <div class="team-card">
+          <div class="team-icon">✅</div>
+          <div class="team-name">Quality Assurance</div>
+          <div class="team-role">Reviews active client records. Uses Odoo's chatter to flag issues on any lead.</div>
+        </div>
+      </div>
+      <p style="font-size:7.5px; color:var(--ink-soft); margin-top:7px;">
+        Each team gets its own Odoo view with role-based access. The manager sees everything; reps see only what is relevant to them.
+      </p>
+    </div>
+
+    <!-- WhatsApp + Email -->
+    <div>
+      <div class="section-title"><span>04</span>WhatsApp &amp; Email — The Saudi Business Stack</div>
+      <div class="int-row">
+        <div class="int-card">
+          <div class="int-header whatsapp">
+            <span style="font-size:15px;">💬</span>&nbsp; WhatsApp Business Integration
+          </div>
+          <div class="int-body">
+            <ul>
+              <li>Message brands directly from their CRM lead record</li>
+              <li>Full WhatsApp thread saved on the record permanently</li>
+              <li>Pre-approved message templates for consultation confirmations</li>
+              <li>Incoming replies trigger a notification to the assigned rep</li>
+              <li>One shared WhatsApp Business number — no personal phones needed</li>
+            </ul>
+          </div>
+        </div>
+        <div class="int-card">
+          <div class="int-header email">
+            <span style="font-size:15px;">✉️</span>&nbsp; Email Integration
+          </div>
+          <div class="int-body">
+            <ul>
+              <li>Connect your company email (Gmail, Outlook, or custom)</li>
+              <li>Set up <strong>info@franchiseme.net</strong> as a lead auto-creation alias</li>
+              <li>Every email to/from a brand is logged on their record</li>
+              <li>Send branded proposal emails with templates from the CRM</li>
+              <li>Mass email campaigns to past &amp; future leads</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="ksa-note" style="margin-top:8px;">
+        <strong>KSA Market Context:</strong> WhatsApp is the primary B2B communication channel in Saudi Arabia.
+        Odoo 19's native WhatsApp Business API integration means your team never leaves the CRM to message a client —
+        and no conversation history is ever lost on a personal device.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="inner-footer-left">CodeOx · shabeeb.k@code-ox.com · +966 535 716 437</div>
+    <div class="inner-footer-page">Page 2 of 3</div>
+    <div class="inner-footer-right">Confidential — FranchiseMe</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 3 — CRM FEATURES + OPTIONS
+     ════════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="inner-header-title">Odoo 19 CRM — Full Features &amp; Deployment Options</div>
+    <div class="inner-header-sub">FM-CRM-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="section-title"><span>05</span>Everything Included in Odoo 19 CRM</div>
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-card-title"><span>🎯</span> Lead &amp; Pipeline Management</div>
+          <ul class="feat-list">
+            <li>Visual Kanban pipeline — drag brands across stages</li>
+            <li>Lead scoring &amp; priority flags (hot, warm, cold)</li>
+            <li>Duplicate detection &amp; smart merging</li>
+            <li>Expected revenue &amp; close date per opportunity</li>
+            <li>Lost reason tracking for win/loss analysis</li>
+          </ul>
+        </div>
+        <div class="feat-card">
+          <div class="feat-card-title"><span>👥</span> Lead Distribution — 5 Users</div>
+          <ul class="feat-list">
+            <li>Round-robin auto-assignment or manual assign</li>
+            <li>Each rep sees only their own brands by default</li>
+            <li>Manager sees all reps' pipelines in one view</li>
+            <li>Lead ownership transfer between reps</li>
+            <li>Sales team grouping with team lead access</li>
+          </ul>
+        </div>
+        <div class="feat-card">
+          <div class="feat-card-title"><span>📋</span> Activities &amp; Follow-ups</div>
+          <ul class="feat-list">
+            <li>Schedule calls, emails, meetings on any lead</li>
+            <li>Overdue activity alerts &amp; colour-coded deadlines</li>
+            <li>Calendar view synced to all activities</li>
+            <li>Reminder notifications in-app and by email</li>
+            <li>Auto-suggest next action when marking done</li>
+          </ul>
+        </div>
+        <div class="feat-card">
+          <div class="feat-card-title"><span>📊</span> Reporting &amp; Analytics</div>
+          <ul class="feat-list">
+            <li>Pipeline analysis: won/lost by rep, stage, and source</li>
+            <li>Revenue forecast by month/quarter</li>
+            <li>Activity performance reports per rep</li>
+            <li>Custom dashboard tiles (drag &amp; drop)</li>
+            <li>Export any report to Excel/CSV</li>
+          </ul>
+        </div>
+        <div class="feat-card">
+          <div class="feat-card-title"><span>🗂️</span> Contact &amp; Brand Management</div>
+          <ul class="feat-list">
+            <li>Unified contact book shared across 5 users</li>
+            <li>Company + individual contact hierarchy</li>
+            <li>Full history per brand: calls, emails, WhatsApps</li>
+            <li>Custom fields &amp; tags (industry, franchise type, etc.)</li>
+            <li>Attachments: proposals, contracts, reports</li>
+          </ul>
+        </div>
+        <div class="feat-card">
+          <div class="feat-card-title"><span>📱</span> Mobile App (iOS &amp; Android)</div>
+          <ul class="feat-list">
+            <li>Full CRM access on any device, anywhere</li>
+            <li>Update lead status from client meetings</li>
+            <li>Log calls and add notes from the field</li>
+            <li>Push notifications for due activities</li>
+            <li>Same interface as desktop — no extra training</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pill-row">
+        <span class="pill">CRM Pipeline</span>
+        <span class="pill">WhatsApp Business</span>
+        <span class="pill">Email Integration</span>
+        <span class="pill">Email Marketing</span>
+        <span class="pill">Calendar</span>
+        <span class="pill">Mobile App</span>
+        <span class="pill">Contacts</span>
+        <span class="pill">Reporting</span>
+        <span class="pill">5 User Licences</span>
+        <span class="pill">AI-Powered Lead Scoring</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title"><span>06</span>Deployment Options</div>
+      <div class="opts-grid">
+
+        <div class="opt-card rec">
+          <div class="opt-head rec-h">
+            <div class="opt-badge badge-r">✦ Recommended for FranchiseMe</div>
+            <div class="opt-name w">Option 1 — Odoo Online</div>
+            <div class="opt-tag w">No server. No IT team. Just pay licence + implementation.</div>
+          </div>
+          <div class="opt-body">
+            <div class="cost-row">
+              <div class="cost-item"><div class="cl">Licence</div><div class="cv">Per user / month</div></div>
+              <div class="cost-item"><div class="cl">Server Cost</div><div class="cv" style="color:var(--green)">None ✓</div></div>
+            </div>
+            <div class="opt-items">
+              <div class="oi pro">Hosted by Odoo — no server to buy or manage</div>
+              <div class="oi pro">Go live in 2–3 weeks</div>
+              <div class="oi pro">Automatic security updates &amp; daily backups</div>
+              <div class="oi pro">Access from any browser or mobile device</div>
+              <div class="oi pro">Add more users as your team grows</div>
+              <div class="oi con">Standard fields only (custom fields accepted ✓)</div>
+              <div class="oi con">No deep code-level customisation</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="opt-card">
+          <div class="opt-head">
+            <div class="opt-badge badge-c">If Customisation is Needed</div>
+            <div class="opt-name">Option 2 — Odoo Custom</div>
+            <div class="opt-tag">Full flexibility. Requires server + custom licence.</div>
+          </div>
+          <div class="opt-body">
+            <div class="cost-row">
+              <div class="cost-item"><div class="cl">Licence</div><div class="cv">Custom Odoo</div></div>
+              <div class="cost-item"><div class="cl">Server</div><div class="cv">VPS / Cloud</div></div>
+            </div>
+            <div class="opt-items">
+              <div class="oi pro">Full code-level customisation freedom</div>
+              <div class="oi pro">Custom modules &amp; proprietary integrations</div>
+              <div class="oi pro">Own your data and hosting environment</div>
+              <div class="oi con">Higher upfront cost (server + dev + licence)</div>
+              <div class="oi con">Longer implementation — 6–10 weeks</div>
+            </div>
+            <div class="cond-box" style="margin-top:4px;">
+              <strong>Choose this only if</strong> FranchiseMe requires custom business logic or integrations beyond what Odoo Online's configuration allows. Start with Option 1 first.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <div class="rec-box">
+        <div class="rec-title">CodeOx Recommendation — Start with Odoo Online, Go Live in 3 Weeks</div>
+        <div class="rec-body">
+          FranchiseMe's requirements — lead management, WhatsApp, email, and distribution across 5 users — are 100% covered
+          by Odoo 19 Online. No server, no infrastructure headache. CodeOx handles setup, configuration, and training.
+          Your team goes live and starts capturing every brand inquiry from day one.
+        </div>
+        <div class="rec-steps">
+          <div class="rec-step">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong>Discovery Session (1–2 hrs)</strong> — CodeOx maps your exact workflow, pipeline stages, and team roles. No surprises at go-live.</div>
+          </div>
+          <div class="rec-step">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong>Setup &amp; Configuration (1–2 weeks)</strong> — CRM pipeline, WhatsApp Business API, email alias, user roles, and dashboards configured.</div>
+          </div>
+          <div class="rec-step">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong>Team Training &amp; Go-Live (1 session)</strong> — All 5 users trained. FranchiseMe goes live on Odoo 19 CRM with CodeOx on standby support.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="inner-footer-left">CodeOx · shabeeb.k@code-ox.com · +966 535 716 437</div>
+    <div class="inner-footer-page">Page 3 of 3</div>
+    <div class="inner-footer-right">Confidential — FranchiseMe</div>
+  </div>
+</div>
+
+</body>
+</html>
