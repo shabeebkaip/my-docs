@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عرض Odoo 19 CRM — FranchiseMe</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:        #1D4ED8;
+  --blue-dark:   #0F2057;
+  --blue-mid:    #3B82F6;
+  --blue-light:  #DBEAFE;
+  --blue-pale:   #EFF6FF;
+  --green:       #059669;
+  --green-bg:    #D1FAE5;
+  --amber:       #D97706;
+  --amber-bg:    #FEF3C7;
+  --red:         #B91C1C;
+  --red-bg:      #FEE2E2;
+  --ink:         #0F172A;
+  --ink-soft:    #475569;
+  --border:      #E2E8F0;
+  --stripe:      #F8FAFC;
+}
+
+body {
+  font-family: 'Tajawal', 'Inter', system-ui, sans-serif;
+  background: #CBD5E1;
+  color: var(--ink);
+  font-size: 10px;
+  line-height: 1.7;
+  direction: rtl;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+@media print {
+  body { background: none; }
+  .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+}
+@page { size: A4; margin: 0; }
+
+/* ── COVER ── */
+.cover {
+  background: #fff;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  border-top: 5px solid var(--blue-dark);
+  padding: 36px 40px 32px;
+}
+.cover-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+.logo-tagline { font-size: 8px; color: var(--ink-soft); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 4px; }
+.cover-date-badge { background: var(--blue-pale); border: 1px solid var(--blue-light); border-radius: 6px; padding: 6px 12px; text-align: left; }
+.cover-date-badge .label { font-size: 7.5px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.5px; }
+.cover-date-badge .val   { font-size: 10px; font-weight: 600; color: var(--blue-dark); }
+.cover-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 0 24px; }
+.cover-tag { display: inline-block; background: var(--blue-light); color: var(--blue-dark); font-size: 8px; font-weight: 700; letter-spacing: 0.8px; padding: 4px 10px; border-radius: 4px; margin-bottom: 16px; width: fit-content; }
+.cover-title { font-size: 30px; font-weight: 900; color: var(--blue-dark); line-height: 1.2; letter-spacing: 0; margin-bottom: 10px; }
+.cover-subtitle { font-size: 11.5px; color: var(--ink-soft); font-weight: 400; margin-bottom: 28px; line-height: 1.7; }
+.cover-divider { width: 56px; height: 3px; background: var(--blue-mid); border-radius: 2px; margin-bottom: 28px; }
+.cover-cred { background: var(--blue-pale); border: 1px solid var(--blue-light); border-right: 4px solid var(--blue); border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 9px; color: var(--blue-dark); line-height: 1.7; }
+.cover-cred strong { font-weight: 700; }
+.meta-table { width: 100%; border-collapse: collapse; }
+.meta-table td { padding: 7.5px 12px; font-size: 9.5px; border-bottom: 1px solid var(--border); }
+.meta-table td:first-child { width: 34%; color: var(--ink-soft); font-weight: 500; background: var(--stripe); }
+.meta-table td:last-child { color: var(--ink); font-weight: 600; }
+.meta-table tr:first-child td { border-top: 1px solid var(--border); }
+.cover-footer-note { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); font-size: 7.5px; color: var(--ink-soft); line-height: 1.6; }
+
+/* ── INNER LAYOUT ── */
+.inner-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; border-bottom: 1px solid var(--border); background: var(--blue-pale); flex-shrink: 0; }
+.ih-title { font-size: 8px; font-weight: 700; color: var(--blue-dark); letter-spacing: 0.3px; }
+.ih-sub   { font-size: 7.5px; color: var(--ink-soft); }
+.inner-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding: 9px 28px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.if-left  { font-size: 7.5px; color: var(--ink-soft); }
+.if-page  { font-size: 7.5px; color: var(--ink-soft); font-weight: 600; }
+.if-right { font-size: 7.5px; color: var(--blue-dark); font-weight: 600; }
+.content  { flex: 1; padding: 18px 28px; display: flex; flex-direction: column; gap: 15px; }
+
+/* ── HEADINGS ── */
+.sec-title { font-size: 12px; font-weight: 800; color: var(--blue-dark); letter-spacing: 0; padding-bottom: 6px; border-bottom: 2px solid var(--blue-light); margin-bottom: 9px; }
+.sec-title span { display: inline-block; background: var(--blue-dark); color: #fff; font-size: 7.5px; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-left: 7px; margin-right: 0; vertical-align: middle; font-family: 'Inter', sans-serif; }
+
+/* ── PIPELINE ── */
+.pipeline { display: flex; align-items: stretch; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.ps { flex: 1; padding: 8px 5px; text-align: center; border-left: 1px solid var(--border); background: #fff; }
+.ps:last-child { border-left: none; }
+.ps.won  { background: var(--green-bg); }
+.ps.lost { background: var(--red-bg); }
+.ps-num  { width: 18px; height: 18px; border-radius: 50%; background: var(--blue-light); color: var(--blue-dark); font-size: 7.5px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 4px; font-family: 'Inter', sans-serif; }
+.ps.won  .ps-num { background: var(--green-bg); color: var(--green); }
+.ps.lost .ps-num { background: var(--red-bg);  color: var(--red);  }
+.ps-label { font-size: 7.5px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.ps-sub   { font-size: 6.5px; color: var(--ink-soft); margin-top: 2px; line-height: 1.3; }
+
+/* ── PAIN TABLE ── */
+.pain-table { width: 100%; border-collapse: collapse; }
+.pain-table th { padding: 6px 10px; text-align: right; font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 2px solid var(--border); }
+.pain-table th:first-child { color: var(--red); width: 43%; }
+.pain-table th:last-child  { color: var(--green); }
+.pain-table td { padding: 7px 10px; font-size: 8px; vertical-align: top; border-bottom: 1px solid var(--border); line-height: 1.55; text-align: right; }
+.pain-table tr:nth-child(even) td { background: var(--stripe); }
+.pain-table td:first-child { color: var(--ink-soft); }
+.pain-table td:last-child  { color: var(--ink); font-weight: 500; }
+.pain-table td:last-child::before { content: '✓ '; color: var(--green); font-weight: 700; }
+
+/* ── ADMIN BOX ── */
+.admin-box { background: var(--blue-pale); border: 1px solid var(--blue-light); border-right: 4px solid var(--blue); border-radius: 8px; padding: 10px 14px; }
+.admin-box-title { font-size: 8.5px; font-weight: 700; color: var(--blue-dark); margin-bottom: 7px; }
+.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; }
+.ag-item { font-size: 8px; color: var(--ink-soft); padding-right: 11px; padding-left: 0; position: relative; line-height: 1.4; }
+.ag-item::before { content: '›'; position: absolute; right: 0; left: auto; color: var(--blue-mid); font-weight: 700; }
+
+/* ── INTEGRATION CARDS ── */
+.int-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.int-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.int-head { display: flex; align-items: center; gap: 8px; padding: 9px 12px; font-size: 9.5px; font-weight: 700; color: #fff; }
+.int-head.wa    { background: #128C7E; }
+.int-head.email { background: #1D4ED8; }
+.int-body { padding: 10px 12px; }
+.int-body ul { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.int-body ul li { font-size: 8px; color: var(--ink-soft); padding-right: 11px; padding-left: 0; position: relative; line-height: 1.4; }
+.int-body ul li::before { content: '›'; position: absolute; right: 0; left: auto; color: var(--blue-mid); font-weight: 700; }
+.ksa-note { background: #FFF7ED; border: 1px solid #FED7AA; border-right: 4px solid var(--amber); border-radius: 6px; padding: 8px 12px; font-size: 8px; color: #92400E; line-height: 1.6; }
+.ksa-note strong { font-weight: 700; }
+
+/* ── FEATURE TILES ── */
+.feat-grid-visual {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.feat-tile {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 12px 12px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.feat-icon-wrap {
+  width: 36px; height: 36px;
+  background: var(--blue-pale);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.feat-name { font-size: 9.5px; font-weight: 800; color: var(--blue-dark); line-height: 1.3; }
+.feat-desc { font-size: 8px; color: var(--ink-soft); line-height: 1.55; }
+
+/* ── OPTIONS ── */
+.opts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.opt-card { border-radius: 10px; overflow: hidden; border: 1.5px solid var(--border); }
+.opt-card.rec { border-color: var(--blue); }
+.opt-head { padding: 11px 14px; border-bottom: 1px solid var(--border); background: var(--stripe); }
+.opt-head.rh  { background: var(--blue-dark); }
+.opt-badge { display: inline-block; font-size: 7px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; margin-bottom: 4px; }
+.br { background: var(--blue-mid); color: #fff; }
+.bc { background: #E2E8F0; color: var(--ink-soft); }
+.opt-name { font-size: 14px; font-weight: 800; color: var(--blue-dark); letter-spacing: 0; font-family: 'Tajawal', 'Inter', sans-serif; }
+.opt-name.w { color: #fff; }
+.opt-tag { font-size: 8px; color: var(--ink-soft); margin-top: 2px; }
+.opt-tag.w { color: rgba(255,255,255,0.7); }
+.opt-body { padding: 11px 14px; display: flex; flex-direction: column; gap: 8px; }
+.cost-row { display: flex; gap: 7px; }
+.ci { flex: 1; background: var(--stripe); border: 1px solid var(--border); border-radius: 6px; padding: 6px 9px; }
+.ci .cl { font-size: 7px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.3px; }
+.ci .cv { font-size: 9.5px; font-weight: 700; color: var(--blue-dark); margin-top: 2px; }
+.opt-items { display: flex; flex-direction: column; gap: 3px; }
+.oi { font-size: 8px; color: var(--ink-soft); padding-right: 14px; padding-left: 0; position: relative; line-height: 1.4; }
+.oi::before { position: absolute; right: 0; left: auto; font-weight: 700; }
+.oi.pro::before { content: '✓'; color: var(--green); }
+.oi.con::before { content: '○'; color: var(--amber); }
+.cond-box { background: var(--amber-bg); border: 1px solid #FDE68A; border-radius: 6px; padding: 7px 10px; font-size: 8px; color: #92400E; line-height: 1.6; }
+
+/* ── REC BOX ── */
+.rec-box { background: var(--blue-dark); color: #fff; border-radius: 10px; padding: 14px 18px; }
+.rec-title { font-size: 11px; font-weight: 800; letter-spacing: 0; margin-bottom: 5px; }
+.rec-body  { font-size: 8.5px; color: rgba(255,255,255,0.82); line-height: 1.7; margin-bottom: 10px; }
+.rec-steps { display: flex; flex-direction: column; gap: 5px; }
+.rec-step  { display: flex; align-items: flex-start; gap: 9px; }
+.sn { width: 18px; height: 18px; border-radius: 50%; background: var(--blue-mid); color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Inter', sans-serif; }
+.st { font-size: 8.5px; color: rgba(255,255,255,0.85); line-height: 1.6; padding-top: 1px; }
+.st strong { color: #fff; }
+
+/* ── PILL ROW ── */
+.pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.pill { background: var(--blue-light); color: var(--blue-dark); font-size: 7.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+
+/* ── NUMBERS / PRICES always LTR ── */
+.ltr { direction: ltr; unicode-bidi: embed; display: inline-flex; align-items: center; }
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     الصفحة 1 — الغلاف
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-header">
+      <div>
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" style="height:30px; margin-bottom:4px; display:block;">
+        <div class="logo-tagline">شريك التحول الرقمي</div>
+      </div>
+      <div class="cover-date-badge">
+        <div class="label">تاريخ الإعداد</div>
+        <div class="val">28 يونيو 2026</div>
+      </div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-tag">عرض حل Odoo 19 لإدارة علاقات العملاء</div>
+      <div class="cover-title">نمِّ علاماتك التجارية.<br>لا تفقد أي فرصة.</div>
+      <div class="cover-subtitle">
+        عرض نظام CRM المُصمَّم خصيصًا لـ FranchiseMe — يُبيِّن كيف يُحوِّل Odoo 19<br>
+        خط استشاراتك وتوزيع مهام الفريق وواتساب والبريد الإلكتروني إلى منظومة واحدة.
+      </div>
+
+      <div class="cover-divider"></div>
+
+      <!-- Client logo -->
+      <div style="margin:8px 0 6px;">
+        <img src="franchiseme_logo.png" alt="FranchiseMe" style="height:36px; object-fit:contain; display:block;">
+      </div>
+
+      <div class="cover-cred">
+        <strong>FranchiseMe</strong> هي شركة الاستشارات الوحيدة في المملكة العربية السعودية ومنطقة الخليج التي تضم اثنين من حاملي شهادة
+        <strong>المدير التنفيذي المعتمد للامتياز التجاري (CFE)</strong> — أرفع اعتماد تمنحه الرابطة الدولية للامتياز التجاري.
+        شركة بهذا المستوى تستحق نظام CRM يليق بمكانتها المهنية.
+        <strong>Odoo 19 يُحقِّق ذلك بالضبط.</strong>
+      </div>
+
+      <table class="meta-table">
+        <tr><td>العميل</td>            <td>FranchiseMe — استشارات الامتياز وتطوير العلامات التجارية، المملكة العربية السعودية</td></tr>
+        <tr><td>أُعِدَّ بواسطة</td>   <td>Raghib Ali Rafeeq · CodeOx · <span dir="ltr">+966 561 765 707</span></td></tr>
+        <tr><td>المنصة</td>             <td>Odoo 19 CRM (أحدث إصدار)</td></tr>
+        <tr><td>حجم الفريق</td>         <td>6 مستخدمين — 5 مندوبي مبيعات + مسؤول واحد</td></tr>
+        <tr><td>الوحدات الأساسية</td>   <td>CRM · WhatsApp (Discuss) · Email Marketing · Contacts</td></tr>
+        <tr><td>الخيارات المقدَّمة</td> <td>الخيار الأول: Odoo Online &nbsp;|&nbsp; الخيار الثاني: Odoo Custom</td></tr>
+        <tr><td>رقم المرجع</td>          <td><span dir="ltr">FM-CRM-2026-01 · Version 1.0</span></td></tr>
+      </table>
+    </div>
+
+    <div class="cover-footer-note">
+      هذه الوثيقة مُعدَّة حصريًا لـ FranchiseMe وهي سرية. الأسعار والجداول الزمنية استرشادية ريثما تُعقَد جلسة الاستكشاف.
+      &copy; 2026 CodeOx. جميع الحقوق محفوظة. &nbsp;·&nbsp; code-ox.com
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     الصفحة 2 — عملك على Odoo
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">كيف يتكامل Odoo 19 CRM مع أعمال FranchiseMe</div>
+    <div class="ih-sub"><span dir="ltr">FM-CRM-2026-01 · سري</span></div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>01</span>كيف تدخل الفرص إلى نظامك — مسارَان، خط مبيعات واحد</div>
+
+      <!-- مسارَا إدخال الفرص -->
+      <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:6px; align-items:center; margin-bottom:7px;">
+
+        <!-- المسار الأول: قائمة الفرص الحالية -->
+        <div style="background:var(--blue-pale); border:1.5px solid var(--blue-light); border-radius:8px; padding:8px 10px;">
+          <div style="font-size:7.5px; font-weight:800; color:var(--blue-dark); margin-bottom:4px;">📋  المسار الأول — قائمة الفرص الحالية</div>
+          <div style="display:flex; flex-direction:column; gap:3px;">
+            <div style="display:flex; align-items:center; gap:5px; font-size:7px; color:var(--ink);">
+              <span style="background:var(--blue-dark); color:#fff; border-radius:50%; width:14px; height:14px; display:flex; align-items:center; justify-content:center; font-size:6.5px; font-weight:700; flex-shrink:0; font-family:'Inter';">1</span>
+              استيراد 500+ فرصة بيع عبر CSV / Excel — رفع واحد وانتهى
+            </div>
+            <div style="display:flex; align-items:center; gap:5px; font-size:7px; color:var(--ink);">
+              <span style="background:var(--blue-dark); color:#fff; border-radius:50%; width:14px; height:14px; display:flex; align-items:center; justify-content:center; font-size:6.5px; font-weight:700; flex-shrink:0; font-family:'Inter';">2</span>
+              المسؤول يراجع ويوزِّع كل فرصة على المندوب المناسب
+            </div>
+            <div style="display:flex; align-items:center; gap:5px; font-size:7px; color:var(--ink);">
+              <span style="background:var(--blue-dark); color:#fff; border-radius:50%; width:14px; height:14px; display:flex; align-items:center; justify-content:center; font-size:6.5px; font-weight:700; flex-shrink:0; font-family:'Inter';">3</span>
+              كل مندوب من الخمسة يرى فرصه المُخصَّصة فقط
+            </div>
+          </div>
+        </div>
+
+        <!-- فاصل أو -->
+        <div style="text-align:center; font-size:8px; font-weight:800; color:var(--ink-soft); padding:0 4px;">أو</div>
+
+        <!-- المسار الثاني: استفسار جديد وارد -->
+        <div style="background:#F0FDF4; border:1.5px solid #6EE7B7; border-radius:8px; padding:8px 10px;">
+          <div style="font-size:7.5px; font-weight:800; color:#065F46; margin-bottom:4px;">🌐  المسار الثاني — استفسار جديد وارد</div>
+          <div style="display:flex; flex-direction:column; gap:3px;">
+            <div style="display:flex; align-items:center; gap:5px; font-size:7px; color:var(--ink);">
+              <span style="background:#065F46; color:#fff; border-radius:50%; width:14px; height:14px; display:flex; align-items:center; justify-content:center; font-size:6.5px; font-weight:700; flex-shrink:0; font-family:'Inter';">1</span>
+              يصل الاستفسار عبر الموقع / واتساب / البريد الإلكتروني
+            </div>
+            <div style="display:flex; align-items:center; gap:5px; font-size:7px; color:var(--ink);">
+              <span style="background:#065F46; color:#fff; border-radius:50%; width:14px; height:14px; display:flex; align-items:center; justify-content:center; font-size:6.5px; font-weight:700; flex-shrink:0; font-family:'Inter';">2</span>
+              Odoo ينشئ الفرصة تلقائيًا — لا شيء يضيع
+            </div>
+            <div style="display:flex; align-items:center; gap:5px; font-size:7px; color:var(--ink);">
+              <span style="background:#065F46; color:#fff; border-radius:50%; width:14px; height:14px; display:flex; align-items:center; justify-content:center; font-size:6.5px; font-weight:700; flex-shrink:0; font-family:'Inter';">3</span>
+              المسؤول يُوزِّع على المندوب المتاح فورًا
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- سهم القمع -->
+      <div style="text-align:center; font-size:7px; color:var(--ink-soft); margin-bottom:5px; letter-spacing:0.1px;">
+        ↓ &nbsp; كلا المسارَين يصبَّان في خط المبيعات ذاته — المسؤول يوزِّع، وكل مندوب يتابع فرصه &nbsp; ↓
+      </div>
+
+      <!-- مراحل خط المبيعات -->
+      <div class="pipeline">
+        <div class="ps"><div class="ps-num">1</div><div class="ps-label">فرصة جديدة</div><div class="ps-sub">مستوردة أو تلقائية</div></div>
+        <div class="ps"><div class="ps-num">2</div><div class="ps-label">الاستشارة مجدوَلة</div><div class="ps-sub">الاجتماع محجوز، المندوب معيَّن</div></div>
+        <div class="ps"><div class="ps-num">3</div><div class="ps-label">الاستشارة منتهية</div><div class="ps-sub">الملاحظات مسجَّلة، نقدِّم العرض</div></div>
+        <div class="ps"><div class="ps-num">4</div><div class="ps-label">العرض أُرسِل</div><div class="ps-sub">نموذج الامتياز مُسلَّم</div></div>
+        <div class="ps"><div class="ps-num">5</div><div class="ps-label">التفاوض</div><div class="ps-sub">العقد قيد النقاش</div></div>
+        <div class="ps won"><div class="ps-num">6</div><div class="ps-label">فاز — نشط</div><div class="ps-sub">تطوير العلامة يبدأ</div></div>
+        <div class="ps lost"><div class="ps-num">7</div><div class="ps-label">خُسِر</div><div class="ps-sub">السبب مسجَّل</div></div>
+      </div>
+      <p style="font-size:7px; color:var(--ink-soft); margin-top:5px;">المراحل قابلة للتخصيص الكامل — أعِد تسميتها أو رتِّبها أو أضِف مراحل جديدة لتناسب عمليتك.</p>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>02</span>لماذا تختار الفِرَق النامية Odoo 19 CRM</div>
+      <table class="pain-table">
+        <thead><tr><th>التحدي الشائع</th><th>مع Odoo 19 CRM</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>معلومات الفرص موزَّعة على أدوات متعددة — لا مرجع موحَّد للفريق</td>
+            <td>كل الاستفسارات تصل إلى صندوق وارد واحد. Odoo ينشئ فرصة تلقائيًا من كل بريد إلكتروني أو نموذج موقع</td>
+          </tr>
+          <tr>
+            <td>لا طريقة منظَّمة لتوزيع الفرص على المندوبين — التوزيع يدوي وغير منتظم</td>
+            <td>توزيع تلقائي دوري أو تعيين يدوي بنقرة واحدة. كل مندوب يرى خط مبيعاته الخاص فقط</td>
+          </tr>
+          <tr>
+            <td>تاريخ التواصل مشتَّت بين أدوات متعددة — الحصول على صورة كاملة يستغرق وقتًا طويلاً</td>
+            <td>كل مكالمة وبريد وواتساب وملاحظة في سجل واحد. التاريخ الكامل مرئي للفريق في ثوانٍ</td>
+          </tr>
+          <tr>
+            <td>لا رؤية فورية لصحة خط المبيعات أو عبء الفريق أو الفرص الباردة</td>
+            <td>لوحة مباشرة: خط المبيعات حسب المرحلة، عبء المندوبين، معدل التحويل، متوسط وقت الصفقة</td>
+          </tr>
+          <tr>
+            <td>المتابعة تعتمد على الذاكرة الفردية — التذكيرات غير منتظمة وتضيع الفرص</td>
+            <td>جدوِل المكالمات والاجتماعات والبريد على أي فرصة. Odoo يُنبِّه المندوب قبل موعد الاستحقاق</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>03</span>المسؤول — تحكُّم كامل في فريق المبيعات</div>
+      <div class="admin-box">
+        <div class="admin-box-title">المسؤول يرى كل ما لا يستطيع المندوبون الخمسة رؤيته — ويتصرَّف فورًا.</div>
+        <div class="admin-grid">
+          <div class="ag-item">مشاهدة خط مبيعات كل مندوب على شاشة واحدة — من لديه ضغط زائد ومن يحتاج فرصًا أكثر</div>
+          <div class="ag-item">رصد الفرص الباردة قبل فوات الأوان — التدخل في اللحظة المناسبة بالضبط</div>
+          <div class="ag-item">تتبُّع أداء كل مندوب: المكالمات والعروض والفرص الرابحة والخاسرة</div>
+          <div class="ag-item">إعادة تعيين أي فرصة بنقرة واحدة إذا غاب مندوب أو غادر الفريق</div>
+          <div class="ag-item">إنشاء تقارير أداء أسبوعية أو شهرية لكل مندوب — دون جمع بيانات يدوي</div>
+          <div class="ag-item">سجل كامل لكل إجراء على كل فرصة — مساءلة شاملة للفريق</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left"><span dir="ltr">Raghib Ali Rafeeq · CodeOx · +966 561 765 707</span></div>
+    <div class="if-page">صفحة 2 من 5</div>
+    <div class="if-right">سري — FranchiseMe</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     الصفحة 3 — الميزات
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Odoo 19 CRM — كل شيء مشمول</div>
+    <div class="ih-sub"><span dir="ltr">FM-CRM-2026-01 · سري</span></div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>04</span>الميزات — دفعة واحدة</div>
+      <div class="feat-grid-visual">
+
+        <div class="feat-tile">
+          <div class="feat-icon-wrap">📅</div>
+          <div class="feat-name">التقويم وجدوَلة الاجتماعات</div>
+          <div class="feat-desc">احجز الاستشارات المجانية مباشرة من سجل الفرصة. يتزامن مع Google Calendar وOutlook — كل اجتماع مرتبط بالعلامة التجارية.</div>
+        </div>
+
+        <div class="feat-tile">
+          <div class="feat-icon-wrap">👥</div>
+          <div class="feat-name">التوزيع الذكي للفرص</div>
+          <div class="feat-desc">توزيع دوري تلقائي على 5 مندوبين. المسؤول يتحكَّم في مَن يحصل على ماذا — المندوبون يرون فرصهم فقط.</div>
+        </div>
+
+        <div class="feat-tile">
+          <div class="feat-icon-wrap">💬</div>
+          <div class="feat-name">واتساب للأعمال</div>
+          <div class="feat-desc">راسِل العلامات التجارية مباشرة من نظام CRM. يُحفَظ تاريخ المحادثة تلقائيًا — لا شيء على الهواتف الشخصية.</div>
+        </div>
+
+        <div class="feat-tile">
+          <div class="feat-icon-wrap">✉️</div>
+          <div class="feat-name">تكامل البريد الإلكتروني</div>
+          <div class="feat-desc">اربِط بريد شركتك. كل رسالة من/إلى العلامة مرتبطة تلقائيًا بسجلها. الرسائل الواردة تُنشئ فرصًا تلقائيًا.</div>
+        </div>
+
+        <div class="feat-tile">
+          <div class="feat-icon-wrap">📋</div>
+          <div class="feat-name">الأنشطة والمتابعة</div>
+          <div class="feat-desc">جدوِل المكالمات والاجتماعات والمهام على أي فرصة. Odoo يُرسل تذكيرات قبل موعدها — لا متابعة تُهمَل أبدًا.</div>
+        </div>
+
+        <div class="feat-tile">
+          <div class="feat-icon-wrap">📊</div>
+          <div class="feat-name">لوحات المتابعة الحية</div>
+          <div class="feat-desc">تحليلات لحظية: الفوز/الخسارة حسب المندوب، معدلات التحويل، توقعات الإيرادات وتقارير الأنشطة. تصدير إلى Excel في أي وقت.</div>
+        </div>
+
+        <div class="feat-tile">
+          <div class="feat-icon-wrap">🗂️</div>
+          <div class="feat-name">مركز معلومات العلامة</div>
+          <div class="feat-desc">سجل واحد لكل علامة تجارية — كل مكالمة وبريد وواتساب وملاحظة وعرض وعقد في مكان واحد. ابحث عن أي شيء في ثوانٍ.</div>
+        </div>
+
+        <div class="feat-tile">
+          <div class="feat-icon-wrap">📱</div>
+          <div class="feat-name">تطبيق الجوال</div>
+          <div class="feat-desc">نظام CRM كامل على iOS وAndroid. حدِّث الفرص وسجِّل المكالمات واستقبِل تذكيرات الأنشطة من أي مكان.</div>
+        </div>
+
+        <div class="feat-tile">
+          <div class="feat-icon-wrap">🤖</div>
+          <div class="feat-name">تقييم الفرص بالذكاء الاصطناعي</div>
+          <div class="feat-desc">الذكاء الاصطناعي في Odoo 19 يُقيِّم الفرص حسب احتمالية التحويل — المندوبون يُركِّزون وقتهم على أفضل الفرص أولاً.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- لقطة شاشة خط المبيعات -->
+    <div>
+      <div class="sec-title"><span>05</span>شاهده في العمل — لوحة كانبان لـ Odoo 19 CRM</div>
+      <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,0.08);">
+        <img src="screenshots/crm_pipeline.webp" alt="Odoo CRM Pipeline" style="width:100%; display:block; max-height:58mm; object-fit:cover; object-position:top;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 12px; background:var(--stripe); border-top:1px solid var(--border);">
+          <span style="font-size:7.5px; color:var(--ink-soft);">عرض كانبان — اسحب وأفلِت العلامات التجارية عبر المراحل، وشاهد قيم الصفقات وتعيينات المندوبين بلمحة</span>
+          <span style="font-size:7px; color:var(--blue-dark); font-weight:600; white-space:nowrap; margin-right:12px;" dir="ltr">Source: odoo.com</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left"><span dir="ltr">Raghib Ali Rafeeq · CodeOx · +966 561 765 707</span></div>
+    <div class="if-page">صفحة 3 من 5</div>
+    <div class="if-right">سري — FranchiseMe</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     الصفحة 4 — التكاملات + خيارات النشر
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">تكامل واتساب والبريد الإلكتروني · خيارات النشر</div>
+    <div class="ih-sub"><span dir="ltr">FM-CRM-2026-01 · سري</span></div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>06</span>واتساب والبريد الإلكتروني — عمود أعمال المملكة</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:start;">
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="int-card">
+            <div class="int-head wa"><span style="font-size:15px;">💬</span>&nbsp; واتساب للأعمال</div>
+            <div class="int-body">
+              <ul>
+                <li>راسِل العلامات من سجل الفرصة في CRM</li>
+                <li>يُحفَظ كامل المحادثة بشكل دائم</li>
+                <li>قوالب جاهزة للتأكيدات والمتابعة</li>
+                <li>الردود الواردة تُنبِّه المندوب في Odoo</li>
+                <li>رقم واحد مشترك — بدون هواتف شخصية</li>
+              </ul>
+            </div>
+          </div>
+          <div class="int-card">
+            <div class="int-head email"><span style="font-size:15px;">✉️</span>&nbsp; تكامل البريد الإلكتروني</div>
+            <div class="int-body">
+              <ul>
+                <li>اربِط Gmail أو Outlook أو SMTP مخصَّص</li>
+                <li><span dir="ltr">info@franchiseme.net</span> ينشئ فرصًا تلقائيًا</li>
+                <li>كل رسالة تُسجَّل في سجل العلامة التجارية</li>
+                <li>أرسِل العروض بقوالب مرئية بهوية الشركة</li>
+                <li>حملات بريد جماعي لرعاية الفرص وتنميتها</li>
+              </ul>
+            </div>
+          </div>
+          <div class="ksa-note">
+            <strong>السياق السعودي:</strong> واتساب هو القناة الأولى للأعمال B2B في المملكة العربية السعودية. التكامل الأصيل في Odoo 19 يعني ألا تضيع محادثة واحدة على هاتف شخصي.
+          </div>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,0.08);">
+          <img src="screenshots/crm_communication.webp" alt="Odoo Lead Record" style="width:100%; display:block;">
+          <div style="padding:6px 10px; background:var(--stripe); border-top:1px solid var(--border);">
+            <span style="font-size:7.5px; color:var(--ink-soft);">سجل الفرصة — كامل مراسلات البريد والأنشطة المخطَّطة وتاريخ التواصل في عرض واحد</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>07</span>اختَر طريقة النشر</div>
+      <div class="opts-grid">
+
+        <div class="opt-card rec">
+          <div class="opt-head rh">
+            <div class="opt-badge br">✦ موصى به لـ FranchiseMe</div>
+            <div class="opt-name w">الخيار الأول — Odoo Online</div>
+            <div class="opt-tag w">بدون خادم. بدون فريق تقني. اشتراك + تنفيذ فقط.</div>
+          </div>
+          <div class="opt-body">
+            <div class="cost-row">
+              <div class="ci"><div class="cl">الاشتراك</div><div class="cv">سنوي</div></div>
+              <div class="ci"><div class="cl">تكلفة الخادم</div><div class="cv" style="color:var(--green)">لا يوجد ✓</div></div>
+            </div>
+            <div class="opt-items">
+              <div class="oi pro">مستضاف من Odoo — لا خادم للشراء أو الإدارة</div>
+              <div class="oi pro">انطلاق في 7–10 أيام</div>
+              <div class="oi pro">تحديثات تلقائية ونسخ احتياطية يومية</div>
+              <div class="oi pro">الوصول من أي متصفح أو جهاز محمول</div>
+              <div class="oi con">حقول معيارية فقط (الحقول المخصَّصة مقبولة ✓)</div>
+              <div class="oi con">لا تعديل على مستوى الكود</div>
+            </div>
+            <!-- ملخص الاستثمار -->
+            <div style="background:var(--green-bg); border:1px solid #6EE7B7; border-radius:8px; padding:10px 12px;">
+              <div style="font-size:7.5px; font-weight:700; color:var(--blue-dark); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:8px;">ملخص الاستثمار</div>
+              <!-- رسوم التنفيذ -->
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:#fff; border:1px solid #6EE7B7; border-radius:6px; margin-bottom:5px;">
+                <div>
+                  <div style="font-size:8.5px; font-weight:700; color:var(--ink);">رسوم التنفيذ</div>
+                  <div style="font-size:7px; color:var(--ink-soft);">مرة واحدة · تُدفَع لـ CodeOx · إعداد وتهيئة وتدريب &nbsp;·&nbsp; <span style="color:#B91C1C; font-weight:600;">غير شاملة للضريبة</span></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:3px; font-size:14px; font-weight:900; color:var(--blue-dark); white-space:nowrap;" dir="ltr">
+                  <img src="Saudi_Riyal_Symbol.svg.png" style="height:12px; filter:brightness(0) saturate(100%) invert(8%) sepia(60%) saturate(900%) hue-rotate(200deg) brightness(60%);">9,000 – 10,000
+                </div>
+              </div>
+              <!-- ترخيص Odoo -->
+              <div style="background:#fff; border:1px solid #6EE7B7; border-radius:6px; padding:8px 10px;">
+                <div style="font-size:8.5px; font-weight:700; color:var(--ink); margin-bottom:6px;">ترخيص Odoo — الخطة المعيارية &nbsp;<span style="font-size:7px; font-weight:500; color:var(--ink-soft);">6 مستخدمين · جميع التطبيقات · يُدفَع مباشرةً لـ Odoo</span></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                  <!-- الخطة السنوية -->
+                  <div style="border:1.5px solid var(--green); border-radius:6px; padding:7px 9px; position:relative;">
+                    <div style="position:absolute; top:-8px; right:8px; background:var(--green); color:#fff; font-size:6.5px; font-weight:700; padding:1px 6px; border-radius:3px; letter-spacing:0.3px;">★ موصى به</div>
+                    <div style="font-size:7.5px; font-weight:700; color:var(--ink); margin-bottom:3px;">الخطة السنوية</div>
+                    <div style="display:flex; align-items:center; gap:2px; font-size:13px; font-weight:900; color:var(--blue-dark);" dir="ltr">
+                      <img src="Saudi_Riyal_Symbol.svg.png" style="height:11px; filter:brightness(0) saturate(100%) invert(8%) sepia(60%) saturate(900%) hue-rotate(200deg) brightness(60%);">304<span style="font-size:8px; font-weight:500;">/شهر</span>
+                    </div>
+                    <div style="font-size:7px; color:var(--ink-soft); margin-top:2px;" dir="ltr">
+                      <img src="Saudi_Riyal_Symbol.svg.png" style="height:7px; filter:brightness(0) saturate(100%) invert(8%) sepia(60%) saturate(900%) hue-rotate(200deg) brightness(60%); vertical-align:middle;">3,645 يُفوَّتر سنويًا · يشمل خصم السنة الأولى
+                    </div>
+                  </div>
+                  <!-- الخطة الشهرية -->
+                  <div style="border:1px solid #6EE7B7; border-radius:6px; padding:7px 9px;">
+                    <div style="font-size:7.5px; font-weight:700; color:var(--ink); margin-bottom:3px;">الخطة الشهرية</div>
+                    <div style="display:flex; align-items:center; gap:2px; font-size:13px; font-weight:900; color:var(--blue-dark);" dir="ltr">
+                      <img src="Saudi_Riyal_Symbol.svg.png" style="height:11px; filter:brightness(0) saturate(100%) invert(8%) sepia(60%) saturate(900%) hue-rotate(200deg) brightness(60%);">380<span style="font-size:8px; font-weight:500;">/شهر</span>
+                    </div>
+                    <div style="font-size:7px; color:var(--ink-soft); margin-top:2px;">بدون التزام سنوي · يشمل خصم السنة الأولى</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="opt-card">
+          <div class="opt-head">
+            <div class="opt-badge bc">للشركات النامية والعمليات الفريدة</div>
+            <div class="opt-name">الخيار الثاني — Odoo Custom</div>
+            <div class="opt-tag">بمستوى المؤسسات. مبني بالضبط لمنطق عملك.</div>
+          </div>
+          <div class="opt-body">
+            <div class="cost-row">
+              <div class="ci"><div class="cl">الترخيص</div><div class="cv">Odoo مخصَّص</div></div>
+              <div class="ci"><div class="cl">الاستضافة</div><div class="cv">خادم مخصَّص</div></div>
+            </div>
+            <div class="opt-items">
+              <div class="oi pro">تخصيص كامل على مستوى الكود — مبني لعمليتك بالضبط</div>
+              <div class="oi pro">وحدات وأتمتة وتكاملات خاصة</div>
+              <div class="oi pro">امتلِك بياناتك وخادمك وبيئتك</div>
+              <div class="oi pro">ينمو مع عملك — بدون قيود المنصة</div>
+              <div class="oi pro">CodeOx يصبح شريكك التقني على المدى البعيد</div>
+            </div>
+            <div style="background:var(--stripe); border:1px solid var(--border); border-radius:5px; padding:8px 10px; margin-top:2px;">
+              <div style="font-size:7px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:4px;">الاستثمار</div>
+              <div style="font-size:12px; font-weight:900; color:var(--blue-dark); letter-spacing:0;">وفقًا للمتطلبات</div>
+              <div style="font-size:7.5px; color:var(--ink-soft); margin-top:3px; line-height:1.6;">يُحدَّد بعد جلسة استكشاف. السعر يعكس العمليات والوحدات والتكاملات المبنية خصيصًا لعملك.</div>
+            </div>
+            <div class="cond-box" style="margin-top:6px; background:#EFF6FF; border-color:var(--blue-light);">
+              <strong style="color:var(--blue-dark);">مثالي للشركات</strong> <span style="color:var(--ink);">التي تريد نظامًا مبنيًا حول عمليتها بالضبط — وليس العكس.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left"><span dir="ltr">Raghib Ali Rafeeq · CodeOx · +966 561 765 707</span></div>
+    <div class="if-page">صفحة 4 من 5</div>
+    <div class="if-right">سري — FranchiseMe</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     الصفحة 5 — المقارنة والتوصية
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">مقارنة سريعة وتوصية</div>
+    <div class="ih-sub"><span dir="ltr">FM-CRM-2026-01 · سري</span></div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>08</span>مقارنة سريعة</div>
+      <table style="width:100%; border-collapse:collapse; font-size:8.5px;">
+        <thead>
+          <tr>
+            <th style="background:var(--blue-dark); color:#fff; padding:7px 10px; text-align:right; font-size:8px; width:34%;">الميزة</th>
+            <th style="background:var(--blue-dark); color:#fff; padding:7px 10px; text-align:right; font-size:8px;">Odoo Online (الخيار الأول)</th>
+            <th style="background:var(--blue-dark); color:#fff; padding:7px 10px; text-align:right; font-size:8px;">Odoo Custom (الخيار الثاني)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:6px 10px; border-bottom:1px solid var(--border); font-weight:600;">خط مبيعات CRM وإدارة الفرص</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول + قابل للتخصيص</td></tr>
+          <tr style="background:var(--stripe);"><td style="padding:6px 10px; border-bottom:1px solid var(--border); font-weight:600;">واتساب للأعمال</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول</td></tr>
+          <tr><td style="padding:6px 10px; border-bottom:1px solid var(--border); font-weight:600;">تكامل البريد الإلكتروني</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول</td></tr>
+          <tr style="background:var(--stripe);"><td style="padding:6px 10px; border-bottom:1px solid var(--border); font-weight:600;">تطبيق الجوال (iOS وAndroid)</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول</td></tr>
+          <tr><td style="padding:6px 10px; border-bottom:1px solid var(--border); font-weight:600;">لوحة تحكم المسؤول</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مشمول</td></tr>
+          <tr style="background:var(--stripe);"><td style="padding:6px 10px; border-bottom:1px solid var(--border); font-weight:600;">الاستضافة والبنية التحتية</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--ink-soft); font-weight:600;">تُدار بواسطة Odoo</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ خادم مخصَّص — تحكم كامل</td></tr>
+          <tr><td style="padding:6px 10px; border-bottom:1px solid var(--border); font-weight:600;">وحدات وأتمتة مخصَّصة</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--ink-soft); font-weight:600;">ضبط معياري فقط</td><td style="padding:6px 10px; border-bottom:1px solid var(--border); color:var(--green); font-weight:600;">✓ مبني لعمليتك بالضبط</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="rec-box">
+        <div class="rec-title">توصية CodeOx — ابدأ بـ Odoo Online، انطلق خلال 7–10 أيام</div>
+        <div class="rec-body">
+          متطلبات FranchiseMe الآنية — إدارة الفرص والواتساب والبريد الإلكتروني وتوزيع العمل على 5 مندوبين يُشرِف عليهم مسؤول واحد —
+          مُغطَّاة 100% بـ Odoo 19 Online. نوصي بالبدء هنا: بدون أعباء خادم، وأسرع انطلاق، وكل قدرة أساسية يحتاجها فريقك من اليوم الأول.
+          مع نمو FranchiseMe وظهور عمليات فريدة، يُصبح <strong>الخيار الثاني (Custom)</strong> الخطوة الطبيعية التالية —
+          منصة مبنية بالكامل حول طريقة عملك، مع CodeOx كشريك تقني طويل الأمد.
+        </div>
+        <div class="rec-steps">
+          <div class="rec-step">
+            <div class="sn">1</div>
+            <div class="st"><strong>جلسة استكشاف (1–2 ساعة)</strong> — CodeOx يرسم عمليتك وخط مبيعاتك وأدوار الفريق بالضبط.</div>
+          </div>
+          <div class="rec-step">
+            <div class="sn">2</div>
+            <div class="st"><strong>إعداد وتهيئة (5–7 أيام)</strong> — خط مبيعات CRM وواجهة WhatsApp API والبريد المُختصَر و6 أدوار مستخدمين ولوحات المتابعة جاهزة.</div>
+          </div>
+          <div class="rec-step">
+            <div class="sn">3</div>
+            <div class="st"><strong>تدريب وانطلاق</strong> — تدريب المسؤول + 5 مندوبي المبيعات. FranchiseMe تنطلق مع CodeOx في وضع الدعم الجاهز.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left"><span dir="ltr">Raghib Ali Rafeeq · CodeOx · +966 561 765 707</span></div>
+    <div class="if-page">صفحة 5 من 5</div>
+    <div class="if-right">سري — FranchiseMe</div>
+  </div>
+</div>
+
+</body>
+</html>
