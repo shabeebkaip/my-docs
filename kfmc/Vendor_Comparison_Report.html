@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Comparison Report — Network Monitoring Platform — CodeOx</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green:       #059669;
+  --green-dark:  #064E3B;
+  --green-light: #D1FAE5;
+  --green-mid:   #10B981;
+  --ink:         #0F172A;
+  --ink-soft:    #475569;
+  --border:      #E2E8F0;
+  --bg-stripe:   #F8FAFC;
+  --yes:  #166534; --yes-bg:  #DCFCE7;
+  --warn: #92400E; --warn-bg: #FEF3C7;
+  --no:   #B91C1C; --no-bg:   #FEE2E2;
+  --t1-bg: #EFF6FF; --t1: #1D4ED8;
+  --t2-bg: #F0FDF4; --t2: #059669;
+  --t3-bg: #FEF3C7; --t3: #92400E;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #CBD5E1;
+  color: var(--ink);
+  font-size: 10px;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+@media print {
+  body { background: none; }
+  .page {
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    break-after: page;
+  }
+}
+@page { size: A4; margin: 0; }
+
+/* ── COVER ── */
+.cover {
+  background: #0A1F12;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.cover-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none; z-index: 1;
+}
+.cover-accent {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(180deg, #10B981 0%, rgba(16,185,129,0.12) 100%);
+  z-index: 3;
+}
+.cover-topbar {
+  position: relative; z-index: 4;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px 16px 34px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.cover-topbar-left { display: flex; align-items: center; gap: 14px; }
+.cover-topbar img { height: 22px; filter: brightness(0) invert(1); opacity: 0.9; }
+.cover-topbar-sep { width: 1px; height: 22px; background: rgba(255,255,255,0.15); }
+.cover-topbar-label { font-size: 8px; font-weight: 600; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+.cover-doc-pill {
+  border: 1.5px solid #10B981; color: #6EE7B7;
+  font-size: 7.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 4px;
+}
+.cover-hero {
+  position: relative; z-index: 4; flex: 1;
+  display: flex; flex-direction: column;
+  padding: 36px 28px 0 34px;
+}
+.cover-overline {
+  font-size: 8px; font-weight: 600; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px;
+}
+.cover-internal-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 4px; padding: 4px 10px; margin-bottom: 18px;
+  font-size: 8px; font-weight: 700; color: #FCD34D; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.cover-title {
+  font-size: 32px; font-weight: 800; line-height: 1.07; color: #fff; margin-bottom: 7px;
+}
+.cover-title-accent { color: #34D399; }
+.cover-subtitle {
+  font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.65; max-width: 400px; margin-bottom: 28px;
+}
+
+.cover-summary-grid {
+  position: relative; z-index: 4;
+  margin: 0 28px 14px 34px;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+}
+.cover-summary-card {
+  background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.18);
+  border-radius: 6px; padding: 12px 14px;
+}
+.cover-summary-rank { font-size: 7.5px; color: #34D399; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+.cover-summary-vendor { font-size: 12px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 4px; }
+.cover-summary-sub { font-size: 8.5px; color: rgba(255,255,255,0.42); }
+
+.cover-meta {
+  position: relative; z-index: 4;
+  margin: 0 28px 14px 34px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px; display: grid; grid-template-columns: repeat(4,1fr); overflow: hidden;
+}
+.cover-meta-item {
+  padding: 12px 14px; border-right: 1px solid rgba(255,255,255,0.07);
+}
+.cover-meta-item:last-child { border-right: none; }
+.cover-meta-label { font-size: 7.5px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 5px; }
+.cover-meta-value { font-size: 11px; font-weight: 600; color: #fff; }
+.cover-meta-value.accent { color: #34D399; }
+
+.cover-footer {
+  position: relative; z-index: 4;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 12px 28px 12px 34px;
+  display: flex; align-items: center; gap: 12px;
+}
+.cover-footer img { height: 15px; filter: brightness(0) invert(1); opacity: 0.6; }
+.cover-footer-sep { width: 1px; height: 12px; background: rgba(255,255,255,0.13); }
+.cover-footer-text { font-size: 8.5px; color: rgba(255,255,255,0.35); }
+
+/* ── INNER ── */
+.inner-page { display: flex; flex-direction: column; min-height: 297mm; }
+.inner-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 24px; border-bottom: 1px solid var(--border); background: #FAFBFC; flex-shrink: 0;
+}
+.inner-header img { height: 14px; opacity: 0.7; }
+.inner-header-title { font-size: 8.5px; color: #64748B; font-weight: 500; }
+.inner-header-ref   { font-size: 8.5px; color: #94A3B8; }
+.inner-content { flex: 1; padding: 18px 24px 14px; }
+.inner-footer {
+  border-top: 1px solid var(--border); padding: 9px 24px;
+  display: flex; align-items: center; gap: 9px; background: #FAFBFC; flex-shrink: 0;
+}
+.inner-footer img { height: 12px; opacity: 0.4; }
+.inner-footer-sep { width: 1px; height: 10px; background: #CBD5E1; }
+.inner-footer-text { font-size: 7.5px; color: #94A3B8; flex: 1; }
+.inner-footer-page { font-size: 8px; color: #94A3B8; font-weight: 600; }
+
+/* ── HEADINGS ── */
+.sec-label { font-size: 7.5px; font-weight: 700; color: var(--green-mid); text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 5px; }
+.sec-heading { font-size: 18px; font-weight: 800; color: var(--ink); margin-bottom: 10px; line-height: 1.15; }
+.section-hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+.part-banner {
+  background: var(--green-dark); color: #fff;
+  border-radius: 5px; padding: 11px 14px;
+  display: flex; align-items: center; gap: 11px; margin-bottom: 12px;
+}
+.part-num {
+  width: 26px; height: 26px; min-width: 26px; border-radius: 50%;
+  background: var(--green-mid); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: #fff;
+}
+.part-sub   { font-size: 7.5px; color: rgba(255,255,255,0.42); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2px; }
+.part-title { font-size: 12px; font-weight: 700; }
+
+.sub-heading {
+  display: flex; align-items: center; gap: 9px; margin: 12px 0 7px;
+}
+.sub-badge {
+  background: var(--green-dark); color: #fff;
+  font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 3px;
+  letter-spacing: 0.06em; white-space: nowrap;
+}
+.sub-title { font-size: 11px; font-weight: 700; color: var(--ink); }
+
+/* ── TABLES ── */
+.doc-table {
+  width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 12px;
+}
+.doc-table thead th {
+  background: var(--green-dark); color: #fff;
+  padding: 7px 9px; text-align: left; font-size: 7.5px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.doc-table tbody tr:nth-child(even) { background: var(--bg-stripe); }
+.doc-table tbody td {
+  padding: 7px 9px; border-bottom: 1px solid var(--border);
+  vertical-align: top; line-height: 1.55; color: var(--ink);
+}
+
+/* ── CHECK BADGES ── */
+.chk { display: inline-block; font-size: 8px; font-weight: 700; padding: 2px 7px; border-radius: 3px; white-space: nowrap; }
+.chk-yes  { background: var(--yes-bg);  color: var(--yes);  }
+.chk-warn { background: var(--warn-bg); color: var(--warn); }
+.chk-no   { background: var(--no-bg);   color: var(--no);   }
+.chk-na   { background: #F1F5F9; color: #64748B; }
+
+/* ── VENDOR PROFILE CARD ── */
+.vendor-card {
+  border: 1px solid var(--border); border-radius: 7px; padding: 14px 16px;
+  margin-bottom: 12px; position: relative;
+}
+.vendor-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+.vendor-name { font-size: 14px; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
+.vendor-by   { font-size: 8.5px; color: var(--ink-soft); }
+.vendor-tier { font-size: 8px; font-weight: 700; padding: 3px 10px; border-radius: 10px; }
+.tier-1 { background: var(--t1-bg); color: var(--t1); }
+.tier-2 { background: var(--t2-bg); color: var(--t2); }
+.tier-3 { background: var(--t3-bg); color: var(--t3); }
+
+.vendor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.vendor-detail { background: var(--bg-stripe); border-radius: 4px; padding: 7px 10px; }
+.vendor-detail-label { font-size: 7.5px; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+.vendor-detail-value { font-size: 9px; color: var(--ink); line-height: 1.5; }
+
+.pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.pros { background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 4px; padding: 8px 10px; }
+.cons { background: #FFF5F5; border: 1px solid #FECACA; border-radius: 4px; padding: 8px 10px; }
+.pros-label { font-size: 7.5px; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+.cons-label { font-size: 7.5px; font-weight: 700; color: #B91C1C; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+.pros ul, .cons ul { padding-left: 12px; font-size: 8.5px; line-height: 1.75; color: var(--ink-soft); }
+
+/* ── NOTE BOX ── */
+.note-box {
+  border-radius: 5px; padding: 10px 12px;
+  font-size: 9.5px; line-height: 1.65; margin-bottom: 10px;
+}
+.note-box .note-label { font-size: 7px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 5px; }
+.note-box.green { background: #F0FDF4; border: 1px solid #BBF7D0; border-left: 3px solid var(--green); }
+.note-box.green .note-label { color: var(--green); }
+.note-box.amber { background: #FFFBEB; border: 1px solid #FDE68A; border-left: 3px solid #F59E0B; }
+.note-box.amber .note-label { color: #B45309; }
+.note-box p { color: #374151; }
+.note-box strong { font-weight: 600; }
+
+/* ── TCO / SCORE GRID ── */
+.score-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 12px; }
+.score-card {
+  border: 1px solid var(--border); border-radius: 5px; padding: 10px 12px;
+  border-top: 3px solid var(--green-mid);
+}
+.score-vendor { font-size: 11px; font-weight: 800; color: var(--ink); margin-bottom: 2px; }
+.score-tco    { font-size: 14px; font-weight: 800; color: var(--green-dark); margin-bottom: 3px; }
+.score-label  { font-size: 7.5px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── RECO CARD ── */
+.reco-card {
+  border-radius: 6px; padding: 12px 14px; margin-bottom: 10px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.reco-card.primary  { background: #EFF6FF; border: 1px solid #BFDBFE; border-left: 4px solid #1D4ED8; }
+.reco-card.alt1     { background: #F0FDF4; border: 1px solid #BBF7D0; border-left: 4px solid var(--green); }
+.reco-card.alt2     { background: #FFFBEB; border: 1px solid #FDE68A; border-left: 4px solid #F59E0B; }
+.reco-rank { font-size: 18px; font-weight: 900; min-width: 28px; }
+.reco-rank.primary  { color: #1D4ED8; }
+.reco-rank.alt1     { color: var(--green); }
+.reco-rank.alt2     { color: #D97706; }
+.reco-vendor  { font-size: 12px; font-weight: 800; color: var(--ink); margin-bottom: 3px; }
+.reco-reason  { font-size: 9px; color: var(--ink-soft); line-height: 1.65; }
+
+/* ── NEXT STEPS TABLE ── */
+.step-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 12px; }
+.step-table th { background: #374151; color: #fff; padding: 7px 10px; text-align: left; font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.step-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.step-table tr:nth-child(even) td { background: var(--bg-stripe); }
+.step-num { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: var(--green-mid); color: #fff; border-radius: 50%; font-size: 9px; font-weight: 800; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ══ PAGE 1 — COVER ══ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-grid"></div>
+    <div class="cover-accent"></div>
+
+    <div class="cover-topbar">
+      <div class="cover-topbar-left">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+        <div class="cover-topbar-sep"></div>
+        <div class="cover-topbar-label">CodeOx Technologies — Advisory Report</div>
+      </div>
+      <div class="cover-doc-pill">Vendor Research &amp; Comparison</div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-overline">SolarWinds Replacement · Network Monitoring</div>
+      <div class="cover-internal-badge">⚠ Internal Use Only — Do Not Share with Vendors</div>
+      <div class="cover-title">
+        Network Monitoring<br>
+        <span class="cover-title-accent">Vendor Comparison</span><br>
+        Report
+      </div>
+      <div class="cover-subtitle">
+        Research and evaluation of enterprise-grade network monitoring platforms as replacements for the current SolarWinds NPM + NTA deployment. Covers feature coverage, TCO estimates, regional support, and ranked procurement recommendations.
+      </div>
+    </div>
+
+    <div class="cover-summary-grid">
+      <div class="cover-summary-card">
+        <div class="cover-summary-rank">#1 Primary Recommendation</div>
+        <div class="cover-summary-vendor">ManageEngine OpManager Plus</div>
+        <div class="cover-summary-sub">Best SolarWinds parity · Native ServiceNow · KSA support</div>
+      </div>
+      <div class="cover-summary-card">
+        <div class="cover-summary-rank">#2 Alternative</div>
+        <div class="cover-summary-vendor">PRTG Network Monitor</div>
+        <div class="cover-summary-sub">Fastest migration · Best UX · Broadest sensor library</div>
+      </div>
+      <div class="cover-summary-card">
+        <div class="cover-summary-rank">#3 Budget Option</div>
+        <div class="cover-summary-vendor">Zabbix + ntopng</div>
+        <div class="cover-summary-sub">Open source · Lowest 3-yr TCO · Linux-native</div>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Date</div>
+        <div class="cover-meta-value accent">June 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Vendors Evaluated</div>
+        <div class="cover-meta-value">6</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Prepared By</div>
+        <div class="cover-meta-value">CodeOx</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Classification</div>
+        <div class="cover-meta-value accent">Internal Only</div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="cover-footer-sep"></div>
+      <div class="cover-footer-text">shabeeb.k@code-ox.com · +966 535 716 437</div>
+      <div class="cover-footer-sep"></div>
+      <div class="cover-footer-text">code-ox.com</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 2 — Research Scope + Shortlist ══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Network Monitoring — Vendor Comparison Report</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="note-box amber" style="margin-bottom:14px;">
+        <div class="note-label">Internal Document</div>
+        <p>This report is for internal evaluation purposes only. It contains CodeOx advisory assessments and indicative pricing. <strong>Do not share with vendors or the client.</strong></p>
+      </div>
+
+      <div class="part-banner">
+        <div class="part-num">1</div>
+        <div><div class="part-sub">Section 1</div><div class="part-title">Research Scope</div></div>
+      </div>
+      <p style="font-size:9px;color:var(--ink-soft);margin-bottom:12px;">This report evaluates commercially available enterprise network monitoring platforms against the following procurement profile:</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+        <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:5px;padding:10px 12px;">
+          <div style="font-size:7.5px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Scale</div>
+          <div style="font-size:10px;font-weight:700;color:var(--ink);">3,000–5,000 nodes</div>
+          <div style="font-size:8.5px;color:var(--ink-soft);">Up to 100,000 interfaces</div>
+        </div>
+        <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:5px;padding:10px 12px;">
+          <div style="font-size:7.5px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Deployment</div>
+          <div style="font-size:10px;font-weight:700;color:var(--ink);">On-premises only</div>
+          <div style="font-size:8.5px;color:var(--ink-soft);">No cloud SaaS dependency</div>
+        </div>
+        <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:5px;padding:10px 12px;">
+          <div style="font-size:7.5px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Compliance</div>
+          <div style="font-size:10px;font-weight:700;color:var(--ink);">NCA ECC 2018</div>
+          <div style="font-size:8.5px;color:var(--ink-soft);">Saudi Arabia mandatory</div>
+        </div>
+      </div>
+
+      <div class="part-banner">
+        <div class="part-num">2</div>
+        <div><div class="part-sub">Section 2</div><div class="part-title">Vendor Shortlist Overview</div></div>
+      </div>
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>Vendor</th><th>Product</th><th>Origin</th><th>Deployment</th><th>Pricing Model</th><th style="width:70px;">Tier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:700;">Paessler AG</td>
+            <td>PRTG Network Monitor</td><td>Germany</td><td>On-prem / Cloud</td><td>Per-sensor perpetual or subscription</td>
+            <td><span class="vendor-tier tier-1">⭐ Tier 1</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;">Zoho (ManageEngine)</td>
+            <td>OpManager Plus</td><td>India / USA</td><td>On-prem</td><td>Per-device perpetual or subscription</td>
+            <td><span class="vendor-tier tier-1">⭐ Tier 1</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;">Progress Software</td>
+            <td>WhatsUp Gold</td><td>USA</td><td>On-prem</td><td>Per-device subscription</td>
+            <td><span class="vendor-tier tier-1">⭐ Tier 1</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;">Zabbix LLC</td>
+            <td>Zabbix Enterprise</td><td>Latvia</td><td>On-prem (Linux)</td><td>Open source + paid support</td>
+            <td><span class="vendor-tier tier-2">✅ Tier 2</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;">Centreon SAS</td>
+            <td>Centreon IT Monitoring</td><td>France</td><td>On-prem / Cloud</td><td>Subscription</td>
+            <td><span class="vendor-tier tier-2">✅ Tier 2</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;">Cisco</td>
+            <td>Catalyst Center (DNA)</td><td>USA</td><td>On-prem appliance</td><td>Cisco licensing</td>
+            <td><span class="vendor-tier tier-3">⚠️ Conditional</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">3</div>
+        <div><div class="part-sub">Section 3</div><div class="part-title">Vendor Profiles</div></div>
+      </div>
+
+      <div class="vendor-card">
+        <div class="vendor-card-header">
+          <div>
+            <div class="vendor-name">PRTG Network Monitor</div>
+            <div class="vendor-by">Paessler AG · paessler.com/prtg</div>
+          </div>
+          <span class="vendor-tier tier-1">⭐ Tier 1 — Recommended</span>
+        </div>
+        <p style="font-size:9px;color:var(--ink-soft);margin-bottom:8px;">Founded 1997; 500,000+ installations globally. Widest sensor library (200+ types). Consistently ranked as the most user-friendly SolarWinds NPM replacement with fastest migration path.</p>
+        <div class="vendor-grid">
+          <div class="vendor-detail"><div class="vendor-detail-label">Licensing</div><div class="vendor-detail-value">Per-sensor perpetual. XL (unlimited) license recommended for this scale. Typical 5,000-sensor: USD 15–25K one-time + 25% annual maintenance.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">Server OS</div><div class="vendor-detail-value">Windows Server (primary). Linux via remote probes only. HA via Windows failover cluster.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">Flow Support</div><div class="vendor-detail-value">NetFlow v5/v9, sFlow, IPFIX — included in base product via flow sensor.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">ServiceNow</div><div class="vendor-detail-value">Via webhook/REST — no native certified connector. Requires configuration.</div></div>
+        </div>
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pros-label">Strengths</div>
+            <ul>
+              <li>Most intuitive UI — lowest learning curve from SolarWinds</li>
+              <li>200+ out-of-box sensor types cover almost any device</li>
+              <li>Fastest time-to-value post-migration</li>
+              <li>Strong community and documentation</li>
+              <li>XL license eliminates per-sensor cost management</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="cons-label">Weaknesses</div>
+            <ul>
+              <li>Windows Server required — no full Linux server support</li>
+              <li>No native ServiceNow connector</li>
+              <li>Sensor-based licensing gets complex at scale if not on XL</li>
+              <li>Flow analysis less feature-rich vs. dedicated NTA tools</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Internal — Do Not Share · CodeOx Advisory · June 2026</div>
+      <div class="inner-footer-page">Page 2 of 8</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 3 — ManageEngine + WhatsUp ══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Network Monitoring — Vendor Comparison Report</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="vendor-card">
+        <div class="vendor-card-header">
+          <div>
+            <div class="vendor-name">ManageEngine OpManager Plus</div>
+            <div class="vendor-by">Zoho Corporation · manageengine.com/network-monitoring</div>
+          </div>
+          <span class="vendor-tier tier-1">⭐ Tier 1 — Primary Recommendation</span>
+        </div>
+        <p style="font-size:9px;color:var(--ink-soft);margin-bottom:8px;">Direct SolarWinds NPM + NTA feature parity in a single bundle. Zoho has been operating for 27+ years with 100M+ users globally. OpManager Plus = OpManager + NetFlow Analyzer + IP Address Manager + Switch Port Mapper. Strong GCC/KSA reseller presence.</p>
+        <div class="vendor-grid">
+          <div class="vendor-detail"><div class="vendor-detail-label">Licensing</div><div class="vendor-detail-value">Per-device perpetual or annual subscription. Enterprise (1,000+ devices): USD 10–35K depending on scale. Free 30-device evaluation.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">Server OS</div><div class="vendor-detail-value">Windows Server 2019/2022 and Linux (RHEL/Ubuntu) — full support on both. VMware deployment confirmed.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">Flow Support</div><div class="vendor-detail-value">NetFlow Analyzer bundled in OpManager Plus — full NetFlow v9, sFlow, IPFIX. Best-in-class NTA included.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">ServiceNow</div><div class="vendor-detail-value">✅ Native certified ServiceNow connector. Incident auto-creation on critical alerts out of the box.</div></div>
+        </div>
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pros-label">Strengths</div>
+            <ul>
+              <li>Most complete SolarWinds NPM + NTA parity of all evaluated vendors</li>
+              <li>Native ServiceNow integration — no custom development needed</li>
+              <li>Full Linux server support — no Windows Server dependency</li>
+              <li>Strong GCC/KSA reseller presence; Arabic-speaking support available</li>
+              <li>OpManager Plus mirrors Orion suite — familiar to SolarWinds users</li>
+              <li>Competitively priced vs. SolarWinds at comparable feature level</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="cons-label">Weaknesses</div>
+            <ul>
+              <li>UI is more complex than PRTG — steeper initial learning curve</li>
+              <li>Large feature set can overwhelm initial setup</li>
+              <li>HA is an add-on cost above base license</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-hr"></div>
+
+      <div class="vendor-card">
+        <div class="vendor-card-header">
+          <div>
+            <div class="vendor-name">WhatsUp Gold</div>
+            <div class="vendor-by">Progress Software · whatsupgold.com</div>
+          </div>
+          <span class="vendor-tier tier-1">⭐ Tier 1 — Strong Candidate</span>
+        </div>
+        <p style="font-size:9px;color:var(--ink-soft);margin-bottom:8px;">30+ year track record as a direct SolarWinds NPM competitor. Acquired by Progress Software in 2010. Strong US/UK enterprise install base. Growing in Middle East.</p>
+        <div class="vendor-grid">
+          <div class="vendor-detail"><div class="vendor-detail-label">Licensing</div><div class="vendor-detail-value">Annual subscription per device. WhatsUp Gold Total Plus (all modules): ~USD 8–20K/year. 14-day free trial.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">Server OS</div><div class="vendor-detail-value">Windows Server only — no native Linux deployment. MS SQL required (not bundled). Key constraint.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">Flow Support</div><div class="vendor-detail-value">NetFlow, sFlow, IPFIX built into base product. Good top-talker and application views.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">ServiceNow</div><div class="vendor-detail-value">Via REST webhook — no native certified connector. Configurable but requires setup.</div></div>
+        </div>
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pros-label">Strengths</div>
+            <ul>
+              <li>Clean, modern UI with strong dashboards</li>
+              <li>Long track record as SolarWinds NPM direct alternative</li>
+              <li>Flow analysis, topology, and alerting all in base product</li>
+              <li>Dependency-aware alert suppression built in</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="cons-label">Weaknesses</div>
+            <ul>
+              <li>Windows Server only — significant if Linux preferred</li>
+              <li>Limited GCC/KSA regional presence — EMEA support routed</li>
+              <li>Smaller ecosystem vs. PRTG or ManageEngine</li>
+              <li>No healthcare-specific GCC references readily available</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box amber">
+        <div class="note-label">CodeOx Assessment — WhatsUp Gold</div>
+        <p>Solid platform but the Windows-only constraint and limited KSA support are concerns. Recommended as <strong>Tier 3 fallback</strong> if PRTG and OpManager cannot meet commercial requirements.</p>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Internal — Do Not Share · CodeOx Advisory · June 2026</div>
+      <div class="inner-footer-page">Page 3 of 8</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 4 — Zabbix + Centreon + Cisco ══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Network Monitoring — Vendor Comparison Report</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="vendor-card">
+        <div class="vendor-card-header">
+          <div>
+            <div class="vendor-name">Zabbix Enterprise</div>
+            <div class="vendor-by">Zabbix LLC · zabbix.com &nbsp;·&nbsp; Open Source (GPL) + Commercial Support</div>
+          </div>
+          <span class="vendor-tier tier-2">✅ Tier 2 — Budget Path</span>
+        </div>
+        <p style="font-size:9px;color:var(--ink-soft);margin-bottom:8px;">Open source enterprise monitoring founded 2001. Core software is free (GPL); Zabbix LLC sells commercial support and professional services. Proven at 100K+ node deployments globally. Native HA since v6.0 (2022). Best-in-class scalability.</p>
+        <div class="vendor-grid">
+          <div class="vendor-detail"><div class="vendor-detail-label">Licensing</div><div class="vendor-detail-value">Software FREE (GPL). Commercial support: ~USD 2–15K/year depending on node count. Implementation services quoted separately. Lowest 3-yr TCO of all vendors evaluated.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">Server OS</div><div class="vendor-detail-value">Linux (RHEL, Ubuntu) — primary. Windows NOT supported as server. TimescaleDB recommended for large-scale deployments.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">Flow Support</div><div class="vendor-detail-value">⚠️ Not native. Requires external tool: ntopng (recommended), pmacct, or Elastic-based stack. Adds deployment complexity.</div></div>
+          <div class="vendor-detail"><div class="vendor-detail-label">ServiceNow</div><div class="vendor-detail-value">Via media type webhook. Community-maintained templates available. Not a native certified integration.</div></div>
+        </div>
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pros-label">Strengths</div>
+            <ul>
+              <li>Zero software licensing cost — dramatically lower TCO</li>
+              <li>Proven at 100K+ node scale with TimescaleDB</li>
+              <li>Highly customizable — monitors anything via custom items</li>
+              <li>Native Linux deployment — no Windows Server required</li>
+              <li>Active development (v7.x); large global community</li>
+              <li>Native HA since v6.0 with no additional license cost</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="cons-label">Weaknesses</div>
+            <ul>
+              <li>No native NetFlow/sFlow — requires ntopng integration</li>
+              <li>Higher initial setup effort; not plug-and-play</li>
+              <li>UI is functional but less polished than commercial tools</li>
+              <li>MENA commercial support coverage should be verified</li>
+              <li>Requires Linux server administration expertise</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-hr"></div>
+
+      <div class="vendor-card">
+        <div class="vendor-card-header">
+          <div>
+            <div class="vendor-name">Centreon IT Monitoring</div>
+            <div class="vendor-by">Centreon SAS · centreon.com</div>
+          </div>
+          <span class="vendor-tier tier-2">✅ Tier 2 — Fallback Only</span>
+        </div>
+        <p style="font-size:9px;color:var(--ink-soft);margin-bottom:7px;">French monitoring platform with Nagios roots. Enterprise edition targets large enterprise and service providers. Growing European and Middle East presence. Flow analysis requires a paid MAP add-on — not native in base product.</p>
+        <div class="note-box amber" style="margin-top:4px;">
+          <div class="note-label">CodeOx Assessment</div>
+          <p>Centreon is capable but flow analysis is not native and topology maps require a paid add-on. Limited GCC regional presence vs. ManageEngine. <strong>Recommend as fallback Tier 2 only.</strong></p>
+        </div>
+      </div>
+
+      <div class="section-hr"></div>
+
+      <div class="vendor-card">
+        <div class="vendor-card-header">
+          <div>
+            <div class="vendor-name">Cisco Catalyst Center (formerly DNA Center)</div>
+            <div class="vendor-by">Cisco · cisco.com/site/us/en/products/networking/catalyst-center</div>
+          </div>
+          <span class="vendor-tier tier-3">⚠️ Conditional Only</span>
+        </div>
+        <p style="font-size:9px;color:var(--ink-soft);margin-bottom:7px;">Cisco's campus network management and assurance platform. Provides deep visibility for Cisco infrastructure but leaves significant monitoring gaps for non-Cisco devices (Juniper, Fortinet, Palo Alto). Requires dedicated hardware/virtual Cisco appliance.</p>
+        <div class="note-box amber">
+          <div class="note-label">CodeOx Assessment</div>
+          <p>Only recommend if the campus network is <strong>&gt;80% Cisco</strong>. For a genuinely multi-vendor environment, Catalyst Center does not replace SolarWinds comprehensively. Could be deployed alongside OpManager for Cisco-specific automation, but this increases complexity and cost. <strong>Not recommended as the sole SolarWinds replacement.</strong></p>
+        </div>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Internal — Do Not Share · CodeOx Advisory · June 2026</div>
+      <div class="inner-footer-page">Page 4 of 8</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 5 — Feature Comparison Matrix ══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Network Monitoring — Vendor Comparison Report</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">4</div>
+        <div><div class="part-sub">Section 4</div><div class="part-title">Feature Comparison Matrix</div></div>
+      </div>
+
+      <div class="sub-heading"><span class="sub-badge">4.1</span><span class="sub-title">Functional Coverage</span></div>
+      <p style="font-size:8.5px;color:var(--ink-soft);margin-bottom:8px;">
+        <span class="chk chk-yes">✅ Full</span> &nbsp;
+        <span class="chk chk-warn">⚠ Partial/Add-on</span> &nbsp;
+        <span class="chk chk-no">❌ Not Supported</span>
+      </p>
+
+      <table class="doc-table" style="font-size:8.5px;">
+        <thead>
+          <tr>
+            <th style="width:170px;">Feature</th>
+            <th style="width:60px;text-align:center;">PRTG</th>
+            <th style="width:70px;text-align:center;">OpManager</th>
+            <th style="width:70px;text-align:center;">WhatsUp</th>
+            <th style="width:60px;text-align:center;">Zabbix</th>
+            <th style="width:65px;text-align:center;">Centreon</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-weight:600;">SNMP v1/v2c/v3</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">CDP/LLDP Discovery</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">NetFlow / sFlow / IPFIX</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-no">❌</span></td><td style="text-align:center;"><span class="chk chk-no">❌</span></td></tr>
+          <tr><td style="font-weight:600;">Auto Topology Maps</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-warn">⚠ Add-on</span></td></tr>
+          <tr><td style="font-weight:600;">Drag-and-drop dashboards</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">SLA Reporting</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">Scheduled PDF Reports</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">AD/LDAP Integration</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">SAML 2.0 SSO</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">RBAC + Custom Roles</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">ServiceNow Native Connector</td><td style="text-align:center;"><span class="chk chk-warn">⚠ Webhook</span></td><td style="text-align:center;"><span class="chk chk-yes">✅ Native</span></td><td style="text-align:center;"><span class="chk chk-warn">⚠ Webhook</span></td><td style="text-align:center;"><span class="chk chk-warn">⚠ Webhook</span></td><td style="text-align:center;"><span class="chk chk-warn">⚠ Webhook</span></td></tr>
+          <tr><td style="font-weight:600;">REST API</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">Alert Dependency Suppression</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">Linux Server Deployment</td><td style="text-align:center;"><span class="chk chk-warn">⚠ Partial</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-no">❌</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">HA / Failover</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+          <tr><td style="font-weight:600;">Custom MIB Import</td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td><td style="text-align:center;"><span class="chk chk-yes">✅</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">4.2</span><span class="sub-title">Commercial &amp; Strategic Comparison</span></div>
+      <table class="doc-table" style="font-size:8.5px;">
+        <thead>
+          <tr>
+            <th style="width:170px;">Attribute</th>
+            <th style="width:60px;text-align:center;">PRTG</th>
+            <th style="width:70px;text-align:center;">OpManager</th>
+            <th style="width:70px;text-align:center;">WhatsUp</th>
+            <th style="width:60px;text-align:center;">Zabbix</th>
+            <th style="width:65px;text-align:center;">Centreon</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-weight:600;">KSA/GCC Support Presence</td><td style="text-align:center;"><span class="chk chk-warn">⚠ EMEA</span></td><td style="text-align:center;"><span class="chk chk-yes">✅ Local</span></td><td style="text-align:center;"><span class="chk chk-warn">⚠ Limited</span></td><td style="text-align:center;"><span class="chk chk-warn">⚠ Limited</span></td><td style="text-align:center;"><span class="chk chk-warn">⚠ Limited</span></td></tr>
+          <tr><td style="font-weight:600;">Software License Cost</td><td style="text-align:center;">Medium</td><td style="text-align:center;">Medium</td><td style="text-align:center;">Medium</td><td style="text-align:center;font-weight:800;color:var(--yes);">FREE</td><td style="text-align:center;">Medium</td></tr>
+          <tr><td style="font-weight:600;">Est. 3-yr TCO (~3K nodes)</td><td style="text-align:center;">~USD 60K</td><td style="text-align:center;font-weight:700;color:var(--green-dark);">~USD 45K</td><td style="text-align:center;">~USD 55K</td><td style="text-align:center;font-weight:700;color:var(--green-dark);">~USD 20K</td><td style="text-align:center;">~USD 50K</td></tr>
+          <tr><td style="font-weight:600;">Migration Ease from SolarWinds</td><td style="text-align:center;font-weight:700;">★★★★★</td><td style="text-align:center;font-weight:700;">★★★★</td><td style="text-align:center;font-weight:700;">★★★★</td><td style="text-align:center;font-weight:700;">★★★</td><td style="text-align:center;font-weight:700;">★★★</td></tr>
+          <tr><td style="font-weight:600;">Time-to-Value</td><td style="text-align:center;">Fast</td><td style="text-align:center;">Medium</td><td style="text-align:center;">Medium</td><td style="text-align:center;">Slower</td><td style="text-align:center;">Medium</td></tr>
+          <tr><td style="font-weight:600;">Healthcare Sector References</td><td style="text-align:center;">Medium</td><td style="text-align:center;font-weight:700;color:var(--green);">High</td><td style="text-align:center;">Low</td><td style="text-align:center;">High</td><td style="text-align:center;">Medium</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:7.5px;color:#94A3B8;margin-top:-8px;">* TCO estimates are indicative only. Vendor quotes required for accurate figures. Does not include infrastructure (server/VM) costs.</p>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Internal — Do Not Share · CodeOx Advisory · June 2026</div>
+      <div class="inner-footer-page">Page 5 of 8</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 6 — 3-yr TCO Comparison ══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Network Monitoring — Vendor Comparison Report</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">5</div>
+        <div><div class="part-sub">Section 5</div><div class="part-title">3-Year TCO Breakdown</div></div>
+      </div>
+      <p style="font-size:9px;color:var(--ink-soft);margin-bottom:12px;">Indicative cost ranges for a ~3,000 node / 80,000 interface deployment. All figures in USD. Vendor quotes required to confirm before any commercial commitment.</p>
+
+      <div class="score-grid" style="grid-template-columns:repeat(5,1fr);">
+        <div class="score-card">
+          <div class="score-label">PRTG XL / Enterprise</div>
+          <div class="score-tco">~$60K</div>
+          <div style="font-size:8px;color:var(--ink-soft);">Perpetual + 3yr maint.</div>
+        </div>
+        <div class="score-card" style="border-top-color:var(--green-mid);">
+          <div class="score-label">ManageEngine OpManager+</div>
+          <div class="score-tco">~$45K</div>
+          <div style="font-size:8px;color:var(--ink-soft);">Perpetual + 3yr support</div>
+        </div>
+        <div class="score-card">
+          <div class="score-label">WhatsUp Gold Total Plus</div>
+          <div class="score-tco">~$55K</div>
+          <div style="font-size:8px;color:var(--ink-soft);">3yr subscription</div>
+        </div>
+        <div class="score-card" style="border-top-color:#059669;">
+          <div class="score-label">Zabbix + ntopng</div>
+          <div class="score-tco">~$20K</div>
+          <div style="font-size:8px;color:var(--ink-soft);">Impl. + support only</div>
+        </div>
+        <div class="score-card">
+          <div class="score-label">Centreon IT Edition</div>
+          <div class="score-tco">~$50K</div>
+          <div style="font-size:8px;color:var(--ink-soft);">3yr subscription</div>
+        </div>
+      </div>
+
+      <div class="note-box amber">
+        <div class="note-label">TCO Disclaimer</div>
+        <p>Figures above exclude: server/VM infrastructure costs, implementation professional services (which can range USD 10–30K), and internal staff time. The Zabbix figure assumes CodeOx handles implementation; internal Linux ops capability required for ongoing management. All figures are CodeOx estimates — request formal quotes before presenting to decision-makers.</p>
+      </div>
+
+      <table class="doc-table">
+        <thead><tr><th>Cost Component</th><th style="width:80px;text-align:center;">PRTG</th><th style="width:90px;text-align:center;">OpManager Plus</th><th style="width:80px;text-align:center;">WhatsUp Gold</th><th style="width:70px;text-align:center;">Zabbix</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Software license (Year 1)</td><td style="text-align:center;">~$20K</td><td style="text-align:center;">~$15K</td><td style="text-align:center;">~$18K/yr</td><td style="text-align:center;color:var(--yes);font-weight:700;">$0</td></tr>
+          <tr><td style="font-weight:600;">Annual maintenance/support (Y2–3)</td><td style="text-align:center;">~$25K total</td><td style="text-align:center;">~$20K total</td><td style="text-align:center;">Included</td><td style="text-align:center;">~$10–15K/yr</td></tr>
+          <tr><td style="font-weight:600;">Flow analysis module</td><td style="text-align:center;">Included</td><td style="text-align:center;">Included</td><td style="text-align:center;">Included</td><td style="text-align:center;">ntopng ~$5K</td></tr>
+          <tr><td style="font-weight:600;">HA add-on</td><td style="text-align:center;">Included</td><td style="text-align:center;">~$2–5K</td><td style="text-align:center;">Included</td><td style="text-align:center;">Free (built-in)</td></tr>
+          <tr><td style="font-weight:600;">Implementation services</td><td style="text-align:center;">~$10–20K</td><td style="text-align:center;">~$10–15K</td><td style="text-align:center;">~$10–15K</td><td style="text-align:center;">~$15–25K</td></tr>
+          <tr><td style="font-weight:600;">Training</td><td style="text-align:center;">~$3–5K</td><td style="text-align:center;">~$3–5K</td><td style="text-align:center;">~$3–5K</td><td style="text-align:center;">~$3–5K</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">6</div>
+        <div><div class="part-sub">Section 6</div><div class="part-title">BRD Shortlist — Vendors to Receive the BRD</div></div>
+      </div>
+      <p style="font-size:9px;color:var(--ink-soft);margin-bottom:10px;">Based on this research, CodeOx recommends issuing the BRD to the following vendors for formal proposal responses:</p>
+      <table class="doc-table">
+        <thead><tr><th style="width:30px;">#</th><th>Vendor / Product</th><th>Rationale for Inclusion</th><th style="width:80px;">Priority</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col" style="font-weight:800;">1</td><td style="font-weight:700;">ManageEngine OpManager Plus</td><td>Highest functional parity, native ServiceNow, KSA resellers, Linux support</td><td><span class="chk chk-yes">Primary</span></td></tr>
+          <tr><td class="id-col" style="font-weight:800;">2</td><td style="font-weight:700;">PRTG Network Monitor (XL/Enterprise)</td><td>Best UX, fastest migration, broadest sensor library, strong enterprise track record</td><td><span class="chk chk-yes">Primary</span></td></tr>
+          <tr><td class="id-col" style="font-weight:800;">3</td><td style="font-weight:700;">WhatsUp Gold Total Plus</td><td>Strong feature coverage; include if either primary vendor fails commercial requirements</td><td><span class="chk chk-warn">Fallback</span></td></tr>
+          <tr><td class="id-col" style="font-weight:800;">4</td><td style="font-weight:700;">Zabbix (via certified partner)</td><td>Include only if budget is the primary constraint; requires Linux ops capability</td><td><span class="chk chk-warn">Budget path</span></td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Internal — Do Not Share · CodeOx Advisory · June 2026</div>
+      <div class="inner-footer-page">Page 6 of 8</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 7 — Recommendations ══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Network Monitoring — Vendor Comparison Report</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">7</div>
+        <div><div class="part-sub">Section 7</div><div class="part-title">CodeOx Recommendations</div></div>
+      </div>
+
+      <div class="reco-card primary">
+        <div class="reco-rank primary">#1</div>
+        <div>
+          <div class="reco-vendor">ManageEngine OpManager Plus — Primary Recommendation</div>
+          <div class="reco-reason">
+            Highest functional coverage against the BRD requirements. Includes NetFlow Analyzer in the bundle. Native ServiceNow certified connector eliminates a key integration risk. Full Linux deployment support. Strong GCC/KSA reseller presence with Arabic-speaking support available. OpManager Plus mirrors the SolarWinds Orion bundle concept making it the most familiar procurement model for organizations coming off SolarWinds. Competitively priced with lowest commercial risk.
+          </div>
+        </div>
+      </div>
+
+      <div class="reco-card alt1">
+        <div class="reco-rank alt1">#2</div>
+        <div>
+          <div class="reco-vendor">PRTG Network Monitor (XL or Enterprise License) — Alternative</div>
+          <div class="reco-reason">
+            Best user experience and fastest time-to-value of all evaluated platforms. If the NOC team adoption speed and a tight cutover timeline are priorities, PRTG will have the lowest migration friction from SolarWinds. The XL (unlimited sensor) or Enterprise license is the correct SKU for this scale — avoids per-sensor cost management at 80K+ interfaces. The main gap is Windows Server deployment and no native ServiceNow connector, both of which are manageable.
+          </div>
+        </div>
+      </div>
+
+      <div class="reco-card alt2">
+        <div class="reco-rank alt2">#3</div>
+        <div>
+          <div class="reco-vendor">Zabbix + ntopng — Budget-Constrained Path</div>
+          <div class="reco-reason">
+            If budget is the primary constraint and the team has Linux operations capability, this stack eliminates all software licensing costs. Zabbix handles SNMP polling, alerting, dashboards, and topology; ntopng provides the flow analysis layer. Combined 3-year TCO is ~USD 20K vs. ~USD 45–60K for commercial alternatives. Requires more implementation effort and an ongoing Linux-skilled operations capability. Only recommended if budget pressure is confirmed as a hard constraint.
+          </div>
+        </div>
+      </div>
+
+      <div class="section-hr"></div>
+
+      <div class="note-box green">
+        <div class="note-label">Recommended POC Shortlist</div>
+        <p>CodeOx recommends a maximum <strong>30-day parallel POC</strong> with the top 2 vendors before contract award. Suggested shortlist: <strong>(1) ManageEngine OpManager Plus → (2) PRTG Network Monitor</strong>. If both fail commercial requirements, add WhatsUp Gold as a third. Define POC success criteria from BRD Section 14 acceptance criteria before initiating.</p>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Internal — Do Not Share · CodeOx Advisory · June 2026</div>
+      <div class="inner-footer-page">Page 7 of 8</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 8 — Next Steps ══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Network Monitoring — Vendor Comparison Report</div>
+      <div class="inner-header-ref">Internal · CodeOx · June 2026</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">8</div>
+        <div><div class="part-sub">Section 8</div><div class="part-title">Procurement Next Steps</div></div>
+      </div>
+
+      <table class="step-table">
+        <thead>
+          <tr><th style="width:30px;">#</th><th>Action</th><th style="width:110px;">Owner</th><th style="width:90px;">Timeline</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="step-num">1</span></td>
+            <td>Distribute BRD (KFMC-NMS-BRD-2026) to shortlisted vendors: ManageEngine, PRTG, WhatsUp Gold</td>
+            <td>CodeOx</td>
+            <td>Week 1</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">2</span></td>
+            <td>Set vendor Q&amp;A deadline (5 business days after BRD distribution). Respond to all vendor queries in a single consolidated FAQ shared with all vendors</td>
+            <td>CodeOx</td>
+            <td>Week 2</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">3</span></td>
+            <td>Collect formal vendor proposal responses per BRD Section 16 including requirements compliance matrix and commercial proposal</td>
+            <td>Vendors</td>
+            <td>Weeks 2–3</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">4</span></td>
+            <td>Score proposals against BRD evaluation criteria (Section 11). Disqualify any vendor failing Must Have requirements. Shortlist top 2 for POC</td>
+            <td>CodeOx + Client IT</td>
+            <td>Week 4</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">5</span></td>
+            <td>Schedule and complete live product demos with top 2 shortlisted vendors (2 hours each, NOC-focused scenario walk-through)</td>
+            <td>CodeOx + Vendors</td>
+            <td>Week 5</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">6</span></td>
+            <td>Initiate 30-day parallel POC with selected vendor against BRD Section 14 acceptance criteria. Maintain SolarWinds in parallel throughout</td>
+            <td>All parties</td>
+            <td>Weeks 6–10</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">7</span></td>
+            <td>Conduct POC debrief with NOC team and network engineering. Document pass/fail against each AC. Confirm vendor selection</td>
+            <td>CodeOx + Client IT</td>
+            <td>Week 10</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">8</span></td>
+            <td>Request best-and-final commercial offer from selected vendor. Negotiate 3-year contract terms, payment schedule, and SLA commitments</td>
+            <td>CodeOx + Client IT</td>
+            <td>Weeks 11–12</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">9</span></td>
+            <td>Contract award and project kickoff. Begin formal implementation with 30-day parallel run before SolarWinds decommission</td>
+            <td>Client + Vendor</td>
+            <td>Week 13</td>
+          </tr>
+          <tr>
+            <td><span class="step-num">10</span></td>
+            <td>SolarWinds decommission after UAT sign-off and 30-day stable operation on new platform. Zero monitoring gap confirmed</td>
+            <td>Client IT</td>
+            <td>Week 17+</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-hr"></div>
+
+      <div style="margin-top:16px;padding:14px 16px;background:#F8FAFC;border:1px solid var(--border);border-radius:6px;">
+        <div style="font-size:7.5px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;">CodeOx Contact</div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" style="height:18px;opacity:0.7;">
+          <div style="font-size:9px;color:var(--ink-soft);line-height:1.7;">
+            For any questions about this vendor comparison report or the procurement process, contact:<br>
+            <strong>Shabeeb Kaip</strong> · CodeOx Technologies<br>
+            shabeeb.k@code-ox.com · +966 535 716 437 · code-ox.com
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Internal — Do Not Share · CodeOx Advisory · June 2026</div>
+      <div class="inner-footer-page">Page 8 of 8</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

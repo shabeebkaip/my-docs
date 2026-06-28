@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRD — Enterprise Campus Network Monitoring System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:       #1D4ED8;
+  --blue-dark:  #0F2057;
+  --blue-light: #DBEAFE;
+  --blue-mid:   #3B82F6;
+  --ink:        #0F172A;
+  --ink-soft:   #475569;
+  --border:     #E2E8F0;
+  --bg-stripe:  #F8FAFC;
+  --must:       #B91C1C;
+  --must-bg:    #FEE2E2;
+  --should:     #92400E;
+  --should-bg:  #FEF3C7;
+  --could:      #166534;
+  --could-bg:   #DCFCE7;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #CBD5E1;
+  color: var(--ink);
+  font-size: 10px;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+@media print {
+  body { background: none; }
+  .page {
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    break-after: page;
+  }
+}
+@page { size: A4; margin: 0; }
+
+/* ── COVER ── */
+.cover {
+  background: #0B1827;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.cover-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none; z-index: 1;
+}
+.cover-accent {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(180deg, #3B82F6 0%, rgba(59,130,246,0.15) 100%);
+  z-index: 3;
+}
+.cover-topbar {
+  position: relative; z-index: 4;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px 16px 34px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.cover-topbar-left { display: flex; align-items: center; gap: 14px; }
+.cover-topbar img { height: 22px; filter: brightness(0) invert(1); opacity: 0.9; }
+.cover-topbar-sep { width: 1px; height: 22px; background: rgba(255,255,255,0.15); }
+.cover-topbar-label { font-size: 8px; font-weight: 600; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+.cover-doc-pill {
+  border: 1.5px solid #3B82F6; color: #93C5FD;
+  font-size: 7.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 4px;
+}
+.cover-hero {
+  position: relative; z-index: 4; flex: 1;
+  display: flex; flex-direction: column;
+  padding: 36px 28px 0 34px;
+}
+.cover-overline {
+  font-size: 8px; font-weight: 600; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px;
+}
+.cover-title {
+  font-size: 34px; font-weight: 800; line-height: 1.07; color: #fff; margin-bottom: 7px;
+}
+.cover-title-accent { color: #60A5FA; }
+.cover-subtitle {
+  font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.65; max-width: 380px; margin-bottom: 28px;
+}
+.cover-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 32px; }
+.cover-tag {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px; padding: 5px 11px; font-size: 9.5px; color: rgba(255,255,255,0.6);
+}
+.cover-tag strong { color: #fff; font-weight: 600; }
+
+.cover-meta {
+  position: relative; z-index: 4;
+  margin: 0 28px 16px 34px;
+  background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 6px; display: grid; grid-template-columns: repeat(4,1fr); overflow: hidden;
+}
+.cover-meta-item {
+  padding: 13px 14px; border-right: 1px solid rgba(59,130,246,0.12);
+}
+.cover-meta-item:last-child { border-right: none; }
+.cover-meta-label { font-size: 7.5px; color: rgba(255,255,255,0.33); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 5px; }
+.cover-meta-value { font-size: 11px; font-weight: 600; color: #fff; }
+.cover-meta-value.accent { color: #60A5FA; }
+
+.cover-confidential {
+  position: relative; z-index: 4;
+  margin: 0 28px 16px 34px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 5px; padding: 10px 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.cover-confidential-label { font-size: 7.5px; font-weight: 700; color: #60A5FA; letter-spacing: 0.13em; text-transform: uppercase; white-space: nowrap; margin-top: 1px; min-width: 90px; }
+.cover-confidential-text { font-size: 9.5px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+
+.cover-footer {
+  position: relative; z-index: 4;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 12px 28px 12px 34px;
+  display: flex; align-items: center; gap: 12px;
+}
+.cover-footer img { height: 15px; filter: brightness(0) invert(1); opacity: 0.6; }
+.cover-footer-sep { width: 1px; height: 12px; background: rgba(255,255,255,0.13); }
+.cover-footer-text { font-size: 8.5px; color: rgba(255,255,255,0.35); }
+
+/* ── INNER PAGES ── */
+.inner-page { display: flex; flex-direction: column; min-height: 297mm; }
+
+.inner-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 24px;
+  border-bottom: 1px solid var(--border);
+  background: #FAFBFC;
+  flex-shrink: 0;
+}
+.inner-header img { height: 14px; opacity: 0.7; }
+.inner-header-title { font-size: 8.5px; color: #64748B; font-weight: 500; }
+.inner-header-ref   { font-size: 8.5px; color: #94A3B8; }
+
+.inner-content { flex: 1; padding: 20px 24px 16px; }
+
+.inner-footer {
+  border-top: 1px solid var(--border);
+  padding: 9px 24px;
+  display: flex; align-items: center; gap: 9px;
+  background: #FAFBFC; flex-shrink: 0;
+}
+.inner-footer img { height: 12px; opacity: 0.4; }
+.inner-footer-sep { width: 1px; height: 10px; background: #CBD5E1; }
+.inner-footer-text { font-size: 7.5px; color: #94A3B8; flex: 1; }
+.inner-footer-page { font-size: 8px; color: #94A3B8; font-weight: 600; }
+
+/* ── SECTION HEADINGS ── */
+.sec-label {
+  font-size: 7.5px; font-weight: 700; color: var(--blue-mid);
+  text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 5px;
+}
+.sec-heading {
+  font-size: 18px; font-weight: 800; color: var(--ink);
+  margin-bottom: 10px; line-height: 1.15;
+}
+.sec-intro {
+  font-size: 9.5px; color: var(--ink-soft); line-height: 1.72; margin-bottom: 14px;
+}
+
+.sub-heading {
+  display: flex; align-items: center; gap: 9px; margin: 14px 0 8px;
+}
+.sub-badge {
+  background: var(--blue-dark); color: #fff;
+  font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 3px;
+  letter-spacing: 0.06em; white-space: nowrap;
+}
+.sub-title { font-size: 11px; font-weight: 700; color: var(--ink); }
+
+.section-hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+/* ── TABLES ── */
+.doc-table {
+  width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 14px;
+}
+.doc-table thead th {
+  background: var(--blue-dark); color: #fff;
+  padding: 7px 9px; text-align: left; font-size: 7.5px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.doc-table thead th:first-child { border-radius: 4px 0 0 0; }
+.doc-table thead th:last-child  { border-radius: 0 4px 0 0; }
+.doc-table tbody tr:nth-child(even) { background: var(--bg-stripe); }
+.doc-table tbody td {
+  padding: 7px 9px; border-bottom: 1px solid var(--border);
+  vertical-align: top; line-height: 1.55; color: var(--ink);
+}
+.doc-table tbody td.id-col {
+  font-size: 8px; font-weight: 700; color: var(--blue-mid); white-space: nowrap; width: 54px;
+}
+.doc-table tbody td.pri-col { width: 90px; }
+
+/* Priority badges */
+.badge {
+  display: inline-block; font-size: 7.5px; font-weight: 700;
+  padding: 2px 7px; border-radius: 10px; letter-spacing: 0.04em; white-space: nowrap;
+}
+.badge-must   { background: var(--must-bg);   color: var(--must);   }
+.badge-should { background: var(--should-bg); color: var(--should); }
+.badge-could  { background: var(--could-bg);  color: var(--could);  }
+
+/* Status / check badges */
+.badge-yes  { background: #DCFCE7; color: #166534; }
+.badge-warn { background: #FEF3C7; color: #92400E; }
+.badge-no   { background: #FEE2E2; color: #B91C1C; }
+
+/* ── NOTE BOXES ── */
+.note-box {
+  border-radius: 5px; padding: 10px 12px;
+  font-size: 9.5px; line-height: 1.65; margin-bottom: 12px;
+}
+.note-box .note-label {
+  font-size: 7px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 5px;
+}
+.note-box.blue  { background: #EFF6FF; border: 1px solid #BFDBFE; border-left: 3px solid var(--blue); }
+.note-box.blue  .note-label { color: var(--blue); }
+.note-box.amber { background: #FFFBEB; border: 1px solid #FDE68A; border-left: 3px solid #F59E0B; }
+.note-box.amber .note-label { color: #B45309; }
+.note-box.red   { background: #FFF5F5; border: 1px solid #FECACA; border-left: 3px solid #DC2626; }
+.note-box.red   .note-label { color: #B91C1C; }
+.note-box p { color: #374151; }
+.note-box strong { font-weight: 600; }
+
+/* ── INFO GRID ── */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.info-card { border: 1px solid var(--border); border-radius: 5px; padding: 10px 12px; }
+.info-card-label { font-size: 8.5px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.info-card-value { font-size: 9px; color: var(--ink-soft); line-height: 1.55; }
+
+/* ── PART BANNER ── */
+.part-banner {
+  background: var(--blue-dark); color: #fff;
+  border-radius: 5px; padding: 11px 14px;
+  display: flex; align-items: center; gap: 11px; margin-bottom: 13px;
+}
+.part-num {
+  width: 26px; height: 26px; min-width: 26px; border-radius: 50%;
+  background: var(--blue-mid); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: #fff;
+}
+.part-sub   { font-size: 7.5px; color: rgba(255,255,255,0.42); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2px; }
+.part-title { font-size: 12px; font-weight: 700; }
+
+/* ── KPI GRID ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+.kpi-card {
+  border: 1px solid var(--blue-light); background: #EFF6FF;
+  border-radius: 5px; padding: 10px 12px; border-top: 3px solid var(--blue-mid);
+}
+.kpi-label { font-size: 8px; color: var(--blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+.kpi-value { font-size: 14px; font-weight: 800; color: var(--blue-dark); line-height: 1; margin-bottom: 3px; }
+.kpi-desc  { font-size: 8.5px; color: var(--ink-soft); }
+
+/* ── EVAL TABLE (weighted) ── */
+.weight-bar {
+  display: inline-block; height: 5px; border-radius: 3px; background: var(--blue-mid); vertical-align: middle; margin-left: 6px;
+}
+
+/* ── TOC ── */
+.toc-list { list-style: none; margin-bottom: 14px; }
+.toc-list li {
+  display: flex; align-items: baseline; gap: 0;
+  padding: 4px 0; border-bottom: 1px dashed #E2E8F0;
+  font-size: 9.5px;
+}
+.toc-num  { color: var(--blue-mid); font-weight: 700; min-width: 30px; }
+.toc-title { color: var(--ink); flex: 1; }
+.toc-dots { flex: 1; border-bottom: 1px dotted #CBD5E1; margin: 0 8px; position: relative; top: -3px; }
+.toc-page { color: var(--ink-soft); font-size: 8.5px; }
+.toc-group { font-size: 8px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.12em; margin: 10px 0 4px; }
+
+/* Risks table status */
+.risk-low    { background: #DCFCE7; color: #166534; font-weight: 600; font-size: 8px; padding: 2px 6px; border-radius: 3px; display: inline-block; }
+.risk-med    { background: #FEF3C7; color: #92400E; font-weight: 600; font-size: 8px; padding: 2px 6px; border-radius: 3px; display: inline-block; }
+.risk-high   { background: #FEE2E2; color: #B91C1C; font-weight: 600; font-size: 8px; padding: 2px 6px; border-radius: 3px; display: inline-block; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ PAGE 1 — COVER ═══ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-grid"></div>
+    <div class="cover-accent"></div>
+
+    <div class="cover-topbar">
+      <div class="cover-topbar-left">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+        <div class="cover-topbar-sep"></div>
+        <div class="cover-topbar-label">Prepared by CodeOx Technologies</div>
+      </div>
+      <div class="cover-doc-pill">Business Requirements Document</div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-overline">Vendor Procurement · Network Infrastructure</div>
+      <div class="cover-title">
+        Enterprise Campus<br>
+        <span class="cover-title-accent">Network Monitoring</span><br>
+        System
+      </div>
+      <div class="cover-subtitle">
+        Formal requirements specification for the procurement of an enterprise-grade network monitoring platform to replace the current SolarWinds NPM/NTA deployment at The Client Organization.
+      </div>
+      <div class="cover-tags">
+        <div class="cover-tag"><strong>Client:</strong> The Client Organization</div>
+        <div class="cover-tag"><strong>Scope:</strong> Up to 5,000 Nodes · 100,000 Interfaces</div>
+        <div class="cover-tag"><strong>Deployment:</strong> On-Premises Only</div>
+        <div class="cover-tag"><strong>Compliance:</strong> NCA ECC 2018</div>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Version</div>
+        <div class="cover-meta-value accent">v2.0</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Date</div>
+        <div class="cover-meta-value">June 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Status</div>
+        <div class="cover-meta-value accent">For Vendor Distribution</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Reference</div>
+        <div class="cover-meta-value">NMS-BRD-2026</div>
+      </div>
+    </div>
+
+    <div class="cover-confidential">
+      <div class="cover-confidential-label">Confidential Notice</div>
+      <div class="cover-confidential-text">
+        This document is intended solely for authorized vendors participating in the this network monitoring platform procurement process. Recipients must not disclose, reproduce, or distribute this document to any third party without prior written consent from CodeOx.
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="cover-footer-sep"></div>
+      <div class="cover-footer-text">shabeeb.k@code-ox.com · +966 535 716 437</div>
+      <div class="cover-footer-sep"></div>
+      <div class="cover-footer-text">code-ox.com</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 2 — TOC + DOC INFO ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="sec-label">Document</div>
+      <div class="sec-heading">Table of Contents</div>
+
+      <ul class="toc-list">
+        <div class="toc-group">Background</div>
+        <li><span class="toc-num">1</span><span class="toc-title">Executive Summary</span><span class="toc-dots"></span><span class="toc-page">3</span></li>
+        <li><span class="toc-num">2</span><span class="toc-title">Organization &amp; Current Environment</span><span class="toc-dots"></span><span class="toc-page">3</span></li>
+        <li><span class="toc-num">3</span><span class="toc-title">Business Problem Statement</span><span class="toc-dots"></span><span class="toc-page">3</span></li>
+        <li><span class="toc-num">4</span><span class="toc-title">Project Objectives &amp; Success Metrics</span><span class="toc-dots"></span><span class="toc-page">4</span></li>
+        <li><span class="toc-num">5</span><span class="toc-title">Scope</span><span class="toc-dots"></span><span class="toc-page">4</span></li>
+        <li><span class="toc-num">6</span><span class="toc-title">Stakeholders</span><span class="toc-dots"></span><span class="toc-page">4</span></li>
+        <div class="toc-group">Requirements</div>
+        <li><span class="toc-num">7</span><span class="toc-title">Functional Requirements</span><span class="toc-dots"></span><span class="toc-page">5–7</span></li>
+        <li><span class="toc-num">8</span><span class="toc-title">Non-Functional Requirements</span><span class="toc-dots"></span><span class="toc-page">8</span></li>
+        <li><span class="toc-num">9</span><span class="toc-title">Technical Environment</span><span class="toc-dots"></span><span class="toc-page">9</span></li>
+        <li><span class="toc-num">10</span><span class="toc-title">Compliance &amp; Regulatory Requirements</span><span class="toc-dots"></span><span class="toc-page">9</span></li>
+        <div class="toc-group">Procurement</div>
+        <li><span class="toc-num">11</span><span class="toc-title">Vendor Evaluation Criteria</span><span class="toc-dots"></span><span class="toc-page">10</span></li>
+        <li><span class="toc-num">12</span><span class="toc-title">Commercial &amp; Licensing Requirements</span><span class="toc-dots"></span><span class="toc-page">10</span></li>
+        <li><span class="toc-num">13</span><span class="toc-title">Implementation &amp; Support Requirements</span><span class="toc-dots"></span><span class="toc-page">11</span></li>
+        <li><span class="toc-num">14</span><span class="toc-title">Acceptance Criteria</span><span class="toc-dots"></span><span class="toc-page">11</span></li>
+        <li><span class="toc-num">15</span><span class="toc-title">Risks &amp; Constraints</span><span class="toc-dots"></span><span class="toc-page">12</span></li>
+        <li><span class="toc-num">16</span><span class="toc-title">Vendor Response Instructions</span><span class="toc-dots"></span><span class="toc-page">12</span></li>
+        <div class="toc-group">Appendices</div>
+        <li><span class="toc-num">A</span><span class="toc-title">Priority Key</span><span class="toc-dots"></span><span class="toc-page">13</span></li>
+        <li><span class="toc-num">B</span><span class="toc-title">Glossary</span><span class="toc-dots"></span><span class="toc-page">13</span></li>
+      </ul>
+
+      <div class="section-hr"></div>
+
+      <div class="sec-label">Document History</div>
+      <div class="sec-heading" style="font-size:14px;margin-bottom:8px;">Revision History</div>
+
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>Version</th><th>Date</th><th>Author</th><th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id-col">1.0</td>
+            <td>May 2026</td>
+            <td>Business Analysis Team</td>
+            <td>Initial internal draft</td>
+          </tr>
+          <tr>
+            <td class="id-col">2.0</td>
+            <td>June 2026</td>
+            <td>CodeOx</td>
+            <td>Revised for vendor distribution — reframed as procurement BRD; added evaluation criteria, commercial requirements, and vendor response instructions</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note-box blue" style="margin-top:10px;">
+        <div class="note-label">Priority Key Summary</div>
+        <p>Requirements in this document are classified as <strong>Must Have (M)</strong> — disqualifying if not met; <strong>Should Have (S)</strong> — weighted in scoring; <strong>Could Have (C)</strong> — low-weight differentiator. See Appendix A for full definitions.</p>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 2 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 3 — Sections 1–3 ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">1</div>
+        <div>
+          <div class="part-sub">Section 1</div>
+          <div class="part-title">Executive Summary</div>
+        </div>
+      </div>
+      <p class="sec-intro">
+        The Client Organization operates a large-scale enterprise campus network serving clinical, administrative, and research functions. The organization's current SolarWinds network monitoring contract is being discontinued and The client is seeking a replacement of equivalent or superior capability.
+      </p>
+      <p class="sec-intro">
+        This BRD defines the full scope of functional requirements, non-functional requirements, integration needs, compliance obligations, and commercial expectations. Vendors are invited to respond with a formal proposal demonstrating how their solution meets each stated requirement. The selected platform must provide complete, real-time visibility into network infrastructure health, performance, and availability from a centralized, web-based console deployed on-premises within the client's data center.
+      </p>
+
+      <div class="part-banner">
+        <div class="part-num">2</div>
+        <div>
+          <div class="part-sub">Section 2</div>
+          <div class="part-title">Organization &amp; Current Environment</div>
+        </div>
+      </div>
+
+      <div class="sub-heading">
+        <span class="sub-badge">2.1</span><span class="sub-title">About the Organization</span>
+      </div>
+      <p class="sec-intro">The client is a healthcare institution operating an enterprise-grade network spanning campus buildings, data centers, and clinical zones. The infrastructure is multi-vendor: Cisco, Juniper, HPE/Aruba, Fortinet, and Palo Alto.</p>
+
+      <div class="sub-heading">
+        <span class="sub-badge">2.2</span><span class="sub-title">Current Monitoring Environment</span>
+      </div>
+      <table class="doc-table" style="margin-bottom:14px;">
+        <thead><tr><th style="width:180px;">Attribute</th><th>Current State</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col" style="width:180px;color:var(--ink-soft);font-weight:600;">Existing Platform</td><td>SolarWinds NPM + NTA modules</td></tr>
+          <tr><td style="width:180px;color:var(--ink-soft);font-weight:600;">Contract Status</td><td>Ending — active replacement search</td></tr>
+          <tr><td style="width:180px;color:var(--ink-soft);font-weight:600;">Approx. Scale</td><td>~3,000 monitored nodes; ~80,000 monitored interfaces</td></tr>
+          <tr><td style="width:180px;color:var(--ink-soft);font-weight:600;">Deployment Model</td><td>On-premises, Windows Server</td></tr>
+          <tr><td style="width:180px;color:var(--ink-soft);font-weight:600;">Active Integrations</td><td>Active Directory (AD), Email notifications, SNMP traps</td></tr>
+          <tr><td style="width:180px;color:var(--ink-soft);font-weight:600;">Primary Users</td><td>NOC team, Network Engineering, IT Management</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading">
+        <span class="sub-badge">2.3</span><span class="sub-title">Drivers for Change</span>
+      </div>
+      <div class="info-grid">
+        <div class="info-card"><div class="info-card-label">Contract Termination</div><div class="info-card-value">Commercial agreement with SolarWinds is ending; replacement must be operational before cutover.</div></div>
+        <div class="info-card"><div class="info-card-label">TCO Reduction</div><div class="info-card-value">Lower total cost of ownership over a 3-year horizon is a key selection criterion.</div></div>
+        <div class="info-card"><div class="info-card-label">Vendor Independence</div><div class="info-card-value">Eliminate single-vendor lock-in for network observability infrastructure.</div></div>
+        <div class="info-card"><div class="info-card-label">Long-Term Roadmap</div><div class="info-card-value">Require a vendor with demonstrated product stability and an active 3-year development roadmap.</div></div>
+      </div>
+
+      <div class="part-banner">
+        <div class="part-num">3</div>
+        <div>
+          <div class="part-sub">Section 3</div>
+          <div class="part-title">Business Problem Statement</div>
+        </div>
+      </div>
+      <p class="sec-intro">Without a unified, real-time monitoring platform, the IT Operations team faces the following operational risks:</p>
+      <table class="doc-table">
+        <thead><tr><th>Problem Area</th><th>Impact</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Reactive incident response</td><td>Outages detected by end-user complaints rather than proactive alerting — extends MTTR</td></tr>
+          <tr><td style="font-weight:600;">Monitoring blind spots</td><td>Multi-vendor infrastructure produces fragmented visibility with no single pane of glass</td></tr>
+          <tr><td style="font-weight:600;">No root cause correlation</td><td>Performance degradation cannot be traced across L2/L3 without automated dependency mapping</td></tr>
+          <tr><td style="font-weight:600;">Absent capacity planning</td><td>Bandwidth saturation and hardware refresh decisions are reactive without trending data</td></tr>
+          <tr><td style="font-weight:600;">Compliance reporting gaps</td><td>Uptime SLAs, audit trails, and availability metrics must be generated manually</td></tr>
+          <tr><td style="font-weight:600;">No traffic visibility</td><td>Cannot identify top bandwidth consumers, rogue applications, or abnormal traffic in real time</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 3 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 4 — Sections 4–6 ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">4</div>
+        <div><div class="part-sub">Section 4</div><div class="part-title">Project Objectives &amp; Success Metrics</div></div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">Coverage</div><div class="kpi-value">≥98%</div><div class="kpi-desc">Managed devices discovered within 48 hrs of deployment</div></div>
+        <div class="kpi-card"><div class="kpi-label">Alert Latency</div><div class="kpi-value">≤60s</div><div class="kpi-desc">Threshold breach to notification delivery</div></div>
+        <div class="kpi-card"><div class="kpi-label">MTTR Reduction</div><div class="kpi-value">≥35%</div><div class="kpi-desc">vs. baseline within 90 days of go-live</div></div>
+        <div class="kpi-card"><div class="kpi-label">Console Uptime</div><div class="kpi-value">99.9%</div><div class="kpi-desc">Platform availability SLA for monitoring console</div></div>
+        <div class="kpi-card"><div class="kpi-label">NOC Adoption</div><div class="kpi-value">100%</div><div class="kpi-desc">NOC operators trained and live within 30 days</div></div>
+        <div class="kpi-card"><div class="kpi-label">Cutover Gap</div><div class="kpi-value">0</div><div class="kpi-desc">Zero monitoring gap during SolarWinds transition</div></div>
+      </div>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">5</div>
+        <div><div class="part-sub">Section 5</div><div class="part-title">Scope</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="sub-heading"><span class="sub-badge">5.1</span><span class="sub-title">In Scope</span></div>
+          <ul style="font-size:9px;color:var(--ink-soft);line-height:1.8;padding-left:14px;">
+            <li>Device discovery, inventory &amp; classification (SNMP, ICMP, CDP/LLDP)</li>
+            <li>Real-time SNMP polling — CPU, memory, interface metrics</li>
+            <li>NetFlow / sFlow / IPFIX traffic collection &amp; analysis</li>
+            <li>Layer 2 &amp; Layer 3 topology discovery &amp; mapping</li>
+            <li>Threshold-based &amp; anomaly alerting with escalation</li>
+            <li>Drag-and-drop dashboards &amp; pre-built NOC views</li>
+            <li>Scheduled reporting (PDF, Excel, HTML)</li>
+            <li>RBAC with Active Directory / LDAP integration</li>
+            <li>REST API for ITSM integration</li>
+            <li>High-availability (HA) deployment architecture</li>
+            <li>Multi-vendor device support (Cisco, Juniper, HPE, Fortinet, PA)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sub-heading"><span class="sub-badge">5.2</span><span class="sub-title">Out of Scope</span></div>
+          <ul style="font-size:9px;color:var(--ink-soft);line-height:1.8;padding-left:14px;">
+            <li>Application Performance Monitoring (APM)</li>
+            <li>Log aggregation / SIEM / SOAR</li>
+            <li>Configuration backup &amp; change management (NCM)</li>
+            <li>Endpoint or agent-based security monitoring</li>
+            <li>SD-WAN / SASE-specific monitoring</li>
+            <li>Mobile native applications</li>
+          </ul>
+          <div class="sub-heading" style="margin-top:10px;"><span class="sub-badge">5.3</span><span class="sub-title">Key Constraints</span></div>
+          <table class="doc-table" style="font-size:8.5px;">
+            <tbody>
+              <tr><td style="font-weight:600;width:110px;">Deployment</td><td>On-premises only — no cloud SaaS</td></tr>
+              <tr><td style="font-weight:600;">Data Residency</td><td>All data stays within the client's on-prem environment</td></tr>
+              <tr><td style="font-weight:600;">Compliance</td><td>NCA ECC 2018 mandatory</td></tr>
+              <tr><td style="font-weight:600;">Transition</td><td>No monitoring gap during cutover</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">6</div>
+        <div><div class="part-sub">Section 6</div><div class="part-title">Stakeholders</div></div>
+      </div>
+
+      <table class="doc-table">
+        <thead>
+          <tr><th>Stakeholder</th><th>Role</th><th>Responsibility</th><th style="width:80px;">Engagement</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-weight:600;">IT Operations Director</td><td>Primary Sponsor</td><td>Approve requirements and budget; final sign-off</td><td><span class="badge badge-must">High</span></td></tr>
+          <tr><td style="font-weight:600;">Network Engineering Team</td><td>Subject Matter Expert</td><td>Validate monitoring requirements and device coverage</td><td><span class="badge badge-must">High</span></td></tr>
+          <tr><td style="font-weight:600;">NOC Manager</td><td>End User Representative</td><td>Define alerting workflows, dashboard needs, NOC workflows</td><td><span class="badge badge-must">High</span></td></tr>
+          <tr><td style="font-weight:600;">IT Security Team</td><td>Reviewer</td><td>Validate access control, data security, compliance requirements</td><td><span class="badge badge-should">Medium</span></td></tr>
+          <tr><td style="font-weight:600;">CodeOx</td><td>Procurement Facilitator</td><td>Coordinate vendor evaluation, requirement alignment, selection</td><td><span class="badge badge-must">High</span></td></tr>
+          <tr><td style="font-weight:600;">Executive Leadership</td><td>Executive Sponsor</td><td>Final investment decision and budget governance</td><td><span class="badge badge-could">Low</span></td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 4 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 5 — FR 7.1–7.2 ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">7</div>
+        <div><div class="part-sub">Section 7</div><div class="part-title">Functional Requirements</div></div>
+      </div>
+      <p style="font-size:9px;color:var(--ink-soft);margin-bottom:12px;">All requirements are tagged with priority: <span class="badge badge-must">Must Have</span> <span class="badge badge-should">Should Have</span> <span class="badge badge-could">Could Have</span>. Must Have items are disqualifying if not natively supported. See Appendix A for full definitions.</p>
+
+      <div class="sub-heading"><span class="sub-badge">7.1</span><span class="sub-title">Device Discovery &amp; Inventory</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th><th style="width:90px;">Priority</th><th style="width:140px;">Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">FR-01</td><td>Automated ICMP ping sweep across user-defined IP ranges or CIDR subnets to discover all live hosts</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td>CIDR notation support required</td></tr>
+          <tr><td class="id-col">FR-02</td><td>Poll and manage devices via SNMP v1, v2c, and v3 with configurable community strings and v3 auth/priv credentials</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-03</td><td>Use CDP and LLDP to discover adjacent devices and build neighbor tables automatically</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-04</td><td>Import and parse custom MIB files to extend monitoring to proprietary or niche device types</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td>MIB browser preferred</td></tr>
+          <tr><td class="id-col">FR-05</td><td>Auto-classify discovered devices by type: router, switch, firewall, server, wireless AP, printer, UPS</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-06</td><td>Schedule recurring discovery scans (hourly, daily, weekly) with delta reporting of new/removed devices</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-07</td><td>Live device inventory view with filterable columns: device name, IP, type, vendor, OS version, status, last polled</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-08</td><td>Bulk device import via CSV for large-scale on-boarding</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">7.2</span><span class="sub-title">Real-Time Performance Monitoring</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th><th style="width:90px;">Priority</th><th style="width:140px;">Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">FR-10</td><td>Poll device CPU and memory utilization via SNMP at configurable intervals (default 60s; minimum 30s)</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-11</td><td>Monitor interface-level metrics per port: bandwidth utilization (in/out), error rate, discard rate, packet loss</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td>Per-interface granularity required</td></tr>
+          <tr><td class="id-col">FR-12</td><td>Real-time up/down status with color-coded indicators: green (up), red (down), yellow (warning), grey (unknown)</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-13</td><td>Calculate and display device response time (latency) via ICMP round-trip time per device</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-14</td><td>Retain raw performance data minimum 90 days; aggregated hourly/daily data minimum 2 years</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td>Configurable retention policy</td></tr>
+          <tr><td class="id-col">FR-15</td><td>WMI polling for Windows servers: disk I/O, service status, process CPU</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-16</td><td>SNMP trap reception and correlation with polled device state</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-17</td><td>Interface utilization trend sparklines or heat maps within device detail views</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 5 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 6 — FR 7.3–7.5 ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="sub-heading"><span class="sub-badge">7.3</span><span class="sub-title">Network Traffic Analysis (Flow)</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th><th style="width:90px;">Priority</th><th style="width:140px;">Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">FR-20</td><td>Receive and parse NetFlow v5/v9, sFlow v5, and IPFIX records (UDP listener, configurable port, default 2055)</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-21</td><td>Classify traffic by application using NBAR / DPI signatures; display top-N applications by bandwidth</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-22</td><td>Display top talkers by source IP, destination IP, protocol, and port with conversation-level drill-down</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-23</td><td>Historical flow analysis with selectable time ranges: 1h, 6h, 24h, 7d, 30d, and custom range</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-24</td><td>Alert on bandwidth utilization thresholds per interface or aggregate circuit capacity</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td>Integrates with alert engine</td></tr>
+          <tr><td class="id-col">FR-25</td><td>Per-VLAN and per-subnet traffic breakdown</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-26</td><td>Identify and flag anomalous traffic patterns (e.g., port scans, sudden bandwidth spikes)</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">7.4</span><span class="sub-title">Topology Discovery &amp; Mapping</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th><th style="width:90px;">Priority</th><th style="width:140px;">Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">FR-30</td><td>Auto-generate Layer 2 topology maps using CDP/LLDP neighbor discovery data without manual input</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-31</td><td>Generate Layer 3 routing topology maps using OSPF/BGP tables retrieved via SNMP</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-32</td><td>Overlay live device health status on topology maps using color-coded status indicators</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-33</td><td>Custom network maps with drag-and-drop device placement and optional background floor plan images</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-34</td><td>Export topology maps as PNG, PDF, or SVG</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-35</td><td>Link utilization levels shown on map edges with color graduation (green/amber/red)</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-36</td><td>Topology map drill-down — clicking a device opens its detail/performance view</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">7.5</span><span class="sub-title">Alerting &amp; Notification Engine</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th><th style="width:90px;">Priority</th><th style="width:140px;">Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">FR-40</td><td>Threshold-based alerts on any monitored metric: CPU %, memory %, interface utilization, packet loss, device up/down</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-41</td><td>Multi-condition alert rules using AND/OR boolean logic across multiple metrics and device groups</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-42</td><td>Notifications via: email (SMTP), SMS (HTTP gateway), webhook (outbound JSON POST), SNMP trap forwarding</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td>All four channels required</td></tr>
+          <tr><td class="id-col">FR-43</td><td>Alert escalation policies — auto-escalate to next tier if unacknowledged within configurable time window</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-44</td><td>Maintenance windows (one-time and recurring) that automatically suppress alerts for planned downtime</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-45</td><td>Dependent alert suppression — suppress child device alerts when upstream parent is confirmed down</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td>Root cause suppression</td></tr>
+          <tr><td class="id-col">FR-46</td><td>Alert acknowledgement, annotation, and assignment to operators from within the console</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-47</td><td>Alert history log with search, filter, and export capability</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-48</td><td>Alert deduplication to prevent notification flooding for flapping devices</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 6 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 7 — FR 7.6–7.8 ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="sub-heading"><span class="sub-badge">7.6</span><span class="sub-title">Dashboards &amp; Reporting</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th><th style="width:90px;">Priority</th><th style="width:140px;">Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">FR-50</td><td>Drag-and-drop dashboard builder with widget types: gauge, line chart, bar chart, table, topology tile, status summary</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-51</td><td>Out-of-the-box dashboards: Executive Summary, NOC Real-Time Overview, Interface Detail, Top-10 Bandwidth Users, Device Health</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-52</td><td>Scheduled reports delivered via email in PDF, Excel, and HTML formats</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-53</td><td>SLA availability reporting per device or group: uptime %, MTTR, MTBF, downtime events over configurable date ranges</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-54</td><td>Capacity planning reports that trend current utilization and project when thresholds will be exceeded</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td>Linear trend minimum</td></tr>
+          <tr><td class="id-col">FR-55</td><td>Report templates saveable and shareable across user accounts</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-56</td><td>Dashboard sharing via read-only public URL or embedded iFrame (NOC wall display use case)</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">7.7</span><span class="sub-title">Access Control &amp; User Management</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th><th style="width:90px;">Priority</th><th style="width:140px;">Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">FR-60</td><td>RBAC with built-in roles: Administrator, Operator, Read-Only; plus custom role creation with granular permission assignment</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-61</td><td>Integration with Microsoft Active Directory and LDAP for user authentication and group-to-role mapping</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-62</td><td>SAML 2.0 for single sign-on (SSO) integration</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-63</td><td>Organizational unit-based device visibility scoping — users only see devices within their assigned scope</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-64</td><td>Tamper-evident audit log of all user actions: login/logout, config changes, alert acknowledgements, report generation</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-65</td><td>Account lockout policy after configurable number of failed login attempts</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">7.8</span><span class="sub-title">API &amp; External Integration</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th><th style="width:90px;">Priority</th><th style="width:140px;">Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">FR-70</td><td>Documented REST API (JSON) for programmatic read/write access to devices, alerts, metrics, and configuration</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-71</td><td>Outbound webhook triggers on alert state changes (open, acknowledged, resolved)</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-72</td><td>Native or documented integration with ServiceNow for automatic incident creation on critical alerts</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-73</td><td>Receive syslog messages from network devices and correlate with polled device state</td><td class="pri-col"><span class="badge badge-should">Should Have</span></td><td></td></tr>
+          <tr><td class="id-col">FR-74</td><td>SNMP trap reception from managed devices</td><td class="pri-col"><span class="badge badge-must">Must Have</span></td><td></td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 7 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 8 — Section 8 NFR ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">8</div>
+        <div><div class="part-sub">Section 8</div><div class="part-title">Non-Functional Requirements</div></div>
+      </div>
+
+      <div class="sub-heading"><span class="sub-badge">8.1</span><span class="sub-title">Performance</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th><th style="width:140px;">Target / Metric</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">NFR-01</td><td>Dashboard load time for standard views with up to 500 devices</td><td style="font-weight:700;color:var(--blue-dark);">&lt; 3 seconds</td></tr>
+          <tr><td class="id-col">NFR-02</td><td>Full polling cycle duration for 10,000 monitored interfaces</td><td style="font-weight:700;color:var(--blue-dark);">&lt; 60 seconds</td></tr>
+          <tr><td class="id-col">NFR-03</td><td>NetFlow / sFlow / IPFIX record ingestion and processing throughput</td><td style="font-weight:700;color:var(--blue-dark);">≥ 100,000 flows/s</td></tr>
+          <tr><td class="id-col">NFR-04</td><td>Alert trigger latency from threshold breach to notification delivery</td><td style="font-weight:700;color:var(--blue-dark);">&lt; 60 seconds</td></tr>
+          <tr><td class="id-col">NFR-05</td><td>Search / filter response across full device inventory</td><td style="font-weight:700;color:var(--blue-dark);">&lt; 2 seconds</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">8.2</span><span class="sub-title">Scalability</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">NFR-10</td><td>Support at least <strong>5,000 monitored nodes</strong> and <strong>100,000 monitored interfaces</strong> in a single deployment</td></tr>
+          <tr><td class="id-col">NFR-11</td><td>Distributed polling architecture must support horizontal scaling by adding polling engines with no platform reinstall</td></tr>
+          <tr><td class="id-col">NFR-12</td><td>Database architecture must maintain query performance as historical data grows beyond 1 TB</td></tr>
+          <tr><td class="id-col">NFR-13</td><td>Support at least <strong>50 concurrent authenticated web console users</strong> without performance degradation</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">8.3</span><span class="sub-title">Availability &amp; Reliability</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">NFR-20</td><td>Platform shall maintain <strong>99.9% uptime</strong> for the monitoring console (&lt; 8.76 hours unplanned downtime/year)</td></tr>
+          <tr><td class="id-col">NFR-21</td><td>Hot-standby HA configuration must achieve failover within <strong>60 seconds</strong> with no data loss</td></tr>
+          <tr><td class="id-col">NFR-22</td><td>All configuration and historical data backed up daily with minimum 30-day backup retention</td></tr>
+          <tr><td class="id-col">NFR-23</td><td>Distributed polling engines must continue collecting data independently if central server is temporarily unreachable</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">8.4</span><span class="sub-title">Security</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">NFR-30</td><td>All web console traffic served over HTTPS (TLS 1.2 minimum; TLS 1.3 preferred)</td></tr>
+          <tr><td class="id-col">NFR-31</td><td>SNMP v3 credentials stored encrypted at rest (AES-256 minimum)</td></tr>
+          <tr><td class="id-col">NFR-32</td><td>User passwords stored using strong one-way hashing algorithm (bcrypt or Argon2)</td></tr>
+          <tr><td class="id-col">NFR-33</td><td>Session timeout after 30 minutes of inactivity (administrator-configurable)</td></tr>
+          <tr><td class="id-col">NFR-34</td><td>Third-party OWASP Top 10 vulnerability assessment completed within the past 24 months; report available on request</td></tr>
+          <tr><td class="id-col">NFR-35</td><td>No monitoring data, device credentials, or telemetry transmitted to any external cloud service</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">8.5</span><span class="sub-title">Usability</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:52px;">ID</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">NFR-40</td><td>Web console fully functional on Chrome, Firefox, Edge (Chromium), and Safari (latest 2 major versions)</td></tr>
+          <tr><td class="id-col">NFR-41</td><td>UI responsive and functional at 1280×800 minimum resolution</td></tr>
+          <tr><td class="id-col">NFR-42</td><td>New administrator able to complete initial device discovery and receive first alert within 4 hours of installation</td></tr>
+          <tr><td class="id-col">NFR-43</td><td>In-product contextual help or searchable knowledge base accessible from within the console</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 8 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 9 — Sections 9–10 ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">9</div>
+        <div><div class="part-sub">Section 9</div><div class="part-title">Technical Environment</div></div>
+      </div>
+
+      <div class="sub-heading"><span class="sub-badge">9.1</span><span class="sub-title">Current Network Infrastructure</span></div>
+      <table class="doc-table" style="margin-bottom:12px;">
+        <thead><tr><th style="width:160px;">Category</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Network Vendors</td><td>Cisco (primary), Juniper, HPE/Aruba, Fortinet, Palo Alto</td></tr>
+          <tr><td style="font-weight:600;">Protocols in Use</td><td>SNMP v2c/v3, OSPF, BGP, CDP, LLDP</td></tr>
+          <tr><td style="font-weight:600;">Flow Export</td><td>NetFlow v9 (Cisco), sFlow (HPE/Aruba)</td></tr>
+          <tr><td style="font-weight:600;">Authentication</td><td>Microsoft Active Directory</td></tr>
+          <tr><td style="font-weight:600;">ITSM Platform</td><td>ServiceNow</td></tr>
+          <tr><td style="font-weight:600;">Server OS</td><td>Windows Server 2019/2022, RHEL 8/9, Ubuntu 22.04 LTS</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">9.2</span><span class="sub-title">Deployment Requirements</span></div>
+      <div class="note-box blue" style="margin-bottom:10px;">
+        <div class="note-label">Deployment Model</div>
+        <p>On-premises only. Cloud-connected SaaS models are <strong>not acceptable</strong>. Vendor must confirm VM deployment support and provide resource specifications (vCPU, RAM, storage) for the proposed scale.</p>
+      </div>
+      <table class="doc-table" style="margin-bottom:12px;">
+        <thead><tr><th style="width:160px;">Requirement</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Supported OS</td><td>Windows Server 2019/2022 and/or Linux (RHEL 8/9 or Ubuntu 22.04 LTS)</td></tr>
+          <tr><td style="font-weight:600;">Virtualization</td><td>VMware vSphere — vendor must confirm VM support and provide sizing specs</td></tr>
+          <tr><td style="font-weight:600;">High Availability</td><td>Active-passive HA required — vendor must describe architecture in proposal</td></tr>
+          <tr><td style="font-weight:600;">Database</td><td>Vendor must describe embedded or external DB engine and provide storage sizing guidance</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">9.3</span><span class="sub-title">Integration Points</span></div>
+      <table class="doc-table">
+        <thead><tr><th style="width:180px;">System</th><th style="width:160px;">Integration Type</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Microsoft Active Directory</td><td>LDAP / LDAPS</td><td>User authentication and role mapping</td></tr>
+          <tr><td style="font-weight:600;">ServiceNow</td><td>REST webhook outbound</td><td>Auto-create incidents from critical alerts</td></tr>
+          <tr><td style="font-weight:600;">Email Server</td><td>SMTP with TLS</td><td>Alert notifications and scheduled report delivery</td></tr>
+          <tr><td style="font-weight:600;">SMS Gateway</td><td>HTTP API</td><td>Critical alert SMS via third-party gateway</td></tr>
+          <tr><td style="font-weight:600;">Syslog</td><td>UDP/TCP</td><td>Receive device syslog events</td></tr>
+          <tr><td style="font-weight:600;">External APIs</td><td>REST (JSON)</td><td>Programmatic read access for third-party tooling</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">10</div>
+        <div><div class="part-sub">Section 10</div><div class="part-title">Compliance &amp; Regulatory Requirements</div></div>
+      </div>
+      <p style="font-size:9px;color:var(--ink-soft);margin-bottom:10px;">All aspects of the solution — data storage, access control, encryption, and audit logging — must comply with the following. Vendors must explicitly state compliance posture against each item in their proposal.</p>
+      <table class="doc-table">
+        <thead><tr><th style="width:180px;">Standard / Regulation</th><th>Relevance &amp; Expectation</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700;">NCA ECC 2018 (KSA)</td><td>Saudi National Cybersecurity Authority Essential Controls — governs monitoring tool data handling, access management, and encryption. <strong>Mandatory compliance.</strong></td></tr>
+          <tr><td style="font-weight:700;">HIPAA (where applicable)</td><td>The client handles patient data. Network monitoring systems must not inadvertently capture or expose PHI. Vendor must confirm scope.</td></tr>
+          <tr><td style="font-weight:700;">ISO/IEC 27001</td><td>Vendor must confirm that their development and delivery processes are ISO 27001 certified or in active pursuit. Certificate or status letter required.</td></tr>
+          <tr><td style="font-weight:700;">GDPR (informational)</td><td>Applicable to any data processed on behalf of non-KSA entities. Vendor must clarify data processing scope and confirm no data leaves the on-prem environment.</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 9 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 10 — Sections 11–12 ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">11</div>
+        <div><div class="part-sub">Section 11</div><div class="part-title">Vendor Evaluation Criteria</div></div>
+      </div>
+
+      <table class="doc-table" style="margin-bottom:12px;">
+        <thead><tr><th style="width:30px;">#</th><th>Criterion</th><th style="width:70px;text-align:center;">Weight</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="id-col">1</td>
+            <td><strong>Functional Coverage</strong> — percentage of Must Have requirements met natively (no customization)</td>
+            <td style="text-align:center;font-weight:800;color:var(--blue-dark);font-size:12px;">30%</td>
+          </tr>
+          <tr>
+            <td class="id-col">2</td>
+            <td><strong>Scalability &amp; Performance</strong> — proven ability to support 5,000+ nodes and 100,000+ interfaces</td>
+            <td style="text-align:center;font-weight:800;color:var(--blue-dark);font-size:12px;">15%</td>
+          </tr>
+          <tr>
+            <td class="id-col">3</td>
+            <td><strong>Security &amp; Compliance</strong> — encryption, RBAC, audit logging, NCA ECC alignment, ISO 27001</td>
+            <td style="text-align:center;font-weight:800;color:var(--blue-dark);font-size:12px;">15%</td>
+          </tr>
+          <tr>
+            <td class="id-col">4</td>
+            <td><strong>Total Cost of Ownership (3-year)</strong> — license, maintenance, support, and infrastructure costs</td>
+            <td style="text-align:center;font-weight:800;color:var(--blue-dark);font-size:12px;">15%</td>
+          </tr>
+          <tr>
+            <td class="id-col">5</td>
+            <td><strong>Vendor Stability &amp; Roadmap</strong> — years in market, customer base size, active development commitment</td>
+            <td style="text-align:center;font-weight:800;color:var(--blue-dark);font-size:12px;">10%</td>
+          </tr>
+          <tr>
+            <td class="id-col">6</td>
+            <td><strong>SolarWinds Migration Ease</strong> — tooling for discovery import, configuration migration, parallel-run support</td>
+            <td style="text-align:center;font-weight:800;color:var(--blue-dark);font-size:12px;">8%</td>
+          </tr>
+          <tr>
+            <td class="id-col">7</td>
+            <td><strong>Support Quality</strong> — SLA tiers available, KSA or MENA region support presence, dedicated TAM</td>
+            <td style="text-align:center;font-weight:800;color:var(--blue-dark);font-size:12px;">7%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">11.1</span><span class="sub-title">Shortlisting Process</span></div>
+      <div class="info-grid">
+        <div class="info-card"><div class="info-card-label">Step 1 — RFI Review</div><div class="info-card-value">Proposals evaluated against FR/NFR requirements matrix. Vendors failing Must Have items are disqualified.</div></div>
+        <div class="info-card"><div class="info-card-label">Step 2 — Reference Check</div><div class="info-card-value">Minimum 2 enterprise references (≥1,000 nodes). GCC or healthcare sector references preferred.</div></div>
+        <div class="info-card"><div class="info-card-label">Step 3 — POC (max 3 vendors)</div><div class="info-card-value">Shortlisted vendors conduct a 30-day on-site or remote POC against a defined test plan.</div></div>
+        <div class="info-card"><div class="info-card-label">Step 4 — Commercial Award</div><div class="info-card-value">Final pricing submitted after POC conclusion. Contract awarded within 2 weeks of commercial close.</div></div>
+      </div>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">12</div>
+        <div><div class="part-sub">Section 12</div><div class="part-title">Commercial &amp; Licensing Requirements</div></div>
+      </div>
+      <p style="font-size:9px;color:var(--ink-soft);margin-bottom:10px;">Vendors must address all of the following in their proposal response:</p>
+      <table class="doc-table">
+        <thead><tr><th style="width:180px;">Requirement</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Licensing Model</td><td>State clearly: perpetual vs. subscription; per-node, per-interface, per-user, or unlimited</td></tr>
+          <tr><td style="font-weight:600;">3-Year TCO</td><td>Full 3-year cost breakdown: license fees, annual maintenance/support, implementation services, training</td></tr>
+          <tr><td style="font-weight:600;">POC Pricing</td><td>Confirm whether a fully-featured POC license can be provided at no cost during the evaluation period</td></tr>
+          <tr><td style="font-weight:600;">Scalability Pricing</td><td>Clarify pricing for scaling from current node count (~3,000) to 5,000+ nodes</td></tr>
+          <tr><td style="font-weight:600;">Module Pricing</td><td>If flow analysis, topology, or reporting are separate modules, itemize each cost separately</td></tr>
+          <tr><td style="font-weight:600;">Support Tiers</td><td>Describe available support tiers (business hours, 24×7, dedicated TAM) and associated annual cost</td></tr>
+          <tr><td style="font-weight:600;">Payment Terms</td><td>State preferred terms: annual, multi-year upfront; specify any multi-year discount</td></tr>
+          <tr><td style="font-weight:600;">KSA Partner</td><td>Confirm whether a KSA-based authorized reseller or implementation partner is available</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 10 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 11 — Sections 13–14 ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">13</div>
+        <div><div class="part-sub">Section 13</div><div class="part-title">Implementation &amp; Support Requirements</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="sub-heading"><span class="sub-badge">13.1</span><span class="sub-title">Implementation</span></div>
+          <ul style="font-size:9px;color:var(--ink-soft);line-height:1.9;padding-left:14px;">
+            <li>Formal implementation project plan within 10 business days of contract award</li>
+            <li>Parallel running period of <strong>minimum 30 days</strong> alongside existing SolarWinds during cutover</li>
+            <li>Initial device discovery and onboarding support for the first 500 devices</li>
+            <li>All documentation (installation, admin, user guides) provided in English</li>
+          </ul>
+          <div class="sub-heading" style="margin-top:10px;"><span class="sub-badge">13.2</span><span class="sub-title">Training</span></div>
+          <ul style="font-size:9px;color:var(--ink-soft);line-height:1.9;padding-left:14px;">
+            <li>Administrator training: minimum <strong>2 days</strong> live instructor-led (in-person or virtual)</li>
+            <li>NOC operator training: minimum <strong>1 day</strong> practical session</li>
+            <li>Training materials (slides, video, or e-learning) for self-paced refresher use</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sub-heading"><span class="sub-badge">13.3</span><span class="sub-title">Ongoing Support SLA</span></div>
+          <table class="doc-table">
+            <thead><tr><th>Priority</th><th>Initial Response</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:600;">P1 — Critical</td><td>≤ 4 hours · 24×7</td></tr>
+              <tr><td style="font-weight:600;">P2 — High</td><td>≤ 8 hours · business hours</td></tr>
+              <tr><td style="font-weight:600;">P3 — Medium</td><td>≤ 24 hours · business hours</td></tr>
+            </tbody>
+          </table>
+          <ul style="font-size:9px;color:var(--ink-soft);line-height:1.9;padding-left:14px;margin-top:8px;">
+            <li>Dedicated support channel: ticketing portal, email, and phone</li>
+            <li>Security patches delivered within 30 days of release</li>
+            <li>Named KSA or MENA region technical account contact preferred</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">14</div>
+        <div><div class="part-sub">Section 14</div><div class="part-title">Acceptance Criteria</div></div>
+      </div>
+      <p style="font-size:9px;color:var(--ink-soft);margin-bottom:10px;">The solution will be accepted for production when all of the following are verified through User Acceptance Testing (UAT):</p>
+      <table class="doc-table">
+        <thead><tr><th style="width:50px;">ID</th><th>Acceptance Criterion</th><th style="width:110px;">Test Method</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">AC-01</td><td>Discovery scan completes across a /24 subnet and returns all live devices within 5 minutes</td><td>Live test</td></tr>
+          <tr><td class="id-col">AC-02</td><td>SNMP polling accurately reflects actual CPU and interface state within 2 polling cycles of a real change</td><td>Lab test</td></tr>
+          <tr><td class="id-col">AC-03</td><td>Alert fires and email notification is received within 60 seconds of a threshold breach</td><td>Live test</td></tr>
+          <tr><td class="id-col">AC-04</td><td>Topology map correctly displays all discovered CDP/LLDP neighbors and links for a 50-device test network</td><td>UAT review</td></tr>
+          <tr><td class="id-col">AC-05</td><td>NetFlow data from a Cisco router correctly populates top-talker and top-application views</td><td>Lab test</td></tr>
+          <tr><td class="id-col">AC-06</td><td>A Read-Only user cannot access configuration or alert management screens</td><td>Role test</td></tr>
+          <tr><td class="id-col">AC-07</td><td>A scheduled PDF report is generated and delivered to the configured email recipient</td><td>End-to-end test</td></tr>
+          <tr><td class="id-col">AC-08</td><td>Platform sustains polling of 10,000 interfaces for 24 hours without memory leak or performance degradation</td><td>Load test</td></tr>
+          <tr><td class="id-col">AC-09</td><td>HA failover completes within 60 seconds with no data loss on the secondary node</td><td>Failover test</td></tr>
+          <tr><td class="id-col">AC-10</td><td>RBAC user scoped to a device group cannot view devices outside that group</td><td>Role test</td></tr>
+          <tr><td class="id-col">AC-11</td><td>Alert suppression correctly silences child-device alerts when the upstream parent is confirmed down</td><td>Integration test</td></tr>
+          <tr><td class="id-col">AC-12</td><td>Audit log captures login, configuration change, and alert acknowledgement with user and timestamp</td><td>Audit test</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 11 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 12 — Sections 15–16 ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner">
+        <div class="part-num">15</div>
+        <div><div class="part-sub">Section 15</div><div class="part-title">Risks &amp; Constraints</div></div>
+      </div>
+      <table class="doc-table" style="margin-bottom:14px;">
+        <thead><tr><th>Risk</th><th style="width:80px;">Likelihood</th><th style="width:70px;">Impact</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Monitoring gap during SolarWinds cutover</td><td><span class="risk-med">Medium</span></td><td><span class="risk-high">High</span></td><td>Mandatory 30-day parallel-run; vendor to confirm migration tooling</td></tr>
+          <tr><td style="font-weight:600;">MIB compatibility issues with niche medical devices</td><td><span class="risk-med">Medium</span></td><td><span class="risk-med">Medium</span></td><td>Vendor must provide MIB browser, OID test tool, and escalation path for custom MIBs</td></tr>
+          <tr><td style="font-weight:600;">Flow data volume exceeding platform processing capacity</td><td><span class="risk-low">Low</span></td><td><span class="risk-high">High</span></td><td>Vendor to provide capacity sizing guidance; confirm flow sampling support</td></tr>
+          <tr><td style="font-weight:600;">Database storage growth exceeding projections</td><td><span class="risk-med">Medium</span></td><td><span class="risk-high">High</span></td><td>Vendor must provide configurable retention policies and auto-archive capability</td></tr>
+          <tr><td style="font-weight:600;">ServiceNow integration requiring custom development</td><td><span class="risk-low">Low</span></td><td><span class="risk-med">Medium</span></td><td>Confirm native or documented REST API integration before contract award</td></tr>
+          <tr><td style="font-weight:600;">Vendor financial instability or product discontinuation</td><td><span class="risk-low">Low</span></td><td><span class="risk-high">Very High</span></td><td>Require 3-year roadmap commitment; evaluate market standing and active customer base</td></tr>
+        </tbody>
+      </table>
+
+      <div class="section-hr"></div>
+
+      <div class="part-banner">
+        <div class="part-num">16</div>
+        <div><div class="part-sub">Section 16</div><div class="part-title">Vendor Response Instructions</div></div>
+      </div>
+
+      <div class="sub-heading"><span class="sub-badge">16.1</span><span class="sub-title">Required Sections in Vendor Proposal</span></div>
+      <table class="doc-table" style="margin-bottom:12px;">
+        <thead><tr><th style="width:30px;">#</th><th>Section</th><th>Content Expected</th></tr></thead>
+        <tbody>
+          <tr><td class="id-col">1</td><td style="font-weight:600;">Company Overview</td><td>Years in operation, GCC customer base, relevant certifications (ISO 27001, etc.)</td></tr>
+          <tr><td class="id-col">2</td><td style="font-weight:600;">Product Overview</td><td>Current product version, release cadence, 3-year roadmap summary</td></tr>
+          <tr><td class="id-col">3</td><td style="font-weight:600;">Requirements Compliance Matrix</td><td>Complete table mapping every FR and NFR in this document to: ✅ Natively supported / ⚠️ Via configuration / 🔧 Via customization / ❌ Not supported</td></tr>
+          <tr><td class="id-col">4</td><td style="font-weight:600;">Architecture Overview</td><td>Deployment diagram, HA design, supported OS, virtualization platforms, storage sizing</td></tr>
+          <tr><td class="id-col">5</td><td style="font-weight:600;">Security &amp; Compliance Statement</td><td>Explicitly address NCA ECC 2018, encryption at rest/in-transit, audit logging, data residency</td></tr>
+          <tr><td class="id-col">6</td><td style="font-weight:600;">Migration Approach</td><td>Proposed transition from SolarWinds with no monitoring gap; parallel-run strategy</td></tr>
+          <tr><td class="id-col">7</td><td style="font-weight:600;">POC Plan</td><td>Proposed 30-day POC scope, success criteria, and resource requirements</td></tr>
+          <tr><td class="id-col">8</td><td style="font-weight:600;">Customer References</td><td>Minimum 2 enterprise references; GCC or healthcare sector preferred</td></tr>
+          <tr><td class="id-col">9</td><td style="font-weight:600;">Commercial Proposal</td><td>Itemized 3-year TCO, licensing model, support tiers, and payment options</td></tr>
+          <tr><td class="id-col">10</td><td style="font-weight:600;">Support Model</td><td>SLA commitments, escalation process, KSA/MENA region support availability</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sub-heading"><span class="sub-badge">16.2</span><span class="sub-title">Submission Details</span></div>
+      <div class="info-grid">
+        <div class="info-card"><div class="info-card-label">Submission Format</div><div class="info-card-value">PDF or Word document submitted via email</div></div>
+        <div class="info-card"><div class="info-card-label">Point of Contact</div><div class="info-card-value">Shabeeb Kaip · CodeOx<br>shabeeb.k@code-ox.com<br>+966 535 716 437</div></div>
+        <div class="info-card"><div class="info-card-label">Questions Deadline</div><div class="info-card-value">Clarifications accepted up to 5 business days before the submission deadline</div></div>
+        <div class="info-card"><div class="info-card-label">Submission Deadline</div><div class="info-card-value">To be confirmed by CodeOx upon BRD distribution</div></div>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 12 of 13</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ PAGE 13 — Appendices ═══ -->
+<div class="page">
+  <div class="inner-page">
+    <div class="inner-header">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-header-title">Enterprise Campus Network Monitoring — BRD</div>
+      <div class="inner-header-ref">NMS-BRD-2026 · v2.0</div>
+    </div>
+    <div class="inner-content">
+
+      <div class="part-banner" style="background:#374151;">
+        <div class="part-num" style="background:#6B7280;">A</div>
+        <div><div class="part-sub">Appendix A</div><div class="part-title">Priority Key</div></div>
+      </div>
+      <table class="doc-table" style="margin-bottom:18px;">
+        <thead><tr><th style="width:120px;">Priority</th><th>Definition</th><th style="width:200px;">Vendor Implication</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-must">Must Have</span></td>
+            <td>Critical requirement — the solution must support this natively or with minor configuration</td>
+            <td>Failure to meet a Must Have item <strong>disqualifies</strong> the vendor proposal</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-should">Should Have</span></td>
+            <td>Important but not disqualifying — absence will be scored against the vendor</td>
+            <td>Describe compensating capability or planned roadmap delivery date</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-could">Could Have</span></td>
+            <td>Nice to have — low weight in scoring; not expected in baseline proposal</td>
+            <td>Mention if natively available; no penalty if absent</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="part-banner" style="background:#374151;">
+        <div class="part-num" style="background:#6B7280;">B</div>
+        <div><div class="part-sub">Appendix B</div><div class="part-title">Glossary</div></div>
+      </div>
+      <div class="two-col">
+        <table class="doc-table">
+          <thead><tr><th style="width:80px;">Term</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td class="id-col">SNMP</td><td>Simple Network Management Protocol — polls and manages network devices</td></tr>
+            <tr><td class="id-col">NetFlow</td><td>Cisco protocol for exporting IP traffic metadata from routers and switches</td></tr>
+            <tr><td class="id-col">sFlow</td><td>Vendor-neutral flow sampling protocol supported by HPE/Aruba and others</td></tr>
+            <tr><td class="id-col">IPFIX</td><td>IETF-standardized flow export protocol (successor to NetFlow v9)</td></tr>
+            <tr><td class="id-col">CDP</td><td>Cisco Discovery Protocol — Layer 2 protocol for discovering adjacent Cisco devices</td></tr>
+            <tr><td class="id-col">LLDP</td><td>Link Layer Discovery Protocol — vendor-neutral equivalent of CDP</td></tr>
+            <tr><td class="id-col">MIB</td><td>Management Information Base — SNMP OID database for a given device type</td></tr>
+            <tr><td class="id-col">MTTR</td><td>Mean Time to Repair — average time to restore a failed service or device</td></tr>
+            <tr><td class="id-col">MTBF</td><td>Mean Time Between Failures — average time between successive failures</td></tr>
+          </tbody>
+        </table>
+        <table class="doc-table">
+          <thead><tr><th style="width:80px;">Term</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td class="id-col">RBAC</td><td>Role-Based Access Control — permission model tying user roles to resource access</td></tr>
+            <tr><td class="id-col">NCA ECC</td><td>Saudi Arabia National Cybersecurity Authority Essential Controls (2018)</td></tr>
+            <tr><td class="id-col">NOC</td><td>Network Operations Center — team responsible for real-time network monitoring</td></tr>
+            <tr><td class="id-col">HA</td><td>High Availability — system design eliminating single points of failure</td></tr>
+            <tr><td class="id-col">TCO</td><td>Total Cost of Ownership — all costs over a defined ownership period</td></tr>
+            <tr><td class="id-col">POC</td><td>Proof of Concept — time-limited evaluation of a vendor solution</td></tr>
+            <tr><td class="id-col">ITSM</td><td>IT Service Management platform (e.g., ServiceNow)</td></tr>
+            <tr><td class="id-col">TLS</td><td>Transport Layer Security — protocol for encrypted data transmission</td></tr>
+            <tr><td class="id-col">SAML</td><td>Security Assertion Markup Language — standard for SSO federation</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:14px;">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" style="height:18px;opacity:0.65;">
+        <div style="font-size:8.5px;color:var(--ink-soft);line-height:1.6;">
+          Prepared by <strong>CodeOx Technologies</strong> on behalf of The Client Organization · June 2026<br>
+          shabeeb.k@code-ox.com · +966 535 716 437 · code-ox.com
+        </div>
+      </div>
+
+    </div>
+    <div class="inner-footer">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="inner-footer-sep"></div>
+      <div class="inner-footer-text">Confidential — Vendor Use Only · NMS-BRD-2026</div>
+      <div class="inner-footer-page">Page 13 of 13</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
