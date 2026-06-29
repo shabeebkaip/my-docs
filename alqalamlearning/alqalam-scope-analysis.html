@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al Qalam Learning — Scope &amp; Strategy Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green:        #047857;
+  --green-dark:   #064E3B;
+  --green-mid:    #10B981;
+  --green-light:  #D1FAE5;
+  --green-pale:   #ECFDF5;
+  --blue:         #1D4ED8;
+  --blue-pale:    #EFF6FF;
+  --amber:        #D97706;
+  --amber-bg:     #FEF3C7;
+  --red:          #B91C1C;
+  --red-bg:       #FEE2E2;
+  --ink:          #0F172A;
+  --ink-soft:     #475569;
+  --border:       #E2E8F0;
+  --stripe:       #F8FAFC;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #CBD5E1;
+  color: var(--ink);
+  font-size: 10px;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+@media print {
+  body { background: none; }
+  .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+}
+@page { size: A4; margin: 0; }
+
+/* ── COVER ── */
+.cover { background: #fff; min-height: 297mm; display: flex; flex-direction: column; border-top: 5px solid var(--green-dark); padding: 36px 40px 32px; }
+.cover-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+.logo-tagline { font-size: 8px; color: var(--ink-soft); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 4px; }
+.cover-date-badge { background: var(--green-pale); border: 1px solid var(--green-light); border-radius: 6px; padding: 6px 12px; text-align: right; }
+.cover-date-badge .label { font-size: 7.5px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.5px; }
+.cover-date-badge .val   { font-size: 10px; font-weight: 600; color: var(--green-dark); }
+.cover-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 0 24px; }
+.cover-tag { display: inline-block; background: var(--green-light); color: var(--green-dark); font-size: 8px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; margin-bottom: 16px; width: fit-content; }
+.cover-title { font-size: 32px; font-weight: 900; color: var(--green-dark); line-height: 1.1; letter-spacing: -1.2px; margin-bottom: 10px; }
+.cover-subtitle { font-size: 11.5px; color: var(--ink-soft); font-weight: 400; margin-bottom: 28px; line-height: 1.6; }
+.cover-divider { width: 56px; height: 3px; background: var(--green-mid); border-radius: 2px; margin-bottom: 28px; }
+.cover-cred { background: var(--green-pale); border: 1px solid var(--green-light); border-left: 4px solid var(--green); border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 9px; color: var(--green-dark); line-height: 1.6; }
+.cover-cred strong { font-weight: 700; }
+.meta-table { width: 100%; border-collapse: collapse; }
+.meta-table td { padding: 7.5px 12px; font-size: 9.5px; border-bottom: 1px solid var(--border); }
+.meta-table td:first-child { width: 34%; color: var(--ink-soft); font-weight: 500; background: var(--stripe); }
+.meta-table td:last-child { color: var(--ink); font-weight: 600; }
+.meta-table tr:first-child td { border-top: 1px solid var(--border); }
+.cover-footer-note { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); font-size: 7.5px; color: var(--ink-soft); line-height: 1.5; }
+
+/* ── INNER LAYOUT ── */
+.inner-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; border-bottom: 1px solid var(--border); background: var(--green-pale); flex-shrink: 0; }
+.ih-title { font-size: 8px; font-weight: 700; color: var(--green-dark); letter-spacing: 0.3px; }
+.ih-sub   { font-size: 7.5px; color: var(--ink-soft); }
+.inner-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding: 9px 28px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.if-left  { font-size: 7.5px; color: var(--ink-soft); }
+.if-page  { font-size: 7.5px; color: var(--ink-soft); font-weight: 600; }
+.if-right { font-size: 7.5px; color: var(--green-dark); font-weight: 600; }
+.content  { flex: 1; padding: 18px 28px; display: flex; flex-direction: column; gap: 15px; }
+
+/* ── HEADINGS ── */
+.sec-title { font-size: 12px; font-weight: 800; color: var(--green-dark); letter-spacing: -0.3px; padding-bottom: 6px; border-bottom: 2px solid var(--green-light); margin-bottom: 9px; }
+.sec-title span { display: inline-block; background: var(--green-dark); color: #fff; font-size: 7.5px; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-right: 7px; vertical-align: middle; }
+
+/* ── APP CARDS ── */
+.app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.app-card { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: #fff; display: flex; flex-direction: column; gap: 6px; }
+.app-card .ac-head { display: flex; align-items: center; gap: 8px; }
+.app-card .ac-icon { width: 32px; height: 32px; background: var(--green-pale); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.app-card .ac-name { font-size: 10.5px; font-weight: 800; color: var(--green-dark); }
+.app-card .ac-tech { font-size: 7.5px; color: var(--ink-soft); margin-top: 1px; }
+.app-card .ac-users { font-size: 8px; color: var(--ink); }
+.app-card .ac-users strong { color: var(--green-dark); }
+.app-card .ac-desc { font-size: 8px; color: var(--ink-soft); line-height: 1.5; }
+.app-card.p2 { background: var(--stripe); border-style: dashed; }
+
+/* ── STACK TABLE ── */
+.stack-table { width: 100%; border-collapse: collapse; }
+.stack-table th { padding: 6px 10px; text-align: left; font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--green-dark); border-bottom: 2px solid var(--border); background: var(--stripe); }
+.stack-table td { padding: 7px 10px; font-size: 8px; vertical-align: top; border-bottom: 1px solid var(--border); line-height: 1.45; }
+.stack-table tr:nth-child(even) td { background: var(--stripe); }
+.stack-table td:first-child { color: var(--ink-soft); font-weight: 600; width: 22%; }
+.stack-table td:nth-child(2) { color: var(--ink); font-weight: 600; }
+
+/* ── FEATURE TABLE ── */
+.feat-table { width: 100%; border-collapse: collapse; }
+.feat-table th { padding: 6px 9px; text-align: left; font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--green-dark); border-bottom: 2px solid var(--border); background: var(--stripe); }
+.feat-table td { padding: 5px 9px; font-size: 7.5px; vertical-align: middle; border-bottom: 1px solid var(--border); line-height: 1.4; }
+.feat-table tr:nth-child(even) td { background: var(--stripe); }
+.feat-table .mod { font-weight: 700; color: var(--green-dark); }
+.feat-table .yes { color: var(--green); font-weight: 800; text-align: center; width: 32px; }
+.feat-table .no  { color: var(--red);   font-weight: 800; text-align: center; width: 32px; }
+.feat-table .neu { color: var(--amber); font-weight: 800; text-align: center; width: 32px; }
+.feat-table .pl  { font-size: 7px; color: var(--ink-soft); text-align: center; width: 44px; }
+
+/* ── PHASE PILLS ── */
+.phase-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.phase-pill { padding: 3px 10px; border-radius: 14px; font-size: 7.5px; font-weight: 700; letter-spacing: 0.3px; }
+.phase-pill.p1 { background: var(--green-light); color: var(--green-dark); }
+.phase-pill.p2 { background: var(--blue-pale); color: var(--blue); }
+.phase-pill.p3 { background: var(--amber-bg); color: var(--amber); }
+
+/* ── BOXES ── */
+.box-note { border-radius: 8px; padding: 10px 14px; font-size: 8.5px; line-height: 1.55; }
+.box-note.green { background: var(--green-pale); border: 1px solid var(--green-light); border-left: 4px solid var(--green); color: var(--green-dark); }
+.box-note.amber { background: var(--amber-bg); border: 1px solid #FDE68A; border-left: 4px solid var(--amber); color: #92400E; }
+.box-note.red   { background: var(--red-bg);   border: 1px solid #FCA5A5; border-left: 4px solid var(--red);   color: #7F1D1D; }
+.box-note.blue  { background: var(--blue-pale); border: 1px solid #BFDBFE; border-left: 4px solid var(--blue); color: #1E3A8A; }
+.box-note strong { font-weight: 700; }
+.box-note .bn-title { font-size: 9px; font-weight: 800; margin-bottom: 4px; display: block; }
+
+/* ── COMPARE TABLE ── */
+.cmp-table { width: 100%; border-collapse: collapse; }
+.cmp-table th { padding: 7px 10px; text-align: left; font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 2px solid var(--border); }
+.cmp-table th:first-child { color: var(--ink-soft); width: 18%; }
+.cmp-table th:nth-child(2) { color: var(--red); width: 32%; }
+.cmp-table th:nth-child(3) { color: var(--green); width: 32%; }
+.cmp-table th:last-child  { color: var(--green-dark); }
+.cmp-table td { padding: 7px 10px; font-size: 7.5px; vertical-align: top; border-bottom: 1px solid var(--border); line-height: 1.45; }
+.cmp-table tr:nth-child(even) td { background: var(--stripe); }
+.cmp-table td:first-child { color: var(--ink-soft); font-weight: 700; }
+.cmp-table td:nth-child(2) { color: var(--ink); }
+.cmp-table td:nth-child(3) { color: var(--ink); }
+.cmp-table td:last-child  { color: var(--green-dark); font-weight: 600; }
+
+/* ── REC BOX ── */
+.rec-box { background: var(--green-dark); color: #fff; border-radius: 10px; padding: 14px 18px; }
+.rec-title { font-size: 11px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 5px; }
+.rec-body  { font-size: 8.5px; color: rgba(255,255,255,0.82); line-height: 1.6; margin-bottom: 10px; }
+.rec-steps { display: flex; flex-direction: column; gap: 5px; }
+.rec-step  { display: flex; align-items: flex-start; gap: 9px; }
+.sn { width: 18px; height: 18px; border-radius: 50%; background: var(--green-mid); color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.st { font-size: 8.5px; color: rgba(255,255,255,0.85); line-height: 1.5; padding-top: 1px; }
+.st strong { color: #fff; }
+
+/* ── KPI CARDS ── */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.kpi { background: var(--green-pale); border: 1px solid var(--green-light); border-radius: 8px; padding: 9px 11px; text-align: center; }
+.kpi-num { font-size: 16px; font-weight: 900; color: var(--green-dark); line-height: 1.1; }
+.kpi-lbl { font-size: 7px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 3px; font-weight: 600; }
+
+/* ── PILL ROW ── */
+.pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.pill { background: var(--green-light); color: var(--green-dark); font-size: 7.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — COVER
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-header">
+      <div>
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" style="height:30px; margin-bottom:4px; display:block;">
+        <div class="logo-tagline">Digital Transformation Partner</div>
+      </div>
+      <div class="cover-date-badge">
+        <div class="label">Prepared</div>
+        <div class="val">29 June 2026</div>
+      </div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-tag">Al Qalam Learning — Scope &amp; Strategy</div>
+      <div class="cover-title">From 18 Modules<br>to a Shippable Plan.</div>
+      <div class="cover-subtitle">
+        A complete scope, app architecture, phase plan, and competitive strategy for the<br>
+        Al Qalam Learning mobile &amp; web platform — ready for proposal preparation.
+      </div>
+
+      <div class="cover-divider"></div>
+
+      <div class="cover-cred">
+        <strong>Internal scope &amp; strategy document.</strong> This consolidates the client's confirmed Phase 1 features,
+        the additions from round 2 of discussions (desktop access + student–teacher communication), a competitive read
+        on the alternate vendor's proposal, and CodeOx's recommended timeline &amp; positioning. The client-facing proposal
+        will be prepared from this base.
+      </div>
+
+      <table class="meta-table">
+        <tr><td>Client</td>             <td>Al Qalam Learning — Islamic school / learning institute</td></tr>
+        <tr><td>Prepared by</td>        <td>Shabeeb K · CodeOx · +966 53 571 6437 · shabeeb.k@code-ox.com</td></tr>
+        <tr><td>Scope</td>              <td>Mobile App (iOS + Android) · Web Portal (Admin + Student) · Shared Backend</td></tr>
+        <tr><td>Primary Roles</td>      <td>Student · Teacher · Admin (Parent access — pending confirmation)</td></tr>
+        <tr><td>Languages</td>          <td>English &amp; Malayalam</td></tr>
+        <tr><td>Phase 1 Modules</td>    <td>15 of 18 (full or partial) · ~52 features + 1:1 chat</td></tr>
+        <tr><td>Recommended Timeline</td><td>3 months for Phase 1 (vs. competing 6-month quote)</td></tr>
+        <tr><td>Document Ref</td>       <td>AQL-SCOPE-2026-01 · Version 1.0</td></tr>
+      </table>
+    </div>
+
+    <div class="cover-footer-note">
+      Prepared exclusively for internal review and proposal preparation. Pricing and timelines are indicative pending final scope sign-off.
+      &copy; 2026 CodeOx. All rights reserved. &nbsp;·&nbsp; code-ox.com
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — PROJECT OVERVIEW + APPS TO BUILD
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Project Overview · Apps to Build · Technology Stack</div>
+    <div class="ih-sub">AQL-SCOPE-2026-01 · Internal</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>01</span>What Al Qalam Asked For</div>
+      <p style="font-size:9px; color:var(--ink-soft); margin-bottom:8px;">
+        A combined <strong>School ERP + LMS + Islamic-education platform</strong> delivered as a mobile app
+        (iOS + Android), an admin / teacher web portal, and — per round 2 of discussions — a desktop-accessible
+        student web portal. The original feature list spanned 18 modules covering school operations, learning,
+        Islamic studies, communications, certificates, admissions, and platform extras.
+      </p>
+      <div class="box-note green">
+        <span class="bn-title">Honest size read</span>
+        This is comparable in scope to <strong>Classera / Teachmint / Edmingle + a custom Islamic layer</strong>.
+        It is not a small app. Shipped without a phase plan, this becomes a 9–12 month build. With CodeOx's recommended
+        phasing, <strong>Phase 1 ships in 3 months</strong> with the features the client marked as essential.
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>02</span>Apps to be Built</div>
+      <div class="app-grid">
+
+        <div class="app-card">
+          <div class="ac-head">
+            <div class="ac-icon">📱</div>
+            <div>
+              <div class="ac-name">Mobile App — iOS + Android</div>
+              <div class="ac-tech">React Native (Expo) · single codebase</div>
+            </div>
+          </div>
+          <div class="ac-users"><strong>Users:</strong> Student, Teacher (role-based login)</div>
+          <div class="ac-desc">Day-to-day usage — attendance, homework, fees view, notifications, study materials, certificates, 1:1 chat with teacher.</div>
+        </div>
+
+        <div class="app-card">
+          <div class="ac-head">
+            <div class="ac-icon">🖥️</div>
+            <div>
+              <div class="ac-name">Web Portal — Admin + Teacher</div>
+              <div class="ac-tech">Next.js 16 (App Router) on Vercel</div>
+            </div>
+          </div>
+          <div class="ac-users"><strong>Users:</strong> School Admin, Principal, Teachers</div>
+          <div class="ac-desc">Heavy data entry — admissions review, fee setup, exam &amp; marks entry, broadcast announcements, bulk uploads, financial &amp; attendance reports.</div>
+        </div>
+
+        <div class="app-card">
+          <div class="ac-head">
+            <div class="ac-icon">💻</div>
+            <div>
+              <div class="ac-name">Web Portal — Student (Desktop)</div>
+              <div class="ac-tech">Same Next.js codebase · different routes</div>
+            </div>
+          </div>
+          <div class="ac-users"><strong>Users:</strong> Students (browser version of the mobile app)</div>
+          <div class="ac-desc">Confirmed in round 2 — <em>"Mobile and desktop il access option venamtto"</em>. Students can access notes, homework, calendar, certificates, and chat from any browser on PC, laptop, or tablet.</div>
+        </div>
+
+        <div class="app-card">
+          <div class="ac-head">
+            <div class="ac-icon">🗄️</div>
+            <div>
+              <div class="ac-name">Backend (shared by all apps)</div>
+              <div class="ac-tech">Supabase · Postgres + Auth + Storage + Realtime</div>
+            </div>
+          </div>
+          <div class="ac-users"><strong>Used by:</strong> All three frontends</div>
+          <div class="ac-desc">Single source of truth — user data, content, files, real-time events for chat &amp; notifications. Push delivered via Expo Notifications.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>03</span>Technology Stack — Built for Speed &amp; Low Operating Cost</div>
+      <table class="stack-table">
+        <thead><tr><th>Layer</th><th>Choice</th><th>Why this choice</th></tr></thead>
+        <tbody>
+          <tr><td>Mobile</td><td>React Native (Expo)</td><td>One codebase for iOS + Android + tablet. Over-the-air updates without re-submitting to app stores.</td></tr>
+          <tr><td>Web (Admin + Student)</td><td>Next.js 16 on Vercel</td><td>Server-rendered, fast page loads, modern App Router, deploys in seconds, auto-scaling included.</td></tr>
+          <tr><td>Backend &amp; Database</td><td>Supabase (Postgres)</td><td>Relational database — correct fit for school data (students, classes, marks). Built-in auth, file storage, real-time, row-level security.</td></tr>
+          <tr><td>Push Notifications</td><td>Expo Notifications</td><td>Free, integrated with the mobile stack, FCM + APNs handled in one API.</td></tr>
+          <tr><td>Live Class (Phase 2)</td><td>Google Meet / Zoom deep link</td><td>Client provides the Meet/Zoom account; we integrate with deep links. No custom video infrastructure to build or maintain.</td></tr>
+          <tr><td>Payment Gateway (Phase 2)</td><td>Razorpay / HyperPay / Tap</td><td>Region-dependent. Decision once client confirms operating country.</td></tr>
+          <tr><td>i18n</td><td>react-i18next + next-intl</td><td>English + Malayalam at launch. Arabic can be added later without architectural changes.</td></tr>
+          <tr><td>AI (Phase 4)</td><td>Vercel AI Gateway</td><td>Unified access to OpenAI / Claude / Gemini for the future homework-assistant feature.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 2 of 6</div>
+    <div class="if-right">Internal · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — PHASE 1 LOCKED SCOPE (CLIENT-CONFIRMED)
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Phase 1 Locked Scope — Features the Client Marked ✅</div>
+    <div class="ih-sub">AQL-SCOPE-2026-01 · Internal</div>
+  </div>
+
+  <div class="content">
+
+    <div class="phase-row">
+      <span class="phase-pill p1">PHASE 1 — MVP LAUNCH</span>
+      <span class="phase-pill p2">PHASE 2 — engagement + islamic core</span>
+      <span class="phase-pill p3">PHASE 3 — polish + future</span>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>04</span>Phase 1 Features — Locked List</div>
+      <table class="feat-table">
+        <thead>
+          <tr>
+            <th style="width:18%">Module</th>
+            <th>Feature</th>
+            <th class="pl">Phase</th>
+            <th style="width:18%">Where</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="mod" rowspan="6">Student Dashboard</td><td>Student profile</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Class &amp; section details</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Student ID</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Attendance percentage</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Performance summary</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Upcoming classes</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+
+          <tr><td class="mod" rowspan="2">Live Classes (partial)</td><td>Weekly timetable</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Class reminders (push)</td><td class="pl">P1</td><td>Mobile</td></tr>
+
+          <tr><td class="mod" rowspan="5">Learning Materials</td><td>Notes</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Worksheets</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>PDF downloads (offline view)</td><td class="pl">P1</td><td>Mobile</td></tr>
+          <tr><td>Practice activities</td><td class="pl">P1</td><td>Mobile</td></tr>
+          <tr><td>Islamic study resources (library)</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+
+          <tr><td class="mod" rowspan="5">Homework &amp; Assignments</td><td>Daily homework</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Assignment submission</td><td class="pl">P1</td><td>Mobile</td></tr>
+          <tr><td>Upload photos / PDFs</td><td class="pl">P1</td><td>Mobile</td></tr>
+          <tr><td>Teacher feedback</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Due-date reminders</td><td class="pl">P1</td><td>Mobile</td></tr>
+
+          <tr><td class="mod" rowspan="3">Exams (partial)</td><td>Exam timetable</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Marks &amp; grades entry / view</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Report cards (PDF download)</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+
+          <tr><td class="mod" rowspan="3">Attendance Management</td><td>Daily attendance (teacher marks)</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Monthly attendance report</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Leave application + approval</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+
+          <tr><td class="mod">Fees (partial)</td><td>Fee reminders (push)</td><td class="pl">P1</td><td>Mobile</td></tr>
+
+          <tr><td class="mod" rowspan="5">Teacher Portal</td><td>Mark attendance</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Upload homework</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Upload study materials</td><td class="pl">P1</td><td>Web</td></tr>
+          <tr><td>Enter marks per student</td><td class="pl">P1</td><td>Web</td></tr>
+          <tr><td>Send announcements (class / school)</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+
+          <tr><td class="mod" rowspan="5">Notifications</td><td>School announcements</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Exam alerts</td><td class="pl">P1</td><td>Mobile</td></tr>
+          <tr><td>Holiday notices</td><td class="pl">P1</td><td>Mobile</td></tr>
+          <tr><td>Event reminders</td><td class="pl">P1</td><td>Mobile</td></tr>
+          <tr><td>Parent messages</td><td class="pl">P1</td><td>Mobile</td></tr>
+
+          <tr><td class="mod">Islamic Events (partial)</td><td>Workshop registrations</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+
+          <tr><td class="mod" rowspan="3">Certificates &amp; Achievements</td><td>Download certificates (PDF)</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Achievement badges</td><td class="pl">P1</td><td>Mobile</td></tr>
+          <tr><td>Student awards display</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+
+          <tr><td class="mod" rowspan="4">Academic Calendar</td><td>School calendar</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Holidays</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Exam dates</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>Events</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+
+          <tr><td class="mod" rowspan="3">Admission Section</td><td>Online admission form (public)</td><td class="pl">P1</td><td>Web</td></tr>
+          <tr><td>Document upload</td><td class="pl">P1</td><td>Web</td></tr>
+          <tr><td>Admission status tracking</td><td class="pl">P1</td><td>Web</td></tr>
+
+          <tr><td class="mod" rowspan="2">Support &amp; Help Desk</td><td>Admin contact</td><td class="pl">P1</td><td>Mobile + Web</td></tr>
+          <tr><td>WhatsApp support button</td><td class="pl">P1</td><td>Mobile</td></tr>
+
+          <tr><td class="mod" rowspan="3">Platform &amp; Extras</td><td>Multi-language: English + Malayalam</td><td class="pl">P1</td><td>All</td></tr>
+          <tr><td>Mobile, tablet &amp; desktop support</td><td class="pl">P1</td><td>All</td></tr>
+          <tr><td>Push notifications (FCM + APNs)</td><td class="pl">P1</td><td>Mobile</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 3 of 6</div>
+    <div class="if-right">Internal · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 4 — ROUND 2 ADDITIONS + DEFERRED MODULES
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Round 2 Additions · Phase 2+ Deferred Scope · Open Clarifications</div>
+    <div class="ih-sub">AQL-SCOPE-2026-01 · Internal</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>05</span>Round 2 — Client Additions (29 June 2026)</div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="box-note green">
+          <span class="bn-title">✓ Confirmed — Desktop Access</span>
+          <em>"Mobile and desktop il access option venamtto"</em><br>
+          The Web Portal — Student (desktop browser version) is now <strong>locked into Phase 1</strong>, not optional.
+          No additional codebase — reuses the Next.js portal stack.
+        </div>
+        <div class="box-note green">
+          <span class="bn-title">✓ Added — Student ↔ Teacher Chat</span>
+          <em>"Students teachers communication option also needed"</em><br>
+          Moved from Phase 3 to <strong>Phase 1</strong>. Scoped tight to protect the timeline:
+          1:1 text chat, per-subject thread, no media, no group chat.
+        </div>
+      </div>
+
+      <div class="box-note amber" style="margin-top:10px;">
+        <span class="bn-title">⚠ Scope-flexibility clause</span>
+        <em>"Ath pole cherya enthnklm okke add aakkaan aavashyam undel idayil parayaamallolle"</em><br>
+        Friendly — but a scope-creep door. <strong>Recommended handling rule</strong> for the proposal:
+        small additions are batched into a fortnightly review. Anything &lt;1 day is absorbed.
+        Anything bigger is quickly estimated and either fits in (without slipping the deadline) or queues into Phase 2.
+        This keeps the launch promise intact.
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>06</span>Deferred to Phase 2 (Client-marked ❌ — or clear next-phase fit)</div>
+      <table class="feat-table">
+        <thead>
+          <tr><th style="width:22%">Module</th><th>Deferred Features</th><th class="pl" style="width:48px">Phase</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mod">Live Classes</td><td>Join class button · Google Meet / Zoom integration · Recorded classes section</td><td class="pl">P2</td></tr>
+          <tr><td class="mod">Online Exams</td><td>Online exams with timer · Quiz section</td><td class="pl">P2</td></tr>
+          <tr><td class="mod">Fees</td><td>Fee details view · Payment history · Online payment gateway · Download receipts</td><td class="pl">P2</td></tr>
+          <tr><td class="mod">Parent Portal</td><td>Child progress · Attendance view · Homework status · Teacher remarks · Parent-specific notifications</td><td class="pl">P2*</td></tr>
+          <tr><td class="mod">Quran Section</td><td>Hifdh progress tracker · Surah memorization record · Tilawah recordings · Quran revision schedule</td><td class="pl">P2</td></tr>
+          <tr><td class="mod">Islamic Studies</td><td>Hadith of the week · Daily Adhkar · Dua collection · Seerah lessons · Islamic quizzes</td><td class="pl">P2</td></tr>
+          <tr><td class="mod">Salah Tracker</td><td>Daily prayer tracker · Prayer reminders (location-based) · Weekly / monthly report</td><td class="pl">P2</td></tr>
+          <tr><td class="mod">Islamic Events</td><td>Musabaqa registrations · Ramadan activities · Dhul Hijjah activities</td><td class="pl">P2</td></tr>
+          <tr><td class="mod">Certificates</td><td>Competition results</td><td class="pl">P2</td></tr>
+          <tr><td class="mod">Communication (P3)</td><td>Parent ↔ Teacher chat · Parent ↔ Admin chat · Parent support ticket system</td><td class="pl">P3</td></tr>
+          <tr><td class="mod">AI (P4)</td><td>AI homework assistant · AI-generated exam papers · Predictive analytics</td><td class="pl">P4</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:7px; color:var(--ink-soft); margin-top:5px;">* Parent Portal full-screen views are P2. In Phase 1, parents receive notifications and view their child's status by sharing the student account (pending clarification — see Q1 below).</p>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>07</span>Open Clarifications — Required Before Final Proposal</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+
+        <div class="box-note blue">
+          <span class="bn-title">Q1 · Parent access in Phase 1?</span>
+          Parent Portal marked ❌ across the board, yet "parent messages" and "fee reminders" are ✅.
+          Who receives them? Options: (a) parents log in via student account, (b) parents notified via WhatsApp / SMS only, (c) misclick — parents do need login.
+          <strong>Need decision.</strong>
+        </div>
+
+        <div class="box-note blue">
+          <span class="bn-title">Q2 · Fee reminders without fee details?</span>
+          Reminders ✅ but fee details ❌. Likely the admin enters dues in backend; parents only get push (no amount). <strong>Confirm interpretation.</strong>
+        </div>
+
+        <div class="box-note blue">
+          <span class="bn-title">Q3 · No Islamic features in Phase 1?</span>
+          Surprising for an Islamic school — all of Quran / Salah / Adhkar deferred.
+          Likely intentional (ship core school ops first). <strong>Confirm with client</strong> that they accept launching without these for the first 3 months.
+        </div>
+
+        <div class="box-note blue">
+          <span class="bn-title">Q4 · Operating region?</span>
+          Determines payment gateway (Razorpay vs HyperPay vs Tap), data residency, and compliance baseline. <strong>Confirm country/region.</strong>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 4 of 6</div>
+    <div class="if-right">Internal · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 5 — COMPETITIVE ANALYSIS
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Competitor Analysis — Read on the Alternate Vendor's Proposal</div>
+    <div class="ih-sub">AQL-SCOPE-2026-01 · Internal</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>08</span>What the Competitor Is Pitching</div>
+      <p style="font-size:9px; color:var(--ink-soft); margin-bottom:8px;">
+        Source: screenshots shared by the client from a Google Meet call with another vendor
+        (presenter: <strong>Muhammed</strong>; document: <em>Al_Qalam_Learning_App_Proposal.pdf</em>, page 4 of 6).
+      </p>
+
+      <table class="cmp-table">
+        <thead>
+          <tr><th>Layer</th><th>Competitor</th><th>CodeOx</th><th>Honest read</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Mobile</td><td>Flutter (cross-platform, Dart)</td><td>React Native (Expo)</td><td>Tie — both are valid choices for cross-platform mobile.</td></tr>
+          <tr><td>Backend</td><td>Node.js + Express "microservices"</td><td>Supabase (auto-generated APIs on Postgres)</td><td>We win — microservices for one school = over-engineering &amp; +months of build time.</td></tr>
+          <tr><td>Database</td><td>MongoDB (document store)</td><td>Postgres (relational)</td><td>We win — student / class / marks data is relational. Postgres is the right tool.</td></tr>
+          <tr><td>Cloud</td><td>Firebase + AWS + dedicated VPS (3 platforms)</td><td>Vercel + Supabase (2 platforms, managed)</td><td>We win — 1 hosting bill, no VPS to patch, no devops hire required.</td></tr>
+          <tr><td>Live class</td><td>Google Meet API deep link</td><td>Google Meet / Zoom deep link</td><td>Tie — same approach.</td></tr>
+          <tr><td>Production</td><td>"Hardened dedicated VPS with HA firewalls"</td><td>Vercel + Supabase (auto-scaling, HA built-in)</td><td>We win — zero operational overhead, no manual server patching.</td></tr>
+          <tr><td>Timeline</td><td><strong>6-Month Strategic Plan</strong></td><td><strong>3 months</strong> (recommended)</td><td>We win — 50% faster, same Phase 1 feature set.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>09</span>Where They Win &nbsp;·&nbsp; Where We Win</div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+
+        <div class="box-note amber">
+          <span class="bn-title">Where the competitor wins</span>
+          <strong>Buzzword density.</strong> Their proposal reads as "enterprise" — phrases like
+          "Comprehensive Flutter Mobile Cross-Platform Ecosystem", "Centralized Web Administration Control Console",
+          "Hardened dedicated VPS", "Microservices Integration". Some clients buy this perception.<br><br>
+          <strong>Perceived thoroughness.</strong> A 6-month plan reads as "careful" to a non-technical buyer.<br><br>
+          <strong>No Islamic-domain content visible</strong> in the screenshot — their proposal looks like a generic LMS template.
+        </div>
+
+        <div class="box-note green">
+          <span class="bn-title">Where CodeOx wins</span>
+          <strong>Speed:</strong> 3 months vs 6 — they see value in week 6, not month 6.<br>
+          <strong>TCO:</strong> 1 managed platform vs VPS + Firebase + AWS — lower monthly bill, no devops hire.<br>
+          <strong>Right data model:</strong> Postgres for relational school data, not MongoDB.<br>
+          <strong>Phased payments:</strong> 4 milestone payments tied to working features, not a 6-month lump.<br>
+          <strong>Islamic-domain ready:</strong> Hifdh, Salah, Adhkar, Musabaqa, EN+ML already mapped in our scope.<br>
+          <strong>No vendor lock-in:</strong> standard Postgres + Next.js + React Native — portable, hire-able anywhere.<br>
+          <strong>Local communication:</strong> direct in Malayalam, no agency layers.
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>10</span>The Counter-Pitch — 6 Points to Lead With</div>
+      <table class="feat-table">
+        <thead><tr><th style="width:6%">#</th><th>Point</th><th>One-line proof</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1</strong></td><td><strong>3 months vs 6 months</strong></td><td>Same Phase 1 features delivered in half the time. Value starts week 6.</td></tr>
+          <tr><td><strong>2</strong></td><td><strong>One hosting bill vs three</strong></td><td>Vercel + Supabase. Theirs needs Firebase + AWS + dedicated VPS + a devops engineer.</td></tr>
+          <tr><td><strong>3</strong></td><td><strong>Right tool for school data</strong></td><td>Postgres (relational) — built for students, classes, marks, attendance. MongoDB is for unstructured documents.</td></tr>
+          <tr><td><strong>4</strong></td><td><strong>Phased milestone payments</strong></td><td>Four payments tied to working deliverables, not one 6-month upfront commitment.</td></tr>
+          <tr><td><strong>5</strong></td><td><strong>Islamic-domain-ready</strong></td><td>Hifdh, Salah, Adhkar, Musabaqa, EN + ML already in our roadmap — we didn't need to be told.</td></tr>
+          <tr><td><strong>6</strong></td><td><strong>You own the code</strong></td><td>Standard stack — portable, hire any Next.js / React Native dev. No lock-in to custom microservices.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 5 of 6</div>
+    <div class="if-right">Internal · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 6 — RECOMMENDED STRATEGY + NEXT STEPS
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Recommended Strategy · Timeline · Next Steps</div>
+    <div class="ih-sub">AQL-SCOPE-2026-01 · Internal</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>11</span>Phase 1 — Key Numbers</div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-num">~52</div><div class="kpi-lbl">Features in Phase 1</div></div>
+        <div class="kpi"><div class="kpi-num">3</div><div class="kpi-lbl">Apps to deliver</div></div>
+        <div class="kpi"><div class="kpi-num">3 mo</div><div class="kpi-lbl">Recommended timeline</div></div>
+        <div class="kpi"><div class="kpi-num">50%</div><div class="kpi-lbl">Faster than competing quote</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>12</span>Timeline Recommendation — Quote 3 Months, Not 2</div>
+      <div class="box-note amber">
+        <span class="bn-title">Honest assessment</span>
+        The verbal "2 months" given to the client is <strong>too aggressive</strong> for the locked ✅ list
+        plus the round-2 chat addition. Realistic delivery is 3 months.
+        Reframe to the client as: <em>"On closer review of the full ✅ list and the new chat feature, we are committing
+        3 months for production-ready delivery — still 50% faster than the alternative quote."</em>
+        Half their timeline beats a 2-month promise that slips.
+      </div>
+      <div class="box-note green" style="margin-top:8px;">
+        <span class="bn-title">Phase 1 Milestone Plan (3 months / 4 milestones)</span>
+        <strong>M1 (week 3):</strong> Auth, role-based access, student profile, academic calendar, notifications skeleton.<br>
+        <strong>M2 (week 6):</strong> Attendance, homework + submissions, teacher portal core, push notifications live.<br>
+        <strong>M3 (week 9):</strong> Notes / materials, exam timetable + marks + report cards, certificates, admission form, leave application, 1:1 chat.<br>
+        <strong>M4 (week 12):</strong> Multi-language polish, desktop responsive pass, app store submission, training + handover.
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>13</span>Final Phase Roadmap</div>
+      <table class="feat-table">
+        <thead><tr><th style="width:14%">Phase</th><th>Goal</th><th style="width:18%">Timeline</th><th style="width:14%">Features</th></tr></thead>
+        <tbody>
+          <tr><td class="mod">Phase 1 — MVP</td><td>Launch a working school platform — core operations + chat + EN/ML + desktop</td><td>3 months</td><td>~52</td></tr>
+          <tr><td class="mod">Phase 2 — Engagement + Islamic core</td><td>Live class integration, online exams, online fee payment, Quran / Salah / Adhkar, Musabaqa</td><td>2–3 months</td><td>~30</td></tr>
+          <tr><td class="mod">Phase 3 — Polish</td><td>Parent ↔ Teacher chat, support ticketing, advanced analytics</td><td>2 months</td><td>~10</td></tr>
+          <tr><td class="mod">Phase 4 — Future</td><td>AI homework assistant, AI exam paper generator, predictive analytics</td><td>TBD</td><td>3+</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="rec-box">
+        <div class="rec-title">Recommended Next Steps</div>
+        <div class="rec-body">Six actions to convert this analysis into a signed engagement.</div>
+        <div class="rec-steps">
+          <div class="rec-step"><div class="sn">1</div><div class="st">Send the <strong>4 open clarifications</strong> (Q1 parent access · Q2 fees · Q3 Islamic deferral · Q4 region) — block the proposal until answered.</div></div>
+          <div class="rec-step"><div class="sn">2</div><div class="st"><strong>Reframe the timeline to 3 months</strong> in the client message — honest delivery, still half the competitor's quote.</div></div>
+          <div class="rec-step"><div class="sn">3</div><div class="st">Probe in next call — <em>"Did the other vendor cover Islamic features (Hifdh, Salah, Adhkar) in Phase 1?"</em> If no → strong differentiator.</div></div>
+          <div class="rec-step"><div class="sn">4</div><div class="st">Ask the client (politely) about the alternate vendor's price range — informs our positioning &amp; pricing strategy.</div></div>
+          <div class="rec-step"><div class="sn">5</div><div class="st">Build the client-facing proposal HTML using this analysis as the base — lead with the <strong>6-point counter-pitch</strong> and the 4-milestone Phase 1 plan.</div></div>
+          <div class="rec-step"><div class="sn">6</div><div class="st">Include the <strong>scope-flexibility clause</strong> (fortnightly review, &lt;1-day items absorbed, larger items estimated or queued to P2) to handle the "idayil parayaamallolle" door.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pills">
+      <span class="pill">Mobile · React Native</span>
+      <span class="pill">Web · Next.js</span>
+      <span class="pill">Backend · Supabase</span>
+      <span class="pill">3 months · 4 milestones</span>
+      <span class="pill">~52 features in Phase 1</span>
+      <span class="pill">EN + ML</span>
+      <span class="pill">Mobile + Tablet + Desktop</span>
+      <span class="pill">Islamic-domain ready</span>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437 · shabeeb.k@code-ox.com</div>
+    <div class="if-page">Page 6 of 6</div>
+    <div class="if-right">Internal · Al Qalam Learning</div>
+  </div>
+</div>
+
+</body>
+</html>

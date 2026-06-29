@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al Qalam Learning — Mobile &amp; Web App Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green:        #E11D48;
+  --green-dark:   #0F2057;
+  --green-mid:    #F43F5E;
+  --green-light:  #FFE4E6;
+  --green-pale:   #FFF1F2;
+  --gold:         #B45309;
+  --gold-light:   #FDE68A;
+  --gold-pale:    #FEF3C7;
+  --blue:         #1D4ED8;
+  --blue-pale:    #EFF6FF;
+  --amber:        #D97706;
+  --red:          #B91C1C;
+  --ink:          #0F172A;
+  --ink-soft:     #475569;
+  --border:       #E2E8F0;
+  --stripe:       #F8FAFC;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #CBD5E1;
+  color: var(--ink);
+  font-size: 10px;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+@media print {
+  body { background: none; }
+  .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+}
+@page { size: A4; margin: 0; }
+
+/* ── COVER ── */
+.cover { background: #fff; min-height: 297mm; display: flex; flex-direction: column; border-top: 5px solid var(--green-dark); padding: 36px 40px 32px; position: relative; }
+.cover::after {
+  content: "";
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle at top left, rgba(225, 29, 72, 0.05) 0%, transparent 55%);
+  border-top-left-radius: 100%;
+  z-index: 0;
+}
+.cover > * { position: relative; z-index: 1; }
+.cover-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+.logo-tagline { font-size: 8px; color: var(--ink-soft); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 4px; }
+.cover-date-badge { background: var(--green-pale); border: 1px solid var(--green-light); border-radius: 6px; padding: 6px 12px; text-align: right; }
+.cover-date-badge .label { font-size: 7.5px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.5px; }
+.cover-date-badge .val   { font-size: 10px; font-weight: 600; color: var(--green-dark); }
+.cover-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 0 24px; }
+.cover-tag { display: inline-block; background: var(--green-light); color: var(--green-dark); font-size: 8px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; margin-bottom: 16px; width: fit-content; }
+.cover-title { font-size: 34px; font-weight: 900; color: var(--green-dark); line-height: 1.05; letter-spacing: -1.2px; margin-bottom: 12px; }
+.cover-subtitle { font-size: 11.5px; color: var(--ink-soft); font-weight: 400; margin-bottom: 28px; line-height: 1.65; max-width: 480px; }
+.cover-divider { width: 56px; height: 3px; background: var(--green-mid); border-radius: 2px; margin-bottom: 28px; }
+.cover-cred { background: var(--green-pale); border: 1px solid var(--green-light); border-left: 4px solid var(--green); border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 9px; color: var(--green-dark); line-height: 1.65; }
+.cover-cred strong { font-weight: 700; }
+.meta-table { width: 100%; border-collapse: collapse; }
+.meta-table td { padding: 7.5px 12px; font-size: 9.5px; border-bottom: 1px solid var(--border); }
+.meta-table td:first-child { width: 34%; color: var(--ink-soft); font-weight: 500; background: var(--stripe); }
+.meta-table td:last-child { color: var(--ink); font-weight: 600; }
+.meta-table tr:first-child td { border-top: 1px solid var(--border); }
+.cover-footer-note { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); font-size: 7.5px; color: var(--ink-soft); line-height: 1.5; }
+
+/* ── INNER LAYOUT ── */
+.inner-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; border-bottom: 1px solid var(--border); background: var(--green-pale); flex-shrink: 0; }
+.ih-title { font-size: 8px; font-weight: 700; color: var(--green-dark); letter-spacing: 0.3px; }
+.ih-sub   { font-size: 7.5px; color: var(--ink-soft); }
+.inner-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding: 9px 28px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.if-left  { font-size: 7.5px; color: var(--ink-soft); }
+.if-page  { font-size: 7.5px; color: var(--ink-soft); font-weight: 600; }
+.if-right { font-size: 7.5px; color: var(--green-dark); font-weight: 600; }
+.content  { flex: 1; padding: 18px 28px; display: flex; flex-direction: column; gap: 15px; }
+
+/* ── HEADINGS ── */
+.sec-title { font-size: 12px; font-weight: 800; color: var(--green-dark); letter-spacing: -0.3px; padding-bottom: 6px; border-bottom: 2px solid var(--green-light); margin-bottom: 9px; }
+.sec-title span { display: inline-block; background: var(--green-dark); color: #fff; font-size: 7.5px; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-right: 7px; vertical-align: middle; }
+
+/* ── APP CARDS ── */
+.app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.app-card { border: 1px solid var(--border); border-radius: 10px; padding: 10px 11px; background: #fff; display: flex; flex-direction: column; gap: 5px; }
+.app-card .ac-head { display: flex; align-items: center; gap: 7px; }
+.app-card .ac-icon { width: 28px; height: 28px; background: var(--green-pale); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.app-card .ac-name { font-size: 9px; font-weight: 800; color: var(--green-dark); line-height: 1.2; }
+.app-card .ac-tech { font-size: 6.8px; color: var(--ink-soft); margin-top: 1px; line-height: 1.3; }
+.app-card .ac-users { font-size: 7px; color: var(--ink); line-height: 1.3; }
+.app-card .ac-users strong { color: var(--green-dark); }
+.app-card .ac-desc { font-size: 7px; color: var(--ink-soft); line-height: 1.45; }
+
+/* ── BENTO GRID ── */
+.bento { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(104px, auto); gap: 9px; }
+
+/* ── DAY JOURNEY (horizontal timeline) ── */
+.journey { background: linear-gradient(135deg, var(--green-pale) 0%, #fff 65%); border: 1px solid var(--green-light); border-radius: 12px; padding: 14px 18px 16px; }
+.journey-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.journey-title { font-size: 11px; font-weight: 800; color: var(--green-dark); letter-spacing: -0.2px; }
+.journey-sub { font-size: 7.5px; color: var(--ink-soft); font-weight: 500; }
+.journey-track { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; position: relative; padding-top: 4px; }
+.journey-track::before { content: ""; position: absolute; top: 18px; left: 6%; right: 6%; height: 2px; background: var(--green-light); border-radius: 2px; z-index: 0; }
+.j-step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; padding: 0 3px; }
+.j-time { font-size: 6.5px; font-weight: 800; color: var(--green); letter-spacing: 0.5px; text-transform: uppercase; }
+.j-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--green-dark); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; line-height: 1; border: 3px solid #fff; box-shadow: 0 1px 4px rgba(15,32,87,0.18); }
+.j-dot.alt { background: var(--green-mid); }
+.j-action { font-size: 8px; font-weight: 800; color: var(--green-dark); line-height: 1.2; margin-top: 2px; }
+.j-detail { font-size: 6.8px; color: var(--ink-soft); line-height: 1.4; }
+
+/* ── ADMIN COMMAND ROW ── */
+.cmd-row { background: var(--green-dark); color: #fff; border-radius: 12px; padding: 16px 20px; position: relative; overflow: hidden; }
+.cmd-row::after { content: ""; position: absolute; right: -60px; bottom: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(244,63,94,0.3) 0%, transparent 70%); }
+.cmd-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 13px; position: relative; z-index: 1; }
+.cmd-title { font-size: 11px; font-weight: 800; color: #fff; letter-spacing: -0.2px; }
+.cmd-sub { font-size: 7.5px; color: rgba(255,255,255,0.65); font-weight: 500; }
+.cmd-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; position: relative; z-index: 1; }
+.cmd-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 9px; padding: 11px 12px; }
+.cmd-icon { width: 28px; height: 28px; background: rgba(244,63,94,0.2); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 14px; margin-bottom: 7px; }
+.cmd-stat { font-size: 16px; font-weight: 900; color: var(--green-mid); letter-spacing: -0.4px; line-height: 1; }
+.cmd-stat .cmd-unit { font-size: 8.5px; color: rgba(255,255,255,0.6); font-weight: 600; margin-left: 3px; }
+.cmd-label { font-size: 8px; color: #fff; font-weight: 700; margin-top: 6px; line-height: 1.2; }
+.cmd-desc { font-size: 6.8px; color: rgba(255,255,255,0.6); line-height: 1.4; margin-top: 2px; }
+.bento-card { border: 1px solid var(--border); border-radius: 12px; padding: 11px 12px; background: #fff; display: flex; flex-direction: column; gap: 5px; position: relative; overflow: hidden; }
+.bento-card.hero  { grid-column: span 2; grid-row: span 2; background: linear-gradient(135deg, var(--blue-pale) 0%, #fff 75%); border-color: var(--green-light); }
+.bento-card.wide  { grid-column: span 2; }
+.bento-card.tall  { grid-row: span 2; }
+.bento-head { display: flex; align-items: center; gap: 8px; }
+.bento-icon { width: 30px; height: 30px; background: var(--green-light); color: var(--green-dark); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.bento-card.hero .bento-icon { width: 38px; height: 38px; font-size: 18px; background: var(--green-dark); color: #fff; }
+.bento-title { font-size: 9px; font-weight: 800; color: var(--green-dark); line-height: 1.2; letter-spacing: -0.1px; }
+.bento-card.hero .bento-title { font-size: 12px; letter-spacing: -0.3px; }
+.bento-count { position: absolute; top: 9px; right: 11px; font-size: 6.5px; font-weight: 800; color: var(--green-dark); background: var(--green-light); padding: 2px 7px; border-radius: 10px; letter-spacing: 0.3px; }
+.bento-card.hero .bento-count { background: var(--green-dark); color: #fff; top: 11px; right: 13px; }
+.bento-desc { font-size: 7.5px; color: var(--ink-soft); line-height: 1.5; }
+.bento-card.hero .bento-desc { font-size: 8.5px; color: var(--ink); font-weight: 500; }
+.bento-feats { list-style: none; display: flex; flex-direction: column; gap: 2px; margin-top: 3px; }
+.bento-feats li { font-size: 7px; color: var(--ink); padding-left: 9px; position: relative; line-height: 1.5; }
+.bento-feats li::before { content: '›'; position: absolute; left: 0; color: var(--green-mid); font-weight: 700; }
+.bento-card.hero .bento-feats li { font-size: 7.5px; }
+.bento-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
+.bento-tag { background: var(--green-light); color: var(--green-dark); font-size: 6.5px; font-weight: 700; padding: 2px 6px; border-radius: 8px; letter-spacing: 0.1px; }
+
+/* ── PHONE MOCKUP INSIDE HERO ── */
+.bento-mock { background: var(--green-dark); border-radius: 10px; padding: 9px 11px; color: #fff; margin-top: 5px; position: relative; overflow: hidden; }
+.bento-mock::before { content: ""; position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(244,63,94,0.35) 0%, transparent 70%); }
+.bm-status { font-size: 6.5px; color: rgba(255,255,255,0.55); letter-spacing: 0.4px; text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
+.bm-greet { font-size: 7px; color: rgba(255,255,255,0.7); }
+.bm-name { font-size: 11px; font-weight: 800; color: #fff; letter-spacing: -0.2px; }
+.bm-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
+.bm-stat { background: rgba(255,255,255,0.08); border-radius: 6px; padding: 5px 7px; }
+.bm-stat-val { font-size: 13px; font-weight: 900; color: var(--green-mid); line-height: 1.1; }
+.bm-stat-lbl { font-size: 6px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 1px; font-weight: 600; }
+.bm-next { font-size: 6.5px; color: rgba(255,255,255,0.7); margin-top: 6px; padding-top: 5px; border-top: 1px solid rgba(255,255,255,0.1); }
+.bm-next strong { color: #fff; font-weight: 700; }
+.bm-file-row { display: flex; gap: 4px; margin-top: 5px; }
+.bm-file { background: rgba(255,255,255,0.08); border: 1px dashed rgba(255,255,255,0.2); border-radius: 5px; padding: 4px 6px; font-size: 6px; color: rgba(255,255,255,0.7); flex: 1; text-align: center; }
+.bm-btn { background: var(--green-mid); color: #fff; font-size: 8px; font-weight: 800; text-align: center; padding: 5px; border-radius: 6px; margin-top: 6px; letter-spacing: 0.5px; }
+.bm-comment { background: rgba(244,63,94,0.15); border-left: 2px solid var(--green-mid); padding: 4px 7px; margin-top: 5px; font-size: 6.5px; color: rgba(255,255,255,0.85); border-radius: 3px; line-height: 1.5; font-style: italic; }
+.bm-bubble { font-size: 7px; padding: 5px 8px; border-radius: 10px; max-width: 80%; line-height: 1.4; margin-top: 4px; }
+.bm-bubble.them { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); border-bottom-left-radius: 2px; }
+.bm-bubble.me { background: var(--green-mid); color: #fff; align-self: flex-end; margin-left: auto; border-bottom-right-radius: 2px; font-weight: 500; }
+.bm-bubbles { display: flex; flex-direction: column; }
+.bm-field { font-size: 7px; color: rgba(255,255,255,0.85); padding: 4px 7px; background: rgba(255,255,255,0.06); border-radius: 4px; margin-top: 3px; }
+.bm-field strong { color: #fff; font-weight: 700; }
+.bm-badge { display: inline-block; background: var(--green-mid); color: #fff; font-size: 6px; font-weight: 800; padding: 2px 7px; border-radius: 8px; letter-spacing: 0.5px; margin-top: 6px; text-transform: uppercase; }
+
+/* legacy alias kept for any older grids */
+.feat-modules { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.feat-mod { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.feat-mod-head { display: flex; align-items: center; gap: 7px; background: var(--green-pale); padding: 7px 11px; border-bottom: 1px solid var(--green-light); }
+.feat-mod-icon { font-size: 13px; }
+.feat-mod-name { font-size: 9px; font-weight: 800; color: var(--green-dark); }
+.feat-mod-body { padding: 8px 11px; }
+.feat-mod-body ul { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.feat-mod-body ul li { font-size: 7.5px; color: var(--ink); padding-left: 12px; position: relative; line-height: 1.45; }
+.feat-mod-body ul li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+
+/* ── STACK TABLE ── */
+.stack-table { width: 100%; border-collapse: collapse; }
+.stack-table th { padding: 6px 10px; text-align: left; font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--green-dark); border-bottom: 2px solid var(--border); background: var(--stripe); }
+.stack-table td { padding: 7px 10px; font-size: 8px; vertical-align: top; border-bottom: 1px solid var(--border); line-height: 1.45; }
+.stack-table tr:nth-child(even) td { background: var(--stripe); }
+.stack-table td:first-child { color: var(--ink-soft); font-weight: 600; width: 22%; }
+.stack-table td:nth-child(2) { color: var(--ink); font-weight: 600; }
+
+/* ── BOXES ── */
+.box-note { border-radius: 8px; padding: 10px 14px; font-size: 8.5px; line-height: 1.6; }
+.box-note.green { background: var(--green-pale); border: 1px solid var(--green-light); border-left: 4px solid var(--green); color: var(--green-dark); }
+.box-note.gold { background: var(--gold-pale); border: 1px solid var(--gold-light); border-left: 4px solid var(--gold); color: #78350F; }
+.box-note.blue { background: var(--blue-pale); border: 1px solid #BFDBFE; border-left: 4px solid var(--blue); color: #1E3A8A; }
+.box-note strong { font-weight: 700; }
+.box-note .bn-title { font-size: 9px; font-weight: 800; margin-bottom: 4px; display: block; }
+
+/* ── MILESTONES ── */
+.milestone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.milestone { border: 1.5px solid var(--green-light); border-radius: 10px; padding: 12px 12px 10px; background: #fff; display: flex; flex-direction: column; gap: 6px; position: relative; }
+.milestone-num { width: 26px; height: 26px; background: var(--green-dark); color: #fff; border-radius: 50%; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.milestone-week { font-size: 7px; color: var(--green); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.milestone-name { font-size: 9.5px; font-weight: 800; color: var(--green-dark); line-height: 1.2; }
+.milestone-pct { font-size: 14px; font-weight: 900; color: var(--green-dark); margin-top: 2px; }
+.milestone-amt { font-size: 8px; color: var(--ink-soft); font-weight: 600; }
+.milestone-deliv { font-size: 7.5px; color: var(--ink); line-height: 1.5; margin-top: 4px; }
+
+/* ── PRICING ── */
+.price-box { background: var(--green-dark); color: #fff; border-radius: 12px; padding: 20px 24px; text-align: center; }
+.price-label { font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,0.75); margin-bottom: 6px; font-weight: 600; }
+.price-amount { font-size: 38px; font-weight: 900; letter-spacing: -1.2px; line-height: 1; margin-bottom: 4px; }
+.price-amount .cur { font-size: 18px; font-weight: 700; margin-right: 6px; opacity: 0.85; vertical-align: middle; }
+.price-note { font-size: 9px; color: rgba(255,255,255,0.85); font-weight: 500; }
+.price-sub { font-size: 7.5px; color: rgba(255,255,255,0.65); margin-top: 6px; }
+
+.payment-table { width: 100%; border-collapse: collapse; }
+.payment-table th { padding: 8px 10px; text-align: left; font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--green-dark); border-bottom: 2px solid var(--border); background: var(--stripe); }
+.payment-table td { padding: 8px 10px; font-size: 8.5px; vertical-align: middle; border-bottom: 1px solid var(--border); line-height: 1.45; }
+.payment-table tr:nth-child(even) td { background: var(--stripe); }
+.payment-table .num-col { width: 8%; font-weight: 700; color: var(--green-dark); }
+.payment-table .ms-col { color: var(--ink); font-weight: 600; }
+.payment-table .when-col { width: 18%; color: var(--ink-soft); }
+.payment-table .pct-col { width: 12%; color: var(--green-dark); font-weight: 800; text-align: center; }
+.payment-table .amt-col { width: 16%; color: var(--ink); font-weight: 700; text-align: right; }
+.payment-table tr.total-row td { font-weight: 800; color: var(--green-dark); background: var(--green-pale); border-bottom: none; padding: 10px; font-size: 9.5px; }
+
+/* ── INCLUDED / EXCLUDED ── */
+.inc-exc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.inc-card, .exc-card { border-radius: 8px; padding: 11px 14px; }
+.inc-card { background: var(--green-pale); border: 1px solid var(--green-light); }
+.exc-card { background: #FEF2F2; border: 1px solid #FECACA; }
+.inc-card .iec-title, .exc-card .iec-title { font-size: 9.5px; font-weight: 800; margin-bottom: 7px; }
+.inc-card .iec-title { color: var(--green-dark); }
+.exc-card .iec-title { color: var(--red); }
+.inc-card ul, .exc-card ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.inc-card ul li, .exc-card ul li { font-size: 7.5px; color: var(--ink); padding-left: 13px; position: relative; line-height: 1.5; }
+.inc-card ul li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+.exc-card ul li::before { content: '✕'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+
+/* ── WHY US ── */
+.why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.why-card { display: flex; gap: 10px; padding: 11px 13px; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+.why-num { width: 28px; height: 28px; border-radius: 50%; background: var(--green-dark); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.why-body .why-title { font-size: 9.5px; font-weight: 800; color: var(--green-dark); margin-bottom: 3px; line-height: 1.2; }
+.why-body .why-desc { font-size: 7.5px; color: var(--ink-soft); line-height: 1.55; }
+
+/* ── REC BOX ── */
+.rec-box { background: var(--green-dark); color: #fff; border-radius: 10px; padding: 14px 18px; }
+.rec-title { font-size: 11px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 5px; }
+.rec-body  { font-size: 8.5px; color: rgba(255,255,255,0.82); line-height: 1.6; margin-bottom: 10px; }
+.rec-steps { display: flex; flex-direction: column; gap: 5px; }
+.rec-step  { display: flex; align-items: flex-start; gap: 9px; }
+.sn { width: 18px; height: 18px; border-radius: 50%; background: var(--green-mid); color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.st { font-size: 8.5px; color: rgba(255,255,255,0.85); line-height: 1.5; padding-top: 1px; }
+.st strong { color: #fff; }
+
+/* ── ARCHITECTURE DIAGRAM ── */
+.arch { display: flex; flex-direction: column; gap: 0; align-items: stretch; }
+.arch-layer { background: #fff; border: 1px solid var(--green-light); border-radius: 12px; padding: 10px 14px 12px; }
+.arch-layer.dark { background: var(--green-dark); border-color: var(--green-dark); color: #fff; }
+.arch-layer-label { font-size: 6.5px; color: var(--green); font-weight: 800; letter-spacing: 0.7px; text-transform: uppercase; margin-bottom: 7px; }
+.arch-layer.dark .arch-layer-label { color: var(--green-mid); }
+.arch-layer-cards { display: grid; gap: 7px; }
+.arch-card { background: var(--green-pale); border: 1px solid var(--green-light); border-radius: 8px; padding: 8px 9px; display: flex; align-items: center; gap: 8px; }
+.arch-card-icon { width: 28px; height: 28px; background: #fff; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.arch-card-text { flex: 1; min-width: 0; }
+.arch-card-name { font-size: 8.5px; font-weight: 800; color: var(--green-dark); line-height: 1.2; }
+.arch-card-sub { font-size: 6.5px; color: var(--ink-soft); margin-top: 2px; line-height: 1.3; }
+.arch-layer.dark .arch-card { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
+.arch-layer.dark .arch-card-icon { background: var(--green-mid); }
+.arch-layer.dark .arch-card-name { color: #fff; }
+.arch-layer.dark .arch-card-sub { color: rgba(255,255,255,0.65); }
+.arch-conn { height: 18px; display: flex; align-items: center; justify-content: center; position: relative; margin: 3px 0; }
+.arch-conn::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: var(--green-mid); transform: translateX(-50%); }
+.arch-conn-label { background: #fff; border: 1px solid var(--green-light); color: var(--green-dark); font-size: 6.5px; font-weight: 800; padding: 3px 9px; border-radius: 10px; position: relative; z-index: 1; letter-spacing: 0.4px; text-transform: uppercase; }
+.arch-foundation { background: var(--green-dark); color: #fff; border-radius: 12px; padding: 11px 16px; text-align: center; font-size: 8px; font-weight: 500; letter-spacing: 0.2px; }
+.arch-foundation strong { font-weight: 800; color: #fff; }
+.arch-foundation .af-label { font-size: 6.5px; color: var(--green-mid); font-weight: 800; letter-spacing: 0.7px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+/* ── SECURITY GRID ── */
+.sec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.sec-card { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; background: #fff; }
+.sec-card-icon { width: 28px; height: 28px; background: var(--green-light); color: var(--green-dark); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; margin-bottom: 6px; }
+.sec-card-name { font-size: 8.5px; font-weight: 800; color: var(--green-dark); margin-bottom: 3px; line-height: 1.2; }
+.sec-card-desc { font-size: 7px; color: var(--ink-soft); line-height: 1.5; }
+
+/* ── RELIABILITY STAT BAND ── */
+.rel-band { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.rel-stat { background: var(--green-pale); border: 1px solid var(--green-light); border-radius: 8px; padding: 10px 11px; text-align: center; }
+.rel-num { font-size: 16px; font-weight: 900; color: var(--green-dark); line-height: 1; letter-spacing: -0.4px; }
+.rel-lbl { font-size: 6.8px; color: var(--ink-soft); margin-top: 5px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
+
+/* ── DESIGN PHASE ── */
+.design-block { background: linear-gradient(135deg, #fff 0%, var(--green-pale) 100%); border: 1px solid var(--green-light); border-radius: 12px; padding: 14px 16px 16px; }
+.design-head { display: flex; align-items: center; gap: 9px; margin-bottom: 11px; }
+.design-figma { background: var(--green-dark); color: #fff; font-size: 7px; font-weight: 800; padding: 4px 9px; border-radius: 12px; letter-spacing: 0.6px; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; }
+.design-figma::before { content: "✦"; color: var(--green-mid); font-size: 9px; }
+.design-intro { font-size: 8.5px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 9px; }
+.design-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.design-card { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; background: #fff; }
+.design-icon { width: 28px; height: 28px; background: var(--green-light); color: var(--green-dark); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; margin-bottom: 6px; }
+.design-title { font-size: 9px; font-weight: 800; color: var(--green-dark); margin-bottom: 3px; line-height: 1.2; }
+.design-desc { font-size: 7px; color: var(--ink-soft); line-height: 1.5; }
+
+/* ── DESIGN SYSTEM PREVIEW ── */
+.design-preview { margin-top: 13px; padding-top: 13px; border-top: 1px dashed var(--green-light); display: grid; grid-template-columns: 1.3fr 1fr 0.9fr; gap: 10px; }
+.dp-section { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+.dp-label { font-size: 6.5px; color: var(--green); font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 7px; }
+.dp-swatches { display: flex; gap: 5px; }
+.dp-swatch { flex: 1; height: 36px; border-radius: 7px; position: relative; overflow: hidden; }
+.dp-swatch-name { position: absolute; bottom: 3px; left: 5px; font-size: 6px; font-weight: 800; letter-spacing: 0.2px; }
+.dp-hex { font-size: 6px; color: var(--ink-soft); margin-top: 6px; font-family: 'SF Mono', Menlo, monospace; letter-spacing: 0.2px; }
+.dp-typo-h { font-size: 15px; font-weight: 900; color: var(--green-dark); letter-spacing: -0.5px; line-height: 1; margin-bottom: 4px; }
+.dp-typo-b { font-size: 8px; color: var(--ink); line-height: 1.45; }
+.dp-typo-meta { font-size: 6px; color: var(--ink-soft); margin-top: 5px; font-family: 'SF Mono', Menlo, monospace; }
+.dp-comp { display: flex; flex-direction: column; gap: 7px; align-items: flex-start; }
+.dp-btn-row { display: flex; gap: 5px; }
+.dp-btn { background: var(--green-dark); color: #fff; font-size: 7px; font-weight: 800; padding: 5px 11px; border-radius: 6px; letter-spacing: 0.4px; }
+.dp-btn-sec { background: #fff; color: var(--green-dark); border: 1.5px solid var(--green-dark); font-size: 7px; font-weight: 800; padding: 3.5px 9.5px; border-radius: 6px; letter-spacing: 0.4px; }
+.dp-tag-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.dp-tag { background: var(--green-light); color: var(--green-dark); font-size: 6.5px; font-weight: 700; padding: 2.5px 7px; border-radius: 10px; }
+
+/* ── KPI ── */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.kpi { background: var(--green-pale); border: 1px solid var(--green-light); border-radius: 8px; padding: 9px 11px; text-align: center; }
+.kpi-num { font-size: 18px; font-weight: 900; color: var(--green-dark); line-height: 1.1; }
+.kpi-lbl { font-size: 7px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 3px; font-weight: 600; }
+
+/* ── SIGNATURE ── */
+.sig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 12px; }
+.sig-block { border-top: 1.5px solid var(--ink); padding-top: 8px; }
+.sig-name { font-size: 9.5px; font-weight: 800; color: var(--ink); }
+.sig-role { font-size: 8px; color: var(--ink-soft); margin-top: 2px; }
+.sig-line { font-size: 8px; color: var(--ink-soft); margin-top: 5px; }
+
+/* ── PILL ROW ── */
+.pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.pill { background: var(--green-light); color: var(--green-dark); font-size: 7.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — COVER
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-header">
+      <div>
+        <img src="codeox-logo.png" alt="CodeOx" style="height:32px; width:auto; margin-bottom:4px; display:block; image-rendering:-webkit-optimize-contrast;">
+        <div class="logo-tagline">Digital Transformation Partner</div>
+      </div>
+      <div class="cover-date-badge">
+        <div class="label">Prepared</div>
+        <div class="val">29 June 2026</div>
+      </div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-tag">Mobile &amp; Web App — Solution Proposal</div>
+      <div class="cover-title">A Complete Learning<br>Platform for Al Qalam.</div>
+      <div class="cover-subtitle">
+        A purpose-built mobile and web platform for Al Qalam Learning — bringing students, teachers,
+        and administrators onto one unified system. Built for speed of delivery, low operating cost,
+        and the dignity an Islamic learning institute deserves.
+      </div>
+
+      <div class="cover-divider"></div>
+
+      <!-- Client logo -->
+      <div style="margin:6px 0 18px; display:flex; align-items:center; gap:18px;">
+        <img src="alqalam-logo.png" alt="Al Qalam Learning" style="height:56px; object-fit:contain; display:block;">
+      </div>
+
+      <div class="cover-cred">
+        <strong>Built for the mission of "Nurturing Upon Salafi Tarbiyah" — founded by dedicated Salafi sisters.</strong>
+        This proposal carries Al Qalam's four programmes — <em>Academic with Islamic Course</em>,
+        <em>Madrasa with Hifdh</em>, <em>Hifdh Only</em>, and <em>Individual Tuition</em> — into one
+        digital platform: a Mobile App (iOS + Android), an Admin &amp; Teacher Web Portal, and Desktop
+        access for students. The goal is the same as yours — to prepare students for both this world and
+        the Hereafter, through technology that respects the depth of what is being taught.
+      </div>
+
+      <table class="meta-table">
+        <tr><td>Client</td>            <td>Al Qalam Learning</td></tr>
+        <tr><td>Prepared by</td>       <td>Shabeeb K · CodeOx · +966 53 571 6437 · shabeeb.k@code-ox.com</td></tr>
+        <tr><td>Our Portfolio</td>     <td>my-docs-sigma-beige.vercel.app/portfolio</td></tr>
+        <tr><td>Scope</td>             <td>Mobile App (iOS + Android) · Web Portal (Admin + Student) · Backend</td></tr>
+        <tr><td>Roles Supported</td>   <td>Student · Teacher · Admin</td></tr>
+        <tr><td>Languages</td>         <td>English &amp; Malayalam (bilingual UI)</td></tr>
+        <tr><td>Phase 1 Features</td>  <td>52+ features across 15 modules</td></tr>
+        <tr><td>Timeline</td>          <td>4 Months · 4 Build Phases · Production-ready delivery</td></tr>
+        <tr><td>Payment Terms</td>     <td>40% Advance · 40% on UAT Submission · 20% on Go-Live</td></tr>
+        <tr><td>Investment</td>        <td>₹ 2,50,000 (All-inclusive, Phase 1)</td></tr>
+        <tr><td>Document Ref</td>      <td>AQL-PROP-2026-01 · Version 1.0</td></tr>
+      </table>
+    </div>
+
+    <div class="cover-footer-note">
+      Prepared exclusively for Al Qalam Learning and confidential. Pricing valid for 30 days from preparation date.
+      &copy; 2026 CodeOx. All rights reserved. &nbsp;·&nbsp; code-ox.com
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — WHAT YOU GET + APPS
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">What You Get · Three Apps · One Backend</div>
+    <div class="ih-sub">AQL-PROP-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>01</span>Project Summary</div>
+      <p style="font-size:9.5px; color:var(--ink-soft); line-height:1.7;">
+        Al Qalam Learning becomes a fully digital school — students view their schedule, homework,
+        attendance, and marks from a single mobile app. Teachers mark attendance, upload materials,
+        and communicate directly with students. Administrators run admissions, calendars, reports,
+        and broadcasts from a dedicated web console. All three roles share a single source of truth,
+        accessible on phone, tablet, and desktop.
+      </p>
+
+      <div class="kpi-row" style="margin-top:10px;">
+        <div class="kpi"><div class="kpi-num">3</div><div class="kpi-lbl">Apps Delivered</div></div>
+        <div class="kpi"><div class="kpi-num">52+</div><div class="kpi-lbl">Phase 1 Features</div></div>
+        <div class="kpi"><div class="kpi-num">15</div><div class="kpi-lbl">Functional Modules</div></div>
+        <div class="kpi"><div class="kpi-num">4</div><div class="kpi-lbl">Months to Launch</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>02</span>The Three Applications We Will Build</div>
+      <div class="app-grid">
+
+        <div class="app-card">
+          <div class="ac-head">
+            <div class="ac-icon">📱</div>
+            <div>
+              <div class="ac-name">Mobile App — iOS &amp; Android</div>
+              <div class="ac-tech">React Native · single codebase · tablet-ready</div>
+            </div>
+          </div>
+          <div class="ac-users"><strong>Users:</strong> Students &amp; Teachers</div>
+          <div class="ac-desc">
+            The daily-use app. Students see homework, attendance, schedule, materials, marks,
+            certificates, and chat with their teacher. Teachers mark attendance, upload work,
+            enter marks, send announcements — all from the phone.
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="ac-head">
+            <div class="ac-icon">🖥️</div>
+            <div>
+              <div class="ac-name">Admin &amp; Teacher Web Portal</div>
+              <div class="ac-tech">Next.js · runs on any browser · responsive</div>
+            </div>
+          </div>
+          <div class="ac-users"><strong>Users:</strong> School Admin, Principal, Teachers</div>
+          <div class="ac-desc">
+            The control room. Manage students, teachers, classes, admissions, academic calendar.
+            Enter exam marks, generate report cards, broadcast announcements, review attendance reports,
+            and approve leave requests at scale.
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="ac-head">
+            <div class="ac-icon">💻</div>
+            <div>
+              <div class="ac-name">Student Web Portal — Desktop</div>
+              <div class="ac-tech">Same web platform · student-facing routes</div>
+            </div>
+          </div>
+          <div class="ac-users"><strong>Users:</strong> Students (browser access)</div>
+          <div class="ac-desc">
+            For students who prefer a computer — same data as the mobile app, optimised for desktop.
+            Notes, homework submission, schedule, certificates, report cards, and chat — accessible
+            from any laptop or PC browser.
+          </div>
+        </div>
+
+        <div class="app-card" style="background:var(--stripe);">
+          <div class="ac-head">
+            <div class="ac-icon">🗄️</div>
+            <div>
+              <div class="ac-name">Shared Cloud Backend</div>
+              <div class="ac-tech">Node.js · Express · MongoDB · Cloud VPS</div>
+            </div>
+          </div>
+          <div class="ac-users"><strong>Powers:</strong> All three apps</div>
+          <div class="ac-desc">
+            One source of truth. Battle-tested Node.js API on a dedicated cloud VPS,
+            with MongoDB powering flexible data storage for students, classes, marks,
+            content and chat history. Real-time delivery via Socket.io.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>03</span>How the Platform Maps to Your 4 Programmes</div>
+      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:7px;">
+
+        <div style="border:1px solid var(--green-light); border-left:3px solid var(--green); border-radius:8px; padding:8px 10px; background:#fff;">
+          <div style="font-size:8.5px; font-weight:800; color:var(--green-dark); margin-bottom:4px; line-height:1.2;">Academic with Islamic Course</div>
+          <div style="font-size:7px; color:var(--ink-soft); line-height:1.5;">
+            Daily homework &amp; submissions · Attendance &amp; marks · Notes &amp; worksheets · Islamic study resources · Exam timetable &amp; report cards · Bilingual EN/ML UI.
+          </div>
+        </div>
+
+        <div style="border:1px solid var(--green-light); border-left:3px solid var(--green); border-radius:8px; padding:8px 10px; background:#fff;">
+          <div style="font-size:8.5px; font-weight:800; color:var(--green-dark); margin-bottom:4px; line-height:1.2;">Madrasa with Hifdh Course</div>
+          <div style="font-size:7px; color:var(--ink-soft); line-height:1.5;">
+            Madrasa schedule alongside academic timetable · Notes for both streams · Teacher feedback per subject · Workshop &amp; Musabaqa registrations · Achievement badges &amp; certificates.
+          </div>
+        </div>
+
+        <div style="border:1px solid var(--green-light); border-left:3px solid var(--green); border-radius:8px; padding:8px 10px; background:#fff;">
+          <div style="font-size:8.5px; font-weight:800; color:var(--green-dark); margin-bottom:4px; line-height:1.2;">Hifdh Only Course</div>
+          <div style="font-size:7px; color:var(--ink-soft); line-height:1.5;">
+            Dedicated Hifdh schedule · Ustadh-student 1:1 chat for revision · Attendance for Hifdh sessions · Event reminders &amp; holiday notices · Certificate downloads.
+          </div>
+        </div>
+
+        <div style="border:1px solid var(--green-light); border-left:3px solid var(--green); border-radius:8px; padding:8px 10px; background:#fff;">
+          <div style="font-size:8.5px; font-weight:800; color:var(--green-dark); margin-bottom:4px; line-height:1.2;">Individual Tuition</div>
+          <div style="font-size:7px; color:var(--ink-soft); line-height:1.5;">
+            One-on-one tutor-student thread · Personal homework upload &amp; feedback · Custom timetable per student · Private notes &amp; worksheets · Push reminders for sessions.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 2 of 10</div>
+    <div class="if-right">Confidential · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — DESIGN PHASE
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Design Phase · Figma Prototype Before a Single Line of Code</div>
+    <div class="ih-sub">AQL-PROP-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>04</span>Design Phase — What You Get Before a Line of Code Is Written</div>
+      <div class="design-block">
+        <div class="design-head">
+          <span class="design-figma">Designed in Figma</span>
+          <div style="font-size:8px; color:var(--ink-soft);">All design assets delivered as a Figma file you own and can edit.</div>
+        </div>
+        <div class="design-intro">
+          The design phase runs through the first 2–3 weeks of the project. Nothing gets coded until you sign off on the look,
+          feel, and flow. You see the entire app — every screen, every interaction — as a clickable Figma prototype before
+          development begins.
+        </div>
+        <div class="design-grid">
+
+          <div class="design-card">
+            <div class="design-icon">🎨</div>
+            <div class="design-title">Visual Design System</div>
+            <div class="design-desc">Brand colors, typography, spacing, iconography &amp; component library — the foundation every screen builds from.</div>
+          </div>
+
+          <div class="design-card">
+            <div class="design-icon">✏️</div>
+            <div class="design-title">Wireframes</div>
+            <div class="design-desc">Low-fidelity structure of every key screen — student, teacher, admin. Signed off before pixel-pushing begins.</div>
+          </div>
+
+          <div class="design-card">
+            <div class="design-icon">🖼️</div>
+            <div class="design-title">High-Fidelity Mockups</div>
+            <div class="design-desc">Pixel-perfect Figma frames for mobile, tablet &amp; desktop. Bilingual (EN + ML) layouts included.</div>
+          </div>
+
+          <div class="design-card">
+            <div class="design-icon">👆</div>
+            <div class="design-title">Interactive Prototype</div>
+            <div class="design-desc">A clickable Figma prototype — you tap through the entire app and feel it before a single line of code.</div>
+          </div>
+
+          <div class="design-card">
+            <div class="design-icon">📦</div>
+            <div class="design-title">Component Library &amp; Style Guide</div>
+            <div class="design-desc">Reusable Figma components &amp; documented style guide — handed off to development with zero ambiguity.</div>
+          </div>
+
+          <div class="design-card">
+            <div class="design-icon">🔁</div>
+            <div class="design-title">Two Revision Rounds</div>
+            <div class="design-desc">Feedback cycles built into the design phase — we iterate with you until the look &amp; flow are signed off.</div>
+          </div>
+
+        </div>
+
+        <!-- Design System Preview -->
+        <div class="design-preview">
+
+          <div class="dp-section">
+            <div class="dp-label">Sample Colour Palette</div>
+            <div class="dp-swatches">
+              <div class="dp-swatch" style="background:#0F2057;"><span class="dp-swatch-name" style="color:#fff;">Navy</span></div>
+              <div class="dp-swatch" style="background:#E11D48;"><span class="dp-swatch-name" style="color:#fff;">Coral</span></div>
+              <div class="dp-swatch" style="background:#F43F5E;"><span class="dp-swatch-name" style="color:#fff;">Rose</span></div>
+              <div class="dp-swatch" style="background:#FFE4E6;"><span class="dp-swatch-name" style="color:#881337;">Pale</span></div>
+              <div class="dp-swatch" style="background:#0F172A;"><span class="dp-swatch-name" style="color:#fff;">Ink</span></div>
+            </div>
+            <div class="dp-hex">Final palette chosen with the school during design week 1.</div>
+          </div>
+
+          <div class="dp-section">
+            <div class="dp-label">Typography</div>
+            <div class="dp-typo-h">Assalamu Alaikum</div>
+            <div class="dp-typo-b">Clear, friendly type built to read well in both English and Malayalam screens.</div>
+            <div class="dp-typo-meta">Inter · 400 / 600 / 800</div>
+          </div>
+
+          <div class="dp-section">
+            <div class="dp-label">Components</div>
+            <div class="dp-comp">
+              <div class="dp-btn-row">
+                <span class="dp-btn">Submit</span>
+                <span class="dp-btn-sec">Cancel</span>
+              </div>
+              <div class="dp-tag-row">
+                <span class="dp-tag">Attendance ✓</span>
+                <span class="dp-tag">Homework</span>
+                <span class="dp-tag">Chat</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 3 of 10</div>
+    <div class="if-right">Confidential · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 4 — TECH STACK · ARCHITECTURE · SECURITY · RELIABILITY
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Technology Stack · System Architecture</div>
+    <div class="ih-sub">AQL-PROP-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>05</span>Technology Stack</div>
+      <table class="stack-table">
+        <thead><tr><th>Layer</th><th>Technology</th><th>Why this choice</th></tr></thead>
+        <tbody>
+          <tr><td>Mobile</td><td>React Native (Expo)</td><td>One codebase for iOS + Android — half the build cost. Over-the-air updates without re-submitting to app stores.</td></tr>
+          <tr><td>Web Portals</td><td>Next.js 16</td><td>Industry-leading framework. Server-rendered, fast load times, modern App Router, smooth on any device.</td></tr>
+          <tr><td>Backend API</td><td>Node.js + Express</td><td>Mainstream, battle-tested REST API stack. High concurrency, asynchronous, easy to extend.</td></tr>
+          <tr><td>Database</td><td>MongoDB</td><td>Flexible document store — perfect fit for school content (notes, materials, mixed data shapes). Scales smoothly from one school to many.</td></tr>
+          <tr><td>Authentication</td><td>JWT + bcrypt</td><td>Industry-standard token-based auth. Role-based access for Student / Teacher / Admin built in.</td></tr>
+          <tr><td>File Storage</td><td>VPS + S3-compatible storage</td><td>Cloud object storage (DigitalOcean Spaces / Backblaze B2 / Cloudflare R2) — pennies per GB for notes, photos, PDFs, certificates.</td></tr>
+          <tr><td>Push Notifications</td><td>Firebase Cloud Messaging</td><td>Free, supports both Android (FCM) and iOS (APNs) from a single API. The standard choice.</td></tr>
+          <tr><td>Chat (1:1 Student–Teacher)</td><td>Socket.io</td><td>Real-time bidirectional messaging over the same Node.js backend. Mature, proven library.</td></tr>
+          <tr><td>Multi-language</td><td>react-i18next / next-intl</td><td>English &amp; Malayalam from day one. Additional languages can be added later without rebuilding.</td></tr>
+          <tr><td>Hosting</td><td>Dedicated Cloud VPS</td><td>A single, high-performance virtual private server with full root access. Predictable monthly cost — no surprise bills, no usage-based pricing traps.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>06</span>System Architecture — Every Layer, End to End</div>
+      <p style="font-size:9px; color:var(--ink-soft); line-height:1.6; margin-bottom:9px;">
+        Four clean tiers — clients, API, data &amp; services, and infrastructure. Every request flows through
+        the same authenticated path. No hidden services, no black boxes, no vendor lock-in.
+      </p>
+
+      <div class="arch">
+
+        <!-- Tier 1: Clients -->
+        <div class="arch-layer">
+          <div class="arch-layer-label">① Client Layer · 3 applications</div>
+          <div class="arch-layer-cards" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="arch-card">
+              <div class="arch-card-icon">📱</div>
+              <div class="arch-card-text">
+                <div class="arch-card-name">Mobile App</div>
+                <div class="arch-card-sub">React Native · iOS + Android</div>
+              </div>
+            </div>
+            <div class="arch-card">
+              <div class="arch-card-icon">🖥️</div>
+              <div class="arch-card-text">
+                <div class="arch-card-name">Admin &amp; Teacher Web</div>
+                <div class="arch-card-sub">Next.js · all browsers</div>
+              </div>
+            </div>
+            <div class="arch-card">
+              <div class="arch-card-icon">💻</div>
+              <div class="arch-card-text">
+                <div class="arch-card-name">Student Web Portal</div>
+                <div class="arch-card-sub">Next.js · desktop access</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-conn"><span class="arch-conn-label">HTTPS · TLS 1.3 · JWT Bearer Token</span></div>
+
+        <!-- Tier 2: API -->
+        <div class="arch-layer dark">
+          <div class="arch-layer-label">② API Layer · single gateway</div>
+          <div class="arch-layer-cards" style="grid-template-columns: 1fr 1fr;">
+            <div class="arch-card">
+              <div class="arch-card-icon">⚙️</div>
+              <div class="arch-card-text">
+                <div class="arch-card-name">Node.js + Express</div>
+                <div class="arch-card-sub">REST API · Auth · RBAC · Business logic</div>
+              </div>
+            </div>
+            <div class="arch-card">
+              <div class="arch-card-icon">⚡</div>
+              <div class="arch-card-text">
+                <div class="arch-card-name">Socket.io Gateway</div>
+                <div class="arch-card-sub">Real-time chat &amp; live notifications</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-conn"><span class="arch-conn-label">Internal calls · Mongoose ODM · S3 SDK · FCM SDK</span></div>
+
+        <!-- Tier 3: Data & Services -->
+        <div class="arch-layer">
+          <div class="arch-layer-label">③ Data &amp; Services Layer</div>
+          <div class="arch-layer-cards" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="arch-card">
+              <div class="arch-card-icon">🗄️</div>
+              <div class="arch-card-text">
+                <div class="arch-card-name">MongoDB</div>
+                <div class="arch-card-sub">Primary database</div>
+              </div>
+            </div>
+            <div class="arch-card">
+              <div class="arch-card-icon">📁</div>
+              <div class="arch-card-text">
+                <div class="arch-card-name">S3 Storage</div>
+                <div class="arch-card-sub">Files · PDFs · photos</div>
+              </div>
+            </div>
+            <div class="arch-card">
+              <div class="arch-card-icon">🔔</div>
+              <div class="arch-card-text">
+                <div class="arch-card-name">FCM</div>
+                <div class="arch-card-sub">Push iOS + Android</div>
+              </div>
+            </div>
+            <div class="arch-card">
+              <div class="arch-card-icon">📧</div>
+              <div class="arch-card-text">
+                <div class="arch-card-name">SMTP</div>
+                <div class="arch-card-sub">Email reminders</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-conn"><span class="arch-conn-label">Hosted on</span></div>
+
+        <!-- Tier 4: Infrastructure -->
+        <div class="arch-foundation">
+          <span class="af-label">④ Infrastructure Layer</span>
+          <strong>Cloud VPS</strong> · Ubuntu LTS · <strong>Nginx</strong> reverse proxy · <strong>PM2</strong> process manager · <strong>Let's Encrypt</strong> SSL · <strong>Daily encrypted backups</strong>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 4 of 10</div>
+    <div class="if-right">Confidential · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 5 — SECURITY & DATA PROTECTION
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Security &amp; Data Protection</div>
+    <div class="ih-sub">AQL-PROP-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>07</span>Security &amp; Data Protection</div>
+      <p style="font-size:9px; color:var(--ink-soft); line-height:1.6; margin-bottom:9px;">
+        Security is built in at every layer — from how passwords are stored to how data is backed up.
+        Six controls, all standard practice for production systems handling student and family data.
+      </p>
+      <div class="sec-grid">
+
+        <div class="sec-card">
+          <div class="sec-card-icon">🔐</div>
+          <div class="sec-card-name">JWT Authentication</div>
+          <div class="sec-card-desc">Industry-standard token-based auth. Short-lived access tokens, secure refresh flow.</div>
+        </div>
+
+        <div class="sec-card">
+          <div class="sec-card-icon">👥</div>
+          <div class="sec-card-name">Role-Based Access Control</div>
+          <div class="sec-card-desc">Student / Teacher / Admin see only what their role allows — enforced at the API.</div>
+        </div>
+
+        <div class="sec-card">
+          <div class="sec-card-icon">🔒</div>
+          <div class="sec-card-name">bcrypt Password Hashing</div>
+          <div class="sec-card-desc">Passwords never stored in plain text. One-way hashed with adaptive cost factor.</div>
+        </div>
+
+        <div class="sec-card">
+          <div class="sec-card-icon">🛡️</div>
+          <div class="sec-card-name">HTTPS Everywhere</div>
+          <div class="sec-card-desc">TLS 1.3 across all clients &amp; APIs. Auto-renewing Let's Encrypt certificates.</div>
+        </div>
+
+        <div class="sec-card">
+          <div class="sec-card-icon">💾</div>
+          <div class="sec-card-name">Encrypted Backups</div>
+          <div class="sec-card-desc">Daily MongoDB snapshots, encrypted at rest, 30-day retention with point-in-time recovery.</div>
+        </div>
+
+        <div class="sec-card">
+          <div class="sec-card-icon">📜</div>
+          <div class="sec-card-name">Audit Logging</div>
+          <div class="sec-card-desc">All admin actions logged — who changed what, when. Full accountability trail.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 5 of 10</div>
+    <div class="if-right">Confidential · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 6 — RELIABILITY · PHASE 1 FEATURES (PART 1)
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Reliability · Phase 1 Features — Detailed Module Breakdown (1 of 2)</div>
+    <div class="ih-sub">AQL-PROP-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>08</span>Reliability Commitments</div>
+      <div class="rel-band">
+        <div class="rel-stat">
+          <div class="rel-num">99.5%</div>
+          <div class="rel-lbl">Uptime target</div>
+        </div>
+        <div class="rel-stat">
+          <div class="rel-num">Daily</div>
+          <div class="rel-lbl">Encrypted backups</div>
+        </div>
+        <div class="rel-stat">
+          <div class="rel-num">30d</div>
+          <div class="rel-lbl">Backup retention</div>
+        </div>
+        <div class="rel-stat">
+          <div class="rel-num">24/7</div>
+          <div class="rel-lbl">Error monitoring</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>09</span>What Students &amp; Teachers See Every Day</div>
+      <div class="bento">
+
+        <!-- HERO: Student Dashboard with mockup -->
+        <div class="bento-card hero">
+          <div class="bento-count">6 features</div>
+          <div class="bento-head">
+            <div class="bento-icon">🎓</div>
+            <div class="bento-title">Student Dashboard</div>
+          </div>
+          <div class="bento-desc">Everything a student needs to know — at a glance, the moment they open the app.</div>
+          <div class="bento-mock">
+            <div class="bm-status">Al Qalam · Home</div>
+            <div class="bm-greet">Assalamu Alaikum,</div>
+            <div class="bm-name">Ali Khan · Grade 7-A</div>
+            <div class="bm-stat-row">
+              <div class="bm-stat">
+                <div class="bm-stat-val">92%</div>
+                <div class="bm-stat-lbl">Attendance</div>
+              </div>
+              <div class="bm-stat">
+                <div class="bm-stat-val">A+</div>
+                <div class="bm-stat-lbl">Performance</div>
+              </div>
+            </div>
+            <div class="bm-next"><strong>Next:</strong> Tafseer · 10:15 AM</div>
+          </div>
+          <ul class="bento-feats" style="margin-top:4px;">
+            <li>Profile · Class · Student ID</li>
+            <li>Live attendance % &amp; performance card</li>
+            <li>Today's schedule + upcoming classes</li>
+          </ul>
+        </div>
+
+        <!-- Small: Notifications -->
+        <div class="bento-card">
+          <div class="bento-count">6</div>
+          <div class="bento-head">
+            <div class="bento-icon">🔔</div>
+            <div class="bento-title">Notifications</div>
+          </div>
+          <div class="bento-tags">
+            <span class="bento-tag">Push</span>
+            <span class="bento-tag">Exam alerts</span>
+            <span class="bento-tag">Holidays</span>
+            <span class="bento-tag">Events</span>
+          </div>
+        </div>
+
+        <!-- Small: Live Schedule -->
+        <div class="bento-card">
+          <div class="bento-count">3</div>
+          <div class="bento-head">
+            <div class="bento-icon">📅</div>
+            <div class="bento-title">Live Class Schedule</div>
+          </div>
+          <div class="bento-tags">
+            <span class="bento-tag">Weekly timetable</span>
+            <span class="bento-tag">Reminders</span>
+          </div>
+        </div>
+
+        <!-- Wide: Attendance -->
+        <div class="bento-card wide">
+          <div class="bento-count">5 features</div>
+          <div class="bento-head">
+            <div class="bento-icon">📊</div>
+            <div class="bento-title">Attendance Management</div>
+          </div>
+          <div class="bento-desc">Teachers mark in one tap. Students &amp; admin see live percentages. Monthly reports auto-generated.</div>
+          <div class="bento-tags">
+            <span class="bento-tag">Daily mark</span>
+            <span class="bento-tag">Monthly report</span>
+            <span class="bento-tag">Leave application</span>
+            <span class="bento-tag">Approval flow</span>
+          </div>
+        </div>
+
+        <!-- HERO: Homework with mockup -->
+        <div class="bento-card hero">
+          <div class="bento-count">5 features</div>
+          <div class="bento-head">
+            <div class="bento-icon">📝</div>
+            <div class="bento-title">Homework &amp; Assignments</div>
+          </div>
+          <div class="bento-desc">Snap a photo, hit submit. Teacher feedback lands in hours, not days.</div>
+          <div class="bento-mock">
+            <div class="bm-status">📝 Math Worksheet 04</div>
+            <div class="bm-greet">Due tomorrow · 11:59 PM</div>
+            <div class="bm-file-row">
+              <div class="bm-file">📷 photo.jpg</div>
+              <div class="bm-file">📄 worksheet.pdf</div>
+            </div>
+            <div class="bm-btn">SUBMIT ASSIGNMENT</div>
+            <div class="bm-comment">Ustadh Rashid: "Great work, Ali — masha Allah!"</div>
+          </div>
+        </div>
+
+        <!-- Small: Materials -->
+        <div class="bento-card">
+          <div class="bento-count">5</div>
+          <div class="bento-head">
+            <div class="bento-icon">📚</div>
+            <div class="bento-title">Learning Materials</div>
+          </div>
+          <div class="bento-tags">
+            <span class="bento-tag">Notes</span>
+            <span class="bento-tag">PDFs</span>
+            <span class="bento-tag">Offline view</span>
+            <span class="bento-tag">Islamic library</span>
+          </div>
+        </div>
+
+        <!-- Small: Exams -->
+        <div class="bento-card">
+          <div class="bento-count">5</div>
+          <div class="bento-head">
+            <div class="bento-icon">📋</div>
+            <div class="bento-title">Exams &amp; Marks</div>
+          </div>
+          <div class="bento-tags">
+            <span class="bento-tag">Timetable</span>
+            <span class="bento-tag">Marks entry</span>
+            <span class="bento-tag">Report cards</span>
+          </div>
+        </div>
+
+        <!-- Wide: Teacher Portal -->
+        <div class="bento-card wide">
+          <div class="bento-count">6 features</div>
+          <div class="bento-head">
+            <div class="bento-icon">👨‍🏫</div>
+            <div class="bento-title">Teacher Portal</div>
+          </div>
+          <div class="bento-desc">The whole classroom in one screen — attendance, homework, marks, announcements, materials.</div>
+          <div class="bento-tags">
+            <span class="bento-tag">Mark attendance</span>
+            <span class="bento-tag">Assign homework</span>
+            <span class="bento-tag">Upload materials</span>
+            <span class="bento-tag">Enter marks</span>
+            <span class="bento-tag">Announcements</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Day-in-the-life timeline -->
+    <div>
+      <div class="journey">
+        <div class="journey-head">
+          <div class="journey-title">A Day in Ali's Life on Al Qalam</div>
+          <div class="journey-sub">Six touchpoints — one app</div>
+        </div>
+        <div class="journey-track">
+          <div class="j-step">
+            <div class="j-time">7:00 AM</div>
+            <div class="j-dot">1</div>
+            <div class="j-action">Opens the app</div>
+            <div class="j-detail">Sees today's schedule &amp; morning duas</div>
+          </div>
+          <div class="j-step">
+            <div class="j-time">8:30 AM</div>
+            <div class="j-dot alt">2</div>
+            <div class="j-action">Marked present</div>
+            <div class="j-detail">Teacher taps attendance in class</div>
+          </div>
+          <div class="j-step">
+            <div class="j-time">11:00 AM</div>
+            <div class="j-dot">3</div>
+            <div class="j-action">Submits homework</div>
+            <div class="j-detail">Snaps photo of worksheet &amp; uploads</div>
+          </div>
+          <div class="j-step">
+            <div class="j-time">2:00 PM</div>
+            <div class="j-dot alt">4</div>
+            <div class="j-action">Checks marks</div>
+            <div class="j-detail">Ustadh entered today's quiz score</div>
+          </div>
+          <div class="j-step">
+            <div class="j-time">4:30 PM</div>
+            <div class="j-dot">5</div>
+            <div class="j-action">Asks a doubt</div>
+            <div class="j-detail">Chats with teacher about tomorrow's test</div>
+          </div>
+          <div class="j-step">
+            <div class="j-time">7:00 PM</div>
+            <div class="j-dot alt">6</div>
+            <div class="j-action">Reads notes</div>
+            <div class="j-detail">PDF downloaded for offline reading</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 6 of 10</div>
+    <div class="if-right">Confidential · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 4 — PHASE 1 FEATURES (PART 2) + PHASE 2 OUTLOOK
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Phase 1 Features — Detailed Module Breakdown (2 of 2)</div>
+    <div class="ih-sub">AQL-PROP-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>10</span>Communication, Recognition &amp; School Operations</div>
+      <div class="bento">
+
+        <!-- HERO: Chat with chat bubble mockup -->
+        <div class="bento-card hero">
+          <div class="bento-count">4 features</div>
+          <div class="bento-head">
+            <div class="bento-icon">💬</div>
+            <div class="bento-title">Student ↔ Teacher Chat</div>
+          </div>
+          <div class="bento-desc">Doubts cleared the same day. Real-time 1:1 messaging, per subject, with the right teacher.</div>
+          <div class="bento-mock">
+            <div class="bm-status">Chat · Ustadh Rashid · Math</div>
+            <div class="bm-bubbles">
+              <div class="bm-bubble them">When is the surprise test?</div>
+              <div class="bm-bubble me">Wednesday 2 PM in sha Allah</div>
+              <div class="bm-bubble them">JazakAllah khair ustadh 🙏</div>
+              <div class="bm-bubble me">Revise chapters 4 &amp; 5</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Small: Certificates -->
+        <div class="bento-card">
+          <div class="bento-count">4</div>
+          <div class="bento-head">
+            <div class="bento-icon">🏆</div>
+            <div class="bento-title">Certificates &amp; Awards</div>
+          </div>
+          <div class="bento-tags">
+            <span class="bento-tag">PDF certificates</span>
+            <span class="bento-tag">Badges</span>
+            <span class="bento-tag">Awards wall</span>
+          </div>
+        </div>
+
+        <!-- Small: Workshop -->
+        <div class="bento-card">
+          <div class="bento-count">3</div>
+          <div class="bento-head">
+            <div class="bento-icon">🎟️</div>
+            <div class="bento-title">Workshop Registration</div>
+          </div>
+          <div class="bento-tags">
+            <span class="bento-tag">Event listing</span>
+            <span class="bento-tag">Sign-up form</span>
+          </div>
+        </div>
+
+        <!-- Wide: Academic Calendar -->
+        <div class="bento-card wide">
+          <div class="bento-count">4 features</div>
+          <div class="bento-head">
+            <div class="bento-icon">📆</div>
+            <div class="bento-title">Academic Calendar</div>
+          </div>
+          <div class="bento-desc">School calendar, holidays, exam dates, events &amp; workshops — all in one view. Admin updates push to every student instantly.</div>
+          <div class="bento-tags">
+            <span class="bento-tag">Holidays</span>
+            <span class="bento-tag">Exam dates</span>
+            <span class="bento-tag">Events</span>
+            <span class="bento-tag">Auto-sync</span>
+          </div>
+        </div>
+
+        <!-- HERO: Admission with form mockup -->
+        <div class="bento-card hero">
+          <div class="bento-count">4 features</div>
+          <div class="bento-head">
+            <div class="bento-icon">📥</div>
+            <div class="bento-title">Online Admissions</div>
+          </div>
+          <div class="bento-desc">Parents apply from home. Admin reviews from one dashboard. No paperwork lost.</div>
+          <div class="bento-mock">
+            <div class="bm-status">Admission Form · 2026-27</div>
+            <div class="bm-field"><strong>Name:</strong> Ahmed Kabeer</div>
+            <div class="bm-field"><strong>Class applying:</strong> Grade 4</div>
+            <div class="bm-field"><strong>Guardian:</strong> Mohammed K.</div>
+            <div class="bm-file-row">
+              <div class="bm-file">📎 birth-cert.pdf ✓</div>
+              <div class="bm-file">📎 photo.jpg ✓</div>
+            </div>
+            <div class="bm-badge">Under Review</div>
+          </div>
+        </div>
+
+        <!-- Small: Fees -->
+        <div class="bento-card">
+          <div class="bento-count">2</div>
+          <div class="bento-head">
+            <div class="bento-icon">💰</div>
+            <div class="bento-title">Fees — Reminders</div>
+          </div>
+          <div class="bento-desc">Push reminders only in Phase 1. <em>Online payment in Phase 2.</em></div>
+        </div>
+
+        <!-- Small: Support -->
+        <div class="bento-card">
+          <div class="bento-count">3</div>
+          <div class="bento-head">
+            <div class="bento-icon">🆘</div>
+            <div class="bento-title">Support &amp; Help Desk</div>
+          </div>
+          <div class="bento-tags">
+            <span class="bento-tag">Admin contact</span>
+            <span class="bento-tag">WhatsApp btn</span>
+          </div>
+        </div>
+
+        <!-- Wide: Platform & Extras -->
+        <div class="bento-card wide">
+          <div class="bento-count">5 features</div>
+          <div class="bento-head">
+            <div class="bento-icon">🌐</div>
+            <div class="bento-title">Platform &amp; Extras</div>
+          </div>
+          <div class="bento-desc">Bilingual English &amp; Malayalam, runs on mobile, tablet and desktop, with secure role-based login for every user type.</div>
+          <div class="bento-tags">
+            <span class="bento-tag">EN + ML</span>
+            <span class="bento-tag">Mobile</span>
+            <span class="bento-tag">Tablet</span>
+            <span class="bento-tag">Desktop</span>
+            <span class="bento-tag">Role-based access</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>11</span>Phase 2 — Future Upgrades (Quoted Separately)</div>
+      <div class="box-note green">
+        <span class="bn-title">When you are ready to expand</span>
+        Phase 2 is a separate engagement, scoped after Phase 1 goes live. It adds the engagement layer and the
+        Islamic study module — keeping your investment phased, predictable, and tied to working features.
+      </div>
+      <table class="stack-table" style="margin-top:8px;">
+        <thead><tr><th>Module</th><th>Phase 2 Features</th></tr></thead>
+        <tbody>
+          <tr><td>Live Classes</td><td>Google Meet / Zoom deep-link integration · Join Class button · Recorded class library</td></tr>
+          <tr><td>Online Exams</td><td>Timed online exams · MCQ &amp; short-answer quizzes · Auto-grading</td></tr>
+          <tr><td>Fees</td><td>Fee details · Payment history · Online payment gateway · Downloadable receipts</td></tr>
+          <tr><td>Parent Portal</td><td>Dedicated parent login · Child progress dashboard · Teacher remarks · Multi-child switch</td></tr>
+          <tr><td>Quran Section</td><td>Hifdh tracker · Surah memorization log · Tilawah uploads · Revision schedule — <strong>built for your Madrasa with Hifdh &amp; Hifdh Only courses</strong></td></tr>
+          <tr><td>Islamic Studies</td><td>Hadith of the week · Daily Adhkar · Dua collection · Seerah lessons · Quizzes</td></tr>
+          <tr><td>Salah Tracker</td><td>Daily prayer log · Prayer-time reminders · Weekly &amp; monthly reports</td></tr>
+          <tr><td>Islamic Events</td><td><strong>AL QALAM LEARNING MUSABAQA</strong> registrations · Ramadan activities · Dhul Hijjah activities · Vacation classes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 7 of 10</div>
+    <div class="if-right">Confidential · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 5 — TIMELINE + MILESTONES
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Project Timeline · 4 Months · 4 Build Phases · 40/40/20 Payments</div>
+    <div class="ih-sub">AQL-PROP-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>12</span>Delivery Plan</div>
+      <p style="font-size:9px; color:var(--ink-soft); line-height:1.6;">
+        We deliver Phase 1 in four working milestones across 16 weeks. Each milestone is a real,
+        usable deliverable — not just an internal checkpoint. You see working features every 4 weeks,
+        and payments are tied to deliverables you can test in your hands.
+      </p>
+
+      <div class="milestone-grid" style="margin-top:10px;">
+
+        <div class="milestone">
+          <div class="milestone-num">1</div>
+          <div class="milestone-week">Weeks 1–4</div>
+          <div class="milestone-name">Design &amp; Foundation</div>
+          <div class="milestone-deliv">
+            <strong>Figma design</strong> (wireframes → hi-fi mockups → prototype) · Visual design system · Brand sign-off · Project setup · Auth &amp; role-based access · Student / Teacher / Admin login · Academic calendar · Notification framework
+          </div>
+        </div>
+
+        <div class="milestone">
+          <div class="milestone-num">2</div>
+          <div class="milestone-week">Weeks 5–8</div>
+          <div class="milestone-name">Daily Operations</div>
+          <div class="milestone-deliv">
+            Attendance · Homework + submissions · Teacher portal core · Push notifications live · Leave application · Workshop registration
+          </div>
+        </div>
+
+        <div class="milestone">
+          <div class="milestone-num">3</div>
+          <div class="milestone-week">Weeks 9–12</div>
+          <div class="milestone-name">Learning &amp; Assessment</div>
+          <div class="milestone-deliv">
+            Notes &amp; materials · Exam timetable · Marks entry · Report cards · Certificates · Admission form · 1:1 chat
+          </div>
+        </div>
+
+        <div class="milestone">
+          <div class="milestone-num">4</div>
+          <div class="milestone-week">Weeks 13–16</div>
+          <div class="milestone-name">UAT &amp; Go-Live</div>
+          <div class="milestone-deliv">
+            English + Malayalam polish · Desktop responsive · UAT submission &amp; bug-fix sprint · App Store + Play Store submission · Admin training · Handover &amp; go-live
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>13</span>What Happens at Each Milestone</div>
+      <table class="stack-table">
+        <thead>
+          <tr><th>Step</th><th>What Al Qalam does</th><th>What CodeOx does</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Milestone demo</td><td>Tests the working features on a real device + browser</td><td>Deploys a live preview build &amp; walks through every feature</td></tr>
+          <tr><td>Feedback</td><td>Lists any adjustments needed within the locked scope</td><td>Incorporates feedback in the next sprint</td></tr>
+          <tr><td>Sign-off</td><td>Confirms the milestone delivery is accepted</td><td>Issues invoice for the milestone payment</td></tr>
+          <tr><td>Payment</td><td>Releases milestone payment within 5 working days</td><td>Continues to the next milestone</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 8 of 10</div>
+    <div class="if-right">Confidential · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 6 — INVESTMENT + PAYMENT SCHEDULE + IN/OUT
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Investment · Payment Schedule · What's Included</div>
+    <div class="ih-sub">AQL-PROP-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>14</span>Total Investment — Phase 1</div>
+      <div class="price-box">
+        <div class="price-label">All-Inclusive · Phase 1 Build</div>
+        <div class="price-amount"><span class="cur">₹</span>2,50,000</div>
+        <div class="price-note">Two Lakh Fifty Thousand Rupees Only</div>
+        <div class="price-sub">52+ features · 3 apps · 4 months · 40 / 40 / 20 payment plan · No hidden costs</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>15</span>Payment Schedule — 40 / 40 / 20</div>
+      <table class="payment-table">
+        <thead>
+          <tr><th class="num-col">#</th><th class="ms-col">Stage</th><th class="when-col">When</th><th class="pct-col">%</th><th class="amt-col">Amount (₹)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="num-col">1</td><td class="ms-col"><strong>Advance</strong> — kickoff &amp; design sign-off, build begins</td><td class="when-col">On project kickoff</td><td class="pct-col">40%</td><td class="amt-col">1,00,000</td></tr>
+          <tr><td class="num-col">2</td><td class="ms-col"><strong>UAT Submission</strong> — all Phase 1 features built &amp; handed over for client testing</td><td class="when-col">End of Week 12</td><td class="pct-col">40%</td><td class="amt-col">1,00,000</td></tr>
+          <tr><td class="num-col">3</td><td class="ms-col"><strong>Go-Live</strong> — UAT signed off, apps deployed, training complete</td><td class="when-col">End of Week 16</td><td class="pct-col">20%</td><td class="amt-col">50,000</td></tr>
+          <tr class="total-row"><td></td><td>Total — Phase 1 Build</td><td></td><td>100%</td><td style="text-align:right;">₹ 2,50,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>16</span>What's Included &amp; What's Not</div>
+      <div class="inc-exc-grid">
+
+        <div class="inc-card">
+          <div class="iec-title">✓ Included in ₹ 2,50,000</div>
+          <ul>
+            <li>Full Figma design — wireframes, hi-fi mockups, prototype, style guide (mobile + web)</li>
+            <li>Two design revision rounds before development starts</li>
+            <li>Editable Figma file ownership transferred to school</li>
+            <li>iOS app build (React Native)</li>
+            <li>Android app build (React Native)</li>
+            <li>Admin &amp; Teacher Web Portal (Next.js)</li>
+            <li>Student Desktop Web Portal</li>
+            <li>Backend API setup (Node.js + MongoDB on VPS)</li>
+            <li>All 52+ Phase 1 features</li>
+            <li>Bilingual EN + ML</li>
+            <li>Push notifications setup</li>
+            <li>Bug fixes during 4 months of build</li>
+            <li>App Store + Play Store submission</li>
+            <li>Admin &amp; teacher training (one session)</li>
+            <li>Handover documentation</li>
+            <li>30 days post-launch warranty support</li>
+          </ul>
+        </div>
+
+        <div class="exc-card">
+          <div class="iec-title">✕ Not Included (Quoted Separately)</div>
+          <ul>
+            <li>Phase 2 features (live class integration, online exams, payment gateway, Islamic modules, parent portal)</li>
+            <li>Apple Developer account (USD 99/year — paid by school)</li>
+            <li>Google Play Developer account (USD 25 one-time — paid by school)</li>
+            <li>Cloud VPS rental after launch (~₹800–1,500/month depending on plan &amp; provider — paid by school)</li>
+            <li>S3-compatible object storage for files (typically &lt;₹500/month for one school)</li>
+            <li>Domain name &amp; SSL certificate (Let's Encrypt — free; domain ~₹800/year)</li>
+            <li>Content data entry (notes, materials, student lists) — school's responsibility</li>
+            <li>Custom logo / branding design (if not provided)</li>
+            <li>Annual maintenance contract (optional, after 30-day warranty)</li>
+            <li>Features outside the locked Phase 1 list (handled per the scope-flexibility clause)</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <div class="box-note gold">
+        <span class="bn-title">Scope Flexibility Clause</span>
+        Small additions during the project are welcome. <strong>Anything under 1 day of work is absorbed at no extra cost</strong>
+        and batched into the next milestone. Larger changes are quickly estimated — either fit into the current milestone
+        without slipping the deadline, or queued into Phase 2. This keeps the 4-month launch promise intact.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437</div>
+    <div class="if-page">Page 9 of 10</div>
+    <div class="if-right">Confidential · Al Qalam Learning</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 10 — THANK YOU
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Thank You</div>
+    <div class="ih-sub">AQL-PROP-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content" style="justify-content:center; align-items:center; text-align:center; padding:0 30px;">
+
+    <div style="display:flex; flex-direction:column; align-items:center; gap:24px; max-width:520px; margin:auto;">
+
+      <div style="font-size:36px; font-weight:900; color:var(--green-dark); letter-spacing:-1.5px; line-height:1;">Thank You</div>
+
+      <div style="font-size:18px; font-family:'Amiri', 'Times New Roman', serif; color:var(--green); font-weight:600; direction:rtl;">جزاكم الله خيراً</div>
+
+      <div style="width:64px; height:3px; background:var(--green-mid); border-radius:2px;"></div>
+
+      <div style="font-size:11px; color:var(--ink); line-height:1.75;">
+        For considering CodeOx as your technology partner for Al Qalam Learning. We pray this platform
+        becomes a means of barakah for the students, ustadhs, and families it serves —
+        and a sadaqah jariyah for the founders and supporters of this noble mission.
+      </div>
+
+      <div style="background:var(--green-pale); border:1px solid var(--green-light); border-left:4px solid var(--green); border-radius:10px; padding:16px 22px; margin-top:8px; width:100%;">
+        <div style="font-size:8px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-bottom:8px;">Reach out anytime</div>
+        <div style="font-size:13px; font-weight:800; color:var(--green-dark); margin-bottom:4px;">Shabeeb K · CodeOx</div>
+        <div style="font-size:10px; color:var(--ink); line-height:1.7;">
+          +966 53 571 6437<br>
+          shabeeb.k@code-ox.com<br>
+          code-ox.com
+        </div>
+      </div>
+
+      <div style="font-size:8.5px; color:var(--ink-soft); margin-top:6px;">
+        Awaiting your reply — bi-idhnillah, we will begin the moment you give the word.
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">Shabeeb K · CodeOx · +966 53 571 6437 · shabeeb.k@code-ox.com</div>
+    <div class="if-page">Page 10 of 10</div>
+    <div class="if-right">Confidential · Al Qalam Learning</div>
+  </div>
+</div>
+
+</body>
+</html>
