@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jethur × Code-OX — Project Kickoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0F0D; --bg2:#0C1310;
+  --panel:#111A16; --panel2:#16211C;
+  --line:rgba(163,199,182,.14); --line2:rgba(163,199,182,.24);
+  --text:#EDF4F0; --muted:#93A89D; --faint:#5F7469;
+  --green:#31D08D; --green-dim:rgba(49,208,141,.14);
+  --cyan:#5CC0EA; --cyan-dim:rgba(92,192,234,.13);
+  --gold:#E4B75D; --gold-dim:rgba(228,183,93,.13);
+  --red:#EF6A5E; --red-dim:rgba(239,106,94,.13);
+  --disp:"Space Grotesk",system-ui,sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--bg);overflow:hidden;font-family:var(--body);color:var(--text)}
+
+/* ---------- stage & slides ---------- */
+#viewport{position:fixed;inset:0;background:
+  radial-gradient(1100px 600px at 78% -10%, rgba(49,208,141,.055), transparent 60%),
+  radial-gradient(900px 600px at 8% 110%, rgba(92,192,234,.045), transparent 60%),
+  var(--bg)}
+#stage{position:absolute;top:50%;left:50%;width:1280px;height:720px;transform-origin:center}
+.slide{position:absolute;inset:0;padding:64px 76px 60px;opacity:0;visibility:hidden;
+  transform:translateY(14px) scale(.992);transition:opacity .45s ease,transform .45s ease,visibility .45s;
+  display:flex;flex-direction:column}
+.slide.active{opacity:1;visibility:visible;transform:none}
+@media (prefers-reduced-motion: reduce){
+  .slide{transition:opacity .2s ease}
+  .slide.active{transform:none}
+  *{animation:none !important;transition-duration:.01ms !important}
+}
+
+/* ---------- type ---------- */
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:12px}
+.eyebrow .rule{height:1px;width:34px;background:var(--green);opacity:.6}
+.eyebrow.quiet{color:var(--faint)}
+h1{font-family:var(--disp);font-weight:700;font-size:52px;line-height:1.06;letter-spacing:-.015em;margin-top:14px}
+h1 .g{color:var(--green)}
+h1 .c{color:var(--cyan)}
+h1 .a{color:var(--gold)}
+.sub{margin-top:12px;font-size:16px;line-height:1.5;color:var(--muted);max-width:760px}
+.mono{font-family:var(--mono)}
+
+/* ---------- chrome ---------- */
+#progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--green),var(--cyan));width:0;transition:width .4s ease;z-index:60}
+#counter{position:fixed;top:16px;right:24px;font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.14em;z-index:60}
+#brand{position:fixed;bottom:18px;left:24px;font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.18em;z-index:60}
+#navbtns{position:fixed;bottom:14px;right:20px;display:flex;gap:6px;z-index:60;opacity:.75}
+#navbtns button{width:36px;height:30px;border-radius:8px;border:1px solid var(--line);background:rgba(17,26,22,.8);color:var(--muted);cursor:pointer;font-size:14px;transition:.2s}
+#navbtns button:hover{border-color:var(--green);color:var(--green)}
+#navbtns button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+#hint{position:fixed;top:16px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.12em;z-index:60;transition:opacity 1s;pointer-events:none}
+.slidefoot{position:absolute;bottom:26px;left:76px;right:120px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--faint);text-transform:uppercase}
+
+/* ---------- shared components ---------- */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--line2);font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted)}
+.chip .dot{width:7px;height:7px;border-radius:50%}
+.dot.g{background:var(--green)} .dot.c{background:var(--cyan)} .dot.a{background:var(--gold)} .dot.r{background:var(--red)}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:6px}
+.tag.g{color:var(--green);background:var(--green-dim)}
+.tag.c{color:var(--cyan);background:var(--cyan-dim)}
+.tag.a{color:var(--gold);background:var(--gold-dim)}
+.tag.r{color:var(--red);background:var(--red-dim)}
+.tag.n{color:var(--muted);background:rgba(147,168,157,.1)}
+.big{font-family:var(--disp);font-weight:700;letter-spacing:-.02em}
+.klabel{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+
+/* checklist item */
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--text);line-height:1.4}
+.ck .m{flex:none;width:16px;height:16px;border-radius:5px;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.ck .m.g{background:var(--green-dim);color:var(--green)}
+.ck .m.c{background:var(--cyan-dim);color:var(--cyan)}
+.ck .m.a{background:var(--gold-dim);color:var(--gold)}
+.ck .m.r{background:var(--red-dim);color:var(--red)}
+.ck small{display:block;color:var(--faint);font-size:11.5px;margin-top:1px}
+
+/* ---------- S1 cover ---------- */
+.cover{justify-content:center}
+.cover-roots{position:absolute;inset:0;opacity:.5;pointer-events:none}
+.cover .who{display:flex;align-items:center;gap:16px;font-family:var(--disp);font-weight:600;font-size:19px;letter-spacing:.02em}
+.cover .who .x{color:var(--faint);font-weight:400}
+.cover .who .co{color:var(--muted)}
+.cover h1{font-size:88px;margin-top:22px;max-width:900px}
+.cover .streams{display:flex;gap:12px;margin-top:34px}
+.cover .status{display:flex;gap:26px;margin-top:44px}
+.cover .status .st{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--muted)}
+.cover .status .st b{color:var(--text);font-weight:500}
+
+/* ---------- S2 agenda ---------- */
+.agbar{display:flex;gap:6px;margin-top:40px;height:170px}
+.agseg{border-radius:14px;border:1px solid var(--line);background:var(--panel);padding:16px 14px;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:border-color .2s}
+.agseg:hover{border-color:var(--line2)}
+.agseg .n{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--faint)}
+.agseg .t{font-family:var(--disp);font-weight:600;font-size:16.5px;line-height:1.22;margin-top:8px}
+.agseg .min{margin-top:auto;font-family:var(--mono);font-size:12px;color:var(--green)}
+.agseg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--green);opacity:.55}
+.agmeta{display:flex;gap:44px;margin-top:36px}
+.agmeta .m .v{font-family:var(--disp);font-weight:700;font-size:40px;letter-spacing:-.02em}
+.agmeta .m .v span{font-size:17px;color:var(--muted);font-weight:500}
+.agmeta .m .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+
+/* ---------- S3 baseline ---------- */
+.base{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:18px;margin-top:34px;flex:1}
+.bpanel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column}
+.bpanel .hd{display:flex;justify-content:space-between;align-items:center}
+.bpanel .hd .t{font-family:var(--disp);font-weight:600;font-size:16px}
+.gauge-wrap{display:flex;align-items:center;justify-content:center;flex:1;position:relative}
+.gauge-num{position:absolute;text-align:center}
+.gauge-num .v{font-family:var(--disp);font-weight:700;font-size:52px;letter-spacing:-.03em;line-height:1}
+.gauge-num .v span{font-size:19px;color:var(--faint);font-weight:500}
+.gauge-num .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--red);text-transform:uppercase;margin-top:6px}
+.sevbar{display:flex;height:14px;border-radius:7px;overflow:hidden;margin-top:14px}
+.sevbar div{height:100%}
+.sevleg{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+.sevleg .r{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted)}
+.sevleg .r b{color:var(--text);font-family:var(--disp);width:24px}
+.sevleg .sw{width:9px;height:9px;border-radius:3px}
+.li-scores{display:flex;flex-direction:column;gap:16px;margin-top:18px;flex:1;justify-content:center}
+.li-s .lr{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:7px}
+.li-s .lr b{color:var(--text);font-family:var(--disp);font-size:14px}
+.li-s .track{height:9px;border-radius:5px;background:rgba(163,199,182,.09);overflow:hidden}
+.li-s .fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--green));width:0;transition:width 1s cubic-bezier(.2,.7,.2,1)}
+.bignum{font-family:var(--disp);font-weight:700;font-size:56px;letter-spacing:-.03em;line-height:1}
+.baseline-note{margin-top:14px;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted)}
+.baseline-note .pulse{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(49,208,141,.5);animation:pulse 2.2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 11px rgba(49,208,141,0)}100%{box-shadow:0 0 0 0 rgba(49,208,141,0)}}
+
+/* ---------- S4 root plan ---------- */
+.plan{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:8px}
+.wcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;overflow:hidden}
+.wcard .num{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--faint)}
+.wcard .t{font-family:var(--disp);font-weight:600;font-size:21px;margin-top:10px}
+.wcard .d{font-size:13.5px;color:var(--muted);line-height:1.5;margin-top:8px}
+.wcard .meta{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.wcard::before{content:"";position:absolute;top:0;left:0;right:0;height:3px}
+.wcard.g::before{background:var(--green)} .wcard.c::before{background:var(--cyan)} .wcard.a::before{background:var(--gold)}
+.rootsvg{display:block;margin:0 auto}
+
+/* ---------- workstream detail slides ---------- */
+.wgrid{display:grid;grid-template-columns:500px 1fr;gap:32px;margin-top:24px;flex:1;min-height:0}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px}
+.tile .ic{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;padding:3px 8px;border-radius:5px;display:inline-block}
+.tile .tt{font-family:var(--disp);font-weight:600;font-size:14.5px;margin-top:9px;line-height:1.25}
+.tile .td{font-size:12px;color:var(--muted);line-height:1.45;margin-top:5px}
+.wtimeline{display:flex;align-items:center;gap:0;margin-top:26px}
+.wt-step{flex:1;position:relative;padding-top:16px;padding-right:16px}
+.wt-step::before{content:"";position:absolute;top:5px;left:0;right:0;height:2px;background:var(--line2)}
+.wt-step .pt{position:absolute;top:0;left:0;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2.5px solid var(--muted)}
+.wt-step.done .pt{border-color:var(--green);background:var(--green)}
+.wt-step.hot .pt{border-color:var(--green)}
+.wt-step.hot::before{background:linear-gradient(90deg,var(--green),var(--line2))}
+.wt-step .wl{font-family:var(--mono);font-size:10px;letter-spacing:.13em;color:var(--faint);text-transform:uppercase}
+.wt-step .wv{font-family:var(--disp);font-weight:600;font-size:14px;margin-top:3px}
+.wt-step .wv em{font-style:normal;color:var(--green)}
+.mock{background:var(--panel);border:1px solid var(--line2);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px -30px rgba(0,0,0,.7)}
+.mock .bar{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid var(--line);background:var(--panel2)}
+.mock .bar i{width:8px;height:8px;border-radius:50%;background:var(--faint);opacity:.5}
+.mock .url{margin-left:8px;font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--bg);border-radius:5px;padding:3px 10px;letter-spacing:.05em}
+.mock .url b{color:var(--green);font-weight:500}
+
+/* ---------- SEO chart ---------- */
+.chartbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 20px 12px;position:relative}
+.chartbox .cl{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- funnel ---------- */
+.funnel{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.fstep{display:grid;grid-template-columns:60px 1fr 118px;align-items:center;gap:14px}
+.fstep .fv{font-family:var(--disp);font-weight:700;font-size:21px;text-align:right}
+.fstep .fbar{height:26px;border-radius:7px;background:linear-gradient(90deg,var(--gold),rgba(228,183,93,.25));min-width:26px;transition:width .9s cubic-bezier(.2,.7,.2,1)}
+.fstep:last-child .fbar{background:linear-gradient(90deg,var(--green),rgba(49,208,141,.3))}
+.fstep:last-child .fv{color:var(--green)}
+.fstep .fl{font-size:12.5px;color:var(--muted)}
+.fstep .fl b{display:block;color:var(--text);font-weight:600;font-size:13px}
+.pillars{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.postgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:12px}
+.postgrid i{height:22px;border-radius:6px;background:var(--gold-dim);border:1px solid rgba(228,183,93,.3)}
+
+/* ---------- 30 days ---------- */
+.sprint{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px;flex:1}
+.wk{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:19px;position:relative}
+.wk .wn{display:flex;justify-content:space-between;align-items:baseline}
+.wk .wn .w{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--faint)}
+.wk .wt{font-family:var(--disp);font-weight:600;font-size:17px;margin-top:8px}
+.wk ul{list-style:none;margin-top:13px;display:flex;flex-direction:column;gap:8px}
+.wk li{font-size:12.5px;color:var(--muted);line-height:1.4;padding-left:16px;position:relative}
+.wk li::before{content:"";position:absolute;left:0;top:6px;width:6px;height:6px;border-radius:2px;background:var(--green);opacity:.7}
+.wk .mile{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line2);font-size:12px;color:var(--green);font-family:var(--mono);letter-spacing:.04em;display:flex;gap:8px;align-items:center}
+.sprint-track{display:flex;align-items:center;gap:10px;margin-top:22px}
+.sprint-track .seg{flex:1;height:3px;border-radius:2px;background:var(--line2)}
+.sprint-track .seg.on{background:var(--green)}
+.sprint-track .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--faint)}
+
+/* ---------- gantt ---------- */
+.gantt{margin-top:10px;flex:1;display:flex;flex-direction:column;gap:0;justify-content:center}
+.gr{display:grid;grid-template-columns:150px repeat(6,1fr);gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.gr.head{border-bottom:1px solid var(--line2);padding:0 0 10px}
+.gr.head .gm{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--faint);text-align:center}
+.gr .gname{font-family:var(--disp);font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:9px}
+.gr .gname i{width:9px;height:9px;border-radius:3px;flex:none}
+.gcell{height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--muted);background:rgba(163,199,182,.05);border:1px solid transparent;text-align:center;line-height:1.25;padding:2px 4px}
+.gcell.g{background:var(--green-dim);border-color:rgba(49,208,141,.28);color:#B9EDD6}
+.gcell.c{background:var(--cyan-dim);border-color:rgba(92,192,234,.26);color:#C7E8F7}
+.gcell.a{background:var(--gold-dim);border-color:rgba(228,183,93,.26);color:#F2DDAE}
+.gcell.hotg{background:var(--green);color:#06231A;font-weight:600;box-shadow:0 0 24px rgba(49,208,141,.35)}
+.gcell.dim{opacity:.55}
+.gflags{display:flex;gap:16px;margin-top:22px}
+.gflag{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px 16px;display:flex;gap:12px;align-items:center}
+.gflag .fv{font-family:var(--disp);font-weight:700;font-size:22px}
+.gflag .fk{font-size:12.5px;color:var(--muted);line-height:1.35}
+.gflag .fk b{color:var(--text);display:block;font-size:13px}
+
+/* ---------- team ---------- */
+.orgwrap{flex:1;display:flex;align-items:center;justify-content:center;margin-top:6px}
+.pod{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:17px 19px;width:255px}
+.pod .pi{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.pod .pt{font-family:var(--disp);font-weight:600;font-size:16.5px;margin-top:7px}
+.pod .pd{font-size:12.5px;color:var(--muted);line-height:1.45;margin-top:5px}
+.pod .pl{font-size:12px;color:var(--text);margin-top:6px;font-weight:500}
+.hub{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid rgba(49,208,141,.4);border-radius:18px;padding:22px 26px;width:300px;box-shadow:0 0 50px -12px rgba(49,208,141,.25);text-align:center}
+.hub .av{width:52px;height:52px;border-radius:50%;background:var(--green-dim);border:1px solid rgba(49,208,141,.5);color:var(--green);font-family:var(--disp);font-weight:700;font-size:18px;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.hub .ht{font-family:var(--disp);font-weight:700;font-size:20px;margin-top:11px}
+.hub .hr{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-top:4px}
+.hub .hd2{font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.45}
+
+/* ---------- access tiers ---------- */
+.tiers{display:grid;grid-template-columns:1.15fr 1fr .9fr;gap:18px;margin-top:32px;flex:1}
+.tier{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.tier .th{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.tier .th .t{font-family:var(--disp);font-weight:600;font-size:15.5px}
+
+/* ---------- discovery ---------- */
+.disc{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:30px}
+.dq{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:19px 21px}
+.dq .dt{font-family:var(--disp);font-weight:600;font-size:16.5px;display:flex;align-items:center;gap:10px}
+.dq .dt .di{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;background:var(--green-dim)}
+.dq ul{list-style:none;margin-top:11px;display:flex;flex-direction:column;gap:7px}
+.dq li{font-size:12.5px;color:var(--muted);line-height:1.45;padding-left:14px;position:relative}
+.dq li::before{content:"›";position:absolute;left:0;color:var(--green)}
+.banner{margin-top:20px;background:linear-gradient(90deg,var(--green-dim),transparent 70%);border:1px solid rgba(49,208,141,.3);border-radius:13px;padding:14px 20px;display:flex;align-items:center;gap:14px;font-size:14px}
+.banner b{color:var(--green)}
+
+/* ---------- design direction ---------- */
+.refs{display:grid;grid-template-columns:1.35fr 1fr;gap:28px;margin-top:30px;flex:1}
+.refgroup{margin-bottom:18px}
+.refgroup .rg{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
+.reflogos{display:flex;flex-wrap:wrap;gap:8px}
+.reflogo{padding:8px 15px;border-radius:9px;border:1px solid var(--line);background:var(--panel);font-family:var(--disp);font-weight:600;font-size:13.5px;color:var(--text);display:flex;align-items:center;gap:8px}
+.reflogo span{font-family:var(--mono);font-weight:400;font-size:10px;color:var(--faint);letter-spacing:.04em}
+.prin{display:flex;flex-direction:column;gap:11px}
+.prin .p{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px 17px;display:flex;gap:13px;align-items:flex-start}
+.prin .p .pn{font-family:var(--mono);font-size:11px;color:var(--green);margin-top:2px}
+.prin .p .pt2{font-family:var(--disp);font-weight:600;font-size:14.5px}
+.prin .p .pd2{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+/* ---------- cadence ---------- */
+.beats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}
+.beat{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px}
+.beat .bf{font-family:var(--disp);font-weight:700;font-size:22px;color:var(--green)}
+.beat .bt{font-family:var(--disp);font-weight:600;font-size:15px;margin-top:7px}
+.beat .bd{font-size:12px;color:var(--muted);line-height:1.45;margin-top:5px}
+.flow{display:flex;align-items:stretch;gap:10px;margin-top:22px}
+.fnode{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px 15px;position:relative}
+.fnode .fd{font-family:var(--mono);font-size:10px;letter-spacing:.13em;color:var(--gold);text-transform:uppercase}
+.fnode .ft{font-family:var(--disp);font-weight:600;font-size:14px;margin-top:6px}
+.fnode .fx{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.4}
+.farrow{display:flex;align-items:center;color:var(--faint);font-size:16px}
+.rulebox{margin-top:18px;border:1px dashed var(--line2);border-radius:12px;padding:12px 18px;font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:center}
+.rulebox b{color:var(--gold)}
+
+/* ---------- commitments ---------- */
+.commit{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px;flex:1}
+.cside{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column}
+.cside.us{border-color:rgba(49,208,141,.3)}
+.cside.you{border-color:rgba(228,183,93,.3)}
+.cside .ch{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.cside .ch .t{font-family:var(--disp);font-weight:700;font-size:19px}
+.cside ul{list-style:none;margin-top:15px;display:flex;flex-direction:column;gap:12px}
+
+/* ---------- close ---------- */
+.close-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:36px;margin-top:36px;flex:1;align-items:start}
+.contact{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+.contact .cn{font-family:var(--disp);font-weight:700;font-size:19px}
+.contact .cr{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--green);text-transform:uppercase;margin-top:4px}
+.contact .cd{margin-top:14px;display:flex;flex-direction:column;gap:8px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.contact .cd b{color:var(--text);font-weight:500}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="counter">01 / 16</div>
+<div id="hint">← → arrows · F fullscreen</div>
+<div id="navbtns">
+  <button id="prev" aria-label="Previous slide">‹</button>
+  <button id="next" aria-label="Next slide">›</button>
+</div>
+<div id="viewport"><div id="stage">
+
+<!-- ============ S1 · COVER ============ -->
+<section class="slide cover active">
+  <svg class="cover-roots" viewBox="0 0 1280 720" fill="none" aria-hidden="true">
+    <g stroke="rgba(49,208,141,.28)" stroke-width="1.2">
+      <path class="root" d="M1040 720 C 1030 600, 1080 520, 1150 470 S 1240 380, 1235 300"/>
+      <path class="root" d="M1040 720 C 1055 590, 990 540, 960 460 S 930 340, 980 260"/>
+      <path class="root" d="M1040 720 C 1060 620, 1140 600, 1200 560"/>
+      <path class="root" d="M960 460 C 900 420, 880 360, 895 300"/>
+      <path class="root" d="M1150 470 C 1190 440, 1210 430, 1255 425"/>
+      <path class="root" d="M980 260 C 1010 210, 1060 190, 1120 185"/>
+    </g>
+    <g fill="rgba(49,208,141,.75)">
+      <circle cx="1235" cy="300" r="3.5"/><circle cx="980" cy="260" r="3.5"/>
+      <circle cx="1200" cy="560" r="3"/><circle cx="895" cy="300" r="3"/>
+      <circle cx="1255" cy="425" r="3"/><circle cx="1120" cy="185" r="3.5"/>
+      <circle cx="960" cy="460" r="2.5" fill="rgba(92,192,234,.7)"/>
+      <circle cx="1150" cy="470" r="2.5" fill="rgba(228,183,93,.7)"/>
+    </g>
+  </svg>
+  <div class="eyebrow"><span class="rule"></span>PROJECT KICKOFF · JULY 2026 · RIYADH</div>
+  <div class="who" style="margin-top:26px"><span>Jethur</span><span class="x">×</span><span class="co">Code-OX</span></div>
+  <h1>Three pillars.<br>One <span class="g">roadmap.</span></h1>
+  <div class="streams">
+    <span class="chip"><i class="dot g"></i>Website Revamp</span>
+    <span class="chip"><i class="dot c"></i>SEO Retainer</span>
+    <span class="chip"><i class="dot a"></i>LinkedIn Growth</span>
+  </div>
+  <div class="status">
+    <div class="st"><i class="dot g"></i><b>Agreement</b> signed</div>
+    <div class="st"><i class="dot g"></i><b>Scope</b> locked</div>
+    <div class="st"><i class="dot a"></i><b>Production</b> starts today</div>
+  </div>
+  <div class="slidefoot"><span>jethur.com</span><span>JTR-KICKOFF-2026-01</span></div>
+</section>
+
+<!-- ============ S2 · AGENDA ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>AGENDA</div>
+  <h1>60 minutes, <span class="g">six blocks.</span></h1>
+  <p class="sub">Fast through the recap — most of our time goes to discovery and alignment.</p>
+  <div class="agbar">
+    <div class="agseg" style="flex:15"><span class="n">01</span><span class="t">Engagement recap</span><span class="min">15 min</span></div>
+    <div class="agseg" style="flex:10"><span class="n">02</span><span class="t">Roadmap — 30 days &amp; 6 months</span><span class="min">10 min</span></div>
+    <div class="agseg" style="flex:10"><span class="n">03</span><span class="t">Access &amp; credentials</span><span class="min">10 min</span></div>
+    <div class="agseg" style="flex:15"><span class="n">04</span><span class="t">Discovery — business &amp; audience</span><span class="min">15 min</span></div>
+    <div class="agseg" style="flex:5"><span class="n">05</span><span class="t">Design direction</span><span class="min">5 min</span></div>
+    <div class="agseg" style="flex:5"><span class="n">06</span><span class="t">Cadence &amp; next steps</span><span class="min">5 min</span></div>
+  </div>
+  <div class="agmeta">
+    <div class="m"><div class="v">3</div><div class="k">Workstreams starting</div></div>
+    <div class="m"><div class="v">2 <span>months</span></div><div class="k">To new site live</div></div>
+    <div class="m"><div class="v">6 <span>months</span></div><div class="k">Initial retainer term</div></div>
+    <div class="m"><div class="v">1</div><div class="k">Point of contact</div></div>
+  </div>
+  <div class="slidefoot"><span>Kickoff · Working session</span><span>02</span></div>
+</section>
+
+<!-- ============ S3 · BASELINE ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>WHERE WE START</div>
+  <h1>We audited everything. <span class="g">Here's the baseline.</span></h1>
+  <div class="base">
+    <div class="bpanel">
+      <div class="hd"><span class="t">SEO health</span><span class="tag r">Audit · Mar 2026</span></div>
+      <div class="gauge-wrap">
+        <svg width="200" height="200" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="82" fill="none" stroke="rgba(163,199,182,.1)" stroke-width="13"/>
+          <circle class="gauge-arc" cx="100" cy="100" r="82" fill="none" stroke="url(#gg)" stroke-width="13"
+            stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515" transform="rotate(-90 100 100)"/>
+          <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#EF6A5E"/><stop offset="100%" stop-color="#E4B75D"/>
+          </linearGradient></defs>
+        </svg>
+        <div class="gauge-num"><div class="v">43<span>/100</span></div><div class="k">Needs work</div></div>
+      </div>
+      <div class="klabel" style="text-align:center">Score today · target 85+ post-revamp</div>
+    </div>
+    <div class="bpanel">
+      <div class="hd"><span class="t">Website issues</span><span class="tag n">jethur.com</span></div>
+      <div style="margin-top:20px"><span class="bignum">30</span> <span class="klabel" style="font-size:12px">documented findings</span></div>
+      <div class="sevbar">
+        <div style="width:17%;background:var(--red)"></div>
+        <div style="width:50%;background:var(--gold)"></div>
+        <div style="width:33%;background:var(--faint)"></div>
+      </div>
+      <div class="sevleg">
+        <div class="r"><i class="sw" style="background:var(--red)"></i><b>5</b> Critical — broken legal links, no pricing page, single CTA</div>
+        <div class="r"><i class="sw" style="background:var(--gold)"></i><b>15</b> High — schema, H1s, performance, mobile CTA hidden</div>
+        <div class="r"><i class="sw" style="background:var(--faint)"></i><b>10</b> Medium — cleanup &amp; hygiene</div>
+      </div>
+    </div>
+    <div class="bpanel">
+      <div class="hd"><span class="t">LinkedIn health</span><span class="tag n">/company/jethur</span></div>
+      <div class="li-scores">
+        <div class="li-s"><div class="lr"><span>Profile completeness</span><b>65</b></div><div class="track"><div class="fill" data-w="65%"></div></div></div>
+        <div class="li-s"><div class="lr"><span>Content &amp; posting</span><b>50</b></div><div class="track"><div class="fill" data-w="50%"></div></div></div>
+        <div class="li-s"><div class="lr"><span>Engagement &amp; reach</span><b>40</b></div><div class="track"><div class="fill" data-w="40%"></div></div></div>
+      </div>
+      <div class="klabel">Untapped: CEO brand · newsletter · advocacy</div>
+    </div>
+  </div>
+  <div class="baseline-note"><span class="pulse"></span>Every issue is documented, prioritised — and already scheduled into the plan you'll see next.</div>
+  <div class="slidefoot"><span>Full audit reports shared separately</span><span>03</span></div>
+</section>
+
+<!-- ============ S4 · THE PLAN ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>THE ENGAGEMENT</div>
+  <h1>Three workstreams, <span class="g">one root system.</span></h1>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;margin:2px 0 6px">
+    <svg class="rootsvg" width="560" height="150" viewBox="0 0 560 150" fill="none" aria-hidden="true">
+      <path d="M95 14 C 95 70, 200 74, 280 96" stroke="var(--green)" stroke-width="2" opacity=".7"/>
+      <path d="M280 14 L 280 96" stroke="var(--cyan)" stroke-width="2" opacity=".7"/>
+      <path d="M465 14 C 465 70, 360 74, 280 96" stroke="var(--gold)" stroke-width="2" opacity=".7"/>
+      <circle cx="95" cy="14" r="5" fill="var(--green)"/>
+      <circle cx="280" cy="14" r="5" fill="var(--cyan)"/>
+      <circle cx="465" cy="14" r="5" fill="var(--gold)"/>
+      <circle cx="280" cy="100" r="7" fill="#0A0F0D" stroke="var(--green)" stroke-width="2.5"/>
+      <path d="M280 107 L 280 128" stroke="var(--green)" stroke-width="2.5"/>
+      <text x="280" y="146" text-anchor="middle" fill="var(--text)" font-family="Space Grotesk" font-weight="600" font-size="14">jethur.com — trust, rankings, pipeline</text>
+    </svg>
+  </div>
+  <div class="plan">
+    <div class="wcard g">
+      <span class="num">/ 01 · FOUNDATION</span>
+      <div class="t">Website Revamp</div>
+      <div class="d">jethur.com rebuilt on Next.js — designed in Figma, custom CMS, technical SEO in the code from day one.</div>
+      <div class="meta"><span class="tag g">One-time · fixed</span><span class="tag n">Live end of M2</span><span class="tag n">3-mo free support</span></div>
+    </div>
+    <div class="wcard c">
+      <span class="num">/ 02 · VISIBILITY</span>
+      <div class="t">SEO Retainer</div>
+      <div class="d">All 30 audit issues fixed at the source, then ongoing content and authority building that compounds monthly.</div>
+      <div class="meta"><span class="tag c">Retainer · from day 1</span><span class="tag n">2 articles / mo</span><span class="tag n">6-mo term</span></div>
+    </div>
+    <div class="wcard a">
+      <span class="num">/ 03 · PIPELINE</span>
+      <div class="t">LinkedIn Growth</div>
+      <div class="d">12 posts a month across 6 pillars, plus 150+ targeted outreach actions routing warm leads to your sales team.</div>
+      <div class="meta"><span class="tag a">Retainer · from day 1</span><span class="tag n">Page + outreach</span><span class="tag n">6-mo term</span></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span>Scope per Master Agreement · Schedule A</span><span>04</span></div>
+</section>
+
+<!-- ============ S5 · WEBSITE ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>WORKSTREAM 01 · WEBSITE</div>
+  <h1>A new jethur.com, <span class="g">engineered for trust.</span></h1>
+  <div class="wgrid">
+    <div>
+      <div class="mock">
+        <div class="bar"><i></i><i></i><i></i><span class="url">https://<b>jethur.com</b> · Next.js · Lighthouse 90+</span></div>
+        <svg width="100%" viewBox="0 0 500 305" style="display:block">
+          <rect width="500" height="305" fill="#0D1411"/>
+          <rect x="0" y="0" width="500" height="34" fill="#111A16"/>
+          <rect x="18" y="12" width="58" height="10" rx="3" fill="#31D08D" opacity=".9"/>
+          <rect x="180" y="14" width="34" height="6" rx="3" fill="#5F7469"/>
+          <rect x="224" y="14" width="34" height="6" rx="3" fill="#5F7469"/>
+          <rect x="268" y="14" width="40" height="6" rx="3" fill="#E4B75D" opacity=".8"/>
+          <rect x="318" y="14" width="46" height="6" rx="3" fill="#5F7469"/>
+          <rect x="398" y="8" width="84" height="18" rx="9" fill="#31D08D"/>
+          <text x="440" y="20.5" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#06231A" font-weight="600">BOOK DEMO</text>
+          <text x="270" y="10" font-family="IBM Plex Mono" font-size="5.5" fill="#E4B75D" opacity=".9">PRICING ✓</text>
+          <rect x="18" y="58" width="250" height="17" rx="3" fill="#EDF4F0" opacity=".92"/>
+          <rect x="18" y="82" width="196" height="17" rx="3" fill="#EDF4F0" opacity=".55"/>
+          <rect x="18" y="112" width="150" height="8" rx="3" fill="#93A89D" opacity=".5"/>
+          <rect x="18" y="138" width="86" height="22" rx="11" fill="#31D08D"/>
+          <rect x="114" y="138" width="110" height="22" rx="11" fill="none" stroke="#5CC0EA" stroke-width="1.2"/>
+          <text x="169" y="152" text-anchor="middle" font-family="IBM Plex Mono" font-size="7.5" fill="#5CC0EA">PRODUCT TOUR</text>
+          <rect x="290" y="52" width="192" height="118" rx="8" fill="#15201B" stroke="#31D08D" stroke-opacity=".35"/>
+          <rect x="302" y="66" width="70" height="7" rx="3" fill="#31D08D" opacity=".8"/>
+          <rect x="302" y="82" width="168" height="5" rx="2" fill="#5F7469"/>
+          <rect x="302" y="93" width="150" height="5" rx="2" fill="#5F7469"/>
+          <rect x="302" y="112" width="168" height="44" rx="5" fill="#0A0F0D"/>
+          <polyline points="310,148 330,142 350,144 372,132 394,134 416,124 438,118 460,110" fill="none" stroke="#31D08D" stroke-width="2"/>
+          <rect x="18" y="186" width="464" height="1" fill="rgba(163,199,182,.14)"/>
+          <text x="18" y="206" font-family="IBM Plex Mono" font-size="6.5" fill="#5F7469" letter-spacing="2">TRUSTED BY · CASE STUDIES ✓</text>
+          <rect x="18" y="218" width="106" height="52" rx="7" fill="#111A16" stroke="rgba(163,199,182,.14)"/>
+          <rect x="138" y="218" width="106" height="52" rx="7" fill="#111A16" stroke="rgba(163,199,182,.14)"/>
+          <rect x="258" y="218" width="106" height="52" rx="7" fill="#111A16" stroke="rgba(163,199,182,.14)"/>
+          <rect x="378" y="218" width="104" height="52" rx="7" fill="#111A16" stroke="rgba(163,199,182,.14)"/>
+          <text x="18" y="294" font-family="IBM Plex Mono" font-size="6.5" fill="#31D08D" letter-spacing="1.5">PRIVACY POLICY ✓ · TERMS ✓ · RTL-READY ✓</text>
+        </svg>
+      </div>
+      <div class="klabel" style="margin-top:12px;text-align:center">Sticky CTA · pricing &amp; case studies · legal pages live — every critical gap closed by design</div>
+    </div>
+    <div>
+      <div class="tiles">
+        <div class="tile"><span class="ic tag g">FIGMA</span><div class="tt">Design system first</div><div class="td">Wireframes → hi-fi UI, every breakpoint. You sign off before code.</div></div>
+        <div class="tile"><span class="ic tag g">NEXT.JS</span><div class="tt">Enterprise-grade build</div><div class="td">TypeScript, security headers, Lighthouse 90+ on every page.</div></div>
+        <div class="tile"><span class="ic tag g">CMS</span><div class="tt">Custom CMS, fully yours</div><div class="td">Your team publishes blogs, pages and case studies — no vendor.</div></div>
+        <div class="tile"><span class="ic tag g">SEO</span><div class="tt">Technical SEO in the code</div><div class="td">Schema, meta, sitemap, Core Web Vitals — production-grade at launch.</div></div>
+        <div class="tile"><span class="ic tag g">301</span><div class="tt">Nothing lost in migration</div><div class="td">Full redirect map, GA4 + Search Console verified pre-launch.</div></div>
+        <div class="tile"><span class="ic tag g">3 MO</span><div class="tt">Free post-launch support</div><div class="td">Bug fixes, minor changes and content help — included.</div></div>
+      </div>
+      <div class="wtimeline">
+        <div class="wt-step hot"><span class="pt"></span><div class="wl">Month 1</div><div class="wv">Discovery · Design</div></div>
+        <div class="wt-step"><span class="pt"></span><div class="wl">Month 2</div><div class="wv">Build · QA · UAT</div></div>
+        <div class="wt-step"><span class="pt"></span><div class="wl">End of M2</div><div class="wv"><em>🚀 Go-live</em></div></div>
+        <div class="wt-step"><span class="pt"></span><div class="wl">M3 – M5</div><div class="wv">Free support</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span>One-time · Fixed scope</span><span>05</span></div>
+</section>
+
+<!-- ============ S6 · SEO ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>WORKSTREAM 02 · SEO</div>
+  <h1>Launch <span class="c">already ranking</span> — then compound.</h1>
+  <div class="wgrid" style="grid-template-columns:520px 1fr">
+    <div>
+      <div class="chartbox">
+        <span class="cl">Organic visibility · how the retainer compounds</span>
+        <svg width="100%" viewBox="0 0 480 235" style="display:block;margin-top:8px">
+          <line x1="36" y1="195" x2="470" y2="195" stroke="rgba(163,199,182,.2)"/>
+          <g font-family="IBM Plex Mono" font-size="9.5" fill="#5F7469" text-anchor="middle">
+            <text x="70" y="212">M1</text><text x="146" y="212">M2</text><text x="222" y="212">M3</text>
+            <text x="298" y="212">M4</text><text x="374" y="212">M5</text><text x="450" y="212">M6</text>
+          </g>
+          <path d="M36 192 C 90 190, 120 184, 146 172 C 200 148, 240 128, 298 96 C 350 68, 410 44, 470 26 L 470 195 L 36 195 Z"
+            fill="url(#seofill)" opacity=".9"/>
+          <path class="seoline" d="M36 192 C 90 190, 120 184, 146 172 C 200 148, 240 128, 298 96 C 350 68, 410 44, 470 26"
+            fill="none" stroke="#5CC0EA" stroke-width="2.5" stroke-linecap="round"/>
+          <defs><linearGradient id="seofill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(92,192,234,.3)"/><stop offset="100%" stop-color="rgba(92,192,234,0)"/>
+          </linearGradient></defs>
+          <circle cx="70" cy="190" r="4" fill="#5CC0EA"/>
+          <circle cx="146" cy="172" r="4.5" fill="#31D08D"/>
+          <circle cx="298" cy="96" r="4" fill="#5CC0EA"/>
+          <g font-family="IBM Plex Mono" font-size="9" letter-spacing="1">
+            <text x="70" y="172" fill="#93A89D" text-anchor="middle">FOUNDATIONS</text>
+            <text x="146" y="150" fill="#31D08D" text-anchor="middle">SITE LIVE · RANKING-READY</text>
+            <text x="298" y="76" fill="#93A89D" text-anchor="middle">RANKINGS MOVE</text>
+          </g>
+        </svg>
+      </div>
+      <div class="rulebox" style="margin-top:14px"><span>⚡</span><span><b>30 / 30 issues fixed at the source</b> — inside the rebuild, not patched afterwards. Score target: 43 → 85+.</span></div>
+    </div>
+    <div class="tiles">
+      <div class="tile"><span class="ic tag c">KW</span><div class="tt">GRC keyword clusters</div><div class="td">Intent map for KSA + target geos — NCA ECC, SAMA CSF, PDPL. Pages built around clusters.</div></div>
+      <div class="tile"><span class="ic tag c">2×</span><div class="tt">2 long-form articles / month</div><div class="td">High-intent GRC topics, drafted 5 days before publish for your review.</div></div>
+      <div class="tile"><span class="ic tag c">BL</span><div class="tt">Backlinks &amp; authority</div><div class="td">Authority links + internal topic clusters that lift every related page.</div></div>
+      <div class="tile"><span class="ic tag c">AI</span><div class="tt">AI-search ready</div><div class="td">Structured data, FAQ and E-E-A-T signals — visible to Google and LLMs alike.</div></div>
+      <div class="tile"><span class="ic tag c">GSC</span><div class="tt">Always-on monitoring</div><div class="td">Weekly rank tracking, crawl &amp; index health via GA4 + Search Console.</div></div>
+      <div class="tile"><span class="ic tag c">RPT</span><div class="tt">Report — 5th business day</div><div class="td">Rankings, traffic, wins, misses, and a prioritised plan every month.</div></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span>Deliverables committed · outcomes compound, not guaranteed</span><span>06</span></div>
+</section>
+
+<!-- ============ S7 · LINKEDIN ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>WORKSTREAM 03 · LINKEDIN</div>
+  <h1>Content builds the brand. <span class="a">Outreach builds pipeline.</span></h1>
+  <div class="wgrid" style="grid-template-columns:1fr 520px;margin-top:24px">
+    <div>
+      <div class="panel" style="padding:18px 20px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <span class="klabel">Stream A · Page management</span><span class="big" style="font-size:24px;color:var(--gold)">12<span style="font-size:13px;color:var(--faint)"> posts / mo</span></span>
+        </div>
+        <div class="postgrid">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="pillars">
+          <span class="chip" style="font-size:11px;padding:5px 11px">📋 Regulatory intel</span>
+          <span class="chip" style="font-size:11px;padding:5px 11px">🎓 Product education</span>
+          <span class="chip" style="font-size:11px;padding:5px 11px">💡 Thought leadership</span>
+          <span class="chip" style="font-size:11px;padding:5px 11px">🏆 Social proof</span>
+          <span class="chip" style="font-size:11px;padding:5px 11px">👥 Team &amp; culture</span>
+          <span class="chip" style="font-size:11px;padding:5px 11px">🔍 Problem awareness</span>
+        </div>
+      </div>
+      <div class="panel" style="padding:16px 20px;margin-top:14px;display:flex;gap:18px;align-items:center">
+        <div><div class="klabel">Calendar shared</div><div class="big" style="font-size:19px">25th<span style="font-size:12px;color:var(--faint)"> of prior month</span></div></div>
+        <div style="width:1px;height:36px;background:var(--line2)"></div>
+        <div><div class="klabel">Full production</div><div style="font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4">Copy, design, scheduling &amp; engagement — all handled by us</div></div>
+      </div>
+      <div class="rulebox" style="margin-top:14px"><span>🎯</span><span>Targets: <b>CISOs, CROs &amp; Compliance Directors</b> across MENA &amp; South Asia — via Sales Navigator (Jethur-provided licence).</span></div>
+    </div>
+    <div class="panel" style="padding:20px 22px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span class="klabel">Stream B · Outreach funnel — a realistic month</span><span class="tag n">Indicative</span>
+      </div>
+      <div class="funnel">
+        <div class="fstep"><span class="fv">150</span><div class="fbar" data-w="100%"></div><span class="fl"><b>Invites sent</b>personalised, per persona</span></div>
+        <div class="fstep"><span class="fv">~60</span><div class="fbar" data-w="40%"></div><span class="fl"><b>Accepted</b>≈ 40%</span></div>
+        <div class="fstep"><span class="fv">~18</span><div class="fbar" data-w="14%"></div><span class="fl"><b>Replied</b>3-touch sequence</span></div>
+        <div class="fstep"><span class="fv">~8</span><div class="fbar" data-w="8%"></div><span class="fl"><b>Conversations</b>role &amp; regulation-specific</span></div>
+        <div class="fstep"><span class="fv">~3</span><div class="fbar" data-w="5%"></div><span class="fl"><b>Qualified → your sales</b>with full context</span></div>
+      </div>
+      <div class="klabel" style="margin-top:14px">Rates tune upward month-over-month as copy &amp; segments learn</div>
+    </div>
+  </div>
+  <div class="slidefoot"><span>Retainer · 6-month initial term</span><span>07</span></div>
+</section>
+
+<!-- ============ S8 · FIRST 30 DAYS ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>SPRINT PLAN</div>
+  <h1>Kickoff → first hi-fi designs <span class="g">in 21 days.</span></h1>
+  <div class="sprint">
+    <div class="wk">
+      <div class="wn"><span class="w">WEEK 01</span><span class="tag g">Foundation</span></div>
+      <div class="wt">Access &amp; discovery</div>
+      <ul><li>Access handover complete</li><li>Discovery interviews</li><li>GA4 + Search Console verified</li><li>Keyword research starts</li></ul>
+      <div class="mile">◆ All systems unlocked</div>
+    </div>
+    <div class="wk">
+      <div class="wn"><span class="w">WEEK 02</span><span class="tag g">Architecture</span></div>
+      <div class="wt">IA &amp; wireframes</div>
+      <ul><li>Sitemap signed off</li><li>Low-fi wireframes, key pages</li><li>Redirect map drafted</li><li>Tone-of-voice document</li></ul>
+      <div class="mile">◆ Structure locked</div>
+    </div>
+    <div class="wk">
+      <div class="wn"><span class="w">WEEK 03</span><span class="tag g">Design</span></div>
+      <div class="wt">First hi-fi mocks</div>
+      <ul><li>Hero + key page designs</li><li>Component library</li><li>Blog topic queue approved</li><li>LinkedIn calendar approved</li></ul>
+      <div class="mile">◆ Day 21 · first designs</div>
+    </div>
+    <div class="wk">
+      <div class="wn"><span class="w">WEEK 04</span><span class="tag g">Build</span></div>
+      <div class="wt">Code sprint starts</div>
+      <ul><li>Full UI sign-off</li><li>CMS + dev underway</li><li>First 2 blog drafts</li><li>LinkedIn posting goes live</li></ul>
+      <div class="mile">◆ Everything in motion</div>
+    </div>
+  </div>
+  <div class="sprint-track">
+    <span class="lab">DAY 1</span>
+    <span class="seg on"></span><span class="seg on"></span><span class="seg on"></span><span class="seg"></span>
+    <span class="lab">DAY 30 · FIRST MONTHLY REPORT</span>
+  </div>
+  <div class="slidefoot"><span>All three workstreams start together — SEO research feeds site architecture</span><span>08</span></div>
+</section>
+
+<!-- ============ S9 · 6 MONTHS ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>ROADMAP</div>
+  <h1>Six months — <span class="g">what lands when.</span></h1>
+  <div class="gantt">
+    <div class="gr head">
+      <span></span>
+      <span class="gm">M1</span><span class="gm">M2</span><span class="gm">M3</span><span class="gm">M4</span><span class="gm">M5</span><span class="gm">M6</span>
+    </div>
+    <div class="gr">
+      <span class="gname"><i style="background:var(--green)"></i>Website</span>
+      <div class="gcell g">Design</div>
+      <div class="gcell hotg">Build · 🚀 LIVE</div>
+      <div class="gcell g dim">Support</div>
+      <div class="gcell g dim">Support</div>
+      <div class="gcell g dim">Support</div>
+      <div class="gcell dim">—</div>
+    </div>
+    <div class="gr">
+      <span class="gname"><i style="background:var(--cyan)"></i>SEO</span>
+      <div class="gcell c">Research · Tech</div>
+      <div class="gcell c">Blogs 1–2</div>
+      <div class="gcell c">Blogs 3–4 · Links</div>
+      <div class="gcell c">Blogs 5–6 · Clusters</div>
+      <div class="gcell c">Blogs 7–8 · Authority</div>
+      <div class="gcell c">Blogs 9–10 · Review</div>
+    </div>
+    <div class="gr" style="border-bottom:none">
+      <span class="gname"><i style="background:var(--gold)"></i>LinkedIn</span>
+      <div class="gcell a">Audit · Calendar</div>
+      <div class="gcell a">12 posts · 150 reach</div>
+      <div class="gcell a">12 · 150</div>
+      <div class="gcell a">12 · 150</div>
+      <div class="gcell a">12 · 150</div>
+      <div class="gcell a">12 · 150</div>
+    </div>
+  </div>
+  <div class="gflags">
+    <div class="gflag"><span class="fv" style="color:var(--green)">M2</span><span class="fk"><b>First major win</b>New site goes live</span></div>
+    <div class="gflag"><span class="fv" style="color:var(--gold)">M2+</span><span class="fk"><b>Pipeline opens</b>First qualified LinkedIn replies</span></div>
+    <div class="gflag"><span class="fv" style="color:var(--cyan)">M3–6</span><span class="fk"><b>SEO traction</b>Rankings move &amp; compound</span></div>
+    <div class="gflag"><span class="fv">M6</span><span class="fk"><b>Strategy reset</b>Double down on what works</span></div>
+  </div>
+  <div class="slidefoot"><span>Retainers roll month-to-month after the initial term</span><span>09</span></div>
+</section>
+
+<!-- ============ S10 · TEAM ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>TEAM &amp; GOVERNANCE</div>
+  <h1>You talk to <span class="g">one person.</span></h1>
+  <p class="sub">Specialists deliver behind him — no account-manager chains, nothing buried in email threads.</p>
+  <div class="orgwrap">
+    <div style="display:flex;align-items:center;gap:0">
+      <div class="hub">
+        <div class="av">SK</div>
+        <div class="ht">Shabeeb K</div>
+        <div class="hr">Engagement Lead · Code-OX</div>
+        <div class="hd2">Single point of accountability — strategy, weekly syncs, approvals, escalations. Across all three workstreams.</div>
+      </div>
+      <svg width="110" height="260" viewBox="0 0 110 260" fill="none" aria-hidden="true">
+        <path d="M4 130 C 55 130, 55 34, 106 34" stroke="var(--green)" stroke-width="1.6" opacity=".55"/>
+        <path d="M4 130 L 106 130" stroke="var(--cyan)" stroke-width="1.6" opacity=".55"/>
+        <path d="M4 130 C 55 130, 55 226, 106 226" stroke="var(--gold)" stroke-width="1.6" opacity=".55"/>
+        <circle cx="4" cy="130" r="4" fill="var(--green)"/>
+        <circle cx="106" cy="34" r="3.5" fill="var(--green)"/><circle cx="106" cy="130" r="3.5" fill="var(--cyan)"/><circle cx="106" cy="226" r="3.5" fill="var(--gold)"/>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="pod"><span class="pi" style="color:var(--green)">WEB POD</span><div class="pt">Design &amp; Engineering</div><div class="pd">UX, Figma UI, frontend &amp; CMS development, technical SEO in the build.</div></div>
+        <div class="pod"><span class="pi" style="color:var(--cyan)">SEO POD</span><div class="pt">SEO &amp; Content</div><div class="pd">Keyword research, long-form writing, on-page optimisation, reporting.</div><div class="pl">Raghib Ali Rafeeq — SEO Lead</div></div>
+        <div class="pod"><span class="pi" style="color:var(--gold)">SOCIAL POD</span><div class="pt">LinkedIn Growth</div><div class="pd">Content calendars, post design, Sales Navigator outreach, lead routing.</div><div class="pl">Raghib Ali Rafeeq — Growth Lead</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slidefoot"><span>Status, decisions &amp; approvals flow through one shared channel</span><span>10</span></div>
+</section>
+
+<!-- ============ S11 · ACCESS ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>ACCESS &amp; CREDENTIALS</div>
+  <h1>What unlocks work <span class="g">this week.</span></h1>
+  <div class="tiers">
+    <div class="tier" style="border-color:rgba(239,106,94,.35)">
+      <div class="th"><span class="t">Blocks start</span><span class="tag r">This week</span></div>
+      <div class="ck"><span class="m r">1</span><span>Domain registrar + DNS control<small>jethur.com</small></span></div>
+      <div class="ck"><span class="m r">2</span><span>Current hosting &amp; CMS admin login<small>content inventory · redirects</small></span></div>
+      <div class="ck"><span class="m r">3</span><span>Brand assets — logo SVG, colours, fonts<small>or confirm a brand refresh</small></span></div>
+      <div class="ck"><span class="m r">4</span><span>GA4 + Search Console admin invite<small>shabeeb.k@code-ox.com</small></span></div>
+      <div class="ck"><span class="m r">5</span><span>LinkedIn Company Page — super admin<small>/company/jethur</small></span></div>
+    </div>
+    <div class="tier" style="border-color:rgba(228,183,93,.3)">
+      <div class="th"><span class="t">Needed soon</span><span class="tag a">Before week 2</span></div>
+      <div class="ck"><span class="m a">6</span><span>Sales Navigator licence<small>Jethur-provided · we operate it</small></span></div>
+      <div class="ck"><span class="m a">7</span><span>Existing blog / content archive<small>preserve &amp; redirect</small></span></div>
+      <div class="ck"><span class="m a">8</span><span>Customer logos &amp; case studies<small>cleared for public use</small></span></div>
+      <div class="ck"><span class="m a">9</span><span>SME availability for blog input<small>15-minute interviews</small></span></div>
+    </div>
+    <div class="tier">
+      <div class="th"><span class="t">Before go-live</span><span class="tag n">Month 2</span></div>
+      <div class="ck"><span class="m g">10</span><span>Form submissions destination<small>email or CRM</small></span></div>
+      <div class="ck"><span class="m g">11</span><span>SSL certificate decision<small>we recommend free — Let's Encrypt</small></span></div>
+      <div style="margin-top:auto;padding-top:12px;border-top:1px dashed var(--line2);font-size:12.5px;color:var(--muted);line-height:1.5">📋 We send the full checklist as a shared doc <b style="color:var(--text)">right after this call</b> — with owners and dates.</div>
+    </div>
+  </div>
+  <div class="slidefoot"><span>One handover session covers items 1–5 in ~30 minutes</span><span>11</span></div>
+</section>
+
+<!-- ============ S12 · DISCOVERY ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>DISCOVERY</div>
+  <h1>Four conversations that <span class="g">shape everything.</span></h1>
+  <p class="sub">Your answers become website copy, target keywords and LinkedIn voice. Short honest answers beat perfect long ones.</p>
+  <div class="disc">
+    <div class="dq"><div class="dt"><span class="di">🧭</span>Business &amp; positioning</div>
+      <ul><li>Jethur in one sentence — for a stranger?</li><li>Why do customers pick you over a competitor — in <em>their</em> words?</li><li>What category should Google associate Jethur with first?</li></ul></div>
+    <div class="dq"><div class="dt"><span class="di">👥</span>Audience &amp; personas</div>
+      <ul><li>Who signs the cheque — and who champions internally?</li><li>Which job titles are your ideal first reply on LinkedIn?</li><li>What objections come up most in sales calls?</li></ul></div>
+    <div class="dq"><div class="dt"><span class="di">⚔️</span>Competition</div>
+      <ul><li>Top 3–5 competitors to outrank on Google?</li><li>Who's doing LinkedIn well — what should we learn?</li><li>Anyone we should never look or sound like?</li></ul></div>
+    <div class="dq"><div class="dt"><span class="di">🎯</span>Success at month 6</div>
+      <ul><li>What does "this worked" look like in December?</li><li>Inbound leads, brand authority — or both?</li><li>Regulatory events or launches to time content around?</li></ul></div>
+  </div>
+  <div class="banner"><span style="font-size:19px">📨</span><span>The <b>full questionnaire arrives within 24 hours</b> — answer at your own pace, loop in whoever knows each area best.</span></div>
+  <div class="slidefoot"><span>15 minutes now · depth via the questionnaire</span><span>12</span></div>
+</section>
+
+<!-- ============ S13 · DESIGN DIRECTION ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>VISUAL DIRECTION</div>
+  <h1>For a GRC buyer, <span class="g">the website is the demo.</span></h1>
+  <div class="refs">
+    <div>
+      <div class="refgroup"><div class="rg">01 · Category — buyers compare page-by-page</div>
+        <div class="reflogos">
+          <span class="reflogo">Vanta<span>bold confidence</span></span>
+          <span class="reflogo">Drata<span>product UI</span></span>
+          <span class="reflogo">Secureframe<span>trust-first</span></span>
+          <span class="reflogo">Sprinto<span>conversion</span></span>
+          <span class="reflogo">AuditBoard<span>enterprise</span></span>
+        </div></div>
+      <div class="refgroup"><div class="rg">02 · Craft — the 2026 premium-SaaS standard</div>
+        <div class="reflogos">
+          <span class="reflogo">Linear<span>type · motion</span></span>
+          <span class="reflogo">Stripe<span>architecture</span></span>
+          <span class="reflogo">Vercel<span>dark · grids</span></span>
+          <span class="reflogo">Resend<span>minimalist</span></span>
+        </div></div>
+      <div class="refgroup"><div class="rg">03 · Trust — brand maturity, not just UI</div>
+        <div class="reflogos">
+          <span class="reflogo">1Password<span>security story</span></span>
+          <span class="reflogo">Cloudflare<span>infrastructure</span></span>
+          <span class="reflogo">Notion<span>warm enterprise</span></span>
+        </div></div>
+      <div class="rulebox" style="margin-top:4px"><span>💬</span><span><b>Your turn:</b> 2–3 sites you love, anything to avoid, ideas in your head — we capture them now.</span></div>
+    </div>
+    <div class="prin">
+      <div class="klabel" style="margin-bottom:2px">Design principles we'll hold</div>
+      <div class="p"><span class="pn">01</span><div><div class="pt2">Trust before features</div><div class="pd2">CISOs buy confidence — credibility signals on every page.</div></div></div>
+      <div class="p"><span class="pn">02</span><div><div class="pt2">Premium type, generous space</div><div class="pd2">Enterprise calm, never crowded.</div></div></div>
+      <div class="p"><span class="pn">03</span><div><div class="pt2">Product on every fold</div><div class="pd2">Show RootX, don't just describe it.</div></div></div>
+      <div class="p"><span class="pn">04</span><div><div class="pt2">Real outcomes, real logos</div><div class="pd2">Proof over adjectives — case studies up front.</div></div></div>
+      <div class="p"><span class="pn">05</span><div><div class="pt2">Arabic-ready by design</div><div class="pd2">RTL architecture from day one — built for KSA.</div></div></div>
+    </div>
+  </div>
+  <div class="slidefoot"><span>Full moodboard in the design phase — Week 2</span><span>13</span></div>
+</section>
+
+<!-- ============ S14 · CADENCE ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>OPERATING RHYTHM</div>
+  <h1>One call · one channel · <span class="g">one approver.</span></h1>
+  <div class="beats">
+    <div class="beat"><div class="bf">Daily</div><div class="bt">Shared WhatsApp group</div><div class="bd">All three workstreams, one channel. Acknowledged within one business day.</div></div>
+    <div class="beat"><div class="bf">Weekly</div><div class="bt">30-min sync — same slot</div><div class="bd">Recurring time we lock today. Skipped when nothing's pending.</div></div>
+    <div class="beat"><div class="bf">Monthly</div><div class="bt">Combined report — 5th biz day</div><div class="bd">SEO + LinkedIn: results, wins, misses, next-month plan.</div></div>
+    <div class="beat"><div class="bf">Quarterly</div><div class="bt">90-day strategy review</div><div class="bd">Double down on what works, cut what doesn't.</div></div>
+  </div>
+  <div class="klabel" style="margin-top:26px">Approval flow · content calendar (LinkedIn + blog)</div>
+  <div class="flow" style="margin-top:10px">
+    <div class="fnode"><div class="fd">25th</div><div class="ft">We share the calendar</div><div class="fx">12 posts + 2 blog topics for next month</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fd">3 biz days</div><div class="ft">You review</div><div class="fx">Approve · edit · replace</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fd">1st</div><div class="ft">We publish</div><div class="fx">Schedule loaded, outreach running</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="fd">5th biz day</div><div class="ft">You get the report</div><div class="fx">Performance + prioritised plan</div></div>
+  </div>
+  <div class="rulebox"><span>⏱</span><span><b>Silence = approval</b> after 3 business days — delays simply shift deliverables by the same number of days. No drama, either side.</span></div>
+  <div class="slidefoot"><span>Plus an always-on read-only dashboard — live metrics anytime</span><span>14</span></div>
+</section>
+
+<!-- ============ S15 · COMMITMENTS ============ -->
+<section class="slide">
+  <div class="eyebrow"><span class="rule"></span>MUTUAL COMMITMENTS</div>
+  <h1>Clear roles. <span class="g">Both ways.</span></h1>
+  <div class="commit">
+    <div class="cside us">
+      <div class="ch"><span class="t">Code-OX commits</span><span class="tag g">We deliver</span></div>
+      <ul>
+        <li class="ck"><span class="m g">✓</span><span>Promised cadence, every month<small>12 posts · 150 outreach · 2 blogs · report on the 5th</small></span></li>
+        <li class="ck"><span class="m g">✓</span><span>One point of contact<small>Shabeeb owns the engagement, end to end</small></span></li>
+        <li class="ck"><span class="m g">✓</span><span>Same-day acknowledgement<small>on the shared channel, every business day</small></span></li>
+        <li class="ck"><span class="m g">✓</span><span>Honest reporting — wins and misses<small>if something isn't working, you hear it from us first</small></span></li>
+        <li class="ck"><span class="m g">✓</span><span>You own everything we produce<small>code, content, designs — portable, no lock-in</small></span></li>
+      </ul>
+    </div>
+    <div class="cside you">
+      <div class="ch"><span class="t">Jethur commits</span><span class="tag a">You enable</span></div>
+      <ul>
+        <li class="ck"><span class="m a">✓</span><span>Access in the first week<small>domain, GA4, Search Console, LinkedIn admin</small></span></li>
+        <li class="ck"><span class="m a">✓</span><span>One decisive approver<small>authority over calendars, designs and content</small></span></li>
+        <li class="ck"><span class="m a">✓</span><span>3-business-day review window<small>silence = approval, deliverables stay on time</small></span></li>
+        <li class="ck"><span class="m a">✓</span><span>SME time for content depth<small>~15 minutes per blog, when expertise is needed</small></span></li>
+        <li class="ck"><span class="m a">✓</span><span>Sales Navigator licence<small>in place before outreach starts — Week 4</small></span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="slidefoot"><span>Explicit now, so nothing goes wrong later</span><span>15</span></div>
+</section>
+
+<!-- ============ S16 · CLOSE ============ -->
+<section class="slide">
+  <svg class="cover-roots" viewBox="0 0 1280 720" fill="none" aria-hidden="true" style="opacity:.35">
+    <g stroke="rgba(49,208,141,.3)" stroke-width="1.2">
+      <path d="M1100 720 C 1090 590, 1150 520, 1210 470"/>
+      <path d="M1100 720 C 1115 580, 1040 520, 1010 440"/>
+      <path d="M1010 440 C 960 400, 945 350, 960 300"/>
+      <path d="M1210 470 C 1245 445, 1255 430, 1270 400"/>
+    </g>
+    <g fill="rgba(49,208,141,.7)">
+      <circle cx="960" cy="300" r="3.5"/><circle cx="1270" cy="400" r="3"/><circle cx="1010" cy="440" r="2.5"/>
+    </g>
+  </svg>
+  <div class="eyebrow"><span class="rule"></span>NEXT STEPS</div>
+  <h1>Jethur means <span class="g">roots.</span><br>Today we plant them.</h1>
+  <div class="close-grid">
+    <div>
+      <div class="klabel" style="margin-bottom:12px">This week — four things</div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="ck"><span class="m g">1</span><span>Access handover session booked<small>items 1–5 · ~30 minutes · this week</small></span></div>
+        <div class="ck"><span class="m g">2</span><span>Discovery questionnaire in your inbox<small>within 24 hours of this call</small></span></div>
+        <div class="ck"><span class="m g">3</span><span>Weekly sync slot locked<small>same time, every week — we pick it now</small></span></div>
+        <div class="ck"><span class="m g">4</span><span>Shared WhatsApp group live<small>today — all three workstreams, one channel</small></span></div>
+      </div>
+    </div>
+    <div class="contact">
+      <div class="cn">Shabeeb K</div>
+      <div class="cr">Engagement Lead · Code-OX Technologies</div>
+      <div class="cd">
+        <span>✉ <b>shabeeb.k@code-ox.com</b></span>
+        <span>☎ <b>+966 535 716 437</b></span>
+        <span>🌐 <b>code-ox.com</b></span>
+      </div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);line-height:1.5">Anything, anytime — one message away on the shared channel.</div>
+    </div>
+  </div>
+  <div class="slidefoot"><span>Thank you — let's grow</span><span>16 / 16</span></div>
+</section>
+
+</div></div>
+
+<script>
+(function(){
+  const slides=[...document.querySelectorAll('.slide')];
+  const stage=document.getElementById('stage');
+  const progress=document.getElementById('progress');
+  const counter=document.getElementById('counter');
+  const hint=document.getElementById('hint');
+  let i=0;
+
+  function fit(){
+    const s=Math.min(innerWidth/1280,innerHeight/720);
+    stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  }
+  addEventListener('resize',fit);fit();
+
+  function animate(sl){
+    // gauge
+    sl.querySelectorAll('.gauge-arc').forEach(a=>{
+      a.style.transition='none';a.style.strokeDashoffset=515;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        a.style.transition='stroke-dashoffset 1.2s cubic-bezier(.2,.7,.2,1)';
+        a.style.strokeDashoffset=515-(515*0.43);
+      }));
+    });
+    // bars & funnel
+    sl.querySelectorAll('[data-w]').forEach(el=>{
+      el.style.width='0';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.width=el.dataset.w;}));
+    });
+    // seo line draw
+    sl.querySelectorAll('.seoline').forEach(p=>{
+      const len=p.getTotalLength();
+      p.style.transition='none';p.style.strokeDasharray=len;p.style.strokeDashoffset=len;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        p.style.transition='stroke-dashoffset 1.4s ease';p.style.strokeDashoffset=0;
+      }));
+    });
+    // cover roots draw
+    sl.querySelectorAll('.root').forEach((p,k)=>{
+      const len=p.getTotalLength();
+      p.style.transition='none';p.style.strokeDasharray=len;p.style.strokeDashoffset=len;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        p.style.transition=`stroke-dashoffset 1.6s ${k*0.12}s ease`;p.style.strokeDashoffset=0;
+      }));
+    });
+  }
+
+  function go(n){
+    n=Math.max(0,Math.min(slides.length-1,n));
+    if(n===i && slides[n].classList.contains('active')){return}
+    slides[i].classList.remove('active');
+    i=n;
+    slides[i].classList.add('active');
+    progress.style.width=((i+1)/slides.length*100)+'%';
+    counter.textContent=String(i+1).padStart(2,'0')+' / '+slides.length;
+    animate(slides[i]);
+  }
+
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();go(i+1)}
+    else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(i-1)}
+    else if(e.key==='Home'){go(0)}
+    else if(e.key==='End'){go(slides.length-1)}
+    else if(e.key.toLowerCase()==='f'){
+      document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+    }
+  });
+  document.getElementById('next').addEventListener('click',()=>go(i+1));
+  document.getElementById('prev').addEventListener('click',()=>go(i-1));
+
+  // click to advance (ignore chrome buttons)
+  document.getElementById('viewport').addEventListener('click',e=>{
+    if(e.clientX>innerWidth*0.25){go(i+1)}else{go(i-1)}
+  });
+
+  // touch swipe
+  let tx=null;
+  addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+  addEventListener('touchend',e=>{
+    if(tx===null)return;
+    const dx=e.changedTouches[0].clientX-tx;
+    if(Math.abs(dx)>44){dx<0?go(i+1):go(i-1)}
+    tx=null;
+  },{passive:true});
+
+  setTimeout(()=>{hint.style.opacity='0'},6000);
+  progress.style.width=(1/slides.length*100)+'%';
+  animate(slides[0]);
+})();
+</script>
+</body>
+</html>

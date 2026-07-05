@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Kickoff — Jethur × Code-OX</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  /* Brand — Jethur cyan/blue */
+  --cy:        #0891b2;
+  --cy-2:      #0369a1;
+  --cy-deep:   #0c4a6e;
+  --cy-glow:   #22d3ee;
+  --cy-soft:   #67e8f9;
+
+  /* Dark stack */
+  --ink:       #0f172a;
+  --ink-2:     #1e293b;
+  --navy:      #0a1929;
+  --navy-deep: #051221;
+
+  /* Light stack */
+  --bg:        #f4f6fa;
+  --bg-2:      #eef2f8;
+  --surf:      #ffffff;
+  --surf-2:    #f8fafc;
+  --surf-3:    #f1f5f9;
+  --line:      #e2e8f0;
+  --line-2:    #cbd5e1;
+
+  /* Workstream accents */
+  --w1: #06b6d4;       /* website cyan */
+  --w1-bg: rgba(6,182,212,.08);
+  --w1-line: rgba(6,182,212,.22);
+  --w2: #6366f1;       /* SEO indigo */
+  --w2-bg: rgba(99,102,241,.08);
+  --w2-line: rgba(99,102,241,.22);
+  --w3: #14b8a6;       /* LinkedIn teal */
+  --w3-bg: rgba(20,184,166,.08);
+  --w3-line: rgba(20,184,166,.22);
+
+  /* Tones */
+  --muted:     #475569;
+  --dim:       #64748b;
+  --faint:     #94a3b8;
+  --red:       #ef4444;
+  --amber:     #f59e0b;
+  --green:     #10b981;
+
+  /* Fonts */
+  --sans: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'Instrument Serif', Georgia, serif;
+
+  /* Shadows */
+  --sh-sm: 0 1px 2px rgba(15,23,42,.04), 0 1px 3px rgba(15,23,42,.04);
+  --sh-md: 0 4px 8px -2px rgba(15,23,42,.06), 0 2px 4px -1px rgba(15,23,42,.04);
+  --sh-lg: 0 12px 24px -8px rgba(15,23,42,.12), 0 6px 12px -2px rgba(15,23,42,.06);
+  --sh-hi: 0 28px 56px -16px rgba(8,145,178,.2), 0 8px 16px -4px rgba(15,23,42,.08);
+}
+
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+
+/* ── PROGRESS BAR ── */
+#prog{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--cy-glow),var(--cy));
+  z-index:200;transition:width .5s ease;
+  box-shadow:0 0 12px rgba(34,211,238,.5);
+}
+
+/* ── DECK CONTAINER ── */
+#deck{position:fixed;inset:0}
+
+/* ── SLIDE ── */
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  background:var(--bg);
+  opacity:0;pointer-events:none;
+  transform:translateX(40px);
+  transition:opacity .42s cubic-bezier(.4,0,.2,1),transform .42s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.prev  {opacity:0;transform:translateX(-40px)}
+
+/* ── TOP BAR ── */
+.bar{
+  height:56px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 44px;
+  background:var(--surf);
+  border-bottom:1px solid var(--line);
+  z-index:5;
+}
+.bar.dark{background:var(--navy);border-color:rgba(255,255,255,.06)}
+.bar-brand{display:flex;align-items:center;gap:14px}
+.bar-mark{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cy-2);display:flex;align-items:center;gap:8px;
+}
+.bar-mark::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cy);box-shadow:0 0 10px var(--cy);animation:pulse 2.2s ease-in-out infinite}
+.bar.dark .bar-mark{color:var(--cy-glow)}
+.bar.dark .bar-mark::before{background:var(--cy-glow);box-shadow:0 0 10px var(--cy-glow)}
+.bar-div{width:1px;height:18px;background:var(--line)}
+.bar.dark .bar-div{background:rgba(255,255,255,.08)}
+.bar-co{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.04em}
+.bar.dark .bar-co{color:rgba(255,255,255,.4)}
+.bar-label{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+}
+.bar.dark .bar-label{color:rgba(255,255,255,.45)}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+/* ── BODY ── */
+.body{
+  flex:1;display:flex;flex-direction:column;
+  padding:56px 56px 90px;
+  overflow:hidden;
+  position:relative;
+}
+.body.tight{padding:42px 56px 80px}
+.body.dark{background:var(--navy);color:#fff}
+.body.split{flex-direction:row;padding:0}
+
+/* ── EYEBROW / SECTION HEAD ── */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--cy-2);margin-bottom:18px;
+}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--cy-2)}
+.body.dark .eyebrow{color:var(--cy-glow)}
+.body.dark .eyebrow::before{background:var(--cy-glow)}
+
+/* ── TYPOGRAPHY ── */
+h1.headline{
+  font-family:var(--sans);
+  font-size:clamp(48px,5.5vw,84px);
+  font-weight:800;letter-spacing:-.04em;line-height:1.02;
+  color:var(--ink);
+}
+.body.dark h1.headline{color:#fff}
+h1.headline em{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  color:var(--cy-2);letter-spacing:-.01em;
+  padding-right:.04em;
+}
+.body.dark h1.headline em{color:var(--cy-glow)}
+
+h2.head{
+  font-family:var(--sans);
+  font-size:clamp(34px,3.6vw,52px);
+  font-weight:800;letter-spacing:-.035em;line-height:1.08;
+  color:var(--ink);max-width:1000px;
+}
+.body.dark h2.head{color:#fff}
+h2.head em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cy-2);padding-right:.03em}
+.body.dark h2.head em{color:var(--cy-glow)}
+
+.lead{
+  font-family:var(--sans);font-size:18px;line-height:1.65;
+  color:var(--muted);font-weight:400;max-width:880px;
+  margin-top:14px;
+}
+.body.dark .lead{color:rgba(255,255,255,.7)}
+.lead strong{color:var(--ink);font-weight:600}
+.body.dark .lead strong{color:#fff}
+
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.g6{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+
+/* ── CARD ── */
+.card{
+  background:var(--surf);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:24px 26px;
+  position:relative;
+  overflow:hidden;
+  transition:all .2s ease;
+}
+.card-hover:hover{transform:translateY(-2px);box-shadow:var(--sh-lg);border-color:var(--line-2)}
+.card-num{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--cy-2);
+  margin-bottom:12px;
+}
+.card-title{font-size:18px;font-weight:700;letter-spacing:-.015em;color:var(--ink);margin-bottom:8px;line-height:1.25}
+.card-text{font-size:14px;color:var(--muted);line-height:1.6}
+.card-tag{
+  display:inline-flex;font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.06em;color:var(--dim);margin-top:14px;
+}
+
+/* color-coded variants */
+.c-w1::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--w1),var(--cy-glow))}
+.c-w2::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--w2),#818cf8)}
+.c-w3::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--w3),#2dd4bf)}
+
+/* ── BIG BG NUMBER ── */
+.bg-num{
+  position:absolute;font-family:var(--mono);font-weight:700;
+  font-size:clamp(160px,22vw,300px);line-height:.85;
+  color:transparent;
+  -webkit-text-stroke:1.5px rgba(8,145,178,.08);
+  pointer-events:none;user-select:none;
+  letter-spacing:-.04em;z-index:0;
+  top:30px;right:-8px;
+}
+.body.dark .bg-num{
+  -webkit-text-stroke:1.5px rgba(34,211,238,.08);
+}
+
+/* ── NAV ── */
+#nav{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:14px;
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:100px;padding:8px 16px;
+  box-shadow:var(--sh-md);z-index:150;
+}
+.nb{
+  width:34px;height:34px;border-radius:50%;
+  background:transparent;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--dim);transition:all .15s;
+}
+.nb:hover{background:var(--cy);border-color:var(--cy);color:#fff}
+.nb svg{width:14px;height:14px}
+.dots{display:flex;gap:5px;align-items:center}
+.dot{
+  width:6px;height:6px;border-radius:3px;
+  background:var(--line-2);cursor:pointer;transition:all .25s;
+}
+.dot.on{background:var(--cy-2);width:20px}
+#snum{
+  position:fixed;bottom:24px;right:36px;
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:100px;padding:6px 14px;
+  color:var(--dim);box-shadow:var(--sh-sm);z-index:150;
+  letter-spacing:.06em;
+}
+
+/* ── SPECIFIC SLIDE HELPERS ── */
+
+/* COVER */
+.cover-l{
+  width:58%;background:var(--bg);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:48px 56px;position:relative;overflow:hidden;
+  border-right:1px solid var(--line);
+}
+.cover-l::before{
+  content:'';position:absolute;top:0;left:0;width:4px;height:100%;
+  background:linear-gradient(180deg,var(--cy) 0%,rgba(8,145,178,.12) 70%,transparent 100%);
+}
+.cover-l::after{
+  content:'';position:absolute;width:480px;height:480px;border-radius:50%;
+  bottom:-200px;left:-160px;
+  background:radial-gradient(circle,rgba(8,145,178,.08),transparent 70%);
+  pointer-events:none;
+}
+.cover-r{
+  flex:1;background:var(--navy);color:#fff;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:48px 44px;gap:12px;position:relative;overflow:hidden;
+}
+.cover-r::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:radial-gradient(ellipse at 70% 30%,#000 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at 70% 30%,#000 30%,transparent 80%);
+  pointer-events:none;
+}
+.cover-r::after{
+  content:'';position:absolute;width:500px;height:500px;border-radius:50%;
+  top:-180px;right:-180px;
+  background:radial-gradient(circle,rgba(34,211,238,.18),transparent 70%);
+  filter:blur(40px);pointer-events:none;
+}
+.cover-r > *{position:relative;z-index:1}
+
+/* dark card on cover */
+.dark-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-top:2px solid rgba(34,211,238,.55);
+  border-radius:12px;padding:20px 22px;
+}
+.dark-card-lbl{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.4);margin-bottom:8px;
+}
+.dark-card-val{
+  font-family:var(--sans);font-size:32px;font-weight:800;
+  color:#fff;letter-spacing:-.025em;line-height:1;
+}
+.dark-card-val.glow{
+  background:linear-gradient(135deg,var(--cy-glow),var(--cy-soft));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.dark-card-sub{
+  font-family:var(--sans);font-size:13px;color:rgba(255,255,255,.55);
+  margin-top:6px;
+}
+.dark-card-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.dark-card-list li{
+  display:flex;align-items:center;gap:10px;
+  font-size:14px;color:rgba(255,255,255,.78);font-weight:500;
+}
+.dark-card-list li::before{
+  content:'';width:3px;height:14px;background:var(--cy-glow);
+  border-radius:2px;flex-shrink:0;opacity:.7;
+}
+
+/* AGENDA cards */
+.ag-card{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:14px;padding:22px 24px;
+  transition:all .25s;position:relative;overflow:hidden;
+}
+.ag-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cy-glow),var(--cy));
+  transform:scaleX(0);transform-origin:left;transition:transform .3s;
+}
+.ag-card:hover{transform:translateY(-3px);box-shadow:var(--sh-lg);border-color:var(--line-2)}
+.ag-card:hover::before{transform:scaleX(1)}
+.ag-part{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--cy-2);
+  margin-bottom:12px;
+}
+.ag-card h3{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-.015em;margin-bottom:8px;line-height:1.3}
+.ag-card p{font-size:13px;color:var(--muted);line-height:1.6}
+.ag-card .ag-t{
+  margin-top:14px;font-family:var(--mono);font-size:11px;
+  color:var(--faint);font-weight:600;
+}
+
+/* WORKSTREAM */
+.ws{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:18px;padding:28px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:14px;
+  transition:all .25s;
+}
+.ws:hover{transform:translateY(-3px);box-shadow:var(--sh-hi);border-color:var(--line-2)}
+.ws::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.ws.w1::before{background:linear-gradient(90deg,var(--w1),var(--cy-glow))}
+.ws.w2::before{background:linear-gradient(90deg,var(--w2),#818cf8)}
+.ws.w3::before{background:linear-gradient(90deg,var(--w3),#2dd4bf)}
+.ws::after{
+  content:'';position:absolute;width:220px;height:220px;border-radius:50%;
+  top:-100px;right:-100px;pointer-events:none;
+}
+.ws.w1::after{background:radial-gradient(circle,var(--w1-bg),transparent 70%)}
+.ws.w2::after{background:radial-gradient(circle,var(--w2-bg),transparent 70%)}
+.ws.w3::after{background:radial-gradient(circle,var(--w3-bg),transparent 70%)}
+.ws > *{position:relative;z-index:1}
+.ws-num{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase}
+.ws.w1 .ws-num{color:var(--w1)}
+.ws.w2 .ws-num{color:var(--w2)}
+.ws.w3 .ws-num{color:var(--w3)}
+.ws h3{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:-.025em;line-height:1.1}
+.ws-meta{
+  display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;
+  padding:5px 10px;border-radius:6px;width:fit-content;
+}
+.ws.w1 .ws-meta{background:var(--w1-bg);border:1px solid var(--w1-line);color:var(--w1)}
+.ws.w2 .ws-meta{background:var(--w2-bg);border:1px solid var(--w2-line);color:var(--w2)}
+.ws.w3 .ws-meta{background:var(--w3-bg);border:1px solid var(--w3-line);color:var(--w3)}
+.ws-desc{font-size:14px;color:var(--muted);line-height:1.6}
+.ws-list{list-style:none;border-top:1px solid var(--line);padding-top:14px;margin-top:6px;display:flex;flex-direction:column;gap:7px}
+.ws-list li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);line-height:1.5}
+.ws-list li::before{content:'→';font-family:var(--mono);font-weight:700;font-size:12px;flex-shrink:0;margin-top:1px}
+.ws.w1 .ws-list li::before{color:var(--w1)}
+.ws.w2 .ws-list li::before{color:var(--w2)}
+.ws.w3 .ws-list li::before{color:var(--w3)}
+
+/* TEAM */
+.team-card{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:16px;padding:24px;transition:all .25s;
+}
+.team-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--line-2)}
+.ava{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-family:var(--mono);font-weight:800;font-size:16px;
+  margin-bottom:16px;letter-spacing:-.5px;
+  box-shadow:0 8px 16px -4px rgba(8,145,178,.25);
+}
+.ava.a1{background:linear-gradient(135deg,var(--cy-glow),var(--cy))}
+.ava.a2{background:linear-gradient(135deg,var(--cy),var(--cy-2))}
+.ava.a3{background:linear-gradient(135deg,#818cf8,var(--w2));box-shadow:0 8px 16px -4px rgba(99,102,241,.25)}
+.ava.a4{background:linear-gradient(135deg,#2dd4bf,var(--w3));box-shadow:0 8px 16px -4px rgba(20,184,166,.25)}
+.t-role{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cy-2);margin-bottom:6px}
+.t-name{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-.015em;margin-bottom:8px}
+.t-desc{font-size:13px;color:var(--dim);line-height:1.55}
+
+/* INFO BOX */
+.info{
+  background:linear-gradient(135deg,rgba(8,145,178,.06),rgba(99,102,241,.04));
+  border:1px solid rgba(8,145,178,.18);
+  border-left:3px solid var(--cy-2);
+  border-radius:14px;padding:20px 24px;
+  position:relative;overflow:hidden;
+}
+.info::after{
+  content:'';position:absolute;width:220px;height:220px;border-radius:50%;
+  top:-110px;right:-80px;
+  background:radial-gradient(circle,rgba(34,211,238,.1),transparent 70%);
+  pointer-events:none;
+}
+.info-lbl{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--cy-2);
+  margin-bottom:8px;display:flex;align-items:center;gap:10px;
+}
+.info-lbl::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--cy-2);
+  box-shadow:0 0 8px var(--cy-2);
+}
+.info p{font-family:var(--sans);font-size:14px;color:var(--ink-2);line-height:1.7;position:relative;z-index:1}
+.info p em{color:var(--cy-2);font-style:italic;font-weight:500}
+
+/* DETAILED WS slide */
+.ws-detail{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;height:100%}
+.ws-detail-l{padding-right:8px;display:flex;flex-direction:column}
+.ws-detail-r{display:flex;flex-direction:column;gap:14px}
+.detail-meta{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:14px;padding:18px 22px;
+}
+.detail-meta-lbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.detail-meta-v{font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.015em}
+.detail-meta-v.glow{background:linear-gradient(135deg,var(--cy),var(--cy-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+.deliverables{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.delv{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--surf);border:1px solid var(--line);border-radius:10px;
+  padding:13px 16px;transition:all .15s;
+}
+.delv:hover{border-color:var(--cy-line);transform:translateX(3px)}
+.delv-icon{
+  width:30px;height:30px;border-radius:8px;background:var(--w1-bg);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:var(--mono);font-size:12px;font-weight:800;color:var(--w1);
+}
+.ws-detail.w2 .delv-icon{background:var(--w2-bg);color:var(--w2)}
+.ws-detail.w3 .delv-icon{background:var(--w3-bg);color:var(--w3)}
+.delv-text{flex:1}
+.delv-t{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.01em;margin-bottom:2px}
+.delv-d{font-size:12.5px;color:var(--dim);line-height:1.5}
+
+/* ROADMAP cards */
+.rm{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:14px;padding:22px;position:relative;
+  display:flex;flex-direction:column;height:100%;
+  transition:all .25s;
+}
+.rm:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
+.rm::before{
+  content:'';position:absolute;left:0;top:24px;
+  width:4px;height:28px;border-radius:0 4px 4px 0;
+  background:linear-gradient(180deg,var(--cy-glow),var(--cy));
+}
+.rm-wk{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--cy-2);margin-bottom:6px}
+.rm-lb{font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:16px;line-height:1.15}
+.rm-ul{list-style:none;border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:6px}
+.rm-ul li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);line-height:1.5}
+.rm-ul li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--cy-2);flex-shrink:0;margin-top:8px}
+
+/* 6-MONTH TIMELINE */
+.tl-wrap{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--sh-sm)}
+.tl-row{display:grid;grid-template-columns:180px 1fr;gap:14px;padding:14px 0}
+.tl-row + .tl-row{border-top:1px solid var(--line)}
+.tl-name{display:flex;flex-direction:column;gap:5px;justify-content:center;padding:8px 0 8px 16px;border-left:4px solid var(--w1)}
+.tl-row.r2 .tl-name{border-left-color:var(--w2)}
+.tl-row.r3 .tl-name{border-left-color:var(--w3)}
+.tl-sname{font-size:15px;font-weight:800;color:var(--ink);letter-spacing:-.015em}
+.tl-stag{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.tl-mos{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.tl-m{
+  background:var(--surf-2);border:1px solid var(--line);
+  border-radius:10px;padding:12px 12px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.tl-m .m{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--w1)}
+.tl-row.r2 .tl-m .m{color:var(--w2)}
+.tl-row.r3 .tl-m .m{color:var(--w3)}
+.tl-m .d{font-size:12px;color:var(--muted);line-height:1.45}
+.tl-m.live{
+  background:linear-gradient(135deg,var(--w1-bg),rgba(34,211,238,.04));
+  border-color:var(--w1-line);
+  box-shadow:0 0 0 1px var(--w1-line),0 8px 16px -4px rgba(8,145,178,.12);
+}
+.tl-row.r2 .tl-m.live{background:linear-gradient(135deg,var(--w2-bg),rgba(99,102,241,.04));border-color:var(--w2-line);box-shadow:0 0 0 1px var(--w2-line),0 8px 16px -4px rgba(99,102,241,.12)}
+.tl-m.live .m{font-weight:800}
+.tl-m.live .d{color:var(--ink);font-weight:600}
+.tl-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.tl-p{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:12px;padding:16px 20px;position:relative;overflow:hidden;
+}
+.tl-p::before{content:'';position:absolute;left:0;top:0;width:4px;height:100%;background:var(--w1)}
+.tl-p.b::before{background:var(--w2)}
+.tl-p.c::before{background:var(--w3)}
+.tl-pl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.tl-pv{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+
+/* ACCESS */
+.ax-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;height:100%}
+.ax-col-h{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:10px;
+  border-bottom:1px solid var(--line);color:var(--red);
+}
+.ax-col-h.am{color:var(--amber)}
+.ax-col-h.gr{color:var(--dim)}
+.ax-dot{width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)}
+.ax-col-h.am .ax-dot{background:var(--amber);box-shadow:0 0 12px var(--amber)}
+.ax-col-h.gr .ax-dot{background:var(--faint);box-shadow:none}
+.ax-list{display:flex;flex-direction:column;gap:8px}
+.ax-it{
+  background:var(--surf);border:1px solid var(--line);
+  border-left:3px solid var(--red);border-radius:10px;
+  padding:13px 16px;display:flex;align-items:center;gap:12px;
+  transition:all .2s;
+}
+.ax-it:hover{transform:translateX(3px);border-color:var(--line-2);box-shadow:var(--sh-sm)}
+.ax-it.am{border-left-color:var(--amber)}
+.ax-it.gr{border-left-color:var(--faint)}
+.ax-n{flex:1;font-size:13.5px;color:var(--ink);font-weight:500}
+.ax-note{font-family:var(--mono);font-size:11px;color:var(--dim)}
+
+/* Q-CARDS */
+.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:100%}
+.q-col{display:flex;flex-direction:column;gap:14px}
+.q-card{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.q-cat{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cy-2);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:10px;
+}
+.q-cat::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cy-2)}
+.q-ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.q-ul li{font-size:13px;color:var(--muted);line-height:1.5;padding:3px 0 3px 26px;position:relative}
+.q-ul li::before{
+  content:'Q';position:absolute;left:0;top:3px;
+  width:18px;height:18px;background:var(--w1-bg);color:var(--cy-2);
+  border:1px solid var(--w1-line);border-radius:5px;
+  font-family:var(--mono);font-size:9px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+.q-ul li strong{color:var(--ink);font-weight:600}
+.q-ul li em{font-style:italic;color:var(--ink-2)}
+
+/* REFS */
+.ref-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;height:100%}
+.ref-panel{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.ref-pt{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-.015em;margin-bottom:4px}
+.ref-ps{font-size:13px;color:var(--dim);line-height:1.6}
+.ref-lbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--cy-2);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.ref-lbl::before{content:'';width:16px;height:1px;background:var(--cy-2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  background:var(--w1-bg);border:1px solid var(--w1-line);color:var(--cy-2);
+  padding:5px 11px;border-radius:100px;font-family:var(--mono);font-size:11px;font-weight:500;
+  transition:all .15s;
+}
+.chip:hover{background:var(--cy);color:#fff;border-color:var(--cy);transform:translateY(-1px)}
+.scrib{
+  border:1.5px dashed var(--line-2);border-radius:12px;
+  padding:16px 18px;min-height:80px;
+  display:flex;flex-direction:column;gap:6px;
+  background:linear-gradient(135deg,var(--surf-2),var(--surf));
+}
+.scrib-l{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cy-2)}
+.scrib-h{font-size:12px;color:var(--dim);font-style:italic;line-height:1.6}
+
+/* CADENCE FLOW */
+.cad-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.cad-card{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:22px 24px;transition:all .25s}
+.cad-card:hover{box-shadow:var(--sh-md);border-color:var(--w1-line)}
+.cad-h{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.cad-num{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--cy-glow),var(--cy));
+  color:#fff;font-family:var(--mono);font-weight:800;font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 12px -3px rgba(8,145,178,.3);
+}
+.cad-n{font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.015em}
+.cad-ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.cad-ul li{display:flex;align-items:flex-start;gap:12px;font-size:13.5px;color:var(--muted);line-height:1.55;position:relative}
+.cad-ul li::before{
+  content:'';width:16px;height:16px;border-radius:50%;
+  background:rgba(16,185,129,.1);border:1.5px solid var(--green);
+  flex-shrink:0;margin-top:2px;
+}
+.cad-ul li::after{
+  content:'✓';position:absolute;left:3px;color:var(--green);font-weight:800;
+  font-size:11px;margin-top:1px;
+}
+
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:10px;align-items:stretch}
+.flow-step{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;
+  transition:all .25s;
+}
+.flow-step::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cy-glow),var(--cy))}
+.flow-step:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
+.flow-n{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cy-2);margin-bottom:6px}
+.flow-t{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-.015em}
+.flow-d{font-size:12px;color:var(--dim);line-height:1.5}
+.flow-arr{display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:24px;color:var(--cy-2);font-weight:400}
+
+/* COMMITMENTS */
+.commit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;height:100%}
+.commit-card{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:18px;padding:32px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:18px;
+}
+.commit-card::before{content:'';position:absolute;top:0;left:0;width:6px;height:100%;background:var(--cy)}
+.commit-card.r::before{background:var(--w2)}
+.commit-h{display:flex;align-items:center;gap:14px}
+.commit-badge{
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  padding:6px 12px;border-radius:6px;background:var(--w1-bg);color:var(--cy-2);
+  border:1px solid var(--w1-line);
+}
+.commit-card.r .commit-badge{background:var(--w2-bg);color:var(--w2);border-color:var(--w2-line)}
+.commit-title{font-size:24px;font-weight:800;color:var(--ink);letter-spacing:-.025em}
+.commit-ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.commit-ul li{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--muted);line-height:1.55}
+.commit-ul li strong{color:var(--ink);font-weight:600;display:block;font-size:14.5px;margin-bottom:3px}
+.commit-ul li .cnum{
+  flex-shrink:0;width:24px;height:24px;border-radius:6px;
+  background:var(--w1-bg);color:var(--cy-2);border:1px solid var(--w1-line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:800;
+}
+.commit-card.r .commit-ul li .cnum{background:var(--w2-bg);color:var(--w2);border-color:var(--w2-line)}
+
+/* NEXT STEPS */
+.next-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.next-card{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:16px;padding:28px;position:relative;overflow:hidden;
+  transition:all .3s;
+}
+.next-card:hover{transform:translateY(-4px);box-shadow:var(--sh-hi);border-color:var(--w1-line)}
+.next-card::after{
+  content:'';position:absolute;width:240px;height:240px;border-radius:50%;
+  bottom:-140px;right:-100px;
+  background:radial-gradient(circle,var(--w1-bg),transparent 70%);
+  pointer-events:none;transition:transform .4s;
+}
+.next-card:hover::after{transform:scale(1.4)}
+.next-num{
+  width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(135deg,var(--cy-glow),var(--cy));
+  color:#fff;font-family:var(--mono);font-weight:800;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;box-shadow:0 8px 16px -4px rgba(8,145,178,.3);
+  position:relative;z-index:1;
+}
+.next-t{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.015em;position:relative;z-index:1}
+.next-d{font-size:13px;color:var(--muted);line-height:1.6;position:relative;z-index:1}
+
+/* THANK YOU SLIDE */
+.thanks-shell{display:flex;height:100%}
+.thanks-l{
+  width:58%;background:var(--navy);color:#fff;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:60px 60px;position:relative;overflow:hidden;
+}
+.thanks-l::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle 500px at 80% 30%,rgba(34,211,238,.2),transparent 60%),
+    radial-gradient(circle 400px at 10% 90%,rgba(99,102,241,.15),transparent 60%);
+  pointer-events:none;
+}
+.thanks-l::after{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:linear-gradient(135deg,#000 0%,transparent 60%);
+  -webkit-mask-image:linear-gradient(135deg,#000 0%,transparent 60%);
+  pointer-events:none;
+}
+.thanks-l > *{position:relative;z-index:1}
+.thanks-eyebrow{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--cy-glow);margin-bottom:18px;display:flex;align-items:center;gap:12px;
+}
+.thanks-eyebrow::before{content:'';width:24px;height:1px;background:var(--cy-glow)}
+.thanks-title{
+  font-family:var(--sans);font-size:clamp(40px,4.6vw,72px);font-weight:800;
+  letter-spacing:-.035em;line-height:1.05;margin-bottom:24px;
+}
+.thanks-title em{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  background:linear-gradient(135deg,var(--cy-glow),var(--cy-soft));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  padding-right:.03em;
+}
+.thanks-sub{font-size:17px;color:rgba(255,255,255,.7);line-height:1.65;max-width:520px;margin-bottom:32px}
+.thanks-r{
+  flex:1;background:var(--surf);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:60px 50px;gap:16px;
+}
+.contact-card-l{
+  background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:22px 24px;
+}
+.cc-lbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.cc-name{font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.025em;margin-bottom:4px}
+.cc-role{font-family:var(--mono);font-size:12px;color:var(--cy-2);margin-bottom:14px}
+.cc-line{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:var(--muted);padding:4px 0}
+.cc-line::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--cy);opacity:.6}
+
+/* STAT ROW (used in 6-mo slide / billing) */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px}
+.stat-cell{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:24px;text-align:left}
+.stat-val{font-family:var(--sans);font-size:42px;font-weight:800;color:var(--ink);letter-spacing:-.04em;line-height:1;margin-bottom:8px}
+.stat-val em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cy-2)}
+.stat-lbl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.stat-desc{font-size:13px;color:var(--muted);line-height:1.55;margin-top:8px}
+
+/* ─────────────────────────────────────────────
+   VISUAL COMPONENTS — stats, pillars, mock UI, funnel
+   ───────────────────────────────────────────── */
+
+/* HERO STAT TILE (big number callouts) */
+.statile{
+  background:linear-gradient(180deg,var(--surf),var(--surf-2));
+  border:1px solid var(--line);border-radius:20px;
+  padding:24px 28px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:6px;
+}
+.statile::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--cy-glow),var(--cy))}
+.statile.w3::before{background:linear-gradient(90deg,var(--w3),#2dd4bf)}
+.statile.w2::before{background:linear-gradient(90deg,var(--w2),#818cf8)}
+.statile::after{
+  content:'';position:absolute;width:260px;height:260px;border-radius:50%;
+  top:-130px;right:-120px;
+  background:radial-gradient(circle,var(--w1-bg),transparent 70%);
+  pointer-events:none;
+}
+.statile.w3::after{background:radial-gradient(circle,var(--w3-bg),transparent 70%)}
+.statile.w2::after{background:radial-gradient(circle,var(--w2-bg),transparent 70%)}
+.statile > *{position:relative;z-index:1}
+.statile-tag{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--cy-2);
+  display:inline-flex;align-items:center;gap:8px;
+}
+.statile.w3 .statile-tag{color:var(--w3)}
+.statile.w2 .statile-tag{color:var(--w2)}
+.statile-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+.statile-num{
+  font-family:var(--sans);font-size:clamp(56px,7vw,84px);font-weight:800;
+  letter-spacing:-.05em;line-height:1;color:var(--ink);
+  margin-top:4px;
+}
+.statile-num em{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:.55em;color:var(--cy-2);margin-left:6px;
+}
+.statile-lbl{font-size:14px;color:var(--muted);font-weight:600;letter-spacing:-.005em}
+.statile-desc{font-size:12.5px;color:var(--dim);line-height:1.6;margin-top:6px}
+
+/* CONTENT PILLAR TILES */
+.pillar{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:12px;padding:14px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  text-align:center;transition:all .2s;
+}
+.pillar:hover{transform:translateY(-2px);border-color:var(--w3-line);box-shadow:var(--sh-sm)}
+.p-ico{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--w3-bg);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.p-name{font-family:var(--sans);font-size:11.5px;font-weight:700;color:var(--ink);letter-spacing:-.005em;line-height:1.2}
+
+/* LINKEDIN POST MOCKUP */
+.li-post{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:14px;padding:14px 16px;
+  box-shadow:var(--sh-sm);
+  display:flex;flex-direction:column;gap:10px;
+}
+.li-ph{display:flex;align-items:center;gap:10px}
+.li-ava{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cy),var(--cy-2));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;flex-shrink:0;
+}
+.li-meta-w{flex:1;min-width:0}
+.li-name{font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:6px}
+.li-name::after{
+  content:'• Following';font-family:var(--sans);
+  font-size:10px;color:var(--dim);font-weight:500;
+}
+.li-meta{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:1px}
+.li-pill{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  color:var(--cy-2);background:var(--w1-bg);
+  border:1px solid var(--w1-line);
+  padding:3px 8px;border-radius:100px;flex-shrink:0;
+}
+.li-body{font-size:12.5px;color:var(--ink);line-height:1.55}
+.li-body strong{color:var(--cy-2);font-weight:600}
+.li-img{
+  height:80px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.08),transparent 60%),
+    linear-gradient(135deg,var(--cy-deep),var(--cy-2) 60%,var(--w3));
+  border-radius:8px;position:relative;overflow:hidden;
+}
+.li-img::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:20px 20px;
+}
+.li-img::after{
+  content:'SAMA Framework — Q3 2026 update';
+  position:absolute;bottom:10px;left:14px;
+  color:rgba(255,255,255,.92);font-size:11px;
+  font-family:var(--sans);font-weight:700;letter-spacing:-.005em;
+}
+.li-eng{
+  display:flex;gap:14px;padding-top:10px;
+  border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;color:var(--dim);
+}
+.li-eng span{display:inline-flex;align-items:center;gap:5px}
+
+/* OUTREACH FUNNEL */
+.funnel-card{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:14px;padding:18px 20px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.funnel-h{display:flex;align-items:center;justify-content:space-between}
+.funnel-h-l{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--w3);
+  display:flex;align-items:center;gap:8px;
+}
+.funnel-h-l::before{content:'';width:16px;height:1px;background:var(--w3)}
+.funnel-h-r{
+  font-family:var(--mono);font-size:10px;color:var(--dim);
+  background:var(--surf-2);border:1px solid var(--line);
+  padding:3px 9px;border-radius:100px;
+}
+.funnel{display:flex;flex-direction:column;gap:5px}
+.fs{display:flex;align-items:center;gap:10px}
+.fs-num{
+  font-family:var(--mono);font-size:13px;font-weight:800;
+  color:var(--ink);width:42px;flex-shrink:0;text-align:right;
+}
+.fs-bar{
+  height:28px;border-radius:6px;
+  display:flex;align-items:center;padding:0 14px;
+  color:#fff;font-size:11.5px;font-weight:700;letter-spacing:-.005em;
+  position:relative;
+}
+.fs1 .fs-bar{width:100%;background:linear-gradient(90deg,var(--w3),#2dd4bf)}
+.fs2 .fs-bar{width:65%;background:linear-gradient(90deg,#2dd4bf,#5eead4)}
+.fs3 .fs-bar{width:42%;background:linear-gradient(90deg,var(--cy),var(--cy-glow));color:#0a1929}
+.fs4 .fs-bar{width:25%;background:linear-gradient(90deg,var(--cy-2),var(--cy));color:#fff}
+.fs5 .fs-bar{width:12%;background:linear-gradient(90deg,var(--cy-deep),var(--cy-2))}
+.fs-rate{
+  margin-left:auto;font-family:var(--mono);font-size:10px;
+  color:var(--dim);font-weight:600;
+}
+.funnel-note{font-size:11px;color:var(--dim);font-style:italic;line-height:1.5}
+
+/* BROWSER FRAME (for website mockup) */
+.browser{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;box-shadow:var(--sh-md);
+}
+.browser-bar{
+  background:var(--surf-3);padding:10px 14px;
+  display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid var(--line);
+}
+.bd{width:9px;height:9px;border-radius:50%}
+.bd.r{background:#ef4444}.bd.y{background:#f59e0b}.bd.g{background:#10b981}
+.browser-url{
+  flex:1;background:var(--surf);border:1px solid var(--line);
+  border-radius:5px;padding:4px 12px;
+  font-family:var(--mono);font-size:11px;color:var(--dim);
+  text-align:center;
+}
+.browser-body{
+  padding:0;min-height:200px;position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 20%,rgba(8,145,178,.1),transparent 70%),
+    linear-gradient(180deg,var(--bg),var(--surf));
+}
+.bm-hero{padding:28px 28px 22px}
+.bm-eyebrow{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--cy-2);margin-bottom:10px}
+.bm-headline{font-size:24px;font-weight:800;letter-spacing:-.025em;line-height:1.1;color:var(--ink);margin-bottom:8px;max-width:340px}
+.bm-headline em{font-family:var(--serif);font-style:italic;color:var(--cy-2)}
+.bm-sub{font-size:11px;color:var(--muted);line-height:1.5;max-width:300px;margin-bottom:14px}
+.bm-cta{
+  display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;
+  background:var(--cy-2);color:#fff;padding:6px 14px;border-radius:6px;
+  letter-spacing:.04em;
+}
+
+/* MOCK SERP (Google search result) */
+.serp{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:12px;padding:16px 18px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.serp-q{
+  background:var(--surf-2);border:1px solid var(--line);
+  border-radius:8px;padding:8px 12px;
+  display:flex;align-items:center;gap:10px;
+  font-size:12px;color:var(--dim);
+}
+.serp-q::before{
+  content:'';width:14px;height:14px;border-radius:50%;
+  border:1.5px solid var(--dim);position:relative;
+}
+.serp-r{padding:8px 0;border-top:1px solid var(--line)}
+.serp-r.feat{
+  padding:10px 12px;border-top:none;
+  background:linear-gradient(135deg,var(--w1-bg),rgba(34,211,238,.03));
+  border:1px solid var(--w1-line);border-radius:8px;
+  position:relative;
+}
+.serp-r.feat::before{
+  content:'#1';position:absolute;top:-9px;right:12px;
+  font-family:var(--mono);font-size:9px;font-weight:800;
+  background:var(--cy-2);color:#fff;padding:2px 8px;border-radius:4px;
+}
+.serp-url{font-family:var(--mono);font-size:10px;color:var(--green)}
+.serp-t{font-size:13px;font-weight:600;color:#1a0dab;margin-top:2px;letter-spacing:-.005em}
+.serp-d{font-size:11px;color:var(--muted);line-height:1.45;margin-top:3px}
+
+/* MOCK DASHBOARD */
+.dash{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:12px;padding:16px 18px;
+  display:flex;flex-direction:column;gap:8px;
+}
+.dash-h{display:flex;justify-content:space-between;align-items:center}
+.dash-t{font-size:12px;font-weight:600;color:var(--dim)}
+.dash-tag{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  background:rgba(16,185,129,.1);color:var(--green);
+  padding:2px 7px;border-radius:4px;
+}
+.dash-tag.up::before{content:'▲ '}
+.dash-tag.dn{background:rgba(239,68,68,.1);color:var(--red)}
+.dash-tag.dn::before{content:'▼ '}
+.dash-num{font-family:var(--sans);font-size:28px;font-weight:800;letter-spacing:-.03em;color:var(--ink);line-height:1}
+.dash-chart{
+  height:36px;margin-top:6px;
+  background:linear-gradient(180deg,rgba(8,145,178,.12),transparent);
+  border-radius:6px;position:relative;overflow:hidden;
+}
+.dash-chart svg{position:absolute;inset:0;width:100%;height:100%}
+
+/* WEEKLY CONTENT CALENDAR (4-day plan) */
+.week-cal{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.day{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:12px;padding:14px 16px;
+  position:relative;overflow:hidden;transition:all .2s;
+}
+.day::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--w3),#2dd4bf)}
+.day:hover{transform:translateY(-2px);box-shadow:var(--sh-md);border-color:var(--w3-line)}
+.day-tag{
+  font-family:var(--mono);font-size:10px;font-weight:800;
+  letter-spacing:.22em;color:var(--w3);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+.day-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--w3)}
+.day-h{font-size:13.5px;font-weight:800;color:var(--ink);letter-spacing:-.015em;margin-bottom:6px;line-height:1.2}
+.day-eg{font-size:11px;color:var(--dim);line-height:1.55}
+.day-eg b{color:var(--w3);font-weight:600;font-family:var(--mono);font-size:10px;letter-spacing:.04em}
+
+/* CURRENT vs TARGET (state shift) */
+.shift{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:14px;padding:14px 18px;
+  display:flex;align-items:center;gap:14px;
+}
+.shift-l{flex:1}
+.shift-tag{font-family:var(--mono);font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px}
+.shift-tag.now{color:var(--dim)}
+.shift-tag.then{color:var(--w3)}
+.shift-v{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-.005em;line-height:1.3}
+.shift-arr{
+  font-family:var(--serif);font-size:24px;font-weight:400;
+  color:var(--w3);flex-shrink:0;
+}
+
+/* REFERENCE CLUSTERS (visual benchmark cards) */
+.ref-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.ref-cluster{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:14px;padding:18px 18px 14px;
+  display:flex;flex-direction:column;gap:12px;
+  position:relative;overflow:hidden;
+}
+.ref-cluster::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cy),var(--cy-glow))}
+.ref-cluster.rb::before{background:linear-gradient(90deg,var(--w2),#818cf8)}
+.ref-cluster.rc::before{background:linear-gradient(90deg,var(--w3),#2dd4bf)}
+.rc-head{display:flex;align-items:flex-start;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.rc-tag{
+  font-family:var(--mono);font-size:9px;font-weight:800;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--cy-2);
+  padding:5px 8px;border-radius:5px;flex-shrink:0;
+  background:var(--w1-bg);border:1px solid var(--w1-line);
+}
+.ref-cluster.rb .rc-tag{color:var(--w2);background:var(--w2-bg);border-color:var(--w2-line)}
+.ref-cluster.rc .rc-tag{color:var(--w3);background:var(--w3-bg);border-color:var(--w3-line)}
+.rc-meta h4{
+  font-family:var(--sans);font-size:14px;font-weight:800;
+  color:var(--ink);letter-spacing:-.015em;line-height:1.2;
+}
+.rc-meta p{
+  font-size:11px;color:var(--dim);line-height:1.45;margin-top:3px;
+}
+.rc-list{display:flex;flex-direction:column;gap:6px}
+.rc-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 11px;border-radius:8px;
+  background:var(--surf-2);border:1px solid transparent;
+  text-decoration:none;
+  transition:all .15s;cursor:default;
+}
+.rc-item:hover{
+  background:var(--surf);border-color:var(--w1-line);
+  transform:translateX(2px);box-shadow:var(--sh-sm);
+}
+.ref-cluster.rb .rc-item:hover{border-color:var(--w2-line)}
+.ref-cluster.rc .rc-item:hover{border-color:var(--w3-line)}
+.rc-mark{
+  width:28px;height:28px;border-radius:7px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:800;font-size:11px;
+  color:#fff;letter-spacing:-.03em;
+}
+.rc-info{flex:1;min-width:0}
+.rc-name{font-size:12.5px;font-weight:700;color:var(--ink);letter-spacing:-.005em;line-height:1.2}
+.rc-url{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:1px}
+.rc-why{
+  font-size:10.5px;color:var(--dim);line-height:1.4;
+  font-style:italic;text-align:right;flex-shrink:0;max-width:120px;
+}
+
+/* DELIVERABLES (premium icon list) */
+.delv-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.delv2{
+  background:var(--surf);border:1px solid var(--line);
+  border-radius:10px;padding:12px 14px;
+  display:flex;gap:12px;align-items:flex-start;
+  transition:all .15s;
+}
+.delv2:hover{border-color:var(--line-2);transform:translateY(-1px);box-shadow:var(--sh-sm)}
+.delv2-i{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:var(--w1-bg);color:var(--w1);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:800;
+}
+.delv2.w2 .delv2-i{background:var(--w2-bg);color:var(--w2)}
+.delv2.w3 .delv2-i{background:var(--w3-bg);color:var(--w3)}
+.delv2-t{font-size:12.5px;font-weight:700;color:var(--ink);letter-spacing:-.005em;margin-bottom:2px;line-height:1.3}
+.delv2-d{font-size:11px;color:var(--dim);line-height:1.5}
+
+/* HIDE — slide temporarily removed from deck flow */
+.slide.hidden{display:none !important}
+
+/* PRINT FALLBACK */
+@media print{
+  #nav,#snum,#prog{display:none}
+  html,body{overflow:visible;height:auto}
+  .slide{position:relative;opacity:1;transform:none;pointer-events:all;page-break-after:always;height:100vh}
+  .slide.prev{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<div id="deck">
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 1 — COVER
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide active" id="s1">
+  <div class="body split" style="padding:0">
+
+    <!-- LEFT: Light Jethur identity -->
+    <div class="cover-l">
+      <div class="bar-mark" style="margin-bottom:30px">Vendor Kickoff · 29 June 2026</div>
+
+      <h1 style="font-family:var(--sans);font-size:clamp(54px,6vw,92px);font-weight:800;letter-spacing:-.04em;line-height:.98;color:var(--ink);margin-bottom:22px">
+        Jethur <em style="font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cy-2);padding:0 .04em">×</em><br>Code-OX Kickoff
+      </h1>
+
+      <p style="font-family:var(--sans);font-size:18px;color:var(--muted);line-height:1.55;max-width:560px;font-weight:400;margin-bottom:28px">
+        Aligning on the three workstreams we're starting today —
+        <strong style="color:var(--ink);font-weight:600">website revamp</strong>,
+        <strong style="color:var(--ink);font-weight:600">SEO retainer</strong>, and
+        <strong style="color:var(--ink);font-weight:600">LinkedIn growth</strong> —
+        and unlocking the inputs that let us begin work this week.
+      </p>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px">
+        <span class="chip" style="background:var(--w1-bg);border-color:var(--w1-line);color:var(--w1)">Website</span>
+        <span class="chip" style="background:var(--w2-bg);border-color:var(--w2-line);color:var(--w2)">SEO Retainer</span>
+        <span class="chip" style="background:var(--w3-bg);border-color:var(--w3-line);color:var(--w3)">LinkedIn</span>
+        <span class="chip" style="background:var(--bg);border-color:var(--line);color:var(--dim)">JTR-KICKOFF-2026-01</span>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Dark navy premium stats -->
+    <div class="cover-r">
+      <div class="dark-card">
+        <div class="dark-card-lbl">Go-Live Target</div>
+        <div class="dark-card-val glow">2 Months</div>
+        <div style="height:1px;background:rgba(255,255,255,.08);margin:10px 0"></div>
+        <div class="dark-card-sub">3–4 weeks design · 1 month build</div>
+        <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);margin-top:3px">From 29 June 2026</div>
+      </div>
+
+      <div class="dark-card" style="border-top-color:rgba(99,102,241,.55)">
+        <div class="dark-card-lbl">Engagement Scope</div>
+        <ul class="dark-card-list">
+          <li>Website Revamp · one-time</li>
+          <li>SEO Retainer · ongoing</li>
+          <li>LinkedIn Marketing · ongoing</li>
+          <li>6-month initial term · rolls monthly</li>
+        </ul>
+      </div>
+
+      <div class="dark-card" style="border-top-color:rgba(20,184,166,.55)">
+        <div class="dark-card-lbl">Today's Status</div>
+        <ul class="dark-card-list">
+          <li style="color:rgba(255,255,255,.85)"><span style="color:var(--green);margin-right:4px">●</span>Master Agreement signed</li>
+          <li style="color:rgba(255,255,255,.85)"><span style="color:var(--green);margin-right:4px">●</span>Workstreams locked</li>
+          <li style="color:var(--cy-glow);font-weight:700"><span style="margin-right:4px">▸</span>Production kickoff</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 2 — AGENDA
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s2">
+  <div class="bar">
+    <div class="bar-brand">
+      <span class="bar-mark">Jethur × Code-OX</span>
+      <span class="bar-div"></span>
+      <span class="bar-co">Vendor Kickoff · JTR-KICKOFF-2026-01</span>
+    </div>
+    <span class="bar-label">Today's Agenda</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">01</div>
+    <div class="eyebrow">Section 01 · 60 minutes</div>
+    <h2 class="head">What we'll cover <em>together</em></h2>
+    <p class="lead">A working session in six short blocks. Move quickly through recap and roadmap so the second half is spent on discovery and alignment.</p>
+
+    <div class="g3" style="margin-top:36px">
+      <div class="ag-card"><div class="ag-part">Part 01</div><h3>Engagement Recap</h3><p>Three workstreams, who delivers what, what's already locked in the master agreement.</p><div class="ag-t">~15 minutes</div></div>
+      <div class="ag-card"><div class="ag-part">Part 02</div><h3>Roadmap · 30 days + 6 months</h3><p>Week-by-week plan, milestone dates, when each workstream goes live.</p><div class="ag-t">~10 minutes</div></div>
+      <div class="ag-card"><div class="ag-part">Part 03</div><h3>Access &amp; Credentials</h3><p>Domain, analytics, LinkedIn admin, brand assets — what we need to start.</p><div class="ag-t">~10 minutes</div></div>
+      <div class="ag-card"><div class="ag-part">Part 04</div><h3>Discovery — Business · Audience</h3><p>Questions that shape SEO keyword strategy and LinkedIn voice.</p><div class="ag-t">~15 minutes</div></div>
+      <div class="ag-card"><div class="ag-part">Part 05</div><h3>UI References &amp; Vision</h3><p>Sites you love, ideas in your head, things to avoid.</p><div class="ag-t">~5 minutes</div></div>
+      <div class="ag-card"><div class="ag-part">Part 06</div><h3>Cadence &amp; Next Steps</h3><p>Comms channel, weekly call slot, content approval window.</p><div class="ag-t">~5 minutes</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 3 — THREE WORKSTREAMS
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s3">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">Engagement Recap</span></div>
+    <span class="bar-label">Three Workstreams</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">02</div>
+    <div class="eyebrow">Section 02 · Engagement Recap</div>
+    <h2 class="head">Three workstreams. <em>One team.</em></h2>
+    <p class="lead">Website is a one-time build with three months of complimentary post-launch support. SEO and LinkedIn run as a 6-month retainer, then continue month-to-month.</p>
+
+    <div class="g3" style="margin-top:32px">
+      <div class="ws w1">
+        <div class="ws-num">/ 01 · Website</div>
+        <h3>Website Revamp</h3>
+        <div class="ws-meta">One-time · Fixed · 3-mo support</div>
+        <div class="ws-desc">A redesigned jethur.com — engineered for ranking, trust, and lead capture from day one.</div>
+        <ul class="ws-list">
+          <li>Full UX + UI in Figma — sign-off before code</li>
+          <li>Custom-built CMS — your team publishes</li>
+          <li>Technical SEO baked into the build</li>
+          <li>3 months free post-launch support</li>
+        </ul>
+      </div>
+      <div class="ws w2">
+        <div class="ws-num">/ 02 · SEO</div>
+        <h3>SEO Retainer</h3>
+        <div class="ws-meta">Retainer · 6-month initial term</div>
+        <div class="ws-desc">Begins day one — integrated into the revamp, then ongoing monthly after launch.</div>
+        <ul class="ws-list">
+          <li>Phase 1: keyword research + technical SEO</li>
+          <li>Phase 2: 2 long-form articles per month</li>
+          <li>Backlinks, GA4 + Search Console</li>
+          <li>Monthly report by 5th business day</li>
+        </ul>
+      </div>
+      <div class="ws w3">
+        <div class="ws-num">/ 03 · LinkedIn</div>
+        <h3>LinkedIn Marketing</h3>
+        <div class="ws-meta">Retainer · 6-month initial term</div>
+        <div class="ws-desc">Two streams: page management &amp; outreach. Built to compound month after month.</div>
+        <ul class="ws-list">
+          <li>12 posts/month across 6 content pillars</li>
+          <li>150+ personalised outreach actions/month</li>
+          <li>Sales Navigator licence — Jethur-provided</li>
+          <li>Calendar shared 25th of prior month</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 4 — DELIVERY TEAM
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s4">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">One POC · Specialists Behind</span></div>
+    <span class="bar-label">Your Delivery Team</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">03</div>
+    <div class="eyebrow">Section 03 · Team &amp; Governance</div>
+    <h2 class="head">One point of contact. <em>Specialists behind.</em></h2>
+    <p class="lead">Shabeeb is your day-to-day owner across all three workstreams. Specialists deliver behind him — nothing falls between cracks, nothing routes through account managers.</p>
+
+    <div class="g4" style="margin-top:36px">
+      <div class="team-card"><div class="ava a1">SK</div><div class="t-role">Engagement Lead</div><div class="t-name">Shabeeb K</div><div class="t-desc">Head of Operations, Code-OX. Single point of accountability — strategy, weekly syncs, escalations.</div></div>
+      <div class="team-card"><div class="ava a2">DE</div><div class="t-role">Design &amp; Engineering</div><div class="t-name">Code-OX Web Pod</div><div class="t-desc">UX, Figma UI, frontend &amp; CMS development. Owns the website build &amp; technical SEO.</div></div>
+      <div class="team-card"><div class="ava a3">SE</div><div class="t-role">SEO &amp; Content</div><div class="t-name">Code-OX SEO Pod</div><div class="t-desc">Keyword research, blog writing, on-page optimisation, monthly performance reporting.</div></div>
+      <div class="team-card"><div class="ava a4">LI</div><div class="t-role">LinkedIn Growth</div><div class="t-name">Code-OX Social Pod</div><div class="t-desc">Content calendars, post design, Sales Navigator outreach, lead routing to Jethur sales.</div></div>
+    </div>
+
+    <div class="info" style="margin-top:28px">
+      <div class="info-lbl">How we work</div>
+      <p>You hear from one person — not a chain of account managers. Shabeeb runs the engagement, specialists deliver behind him. Status, decisions, and approvals all flow through a single WhatsApp group so nothing is buried in email threads.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 5 — WEBSITE DEEP DIVE
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s5">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark" style="color:var(--w1)"><span style="background:var(--w1);box-shadow:0 0 10px var(--w1)"></span> /01</span><span class="bar-div"></span><span class="bar-co">Workstream Detail</span></div>
+    <span class="bar-label">Website Revamp</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">04</div>
+    <div class="eyebrow">Workstream 01 · Website</div>
+    <h2 class="head">A new jethur.com — <em>engineered for ranking.</em></h2>
+    <p class="lead">One-time fixed build. Designed in Figma. Custom CMS. Technical SEO baked in. Three months of complimentary post-launch support.</p>
+
+    <div class="ws-detail" style="margin-top:32px;flex:1;min-height:0">
+      <div class="ws-detail-l">
+        <h3 style="font-size:15px;font-family:var(--mono);font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--w1);margin-bottom:14px">Deliverables</h3>
+        <div class="deliverables">
+          <div class="delv"><div class="delv-icon">UX</div><div class="delv-text"><div class="delv-t">Discovery, IA &amp; Wireframes</div><div class="delv-d">Sitemap, low-fi wireframes for every page, sign-off before pixel work.</div></div></div>
+          <div class="delv"><div class="delv-icon">UI</div><div class="delv-text"><div class="delv-t">High-Fidelity Figma Designs</div><div class="delv-d">Full visual system, component library, responsive breakpoints (mobile/tablet/desktop).</div></div></div>
+          <div class="delv"><div class="delv-icon">CMS</div><div class="delv-text"><div class="delv-t">Custom-built CMS</div><div class="delv-d">Your team publishes blogs, case studies &amp; pages without our help.</div></div></div>
+          <div class="delv"><div class="delv-icon">SEO</div><div class="delv-text"><div class="delv-t">Technical SEO baked in</div><div class="delv-d">Schema, meta, sitemap, robots.txt, Core Web Vitals — all production-grade.</div></div></div>
+          <div class="delv"><div class="delv-icon">301</div><div class="delv-text"><div class="delv-t">Redirect map &amp; analytics</div><div class="delv-d">Old-URL → new-URL preservation, GA4 + Search Console verified before launch.</div></div></div>
+          <div class="delv"><div class="delv-icon">3M</div><div class="delv-text"><div class="delv-t">3-month complimentary support</div><div class="delv-d">Bug fixes, minor changes, content help — built into the engagement.</div></div></div>
+        </div>
+      </div>
+
+      <div class="ws-detail-r">
+        <div class="detail-meta"><div class="detail-meta-lbl">Engagement Type</div><div class="detail-meta-v">One-time · Fixed scope</div></div>
+        <div class="detail-meta"><div class="detail-meta-lbl">Target Go-Live</div><div class="detail-meta-v glow">End of Month 2</div></div>
+        <div class="detail-meta"><div class="detail-meta-lbl">Design Window</div><div class="detail-meta-v">Month 1 · 3–4 weeks</div></div>
+        <div class="detail-meta"><div class="detail-meta-lbl">Build Window</div><div class="detail-meta-v">Month 2 · 4 weeks</div></div>
+        <div class="detail-meta"><div class="detail-meta-lbl">Post-launch Support</div><div class="detail-meta-v">3 calendar months (free)</div></div>
+        <div class="info" style="margin-top:auto">
+          <div class="info-lbl">Reference</div>
+          <p>Detailed scope per <em>jethur/website.html</em> proposal, incorporated into Master Agreement Schedule A.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 6 — SEO DEEP DIVE
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s6">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark" style="color:var(--w2)"><span style="background:var(--w2);box-shadow:0 0 10px var(--w2)"></span> /02</span><span class="bar-div"></span><span class="bar-co">Workstream Detail</span></div>
+    <span class="bar-label">SEO Retainer</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">05</div>
+    <div class="eyebrow" style="color:var(--w2)"><span style="background:var(--w2)"></span>Workstream 02 · SEO</div>
+    <h2 class="head">SEO from <em>day one</em> — not after launch.</h2>
+    <p class="lead">Two phases. Phase 1 runs alongside the website build — keyword research feeds page architecture. Phase 2 kicks off the moment we launch.</p>
+
+    <div class="ws-detail w2" style="margin-top:32px;flex:1;min-height:0">
+      <div class="ws-detail-l">
+        <h3 style="font-size:15px;font-family:var(--mono);font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--w2);margin-bottom:14px">What lands monthly</h3>
+        <div class="deliverables">
+          <div class="delv"><div class="delv-icon">KW</div><div class="delv-text"><div class="delv-t">Keyword research &amp; clustering</div><div class="delv-d">GRC-specific intent map for KSA + target geos. Pages designed around clusters, not guesses.</div></div></div>
+          <div class="delv"><div class="delv-icon">P1</div><div class="delv-text"><div class="delv-t">Phase 1 — tech SEO in the build</div><div class="delv-d">Schema, internal linking, meta architecture, sitemap, robots, redirect plan, GA4/GSC.</div></div></div>
+          <div class="delv"><div class="delv-icon">2X</div><div class="delv-text"><div class="delv-t">2 long-form articles / month</div><div class="delv-d">Drafted 5 business days before publish for Jethur review. SME input where needed.</div></div></div>
+          <div class="delv"><div class="delv-icon">BL</div><div class="delv-text"><div class="delv-t">Backlinks &amp; topic clusters</div><div class="delv-d">Authority links + internal cluster strategy that lifts every related page.</div></div></div>
+          <div class="delv"><div class="delv-icon">RP</div><div class="delv-text"><div class="delv-t">Monthly performance report</div><div class="delv-d">Rankings, organic traffic, impressions, CTR, wins, issues, prioritised plan for next month.</div></div></div>
+          <div class="delv"><div class="delv-icon">Q1</div><div class="delv-text"><div class="delv-t">Quarterly strategy review</div><div class="delv-d">What's working, where to double down, what to cut.</div></div></div>
+        </div>
+      </div>
+
+      <div class="ws-detail-r">
+        <div class="detail-meta"><div class="detail-meta-lbl">Starts</div><div class="detail-meta-v glow">Day 1 · alongside the build</div></div>
+        <div class="detail-meta"><div class="detail-meta-lbl">Initial Term</div><div class="detail-meta-v">6 months · then month-to-month</div></div>
+        <div class="detail-meta"><div class="detail-meta-lbl">Setup</div><div class="detail-meta-v">No separate onboarding · Phase 1 integrated</div></div>
+        <div class="detail-meta"><div class="detail-meta-lbl">Reporting Day</div><div class="detail-meta-v">5th business day each month</div></div>
+        <div class="detail-meta"><div class="detail-meta-lbl">Blog Cadence</div><div class="detail-meta-v">2 long-form articles / month minimum</div></div>
+        <div class="info" style="margin-top:auto">
+          <div class="info-lbl">Outcome expectations</div>
+          <p>Deliverables &amp; cadence are <em>committed</em>. Ranking and traffic outcomes depend on content resonance, market conditions, and Google algorithm changes — not guaranteed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 7 — LINKEDIN DEEP DIVE
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s7">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark" style="color:var(--w3)">/03</span><span class="bar-div"></span><span class="bar-co">Workstream Detail</span></div>
+    <span class="bar-label">LinkedIn Marketing</span>
+  </div>
+  <div class="body tight">
+    <div class="bg-num">06</div>
+
+    <!-- Compact header -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:22px">
+      <div>
+        <div class="eyebrow" style="color:var(--w3);margin-bottom:12px"><span style="background:var(--w3)"></span>Workstream 03 · LinkedIn</div>
+        <h2 class="head" style="font-size:clamp(28px,3vw,40px)">Two streams. <em>Compounding</em> month over month.</h2>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--w3);background:var(--w3-bg);border:1px solid var(--w3-line);padding:8px 14px;border-radius:100px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap">Two streams · One monthly rhythm</div>
+    </div>
+
+    <!-- HERO STATS — two big number tiles -->
+    <div class="g2" style="gap:16px">
+      <div class="statile w3">
+        <div class="statile-tag">Service C-01 · Page Management</div>
+        <div class="statile-num">12<em>/ mo</em></div>
+        <div class="statile-lbl">Posts published every month</div>
+        <div class="statile-desc">Calendar shared 25th of prior month. Designed, written, scheduled by us. Engagement responses within 24h.</div>
+      </div>
+      <div class="statile w3">
+        <div class="statile-tag">Service C-02 · Outreach</div>
+        <div class="statile-num">150<em>+ / mo</em></div>
+        <div class="statile-lbl">Personalised outreach actions</div>
+        <div class="statile-desc">Sales Navigator segments, tailored intros per persona, 3-touch follow-up sequences. Warm leads routed to your sales team.</div>
+      </div>
+    </div>
+
+    <!-- CONTENT PILLARS -->
+    <div style="margin-top:20px">
+      <div style="font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--w3);margin-bottom:10px;display:flex;align-items:center;gap:10px">
+        <span style="width:16px;height:1px;background:var(--w3)"></span>Content pillars · what we post about
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
+        <div class="pillar"><div class="p-ico">📋</div><div class="p-name">Regulatory<br>Commentary</div></div>
+        <div class="pillar"><div class="p-ico">💬</div><div class="p-name">Customer<br>Stories</div></div>
+        <div class="pillar"><div class="p-ico">🎓</div><div class="p-name">Product<br>Education</div></div>
+        <div class="pillar"><div class="p-ico">💡</div><div class="p-name">Thought<br>Leadership</div></div>
+        <div class="pillar"><div class="p-ico">👥</div><div class="p-name">Team<br>Culture</div></div>
+        <div class="pillar"><div class="p-ico">📰</div><div class="p-name">Industry<br>News</div></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM: Mock LinkedIn post + Outreach funnel -->
+    <div style="display:grid;grid-template-columns:.95fr 1.05fr;gap:16px;margin-top:20px">
+      <!-- LinkedIn post mockup -->
+      <div class="li-post">
+        <div class="li-ph">
+          <div class="li-ava">J</div>
+          <div class="li-meta-w">
+            <div class="li-name">Jethur</div>
+            <div class="li-meta">GRC · 487 followers · 2h ago</div>
+          </div>
+          <span class="li-pill">SAMPLE</span>
+        </div>
+        <div class="li-body">
+          New SAMA framework guidance just dropped — here's what compliance teams in KSA banking need to action by Q3 to stay ahead of the audit cycle. <strong>Three takeaways inside ↓</strong>
+        </div>
+        <div class="li-img"></div>
+        <div class="li-eng">
+          <span>👍 42 reactions</span><span>💬 8 comments</span><span>↗ 12 reposts</span>
+        </div>
+      </div>
+
+      <!-- Outreach funnel -->
+      <div class="funnel-card">
+        <div class="funnel-h">
+          <div class="funnel-h-l">Outreach funnel · realistic month</div>
+          <div class="funnel-h-r">Indicative · not guaranteed</div>
+        </div>
+        <div class="funnel">
+          <div class="fs fs1"><div class="fs-num">150</div><div class="fs-bar">Invites sent <span class="fs-rate" style="color:rgba(255,255,255,.8)">— baseline</span></div></div>
+          <div class="fs fs2"><div class="fs-num">~60</div><div class="fs-bar">Accepted <span class="fs-rate" style="color:rgba(255,255,255,.8)">40%</span></div></div>
+          <div class="fs fs3"><div class="fs-num">~18</div><div class="fs-bar">Replied <span class="fs-rate" style="color:rgba(10,25,40,.6)">30%</span></div></div>
+          <div class="fs fs4"><div class="fs-num">~8</div><div class="fs-bar">Conversations <span class="fs-rate" style="color:rgba(255,255,255,.8)">~44%</span></div></div>
+          <div class="fs fs5"><div class="fs-num">~3</div><div class="fs-bar">Qualified <span class="fs-rate" style="color:rgba(255,255,255,.8)">~37%</span></div></div>
+        </div>
+        <div class="funnel-note">Rates depend on offer-market fit, persona quality &amp; copy. Numbers tune up month-over-month as we learn what resonates.</div>
+      </div>
+    </div>
+
+    <!-- Sales Navigator footnote -->
+    <div class="info" style="margin-top:16px;border-left-color:var(--w3);padding:14px 20px">
+      <div class="info-lbl" style="color:var(--w3)">Sales Navigator</div>
+      <p style="font-size:13px">Licence is <em>Jethur-provided</em> — Code-OX operates it. Needs to be in place before outreach starts in Week 4.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 8 — 30-DAY SPRINT
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s8">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">Kickoff → First Mocks</span></div>
+    <span class="bar-label">First 30 Days</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">07</div>
+    <div class="eyebrow">Section 07 · Sprint Plan</div>
+    <h2 class="head">From today to first hi-fi mock <em>in 21 days.</em></h2>
+    <p class="lead">All three workstreams start together. SEO research feeds website architecture. LinkedIn calendar approved by Week 3.</p>
+
+    <div class="g4" style="margin-top:32px;flex:1;min-height:0">
+      <div class="rm"><div class="rm-wk">Week 01 · Foundation</div><div class="rm-lb">Access &amp; Discovery</div>
+        <ul class="rm-ul"><li>Access handover complete</li><li>Deep discovery interviews</li><li>GA4 + Search Console verified</li><li>SEO keyword research starts</li><li>LinkedIn audit kickoff</li></ul></div>
+      <div class="rm"><div class="rm-wk">Week 02 · Architecture</div><div class="rm-lb">IA + Wireframes</div>
+        <ul class="rm-ul"><li>Sitemap signed off</li><li>Low-fi wireframes for key pages</li><li>Redirect map drafted</li><li>Tone-of-voice document</li><li>LinkedIn audit findings</li></ul></div>
+      <div class="rm"><div class="rm-wk">Week 03 · Design</div><div class="rm-lb">First Hi-Fi Mocks</div>
+        <ul class="rm-ul"><li>Hero, services, case-study designs</li><li>Component library + style guide</li><li>4-week blog topic queue approved</li><li>Month 1 LinkedIn calendar approved</li><li>Outreach segments built</li></ul></div>
+      <div class="rm"><div class="rm-wk">Week 04 · Build</div><div class="rm-lb">Code Sprint Starts</div>
+        <ul class="rm-ul"><li>Full UI sign-off</li><li>CMS modelling + dev starts</li><li>First 2 blog drafts for review</li><li>LinkedIn posting goes live</li><li>First monthly report</li></ul></div>
+    </div>
+
+    <div class="info" style="margin-top:24px">
+      <div class="info-lbl">Effective Date · kickoff today</div>
+      <p>All three workstreams start the calendar month of kickoff. SEO research feeds the website information architecture in Week 1. By end of Month 1: working features visible in every workstream.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 9 — 6-MONTH TIMELINE
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide hidden" id="s9">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">Full Retainer View</span></div>
+    <span class="bar-label">6 Months at a Glance</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">08</div>
+    <div class="eyebrow">Section 08 · Retainer Timeline</div>
+    <h2 class="head">6 months — <em>what lands when.</em></h2>
+    <p class="lead">Website goes live in Month 2 — 3–4 weeks of design, one month to build. SEO compounds from Month 3 onwards. LinkedIn pipeline reads from Month 2.</p>
+
+    <div class="tl-wrap" style="margin-top:28px">
+      <div class="tl-row">
+        <div class="tl-name"><div class="tl-sname">Website Revamp</div><div class="tl-stag">One-time · fixed</div></div>
+        <div class="tl-mos">
+          <div class="tl-m"><span class="m">M1</span><span class="d">Discovery · IA · Design</span></div>
+          <div class="tl-m live"><span class="m">M2 · LIVE</span><span class="d">Build · UAT · Go-Live 🚀</span></div>
+          <div class="tl-m"><span class="m">M3</span><span class="d">Free support</span></div>
+          <div class="tl-m"><span class="m">M4</span><span class="d">Free support</span></div>
+          <div class="tl-m"><span class="m">M5</span><span class="d">Free support · maintenance call</span></div>
+          <div class="tl-m"><span class="m">M6</span><span class="d">Ongoing discussion</span></div>
+        </div>
+      </div>
+      <div class="tl-row r2">
+        <div class="tl-name"><div class="tl-sname">SEO Retainer</div><div class="tl-stag">Continuous · from day 1</div></div>
+        <div class="tl-mos">
+          <div class="tl-m"><span class="m">M1</span><span class="d">Keyword research · Tech SEO · GA4/GSC</span></div>
+          <div class="tl-m live"><span class="m">M2 · LAUNCH</span><span class="d">Blog 1+2 · redirect map live</span></div>
+          <div class="tl-m"><span class="m">M3</span><span class="d">Blog 3+4 · Backlinks</span></div>
+          <div class="tl-m"><span class="m">M4</span><span class="d">Blog 5+6 · Topic clusters</span></div>
+          <div class="tl-m"><span class="m">M5</span><span class="d">Blog 7+8 · Authority links</span></div>
+          <div class="tl-m"><span class="m">M6</span><span class="d">Blog 9+10 · Q-review</span></div>
+        </div>
+      </div>
+      <div class="tl-row r3">
+        <div class="tl-name"><div class="tl-sname">LinkedIn</div><div class="tl-stag">Continuous · from day 1</div></div>
+        <div class="tl-mos">
+          <div class="tl-m"><span class="m">M1</span><span class="d">Audit · Tone · Calendar</span></div>
+          <div class="tl-m"><span class="m">M2</span><span class="d">12 posts · 150 outreach</span></div>
+          <div class="tl-m"><span class="m">M3</span><span class="d">12 posts · 150 outreach</span></div>
+          <div class="tl-m"><span class="m">M4</span><span class="d">12 posts · 150 outreach</span></div>
+          <div class="tl-m"><span class="m">M5</span><span class="d">12 posts · 150 outreach</span></div>
+          <div class="tl-m"><span class="m">M6</span><span class="d">12 posts · 150 outreach</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-sum">
+      <div class="tl-p"><div class="tl-pl">First major win</div><div class="tl-pv">M2 — new site goes live</div></div>
+      <div class="tl-p b"><div class="tl-pl">SEO traction</div><div class="tl-pv">M3 – M6 — rankings move</div></div>
+      <div class="tl-p c"><div class="tl-pl">LinkedIn pipeline</div><div class="tl-pv">M2+ — first qualified replies</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 10 — ACCESS CHECKLIST
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s10">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">What We Need From You</span></div>
+    <span class="bar-label">Access &amp; Credentials</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">09</div>
+    <div class="eyebrow">Section 09 · Access Handover</div>
+    <h2 class="head">What unlocks work <em>this week.</em></h2>
+    <p class="lead">Three priority tiers. <strong style="color:var(--red)">Red</strong> blocks work starting · <strong style="color:var(--amber)">Amber</strong> needed before Week 2 · <strong style="color:var(--dim)">Grey</strong> before go-live.</p>
+
+    <div class="ax-grid" style="margin-top:32px;flex:1;min-height:0">
+      <div>
+        <div class="ax-col-h"><span class="ax-dot"></span>Red · By July 1st</div>
+        <div class="ax-list">
+          <div class="ax-it"><div class="ax-n">Domain registrar access (jethur.com)</div><div class="ax-note">DNS control</div></div>
+          <div class="ax-it"><div class="ax-n">Current hosting + CMS admin login</div><div class="ax-note">Inventory · redirects</div></div>
+          <div class="ax-it"><div class="ax-n">Brand assets — logo (SVG), colours, fonts</div><div class="ax-note">Or confirm refresh</div></div>
+          <div class="ax-it"><div class="ax-n">GA4 + Search Console admin invite</div><div class="ax-note">shabeeb.k@code-ox.com</div></div>
+          <div class="ax-it"><div class="ax-n">LinkedIn Company Page admin access</div><div class="ax-note">Super admin</div></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="ax-col-h am"><span class="ax-dot"></span>Amber · Before Week 2</div>
+        <div class="ax-list">
+          <div class="ax-it am"><div class="ax-n">LinkedIn Sales Navigator licence</div><div class="ax-note">Jethur-provided</div></div>
+          <div class="ax-it am"><div class="ax-n">Existing blog / content archive</div><div class="ax-note">Preserve · redirect</div></div>
+          <div class="ax-it am"><div class="ax-n">Customer logos &amp; case studies (cleared)</div><div class="ax-note">Homepage · LinkedIn</div></div>
+          <div class="ax-it am"><div class="ax-n">Internal SME availability — blog quotes</div><div class="ax-note">15-min interviews</div></div>
+        </div>
+
+        <div class="ax-col-h gr" style="margin-top:24px"><span class="ax-dot"></span>Grey · Before go-live</div>
+        <div class="ax-list">
+          <div class="ax-it gr"><div class="ax-n">SSL cert decision (Let's Encrypt or paid)</div><div class="ax-note">Recommend free</div></div>
+          <div class="ax-it gr"><div class="ax-n">Form submissions destination (email / CRM)</div><div class="ax-note">Contact · demo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 11 — DISCOVERY 1
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s11">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">Discovery · Part 1 of 2</span></div>
+    <span class="bar-label">Business &amp; Positioning</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">10</div>
+    <div class="eyebrow">Section 10 · Discovery — Business</div>
+    <h2 class="head">Shape the story <em>before we write a word.</em></h2>
+    <p class="lead">Your answers shape website copy, target keywords, and LinkedIn voice. Short honest answers beat perfect long ones.</p>
+
+    <div class="info" style="margin-top:20px;margin-bottom:18px">
+      <div class="info-lbl">A structured questionnaire is coming</div>
+      <p>The questions on this slide and the next are here so you see <em>the shape</em> of what we need. We send the full questionnaire (Google Form / shared doc) within 24 hours — answer at your own pace, share with team members who know specific areas.</p>
+    </div>
+
+    <div class="q-grid" style="flex:1;min-height:0">
+      <div class="q-col">
+        <div class="q-card"><div class="q-cat">About Jethur</div><ul class="q-ul"><li>What does Jethur sell, in one sentence — for a stranger?</li><li>Who is the typical buyer? (role · company size · industry)</li><li>What problem are they hiring you to solve?</li><li>Average deal size and sales cycle length?</li><li>What part of the business is growing fastest right now?</li></ul></div>
+        <div class="q-card"><div class="q-cat">Positioning</div><ul class="q-ul"><li>Why do customers pick Jethur over a competitor — in <em>their</em> words?</li><li>What's the one thing competitors say that's wrong about you?</li><li>What category should Google associate Jethur with first?</li></ul></div>
+      </div>
+      <div class="q-col">
+        <div class="q-card"><div class="q-cat">Geography &amp; Verticals</div><ul class="q-ul"><li>Which countries / regions are primary targets for SEO?</li><li>Which verticals should we lead with? (banking, oil &amp; gas, healthcare…)</li><li>Any geos where you do <strong>not</strong> want to be visible?</li></ul></div>
+        <div class="q-card"><div class="q-cat">Goals · Next 6 Months</div><ul class="q-ul"><li>What does <strong>"the engagement worked"</strong> look like at Month 6?</li><li>Optimising for inbound leads, brand authority, or both?</li><li>Regulatory events / launches to time content around?</li><li>Topics off-limits (regulatory, legal, brand-safety)?</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 12 — DISCOVERY 2
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s12">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">Discovery · Part 2 of 2</span></div>
+    <span class="bar-label">Audience &amp; Competition</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">11</div>
+    <div class="eyebrow">Section 11 · Discovery — Audience</div>
+    <h2 class="head">Who we talk to · <em>who we beat.</em></h2>
+    <p class="lead">SEO and LinkedIn are zero-sum games against specific competitors. Naming them lets us reverse-engineer keywords, content gaps, and outreach segments.</p>
+
+    <div class="q-grid" style="margin-top:32px;flex:1;min-height:0">
+      <div class="q-col">
+        <div class="q-card"><div class="q-cat">Buyer Personas</div><ul class="q-ul"><li>Who is the <strong>economic buyer</strong>? (signs the cheque)</li><li>Who is the <strong>champion</strong>? (uses it, recommends it)</li><li>What job titles are your "ideal first reply" on LinkedIn?</li><li>What content do they read? (publications, podcasts, newsletters)</li><li>What objections come up most often in sales calls?</li></ul></div>
+        <div class="q-card"><div class="q-cat">Content Authority</div><ul class="q-ul"><li>Who on the team is publishable as a thought leader?</li><li>Any white papers · decks · talks we can repurpose?</li><li>Are case studies cleared for public use, or under NDA?</li></ul></div>
+      </div>
+      <div class="q-col">
+        <div class="q-card"><div class="q-cat">Competitors</div><ul class="q-ul"><li>Top 3–5 competitors you want to outrank on Google.</li><li>Which of them are doing LinkedIn well — what should we learn?</li><li>Any competitor we should never look or sound like?</li></ul></div>
+        <div class="q-card"><div class="q-cat">Sales Handoff</div><ul class="q-ul"><li>When a LinkedIn reply lands, who picks it up at Jethur?</li><li>What CRM / inbox should leads route to?</li><li>What SLA can sales commit to for first reply?</li><li>What qualifies as a "good lead" for you?</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 13 — REFERENCES & DESIGN BENCHMARKS
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s13">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">For a GRC product, the website IS the product demo</span></div>
+    <span class="bar-label">References &amp; Design Benchmarks</span>
+  </div>
+  <div class="body tight">
+    <div class="bg-num">12</div>
+
+    <div style="margin-bottom:20px">
+      <div class="eyebrow" style="margin-bottom:10px">Section 12 · Visual Direction</div>
+      <h2 class="head" style="font-size:clamp(28px,3vw,42px)">Best-in-class <em>references.</em> Hand-picked benchmarks.</h2>
+      <p class="lead" style="font-size:14.5px;margin-top:8px">Your buyer is a CISO or Head of Compliance evaluating dozens of platforms. The site needs to feel as confident as the best in category — and as crafted as the best B2B SaaS on the web. Here's who we benchmark against.</p>
+    </div>
+
+    <!-- THREE-CLUSTER REFERENCE GRID -->
+    <div class="ref-3col">
+
+      <!-- CLUSTER 1: DIRECT GRC COMPETITORS -->
+      <div class="ref-cluster">
+        <div class="rc-head">
+          <div class="rc-tag">01 · GRC</div>
+          <div class="rc-meta">
+            <h4>Direct Competitors</h4>
+            <p>Buyers compare us page-by-page. Modern, design-led GRC platforms.</p>
+          </div>
+        </div>
+        <div class="rc-list">
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#1a1a1a,#404040)">V</div>
+            <div class="rc-info"><div class="rc-name">Vanta</div><div class="rc-url">vanta.com</div></div>
+            <div class="rc-why">Category leader<br>bold confidence</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#7c3aed,#a78bfa)">D</div>
+            <div class="rc-info"><div class="rc-name">Drata</div><div class="rc-url">drata.com</div></div>
+            <div class="rc-why">Best-in-class product UI</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#0a0a0a,#1f2937)">S</div>
+            <div class="rc-info"><div class="rc-name">Secureframe</div><div class="rc-url">secureframe.com</div></div>
+            <div class="rc-why">Editorial · trust-first</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#16a34a,#22c55e)">Sc</div>
+            <div class="rc-info"><div class="rc-name">Scrut Automation</div><div class="rc-url">scrut.io</div></div>
+            <div class="rc-why">India-built<br>fast rising</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#0891b2,#06b6d4)">Sp</div>
+            <div class="rc-info"><div class="rc-name">Sprinto</div><div class="rc-url">sprinto.com</div></div>
+            <div class="rc-why">Clean conversion arch.</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#1e40af,#3b82f6)">AB</div>
+            <div class="rc-info"><div class="rc-name">AuditBoard</div><div class="rc-url">auditboard.com</div></div>
+            <div class="rc-why">Enterprise tone</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#dc2626,#f87171)">Th</div>
+            <div class="rc-info"><div class="rc-name">Thoropass</div><div class="rc-url">thoropass.com</div></div>
+            <div class="rc-why">Excellent brand system</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLUSTER 2: WORLD-CLASS B2B SAAS DESIGN -->
+      <div class="ref-cluster rb">
+        <div class="rc-head">
+          <div class="rc-tag">02 · Design</div>
+          <div class="rc-meta">
+            <h4>Design Benchmarks</h4>
+            <p>The sites the industry uses to define "premium B2B SaaS" in 2026.</p>
+          </div>
+        </div>
+        <div class="rc-list">
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#0a0a0a,#1f2937)">L</div>
+            <div class="rc-info"><div class="rc-name">Linear</div><div class="rc-url">linear.app</div></div>
+            <div class="rc-why">Reference standard<br>type · motion</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#635bff,#a78bfa)">St</div>
+            <div class="rc-info"><div class="rc-name">Stripe</div><div class="rc-url">stripe.com</div></div>
+            <div class="rc-why">Info architecture gold</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#000,#262626)">V</div>
+            <div class="rc-info"><div class="rc-name">Vercel</div><div class="rc-url">vercel.com</div></div>
+            <div class="rc-why">Dark mode · grids</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#000,#404040)">R</div>
+            <div class="rc-info"><div class="rc-name">Resend</div><div class="rc-url">resend.com</div></div>
+            <div class="rc-why">Minimalist · serif</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#171717,#3f3f46)">C</div>
+            <div class="rc-info"><div class="rc-name">Cursor</div><div class="rc-url">cursor.com</div></div>
+            <div class="rc-why">Product storytelling</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">Cl</div>
+            <div class="rc-info"><div class="rc-name">Clerk</div><div class="rc-url">clerk.com</div></div>
+            <div class="rc-why">Developer trust · clarity</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#1f2937,#374151)">Mi</div>
+            <div class="rc-info"><div class="rc-name">Mintlify</div><div class="rc-url">mintlify.com</div></div>
+            <div class="rc-why">Docs feel like product</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLUSTER 3: BRAND & EDITORIAL INSPIRATION -->
+      <div class="ref-cluster rc">
+        <div class="rc-head">
+          <div class="rc-tag">03 · Brand</div>
+          <div class="rc-meta">
+            <h4>Brand &amp; Editorial</h4>
+            <p>Sites that build trust through brand maturity, not just UI.</p>
+          </div>
+        </div>
+        <div class="rc-list">
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#000,#1f2937)">N</div>
+            <div class="rc-info"><div class="rc-name">Notion</div><div class="rc-url">notion.so</div></div>
+            <div class="rc-why">Warm enterprise · human</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#0d9488,#14b8a6)">Lb</div>
+            <div class="rc-info"><div class="rc-name">Liveblocks</div><div class="rc-url">liveblocks.io</div></div>
+            <div class="rc-why">Bold editorial · big type</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#dc2626,#f59e0b)">F</div>
+            <div class="rc-info"><div class="rc-name">Framer</div><div class="rc-url">framer.com</div></div>
+            <div class="rc-why">Visual · interactive</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#fa5252,#ff8787)">Ra</div>
+            <div class="rc-info"><div class="rc-name">Raycast</div><div class="rc-url">raycast.com</div></div>
+            <div class="rc-why">Personality · craft</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#ef4444,#f87171)">P</div>
+            <div class="rc-info"><div class="rc-name">PostHog</div><div class="rc-url">posthog.com</div></div>
+            <div class="rc-why">Quirky · technical · trusted</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#0f172a,#1e293b)">1P</div>
+            <div class="rc-info"><div class="rc-name">1Password</div><div class="rc-url">1password.com</div></div>
+            <div class="rc-why">Security-first story</div>
+          </div>
+          <div class="rc-item">
+            <div class="rc-mark" style="background:linear-gradient(135deg,#1d4ed8,#60a5fa)">Cf</div>
+            <div class="rc-info"><div class="rc-name">Cloudflare</div><div class="rc-url">cloudflare.com</div></div>
+            <div class="rc-why">Infrastructure trust</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM ROW: Open canvas + Constraints + Design principles -->
+    <div style="display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:14px;margin-top:18px">
+      <div class="ref-panel" style="padding:16px 18px">
+        <div class="ref-lbl" style="margin-top:0">Open canvas · ideas in your head</div>
+        <div class="scrib" style="margin-top:4px;min-height:64px">
+          <div class="scrib-l">We capture during the call</div>
+          <div class="scrib-h">interactive ROI calculator · compliance framework matrix · partner ecosystem · customer trust portal · live security score · regulatory news feed…</div>
+        </div>
+      </div>
+      <div class="ref-panel" style="padding:16px 18px">
+        <div class="ref-lbl" style="margin-top:0">Constraints we should know</div>
+        <div class="scrib" style="margin-top:4px;min-height:64px">
+          <div class="scrib-l">Capture during the call</div>
+          <div class="scrib-h">brand kit must be respected · legal disclaimers · WCAG AA target · multi-language plan · cookie consent regime…</div>
+        </div>
+      </div>
+      <div class="ref-panel" style="padding:16px 18px;background:linear-gradient(135deg,var(--w1-bg),rgba(34,211,238,.03));border-color:var(--w1-line)">
+        <div class="ref-lbl" style="margin-top:0;color:var(--cy-2)">Design principles we'll hold</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:5px;margin-top:6px">
+          <li style="font-size:11.5px;color:var(--ink);line-height:1.5;padding-left:20px;position:relative"><span style="position:absolute;left:0;color:var(--cy-2);font-weight:800;font-family:var(--mono);font-size:10px">01</span>Trust before features — CISOs buy trust</li>
+          <li style="font-size:11.5px;color:var(--ink);line-height:1.5;padding-left:20px;position:relative"><span style="position:absolute;left:0;color:var(--cy-2);font-weight:800;font-family:var(--mono);font-size:10px">02</span>Premium type, generous whitespace</li>
+          <li style="font-size:11.5px;color:var(--ink);line-height:1.5;padding-left:20px;position:relative"><span style="position:absolute;left:0;color:var(--cy-2);font-weight:800;font-family:var(--mono);font-size:10px">03</span>Product screenshots on every fold</li>
+          <li style="font-size:11.5px;color:var(--ink);line-height:1.5;padding-left:20px;position:relative"><span style="position:absolute;left:0;color:var(--cy-2);font-weight:800;font-family:var(--mono);font-size:10px">04</span>Real customer logos &amp; outcomes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 14 — CADENCE & APPROVAL FLOW
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s14">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">How We Work Together</span></div>
+    <span class="bar-label">Cadence &amp; Approval Flow</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">13</div>
+    <div class="eyebrow">Section 13 · Operating Model</div>
+    <h2 class="head">One call · one channel · <em>one approver.</em></h2>
+    <p class="lead">That's enough to ship a website, run SEO, and post 12 LinkedIn pieces every month without anyone burning out.</p>
+
+    <div class="cad-grid" style="margin-top:32px">
+      <div class="cad-card"><div class="cad-h"><div class="cad-num">1</div><div class="cad-n">Communication</div></div>
+        <ul class="cad-ul"><li>One shared WhatsApp group — all three workstreams</li><li>Email for formal sign-offs &amp; approvals</li><li>Phone for genuine emergencies (24h)</li><li>Weekly 30-min call — same slot each week</li></ul></div>
+      <div class="cad-card"><div class="cad-h"><div class="cad-num">2</div><div class="cad-n">Reporting</div></div>
+        <ul class="cad-ul"><li>Monthly performance report — SEO &amp; LinkedIn combined</li><li>Delivered by 5th business day of next month</li><li>Quarterly strategy review — what to double down on</li><li>Always-on dashboard link (read-only)</li></ul></div>
+    </div>
+
+    <div class="ref-lbl" style="margin-bottom:14px">Approval flow — content calendar (LinkedIn &amp; blog)</div>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-n">Step 01 · 25th</div><div class="flow-t">Code-OX shares calendar</div><div class="flow-d">12 LinkedIn posts + 2 blog topics for next month, ready for review.</div></div>
+      <div class="flow-arr">›</div>
+      <div class="flow-step"><div class="flow-n">Step 02 · 3 biz days</div><div class="flow-t">Jethur reviews</div><div class="flow-d">Approve · edit · replace. No reply by Day 3 = approved.</div></div>
+      <div class="flow-arr">›</div>
+      <div class="flow-step"><div class="flow-n">Step 03 · 1st of month</div><div class="flow-t">Code-OX publishes</div><div class="flow-d">Schedule loaded. Outreach starts. Blog drafts due 5 days before publish.</div></div>
+      <div class="flow-arr">›</div>
+      <div class="flow-step"><div class="flow-n">Step 04 · 5th biz day</div><div class="flow-t">Monthly report</div><div class="flow-d">Performance, wins, prioritised plan for the month ahead.</div></div>
+    </div>
+
+    <div class="info" style="margin-top:18px">
+      <div class="info-lbl">Approval rule (from contract)</div>
+      <p>Absence of objection within 3 business days = approval. Anything longer just shifts the deliverable by the same number of days — no drama either side.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 15 — REPORTING & COMMUNICATION
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s15">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">Always-on Transparency</span></div>
+    <span class="bar-label">Reporting · What You See Monthly</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">14</div>
+    <div class="eyebrow">Section 14 · Reporting</div>
+    <h2 class="head">You always know <em>where we stand.</em></h2>
+    <p class="lead">A single combined report each month — SEO and LinkedIn — by the 5th business day. Plus a quarterly review to decide what to double down on.</p>
+
+    <div class="g3" style="margin-top:32px">
+      <div class="card card-hover c-w1" style="display:flex;flex-direction:column;gap:12px">
+        <div class="card-num">SEO Report · monthly</div>
+        <h3 style="font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.015em">What's in it</h3>
+        <ul class="ws-list" style="border-top:none;padding-top:0">
+          <li>Rankings movement (target keywords)</li>
+          <li>Organic traffic + impressions + CTR</li>
+          <li>Blog performance + best-performing pages</li>
+          <li>Technical issues found &amp; fixed</li>
+          <li>Backlinks earned</li>
+          <li>Prioritised plan for next month</li>
+        </ul>
+      </div>
+
+      <div class="card card-hover c-w3" style="display:flex;flex-direction:column;gap:12px">
+        <div class="card-num" style="color:var(--w3)">LinkedIn Report · monthly</div>
+        <h3 style="font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.015em">What's in it</h3>
+        <ul class="ws-list" style="border-top:none;padding-top:0">
+          <li>12 posts published · engagement summary</li>
+          <li>Follower growth &amp; profile views</li>
+          <li>150+ outreach actions · acceptance rate</li>
+          <li>Qualified replies routed to sales</li>
+          <li>Best-performing post archetypes</li>
+          <li>Next-month calendar &amp; outreach focus</li>
+        </ul>
+      </div>
+
+      <div class="card card-hover c-w2" style="display:flex;flex-direction:column;gap:12px">
+        <div class="card-num" style="color:var(--w2)">Quarterly Review</div>
+        <h3 style="font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.015em">90-day strategy reset</h3>
+        <ul class="ws-list" style="border-top:none;padding-top:0">
+          <li>What's working — double down</li>
+          <li>What's not — cut or change</li>
+          <li>Competitive landscape update</li>
+          <li>Content gap analysis</li>
+          <li>ICP / persona refinement</li>
+          <li>Plan for next quarter</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info" style="margin-top:24px">
+      <div class="info-lbl">Always-on dashboard</div>
+      <p>You get a read-only dashboard link with live SEO and LinkedIn metrics — no waiting for the monthly report to check momentum.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 16 — OPERATING RHYTHM
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s16">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">How the Engagement Breathes</span></div>
+    <span class="bar-label">Operating Rhythm</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">15</div>
+    <div class="eyebrow">Section 15 · Rhythm of Work</div>
+    <h2 class="head">Cadence is what makes <em>retainers work.</em></h2>
+    <p class="lead">Four operating beats. Daily presence. Weekly sync. Monthly report. Quarterly reset. Predictable every month, predictable forever.</p>
+
+    <div class="stat-row" style="margin-top:32px">
+      <div class="stat-cell">
+        <div class="statile-tag" style="margin-bottom:8px">Beat 01</div>
+        <div class="stat-val">Daily</div>
+        <div class="stat-lbl">WhatsApp group · always on</div>
+        <div class="stat-desc">One shared WhatsApp group covering all three workstreams. Messages acknowledged within one business day.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="statile-tag" style="margin-bottom:8px">Beat 02</div>
+        <div class="stat-val">Weekly</div>
+        <div class="stat-lbl">30-min sync · same slot</div>
+        <div class="stat-desc">Lock a recurring time. Skip when nothing pending. Never invent meetings to fill the calendar.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="statile-tag" style="margin-bottom:8px">Beat 03</div>
+        <div class="stat-val">5th<em> biz day</em></div>
+        <div class="stat-lbl">Monthly performance report</div>
+        <div class="stat-desc">SEO + LinkedIn combined. Last month's results, this month's priorities — in one document.</div>
+      </div>
+      <div class="stat-cell">
+        <div class="statile-tag" style="margin-bottom:8px">Beat 04</div>
+        <div class="stat-val">Quarterly</div>
+        <div class="stat-lbl">90-day strategy review</div>
+        <div class="stat-desc">What's working — double down. What's not — cut. Where competitors have moved.</div>
+      </div>
+    </div>
+
+    <div class="g2" style="margin-top:28px">
+      <div class="card c-w1" style="display:flex;flex-direction:column;gap:10px">
+        <div class="card-num">Decisions</div>
+        <h3 style="font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.015em">Friction-free approvals</h3>
+        <p class="card-text">One named approver on your side. 3 business days for the content calendar. Silence = approval. No design-by-committee, no week-long email threads.</p>
+      </div>
+      <div class="card c-w2" style="display:flex;flex-direction:column;gap:10px">
+        <div class="card-num" style="color:var(--w2)">When something is off</div>
+        <h3 style="font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.015em">Surface early, fix together</h3>
+        <p class="card-text">If a deliverable looks wrong, you hear it in the monthly report — not the quarterly. We name the issue, propose the fix, and ship the correction in the next cycle.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 17 — MUTUAL COMMITMENTS
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s17">
+  <div class="bar">
+    <div class="bar-brand"><span class="bar-mark">Jethur × Code-OX</span><span class="bar-div"></span><span class="bar-co">What Each Side Owes</span></div>
+    <span class="bar-label">Mutual Commitments</span>
+  </div>
+  <div class="body">
+    <div class="bg-num">16</div>
+    <div class="eyebrow">Section 16 · Mutual Commitments</div>
+    <h2 class="head">Clear roles. <em>Both ways.</em></h2>
+    <p class="lead">A good engagement is symmetric. Here's what each side owes the other — explicit, before anything goes wrong.</p>
+
+    <div class="commit-grid" style="margin-top:32px;flex:1;min-height:0">
+      <div class="commit-card">
+        <div class="commit-h"><span class="commit-badge">Code-OX commits</span></div>
+        <div class="commit-title">What we deliver</div>
+        <ul class="commit-ul">
+          <li><span class="cnum">1</span><div><strong>Promised cadence on every deliverable</strong>12 posts, 150 outreach, 2 blogs, monthly report on the 5th business day. Every month.</div></li>
+          <li><span class="cnum">2</span><div><strong>One point of contact</strong>Shabeeb owns the engagement. No account-manager chain, no buried emails.</div></li>
+          <li><span class="cnum">3</span><div><strong>Same-day acknowledgement</strong>Messages on the shared channel acknowledged within one business day.</div></li>
+          <li><span class="cnum">4</span><div><strong>Honest reporting</strong>Wins AND misses. If something isn't working, you hear it from us first — with a plan to fix it.</div></li>
+          <li><span class="cnum">5</span><div><strong>Code &amp; content ownership</strong>Everything we produce is yours — portable, exportable, no lock-in.</div></li>
+        </ul>
+      </div>
+
+      <div class="commit-card r">
+        <div class="commit-h"><span class="commit-badge">Jethur commits</span></div>
+        <div class="commit-title">What we need from you</div>
+        <ul class="commit-ul">
+          <li><span class="cnum">1</span><div><strong>Access in the first week</strong>Domain, GA4, Search Console, LinkedIn admin — by July 1st.</div></li>
+          <li><span class="cnum">2</span><div><strong>One approver, decisively</strong>One person at Jethur with authority to approve calendars, designs, and content.</div></li>
+          <li><span class="cnum">3</span><div><strong>3-day review window</strong>Content calendar reviews within 3 business days. Silence = approval.</div></li>
+          <li><span class="cnum">4</span><div><strong>SME access for blogs</strong>Brief access to your subject-matter experts for blog quotes (~15 min interviews).</div></li>
+          <li><span class="cnum">5</span><div><strong>Sales SLA on LinkedIn replies</strong>Qualified leads routed to your sales team get first reply within an agreed SLA.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SLIDE 18 — NEXT STEPS + THANK YOU
+     ════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="s18">
+  <div class="body split" style="padding:0">
+    <div class="thanks-l">
+      <div class="thanks-eyebrow">Next steps · within 48 hours</div>
+      <h1 class="thanks-title">Let's build something <em>Jethur is proud of.</em></h1>
+      <p class="thanks-sub">If we align in this meeting, you'll see work hitting the channel by the end of this week. No layers, no waiting in queues — questions go straight to Shabeeb.</p>
+
+      <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px 22px;display:flex;align-items:center;gap:18px">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--cy-glow),var(--cy));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:800;flex-shrink:0">1</div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff">Code-OX sends access tracker + questionnaire</div><div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:3px">Live checklist + discovery form, same day.</div></div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px 22px;display:flex;align-items:center;gap:18px">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--cy-glow),var(--cy));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:800;flex-shrink:0">2</div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff">Jethur confirms POC + weekly call slot</div><div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:3px">One approver. One recurring 30-min slot. WhatsApp group opened.</div></div>
+        </div>
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px 22px;display:flex;align-items:center;gap:18px">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--cy-glow),var(--cy));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:800;flex-shrink:0">3</div>
+          <div><div style="font-size:14px;font-weight:700;color:#fff">Week 1 sprint begins</div><div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:3px">Keyword research, LinkedIn audit, discovery interviews. First update Friday.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="thanks-r">
+      <div class="contact-card-l">
+        <div class="cc-lbl">Your point of contact</div>
+        <div class="cc-name">Shabeeb K</div>
+        <div class="cc-role">Head of Operations · Code-OX Technologies</div>
+        <div class="cc-line">+966 53 571 6437</div>
+        <div class="cc-line">shabeeb.k@code-ox.com</div>
+        <div class="cc-line" style="color:var(--faint)">code-ox.com</div>
+      </div>
+
+      <div class="contact-card-l">
+        <div class="cc-lbl">Engagement reference</div>
+        <div style="font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:600;margin-bottom:6px">JTR-KICKOFF-2026-01</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Master Services Agreement countersigned 29 June 2026. 6-month initial term on recurring services.</div>
+      </div>
+
+      <div class="info" style="margin:0">
+        <div class="info-lbl">Effective today</div>
+        <p>The retainer clock starts this calendar month. First monthly report lands by the 5th business day of next month.</p>
+      </div>
+
+      <div style="margin-top:auto;padding-top:24px;border-top:1px solid var(--line);text-align:center">
+        <div style="font-family:var(--serif);font-style:italic;font-size:22px;color:var(--cy-2);letter-spacing:-.01em;line-height:1.3">
+          "Thank you for trusting us with this."
+        </div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;margin-top:8px">Shabeeb &amp; the Code-OX team</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- ── NAV ── -->
+<div id="nav">
+  <button class="nb" id="prevBtn" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <div class="dots" id="dots"></div>
+  <button class="nb" id="nextBtn" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+</div>
+<div id="snum">01 / 17</div>
+
+<script>
+// Only show non-hidden slides in navigation
+const slides = Array.from(document.querySelectorAll('.slide:not(.hidden)'));
+const total = slides.length;
+let current = 0;
+
+// Make sure first visible slide is active
+slides.forEach((s,i) => s.classList.toggle('active', i === 0));
+
+function goTo(n){
+  n = Math.max(0, Math.min(total-1, n));
+  if(n === current) return;
+  slides[current].classList.remove('active');
+  slides[current].classList.add('prev');
+  const old = current;
+  current = n;
+  slides[current].classList.add('active');
+  setTimeout(() => slides[old].classList.remove('prev'), 420);
+  update();
+}
+
+function update(){
+  document.getElementById('prog').style.width = ((current+1)/total * 100) + '%';
+  document.getElementById('snum').textContent = String(current+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('on', i === current));
+  document.getElementById('prevBtn').style.opacity = current === 0 ? '.35' : '1';
+  document.getElementById('nextBtn').style.opacity = current === total-1 ? '.35' : '1';
+}
+
+const dotsEl = document.getElementById('dots');
+for(let i=0; i<total; i++){
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' on' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+document.getElementById('prevBtn').onclick = () => goTo(current - 1);
+document.getElementById('nextBtn').onclick = () => goTo(current + 1);
+
+document.addEventListener('keydown', e => {
+  if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key))           { e.preventDefault(); goTo(current - 1); }
+  if(e.key === 'Home') { e.preventDefault(); goTo(0); }
+  if(e.key === 'End')  { e.preventDefault(); goTo(total - 1); }
+});
+
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+document.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if(Math.abs(dx) > 50) goTo(dx < 0 ? current + 1 : current - 1);
+}, { passive: true });
+
+update();
+</script>
+
+</body>
+</html>
