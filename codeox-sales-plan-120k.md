@@ -9,14 +9,15 @@ The model below is a monthly steady-state mix. Month 1 will be heavier on AI and
 
 | Service Line | Monthly SAR Target | Avg Deal Size | Deals/Month | Notes |
 |---|---|---|---|---|
-| AI Solutions (AIKA/AIWA) | 45,000 | 30,000–40,000 setup + retainer | 1–2 new + retainer base | Highest margin, fastest close in right vertical |
+| AI Solutions (AIKA/AIWA) | 40,000 | 25,000–40,000 setup + retainer | 1–2 new + retainer base | Highest margin, fastest close in right vertical |
 | Odoo ERP Implementation | 30,000 | 25,000–35,000 | 1 | 6-week sales cycle; start pipeline now for Month 2 close |
-| Web Application Development | 20,000 | 40,000–60,000 | milestone billing on 1 active project | Bill monthly against SOW milestones |
+| Web Application Development | 18,000 | 40,000–60,000 | milestone billing on 1 active project | Bill monthly against SOW milestones |
 | Website Development | 12,000 | 10,000–15,000 | 1 | Fastest close (7–14 days). Volume play |
-| Mobile App Development | 13,000 | 45,000–65,000 | milestone billing on 1 active project | Bill monthly against milestones |
+| Mobile App Development | 10,000 | 45,000–65,000 | milestone billing on 1 active project | Bill monthly against milestones |
+| LinkedIn Marketing Services | 10,000 | 4,000–6,000/mo retainer | 2–3 retainer clients | Pure recurring revenue. Content strategy, ghostwriting, paid campaigns, B2B outbound. |
 | **TOTAL** | **120,000** | | | |
 
-**Key structural insight:** AI and Odoo together account for 75,000 SAR (63% of target). These two service lines must always have active pipeline. Website and web app deals are the cash flow fillers between larger closes.
+**Key structural insight:** AI and Odoo together account for 70,000 SAR (58% of target). These two lines must always have active pipeline. LinkedIn Marketing is the purest recurring revenue play — 2–3 retainer clients at 4,000–6,000 SAR/month each with no delivery risk. Website and web app deals fill cash flow gaps between larger closes.
 
 **Recurring revenue imperative:** Every AI deployment (AIKA/AIWA) must include a monthly SaaS retainer of 3,000–8,000 SAR/month. Ten clients on retainer = 30,000–80,000 SAR/month in baseload revenue that de-risks the target entirely. Build toward this from Month 1.
 
@@ -101,6 +102,24 @@ Deal size: 45,000–65,000 SAR (iOS + Android). Upsell path to AIWA for push-not
 **ICP 2 — Field Service Companies (HVAC, fire suppression, facility management)**
 Pain: Technician job assignments are on paper or WhatsApp. No photo evidence upload. No client sign-off digital trail.
 Deal size: 40,000–55,000 SAR.
+
+---
+
+### LinkedIn Marketing Services
+
+**ICP 1 — B2B Service Companies (Consulting, Engineering, Training, HR)**
+Pain: The company does great work but is invisible on LinkedIn. Founders and directors have no presence. Competitor firms that post consistently win the same tenders. CodeOx runs their LinkedIn content strategy and ghostwrites thought-leadership posts for the GM/Director.
+Deal size: 4,000–6,000 SAR/month retainer. Multi-month by nature — results compound after 60–90 days.
+
+**ICP 2 — Odoo Partners and Technology Resellers**
+Pain: They sell a product (ERP, software, hardware) but generate zero inbound. LinkedIn is the channel their enterprise buyers use to vet vendors before replying to a cold call.
+Deal size: 5,000–7,000 SAR/month retainer. Include paid LinkedIn campaign management as an upsell.
+
+**ICP 3 — KSA Founders and Executives Building Personal Brand**
+Pain: They know their network is their net worth but have no time or writing skills to post consistently. A strong LinkedIn presence opens doors to partnerships, investors, and enterprise clients.
+Deal size: 3,500–5,000 SAR/month for personal brand management (3–5 posts/week + engagement).
+
+**Note:** LinkedIn Marketing is sold independently — not bundled with AI or Odoo. It is a separate buying decision with a separate budget owner (usually Marketing or the Founder directly, not IT or Operations).
 
 ---
 
@@ -223,6 +242,21 @@ Push toward 12,000 SAR minimum by bundling a 3-month SEO and Google Business Pro
 | Complex (offline, IoT, real-time) | 75,000–120,000 SAR | Monthly milestone billing |
 
 **Scope creep protection:** Every proposal includes a fixed scope document with a change request clause. Out-of-scope work is billable at 350–450 SAR/hour. State this before signing — not after the first change request.
+
+---
+
+### LinkedIn Marketing Services
+
+| Package | Monthly Retainer | What's Included |
+|---|---|---|
+| Content Starter | 3,500 SAR/mo | 3 posts/week on company or personal page. Copywriting, image sourcing, scheduling. Monthly performance report. |
+| Growth | 5,000 SAR/mo | 5 posts/week, engagement management (replies, comments), LinkedIn SEO optimization, 1 article/month. |
+| Full Management | 6,500 SAR/mo | Growth package + outbound B2B prospecting (connection requests + message sequences) targeting 100 decision-makers/month. |
+| Paid Campaigns (add-on) | 2,500 SAR/mo management fee + ad budget | LinkedIn Sponsored Content or Lead Gen Forms. Minimum ad budget: 3,000 SAR/month. |
+
+**Minimum commitment:** 3 months. Results on LinkedIn compound — a 1-month trial produces no signal. Frame this expectation before signing.
+
+**Floor:** Never go below 3,500 SAR/month. Below this, the time cost is not recoverable.
 
 ---
 
