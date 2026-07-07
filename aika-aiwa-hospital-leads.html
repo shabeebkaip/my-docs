@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIKA & AIWA — KSA Hospital Lead Tracker | Code-OX</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
+
+  header {
+    background: #0d0d1a;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  header img { height: 38px; }
+  header .title-block h1 { color: #fff; font-size: 1.25rem; font-weight: 700; }
+  header .title-block p { color: #888; font-size: 0.8rem; margin-top: 2px; }
+  header .contact { color: #aaa; font-size: 0.78rem; text-align: right; line-height: 1.7; }
+  header .contact a { color: #6ec6ff; text-decoration: none; }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    background: #1a1a2e;
+    padding: 0 32px;
+  }
+  .tab {
+    padding: 12px 24px;
+    cursor: pointer;
+    color: #888;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab.active { color: #6ec6ff; border-bottom-color: #6ec6ff; }
+
+  .panel { display: none; padding: 28px 32px; }
+  .panel.active { display: block; }
+
+  .meta { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .badge.hot { background: #fff0e6; color: #c45000; }
+  .badge.warm { background: #e6f4ff; color: #005a9e; }
+  .badge.total { background: #e6ffe6; color: #1a6600; }
+
+  .table-wrap { overflow-x: auto; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+  table { width: 100%; border-collapse: collapse; background: #fff; font-size: 0.82rem; }
+  thead tr { background: #0d0d1a; color: #fff; }
+  thead th { padding: 12px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid #eef0f4; transition: background 0.15s; }
+  tbody tr:hover { background: #f9fbff; }
+  tbody td { padding: 11px 14px; vertical-align: top; }
+
+  tr.hot-row { background: #fff7f0; }
+  tr.hot-row:hover { background: #fff0e4; }
+
+  .priority-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .priority-badge.HOT { background: #ffe0c2; color: #b84000; }
+  .priority-badge.WARM { background: #d0eaff; color: #004d8c; }
+  .priority-badge.COLD { background: #e8e8e8; color: #555; }
+
+  .status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: #f0f0f0;
+    color: #666;
+  }
+  .fit { color: #444; line-height: 1.5; }
+
+  .outreach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 20px; }
+  .outreach-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
+  .outreach-card .card-header { background: #0d0d1a; color: #fff; padding: 12px 18px; font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .outreach-card .card-header .badge.hot { font-size: 0.7rem; padding: 2px 8px; }
+  .outreach-card .card-body { padding: 16px 18px; }
+  .outreach-card .msg-label { font-size: 0.7rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; margin-top: 14px; }
+  .outreach-card .msg-label:first-child { margin-top: 0; }
+  .outreach-card .msg-box {
+    background: #f7f9fc;
+    border-left: 3px solid #6ec6ff;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #222;
+    border-radius: 0 6px 6px 0;
+    white-space: pre-wrap;
+  }
+  .outreach-card .msg-box.wa { border-left-color: #25d366; }
+  .char-count { font-size: 0.68rem; color: #aaa; margin-top: 4px; text-align: right; }
+
+  footer { text-align: center; padding: 24px; color: #aaa; font-size: 0.75rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX" onerror="this.style.display='none'">
+  <div class="title-block">
+    <h1>AIKA &amp; AIWA — KSA Hospital Lead Tracker</h1>
+    <p>Kingdom of Saudi Arabia | Generated: 6 July 2026</p>
+  </div>
+  <div class="contact">
+    <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a><br>
+    +966 535 716 437<br>
+    <a href="https://code-ox.com" target="_blank">code-ox.com</a>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('leads', this)">Lead Tracker (26)</div>
+  <div class="tab" onclick="switchTab('outreach', this)">HOT-5 Outreach Templates</div>
+</div>
+
+<!-- LEADS PANEL -->
+<div id="leads" class="panel active">
+  <div class="meta">
+    <span class="badge hot">🔥 5 HOT</span>
+    <span class="badge warm">🌊 12 WARM</span>
+    <span class="badge total">26 Total Leads — KSA Only</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Hospital / Group</th>
+          <th>City / Region</th>
+          <th>Type</th>
+          <th>Size</th>
+          <th>Why AIKA + AIWA Fits</th>
+          <th>Priority</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ===== HOT ===== -->
+        <tr class="hot-row">
+          <td>1</td>
+          <td><strong>HMG — Hospital Management Group</strong></td>
+          <td>Riyadh (Jeddah, Madinah)</td>
+          <td>Private Chain</td>
+          <td>8 hospitals, 1,500+ beds</td>
+          <td class="fit">Largest private hospital group in KSA. Multi-branch call routing is a constant pain. AIKA automates triage and booking across all sites; AIWA handles WhatsApp reminders at group scale.</td>
+          <td><span class="priority-badge HOT">HOT</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr class="hot-row">
+          <td>2</td>
+          <td><strong>Dr. Sulaiman Al Habib Medical Group</strong></td>
+          <td>Riyadh (multi-city KSA)</td>
+          <td>Premium Private Chain</td>
+          <td>15+ hospitals, 3,000+ beds</td>
+          <td class="fit">Premium brand, high patient expectations. AIWA automates post-visit follow-ups and prescription reminders. AIKA handles after-hours calls without adding headcount — strong ROI story.</td>
+          <td><span class="priority-badge HOT">HOT</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr class="hot-row">
+          <td>3</td>
+          <td><strong>Saudi German Hospitals Group</strong></td>
+          <td>Jeddah (Riyadh, Madinah)</td>
+          <td>Private Chain</td>
+          <td>6 hospitals, 1,200+ beds</td>
+          <td class="fit">Active in KSA digital health investment. Diverse patient population (Arabic/English/Urdu) — ideal for AIWA multilingual automation. AIKA reduces missed calls at peak OPD hours.</td>
+          <td><span class="priority-badge HOT">HOT</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr class="hot-row">
+          <td>4</td>
+          <td><strong>Mouwasat Medical Services</strong></td>
+          <td>Dammam (Eastern Province)</td>
+          <td>Private Chain</td>
+          <td>5 hospitals, 1,000+ beds</td>
+          <td class="fit">Serves high-volume industrial workforce in Eastern Province. AIKA handles Arabic/English bilingual inbound at scale; AIWA automates occupational health follow-ups via WhatsApp.</td>
+          <td><span class="priority-badge HOT">HOT</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr class="hot-row">
+          <td>5</td>
+          <td><strong>Aster DM Healthcare — KSA</strong></td>
+          <td>Riyadh &amp; Jeddah</td>
+          <td>Private Chain</td>
+          <td>10+ clinics &amp; hospitals</td>
+          <td class="fit">Rapidly expanding in KSA. High walk-in + call volume daily. AIKA cuts front desk load immediately; AIWA's WhatsApp automation fits their expat and South Asian patient base perfectly.</td>
+          <td><span class="priority-badge HOT">HOT</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+
+        <!-- ===== WARM ===== -->
+        <tr>
+          <td>6</td>
+          <td><strong>Dallah Healthcare</strong></td>
+          <td>Riyadh</td>
+          <td>Private Chain</td>
+          <td>4 hospitals, 700+ beds</td>
+          <td class="fit">Growing outpatient load in Riyadh. AIWA WhatsApp reminders cut no-shows; AIKA automates routine scheduling calls that tie up reception staff.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Al Hammadi Hospital</strong></td>
+          <td>Riyadh</td>
+          <td>Private Chain</td>
+          <td>3 hospitals</td>
+          <td class="fit">Growing Riyadh chain with Vision 2030 modernisation pressure. AIWA manages the full patient journey from booking confirmation to post-discharge check-in.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>Dr. Soliman Fakeeh Hospital</strong></td>
+          <td>Jeddah</td>
+          <td>Large Private</td>
+          <td>1 hospital, 550+ beds</td>
+          <td class="fit">One of Jeddah's largest private hospitals with heavy OPD volume. AIKA automates high call load; AIWA is ideal for managing Hajj/Umrah season appointment surges via WhatsApp.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>International Medical Center (IMC)</strong></td>
+          <td>Jeddah</td>
+          <td>Private</td>
+          <td>1 hospital, 300+ beds</td>
+          <td class="fit">JCI-accredited, international patient base. English-first communication — AIWA WhatsApp + email automation slots directly into their existing digital touchpoints.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>Saad Specialist Hospital</strong></td>
+          <td>Al Khobar</td>
+          <td>Private Specialty</td>
+          <td>1 hospital, 330+ beds</td>
+          <td class="fit">Specialist-heavy (cardiac, oncology). AIWA manages complex multi-appointment follow-up sequences. AIKA routes specialist referral calls precisely without manual transfer.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><strong>Hayat National Hospital</strong></td>
+          <td>Riyadh</td>
+          <td>Private</td>
+          <td>1 hospital, 300+ beds</td>
+          <td class="fit">Premium Riyadh hospital. AIKA as a brand-consistent voice touchpoint; AIWA automates admin load on patient coordinators without degrading the experience.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><strong>Al Moosa Specialist Hospital</strong></td>
+          <td>Al Ahsa (Eastern Province)</td>
+          <td>Private Specialty</td>
+          <td>1 hospital, 200+ beds</td>
+          <td class="fit">Only large private specialist in Al Ahsa catchment. AIWA handles the high WhatsApp query volume from surrounding towns; AIKA eliminates missed call problem in low-staff environment.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><strong>Heraa General Hospital</strong></td>
+          <td>Jeddah</td>
+          <td>Private</td>
+          <td>1 hospital, 250+ beds</td>
+          <td class="fit">Mid-size Jeddah hospital with high walk-in traffic. Front desk is consistently overloaded — AIKA handles overflow calls 24/7.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><strong>King's Medical Group</strong></td>
+          <td>Riyadh (Jeddah)</td>
+          <td>Private Chain</td>
+          <td>Multi-clinic</td>
+          <td class="fit">Growing multi-specialty group. AIWA automates the appointment + follow-up flow as they scale locations without proportionally growing admin headcount.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><strong>Comprehensive Cancer Center (CCC)</strong></td>
+          <td>Riyadh</td>
+          <td>Private Specialty (Oncology)</td>
+          <td>1 hospital</td>
+          <td class="fit">Oncology patients require dense follow-up cadences — AIWA's WhatsApp automation is a direct fit for post-chemo check-in protocols and medication reminders.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><strong>Dr. Erfan &amp; Bagedo General Hospital</strong></td>
+          <td>Jeddah</td>
+          <td>Private</td>
+          <td>1 hospital, 300+ beds</td>
+          <td class="fit">Long-established Jeddah private hospital. AIWA WhatsApp automation for lab results and appointment reminders is a low-friction entry point.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><strong>National Hospital Jeddah</strong></td>
+          <td>Jeddah</td>
+          <td>Private</td>
+          <td>1 hospital, 220+ beds</td>
+          <td class="fit">Steady outpatient base. AIKA handles overflow call volume; AIWA reduces repetitive WhatsApp queries on directions, hours, and appointment confirmations.</td>
+          <td><span class="priority-badge WARM">WARM</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+
+        <!-- ===== COLD ===== -->
+        <tr>
+          <td>18</td>
+          <td><strong>Bugshan Group Hospitals</strong></td>
+          <td>Jeddah</td>
+          <td>Private</td>
+          <td>2 hospitals</td>
+          <td class="fit">Mid-size group, solid fit for AIWA appointment automation. Longer decision cycle expected.</td>
+          <td><span class="priority-badge COLD">COLD</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td><strong>Specialized Medical Center Hospital</strong></td>
+          <td>Riyadh</td>
+          <td>Private Specialty (Ortho)</td>
+          <td>1 hospital, 300 beds</td>
+          <td class="fit">Orthopaedic specialty. AIWA manages post-surgical follow-up sequences. Procurement cycles tied to department heads — longer sales journey.</td>
+          <td><span class="priority-badge COLD">COLD</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td><strong>Noor Specialist Hospital</strong></td>
+          <td>Makkah</td>
+          <td>Private</td>
+          <td>1 hospital, 200+ beds</td>
+          <td class="fit">Extreme seasonal surge during Hajj/Umrah — AIKA's value during peak periods is obvious. MOH compliance requirements may extend procurement timeline.</td>
+          <td><span class="priority-badge COLD">COLD</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td><strong>Al Ansar Hospital</strong></td>
+          <td>Madinah</td>
+          <td>Private</td>
+          <td>1 hospital, 200+ beds</td>
+          <td class="fit">Madinah private hospital with year-round pilgrim traffic. AIWA handles Arabic/English/Urdu patient queries. Niche but captive market.</td>
+          <td><span class="priority-badge COLD">COLD</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>22</td>
+          <td><strong>Dar Al Shifa Hospital</strong></td>
+          <td>Jeddah</td>
+          <td>Private</td>
+          <td>1 hospital</td>
+          <td class="fit">Established Jeddah community hospital. AIWA WhatsApp flow for appointment reminders is a simple, low-risk pilot entry.</td>
+          <td><span class="priority-badge COLD">COLD</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>23</td>
+          <td><strong>Injaz Medical Group</strong></td>
+          <td>Riyadh</td>
+          <td>Private Polyclinic</td>
+          <td>Multi-clinic</td>
+          <td class="fit">Growing Riyadh polyclinic network. AIWA handles appointment-heavy WhatsApp load typical of polyclinic groups scaling quickly.</td>
+          <td><span class="priority-badge COLD">COLD</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>24</td>
+          <td><strong>Al Yamamah Hospital</strong></td>
+          <td>Riyadh</td>
+          <td>Private</td>
+          <td>1 hospital</td>
+          <td class="fit">Mid-size Riyadh private. AIKA as after-hours call coverage is the low-friction entry pitch here.</td>
+          <td><span class="priority-badge COLD">COLD</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>25</td>
+          <td><strong>Bayat Medical Center</strong></td>
+          <td>Riyadh</td>
+          <td>Private Polyclinic</td>
+          <td>Multi-clinic</td>
+          <td class="fit">Polyclinic chain with high booking call volume. AIWA automation is a direct operational cost reduction story.</td>
+          <td><span class="priority-badge COLD">COLD</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+        <tr>
+          <td>26</td>
+          <td><strong>Al Borg Specialized Hospital</strong></td>
+          <td>Riyadh</td>
+          <td>Private Specialty</td>
+          <td>1 hospital</td>
+          <td class="fit">Specialty focus. AIWA for lab results delivery and follow-up sequences; AIKA for referral routing. Smaller ticket, good for a quick pilot reference.</td>
+          <td><span class="priority-badge COLD">COLD</span></td>
+          <td><span class="status-badge">Not Contacted</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px; font-size:0.75rem; color:#999;">
+    ⚠ Verify current decision-maker names &amp; direct contacts via LinkedIn Sales Navigator or Apollo.io before outreach — hospital leadership changes frequently.
+    &nbsp;|&nbsp; Regulatory note: PDPL compliance is mandatory in KSA — lead AIWA pitch with "zero patient data stored outside your infrastructure" when required.
+  </p>
+</div>
+
+<!-- OUTREACH PANEL -->
+<div id="outreach" class="panel">
+  <p style="margin-bottom:20px; font-size:0.84rem; color:#555;">
+    Outreach templates for the 5 HOT accounts. Personalise <strong>[Name]</strong> before sending.
+    LinkedIn notes are under 300 characters. WhatsApp messages are warm, problem-led, and conversational.
+  </p>
+  <div class="outreach-grid">
+
+    <!-- 1. HMG -->
+    <div class="outreach-card">
+      <div class="card-header">
+        <span>HMG — Hospital Management Group</span>
+        <span class="badge hot">🔥 HOT</span>
+      </div>
+      <div class="card-body">
+        <div class="msg-label">LinkedIn Connection Note</div>
+        <div class="msg-box">Hi [Name], I work with Code-OX on AI voice &amp; chat automation for hospital groups. We've built solutions that cut call-centre load significantly — would love to connect and share what we've done for chains your size.</div>
+        <div class="char-count">~230 chars</div>
+        <div class="msg-label">WhatsApp Follow-up</div>
+        <div class="msg-box wa">Hi [Name], thanks for connecting! We've been working with hospital groups on automating high-volume patient calls and WhatsApp queries — the kind that pile up across multiple branches. Happy to share a quick demo specific to HMG's setup. Would a 20-min call this week work?</div>
+      </div>
+    </div>
+
+    <!-- 2. Al Habib -->
+    <div class="outreach-card">
+      <div class="card-header">
+        <span>Dr. Sulaiman Al Habib Medical Group</span>
+        <span class="badge hot">🔥 HOT</span>
+      </div>
+      <div class="card-body">
+        <div class="msg-label">LinkedIn Connection Note</div>
+        <div class="msg-box">Hi [Name], I'm at Code-OX — we help premium hospital groups automate patient communication without losing the personal touch. Al Habib's reputation makes this worth a conversation. Would love to connect.</div>
+        <div class="char-count">~232 chars</div>
+        <div class="msg-label">WhatsApp Follow-up</div>
+        <div class="msg-box wa">Hi [Name], thanks for connecting! Premium hospitals invest heavily in patient experience — but the call centre and WhatsApp queue is often the weakest link. We've built AI agents that handle this seamlessly in Arabic and English. Would love to show you what it looks like — 20 minutes?</div>
+      </div>
+    </div>
+
+    <!-- 3. Saudi German -->
+    <div class="outreach-card">
+      <div class="card-header">
+        <span>Saudi German Hospitals Group</span>
+        <span class="badge hot">🔥 HOT</span>
+      </div>
+      <div class="card-body">
+        <div class="msg-label">LinkedIn Connection Note</div>
+        <div class="msg-box">Hi [Name], I'm with Code-OX — we've built AI voice &amp; chat agents that reduce missed calls and automate patient follow-ups for hospital groups across KSA. Would love to connect and see if it fits Saudi German.</div>
+        <div class="char-count">~237 chars</div>
+        <div class="msg-label">WhatsApp Follow-up</div>
+        <div class="msg-box wa">Hi [Name], appreciate the connection! Saudi German's multilingual patient base across KSA is exactly the environment our AI agents thrive in — Arabic, English, Urdu handled automatically on calls and WhatsApp. We're helping similar chains cut front-desk load by 40–60%. Worth a quick call?</div>
+      </div>
+    </div>
+
+    <!-- 4. Mouwasat -->
+    <div class="outreach-card">
+      <div class="card-header">
+        <span>Mouwasat Medical Services</span>
+        <span class="badge hot">🔥 HOT</span>
+      </div>
+      <div class="card-body">
+        <div class="msg-label">LinkedIn Connection Note</div>
+        <div class="msg-box">Hi [Name], I'm at Code-OX — we build AI voice &amp; WhatsApp agents for hospitals. Mouwasat's scale in the Eastern Province and the industrial workforce you serve makes this a natural fit. Would love to connect.</div>
+        <div class="char-count">~242 chars</div>
+        <div class="msg-label">WhatsApp Follow-up</div>
+        <div class="msg-box wa">Hi [Name], great connecting! With Mouwasat's patient volume across the Eastern Province — many of them industrial workers with limited clinic hours — automating inbound calls and WhatsApp in Arabic and English can save significant front-desk time. Happy to walk you through it. 20 mins this week?</div>
+      </div>
+    </div>
+
+    <!-- 5. Aster KSA -->
+    <div class="outreach-card">
+      <div class="card-header">
+        <span>Aster DM Healthcare — KSA</span>
+        <span class="badge hot">🔥 HOT</span>
+      </div>
+      <div class="card-body">
+        <div class="msg-label">LinkedIn Connection Note</div>
+        <div class="msg-box">Hi [Name], I'm at Code-OX. Aster's patient volumes in KSA are exactly why we built our AI voice &amp; WhatsApp automation stack — the front desk bottleneck is a familiar pain. Worth a quick connect.</div>
+        <div class="char-count">~240 chars</div>
+        <div class="msg-label">WhatsApp Follow-up</div>
+        <div class="msg-box wa">Hi [Name], thanks for connecting! With Aster's daily footfall across KSA, front-desk call queues and unanswered WhatsApp messages are a real patient satisfaction risk. Our AI handles bookings, reminders, and routine queries 24/7 — no extra headcount. Can I show you a 5-minute demo?</div>
+      </div>
+    </div>
+
+  </div>
+  <p style="margin-top:20px; font-size:0.75rem; color:#999;">
+    Code-OX | shabeeb.k@code-ox.com | +966 535 716 437 | code-ox.com
+  </p>
+</div>
+
+<footer>
+  Code-OX &copy; 2026 &nbsp;·&nbsp; AIKA &amp; AIWA — KSA Hospital Lead Tracker &nbsp;·&nbsp; Confidential
+</footer>
+
+<script>
+function switchTab(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
