@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abjad — Infrastructure Review &amp; Deployment Recommendation</title>
+<style>
+  :root{
+    --navy:#0f2740;
+    --blue:#1668e3;
+    --blue-soft:#e8f0fe;
+    --red:#d93025;
+    --red-soft:#fdeceb;
+    --amber:#b06000;
+    --amber-soft:#fdf3e3;
+    --green:#188038;
+    --green-soft:#e6f4ea;
+    --ink:#1f2937;
+    --muted:#6b7280;
+    --line:#e5e7eb;
+    --bg:#f6f8fb;
+    --card:#ffffff;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+  .slide{max-width:1080px;margin:0 auto;padding:64px 40px}
+  h2.slide-title{font-size:30px;color:var(--navy);margin-bottom:6px;letter-spacing:-.3px}
+  p.slide-sub{color:var(--muted);font-size:16px;margin-bottom:34px;max-width:760px}
+  .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);background:var(--blue-soft);padding:6px 14px;border-radius:999px;margin-bottom:14px}
+
+  /* ---------- HERO ---------- */
+  .hero{background:linear-gradient(135deg,#0f2740 0%,#123a63 55%,#1668e3 130%);color:#fff}
+  .hero .slide{padding:72px 40px 64px}
+  .hero-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:64px;flex-wrap:wrap;gap:16px}
+  .hero-top img{height:44px;filter:brightness(0) invert(1)}
+  .hero-top .doc-tag{font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+  .hero h1{font-size:46px;line-height:1.15;letter-spacing:-.5px;max-width:820px;margin-bottom:18px}
+  .hero p.lede{font-size:19px;opacity:.85;max-width:700px;margin-bottom:44px}
+  .hero-meta{display:flex;gap:40px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.25);padding-top:26px}
+  .hero-meta div span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.1em;opacity:.65;margin-bottom:4px}
+  .hero-meta div strong{font-size:16px;font-weight:600}
+
+  /* ---------- TLDR strip ---------- */
+  .tldr{background:#fff;border-bottom:1px solid var(--line)}
+  .tldr .slide{padding:40px 40px}
+  .tldr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .tldr-card{border-radius:var(--radius);padding:24px;border:1px solid var(--line)}
+  .tldr-card .num{font-size:15px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  .tldr-card p{font-size:15px;color:var(--ink)}
+  .t-red{background:var(--red-soft)}   .t-red .num{color:var(--red)}
+  .t-blue{background:var(--blue-soft)} .t-blue .num{color:var(--blue)}
+  .t-green{background:var(--green-soft)} .t-green .num{color:var(--green)}
+
+  /* ---------- Cards & grids ---------- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+
+  /* ---------- Server diagram ---------- */
+  .server-box{border-radius:var(--radius);padding:26px;position:relative}
+  .server-box.current{background:#fff;border:2px solid var(--red)}
+  .server-box.newsrv{background:#fff;border:2px solid var(--green)}
+  .server-box .srv-badge{position:absolute;top:-14px;left:22px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 14px;border-radius:999px;color:#fff}
+  .current .srv-badge{background:var(--red)}
+  .newsrv .srv-badge{background:var(--green)}
+  .server-box h3{font-size:19px;color:var(--navy);margin:8px 0 2px}
+  .server-box .spec{font-size:13px;color:var(--muted);margin-bottom:18px}
+  .app-chip{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:14px;font-weight:600}
+  .app-chip small{font-weight:400;color:var(--muted)}
+  .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .dot-live{background:var(--amber)}
+  .dot-new{background:var(--green)}
+  .db-chip{margin-top:14px;border-style:dashed}
+  .warn-strip{margin-top:16px;background:var(--red-soft);color:var(--red);font-size:13.5px;font-weight:600;border-radius:10px;padding:10px 14px;display:flex;gap:8px;align-items:flex-start}
+  .ok-strip{margin-top:16px;background:var(--green-soft);color:var(--green);font-size:13.5px;font-weight:600;border-radius:10px;padding:10px 14px;display:flex;gap:8px;align-items:flex-start}
+
+  /* ---------- RAM gauge ---------- */
+  .gauge-wrap{display:grid;grid-template-columns:280px 1fr;gap:40px;align-items:center}
+  .donut{width:240px;height:240px;border-radius:50%;background:conic-gradient(var(--red) 0 96%,#e5e7eb 96% 100%);display:flex;align-items:center;justify-content:center;margin:0 auto}
+  .donut-hole{width:158px;height:158px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .donut-hole strong{font-size:34px;color:var(--red);line-height:1}
+  .donut-hole span{font-size:12.5px;color:var(--muted);margin-top:6px;max-width:120px}
+  .bar-row{margin-bottom:22px}
+  .bar-row .bar-label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px}
+  .bar-row .bar-label b{color:var(--navy)}
+  .bar-row .bar-label span{color:var(--muted)}
+  .bar-track{height:14px;border-radius:999px;background:#e9edf3;overflow:hidden}
+  .bar-fill{height:100%;border-radius:999px}
+  .stat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;text-align:center}
+  .stat strong{display:block;font-size:30px;letter-spacing:-.5px;line-height:1.1;margin-bottom:6px}
+  .stat span{font-size:13.5px;color:var(--muted)}
+  .s-red strong{color:var(--red)} .s-amber strong{color:var(--amber)} .s-navy strong{color:var(--navy)}
+
+  /* ---------- Reason cards ---------- */
+  .reason{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px;text-align:left}
+  .reason .icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;background:var(--red-soft)}
+  .reason h4{font-size:15.5px;color:var(--navy);margin-bottom:8px}
+  .reason p{font-size:13.5px;color:var(--muted)}
+
+  /* ---------- Version compare ---------- */
+  .vs-wrap{display:grid;grid-template-columns:1fr 90px 1fr;gap:0;align-items:stretch;margin-top:26px}
+  .vs-side{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;text-align:center}
+  .vs-side .ver{font-size:40px;font-weight:800;letter-spacing:-1px;line-height:1.05;margin:8px 0 4px}
+  .vs-side .tag{display:inline-block;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;margin-top:8px}
+  .vs-bad .ver{color:var(--navy)} .vs-bad .tag{background:#eef1f5;color:var(--muted)}
+  .vs-good .ver{color:var(--green)} .vs-good .tag{background:var(--green-soft);color:var(--green)}
+  .vs-mid{display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--muted);font-weight:700}
+  .vs-side p.small{font-size:13px;color:var(--muted)}
+
+  /* ---------- Cost ---------- */
+  .cost-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+  .cost-table th{background:var(--navy);color:#fff;text-align:left;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:14px 20px}
+  .cost-table td{padding:16px 20px;border-top:1px solid var(--line);font-size:15px;vertical-align:middle}
+  .cost-table td.amount{font-weight:700;color:var(--navy);white-space:nowrap;text-align:right}
+  .cost-table tr.total td{background:var(--blue-soft);font-weight:800;color:var(--navy);font-size:16.5px}
+  .cost-bar{height:10px;border-radius:999px;background:#e9edf3;overflow:hidden;margin-top:6px;max-width:260px}
+  .cost-bar i{display:block;height:100%;border-radius:999px}
+  .cost-note{font-size:13.5px;color:var(--muted);margin-top:14px}
+  .pill{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;margin-left:8px;vertical-align:middle}
+  .pill-green{background:var(--green-soft);color:var(--green)}
+  .pill-grey{background:#eef1f5;color:var(--muted)}
+
+  /* ---------- Timeline ---------- */
+  .timeline{list-style:none;counter-reset:step}
+  .timeline li{position:relative;padding:0 0 30px 66px;counter-increment:step}
+  .timeline li::before{content:counter(step);position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center}
+  .timeline li::after{content:"";position:absolute;left:21px;top:48px;bottom:4px;width:2px;background:var(--line)}
+  .timeline li:last-child::after{display:none}
+  .timeline h4{font-size:16px;color:var(--navy);margin-bottom:4px;padding-top:8px}
+  .timeline p{font-size:14px;color:var(--muted);max-width:640px}
+
+  /* ---------- Security ---------- */
+  .sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .sec-item{display:flex;gap:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+  .sec-item .si{width:40px;height:40px;border-radius:10px;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .sec-item h5{font-size:14.5px;color:var(--navy);margin-bottom:3px}
+  .sec-item p{font-size:13px;color:var(--muted)}
+
+  /* ---------- Approval / footer ---------- */
+  .approve{background:var(--navy);color:#fff}
+  .approve .slide{padding:64px 40px}
+  .approve h2{font-size:28px;margin-bottom:10px}
+  .approve p{opacity:.8;max-width:640px;margin-bottom:36px}
+  .sign-row{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:640px;margin-bottom:56px}
+  .sign-row div{border-top:1px solid rgba(255,255,255,.4);padding-top:10px;font-size:13.5px;opacity:.85}
+  .contact{display:flex;align-items:center;gap:28px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.2);padding-top:30px}
+  .contact img{height:36px;filter:brightness(0) invert(1)}
+  .contact .c-item{font-size:14px;opacity:.85}
+  .contact .c-item b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;opacity:.6;font-weight:700}
+
+  .section-alt{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
+  @media (max-width:860px){
+    .grid-2,.grid-4,.tldr-grid,.sec-grid,.stat-cards{grid-template-columns:1fr}
+    .gauge-wrap{grid-template-columns:1fr}
+    .vs-wrap{grid-template-columns:1fr}
+    .vs-mid{padding:14px 0;transform:rotate(90deg)}
+    .hero h1{font-size:32px}
+    .slide{padding:44px 22px}
+  }
+  @media print{
+    body{background:#fff}
+    .slide{padding:32px 24px;max-width:100%}
+    .hero .slide{padding:40px 24px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ SLIDE 1 · COVER ============ -->
+<section class="hero">
+  <div class="slide">
+    <div class="hero-top">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <span class="doc-tag">Infrastructure Review &amp; Recommendation</span>
+    </div>
+    <h1>Deploying the Abjad Teacher‑Hiring Platform — What We Found &amp; What We Recommend</h1>
+    <p class="lede">We reviewed your entire AWS account before deploying anything. This short visual report shows the current state of your server, why the new platform needs its own home, and exactly what it costs.</p>
+    <div class="hero-meta">
+      <div><span>Prepared for</span><strong>Abjad Teach Limited</strong></div>
+      <div><span>Date</span><strong>July 7, 2026</strong></div>
+      <div><span>Prepared by</span><strong>Shabeeb — Head of Operations, Code‑OX</strong></div>
+      <div><span>Status</span><strong>Awaiting your approval — nothing changed yet</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2 · 30-SECOND SUMMARY ============ -->
+<section class="tldr">
+  <div class="slide">
+    <div class="kicker">The 30‑Second Summary</div>
+    <div class="tldr-grid">
+      <div class="tldr-card t-red">
+        <div class="num">1 · The Situation</div>
+        <p>Your current server was set up for the application it runs today — and it's <b>fully committed to that job</b>. There's no spare room for a second platform on top.</p>
+      </div>
+      <div class="tldr-card t-blue">
+        <div class="num">2 · The Recommendation</div>
+        <p>Add a <b>second, dedicated server</b> for the new platform. Your existing application stays exactly as it is — zero risk of disruption.</p>
+      </div>
+      <div class="tldr-card t-green">
+        <div class="num">3 · The Cost</div>
+        <p>About <b>USD 65–70/month</b> extra. New total cloud bill: roughly <b>USD 100–110/month</b> for both servers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3 · WHAT YOU HAVE TODAY ============ -->
+<section>
+  <div class="slide">
+    <div class="kicker">Current Setup</div>
+    <h2 class="slide-title">What Your AWS Account Runs Today</h2>
+    <p class="slide-sub">One server in Frankfurt, launched in November 2023 and doing exactly what it was purchased for: hosting your existing live application, with three components and two databases. The new teacher‑hiring platform is a separate, additional workload.</p>
+
+    <div class="server-box current" style="max-width:640px;margin:0 auto">
+      <span class="srv-badge">Existing Server — Already In Use</span>
+      <h3>"abjad" — t3a.medium</h3>
+      <div class="spec">2 CPU cores · 4 GB memory · 100 GB storage · ~USD 33–37/month</div>
+      <div class="app-chip"><span class="dot dot-live"></span>abjad‑website <small>— live website (Nuxt/Vue)</small></div>
+      <div class="app-chip"><span class="dot dot-live"></span>abjad‑board <small>— dashboard (Angular)</small></div>
+      <div class="app-chip"><span class="dot dot-live"></span>abjad‑api <small>— backend API (NestJS)</small></div>
+      <div class="app-chip db-chip"><span class="dot dot-live"></span>PostgreSQL + Redis <small>— databases, running on the same server</small></div>
+      <div class="warn-strip">⚠️ <span>This server is serving live traffic today. It was sized for one application — adding a second platform on top could affect what's already running well.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4 · THE SERVER IS FULL ============ -->
+<section class="section-alt">
+  <div class="slide">
+    <div class="kicker">Live Measurement — July 7, 2026</div>
+    <h2 class="slide-title">We Measured It: The Server Is Fully Used by Its Current Job</h2>
+    <p class="slide-sub">Before recommending anything, we checked the real numbers on the live server (read‑only — nothing was touched or restarted). The existing application is making full use of the server it was given — which means there's simply no room left over for a second platform.</p>
+
+    <div class="gauge-wrap">
+      <div>
+        <div class="donut">
+          <div class="donut-hole">
+            <strong>96%</strong>
+            <span>of memory already in use</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="bar-row">
+          <div class="bar-label"><b>Memory used</b><span>2.0 GB + system, of 3.8 GB total</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:96%;background:var(--red)"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><b>Memory genuinely free</b><span>only ~161 MB</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--green)"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label"><b>Swap (slow emergency overflow) in use</b><span>1.6 GB — the server is already spilling to disk</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--amber)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-cards">
+      <div class="stat s-red"><strong>161 MB</strong><span>free memory left — not enough to run even one of the three new applications</span></div>
+      <div class="stat s-amber"><strong>1.6 GB</strong><span>already using "swap" overflow — normal at full utilization, but it shows there's no headroom to add more</span></div>
+      <div class="stat s-navy"><strong>3 + 3</strong><span>applications total if both platforms shared this box — twice the workload this server was sized for</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5 · SOFTWARE TOO OLD ============ -->
+<section>
+  <div class="slide">
+    <div class="kicker">Compatibility Check</div>
+    <h2 class="slide-title">The Two Platforms Are Built on Different Technology</h2>
+    <p class="slide-sub">The existing server's environment matches the application it was set up for — it just doesn't match the new platform, which was built years later on a newer stack. Changing the shared environment in place would put the live application at risk, so a separate environment is the safe answer.</p>
+
+    <div class="vs-wrap">
+      <div class="vs-side vs-bad">
+        <p class="small">Node.js on the existing server</p>
+        <div class="ver">v12</div>
+        <span class="tag">What the existing app was built on</span>
+        <p class="small" style="margin-top:14px">The live application depends on this version — upgrading it in place would risk breaking what's working today.</p>
+      </div>
+      <div class="vs-mid">vs</div>
+      <div class="vs-side vs-good">
+        <p class="small">Node.js the new platform requires</p>
+        <div class="ver">v20+</div>
+        <span class="tag">Current, supported version</span>
+        <p class="small" style="margin-top:14px">Required by the new platform (Next.js 16 / React 19). Best as a fresh, clean install on its own server.</p>
+      </div>
+    </div>
+
+    <div class="vs-wrap">
+      <div class="vs-side vs-bad">
+        <p class="small">Database on the existing server</p>
+        <div class="ver" style="font-size:28px;padding-top:6px">PostgreSQL</div>
+        <span class="tag">Right choice for the existing app</span>
+      </div>
+      <div class="vs-mid">vs</div>
+      <div class="vs-side vs-good">
+        <p class="small">Database the new platform needs</p>
+        <div class="ver" style="font-size:28px;padding-top:6px">MongoDB</div>
+        <span class="tag">A different engine — needs its own home</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6 · WHY NOT SQUEEZE IT IN ============ -->
+<section class="section-alt">
+  <div class="slide">
+    <div class="kicker">The Decision</div>
+    <h2 class="slide-title">Why the New Platform Deserves Its Own Server</h2>
+    <p class="slide-sub">Four independent reasons — any one of them alone would be enough. None of this reflects on the current setup, which was sized correctly for its original purpose.</p>
+    <div class="grid-4">
+      <div class="reason">
+        <div class="icon">🛡️</div>
+        <h4>Protect what's live</h4>
+        <p>Your current application is serving real users. Sharing one small server means a problem in one app can take down the other.</p>
+      </div>
+      <div class="reason">
+        <div class="icon">📦</div>
+        <h4>No room left</h4>
+        <p>With 161 MB free, adding three more applications plus a database would push both old and new apps into constant slowdowns.</p>
+      </div>
+      <div class="reason">
+        <div class="icon">⚙️</div>
+        <h4>Different tech stacks</h4>
+        <p>The new platform needs modern Node.js and MongoDB. Installing them beside the existing stack risks disturbing what already works.</p>
+      </div>
+      <div class="reason">
+        <div class="icon">📐</div>
+        <h4>Built for separation</h4>
+        <p>The platform's codebase was designed for its own dedicated infrastructure and database — not to share a box with an unrelated product.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7 · THE RECOMMENDED SETUP ============ -->
+<section>
+  <div class="slide">
+    <div class="kicker">Our Recommendation</div>
+    <h2 class="slide-title">Two Servers, Fully Independent</h2>
+    <p class="slide-sub">Your existing server continues untouched. A new, dedicated server — with double the memory — hosts the three new applications, sized for up to <b>1,000 concurrent users</b> with an easy path to scale further.</p>
+
+    <div class="grid-2">
+      <div class="server-box current">
+        <span class="srv-badge">Server 1 — Stays Exactly As Is</span>
+        <h3>Existing "abjad" server</h3>
+        <div class="spec">2 cores · 4 GB memory · ~USD 33–37/month (unchanged)</div>
+        <div class="app-chip"><span class="dot dot-live"></span>abjad‑website</div>
+        <div class="app-chip"><span class="dot dot-live"></span>abjad‑board</div>
+        <div class="app-chip"><span class="dot dot-live"></span>abjad‑api</div>
+        <div class="app-chip db-chip"><span class="dot dot-live"></span>PostgreSQL + Redis</div>
+        <div class="ok-strip">✅ <span>Nothing installed, nothing upgraded, nothing restarted. Zero risk to your live application.</span></div>
+      </div>
+
+      <div class="server-box newsrv">
+        <span class="srv-badge">Server 2 — New, Dedicated</span>
+        <h3>New platform server (t3a.large)</h3>
+        <div class="spec">2 cores · 8 GB memory (double) · ~USD 65–70/month</div>
+        <div class="app-chip"><span class="dot dot-new"></span>Teacher/School Website <small>(abjad‑frontend)</small></div>
+        <div class="app-chip"><span class="dot dot-new"></span>Admin Dashboard <small>(abjad‑admin)</small></div>
+        <div class="app-chip"><span class="dot dot-new"></span>Backend API <small>(abjad‑backend)</small></div>
+        <div class="app-chip db-chip"><span class="dot dot-new"></span>MongoDB Atlas <small>— managed cloud database, off the server, auto‑backups included</small></div>
+        <div class="ok-strip">✅ <span>Fresh modern Node.js, your domain + free SSL certificate, monitoring &amp; alerts included.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8 · COST ============ -->
+<section class="section-alt">
+  <div class="slide">
+    <div class="kicker">Investment</div>
+    <h2 class="slide-title">What It Costs — No Surprises</h2>
+    <p class="slide-sub">Simple monthly cloud costs, billed by AWS directly to your account. A single bigger shared server would cost roughly the same — but without the safety of keeping your live application isolated.</p>
+
+    <table class="cost-table">
+      <tr><th>Item</th><th>What it is</th><th style="text-align:right">Monthly</th></tr>
+      <tr>
+        <td><b>Existing server</b> <span class="pill pill-grey">unchanged</span><div class="cost-bar"><i style="width:34%;background:var(--muted)"></i></div></td>
+        <td>Keeps running your current live application, as today</td>
+        <td class="amount">USD 33–37</td>
+      </tr>
+      <tr>
+        <td><b>New dedicated server</b> <span class="pill pill-green">new</span><div class="cost-bar"><i style="width:66%;background:var(--blue)"></i></div></td>
+        <td>Hosts the teacher‑hiring platform — website, admin, API</td>
+        <td class="amount">USD 65–70</td>
+      </tr>
+      <tr>
+        <td><b>Managed database</b> <span class="pill pill-green">free to start</span><div class="cost-bar"><i style="width:2%;background:var(--green)"></i></div></td>
+        <td>MongoDB Atlas free tier at launch; USD 9–60/mo only if usage grows</td>
+        <td class="amount">USD 0</td>
+      </tr>
+      <tr class="total">
+        <td>Total monthly cloud cost</td>
+        <td>Both servers, everything included</td>
+        <td class="amount">≈ USD 100–110</td>
+      </tr>
+    </table>
+    <p class="cost-note">If usage grows beyond 1,000 concurrent users, scaling is a simple server resize or an added second server — not a rebuild.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9 · SECURITY NOTES ============ -->
+<section>
+  <div class="slide">
+    <div class="kicker">Good to Know</div>
+    <h2 class="slide-title">Recommended Extras as the Platform Grows</h2>
+    <p class="slide-sub">These are standard hardening steps that every setup adds as it matures from launch into production scale — completely normal at this stage. None of them block the new deployment, and we can handle them as part of ongoing maintenance.</p>
+    <div class="sec-grid">
+      <div class="sec-item"><div class="si">🔓</div><div><h5>Remote access open to the whole internet</h5><p>Server login (SSH) and the database port accept connections from any address. Should be restricted to trusted locations.</p></div></div>
+      <div class="sec-item"><div class="si">👤</div><div><h5>Everyone uses the master account</h5><p>No individual logins exist — all access is via the single root account. Named users with two‑factor authentication are recommended.</p></div></div>
+      <div class="sec-item"><div class="si">💾</div><div><h5>No backups scheduled</h5><p>The server's 100 GB storage has no automatic backup and is not encrypted at rest.</p></div></div>
+      <div class="sec-item"><div class="si">🔔</div><div><h5>No alerts configured</h5><p>If the server slows down or goes offline, nobody is notified automatically — issues would only be found by manual checking.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10 · NEXT STEPS ============ -->
+<section class="section-alt">
+  <div class="slide">
+    <div class="kicker">After Your Approval</div>
+    <h2 class="slide-title">What Happens Next</h2>
+    <p class="slide-sub">Nothing has been changed on your AWS account yet. Once you approve, this is the plan:</p>
+    <ol class="timeline">
+      <li><h4>Provision the new server</h4><p>Same AWS account, same region (Frankfurt) — your existing server is not touched.</p></li>
+      <li><h4>Install &amp; configure the environment</h4><p>Modern Node.js, connection to the managed MongoDB Atlas database, supporting services.</p></li>
+      <li><h4>Deploy the three applications</h4><p>Website, admin dashboard, and backend API — deployed and verified working.</p></li>
+      <li><h4>Connect your domain + free SSL</h4><p>Your domain points to the new server and the site goes live securely (https). We'll need your domain/registrar details for this step.</p></li>
+      <li><h4>Switch on monitoring &amp; alerts</h4><p>Automatic alerts for high load or downtime, so issues are caught before users notice.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ SLIDE 11 · APPROVAL ============ -->
+<section class="approve">
+  <div class="slide">
+    <h2>Ready When You Are</h2>
+    <p>This document is a recommendation for your review — no changes have been made and no costs incurred. Reply with your approval (or any questions) and we'll begin provisioning the same day.</p>
+    <div class="sign-row">
+      <div>Approved by (client)</div>
+      <div>Date</div>
+    </div>
+    <div class="contact">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <div class="c-item"><b>Prepared by</b>Shabeeb — Head of Operations</div>
+      <div class="c-item"><b>Email</b>shabeeb.k@code-ox.com</div>
+      <div class="c-item"><b>Phone</b>+966 53 571 6437</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
