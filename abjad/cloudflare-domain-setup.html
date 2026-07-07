@@ -3,256 +3,492 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Domain &amp; Cloudflare Setup — Abjad Teach Limited</title>
+<title>Domain, Cloudflare &amp; Server — How It All Connects | Abjad Teach Limited</title>
 <style>
   :root{
     --navy:#123a63;
     --navy-deep:#0f2740;
     --accent:#1668e3;
+    --accent-soft:#e8f0fe;
     --ink:#243244;
     --muted:#64748b;
     --line:#e2e8f0;
     --soft:#eef3fa;
-    --bg:#fafbfd;
+    --bg:#f6f8fb;
     --green:#188038;
+    --green-soft:#e6f4ea;
+    --red:#c5221f;
+    --red-soft:#fdeceb;
+    --amber:#b06000;
+    --amber-soft:#fdf3e3;
+    --radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.58}
 
-  section{padding:60px 0;border-bottom:1px solid var(--line)}
-  section:last-of-type{border-bottom:none}
-  .wrap{max-width:920px;margin:0 auto;padding:0 32px}
+  section{padding:64px 0}
+  .alt{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 36px}
 
-  .kicker{font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
-  h1{font-size:clamp(30px,4.4vw,48px);color:var(--navy-deep);line-height:1.12;letter-spacing:-.5px}
-  h2{font-size:clamp(23px,3vw,32px);color:var(--navy-deep);line-height:1.15;letter-spacing:-.4px;margin-bottom:12px}
-  p.lead{font-size:clamp(15px,1.5vw,17.5px);color:var(--muted);max-width:64ch;margin-bottom:30px}
+  .kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:6px 14px;border-radius:999px;margin-bottom:16px}
+  h2{font-size:clamp(24px,3vw,33px);color:var(--navy-deep);line-height:1.15;letter-spacing:-.4px;margin-bottom:10px}
+  p.lead{font-size:clamp(15px,1.5vw,17px);color:var(--muted);max-width:70ch;margin-bottom:32px}
 
-  .doc-header{background:#fff;border-bottom:1px solid var(--line);padding:68px 0 52px;border-left:10px solid var(--accent)}
-  .title-meta{margin-top:36px;display:flex;gap:44px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:22px}
-  .title-meta div span{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}
-  .title-meta div strong{font-size:15.5px;color:var(--navy-deep)}
+  /* ---------- HERO ---------- */
+  .hero{background:linear-gradient(135deg,#0f2740 0%,#123a63 55%,#1668e3 135%);color:#fff;padding:78px 0 62px}
+  .hero .doc-tag{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;display:block;margin-bottom:40px}
+  .hero h1{font-size:clamp(32px,4.6vw,52px);line-height:1.12;letter-spacing:-.5px;max-width:820px;margin-bottom:18px}
+  .hero p.lede{font-size:clamp(16px,1.7vw,19px);opacity:.85;max-width:700px;margin-bottom:42px}
+  .hero-meta{display:flex;gap:44px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.25);padding-top:24px}
+  .hero-meta div span{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.1em;opacity:.65;margin-bottom:4px}
+  .hero-meta div strong{font-size:15.5px;font-weight:600}
 
-  /* diagram */
-  .diagram{display:flex;align-items:center;flex-wrap:wrap;justify-content:center;margin:22px 0 26px}
-  .dnode{
-    background:#fff;border:2px solid var(--navy);border-radius:14px;
-    padding:20px 22px;text-align:center;min-width:155px;
-  }
-  .dnode .dico{font-size:30px;line-height:1;margin-bottom:8px}
-  .dnode h4{font-size:15px;color:var(--navy-deep);margin-bottom:4px}
-  .dnode p{font-size:12.5px;color:var(--muted);max-width:170px;margin:0 auto}
-  .dnode.hero-node{border-color:var(--accent);background:var(--soft)}
-  .badges{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:9px}
+  /* ---------- TLDR ---------- */
+  .tldr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .tldr-card{border-radius:var(--radius);padding:24px;border:1px solid var(--line)}
+  .tldr-card .num{font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  .tldr-card p{font-size:14.5px}
+  .t-blue{background:var(--accent-soft)}.t-blue .num{color:var(--accent)}
+  .t-green{background:var(--green-soft)}.t-green .num{color:var(--green)}
+  .t-amber{background:var(--amber-soft)}.t-amber .num{color:var(--amber)}
+
+  /* ---------- Diagram ---------- */
+  .diagram{display:flex;align-items:stretch;flex-wrap:wrap;justify-content:center;margin:26px 0 26px;gap:0}
+  .dstep{display:flex;flex-direction:column;align-items:center}
+  .stepnum{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+  .dnode{background:#fff;border:2px solid var(--navy);border-radius:14px;padding:20px 22px;text-align:center;min-width:165px;flex:1;display:flex;flex-direction:column;justify-content:flex-start}
+  .dnode .dico{font-size:32px;line-height:1;margin-bottom:10px}
+  .dnode h4{font-size:15px;color:var(--navy-deep);margin-bottom:5px}
+  .dnode p{font-size:12.5px;color:var(--muted);max-width:180px;margin:0 auto}
+  .dnode.hero-node{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 8px 28px rgba(22,104,227,.15)}
+  .badges{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:10px}
   .badge{font-size:10.5px;font-weight:700;background:var(--accent);color:#fff;border-radius:999px;padding:3px 9px}
-  .darrow{font-size:30px;color:var(--accent);padding:0 14px;font-weight:700;flex-shrink:0}
-  .dapps{display:flex;flex-direction:column;gap:10px}
-  .dapp{
-    display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);
-    border-left:4px solid var(--green);border-radius:10px;padding:11px 16px;font-size:14px;font-weight:600;color:var(--navy-deep);
-  }
+  .darrow{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 12px;flex-shrink:0;margin-top:40px}
+  .darrow b{font-size:28px;color:var(--accent);font-weight:700;line-height:1}
+  .darrow small{font-size:10.5px;color:var(--muted);margin-top:2px;white-space:nowrap}
+  .dapps{display:flex;flex-direction:column;gap:10px;justify-content:center;margin-top:40px}
+  .dapp{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-left:4px solid var(--green);border-radius:10px;padding:11px 16px;font-size:13.5px;font-weight:600;color:var(--navy-deep)}
   .dapp small{font-weight:400;color:var(--muted)}
-  .caption{font-size:14.5px;color:var(--muted);max-width:72ch;background:var(--soft);border-radius:12px;padding:16px 20px;margin:0 auto}
+  .caption{font-size:14.5px;color:var(--muted);max-width:74ch;background:var(--soft);border-radius:12px;padding:16px 20px;margin:0 auto}
 
-  /* benefit cards */
+  /* ---------- Explainer cards ---------- */
   .benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .benefit{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px}
-  .benefit .bico{width:46px;height:46px;border-radius:12px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:23px;margin-bottom:14px}
-  .benefit h4{font-size:15.5px;color:var(--navy-deep);margin-bottom:6px}
+  .benefit{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+  .benefit .bico{width:48px;height:48px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px}
+  .benefit h4{font-size:15.5px;color:var(--navy-deep);margin-bottom:7px}
   .benefit p{font-size:13.5px;color:var(--muted)}
+  .benefit .tagfree{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--green-soft);color:var(--green);border-radius:999px;padding:3px 10px;margin-top:12px}
 
-  /* with / without comparison */
+  /* ---------- Masking explainer ---------- */
+  .mask-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .mask-panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .mask-panel.danger{border-top:4px solid var(--red)}
+  .mask-panel.safe{border-top:4px solid var(--green)}
+  .mask-panel h3{font-size:16.5px;color:var(--navy-deep);margin-bottom:16px}
+  .mask-flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .mask-box{border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;text-align:center;border:1.5px solid var(--line);background:var(--bg)}
+  .mask-box.bad{border-color:var(--red);color:var(--red);background:var(--red-soft)}
+  .mask-box.good{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+  .mask-arrow{color:var(--muted);font-size:18px;font-weight:700}
+  .mask-panel p{font-size:13.5px;color:var(--muted)}
+
+  /* ---------- compare ---------- */
   .compare{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-  .cmp{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px}
-  .cmp.bad{border-top:4px solid #c5221f}
+  .cmp{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .cmp.bad{border-top:4px solid var(--red)}
   .cmp.good{border-top:4px solid var(--green)}
   .cmp h3{font-size:16.5px;color:var(--navy-deep);margin-bottom:14px}
   .cmp ul{list-style:none}
-  .cmp li{font-size:14px;padding:8px 0 8px 28px;position:relative;color:var(--ink);border-bottom:1px solid var(--line)}
+  .cmp li{font-size:14px;padding:9px 0 9px 28px;position:relative;border-bottom:1px solid var(--line)}
   .cmp li:last-child{border-bottom:none}
-  .cmp.bad li::before{content:"✕";position:absolute;left:2px;color:#c5221f;font-weight:700}
+  .cmp.bad li::before{content:"✕";position:absolute;left:2px;color:var(--red);font-weight:700}
   .cmp.good li::before{content:"✓";position:absolute;left:2px;color:var(--green);font-weight:700}
 
-  /* cost panels */
+  /* ---------- tables ---------- */
+  table.tbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  table.tbl th{background:var(--navy);color:#fff;text-align:left;font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;padding:13px 20px}
+  table.tbl td{padding:14px 20px;border-top:1px solid var(--line);font-size:14.5px;vertical-align:top}
+  table.tbl td b{color:var(--navy-deep)}
+  table.tbl td small{color:var(--muted)}
+  table.tbl tr.hl td{background:var(--green-soft)}
+  table.tbl td:last-child{white-space:nowrap}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;vertical-align:middle}
+  .pill-green{background:var(--green-soft);color:var(--green)}
+  .pill-grey{background:#eef1f5;color:var(--muted)}
+
+  /* ---------- cost panels ---------- */
   .twocol{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px}
   .panel h3{font-size:16px;color:var(--navy-deep);margin-bottom:10px}
-  .panel .big{font-size:clamp(24px,2.6vw,32px);font-weight:800;color:var(--navy-deep);letter-spacing:-.5px;margin-bottom:6px}
+  .panel .big{font-size:clamp(26px,2.8vw,34px);font-weight:800;color:var(--navy-deep);letter-spacing:-.5px;margin-bottom:6px}
   .panel .big em{font-style:normal;color:var(--green)}
   .panel p{font-size:14px;color:var(--muted)}
+  .total-strip{margin-top:22px;background:var(--accent-soft);border:1px solid #c4d7fb;border-radius:var(--radius);padding:18px 24px;text-align:center;font-size:15.5px;color:var(--navy-deep)}
+  .total-strip b{font-size:19px}
 
-  /* steps */
-  .timeline{list-style:none;counter-reset:step;max-width:720px}
-  .timeline li{position:relative;padding:0 0 26px 62px;counter-increment:step}
-  .timeline li::before{content:counter(step);position:absolute;left:0;top:0;width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center}
-  .timeline li::after{content:"";position:absolute;left:20px;top:46px;bottom:4px;width:2px;background:var(--line)}
+  /* ---------- timeline ---------- */
+  .timeline{list-style:none;counter-reset:step;max-width:760px}
+  .timeline li{position:relative;padding:0 0 28px 64px;counter-increment:step}
+  .timeline li::before{content:counter(step);position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center}
+  .timeline li::after{content:"";position:absolute;left:21px;top:48px;bottom:4px;width:2px;background:var(--line)}
   .timeline li:last-child::after{display:none}
-  .timeline h4{font-size:15.5px;color:var(--navy-deep);margin-bottom:3px;padding-top:9px}
-  .timeline p{font-size:14px;color:var(--muted)}
+  .timeline h4{font-size:16px;color:var(--navy-deep);margin-bottom:4px;padding-top:9px}
+  .timeline h4 .dur{font-size:11.5px;font-weight:700;color:var(--green);background:var(--green-soft);border-radius:999px;padding:3px 10px;margin-left:10px;vertical-align:middle}
+  .timeline p{font-size:14px;color:var(--muted);max-width:620px}
 
-  .action-callout{background:var(--soft);border:1px solid #c4d7fb;border-radius:14px;padding:22px 26px;display:flex;gap:16px;align-items:flex-start;margin-top:30px}
-  .action-callout .ac-icon{font-size:26px;line-height:1.2}
-  .action-callout h5{font-size:15.5px;color:var(--navy-deep);margin-bottom:4px}
-  .action-callout p{font-size:14px;color:var(--ink)}
+  /* ---------- FAQ ---------- */
+  .faq{max-width:860px}
+  .faq details{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .faq summary{cursor:pointer;padding:18px 22px;font-size:15.5px;font-weight:700;color:var(--navy-deep);list-style:none;position:relative;padding-right:48px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:22px;color:var(--accent);font-weight:400}
+  .faq details[open] summary::after{content:"–"}
+  .faq .faq-body{padding:0 22px 18px;font-size:14.5px;color:var(--muted)}
 
-  @media (max-width:760px){
-    .benefits,.compare,.twocol{grid-template-columns:1fr}
+  .action-callout{background:var(--accent-soft);border:1px solid #c4d7fb;border-radius:var(--radius);padding:24px 28px;display:flex;gap:16px;align-items:flex-start;margin-top:32px}
+  .action-callout .ac-icon{font-size:28px;line-height:1.2}
+  .action-callout h5{font-size:16px;color:var(--navy-deep);margin-bottom:5px}
+  .action-callout p{font-size:14.5px}
+
+  .doc-header-title-meta{margin-top:36px}
+
+  @media (max-width:820px){
+    .benefits,.compare,.twocol,.tldr-grid,.mask-wrap{grid-template-columns:1fr}
     .diagram{flex-direction:column}
-    .darrow{transform:rotate(90deg);padding:8px 0}
-    section{padding:42px 0}
+    .darrow{transform:rotate(90deg);margin:6px 0;padding:8px 0}
+    .darrow small{transform:rotate(-90deg)}
+    .dapps,.darrow{margin-top:0}
+    section{padding:44px 0}
+    .wrap{padding:0 22px}
   }
   @media print{
     body{background:#fff}
     section{padding:26px 0;page-break-inside:avoid}
-    .doc-header{padding:34px 0 26px}
+    .hero{padding:36px 0 28px}
+    .faq details{page-break-inside:avoid}
+    .faq details:not([open]) .faq-body{display:block}
+    .faq summary::after{display:none}
   }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="doc-header">
+<!-- ============ HERO ============ -->
+<header class="hero">
   <div class="wrap">
-    <div class="kicker">Domain &amp; Security Setup</div>
-    <h1>Connecting Your Domain<br>Through Cloudflare</h1>
-    <p class="lead" style="margin:18px 0 0">How your new domain, Cloudflare, and the new Amazon server work together — and why this setup keeps the platform secure at almost no cost.</p>
-    <div class="title-meta">
+    <span class="doc-tag">Domain · Security · Server — Explained</span>
+    <h1>Your Domain, Cloudflare &amp; the New Server — How It All Connects</h1>
+    <p class="lede">Before the new teacher‑hiring platform goes live, three pieces need to click together: a domain name, a security layer, and the server. This document explains each one in plain language — what it is, what it does, what it costs, and why we've chosen it.</p>
+    <div class="hero-meta">
       <div><span>Client</span><strong>Abjad Teach Limited</strong></div>
       <div><span>Date</span><strong>July 2026</strong></div>
-      <div><span>Status</span><strong>For your review</strong></div>
+      <div><span>Status</span><strong>For your review — nothing purchased yet</strong></div>
     </div>
   </div>
 </header>
 
-<!-- THE FLOW -->
+<!-- ============ 30-SECOND SUMMARY ============ -->
+<section class="alt">
+  <div class="wrap">
+    <span class="kicker">The 30‑Second Summary</span>
+    <div class="tldr-grid">
+      <div class="tldr-card t-blue">
+        <div class="num">1 · The Setup</div>
+        <p>Visitors reach the platform through <b>your domain</b>, which passes through <b>Cloudflare</b> (security) before arriving at the <b>new Amazon server</b>.</p>
+      </div>
+      <div class="tldr-card t-green">
+        <div class="num">2 · The Cost</div>
+        <p>The whole front layer costs <b>~$10–15 per year</b> (the domain). Cloudflare's free plan covers everything else — <b>$0/month</b>.</p>
+      </div>
+      <div class="tldr-card t-amber">
+        <div class="num">3 · We Need From You</div>
+        <p>Just <b>the domain name you want</b> (or access to one you already own). Everything else is handled by us.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE THREE PIECES ============ -->
 <section>
   <div class="wrap">
-    <div class="kicker">The Big Picture</div>
-    <h2>The Path a Visitor Takes</h2>
-    <p class="lead">Every visit to the platform flows through this chain. Visitors only ever see your domain — never the server itself.</p>
-    <div class="diagram">
-      <div class="dnode">
-        <div class="dico">🌐</div>
-        <h4>Your Domain Name</h4>
-        <p>what visitors type in the browser</p>
+    <span class="kicker">First, The Basics</span>
+    <h2>The Three Pieces, In Plain Words</h2>
+    <p class="lead">No jargon — here's what each piece actually is and why the platform can't go live without it.</p>
+    <div class="benefits">
+      <div class="benefit">
+        <div class="bico">🌐</div>
+        <h4>The Domain — your address</h4>
+        <p>The name people type to reach you, like <b>abjadteach.com</b>. Without it, the platform is only reachable by a raw number (an IP address) that nobody can remember — and browsers flag as untrustworthy. You own it, registered in your name, renewed yearly like a trade licence.</p>
       </div>
-      <div class="darrow">→</div>
-      <div class="dnode hero-node">
-        <div class="dico">🛡️</div>
-        <h4>Cloudflare</h4>
-        <p>the security layer in front of everything</p>
-        <div class="badges">
-          <span class="badge">DNS</span><span class="badge">Free SSL 🔒</span><span class="badge">Hides server IP</span>
+      <div class="benefit">
+        <div class="bico">🛡️</div>
+        <h4>Cloudflare — your gatekeeper</h4>
+        <p>A global security company that sits between the internet and your server. Roughly <b>1 in 5 of all websites</b> route through it — including banks and governments. Every visitor passes its checkpoint before ever touching your server.</p>
+      </div>
+      <div class="benefit">
+        <div class="bico">🖥️</div>
+        <h4>The Server — your building</h4>
+        <p>The new dedicated Amazon server (t3a.large) where the three applications actually live: the public website, the admin dashboard, and the backend engine. Covered in detail in the separate infrastructure report.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE FLOW DIAGRAM ============ -->
+<section class="alt">
+  <div class="wrap">
+    <span class="kicker">The Big Picture</span>
+    <h2>The Path Every Visitor Takes</h2>
+    <p class="lead">Every single visit — a teacher browsing jobs, a school posting one, your team in the dashboard — flows through this same chain, in order:</p>
+    <div class="diagram">
+      <div class="dstep">
+        <div class="stepnum">1</div>
+        <div class="dnode">
+          <div class="dico">🌐</div>
+          <h4>Your Domain Name</h4>
+          <p>the visitor types <b>abjadteach.com</b> into any browser</p>
         </div>
       </div>
-      <div class="darrow">→</div>
-      <div class="dnode">
-        <div class="dico">🖥️</div>
-        <h4>Amazon EC2 Server</h4>
-        <p>the new dedicated t3a.large server</p>
+      <div class="darrow"><b>→</b><small>encrypted 🔒</small></div>
+      <div class="dstep">
+        <div class="stepnum">2</div>
+        <div class="dnode hero-node">
+          <div class="dico">🛡️</div>
+          <h4>Cloudflare</h4>
+          <p>the security checkpoint — filters, encrypts, and forwards</p>
+          <div class="badges">
+            <span class="badge">DNS</span><span class="badge">Free SSL 🔒</span><span class="badge">Hides server IP</span><span class="badge">Blocks attacks</span>
+          </div>
+        </div>
       </div>
-      <div class="darrow">→</div>
+      <div class="darrow"><b>→</b><small>real IP hidden</small></div>
+      <div class="dstep">
+        <div class="stepnum">3</div>
+        <div class="dnode">
+          <div class="dico">🖥️</div>
+          <h4>Amazon EC2 Server</h4>
+          <p>the new dedicated t3a.large server receives only clean, filtered traffic</p>
+        </div>
+      </div>
+      <div class="darrow"><b>→</b><small>routed by path</small></div>
       <div class="dapps">
         <div class="dapp">🏫 Frontend Website <small>— teachers &amp; schools</small></div>
         <div class="dapp">🛠️ Admin Dashboard <small>— your team</small></div>
         <div class="dapp">⚙️ Backend API <small>— the engine behind both</small></div>
       </div>
     </div>
-    <p class="caption">Cloudflare sits between visitors and our server — it manages the domain, encrypts traffic, and hides the server's real IP address for security. The server then routes each request to the right application.</p>
+    <p class="caption"><b>In one sentence:</b> Cloudflare sits between visitors and our server — it manages the domain, encrypts all traffic, and hides the server's real address. The server then routes each request to the right application. Visitors only ever see your domain; the server itself stays invisible.</p>
   </div>
 </section>
 
-<!-- WHAT CLOUDFLARE DOES -->
+<!-- ============ WHAT CLOUDFLARE DOES — ALL OF IT ============ -->
 <section>
   <div class="wrap">
-    <div class="kicker">Why Cloudflare</div>
-    <h2>Three Jobs, One Free Service</h2>
+    <span class="kicker">Why Cloudflare</span>
+    <h2>Six Jobs It Does — All On the Free Plan</h2>
+    <p class="lead">Most people know Cloudflare for one or two of these. You get all six, at $0/month:</p>
     <div class="benefits">
       <div class="benefit">
         <div class="bico">📖</div>
         <h4>The address book (DNS)</h4>
-        <p>Cloudflare translates your domain name into the server's location — like a phone book for the internet. When we ever move or upgrade servers, we change one entry and visitors notice nothing.</p>
+        <p>Translates your domain name into the server's location — the internet's phone book. If we ever move or upgrade servers, we change one entry and visitors never notice.</p>
+        <span class="tagfree">Free</span>
       </div>
       <div class="benefit">
         <div class="bico">🔒</div>
         <h4>The padlock (SSL)</h4>
-        <p>Every visit is encrypted — the browser shows the padlock and "https". Cloudflare issues and renews this certificate automatically, for free, forever.</p>
+        <p>Encrypts every visit — browsers show the padlock and "https". Without it, browsers display a "Not Secure" warning that scares users away. Issued and renewed automatically, forever.</p>
+        <span class="tagfree">Free</span>
       </div>
       <div class="benefit">
         <div class="bico">🎭</div>
         <h4>The mask (IP hiding)</h4>
-        <p>The server's real address stays secret. Attackers who want to hit the server directly can't find it — they only ever see Cloudflare, which is built to absorb attacks.</p>
+        <p>The server's real address stays secret. Anyone trying to attack the server directly can't find it — they only ever reach Cloudflare's network, which is built to absorb attacks.</p>
+        <span class="tagfree">Free</span>
+      </div>
+      <div class="benefit">
+        <div class="bico">🌊</div>
+        <h4>The flood barrier (DDoS protection)</h4>
+        <p>If someone floods the site with fake traffic to knock it offline (a common, cheap attack), Cloudflare absorbs it across its worldwide network before it reaches your server.</p>
+        <span class="tagfree">Free</span>
+      </div>
+      <div class="benefit">
+        <div class="bico">⚡</div>
+        <h4>The accelerator (CDN)</h4>
+        <p>Copies of your site's images and files are stored in 300+ cities worldwide, so the site loads fast whether the visitor is in Riyadh, London, or Manila.</p>
+        <span class="tagfree">Free</span>
+      </div>
+      <div class="benefit">
+        <div class="bico">📊</div>
+        <h4>The logbook (analytics)</h4>
+        <p>A dashboard showing visits, countries, threats blocked, and bandwidth saved — visibility you'd otherwise pay a monitoring service for.</p>
+        <span class="tagfree">Free</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- WITH VS WITHOUT -->
+<!-- ============ HOW MASKING WORKS ============ -->
+<section class="alt">
+  <div class="wrap">
+    <span class="kicker">A Closer Look</span>
+    <h2>How "Hiding the Server" Actually Works</h2>
+    <p class="lead">This is the piece you specifically asked about — here's exactly what changes:</p>
+    <div class="mask-wrap">
+      <div class="mask-panel danger">
+        <h3>❌ Without masking</h3>
+        <div class="mask-flow">
+          <div class="mask-box bad">😈 Attacker</div>
+          <span class="mask-arrow">→</span>
+          <div class="mask-box">looks up your domain</div>
+          <span class="mask-arrow">→</span>
+          <div class="mask-box bad">sees the server's real address</div>
+        </div>
+        <p>The domain points straight at the server, so its real address is public. Attackers can bypass every protection and hit the server directly — flooding it, probing it for weaknesses, or targeting the applications on it.</p>
+      </div>
+      <div class="mask-panel safe">
+        <h3>✅ With Cloudflare masking</h3>
+        <div class="mask-flow">
+          <div class="mask-box bad">😈 Attacker</div>
+          <span class="mask-arrow">→</span>
+          <div class="mask-box">looks up your domain</div>
+          <span class="mask-arrow">→</span>
+          <div class="mask-box good">sees only Cloudflare 🛡️</div>
+        </div>
+        <p>The domain points at Cloudflare, and Cloudflare quietly forwards clean traffic to the server. On top of that, we configure the server's firewall to <b>only accept traffic coming from Cloudflare</b> — so even someone who somehow discovered the real address would be turned away at the door.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WITH VS WITHOUT ============ -->
 <section>
   <div class="wrap">
-    <div class="kicker">The Difference It Makes</div>
-    <h2>With Cloudflare vs. Without</h2>
+    <span class="kicker">The Difference It Makes</span>
+    <h2>Day-to-Day: With Cloudflare vs. Without</h2>
     <div class="compare">
       <div class="cmp bad">
         <h3>Without Cloudflare</h3>
         <ul>
           <li>Server's real address is public — anyone can target it directly</li>
-          <li>SSL certificate must be installed and renewed manually on the server</li>
-          <li>Attack traffic hits your server at full force</li>
-          <li>Moving servers means DNS changes visitors may feel</li>
+          <li>SSL certificate must be installed and renewed manually on the server — if a renewal is missed, visitors see a security error</li>
+          <li>Attack and junk traffic hits your server at full force, and you pay Amazon for that bandwidth</li>
+          <li>Site speed depends entirely on distance to Frankfurt</li>
+          <li>Moving or upgrading servers requires DNS changes visitors may feel</li>
+          <li>No visibility into traffic or threats without extra tools</li>
         </ul>
       </div>
       <div class="cmp good">
         <h3>With Cloudflare (free plan)</h3>
         <ul>
-          <li>Real server address hidden behind Cloudflare's network</li>
-          <li>SSL issued and renewed automatically — always valid</li>
-          <li>Common attacks absorbed before they reach the server</li>
-          <li>Server changes are invisible to visitors</li>
+          <li>Real server address hidden behind Cloudflare's global network</li>
+          <li>SSL issued and renewed automatically — always valid, zero maintenance</li>
+          <li>Attacks and junk traffic absorbed before they reach (or bill) the server</li>
+          <li>Site loads fast worldwide via 300+ locations</li>
+          <li>Server changes are invisible to visitors — one entry updated</li>
+          <li>Built‑in dashboard: visits, countries, threats blocked</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- COSTS -->
+<!-- ============ DOMAIN OPTIONS ============ -->
+<section class="alt">
+  <div class="wrap">
+    <span class="kicker">Choosing the Domain</span>
+    <h2>Domain Options &amp; Yearly Prices</h2>
+    <p class="lead">The domain is the only paid item in this layer. Prices are per year, from any major registrar (GoDaddy, Namecheap, Cloudflare's own registrar, etc.). You own it — it's registered in Abjad's name, not ours.</p>
+    <table class="tbl">
+      <tr><th>Extension</th><th>Best for</th><th>Approx. price / year</th></tr>
+      <tr class="hl"><td><b>.com</b> <span class="pill pill-green">recommended</span></td><td>The global default — most trusted and easiest to remember <small>(e.g. abjadteach.com)</small></td><td>~$10–15</td></tr>
+      <tr><td><b>.sa / .com.sa</b></td><td>Strong local identity in Saudi Arabia <small>— requires local commercial registration documents</small></td><td>~$20–75</td></tr>
+      <tr><td><b>.net / .org</b></td><td>Solid fallbacks if the .com is taken</td><td>~$12–18</td></tr>
+      <tr><td><b>.io / .co</b></td><td>Modern tech feel — common for startups</td><td>~$25–40</td></tr>
+    </table>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:14px">💡 Common practice: register the <b>.com</b> now, and add local or alternative extensions later if the brand grows — they can all point to the same platform.</p>
+  </div>
+</section>
+
+<!-- ============ COST SUMMARY ============ -->
 <section>
   <div class="wrap">
-    <div class="kicker">Cost</div>
-    <h2>What This Layer Costs</h2>
-    <p class="lead">The entire security and domain layer costs about a dollar a month, averaged out.</p>
+    <span class="kicker">Cost</span>
+    <h2>The Whole Front Layer, Priced</h2>
     <div class="twocol">
       <div class="panel">
         <h3>🌐 Domain name</h3>
         <div class="big">~$10–15<span style="font-size:15px;font-weight:600;color:var(--muted)"> /year</span></div>
-        <p>For a standard .com (varies slightly by extension). Bought once a year from any registrar — GoDaddy, Namecheap, Cloudflare, etc.</p>
+        <p>Standard .com, renewed annually. Paid directly to the registrar under your own account — you own it outright.</p>
       </div>
       <div class="panel">
         <h3>🛡️ Cloudflare</h3>
         <div class="big"><em>$0</em><span style="font-size:15px;font-weight:600;color:var(--muted)"> /month</span></div>
-        <p>The free plan fully covers DNS, SSL, and IP masking at this stage. No paid plan is required to launch — upgrades exist later if ever needed.</p>
+        <p>The free plan covers all six jobs above at this stage of the platform. Paid tiers ($20+/mo) exist for needs like advanced firewall rules — nothing we need to launch.</p>
       </div>
     </div>
+    <div class="total-strip">Total for the entire domain + security layer: <b>about $1 per month</b>, averaged — the domain fee is the only cost.</div>
   </div>
 </section>
 
-<!-- SETUP STEPS -->
+<!-- ============ SETUP STEPS ============ -->
+<section class="alt">
+  <div class="wrap">
+    <span class="kicker">How We Set It Up</span>
+    <h2>Five Steps to Go Live</h2>
+    <p class="lead">Once the domain name is confirmed, the whole layer is typically live within a day:</p>
+    <ol class="timeline">
+      <li><h4>Choose &amp; purchase the domain <span class="dur">~30 min</span></h4><p>You pick the name; we register it (or you register it — either way it's owned by Abjad). ~$10–15/year.</p></li>
+      <li><h4>Add the domain to Cloudflare <span class="dur">~1 hour</span></h4><p>A free Cloudflare account is created in Abjad's name, and the domain's address book (DNS) moves under Cloudflare's management.</p></li>
+      <li><h4>Point Cloudflare at the new Amazon server <span class="dur">~15 min</span></h4><p>One DNS record connects the domain to the new t3a.large server — with masking switched on from minute one, so the real address is never exposed. We also lock the server's firewall to accept traffic only from Cloudflare.</p></li>
+      <li><h4>Switch on SSL <span class="dur">automatic</span></h4><p>Cloudflare issues the certificate — the padlock appears and all traffic is encrypted end to end. Renewal is automatic forever.</p></li>
+      <li><h4>Verify everything end to end <span class="dur">~2 hours</span></h4><p>We test the website, admin dashboard, and API through the real domain — on desktop and mobile — before calling it live.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
 <section>
   <div class="wrap">
-    <div class="kicker">How We Set It Up</div>
-    <h2>Five Steps to Go Live</h2>
-    <ol class="timeline">
-      <li><h4>Choose &amp; purchase the domain</h4><p>You pick the name; it can be registered at any registrar (~$10–15/year).</p></li>
-      <li><h4>Add the domain to Cloudflare (free plan)</h4><p>Cloudflare takes over as the domain's address book (DNS).</p></li>
-      <li><h4>Point Cloudflare at the new Amazon server</h4><p>One DNS record connects the domain to the new t3a.large server — with masking switched on, so the server's real address stays hidden.</p></li>
-      <li><h4>Switch on SSL</h4><p>The padlock appears — all traffic between visitors and the platform is encrypted.</p></li>
-      <li><h4>Verify everything end to end</h4><p>We test the website, admin dashboard, and API through the domain before calling it live.</p></li>
-    </ol>
+    <span class="kicker">Questions You Might Have</span>
+    <h2>Straight Answers</h2>
+    <div class="faq">
+      <details>
+        <summary>Who owns the domain and the Cloudflare account?</summary>
+        <div class="faq-body">You do — both are created in Abjad's name, with your email as the owner. We only hold working access to manage them for you. If we ever part ways, everything stays yours.</div>
+      </details>
+      <details>
+        <summary>Does Cloudflare see or store our data?</summary>
+        <div class="faq-body">Traffic passes through Cloudflare encrypted, the same way it passes through any internet provider. Cloudflare doesn't store your platform's data — your database lives on your server and MongoDB Atlas. This is the same arrangement used by banks, universities, and government sites worldwide.</div>
+      </details>
+      <details>
+        <summary>What if Cloudflare itself has an outage?</summary>
+        <div class="faq-body">Rare, but honest answer: if Cloudflare's network has a major outage, the site would be unreachable for that period — along with a large portion of the internet (their outages make the news precisely because so much depends on them). Their reliability track record is stronger than what a single server could achieve alone, and the trade-off strongly favors having the protection.</div>
+      </details>
+      <details>
+        <summary>Are we locked in? Can we leave Cloudflare later?</summary>
+        <div class="faq-body">No lock-in. The domain is yours, and DNS can be moved to any other provider in under an hour. Cloudflare is the default choice because the free tier is the most generous in the industry — but it's a plug, not a weld.</div>
+      </details>
+      <details>
+        <summary>Can we have email on the domain (e.g. info@abjadteach.com)?</summary>
+        <div class="faq-body">Yes — the domain supports professional email through services like Google Workspace (~$6/user/month) or Zoho Mail (free tier available). It's a separate small setup we can add anytime; it doesn't affect anything in this document.</div>
+      </details>
+      <details>
+        <summary>Why not just use the paid Cloudflare plan for "better" security?</summary>
+        <div class="faq-body">The free plan already includes the protections that matter at this stage: SSL, DDoS absorption, IP masking, and CDN. Paid tiers add tools like advanced firewall rules and image optimization — useful at much larger scale, and easy to switch on later if ever needed. Starting free is not a compromise; it's the right size.</div>
+      </details>
+      <details>
+        <summary>Does this affect the existing application on the old server?</summary>
+        <div class="faq-body">Not at all. This entire layer sits in front of the <b>new</b> server only. The existing application and its server continue exactly as they are today.</div>
+      </details>
+    </div>
+
     <div class="action-callout">
       <span class="ac-icon">📩</span>
       <div>
-        <h5>The one thing we need from you</h5>
-        <p>Confirm the <b>domain name</b> you'd like (e.g. abjadteach.com). If you already own one, share access to where it's registered — everything else above is handled by us.</p>
+        <h5>The one decision we need from you</h5>
+        <p>Confirm the <b>domain name</b> you'd like (e.g. abjadteach.com — we'll check availability). If you already own a domain, share access to where it's registered. Everything else in this document is handled by us, and the whole layer is live within a day of your confirmation.</p>
       </div>
     </div>
   </div>
