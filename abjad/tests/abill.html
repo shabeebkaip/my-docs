@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abjad TC — ABILL</title><link rel="stylesheet" href="tc.css"></head><body>
+<header class="top"><h1>Admin Billing — ABILL</h1><div class="sub">10 cases · admin app @ <code>:3001</code> · <a href="../MANUAL_TEST_CASES.html">← All modules</a> · <span id="prog"></span></div></header>
+<main>
+<nav class="mods"><a href="auth.html">AUTH</a><a href="tprof.html">TPROF</a><a href="dash.html">DASH</a><a href="job.html">JOB</a><a href="save.html">SAVE</a><a href="app.html">APP</a><a href="int.html">INT</a><a href="off.html">OFF</a><a href="notif.html">NOTIF</a><a href="tick.html">TICK</a><a href="sch.html">SCH</a><a href="sjob.html">SJOB</a><a href="cand.html">CAND</a><a href="sapp.html">SAPP</a><a href="soff.html">SOFF</a><a href="short.html">SHORT</a><a href="team.html">TEAM</a><a href="sdash.html">SDASH</a><a href="adm.html">ADM</a><a href="abill.html">ABILL</a><a href="bill.html">BILL</a><a href="match.html">MATCH</a><a href="loc.html">LOC</a><a href="sec.html">SEC</a><a href="edge.html">EDGE</a></nav>
+<section><h2 class="mod">Admin Billing</h2>
+<p class="mod-desc">Admin routes: <code>/billing</code> (overview), <code>/billing/plans</code>, <code>/billing/subscriptions</code>, <code>/billing/invoices</code>, <code>/billing/payments</code>, <code>/billing/ledger/[ownerId]</code>, <code>/ranking</code>. Plans are edit-only on 6 seeded plans (no create/delete — expected). Refunds are full-only, Moyasar-first.</p>
+<table class="tc"><thead><tr><th>ID</th><th>Pri</th><th>Test case · steps · expected</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr data-p="H"><td class="id">ABILL-01</td><td class="tc-detail"><b>Billing overview.</b> Open <code>/billing</code>. <i>Expect:</i> revenue/subscription summary cards; CSV export present; integer-halala amounts render as correct SAR.</td></tr>
+<tr data-p="H"><td class="id">ABILL-02</td><td class="tc-detail"><b>Plans — edit only.</b> On <code>/billing/plans</code> edit a seeded plan. <i>Expect:</i> edit saves; there is NO create/delete (expected — 6 seeded plans only).</td></tr>
+<tr data-p="H"><td class="id">ABILL-03</td><td class="tc-detail"><b>Subscriptions list.</b> Open <code>/billing/subscriptions</code>. <i>Expect:</i> subscriptions with owner, plan, status, period; filter/search work.</td></tr>
+<tr data-p="C"><td class="id">ABILL-04</td><td class="tc-detail"><b>Invoices list.</b> Open <code>/billing/invoices</code>. <i>Expect:</i> invoices with status (Paid/Pending/etc.), <code>INV-YYYY-NNNNN</code> numbers; PDF viewable.</td></tr>
+<tr data-p="C"><td class="id">ABILL-05</td><td class="tc-detail"><b>Payments list.</b> Open <code>/billing/payments</code>. <i>Expect:</i> payments with method (card/mada/bank), amount, status, linked invoice.</td></tr>
+<tr data-p="H"><td class="id">ABILL-06</td><td class="tc-detail"><b>Owner ledger.</b> Open <code>/billing/ledger/[ownerId]</code>. <i>Expect:</i> full ledger entries for that owner; balances consistent.</td></tr>
+<tr data-p="C"><td class="id">ABILL-07</td><td class="tc-detail"><b>Refund (full only).</b> On a card payment, issue a refund. <i>Expect:</i> Moyasar refund first → status flip → refund_issued ledger entry; partial refund NOT offered.</td></tr>
+<tr data-p="H"><td class="id">ABILL-08</td><td class="tc-detail"><b>Bank-transfer refund warning.</b> Attempt refund on a bank-transfer payment. <i>Expect:</i> off-platform warning shown (refund handled manually); subscription not auto-cancelled by the refund.</td></tr>
+<tr data-p="M"><td class="id">ABILL-09</td><td class="tc-detail"><b>Approve bank-transfer invoice.</b> From queue/invoices, mark a pending bank-transfer invoice paid. <i>Expect:</i> invoice → Paid; subscription activates; audit entry.</td></tr>
+<tr data-p="M"><td class="id">ABILL-10</td><td class="tc-detail"><b>Ranking page.</b> Open <code>/ranking</code>. <i>Expect:</i> WDRS ranking surface renders; 30-verified activation gate + daily rotation reflected; admin ranking endpoints respond.</td></tr>
+</tbody></table></section></main>
+<footer>Abjad TC · ABILL · <a href="../MANUAL_TEST_CASES.html">Back to index</a></footer>
+<script src="tc.js"></script></body></html>

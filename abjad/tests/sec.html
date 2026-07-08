@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abjad TC — SEC</title><link rel="stylesheet" href="tc.css"></head><body>
+<header class="top"><h1>Security &amp; Roles — SEC</h1><div class="sub">10 cases · <a href="../MANUAL_TEST_CASES.html">← All modules</a> · <span id="prog"></span></div></header>
+<main>
+<nav class="mods"><a href="auth.html">AUTH</a><a href="tprof.html">TPROF</a><a href="dash.html">DASH</a><a href="job.html">JOB</a><a href="save.html">SAVE</a><a href="app.html">APP</a><a href="int.html">INT</a><a href="off.html">OFF</a><a href="notif.html">NOTIF</a><a href="tick.html">TICK</a><a href="sch.html">SCH</a><a href="sjob.html">SJOB</a><a href="cand.html">CAND</a><a href="sapp.html">SAPP</a><a href="soff.html">SOFF</a><a href="short.html">SHORT</a><a href="team.html">TEAM</a><a href="sdash.html">SDASH</a><a href="adm.html">ADM</a><a href="abill.html">ABILL</a><a href="bill.html">BILL</a><a href="match.html">MATCH</a><a href="loc.html">LOC</a><a href="sec.html">SEC</a><a href="edge.html">EDGE</a></nav>
+<section><h2 class="mod">Security &amp; Role Isolation</h2>
+<p class="mod-desc">Cross-cutting: role isolation between teacher/school/admin, team-role permission enforcement, and session lifetime. Test both UI hiding AND direct URL/API access.</p>
+<table class="tc"><thead><tr><th>ID</th><th>Pri</th><th>Test case · steps · expected</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr data-p="C"><td class="id">SEC-01</td><td class="tc-detail"><b>Teacher cannot reach school routes.</b> Logged in as teacher, navigate to <code>/school/dashboard</code>, <code>/school/candidates</code>. <i>Expect:</i> blocked / redirected; API returns 401/403, no school data leaked.</td></tr>
+<tr data-p="C"><td class="id">SEC-02</td><td class="tc-detail"><b>School cannot reach teacher-only routes.</b> As school, hit teacher-only endpoints. <i>Expect:</i> blocked / 403.</td></tr>
+<tr data-p="C"><td class="id">SEC-03</td><td class="tc-detail"><b>Non-admin cannot reach admin app/API.</b> As teacher/school, open admin <code>:3001</code> and call admin endpoints. <i>Expect:</i> denied; no admin data.</td></tr>
+<tr data-p="C"><td class="id">SEC-04</td><td class="tc-detail"><b>Direct-object access.</b> As teacher A, request teacher B's application/offer by ID; as school X, request school Y's data by ID. <i>Expect:</i> 403/404 — no cross-tenant leakage.</td></tr>
+<tr data-p="C"><td class="id">SEC-05</td><td class="tc-detail"><b>Viewer write-block at API.</b> As a Viewer team member, call a write endpoint (post job / send offer) directly. <i>Expect:</i> rejected even though UI hides the button.</td></tr>
+<tr data-p="H"><td class="id">SEC-06</td><td class="tc-detail"><b>Interviewer scope.</b> As Interviewer, attempt to post a job / extend an offer via API. <i>Expect:</i> 403.</td></tr>
+<tr data-p="H"><td class="id">SEC-07</td><td class="tc-detail"><b>Session expiry + refresh.</b> Stay idle until the access token would expire (~15 min) then act. <i>Expect:</i> silent refresh keeps session, OR clean redirect to login with <code>?next=</code>.</td></tr>
+<tr data-p="H"><td class="id">SEC-08</td><td class="tc-detail"><b>Deleted/suspended user session.</b> While a user is logged in, have admin suspend/delete them; user then acts. <i>Expect:</i> <code>/me</code>/refresh checks reject; user is logged out.</td></tr>
+<tr data-p="C"><td class="id">SEC-09</td><td class="tc-detail"><b>Auth redirects.</b> Logged-in teacher visits <code>/login</code> → <code>/dashboard</code>; school → <code>/school/dashboard</code>. Unauthenticated visiting a protected page → login. <i>Expect:</i> correct redirects.</td></tr>
+<tr data-p="M"><td class="id">SEC-10</td><td class="tc-detail"><b>Cookie hardening.</b> Inspect the session cookie. <i>Expect:</i> HttpOnly + Secure attributes (<code>__Host-</code> prefix); not readable from JS.</td></tr>
+</tbody></table></section></main>
+<footer>Abjad TC · SEC · <a href="../MANUAL_TEST_CASES.html">Back to index</a></footer>
+<script src="tc.js"></script></body></html>

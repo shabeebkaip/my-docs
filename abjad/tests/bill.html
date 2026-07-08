@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abjad TC — BILL</title><link rel="stylesheet" href="tc.css"></head><body>
+<header class="top"><h1>Billing E2E — BILL / SUB / PAY</h1><div class="sub">24 cases · <a href="../MANUAL_TEST_CASES.html">← All modules</a> · <span id="prog"></span></div></header>
+<main>
+<nav class="mods"><a href="auth.html">AUTH</a><a href="tprof.html">TPROF</a><a href="dash.html">DASH</a><a href="job.html">JOB</a><a href="save.html">SAVE</a><a href="app.html">APP</a><a href="int.html">INT</a><a href="off.html">OFF</a><a href="notif.html">NOTIF</a><a href="tick.html">TICK</a><a href="sch.html">SCH</a><a href="sjob.html">SJOB</a><a href="cand.html">CAND</a><a href="sapp.html">SAPP</a><a href="soff.html">SOFF</a><a href="short.html">SHORT</a><a href="team.html">TEAM</a><a href="sdash.html">SDASH</a><a href="adm.html">ADM</a><a href="abill.html">ABILL</a><a href="bill.html">BILL</a><a href="match.html">MATCH</a><a href="loc.html">LOC</a><a href="sec.html">SEC</a><a href="edge.html">EDGE</a></nav>
+<section><h2 class="mod">Billing &amp; Payments (end-to-end)</h2>
+<p class="mod-desc">Moyasar test mode. Teacher routes <code>/billing/*</code>, school <code>/school/billing/*</code>. This carries over the still-untested cases from <code>docs/billing-test-plan.md</code> (original TC numbers noted). Amounts are integer halala rendered as SAR incl. 15% VAT.</p>
+<div class="cardbox"><h3>Moyasar sandbox cards (name on card: anything)</h3>
+<table><thead><tr><th>Network</th><th>Card</th><th>Exp</th><th>CVV</th><th>Result</th></tr></thead><tbody>
+<tr><td>Visa</td><td><code>4111 1111 1111 1111</code></td><td>12/26</td><td>123</td><td>Success</td></tr>
+<tr><td>Mastercard</td><td><code>5200 0000 0000 0007</code></td><td>12/26</td><td>123</td><td>Success</td></tr>
+<tr><td>Mada</td><td><code>4464 0400 1000 0010</code></td><td>12/26</td><td>123</td><td>Success</td></tr>
+<tr><td>Visa — declined</td><td><code>4000 0000 0000 0002</code></td><td>12/26</td><td>123</td><td>Declined</td></tr>
+<tr><td>Visa — expired</td><td><code>4000 0000 0000 0069</code></td><td>12/26</td><td>123</td><td>Expired</td></tr>
+<tr><td>Visa — bad CVV</td><td><code>4000 0000 0000 0127</code></td><td>12/26</td><td>999</td><td>Wrong CVV</td></tr>
+</tbody></table>
+<div class="note-box">Apple Pay / STC Pay cannot be tested in a desktop browser — mark N/A. Prices incl. VAT: teacher monthly <b>69.00</b>, 6-mo <b>345.00</b>, annual <b>552.00</b>; school monthly <b>1,495.00</b>, 6-mo <b>8,395.00</b>, annual <b>14,950.00</b> SAR.</div>
+</div>
+<table class="tc"><thead><tr><th>ID</th><th>Pri</th><th>Test case · steps · expected</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr data-p="M"><td class="id">BILL-01</td><td class="tc-detail"><b>Moyasar assets preload (was TC-013).</b> On <code>/billing/checkout/teacher_premium_monthly</code> open DevTools Network. <i>Expect:</i> moyasar.js + moyasar.css requested on page load, before clicking Continue.</td></tr>
+<tr data-p="C"><td class="id">BILL-02</td><td class="tc-detail"><b>Visa — teacher monthly (TC-020).</b> Pay with <code>4111…</code>. <i>Expect:</i> pay button SAR 69.00 → redirect to <code>/billing/success</code> → "Subscription activated"; header trial pill gone; <code>/billing</code> shows PREMIUM + renews ~30d; invoice PAID 69.00.</td></tr>
+<tr data-p="C"><td class="id">BILL-03</td><td class="tc-detail"><b>Visa — teacher annual (TC-021).</b> Plan teacher_premium_annual. <i>Expect:</i> pay button SAR 552.00; billing shows renews in ~365d.</td></tr>
+<tr data-p="C"><td class="id">BILL-04</td><td class="tc-detail"><b>Mastercard — school monthly (TC-022).</b> Card <code>5200…</code>, plan school_monthly. <i>Expect:</i> SAR 1,495.00; subscription active after payment.</td></tr>
+<tr data-p="H"><td class="id">BILL-05</td><td class="tc-detail"><b>Mastercard — school annual (TC-023).</b> Plan school_annual. <i>Expect:</i> SAR 14,950.00; renews ~365d.</td></tr>
+<tr data-p="H"><td class="id">BILL-06</td><td class="tc-detail"><b>Teacher 6-month (TC-024).</b> Plan teacher_premium_6month. <i>Expect:</i> total 345.00; renews ~180d.</td></tr>
+<tr data-p="H"><td class="id">BILL-07</td><td class="tc-detail"><b>School 6-month (TC-025).</b> Plan school_6month. <i>Expect:</i> total 8,395.00.</td></tr>
+<tr data-p="C"><td class="id">BILL-08</td><td class="tc-detail"><b>Mada — teacher (TC-030).</b> Method Mada, card <code>4464…</code>. <i>Expect:</i> Mada logo on card field; payment succeeds; invoice method = <code>mada</code>.</td></tr>
+<tr data-p="H"><td class="id">BILL-09</td><td class="tc-detail"><b>Mada — school annual (TC-031).</b> <i>Expect:</i> total 14,950.00; invoice method <code>mada</code>.</td></tr>
+<tr data-p="C"><td class="id">BILL-10</td><td class="tc-detail"><b>Declined card (TC-040).</b> Card <code>4000…0002</code>. <i>Expect:</i> decline error; stays on checkout (not /success); NO subscription created.</td></tr>
+<tr data-p="H"><td class="id">BILL-11</td><td class="tc-detail"><b>Expired card (TC-041).</b> Card <code>4000…0069</code>. <i>Expect:</i> "card expired" error.</td></tr>
+<tr data-p="H"><td class="id">BILL-12</td><td class="tc-detail"><b>Wrong CVV (TC-042).</b> Card <code>4000…0127</code> CVV 999. <i>Expect:</i> security-code error.</td></tr>
+<tr data-p="H"><td class="id">BILL-13</td><td class="tc-detail"><b>Close tab mid-payment (TC-043).</b> Close after reaching Moyasar form, reopen <code>/billing</code>. <i>Expect:</i> no subscription; no invoice stuck PAID.</td></tr>
+<tr data-p="M"><td class="id">BILL-14</td><td class="tc-detail"><b>Back button mid-payment (TC-044).</b> Browser back from form, return to checkout. <i>Expect:</i> fresh method picker; Continue works again.</td></tr>
+<tr data-p="C"><td class="id">BILL-15</td><td class="tc-detail"><b>Bank transfer pending (TC-050).</b> School, method Bank Transfer, plan school_annual. <i>Expect:</i> redirect to <code>/school/billing/pending/&lt;id&gt;</code>; Al Rajhi details; invoice # highlighted; amount 14,950.00; <code>/school/billing</code> shows PENDING.</td></tr>
+<tr data-p="M"><td class="id">BILL-16</td><td class="tc-detail"><b>Copy buttons + PDF on pending (TC-051/052).</b> Click each Copy; Download PDF. <i>Expect:</i> clipboard values correct; PDF has invoice details + amounts.</td></tr>
+<tr data-p="C"><td class="id">BILL-17</td><td class="tc-detail"><b>Success activation + fallbacks (TC-060/061/062/063).</b> After paying, watch success page; test localhost reconcile, 20s timeout, and no-query-param load. <i>Expect:</i> activates ≤5s via reconcile; 20s → "processing" (no crash); bare <code>/billing/success</code> renders.</td></tr>
+<tr data-p="H"><td class="id">BILL-18</td><td class="tc-detail"><b>Header plan badge states.</b> Verify pills: no-sub→amber "Start trial"; trial→"Trial · Xd"; urgent≤2d→red; active paid→none; renewing≤14d→"Renews soon"; past-due→red; cancelled/expired→grey; legacy→none. <i>Expect:</i> each state matches.</td></tr>
+<tr data-p="C"><td class="id">BILL-19</td><td class="tc-detail"><b>Cancel subscription.</b> On <code>/billing</code> Cancel Premium → confirm. <i>Expect:</i> Cancelled badge; stays active to period end (cancelAtPeriodEnd); grey pill; dashboard "Re-subscribe" CTA.</td></tr>
+<tr data-p="C"><td class="id">BILL-20</td><td class="tc-detail"><b>Re-subscribe.</b> As a cancelled user pick a plan on <code>/billing/plans</code> and pay. <i>Expect:</i> reactivates; Cancelled badge gone; new period starts.</td></tr>
+<tr data-p="H"><td class="id">BILL-21</td><td class="tc-detail"><b>Plan change / upgrade.</b> Monthly → Annual via Change plan. <i>Expect:</i> new invoice (552.00); subscription moves to annual period.</td></tr>
+<tr data-p="H"><td class="id">BILL-22</td><td class="tc-detail"><b>Paywall modal.</b> As a non-subscriber attempt a gated action (e.g. post job). <i>Expect:</i> PaywallModal with lock + benefits + "See plans"; closes on outside click; paid user is NOT blocked.</td></tr>
+<tr data-p="M"><td class="id">BILL-23</td><td class="tc-detail"><b>Arabic success + bank pages (TC-131/132).</b> Complete a payment and select bank transfer in Arabic. <i>Expect:</i> RTL layout, Arabic headings ("تم تفعيل اشتراكك!"), no broken layout.</td></tr>
+<tr data-p="H"><td class="id">BILL-24</td><td class="tc-detail"><b>Double-click + return-to-form guards (TC-140/141).</b> Rapid double-click Continue; and navigate away from Moyasar form then back. <i>Expect:</i> only one initiate call; returning shows fresh method picker, no stuck form.</td></tr>
+</tbody></table></section></main>
+<footer>Abjad TC · BILL · <a href="../MANUAL_TEST_CASES.html">Back to index</a></footer>
+<script src="tc.js"></script></body></html>
