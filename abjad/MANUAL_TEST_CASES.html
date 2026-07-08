@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abjad — Manual Test Cases</title>
+<link rel="stylesheet" href="tests/tc.css">
+</head><body>
+<header class="top"><h1>Abjad — Manual Test Case Book</h1>
+<div class="sub">Saudi teacher–school recruitment platform · Version 1.1 · Generated 2026-07-07 · index</div></header>
+<main>
+
+<section><h2 class="mod">How to use this book</h2>
+<div class="cardbox">
+<table><tbody>
+<tr><th style="width:180px">Tester name</th><td><span class="note-cell" contenteditable="true" data-id="tester-name">click to type…</span></td></tr>
+<tr><th>Test cycle / date</th><td><span class="note-cell" contenteditable="true" data-id="tester-date">click to type…</span></td></tr>
+<tr><th>Build / branch under test</th><td><span class="note-cell" contenteditable="true" data-id="tester-build">click to type…</span></td></tr>
+</tbody></table>
+<div class="note-box">Each module is its own page (links below). On every page set a case <b>Status</b> (Pass / Fail / Blocked / Not Run) and type in <b>Notes</b>. Everything auto-saves to this browser (localStorage) and is shared across all pages, so your tester name and every result persist as you move between sections. Use <b>Print → Save as PDF</b> per page for a signed report.</div>
+<div class="note-box" style="border-left-color:#1f6feb;background:#eef4fe"><b>Results auto-save into the repository.</b> One-time setup: click <b>⚡ Connect results.json</b> (bottom-right corner of any page) and pick <code>abjad/tests/results.json</code> in this repo. From then on <b>every status and note you enter writes to that file automatically</b> — no save button. The green "✓ Auto-saving" pill confirms it's on; next visits just need one click on <b>▶ Resume</b>. Connecting also loads whatever results are already in the file, so a new tester or machine continues where the last one stopped. When done for the day, commit &amp; push <code>tests/results.json</code>. (Chrome/Edge required for auto-save; other browsers get a manual download button instead.)</div>
+<p class="legend"><span><span class="dot" style="background:var(--pass)"></span>Pass</span><span><span class="dot" style="background:var(--fail)"></span>Fail — file a bug</span><span><span class="dot" style="background:var(--block)"></span>Blocked</span><span><span class="dot" style="background:#fff;border:1px solid #ccc"></span>Not Run (default)</span> &nbsp; Priority: <span class="pri C">C</span> Critical <span class="pri H">H</span> High <span class="pri M">M</span> Medium <span class="pri L">L</span> Low</p>
+<button class="act" onclick="exportAll()">Export ALL results (JSON)</button>
+<button class="act" style="border-color:#c62828;color:#c62828" onclick="if(confirm('Clear every status and note in this browser?')){Object.keys(localStorage).forEach(function(k){if(k.indexOf('abjad-tc:')===0)localStorage.removeItem(k);});location.reload();}">Reset all</button>
+</div></section>
+
+<section><h2 class="mod">Environment</h2>
+<div class="cardbox"><table><thead><tr><th>Component</th><th>Local URL</th><th>Notes</th></tr></thead><tbody>
+<tr><td><b>Teacher / School frontend</b></td><td><code>http://localhost:3000</code></td><td>Next.js (abjad-frontend). Teacher routes at root (<code>/dashboard</code>), school under <code>/school/*</code>. Arabic RTL is default.</td></tr>
+<tr><td><b>Admin panel</b></td><td><code>http://localhost:3001</code></td><td>Next.js (abjad-admin). Start with <code>next dev -p 3001</code> (dev script has no port set) so it doesn't collide with :3000.</td></tr>
+<tr><td><b>Backend API</b></td><td><code>http://localhost:5001</code></td><td>Express (abjad-backend). <code>PORT=5001</code>. Base <code>/api</code>, health <code>/health</code>.</td></tr>
+<tr><td>MongoDB / Redis</td><td><code>:27017</code> / <code>:6379</code></td><td>Some billing states need a manual DB edit (noted per case).</td></tr>
+</tbody></table>
+<div class="note-box"><b>OTP is delivered by EMAIL, not SMS</b> (intentional). On <code>@abjad.test</code> accounts the code prints to the <b>backend terminal</b> (<code>📧 [DEV] OTP Email … Code: 123456</code>). Keep it visible during auth tests. <b>Moyasar</b> runs in test mode — sandbox cards live in the Billing page.</div>
+</div></section>
+
+<section><h2 class="mod">Modules</h2>
+<p class="mod-desc">Suggested order: smoke pass (all Critical cases) → module by module → cross-cutting (Security, Localization, Edge). ~245 cases total.</p>
+<div class="toc-grid">
+<div class="grp">Teacher</div>
+<a class="toc-card" href="tests/auth.html"><span class="pfx">AUTH</span><div class="ttl">Auth &amp; Sessions</div><div class="cnt">14 cases · signup, email OTP, login, recovery, remember-device, session</div></a>
+<a class="toc-card" href="tests/tprof.html"><span class="pfx">TPROF</span><div class="ttl">Teacher Profile</div><div class="cnt">11 cases · sections, uploads, approval states, re-approval</div></a>
+<a class="toc-card" href="tests/dash.html"><span class="pfx">DASH</span><div class="ttl">Teacher Dashboard</div><div class="cnt">6 cases · overview, Recommended-for-You top-5, profile strength</div></a>
+<a class="toc-card" href="tests/job.html"><span class="pfx">JOB</span><div class="ttl">Job Search</div><div class="cnt">12 cases · 8 filters, grid/list, pagination 20/page</div></a>
+<a class="toc-card" href="tests/save.html"><span class="pfx">SAVE</span><div class="ttl">Saved Jobs</div><div class="cnt">4 cases · save/unsave, isSaved flag, saved page</div></a>
+<a class="toc-card" href="tests/app.html"><span class="pfx">APP</span><div class="ttl">Apply &amp; Tracker</div><div class="cnt">11 cases · one-tap apply + cover letter, 7 tracker tabs, withdraw</div></a>
+<a class="toc-card" href="tests/int.html"><span class="pfx">INT</span><div class="ttl">Interviews</div><div class="cnt">8 cases · accept/reschedule/decline, calendar export</div></a>
+<a class="toc-card" href="tests/off.html"><span class="pfx">OFF</span><div class="ttl">Offers</div><div class="cnt">8 cases · lifecycle Sent→Viewed→Accept/Decline/Negotiate/Expire</div></a>
+<a class="toc-card" href="tests/notif.html"><span class="pfx">NOTIF</span><div class="ttl">Notifications</div><div class="cnt">7 cases · center, filter, preferences page</div></a>
+<a class="toc-card" href="tests/tick.html"><span class="pfx">TICK</span><div class="ttl">Support Tickets</div><div class="cnt">5 cases · create, track, statuses</div></a>
+<div class="grp">School</div>
+<a class="toc-card" href="tests/sch.html"><span class="pfx">SCH</span><div class="ttl">Registration &amp; Verify</div><div class="cnt">9 cases · school info, 2-doc verification, profile</div></a>
+<a class="toc-card" href="tests/sjob.html"><span class="pfx">SJOB</span><div class="ttl">Job Posting</div><div class="cnt">13 cases · bilingual, structured sections, daily rate, preview, auto-title</div></a>
+<a class="toc-card" href="tests/cand.html"><span class="pfx">CAND</span><div class="ttl">Candidate Search</div><div class="cnt">12 cases · filters, best-match sort, bulk shortlist, PDF cap 100, profile modal</div></a>
+<a class="toc-card" href="tests/sapp.html"><span class="pfx">SAPP</span><div class="ttl">Application Mgmt</div><div class="cnt">11 cases · status lifecycle, schedule interview, feedback form</div></a>
+<a class="toc-card" href="tests/soff.html"><span class="pfx">SOFF</span><div class="ttl">Offers &amp; Hiring</div><div class="cnt">8 cases · extend offer, counter-offer, confirm hire</div></a>
+<a class="toc-card" href="tests/short.html"><span class="pfx">SHORT</span><div class="ttl">Shortlists</div><div class="cnt">5 cases · folders, actions</div></a>
+<a class="toc-card" href="tests/team.html"><span class="pfx">TEAM</span><div class="ttl">Team &amp; Roles</div><div class="cnt">7 cases · Admin/Recruiter/Interviewer/Viewer permissions</div></a>
+<a class="toc-card" href="tests/sdash.html"><span class="pfx">SDASH</span><div class="ttl">School Dashboard</div><div class="cnt">5 cases · metrics, analytics</div></a>
+<div class="grp">Admin &amp; Cross-cutting</div>
+<a class="toc-card" href="tests/adm.html"><span class="pfx">ADM</span><div class="ttl">Admin Panel</div><div class="cnt">22 cases · queue, approvals, suspension, audit, tickets SLA, email templates, Cmd+K</div></a>
+<a class="toc-card" href="tests/abill.html"><span class="pfx">ABILL</span><div class="ttl">Admin Billing</div><div class="cnt">10 cases · plans/subs/invoices/payments/ledger/ranking, refunds</div></a>
+<a class="toc-card" href="tests/bill.html"><span class="pfx">BILL</span><div class="ttl">Billing E2E</div><div class="cnt">24 cases · cards, Mada, bank transfer, trial, cancel/re-subscribe (carries billing-test-plan TCs)</div></a>
+<a class="toc-card" href="tests/match.html"><span class="pfx">MATCH</span><div class="ttl">AI Matching</div><div class="cnt">6 cases · 30/20/20/15/10/5 formula, badges, why-this-match</div></a>
+<a class="toc-card" href="tests/loc.html"><span class="pfx">LOC</span><div class="ttl">Localization</div><div class="cnt">8 cases · Arabic RTL default, toggle, SAR, Hijri</div></a>
+<a class="toc-card" href="tests/sec.html"><span class="pfx">SEC</span><div class="ttl">Security &amp; Roles</div><div class="cnt">10 cases · role isolation, team permissions, session lifetime</div></a>
+<a class="toc-card" href="tests/edge.html"><span class="pfx">EDGE</span><div class="ttl">Edge &amp; Responsive</div><div class="cnt">9 cases · empty states, invalid input, upload limits, mobile</div></a>
+</div></section>
+
+</main>
+<footer>Abjad Manual Test Case Book · v1.1 · 2026-07-07 · self-contained, works offline. Companion: <code>docs/MANUAL_TEST_CASES_README.md</code></footer>
+<script src="tests/tc.js"></script>
+</body></html>
