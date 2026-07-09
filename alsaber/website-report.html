@@ -1,718 +1,1175 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Website Audit Report — alsabercars.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  :root {
+    --paper: #F4EFE4;
+    --paper-2: #ECE6D7;
+    --paper-3: #E3DCC8;
+    --cream: #FBFAF5;
+    --ink: #1A1C19;
+    --ink-2: #3A3D38;
+    --muted: #6E6A60;
+    --rule: #D5CDB9;
+    --rule-2: #C4BBA3;
+    --accent: #B14A2C;
+    --accent-soft: rgba(177, 74, 44, 0.10);
+    --accent-2: #4F6A4A;
+    --accent-2-soft: rgba(79, 106, 74, 0.13);
+    --warn: #A86A1F;
+    --warn-soft: rgba(168, 106, 31, 0.14);
+    --bad: #8B3A26;
+    --bad-soft: rgba(139, 58, 38, 0.10);
+    --med: #46586A;
+    --med-soft: rgba(70, 88, 106, 0.11);
+    --low: #6E6A60;
+    --low-soft: rgba(110, 106, 96, 0.14);
+    --serif: 'Fraunces', 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--paper); }
+  body {
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 6% 8%, rgba(177, 74, 44, 0.05) 0%, transparent 32%),
+      radial-gradient(circle at 94% 92%, rgba(79, 106, 74, 0.06) 0%, transparent 38%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  ::selection { background: var(--ink); color: var(--paper); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+  /* — Top bar — */
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0 22px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--rule);
+  }
+  .top .ar { font-family: var(--serif); font-size: 18px; color: var(--ink); letter-spacing: 0; }
+  .top .meta { display: flex; gap: 28px; }
+  .top .meta b { color: var(--ink); font-weight: 500; }
 
-:root {
-  --red: #dc2626;
-  --red-bg: #fef2f2;
-  --amber: #b45309;
-  --blue: #1d4ed8;
-  --green: #047857;
-  --slate: #475569;
-  --slate-bg: #f8fafc;
-  --text: #0f172a;
-  --text-muted: #1e293b;
-  --text-dim: #64748b;
-  --border: #e2e8f0;
-  --sans: 'Inter', -apple-system, sans-serif;
-}
+  /* — Section frame — */
+  section.s {
+    padding: 64px 0;
+    border-top: 1px solid var(--rule);
+    position: relative;
+  }
+  section.s:first-of-type { border-top: none; }
+  .s-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .s-tag .num {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+  .s-title {
+    font-family: var(--serif);
+    font-weight: 350;
+    font-size: clamp(32px, 4.6vw, 52px);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    color: var(--ink);
+    margin-bottom: 12px;
+    max-width: 880px;
+  }
+  .s-title em { font-style: italic; color: var(--accent); }
+  .s-sub {
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.4;
+    color: var(--muted);
+    max-width: 760px;
+    margin-bottom: 36px;
+    font-style: italic;
+  }
 
-html, body {
-  background: #ffffff;
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 13px;
-  line-height: 1.6;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
+  /* — Hero — */
+  .hero { padding: 72px 0 60px; }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 26px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 320;
+    font-size: clamp(48px, 8.5vw, 108px);
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); font-weight: 300; }
+  .hero-lede {
+    font-family: var(--serif);
+    font-size: 23px;
+    line-height: 1.35;
+    color: var(--ink-2);
+    max-width: 780px;
+    letter-spacing: -0.012em;
+  }
+  .hero-meta {
+    margin-top: 48px;
+    display: flex;
+    gap: 36px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .hero-meta b { color: var(--ink); font-weight: 500; display: block; margin-top: 3px; font-size: 12px; }
 
-/* ── COVER PAGE ── */
-.cover { min-height: 100vh; display: flex; flex-direction: column; page-break-after: always; }
-.cover-top { background: var(--text); color: white; padding: 56px 72px 52px; flex-shrink: 0; }
-.cover-logo { margin-bottom: 48px; font-size: 26px; font-weight: 900; letter-spacing: 4px; color: #fff; }
-.cover-logo span { display:block; font-size: 11px; font-weight: 600; letter-spacing: 7px; color: rgba(255,255,255,.55); margin-top: 2px; }
-.cover-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
-.cover-title { font-size: 44px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; color: white; margin-bottom: 10px; }
-.cover-domain { font-size: 18px; font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: -0.2px; }
-.cover-desc { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-top: 20px; max-width: 620px; }
-.cover-critical { margin-top: 40px; padding: 24px 28px; background: rgba(230,38,38,0.12); border: 1px solid rgba(230,38,38,0.3); border-radius: 10px; }
-.cover-critical-title { font-size: 13px; font-weight: 800; color: #f87171; margin-bottom: 14px; letter-spacing: 0.2px; }
-.cover-critical-list { display: flex; flex-direction: column; gap: 7px; }
-.cover-critical-item { font-size: 12.5px; color: rgba(255,255,255,0.8); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
-.cover-critical-item::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #f87171; flex-shrink: 0; margin-top: 5px; }
-.cover-bottom { flex: 1; background: var(--slate-bg); padding: 44px 72px; display: flex; flex-direction: column; justify-content: flex-end; }
-.cover-meta-row { display: flex; gap: 48px; margin-bottom: 36px; }
-.cov-meta { flex: 1; }
-.cov-meta-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
-.cov-meta-val { font-size: 14px; font-weight: 700; color: var(--text); }
-.cover-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.cov-stat { background: white; padding: 18px 20px; text-align: center; }
-.cov-stat-num { font-size: 28px; font-weight: 900; letter-spacing: -1px; line-height: 1; }
-.cov-stat-num.red   { color: var(--red); }
-.cov-stat-num.amber { color: #d97706; }
-.cov-stat-num.slate { color: var(--slate); }
-.cov-stat-lbl { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); margin-top: 6px; }
+  /* — Verdict KPI cards — */
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .kpi {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--bad);
+    padding: 24px 22px 20px;
+  }
+  .kpi.warned { border-top-color: var(--warn); }
+  .kpi-num {
+    font-family: var(--serif);
+    font-size: 52px;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--bad);
+  }
+  .kpi.warned .kpi-num { color: var(--warn); }
+  .kpi-num span { font-size: 22px; color: var(--muted); }
+  .kpi-lbl {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+  .kpi-note {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
 
-/* ── CONTENT PAGES ── */
-.page { max-width: 900px; margin: 0 auto; padding: 72px 72px 64px; }
-.section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; page-break-after: avoid; }
-.section-title { font-size: 23px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--border); page-break-after: avoid; }
+  /* — Fix-first ink panel — */
+  .fixfirst {
+    margin-top: 18px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 32px 36px;
+    border-radius: 2px;
+  }
+  .fixfirst-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #E08D6D;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .fixfirst-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 32px;
+  }
+  .fixfirst-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: rgba(244, 239, 228, 0.85);
+  }
+  .fixfirst-item::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #E08D6D;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
 
-.exec-prose { margin-bottom: 32px; }
-.exec-prose p { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 14px; }
-.exec-prose p:last-child { margin-bottom: 0; }
-.exec-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 28px; }
-.stat-card { background: white; padding: 16px 18px; text-align: center; page-break-inside: avoid; }
-.stat-num { font-size: 26px; font-weight: 900; letter-spacing: -1px; line-height: 1; color: var(--text); }
-.stat-num.red { color: var(--red); }
-.stat-num.amber { color: #d97706; }
-.stat-label { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); margin-top: 5px; }
+  /* — Severity chart (proportional segments) — */
+  .sev-chart {
+    display: flex;
+    height: 96px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    background: var(--paper-2);
+  }
+  .sev-seg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 14px 20px;
+    min-width: 0;
+  }
+  .sev-seg.c { flex: 11; background: var(--bad);   color: var(--paper); }
+  .sev-seg.h { flex: 22; background: var(--warn);  color: var(--paper); }
+  .sev-seg.m { flex: 11; background: var(--med);   color: var(--paper); }
+  .sev-seg.l { flex: 2.5;  background: var(--paper-3); color: var(--ink); padding: 14px 12px; }
+  .sev-seg .n {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .sev-seg .t {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 5px;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+  .sev-legend {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .sev-legend .item { border-top: 2px solid var(--ink); padding-top: 10px; }
+  .sev-legend .item.c { border-color: var(--bad); }
+  .sev-legend .item.h { border-color: var(--warn); }
+  .sev-legend .item.m { border-color: var(--med); }
+  .sev-legend .item.l { border-color: var(--rule-2); }
+  .sev-legend .name { font-weight: 600; font-size: 13.5px; color: var(--ink); margin-bottom: 3px; }
+  .sev-legend .note { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .sev-rule {
+    margin-top: 28px;
+    padding: 18px 24px;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.45;
+  }
+  .sev-rule b { font-style: normal; font-weight: 600; color: var(--accent); }
 
-/* ── PAGESPEED SECTION ── */
-.ps-scores { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 26px; }
-.ps-dial { border: 1.5px solid var(--border); border-radius: 10px; padding: 18px; text-align: center; page-break-inside: avoid; }
-.ps-ring { width: 68px; height: 68px; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 900; }
-.ps-ring.bad  { background: #fef2f2; color: var(--red);   border: 4px solid #fca5a5; }
-.ps-ring.mid  { background: #fffbeb; color: #d97706;      border: 4px solid #fcd34d; }
-.ps-ring.good { background: #f0fdf4; color: var(--green); border: 4px solid #86efac; }
-.ps-dial h5 { font-size: 12px; font-weight: 700; color: var(--text); }
-.ps-dial p { font-size: 10.5px; color: var(--text-dim); margin-top: 3px; line-height: 1.45; }
+  /* — Health matrix — */
+  .health {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .h-card {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 24px 26px;
+  }
+  .h-card.wide { grid-column: 1 / -1; }
+  .h-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .h-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .h-badge {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .h-badge.failing { background: var(--bad); color: var(--paper); }
+  .h-badge.needs   { background: var(--warn); color: var(--paper); }
+  .h-verdict {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .h-pills { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 12px; border-top: 1px dashed var(--rule-2); }
+  .pill {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 99px;
+  }
+  .pill.c { background: var(--bad-soft);  color: var(--bad); }
+  .pill.h { background: var(--warn-soft); color: var(--warn); }
+  .pill.m { background: var(--med-soft);  color: var(--med); }
+  .pill.l { background: var(--low-soft);  color: var(--low); }
 
-table.metrics { width: 100%; border-collapse: collapse; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
-table.metrics th { background: var(--text); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-align: left; padding: 10px 16px; }
-table.metrics td { padding: 11px 16px; border-top: 1px solid var(--border); font-size: 12.5px; vertical-align: middle; }
-table.metrics td b { color: var(--text); }
-table.metrics td.val { font-weight: 900; font-size: 15px; white-space: nowrap; }
-table.metrics td.val.bad { color: var(--red); }
-table.metrics td.val.ok { color: var(--green); }
-table.metrics td.thresh { color: var(--text-dim); white-space: nowrap; }
-.ps-note { margin-top: 16px; padding: 14px 18px; background: var(--red-bg); border: 1px solid #fecaca; border-radius: 8px; font-size: 12px; color: #7f1d1d; line-height: 1.65; }
-.ps-note b { color: var(--red); }
+  /* — PageSpeed — */
+  .ps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .ps-card {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 22px 20px;
+    text-align: center;
+  }
+  .ps-circle {
+    width: 74px; height: 74px;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .ps-circle.mid  { background: var(--warn-soft); color: var(--warn); border: 2px solid var(--warn); }
+  .ps-circle.good { background: var(--accent-2-soft); color: var(--accent-2); border: 2px solid var(--accent-2); }
+  .ps-card h5 { font-family: var(--serif); font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.25; }
+  .ps-card p { font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
 
-/* ── FLAT ISSUE LIST ── */
-.flat-list { border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 0; }
-.icard { padding: 16px 20px 18px; border-top: 1px solid var(--border); page-break-inside: avoid; background: white; }
-.icard:first-child { border-top: none; }
-.icard:nth-child(even) { background: #fafafa; }
-.icard-c { border-left: 3px solid var(--red); }
-.icard-h { border-left: 3px solid #d97706; }
-.icard-m { border-left: 3px solid var(--blue); }
-.icard-l { border-left: 3px solid #94a3b8; }
-.icard-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
-.icode { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 5px; flex-shrink: 0; margin-top: 2px; letter-spacing: 0.3px; font-family: monospace; }
-.icode-c { background: #fee2e2; color: var(--red); }
-.icode-h { background: #fef3c7; color: #92400e; }
-.icode-m { background: #dbeafe; color: var(--blue); }
-.icode-l { background: #f1f5f9; color: var(--slate); }
-.ititle { font-size: 13.5px; font-weight: 700; line-height: 1.4; color: var(--text); flex: 1; }
-.ibody { font-size: 12px; color: var(--text-muted); line-height: 1.75; padding-left: 32px; }
+  .met {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03), 0 8px 20px -12px rgba(40,30,10,0.12);
+  }
+  .met th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--paper);
+    background: var(--ink);
+    padding: 11px 16px;
+    font-weight: 500;
+  }
+  .met td {
+    padding: 12px 16px;
+    border-top: 1px dashed var(--rule);
+    font-size: 13px;
+    color: var(--ink-2);
+    vertical-align: middle;
+  }
+  .met td b { color: var(--ink); font-weight: 600; }
+  .met td.val {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .met td.val.bad { color: var(--bad); }
+  .met td.val.ok  { color: var(--accent-2); }
+  .met td.thr { font-family: var(--mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
 
-.cat-head { margin: 40px 0 14px; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); page-break-after: avoid; }
-.cat-head:first-of-type { margin-top: 0; }
+  /* — Category scorecard header — */
+  .cat-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
 
-/* ── FOOTER ── */
-.report-footer { padding: 14px 72px; border-top: 2px solid var(--border); background: white; display: flex; align-items: center; gap: 16px; font-size: 11px; color: var(--text-dim); }
-.footer-sep { color: #cbd5e1; }
+  /* — Finding cards — */
+  .findings { display: flex; flex-direction: column; gap: 12px; }
+  .f {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--rule-2);
+    padding: 22px 26px 20px;
+  }
+  .f.c { border-left-color: var(--bad); }
+  .f.h { border-left-color: var(--warn); }
+  .f.m { border-left-color: var(--med); }
+  .f.l { border-left-color: var(--rule-2); }
+  .f-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .f-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .f-pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+    flex-shrink: 0;
+  }
+  .f.c .f-pill { background: var(--bad-soft);  color: var(--bad); }
+  .f.h .f-pill { background: var(--warn-soft); color: var(--warn); }
+  .f.m .f-pill { background: var(--med-soft);  color: var(--med); }
+  .f.l .f-pill { background: var(--low-soft);  color: var(--low); }
+  .f-title {
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    color: var(--ink);
+    flex-basis: 100%;
+    margin-top: 2px;
+  }
+  .f-body {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.65;
+    max-width: 860px;
+  }
+  .f-body code {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    background: var(--paper-3);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
 
-@media print {
-  html, body { background: white; }
-  .cover { min-height: auto; page-break-after: always; }
-  .page { padding: 40px 56px 48px; }
-  .cover-top { padding: 44px 56px 40px; }
-  .cover-bottom { padding: 36px 56px; }
-  .report-footer { padding: 12px 56px; }
-  .icard { page-break-inside: avoid; }
-  @page { margin: 20mm 0; size: A4 portrait; }
-}
+  /* — Evidence figures — */
+  figure.evidence {
+    margin-top: 16px;
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03), 0 10px 24px -14px rgba(40,30,10,0.18);
+    page-break-inside: avoid;
+    max-width: 860px;
+  }
+  figure.evidence img { display: block; width: 100%; height: auto; }
+  figure.evidence figcaption {
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    border-top: 1px solid var(--rule);
+  }
+  figure.evidence figcaption b { font-weight: 700; }
+  figure.evidence.fig-c figcaption { background: var(--bad-soft); }
+  figure.evidence.fig-c figcaption b { color: var(--bad); }
+  figure.evidence.fig-h figcaption { background: var(--warn-soft); }
+  figure.evidence.fig-h figcaption b { color: var(--warn); }
+  figure.evidence.fig-m figcaption { background: var(--med-soft); }
+  figure.evidence.fig-m figcaption b { color: var(--med); }
+
+  /* — Closing ink panel — */
+  .close-panel {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 44px;
+    border-radius: 2px;
+  }
+  .close-panel .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #E08D6D;
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
+  .close-panel .line {
+    font-family: var(--serif);
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 350;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    max-width: 820px;
+  }
+  .close-panel .line em { font-style: italic; color: #E08D6D; }
+
+  /* — Footer — */
+  footer {
+    margin-top: 64px;
+    border-top: 1px solid var(--rule);
+    padding: 28px 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  footer .brand { display: flex; align-items: center; gap: 16px; }
+  footer .brand img { height: 30px; display: block; }
+  footer .contact {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    line-height: 1.8;
+    text-align: right;
+  }
+  footer .contact b { color: var(--ink); font-weight: 500; }
+
+  @media (max-width: 860px) {
+    .kpis, .ps-row, .sev-legend { grid-template-columns: 1fr 1fr; }
+    .health, .fixfirst-grid { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    body { background: var(--paper); }
+    section.s { padding: 40px 0; }
+    .hero { padding: 40px 0 36px; }
+    .f, .kpi, .h-card, .ps-card { page-break-inside: avoid; }
+    .f:has(figure.evidence) { page-break-inside: auto; }
+    figure.evidence { page-break-inside: avoid; }
+    @page { size: A4 portrait; margin: 14mm 12mm; }
+  }
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<!-- ══════════════════════════════════════ COVER PAGE ═════════════════════════════════════════ -->
-<div class="cover">
-
-  <div class="cover-top">
-    <div class="cover-logo">ALSABER<span>C A R S &nbsp; C O .</span></div>
-
-    <div class="cover-label">Website Analysis</div>
-    <div class="cover-title">Current Website<br>Audit Report</div>
-    <div class="cover-domain">alsabercars.com &nbsp;·&nbsp; July 2026</div>
-
-    <div class="cover-desc">
-      A diagnostic review of the current alsabercars.com — measured performance failures, brand and UX gaps, conversion dead-ends, and search-visibility deficiencies, documented with Google PageSpeed Insights, a full-page technical crawl, and a manual customer-journey walkthrough on desktop and mobile including the complete Purchase Order flow.
-    </div>
-
-    <div class="cover-critical">
-      <div class="cover-critical-title">7 Findings That Demand Immediate Attention</div>
-      <div class="cover-critical-list">
-        <div class="cover-critical-item">The homepage downloads 34 MB — Google flags it as an "enormous network payload"</div>
-        <div class="cover-critical-item">The main image takes 57.5 seconds to appear on a mobile connection (Google's standard: 2.5s)</div>
-        <div class="cover-critical-item">The meta description is an empty string; there is no sitemap and no robots.txt</div>
-        <div class="cover-critical-item">125 of 126 images are invisible to Google — no alt text anywhere</div>
-        <div class="cover-critical-item">A 465,000 SAR G63 AMG and a 180,000 SAR family SUV share one identical card grid</div>
-        <div class="cover-critical-item">The car detail page — where buying decisions happen — has one photo and a two-word description</div>
-        <div class="cover-critical-item">The only buying action is a "Purchase" button that opens a loan-application form asking for salary, commitments and mortgage status</div>
-      </div>
+  <!-- ═══════════ TOP BAR ═══════════ -->
+  <div class="top">
+    <div class="ar">Al Saber Cars Co. · السبر</div>
+    <div class="meta">
+      <span>WEBSITE AUDIT — <b>alsabercars.com</b></span>
+      <span>DATE — <b>8 JULY 2026</b></span>
+      <span>BY — <b>CODE-OX</b></span>
     </div>
   </div>
 
-  <div class="cover-bottom">
-    <div class="cover-meta-row">
-      <div class="cov-meta">
-        <div class="cov-meta-lbl">Audit Date</div>
-        <div class="cov-meta-val">8 July 2026</div>
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="s hero">
+    <div class="hero-eyebrow">Website Analysis Report · Full Diagnostic · July 2026</div>
+    <h1>The showroom is world-class.<br>The website is <em>losing its buyers.</em></h1>
+    <p class="hero-lede">The inventory spans Rolls-Royce, Ferrari and Lamborghini. The website carrying it takes nearly a minute to show a car on mobile, is invisible to Google, and answers a buyer's interest with a salary form. This audit documents 45 verifiable findings — each one specific, measurable, and fixable.</p>
+    <div class="hero-meta">
+      <span>AUDIT DATE<b>8 July 2026</b></span>
+      <span>WEBSITE<b>alsabercars.com</b></span>
+      <span>METHOD<b>Google PageSpeed · Technical crawl · Full UX walkthrough</b></span>
+      <span>BENCHMARKS<b>Rolls-Royce · Ferrari · Porsche digital standards</b></span>
+    </div>
+  </section>
+
+  <!-- ═══════════ VERDICT KPIS ═══════════ -->
+  <section class="s">
+    <div class="s-tag"><span class="num">01</span> The Four Numbers That Matter</div>
+    <h2 class="s-title">Before any detail — <em>read these.</em></h2>
+    <p class="s-sub">Four measurements from Google's own tools. Each one, alone, is enough to explain why the website produces no enquiries.</p>
+
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kpi-num">57.5<span>s</span></div>
+        <div class="kpi-lbl">To show the first car</div>
+        <div class="kpi-note">Google's standard: 2.5 s. This is 23× over.</div>
       </div>
-      <div class="cov-meta">
-        <div class="cov-meta-lbl">Website</div>
-        <div class="cov-meta-val">alsabercars.com</div>
+      <div class="kpi">
+        <div class="kpi-num">34<span>MB</span></div>
+        <div class="kpi-lbl">Homepage download</div>
+        <div class="kpi-note">17× an average page — "enormous," in Google's words.</div>
       </div>
-      <div class="cov-meta">
-        <div class="cov-meta-lbl">Method</div>
-        <div class="cov-meta-val">Google PageSpeed · Technical crawl · UX walkthrough</div>
+      <div class="kpi">
+        <div class="kpi-num">0</div>
+        <div class="kpi-lbl">Words in Google results</div>
+        <div class="kpi-note">The meta description is an empty string.</div>
       </div>
-      <div class="cov-meta">
-        <div class="cov-meta-lbl">Benchmark</div>
-        <div class="cov-meta-val">Rolls-Royce · Ferrari · Lamborghini digital standards</div>
+      <div class="kpi warned">
+        <div class="kpi-num">55<span>/100</span></div>
+        <div class="kpi-lbl">Google performance score</div>
+        <div class="kpi-note">Desktop scores 54 — the site, not the network.</div>
       </div>
     </div>
 
-    <div class="cover-summary">
-      <div class="cov-stat">
-        <div class="cov-stat-num red">45</div>
-        <div class="cov-stat-lbl">Total Issues</div>
-      </div>
-      <div class="cov-stat">
-        <div class="cov-stat-num red">11</div>
-        <div class="cov-stat-lbl">Critical</div>
-      </div>
-      <div class="cov-stat">
-        <div class="cov-stat-num amber">22</div>
-        <div class="cov-stat-lbl">High Severity</div>
-      </div>
-      <div class="cov-stat">
-        <div class="cov-stat-num slate">8</div>
-        <div class="cov-stat-lbl">Categories Reviewed</div>
+    <div class="fixfirst">
+      <div class="fixfirst-label">Seven issues that need fixing first</div>
+      <div class="fixfirst-grid">
+        <div class="fixfirst-item">Homepage downloads 34 MB — Google calls it "enormous"</div>
+        <div class="fixfirst-item">Car detail page has 1 photo and a 2-word description</div>
+        <div class="fixfirst-item">First car takes 57.5 s to appear (Google's limit: 2.5 s)</div>
+        <div class="fixfirst-item">No WhatsApp, no call button — only a salary form</div>
+        <div class="fixfirst-item">Meta description is empty — zero words in Google results</div>
+        <div class="fixfirst-item">G63 AMG 465k SAR listed alongside 180k family SUVs</div>
+        <div class="fixfirst-item">No sitemap, no robots.txt — Google crawls blind</div>
+        <div class="fixfirst-item">125 of 126 images invisible to Google (no alt text)</div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- ═══════════ SEVERITY BREAKDOWN ═══════════ -->
+  <section class="s">
+    <div class="s-tag"><span class="num">02</span> Severity Breakdown · 45 Findings · 5 Categories</div>
+    <h2 class="s-title">The shape of <em>the problem.</em></h2>
+
+    <div class="sev-chart">
+      <div class="sev-seg c"><div class="n">11</div><div class="t">Critical</div></div>
+      <div class="sev-seg h"><div class="n">22</div><div class="t">High</div></div>
+      <div class="sev-seg m"><div class="n">11</div><div class="t">Medium</div></div>
+      <div class="sev-seg l"><div class="n">1</div><div class="t">Low</div></div>
+    </div>
+    <div class="sev-legend">
+      <div class="item c"><div class="name">11 Critical</div><div class="note">Directly costing buyers today — speed, empty detail pages, the purchase form, search invisibility.</div></div>
+      <div class="item h"><div class="name">22 High</div><div class="note">Material damage to brand perception, conversion, or discoverability.</div></div>
+      <div class="item m"><div class="name">11 Medium</div><div class="note">Quality and polish gaps that compound the larger issues.</div></div>
+      <div class="item l"><div class="name">1 Low</div><div class="note">A symptom that independently confirms the diagnosis.</div></div>
+    </div>
+
+    <div class="sev-rule">Every finding in this report is <b>specific, verifiable, and fixable</b> — documented with Google PageSpeed evidence, a full technical crawl, and a manual walkthrough of the customer journey on desktop and mobile.</div>
+  </section>
+
+  <!-- ═══════════ HEALTH MATRIX ═══════════ -->
+  <section class="s">
+    <div class="s-tag"><span class="num">03</span> Category Health</div>
+    <h2 class="s-title">Five areas, <em>one verdict each.</em></h2>
+
+    <div class="health">
+      <div class="h-card">
+        <div class="h-head"><div class="h-name">Performance &amp; Speed</div><div class="h-badge failing">Failing</div></div>
+        <div class="h-verdict">Site takes up to 57.5 s to load. Most mobile visitors leave before seeing a car.</div>
+        <div class="h-pills"><span class="pill c">2 Critical</span><span class="pill h">4 High</span><span class="pill m">2 Medium</span></div>
+      </div>
+      <div class="h-card">
+        <div class="h-head"><div class="h-name">Design &amp; Brand</div><div class="h-badge failing">Failing</div></div>
+        <div class="h-verdict">Generic template — no Al Saber identity. Luxury cars shown with interior shots first, raw database labels in specs.</div>
+        <div class="h-pills"><span class="pill c">2 Critical</span><span class="pill h">5 High</span><span class="pill m">2 Medium</span></div>
+      </div>
+      <div class="h-card">
+        <div class="h-head"><div class="h-name">Conversion &amp; Journey</div><div class="h-badge failing">Failing</div></div>
+        <div class="h-verdict">No WhatsApp. Purchase form asks for salary before a salesperson speaks. No breadcrumbs. Form switches to English mid-journey.</div>
+        <div class="h-pills"><span class="pill c">3 Critical</span><span class="pill h">9 High</span><span class="pill m">5 Medium</span></div>
+      </div>
+      <div class="h-card">
+        <div class="h-head"><div class="h-name">Search &amp; Visibility</div><div class="h-badge failing">Failing</div></div>
+        <div class="h-verdict">Empty meta description. No sitemap. No structured data. 125 images have no alt text. English luxury market excluded entirely.</div>
+        <div class="h-pills"><span class="pill c">4 Critical</span><span class="pill h">4 High</span></div>
+      </div>
+      <div class="h-card wide">
+        <div class="h-head"><div class="h-name">Accessibility &amp; Quality</div><div class="h-badge needs">Needs Work</div></div>
+        <div class="h-verdict">PageSpeed accessibility score 82. Unnamed controls, contrast failures, wrong image aspect ratios. Traffic too low for Google to even measure Core Web Vitals.</div>
+        <div class="h-pills"><span class="pill m">2 Medium</span><span class="pill l">1 Low</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ PAGESPEED ═══════════ -->
+  <section class="s">
+    <div class="s-tag"><span class="num">04</span> Measured Evidence · Google PageSpeed Insights · 8 July 2026</div>
+    <h2 class="s-title">Google's own numbers, <em>unedited.</em></h2>
+
+    <div class="ps-row">
+      <div class="ps-card">
+        <div class="ps-circle mid">55<span style="font-size:13px;font-weight:400">&thinsp;/&thinsp;54</span></div>
+        <h5>Performance<br>Mobile / Desktop</h5>
+        <p>Desktop lower than mobile — proves it's the site, not the network</p>
+      </div>
+      <div class="ps-card">
+        <div class="ps-circle mid">82</div>
+        <h5>Accessibility</h5>
+        <p>Unnamed buttons, contrast failures, touch targets too small</p>
+      </div>
+      <div class="ps-card">
+        <div class="ps-circle good">92</div>
+        <h5>Best Practices</h5>
+        <p>Passes basics — flags low-res images and wrong aspect ratios</p>
+      </div>
+      <div class="ps-card">
+        <div class="ps-circle good">92</div>
+        <h5>SEO (lab only)</h5>
+        <p>Lab check only — does not reflect real search visibility (see findings 35–42)</p>
+      </div>
+    </div>
+
+    <table class="met">
+      <tr>
+        <th>Metric</th>
+        <th>Mobile</th>
+        <th>Desktop</th>
+        <th>Google "Good"</th>
+        <th>What a visitor experiences</th>
+      </tr>
+      <tr>
+        <td><b>First Contentful Paint</b></td>
+        <td class="val bad">9.4 s</td>
+        <td class="val bad">1.9 s</td>
+        <td class="thr">≤ 1.8 s</td>
+        <td>Blank screen on mobile for over 9 seconds</td>
+      </tr>
+      <tr>
+        <td><b>Largest Contentful Paint</b></td>
+        <td class="val bad">57.5 s</td>
+        <td class="val bad">9.2 s</td>
+        <td class="thr">≤ 2.5 s</td>
+        <td>Hero car image: nearly a minute on mobile, 4× limit on desktop</td>
+      </tr>
+      <tr>
+        <td><b>Speed Index</b></td>
+        <td class="val bad">19.5 s</td>
+        <td class="val bad">4.6 s</td>
+        <td class="thr">≤ 3.4 s</td>
+        <td>Page visually incomplete for ~20 seconds on mobile</td>
+      </tr>
+      <tr>
+        <td><b>Total Blocking Time</b></td>
+        <td class="val ok">80 ms</td>
+        <td class="val ok">180 ms</td>
+        <td class="thr">≤ 200 ms</td>
+        <td>Within range — the problem is weight, not scripting</td>
+      </tr>
+      <tr>
+        <td><b>Cumulative Layout Shift</b></td>
+        <td class="val ok">0.015</td>
+        <td class="val ok">0.005</td>
+        <td class="thr">≤ 0.1</td>
+        <td>Layout is stable once loaded — but that takes too long</td>
+      </tr>
+    </table>
+
+    <div class="sev-rule"><b>Notable:</b> Google's real-user Core Web Vitals shows "Not applicable" — the site has too little traffic for Google to even compile field data. The performance and visibility problems compound each other.</div>
+  </section>
+
+  <!-- ═══════════ FINDINGS · PERFORMANCE ═══════════ -->
+  <section class="s">
+    <div class="s-tag"><span class="num">05</span> Findings 1 – 8 · Performance &amp; Delivery</div>
+    <h2 class="s-title">Nobody waits a minute <em>for a Rolls-Royce.</em></h2>
+    <p class="s-sub">A first visit costs 34 MB and nearly a minute of waiting — most mobile visitors are gone before a single car is on screen.</p>
+    <div class="cat-pills"><span class="pill c">2 Critical</span><span class="pill h">4 High</span><span class="pill m">2 Medium</span></div>
+
+    <div class="findings">
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">01</span><span class="f-pill">34 MB download</span>
+          <div class="f-title">The Homepage Downloads 34 MB — 17× the Size of an Average Web Page</div></div>
+        <div class="f-body">PageSpeed measured the total network payload at 34,252 KiB — flagged as an "enormous network payload." The median web page is roughly 2 MB. Every first-time visitor arriving from Instagram, a WhatsApp link, or a Google ad must download the equivalent of a short video before the page completes. On mobile data, that is a real cost in both time and money at the exact moment the site should be making a first impression.</div>
+      </div>
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">02</span><span class="f-pill">57.5 s to render</span>
+          <div class="f-title">The First Car a Visitor Sees Takes 57.5 Seconds to Render</div></div>
+        <div class="f-body">Largest Contentful Paint measured 57.5 seconds on Google's standard mobile conditions, against a 2.5-second "good" threshold. The hero slider loads multi-megapixel PNG cut-outs through a secondary slider domain — they are the last thing to arrive. In practice, the visitors this site most needs to impress will never wait to see the Rolls-Royce.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">03</span><span class="f-pill">9 s blank screen</span>
+          <div class="f-title">Nine Seconds of Blank Screen Before Anything Appears</div></div>
+        <div class="f-body">First Contentful Paint: 9.4 s (threshold 1.8 s). Speed Index: 19.5 s (threshold 3.4 s). The majority of mobile visitors abandon a page that shows nothing within ~3 seconds. These visitors register as zero in any analytics — consistent with the "no conversions from the website" experience.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">04</span><span class="f-pill">9 s delay</span>
+          <div class="f-title">Render-Blocking Resources Add an Estimated 9 Seconds of Delay</div></div>
+        <div class="f-body">PageSpeed identified render-blocking requests with an estimated savings of 8,980 ms — CSS and JavaScript files (Bootstrap, slider libraries, font packs) that must fully download before the browser can draw anything. This is the direct cause of the blank screen in finding 3. Fixable through standard deferral and critical-CSS techniques without changing the visual design.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">05</span><span class="f-pill">17 MB waste</span>
+          <div class="f-title">Images Served Unoptimised — 17 MB of Identified Waste</div></div>
+        <div class="f-body">The image delivery audit found 17,126 KiB of potential savings. Car photos are full-resolution PNGs with no modern formats (WebP/AVIF), no responsive sizing, and no lazy-loading. For an inventory site whose product is photography, the image pipeline is core infrastructure — this is the single largest fixable contributor to the 34 MB payload.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">06</span><span class="f-pill">26 MB re-downloaded</span>
+          <div class="f-title">No Effective Caching — Returning Visitors Re-download 26 MB Every Visit</div></div>
+        <div class="f-body">PageSpeed flagged inefficient cache lifetimes on 26,670 KiB of assets. A visitor who browses from homepage to a car page and back re-downloads nearly the entire payload. Serious buyers visit a dealer's site repeatedly while deciding — every return visit is as slow as the first.</div>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">07</span><span class="f-pill">~900 KiB unused</span>
+          <div class="f-title">~900 KiB of Unused and Unminified Code From a Heavy Library Stack</div></div>
+        <div class="f-body">311 KiB unused CSS, 399 KiB unused JavaScript, 213 KiB unminified files. The site loads jQuery, Bootstrap, RevSlider, Slick, Select2, SweetAlert2, and Font Awesome simultaneously — a 2015-era template stack where each library ships far more code than the site uses.</div>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">08</span><span class="f-pill">Layout jump risk</span>
+          <div class="f-title">Images Declared Without Dimensions — Layout Jump Risk When Speed Improves</div></div>
+        <div class="f-body">Image elements lack explicit width and height attributes, forcing the browser to recalculate layout as each image arrives. Layout shift is currently low (0.015) only because images arrive so late. Fixing speed without fixing dimensions will surface visible content-jumping on a faster site.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════ FINDINGS · DESIGN & BRAND ═══════════ -->
+  <section class="s">
+    <div class="s-tag"><span class="num">06</span> Findings 9 – 17 · Design &amp; Brand</div>
+    <h2 class="s-title">A template wearing <em>a luxury inventory.</em></h2>
+    <p class="s-sub">Generic components carry a Rolls-Royce collection; nothing on screen is ownably Al Saber, and the flagship cars are presented below the standard their own manufacturers set.</p>
+    <div class="cat-pills"><span class="pill c">2 Critical</span><span class="pill h">5 High</span><span class="pill m">2 Medium</span></div>
+
+    <div class="findings">
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">09</span><span class="f-pill">Cut-out on grey</span>
+          <div class="f-title">Flagship Cars Presented as PNG Cut-Outs on Grey Rectangles, Headlines Cropped</div></div>
+        <div class="f-body">The hero slider presents the Rolls-Royce Spectre and Ferrari Purosangue as flat PNG cut-outs floating on grey shapes, with display headlines ("SPECTRE", "FERRARI") partially cropped at the screen edge on both desktop and mobile. These marques whose manufacturers spend millions on presentation standards — the gap between manufacturer and dealer presentation is felt instantly, and it reprices the dealership downward in the buyer's mind.</div>
+      </div>
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">10</span><span class="f-pill">465k next to 180k</span>
+          <div class="f-title">Luxury and Economy Inventory Share One Undifferentiated Grid</div></div>
+        <div class="f-body">A Mercedes G63 AMG at 465,000 SAR sits in the same card format, same stream, directly beside a 180,000 SAR family SUV. The premium buyer reads "trader, not curator" — the digital equivalent of parking the Phantom in a general used-car lot. Two audiences need two presentation experiences; currently there is one, calibrated to neither.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">11</span><span class="f-pill">60+ identical tiles</span>
+          <div class="f-title">60+ Identical Brand Logo Tiles Dominate the Homepage With No Hierarchy</div></div>
+        <div class="f-body">The homepage's largest section is a uniform grid of 60+ grey tiles — Ferrari next to Isuzu next to Dongfeng, all equal weight. It communicates breadth at the cost of positioning: the page reads like a parts catalogue. Breadth is a real business strength, but it needs hierarchy — marquee brands as a curated collection, volume brands as a searchable capability.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">12</span><span class="f-pill">No brand identity</span>
+          <div class="f-title">The Site's Visual Identity Does Not Carry the Al Saber Brand</div></div>
+        <div class="f-body">The site is built on generic template components — stock Bootstrap layouts, default component styling, system-grade typography — with the Al Saber logo placed on top rather than an identity built from it. Nothing in the colour system, type, or graphic language is ownable. A returning visitor would not identify a screenshot of this site as Al Saber without reading the header.</div>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">13</span><span class="f-pill">Watermarked warehouse</span>
+          <div class="f-title">Primary Car Photography Is Watermarked Warehouse Shots</div></div>
+        <div class="f-body">Listing and detail images are single photographs from the warehouse/showroom with a logo watermark across them. Watermarks signal fear of theft, not pride of presentation, and warehouse backdrops undercut cars photographed by their manufacturers in studios. A consistent photography standard — even a branded backdrop corner of the showroom — would transform perceived quality at near-zero cost.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">14</span><span class="f-pill">Interior photos first</span>
+          <div class="f-title">The Gallery Opens With Interior Shots — Every Automotive Standard Requires Exterior First</div></div>
+        <div class="f-body">All three visible photo tiles on the G63 AMG detail page are interior shots: dashboard, middle-row seats, rear seats. The exterior silhouette of a G63 is its most desirable feature, yet a buyer landing on this page sees the centre console first. Every automotive retail and manufacturer context — Ferrari's own site to AutoTrader — leads with the hero exterior, then quarter profiles, then interior detail. Showing only interiors reverses the desire-to-consideration journey and tells the buyer nothing about the car's outside condition.</div>
+        <figure class="evidence fig-h">
+          <img src="assets/shot-1.png" alt="G63 AMG detail page: three small interior photo tiles above a spec icon row and Purchase button">
+          <figcaption><b>Evidence — findings 14 &amp; 15:</b> the entire photographic presentation of a 465,000 SAR G63 AMG — three equal interior tiles (dashboard, middle row, rear seats), no exterior shot, no full-width hero, no gallery.</figcaption>
+        </figure>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">15</span><span class="f-pill">3 thumbnails, no gallery</span>
+          <div class="f-title">Three Small Thumbnail Tiles Replace What Should Be a Full Gallery Experience</div></div>
+        <div class="f-body">Even on the most richly photographed listing in the audit sample — the G63 AMG — the photo presentation is three equal tiles in a horizontal row, each roughly one-third of the content column width. No full-width hero, no lightbox, no photo count indicator, no "view all." Competitors on syarah.com and motory.sa present full-screen galleries with 15–30 images. The tile layout communicates "3 photos to show"; the competitor communicates "nothing to hide." At 465,000 SAR, the difference in buyer confidence is material.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">16</span><span class="f-pill">"determination: 850"</span>
+          <div class="f-title">Specifications Table Shows Raw Database Labels — "determination: 850", "Engine type: 8v"</div></div>
+        <div class="f-body">The G63 AMG Specifications section shows labels exactly as stored in the database: "Engine Measurement: 4.0", "Engine type: 8v", "Engine system: gas", "valves: –", "determination: 850." The label "determination" is a machine-translated fragment meaning nothing to any buyer; "8v" is an internal code for V8; "valves: –" is an empty cell. A serious technical buyer cross-referencing the official Mercedes-AMG spec sheet concludes this data cannot be trusted — and that concern extends to every other listing on the site.</div>
+        <figure class="evidence fig-h">
+          <img src="assets/shot-4.png" alt="Specifications table showing raw labels: Engine type 8v, valves dash, determination 850">
+          <figcaption><b>Evidence — finding 16:</b> the live Specifications table — "Engine type: 8v", "valves: –", "determination: 850" — raw system output on the page where a buyer verifies a six-figure car.</figcaption>
+        </figure>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">17</span><span class="f-pill">Raw colon syntax</span>
+          <div class="f-title">Features Table Uses Raw Colon Syntax and Inconsistent Capitalisation Throughout</div></div>
+        <div class="f-body">The Features section presents: "fog lights : led", "headlights : led", "Bright lights during the day : led" — a colon-separated database output with no editorial pass. Capitalisation is arbitrary, and the colon-plus-space pattern reads as unprocessed system output. On a page where a buyer is forming a price-to-specification assessment, unformatted data erodes the sense that the dealership checks and stands behind its own listings.</div>
+        <figure class="evidence fig-m">
+          <img src="assets/shot-5.png" alt="Features table with colon-separated entries: fog lights : led, headlights : led">
+          <figcaption><b>Evidence — finding 17:</b> the Features section as rendered — "fog lights : led", "Bright lights during the day : led" — colon-separated database entries with no editorial pass.</figcaption>
+        </figure>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════ FINDINGS · CONVERSION ═══════════ -->
+  <section class="s">
+    <div class="s-tag"><span class="num">07</span> Findings 18 – 34 · Conversion &amp; Customer Journey</div>
+    <h2 class="s-title">Where the business <em>actually leaks.</em></h2>
+    <p class="s-sub">The journey's most valuable moments — the detail page and the enquiry — are exactly where the site loses its buyers. This is the category that converts directly into revenue when fixed.</p>
+    <div class="cat-pills"><span class="pill c">3 Critical</span><span class="pill h">9 High</span><span class="pill m">5 Medium</span></div>
+
+    <div class="findings">
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">18</span><span class="f-pill">1 photo · 2-word desc</span>
+          <div class="f-title">The Car Detail Page — the Decision Moment — Is Nearly Empty</div></div>
+        <div class="f-body">The page where a buyer decides whether to act contains: one watermarked photo, a specification icon row, and a description that is literally two words ("بورش تارجا" on the Porsche Targa GTS page). No gallery, no video, no interior shots, no condition report, no story. This is the most valuable page type on the site and currently its weakest — every upstream spend on ads, social, and search pays to deliver visitors to a page that cannot close.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">19</span><span class="f-pill">Data sheet, not a car</span>
+          <div class="f-title">Even the Best-Stocked Detail Pages Read as an Inventory Export, Not a Desire Machine</div></div>
+        <div class="f-body">Where a car has fuller content — the G63 AMG has three photos and a long spec list — the presentation is still a flat data sheet: small tiles, plain bullets, and raw label/value tables (see findings 16, 17). No full-width gallery, no exterior/interior hierarchy, no separation of what makes this car desirable (585 hp, matte PPF, Burmester sound) from routine line items. A 465,000 SAR car deserves a page that builds desire the way the manufacturer's configurator does.</div>
+      </div>
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">20</span><span class="f-pill">No WhatsApp · No call</span>
+          <div class="f-title">No WhatsApp, Call, or Book-a-Viewing Action Exists on Car Pages</div></div>
+        <div class="f-body">The only action on a car page is a single "شراء" (Buy) button. In the Saudi market, WhatsApp is the default channel for car enquiries — its absence from the exact page where desire peaks forces interested buyers to hunt for contact details or leave. A car page should offer the full ladder: WhatsApp this car, call now, book a private viewing, request more photos. Each missing rung is a measurable leak of ready buyers.</div>
+      </div>
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">21</span><span class="f-pill">Salary before hello</span>
+          <div class="f-title">"Purchase" Opens a Financial Interrogation — Salary, Commitments, Mortgage — Before Any Contact</div></div>
+        <div class="f-body">Clicking the sole CTA opens a Purchase Order page whose Finance path requires: total salary, total financial commitments, mortgage status, first/last installment amounts, city, working sector, bank account, and driving license status — before anyone from Al Saber has spoken to the buyer. No buyer discloses salary and debts to a website to express interest in a car. Replace "Purchase" with "Request a Callback" — name, phone, the car — as the Cash path already nearly demonstrates. Every field beyond that is measurable lead leakage, and this is very plausibly the single largest conversion blocker on the site.</div>
+        <figure class="evidence fig-c">
+          <img src="assets/shot-6.png" alt="Purchase Order form Finance path asking for total salary, total commitments and mortgage loan status">
+          <figcaption><b>Evidence — finding 21:</b> the first screen after clicking "Purchase" — total salary, total commitments, and mortgage status demanded before any human contact. Note also the ambiguous required "Price" field (finding 30).</figcaption>
+        </figure>
+        <figure class="evidence fig-c">
+          <img src="assets/shot-8.png" alt="Cash path of the same form: only vehicle, price, name, phone and a Send button">
+          <figcaption><b>The contrast:</b> the same form's Cash path — vehicle, price, name, phone, Send. The minimal lead-first version already exists on the site; it simply is not the default journey.</figcaption>
+        </figure>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">22</span><span class="f-pill">No calculator · No trade-in</span>
+          <div class="f-title">No Financing Calculator or Trade-In Path Anywhere on the Site</div></div>
+        <div class="f-body">No monthly-payment calculator, no bank financing information, and no trade-in valuation journey exist on the site. For the volume inventory (MG, Elantra, family SUVs), financing is how the majority of Saudi buyers purchase and "what would this cost monthly?" is the first question. For the premium side, trade-in is often the door-opener. Both journeys are absent.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">23</span><span class="f-pill">Sold = dead end</span>
+          <div class="f-title">Sold Cars Dead-End the Visitor Instead of Redirecting Their Declared Interest</div></div>
+        <div class="f-body">Sold vehicles remain browsable (the Porsche Targa GTS carries a "مباع" badge) but offer no next step — no "similar cars available," no "notify me when a comparable car arrives," no enquiry option. A visitor on a sold-car page has declared exactly what they want. The current page wastes that declaration. This is among the cheapest conversion wins on the list.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">24</span><span class="f-pill">No lead capture</span>
+          <div class="f-title">No Lead Capture Exists for the Majority of Visitors Who Are Not Ready to Buy Today</div></div>
+        <div class="f-body">No stock alerts ("tell me when a GLE arrives"), no price-drop notifications, no saved-cars account, no newsletter, no callback request. The site converts only visitors ready to press "Buy" this moment — the smallest slice of its traffic — and loses the identity of everyone else entirely.</div>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">25</span><span class="f-pill">Full screen · Nothing to do</span>
+          <div class="f-title">On Mobile the Hero Slider Fills the Entire First Screen — No Inventory, No Search Visible</div></div>
+        <div class="f-body">On a phone — where the majority of Saudi traffic arrives — the first full screen is the slider: a cut-out car, a long paragraph, and slider dots. No inventory, no search, no action is visible without scrolling. Combined with finding 3 (9 seconds blank screen), the mobile first impression is a long wait followed by a screen that offers nothing to do.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">26</span><span class="f-pill">No breadcrumbs</span>
+          <div class="f-title">No Breadcrumbs or Wayfinding — Visitors Cannot Orient Themselves or Find Similar Cars</div></div>
+        <div class="f-body">The car detail page carries no breadcrumb trail and no contextual navigation. The URL encodes the path (/car/1045/Mercedes_G63_AMG_2019) but the page shows only the car name — no "Cars &gt; Luxury &gt; Mercedes" hierarchy, no back-to-results link, no category context. A buyer arriving from WhatsApp, Google, or Instagram has no visible route to the broader inventory and no way to see what else is available at a comparable price point. In a session where comparison is the primary behaviour, no wayfinding is a dead end dressed as a destination.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">27</span><span class="f-pill">Price · No context</span>
+          <div class="f-title">The Price Is a Bare Number — No Monthly Estimate, No Financing Qualifier</div></div>
+        <div class="f-body">The sidebar displays "465,000 ر.س" with no monthly-payment estimate, no "from X SAR/month" qualifier, and no indication of whether the price is fixed or negotiable. Every major automotive platform — motory.sa, syarah.com — shows an estimated monthly payment alongside list price because buyers think in monthly cash-flow terms, not lump sums. The finance form proves Al Saber offers financing — that information belongs next to the price, not buried behind a ten-field application.</div>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">28</span><span class="f-pill">Sidebar adds nothing</span>
+          <div class="f-title">The Sticky Sidebar Repeats the Above-Fold Content Word-for-Word — No Added Value</div></div>
+        <div class="f-body">The sticky sidebar shows: car name, colour swatch, price, Purchase button — the exact same four elements already visible above the fold. As the user reads Specifications and Features, the sidebar adds no contextual value — no "add to compare," no spec callout, no seller note. A sticky element earns its space only if it adds something the scrolled-away section cannot. As implemented, it competes for reading width without earning it.</div>
+        <figure class="evidence fig-m">
+          <img src="assets/shot-2.png" alt="Detail page mid-scroll: plain description bullets beside a sticky sidebar repeating name, colour, price and Purchase">
+          <figcaption><b>Evidence — findings 19 &amp; 28:</b> mid-scroll on the G63 page — plain bullet output on the left, and a sticky sidebar repeating the exact four elements already seen above the fold.</figcaption>
+        </figure>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">29</span><span class="f-pill">Car not pre-filled</span>
+          <div class="f-title">The Purchase Form Does Not Pre-Fill the Car Being Enquired About — Buyer Must Re-Select</div></div>
+        <div class="f-body">The "Purchase" button links to a URL carrying ?car_name=Mercedes_G63_AMG_2019, yet the Purchase Order form arrives with "Choose car" — an empty dropdown. The URL context is discarded at the form boundary. A buyer who clicked "Purchase" on a specific car should never be asked to re-select it — re-selection creates doubt ("is this for the right car?"), adds friction, and risks an incorrect vehicle being selected. This is a direct technical failure at the most consequential step in the user journey.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">30</span><span class="f-pill">"Minimum SAR 20.000" — what?</span>
+          <div class="f-title">The "Price" Field Placeholder "Minimum SAR 20.000" Is Actively Ambiguous on a 465,000 SAR Listing</div></div>
+        <div class="f-body">The Purchase Order form's required "Price" field shows the placeholder "Minimum SAR 20.000." It is not clear whether the buyer should enter: (a) the vehicle's listed price, (b) a price they wish to pay, or (c) a down payment. A buyer from a 465,000 SAR listing typing "465000" may be wrong; typing "20000" equally so. The vehicle selector dropdown implies the system knows the price — yet asks the buyer to type it manually. This is a trust-breaking ambiguity on the one page that must feel certain.</div>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">31</span><span class="f-pill">Stepper on salary field</span>
+          <div class="f-title">"Total Commitments" Uses a Numeric Stepper — Wrong Control for a SAR Financial Field</div></div>
+        <div class="f-body">The Finance form's "Total commitments" field — expecting a monthly SAR obligation like "3,500" or "12,000" — has a numeric increment/decrement spinner. A stepper suits quantities like "number of installments." For a financial amount, a buyer would need to click the up arrow thousands of times to reach their figure. The control signals the form was assembled without reviewing what each field actually collects.</div>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">32</span><span class="f-pill">No progress indicator</span>
+          <div class="f-title">No Progress Indicator on a Multi-Screen Finance Form — Buyers Don't Know How Much Remains</div></div>
+        <div class="f-body">The Finance path spans at least two full viewport heights — salary, commitments, mortgage, installments, city, sector, bank, driving license — with no step indicator, no section headings, no progress bar. A buyer who completes the first screen of fields and finds a second wave of equally demanding questions has no information about how much remains. Research consistently shows progress indicators increase form completion rates; sensitive financial forms without them suffer the highest mid-way abandonment.</div>
+        <figure class="evidence fig-m">
+          <img src="assets/shot-7.png" alt="Second screen of the Finance form: installments, city, working sector, bank account, driving license status">
+          <figcaption><b>Evidence — findings 32 &amp; 33:</b> the second wave of the Finance form — installments, city, working sector, bank account, driving license — with no progress indication, rendered entirely in English on an Arabic site.</figcaption>
+        </figure>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">33</span><span class="f-pill">Arabic site → English form</span>
+          <div class="f-title">The Purchase Order Form Is Entirely in English on an Arabic-Language Site</div></div>
+        <div class="f-body">The single most consequential page — where a buyer expresses intent to purchase — is presented in English: "PURCHASE ORDER," "Individuals," "Corporate," "Finance," "Cash," "Total salary in ATM," "Working sector," "Bank account," "Driving License Status." Every other page is in Arabic. The language switch at the commitment moment is jarring and signals an error to the buyer. "Total salary in ATM" is also a mistranslation — compounding the confusion at the exact moment trust is most needed.</div>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">34</span><span class="f-pill">Heart with no account</span>
+          <div class="f-title">The Favourites/Save Affordance Has No Persistent Account Behind It</div></div>
+        <div class="f-body">The detail page shows a heart icon (favourites) in the sidebar. For a buyer comparing multiple cars across sessions — routine at this price level — the expectation is a retrievable saved list. No sign-in link, no "saved cars" section, and no account system is visible anywhere in the navigation. The affordance makes a promise the site cannot keep. A saved car that disappears when the browser closes weakens trust at exactly the consideration stage.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════ FINDINGS · SEARCH ═══════════ -->
+  <section class="s">
+    <div class="s-tag"><span class="num">08</span> Findings 35 – 42 · Search Visibility &amp; Sharing</div>
+    <h2 class="s-title">An inventory Google <em>cannot see.</em></h2>
+    <p class="s-sub">Structurally invisible: to Google, to Google Images, to WhatsApp link previews, and to every English-speaking luxury buyer in the Kingdom.</p>
+    <div class="cat-pills"><span class="pill c">4 Critical</span><span class="pill h">4 High</span></div>
+
+    <div class="findings">
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">35</span><span class="f-pill">Empty meta description</span>
+          <div class="f-title">The Meta Description Is an Empty String — Zero Words Shown Under the Site in Google</div></div>
+        <div class="f-body">The homepage ships <code>&lt;meta name="description" content=""&gt;</code> — the tag exists and is empty. The text Google shows below a site's name in search results is the highest-leverage copy on the web, and it is currently blank. PageSpeed's own SEO audit flags it directly. Every page on the site shares this condition.</div>
+      </div>
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">36</span><span class="f-pill">No H1 · No keywords</span>
+          <div class="f-title">No H1 Heading Exists, and the Title Tag Carries Zero Car-Related Keywords</div></div>
+        <div class="f-body">The homepage has no H1, and its title tag reads "السبر | الرئيسية" — no "cars," no "luxury," no city, no brand names. Google's two strongest on-page relevance signals are the title and H1; the site provides one empty of meaning and the other not at all. Searches like "معارض سيارات فاخرة الرياض" have no reason to surface this site.</div>
+      </div>
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">37</span><span class="f-pill">No sitemap · 404 robots</span>
+          <div class="f-title">No Sitemap and No robots.txt — Google Crawls the Inventory Blind</div></div>
+        <div class="f-body">Both /sitemap.xml and /robots.txt return 404. A sitemap tells Google "here are my 200 cars, and this one arrived today." Without it, new inventory is discovered only by chance. For a business whose product rotates weekly, this structurally disconnects every new listing from search.</div>
+      </div>
+
+      <div class="f c">
+        <div class="f-head"><span class="f-num">38</span><span class="f-pill">125 / 126 no alt text</span>
+          <div class="f-title">125 of 126 Images Have No Alt Text — the Entire Inventory Is Invisible to Google Images</div></div>
+        <div class="f-body">Every car and brand image carries an empty or missing alt attribute. Google Images is a major discovery channel for car shoppers ("G63 2019 black") and the entire inventory is excluded from it. The alt gap also contributes to the accessibility failures in finding 43 and wastes the image-heavy nature of the site entirely.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">39</span><span class="f-pill">Zero structured data</span>
+          <div class="f-title">Zero Structured Data — No Car Can Appear as a Rich Result in Search</div></div>
+        <div class="f-body">No JSON-LD or microdata exists: no Vehicle, no AutoDealer, no Offer markup. Structured data is what lets Google show a car with its price, year, and mileage directly in results and what feeds "car dealer near me" surfaces. Competitors with marked-up inventory occupy this space unchallenged.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">40</span><span class="f-pill">WhatsApp share = bare URL</span>
+          <div class="f-title">Zero Open Graph Tags — Every Shared Car Link Arrives on WhatsApp as a Bare URL</div></div>
+        <div class="f-body">No Open Graph or Twitter Card tags exist. When anyone shares a car on WhatsApp — the primary way cars circulate socially in the Kingdom — the message shows a naked link with no photo, no name, no price. Every organic share, the cheapest marketing the dealership can get, arrives stripped of its selling power. For a luxury car business this may be the single most costly small gap on the list.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">41</span><span class="f-pill">Arabic only</span>
+          <div class="f-title">Arabic Only — English-Speaking Luxury Buyers Cannot Find or Use the Site</div></div>
+        <div class="f-body">The site exists in a single language with no English version and no hreflang. Riyadh and Jeddah host a substantial international and expatriate segment that shops for premium cars in English — searches like "Rolls Royce for sale Riyadh" or "Ferrari dealer Saudi Arabia" cannot land here meaningfully. Half the addressable luxury market is structurally excluded.</div>
+      </div>
+
+      <div class="f h">
+        <div class="f-head"><span class="f-num">42</span><span class="f-pill">HTTP 406</span>
+          <div class="f-title">The Server Rejects Non-Browser Clients With HTTP 406 — Crawlers Partially Blocked</div></div>
+        <div class="f-body">Direct HTTP requests without full browser headers receive a 406 "Not Acceptable" response. Standard browsers work, but this can silently block or degrade SEO tools, link-preview bots, and monitoring services. Combined with the missing robots.txt, the site's relationship with automated clients — which is what search engines are — is unmanaged and partially hostile.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════ FINDINGS · QUALITY ═══════════ -->
+  <section class="s">
+    <div class="s-tag"><span class="num">09</span> Findings 43 – 45 · Accessibility &amp; Quality</div>
+    <h2 class="s-title">The mechanics <em>underneath.</em></h2>
+    <p class="s-sub">Quality gaps that exclude some users, blur the cars for everyone else — and one number that quietly confirms the whole diagnosis.</p>
+    <div class="cat-pills"><span class="pill m">2 Medium</span><span class="pill l">1 Low</span></div>
+
+    <div class="findings">
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">43</span><span class="f-pill">Score 82 / 100</span>
+          <div class="f-title">Accessibility Score 82 — Unnamed Controls, Contrast Failures, Small Touch Targets</div></div>
+        <div class="f-body">PageSpeed flags buttons without accessible names, links without discernible text, foreground/background contrast failures, touch targets below minimum size, no main landmark, and heading levels out of order. Beyond users it excludes, these cause mis-taps and hard-to-read text for every mobile user — and unnamed links are equally unreadable to Google crawlers.</div>
+      </div>
+
+      <div class="f m">
+        <div class="f-head"><span class="f-num">44</span><span class="f-pill">Blurred on retina screens</span>
+          <div class="f-title">Images Served at Low Resolution and Wrong Aspect Ratios — Blurred on Modern Devices</div></div>
+        <div class="f-body">The Best Practices audit flags images displayed at incorrect aspect ratios and served below the resolution of the screens displaying them. On modern phones or retina displays, photographs of six-figure cars render slightly stretched or blurred. Paradoxically, the site is both too heavy (34 MB) and too low-quality where it counts — the worst of both trades.</div>
+      </div>
+
+      <div class="f l">
+        <div class="f-head"><span class="f-num">45</span><span class="f-pill">No CWV data</span>
+          <div class="f-title">Google Has Too Little Traffic Data to Even Assess the Site's Real-World Performance</div></div>
+        <div class="f-body">The Core Web Vitals field assessment returns "Not applicable" — the site does not receive enough real-user traffic for Google's Chrome UX Report to compile data. Low severity only because it is a symptom, not a cause: it independently confirms that the visibility problems in findings 35–42 translate into a traffic level below Google's measurement floor.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════ CLOSING ═══════════ -->
+  <section class="s">
+    <div class="close-panel">
+      <div class="tag">The bottom line</div>
+      <div class="line">45 findings, one story: the cars deserve a website that works as hard as the showroom does. Every issue in this report is <em>specific, verifiable, and fixable.</em></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer>
+    <div class="brand">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX">
+    </div>
+    <div class="contact">
+      <b>Shabeeb Kaip</b> · Head of Operations, Code-OX<br>
+      shabeeb.k@code-ox.com · +966 53 571 6437 · code-ox.com
+    </div>
+  </footer>
 
 </div>
-
-<!-- ══════════════════════════════════════ CONTENT ════════════════════════════════════════════ -->
-<div class="page">
-
-  <!-- OVERVIEW -->
-  <div style="page-break-inside: avoid;">
-  <div class="section-eyebrow">Overview</div>
-  <div class="section-title">Executive Summary</div>
-  <div class="exec-prose">
-    <p>Al Saber Cars operates a showroom whose inventory spans the most demanding brands in the automotive world — Rolls-Royce, Ferrari, Lamborghini, Bentley — alongside a strong everyday range. The website carrying that inventory does not perform at the level of the cars, in any of the three dimensions that matter: how fast it loads, how premium it feels, and whether Google can find it.</p>
-    <p>The performance numbers are the most urgent. Google PageSpeed measured the homepage at <b>55/100 on mobile and 54/100 on desktop</b> — the desktop score being equally poor proves this is not a network issue but a construction issue. The site downloads <b>34 MB</b>, and its main image takes <b>57.5 seconds</b> to render on a standard mobile connection — twenty-three times over Google's 2.5-second standard — and still 9.2 seconds on a fast desktop line. A first-time mobile visitor sees a blank screen for over nine seconds. For a clientele that decides in seconds whether a brand feels like their world, the site loses a large share of visitors before showing a single car.</p>
-    <p>Search visibility is structurally absent rather than weak: the meta description is an empty string, no page carries an H1 heading, there is no sitemap or robots.txt, 125 of 126 images have no alt text, and no structured data exists — meaning no car, no price, and no brand from the inventory can surface as a rich result. The site exists only in Arabic, making it invisible to English-language luxury buyers in Riyadh and Jeddah. Separately, the customer journey has conversion dead-ends at its most valuable moment: the car detail page offers a single watermarked photo, a two-word description, and no WhatsApp, call, or viewing-booking action — and the one action it does offer, "Purchase," opens a loan-application form that asks for the visitor's salary, financial commitments, and mortgage status before any salesperson has spoken to them. A detailed walkthrough of that form and the car detail page reveals a further layer of UX failures — untranslated database labels in the specifications, a purchase form that does not pre-fill the car being enquired about, an ambiguous price field, a language mismatch that switches from Arabic to English at the exact moment the visitor is asked to commit. This audit documents 45 issues across 8 categories; each one is specific, verifiable, and fixable.</p>
-  </div>
-
-  <div class="exec-stats">
-    <div class="stat-card">
-      <div class="stat-num amber">55<span style="font-size:13px;color:var(--text-dim)">/100</span></div>
-      <div class="stat-label">Mobile Performance</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num red">57.5s</div>
-      <div class="stat-label">Main Image Render</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num red">34 MB</div>
-      <div class="stat-label">Homepage Download</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num red">0</div>
-      <div class="stat-label">Words of Meta Description</div>
-    </div>
-  </div>
-  </div>
-
-  <!-- PAGESPEED MEASUREMENTS -->
-  <div style="page-break-inside: avoid; margin-top: 48px;">
-  <div class="section-eyebrow">Measured Evidence</div>
-  <div class="section-title">Google PageSpeed Insights — Mobile &amp; Desktop, 8 July 2026</div>
-
-  <div class="ps-scores">
-    <div class="ps-dial">
-      <div class="ps-ring mid">55<span style="font-size:11px;font-weight:700">&nbsp;/&nbsp;54</span></div>
-      <h5>Performance — Mobile / Desktop</h5>
-      <p>Failing range on both. Desktop scoring <b>lower</b> than mobile proves the problem is the site itself, not the visitor's network</p>
-    </div>
-    <div class="ps-dial">
-      <div class="ps-ring mid">82</div>
-      <h5>Accessibility</h5>
-      <p>Unnamed buttons/links, contrast failures, undersized touch targets</p>
-    </div>
-    <div class="ps-dial">
-      <div class="ps-ring good">92</div>
-      <h5>Best Practices</h5>
-      <p>Passes basics; flags low-resolution images and wrong aspect ratios</p>
-    </div>
-    <div class="ps-dial">
-      <div class="ps-ring good">92</div>
-      <h5>SEO (lab)</h5>
-      <p>Basic markup checks only — does not measure actual search visibility (see findings 35–42)</p>
-    </div>
-  </div>
-
-  <table class="metrics">
-    <tr><th>Lab Metric</th><th>Mobile</th><th>Desktop</th><th>Google's "Good"</th><th>What it means for a visitor</th></tr>
-    <tr>
-      <td><b>First Contentful Paint</b></td>
-      <td class="val bad">9.4 s</td>
-      <td class="val bad">1.9 s</td>
-      <td class="thresh">≤ 1.8 s</td>
-      <td>On a phone, the screen stays completely blank for over nine seconds</td>
-    </tr>
-    <tr>
-      <td><b>Largest Contentful Paint</b></td>
-      <td class="val bad">57.5 s</td>
-      <td class="val bad">9.2 s</td>
-      <td class="thresh">≤ 2.5 s</td>
-      <td>The hero image — the first car a visitor sees — takes nearly a minute on mobile, and still 4× Google's limit on a fast desktop line</td>
-    </tr>
-    <tr>
-      <td><b>Speed Index</b></td>
-      <td class="val bad">19.5 s</td>
-      <td class="val bad">4.6 s</td>
-      <td class="thresh">≤ 3.4 s</td>
-      <td>The page is visually incomplete for ~20 seconds on mobile</td>
-    </tr>
-    <tr>
-      <td><b>Total Blocking Time</b></td>
-      <td class="val ok">80 ms</td>
-      <td class="val ok">180 ms</td>
-      <td class="thresh">≤ 200 ms</td>
-      <td>Within range — the problem is weight, not scripting</td>
-    </tr>
-    <tr>
-      <td><b>Cumulative Layout Shift</b></td>
-      <td class="val ok">0.015</td>
-      <td class="val ok">0.005</td>
-      <td class="thresh">≤ 0.1</td>
-      <td>Within range — the layout itself is stable once loaded</td>
-    </tr>
-  </table>
-
-  <div class="ps-note"><b>A telling detail:</b> Google's real-user Core Web Vitals assessment returns "Not applicable" — the site does not receive enough traffic for Google to even compile field data on it. The performance problem and the visibility problem confirm each other.</div>
-  </div>
-
-  <!-- ISSUES -->
-  <div style="margin-top: 48px;">
-  <div class="section-eyebrow">Issue Findings</div>
-  <div class="section-title">Website Issues — 45 Findings</div>
-
-  <!-- ─── PERFORMANCE & DELIVERY ─── -->
-  <div class="cat-head">Performance &amp; Delivery — Findings 1–8</div>
-  <div class="flat-list">
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">1</span>
-        <div class="ititle">The Homepage Downloads 34 MB — 17× the Size of an Average Web Page</div>
-      </div>
-      <div class="ibody">PageSpeed measured the total network payload at 34,252 KiB and flagged it as an "enormous network payload." The median web page is roughly 2 MB. Every first-time visitor — including every person clicking an Instagram ad or a shared WhatsApp link — must download the equivalent of a short video before the page completes. On mobile data, that is a real cost in both time and dirhams, paid at the exact moment the site should be making a first impression.</div>
-    </div>
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">2</span>
-        <div class="ititle">The First Car a Visitor Sees Takes 57.5 Seconds to Render</div>
-      </div>
-      <div class="ibody">Largest Contentful Paint — the moment the main hero image appears — measured 57.5 seconds on Google's standard mobile test conditions, against a 2.5-second threshold for "good." The hero slider loads multi-megapixel PNG cut-outs through a secondary slider domain, and they are the last thing to arrive. In practice, the visitors this site most needs to impress will never wait to see the Rolls-Royce.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">3</span>
-        <div class="ititle">Nine Seconds of Blank Screen Before Anything Appears</div>
-      </div>
-      <div class="ibody">First Contentful Paint measured 9.4 seconds (threshold: 1.8s) and Speed Index 19.5 seconds (threshold: 3.4s). Industry benchmark data consistently shows the majority of mobile visitors abandon a page that shows nothing within about 3 seconds. The current site loses these visitors before a single pixel of a car is on screen — and they register as zero in any analytics, which is consistent with the "no conversions from the website" experience.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">4</span>
-        <div class="ititle">Render-Blocking Resources Delay the Page by an Estimated 9 Seconds</div>
-      </div>
-      <div class="ibody">PageSpeed identified render-blocking requests with an estimated savings of 8,980 ms — CSS and JavaScript files (Bootstrap, slider libraries, font packs) that must fully download before the browser is allowed to draw anything. This is the direct cause of the blank-screen period in finding 3 and is fixable through standard deferral and critical-CSS techniques without changing how the site looks.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">5</span>
-        <div class="ititle">Images Are Served Unoptimised — 17 MB of Identified Waste</div>
-      </div>
-      <div class="ibody">The "improve image delivery" audit found 17,126 KiB of potential savings. Car photos and hero cut-outs are delivered as full-resolution PNGs with no modern formats (WebP/AVIF), no responsive sizing for mobile screens, and no lazy-loading discipline. For an inventory site whose product <i>is</i> photography, image pipeline is core infrastructure — this is the single largest fixable contributor to the 34 MB payload.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">6</span>
-        <div class="ititle">No Effective Caching — Returning Visitors Re-download 26 MB</div>
-      </div>
-      <div class="ibody">PageSpeed flagged inefficient cache lifetimes on 26,670 KiB of assets. A visitor who saw the site yesterday — or navigates from the homepage to a car page and back — re-downloads nearly the entire payload. Serious buyers visit a dealer's site repeatedly while deciding; the current configuration makes every one of those visits as slow as the first.</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">7</span>
-        <div class="ititle">~900 KiB of Unused and Unminified Code From a Heavy Library Stack</div>
-      </div>
-      <div class="ibody">The audit found 311 KiB of unused CSS, 399 KiB of unused JavaScript, and unminified files worth a further 213 KiB. The site loads jQuery, Bootstrap, RevSlider, Slick, Select2, SweetAlert2 and Font Awesome together — a 2015-era stack where each library ships far more code than the site uses. This is a symptom of template construction rather than purpose-built development.</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">8</span>
-        <div class="ititle">Images Declared Without Dimensions</div>
-      </div>
-      <div class="ibody">Image elements lack explicit width and height attributes, which forces the browser to recalculate layout as each image arrives. The measured layout shift is currently low (0.015) only because images arrive so late; fixing the speed issues without fixing dimensions would surface visible content-jumping on a faster site.</div>
-    </div>
-  </div>
-
-  <!-- ─── DESIGN & BRAND ─── -->
-  <div class="cat-head">Design &amp; Brand — Findings 9–17</div>
-  <div class="flat-list">
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">9</span>
-        <div class="ititle">Flagship Cars Are Presented as Cut-Out Images on Grey Shapes, With Cropped Headlines</div>
-      </div>
-      <div class="ibody">The hero slider presents the Rolls-Royce Spectre and Ferrari Purosangue as flat PNG cut-outs floating on grey rectangles, with the display headline ("SPECTRE", "FERRARI") partially cut off at the screen edge on both desktop and mobile. These are marques whose manufacturers spend millions of dollars on presentation standards, and their buyers are conditioned by that standard. The gap between how the manufacturer presents the car and how the dealer's website presents it is felt instantly — and it prices the dealership down in the visitor's mind.</div>
-    </div>
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">10</span>
-        <div class="ititle">Luxury and Economy Inventory Share One Undifferentiated Grid</div>
-      </div>
-      <div class="ibody">A Mercedes G63 AMG at 465,000 SAR is listed in the same card format, in the same stream, directly beside a 180,000 SAR family SUV. The premium buyer reads this as "trader, not curator" — the digital equivalent of parking the Phantom in a general used-car lot. The value buyer gains nothing from the mixture either. One inventory serving two very different audiences requires two presentation experiences; currently there is one, calibrated to neither.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">11</span>
-        <div class="ititle">60+ Identical Brand Logo Tiles Dominate the Homepage</div>
-      </div>
-      <div class="ibody">The largest single section of the homepage is a uniform grid of more than sixty grey brand tiles — Ferrari next to Isuzu next to Dongfeng, all with equal weight. It communicates breadth at the cost of positioning: the page reads like a parts catalogue or an aggregator rather than a curated house of automobiles. Breadth is a real strength of the business, but it needs hierarchy — the marquee brands presented as a collection, the volume brands as a searchable capability.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">12</span>
-        <div class="ititle">The Site's Visual Identity Does Not Carry the Al Saber Brand</div>
-      </div>
-      <div class="ibody">This audit confirms the concern that prompted it: the site is built on generic template components — stock Bootstrap layouts, default component styling, system-grade typography — with the Al Saber logo placed on top rather than an identity built out of it. Nothing in the colour system, type, or graphic language is ownable or recognisable. A returning visitor would not identify a screenshot of this site as Al Saber without reading the header.</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">13</span>
-        <div class="ititle">Primary Car Photography Is Watermarked Warehouse Shots</div>
-      </div>
-      <div class="ibody">Listing and detail images are single photographs taken in the warehouse/showroom with a logo watermark across them. Watermarks signal fear of theft, not pride of presentation, and warehouse backdrops undercut cars that are photographed by their manufacturers in studios. A consistent photography standard — even a simple branded backdrop corner of the showroom — would transform perceived quality at near-zero cost.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">14</span>
-        <div class="ititle">The Gallery Opens With Interior Shots — Every Automotive Photography Standard Requires the Exterior First</div>
-      </div>
-      <div class="ibody">On the Mercedes G63 AMG detail page — the best-documented car on the site — all three visible photo tiles are interior shots: the dashboard, the middle-row seats, and the rear seats. The exterior silhouette of a G63 is its most desirable and identifiable feature, yet a buyer landing on this page sees the centre console first. The hierarchy of automotive photography in every retail and manufacturer context — from Ferrari's own site to AutoTrader — is invariably: hero exterior, quarter profiles, interior detail. Showing only interiors at the top of a luxury listing reverses the psychological journey from desire to consideration, and tells the buyer nothing about the car's presence or condition from the outside.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">15</span>
-        <div class="ititle">Three Small Thumbnail Tiles Replace What Should Be a Full Gallery Experience</div>
-      </div>
-      <div class="ibody">Even on the most richly photographed listing in the audit sample, the G63 AMG, the photo presentation is three equal-sized tiles arranged in a horizontal row — each roughly one-third of the content column width. No full-width hero shot exists, no lightbox or expanded gallery is in evidence, and there is no indication of a total photo count or a "view all" affordance. A buyer comparing this car against competitors on syarah.com or motory.sa will find full-screen gallery viewers with 15–30 images and 360-degree views. The current tile layout communicates that Al Saber has three photos to show; the competitor communicates that they have nothing to hide. For a car at 465,000 SAR, the difference in buyer confidence is material.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">16</span>
-        <div class="ititle">The Specifications Table Displays Raw Database Labels — "determination: 850", "Engine type: 8v"</div>
-      </div>
-      <div class="ibody">The Specifications section of the G63 AMG page shows a table with the following labels exactly as stored in the database: "Engine Measurement: 4.0", "Engine type: 8v", "turbo: Twin turbo", "Engine system: gas", "valves: –", "determination: 850", "fuel consumption in liters: 13.1 Liter." The label "determination" is a machine-translated fragment that means nothing to any buyer; "8v" is an internal code for "8-cylinder V8"; "valves: –" is an empty cell. These are not minor labelling issues — they are the moment a serious technical buyer, cross-referencing the official Mercedes-AMG specification sheet, concludes that this information cannot be trusted. A site that cannot correctly label "V8 Biturbo" on a flagship AMG car signals that the data behind every listing may be similarly unreliable.</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">17</span>
-        <div class="ititle">The Features Table Uses Raw Colon Syntax and Inconsistent Capitalisation Throughout</div>
-      </div>
-      <div class="ibody">The Features section presents equipment as "fog lights : led", "headlights : led", "Bright lights during the day : led" — a colon-separated database output format with no editorial pass. Capitalisation is arbitrary (some items sentence-cased, others all-lowercase), and the colon-plus-space pattern reads as unprocessed system output rather than curated specification copy. On a page where a buyer is forming a price-to-specification assessment, inconsistent and unformatted data erodes the sense that the dealership has checked and stands behind its own listings.</div>
-    </div>
-  </div>
-
-  <!-- ─── CONVERSION & CUSTOMER JOURNEY ─── -->
-  <div class="cat-head">Conversion &amp; Customer Journey — Findings 18–34</div>
-  <div class="flat-list">
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">18</span>
-        <div class="ititle">The Car Detail Page — the Decision Moment — Is Nearly Empty</div>
-      </div>
-      <div class="ibody">The page where a buyer decides whether to act contains: one watermarked photo, a specification icon row, and a description that is literally two words ("بورش تارجا" on the Porsche Targa GTS page). No photo gallery, no video, no interior shots, no condition report, no story of the car. This is the single most valuable page type on the site and currently its weakest. Everything upstream — ads, social, search — pays to deliver visitors to a page that cannot close.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">19</span>
-        <div class="ititle">Even the Best-Stocked Detail Pages Read as a Data Sheet, Not a Car</div>
-      </div>
-      <div class="ibody">Where a car does have fuller content — the Mercedes G63 AMG page carries three photos and a long specification list — the presentation is a flat data sheet: small photo tiles in a row, a plain bulleted list of specs, and raw label/value tables with untranslated system labels (see findings 16 and 17). There is no full-width gallery, no exterior/interior sequence, no hierarchy separating what makes this car desirable (585 hp, matte PPF, Burmester sound) from routine line items. A 465,000 SAR car deserves a page that builds desire the way the manufacturer's own configurator does; the current layout presents it with the visual energy of an inventory export.</div>
-    </div>
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">20</span>
-        <div class="ititle">No WhatsApp, Call, or Book-a-Viewing Action on Car Pages</div>
-      </div>
-      <div class="ibody">The only action on a car page is a single "شراء" (Buy) button. In the Saudi market, WhatsApp is the default channel for car enquiries — its absence from the exact page where desire peaks forces interested buyers to hunt for contact details elsewhere or leave. A car page should offer the full ladder: WhatsApp this car, call now, book a private viewing, request more photos. Each missing rung is a measurable leak of ready buyers.</div>
-    </div>
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">21</span>
-        <div class="ititle">The "Purchase" Button Opens a Financial Interrogation — Salary, Commitments, Mortgage — Before Any Salesperson Speaks to the Buyer</div>
-      </div>
-      <div class="ibody">Clicking the sole call-to-action redirects to a "Purchase Order" page whose Finance path requires: total salary, total financial commitments, whether the buyer has a mortgage loan, first and last installment amounts, city, working sector, bank account, and driving license status — all before anyone from Al Saber has said a word to them. This form sits at the single point every lead must pass through, and it is calibrated backwards for a high-ticket sale: no buyer discloses their salary and debts to a website to express interest in a car. The qualification questions are exactly what a salesman handles naturally in conversation. The fix is to replace "Purchase" with "Request a Quote" carrying the minimum a salesman needs to call back — name, phone, the car — as the site's own Cash path already nearly demonstrates. Every field beyond that is measurable lead leakage, and this is very plausibly the single largest conversion blocker on the site.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">22</span>
-        <div class="ititle">No Financing Calculator or Trade-In Path Anywhere</div>
-      </div>
-      <div class="ibody">There is no monthly-payment calculator, no bank financing information, and no trade-in valuation journey on the site. For the volume side of the inventory (MG, Elantra, family SUVs) financing is how the majority of Saudi buyers purchase, and "what would this cost monthly?" is the first question. For the premium side, trade-in/consignment of the current car is often the door-opener. Both journeys are absent.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">23</span>
-        <div class="ititle">Sold Cars Dead-End the Visitor Instead of Redirecting Interest</div>
-      </div>
-      <div class="ibody">Sold vehicles remain browsable (the Porsche Targa GTS page carries a "مباع" badge) but offer the visitor no next step — no "similar cars available now," no "notify me when a comparable car arrives," no enquiry option. A visitor who found their way to a sold car has declared exactly what they want; the current page wastes that declaration. This is among the cheapest conversion wins available.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">24</span>
-        <div class="ititle">No Lead Capture Exists for Visitors Who Aren't Ready Today</div>
-      </div>
-      <div class="ibody">There is no mechanism to convert an interested-but-not-ready visitor into a known lead: no stock alerts ("tell me when a GLE arrives"), no price-drop notifications, no saved-cars account with follow-up, no newsletter, no callback request. The site converts only visitors ready to press "Buy" in the moment — the smallest slice of its traffic — and loses the identity of everyone else.</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">25</span>
-        <div class="ititle">On Mobile, the Hero Slider Occupies the Entire First Screen</div>
-      </div>
-      <div class="ibody">On a phone — where the majority of Saudi traffic arrives — the first full screen is the slider: a cut-out car, a long descriptive paragraph, and slider dots. No inventory, no search, no action is visible without scrolling. Combined with finding 3 (nine seconds of blank screen), the mobile first impression is a long wait followed by a screen that offers nothing to do.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">26</span>
-        <div class="ititle">No Breadcrumbs or Wayfinding — Visitors Cannot Orient Themselves or Navigate Back</div>
-      </div>
-      <div class="ibody">The car detail page carries no breadcrumb trail and no contextual navigation link indicating where in the site the visitor currently stands. The URL structure reveals the path (/car/1045/Mercedes_G63_AMG_2019) but the page itself shows only the car name with no "Cars &gt; Luxury &gt; Mercedes" hierarchy, no back-to-results link, and no category context. A buyer who arrives from a WhatsApp share, a Google result, or an Instagram ad lands on the detail page with no visible route to the broader inventory — they can use the browser back button or the global nav, but neither tells them what else is available in the same category or at a comparable price point. In a browsing session where comparison is the primary behaviour, the absence of wayfinding is a dead end dressed as a destination.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">27</span>
-        <div class="ititle">The Price Is Shown With No Financing Context — Buyers Cannot Assess Affordability</div>
-      </div>
-      <div class="ibody">The sticky sidebar displays "465,000 ر.س" as a standalone number with no monthly-payment estimate, no "from X SAR / month with financing" qualifier, and no indication of whether this price is negotiable or fixed. Every major automotive retail platform — motory.sa, syarah.com, and international equivalents — shows an estimated monthly payment alongside the list price because research consistently shows buyers think in monthly cash-flow terms, not lump sums. A buyer who cannot quickly map the price to what it means for their budget disengages; a buyer who can immediately see "approx. 8,200 SAR / month" has a reason to continue. The finance form behind the "Purchase" button proves Al Saber offers financing — that information belongs next to the price, not buried behind a ten-field application.</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">28</span>
-        <div class="ititle">The Sticky Sidebar Repeats Exactly What Is Already Visible Above the Fold — Adding No New Information</div>
-      </div>
-      <div class="ibody">The fixed sidebar that accompanies the user while scrolling through Car Description, Specifications, and Features contains: car name, available colours swatch, price, and Purchase button — the same four elements already displayed in the above-the-fold section of the page. As the user reads specifications and features, the sidebar offers no contextual value that changes based on what they are reading: no "add to compare," no spec highlight relevant to the current section, no seller note. A sticky element that anchors the primary action is a sound pattern, but only if the action or its surrounding context adds something the scrolled-away section cannot. As implemented, the sidebar is a repeated block that competes for reading width without earning it.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">29</span>
-        <div class="ititle">The Purchase Form Does Not Pre-Fill the Car Being Enquired About — The Buyer Must Re-Select It</div>
-      </div>
-      <div class="ibody">The "Purchase" button on the G63 AMG page links to a URL that carries the car name as a query parameter (?car_name=Mercedes_G63_AMG_2019), yet the Purchase Order form arrives with "The selected vehicle" field showing "Choose car" — an empty dropdown. The context of the buyer's interest, which the URL already encodes, is discarded at the form boundary. A buyer who pressed "Purchase" on a specific car should never be asked to re-select it; re-selection introduces doubt ("is this for the right car?"), adds friction, and risks the buyer choosing an incorrect vehicle from a dropdown listing of the full inventory. This is a direct technical failure at the most consequential step in the user journey.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">30</span>
-        <div class="ititle">The "Price" Field Placeholder "Minimum SAR 20.000" Is Actively Ambiguous on a 465,000 SAR Listing</div>
-      </div>
-      <div class="ibody">The Purchase Order form contains a "Price" field — required, marked with an asterisk — whose placeholder text reads "Minimum SAR 20.000." It is not clear from the form design whether this field is asking the buyer to: (a) enter the vehicle's listed price as they understand it, (b) propose a price they wish to pay, or (c) enter a down payment meeting a stated minimum. A buyer arriving from a 465,000 SAR listing who types "465000" may be entering the wrong thing; a buyer who types "20000" may equally be wrong. The field exists alongside a vehicle selector dropdown, which suggests the system already knows the price — yet asks the buyer to input it manually. This is a trust-breaking ambiguity on the one page that must feel certain and professional.</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">31</span>
-        <div class="ititle">The "Total Commitments" Field Uses a Numeric Stepper — the Wrong Control for a Salary-Range Input</div>
-      </div>
-      <div class="ibody">The Finance path of the Purchase Order form presents "Total commitments" — a field expecting a monthly financial obligation figure in SAR — with a numeric stepper button (the increment/decrement spinner visible on the right edge of the input). A numeric stepper is the correct control for a quantity like "number of installments"; it is the wrong control for an open financial amount that a buyer will type as a value like "3,500" or "12,000." In practice, a buyer who sees the spinner and tries to click it up from the default of "0" to their actual commitment amount will be clicking hundreds or thousands of times. The control signals that the form was assembled without review of what each field actually collects.</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">32</span>
-        <div class="ititle">No Progress Indicator on a Multi-Screen Finance Form — Buyers Do Not Know How Much Remains</div>
-      </div>
-      <div class="ibody">The Finance path of the Purchase Order form spans at least two full viewport heights of fields — from Payment Method at the top through salary, commitments, mortgage, installments, city, working sector, bank account, and driving license status — with no step indicator, no section heading dividers, and no progress bar. A buyer who has completed the first screen's fields and scrolls to find a second wave of equally demanding questions has no information about whether they are 50% or 10% through the form. Research on form completion rates consistently shows that visible progress indicators increase completion — and that forms with no progress signal, especially sensitive financial forms, suffer higher abandonment mid-way. A simple "Step 2 of 3" or a segmented progress bar costs nothing to add and would recover a measurable share of the drop-off this form currently produces.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">33</span>
-        <div class="ititle">The Purchase Order Form Is Entirely in English on an Arabic-Language Site</div>
-      </div>
-      <div class="ibody">The Purchase Order page — the single most consequential page on the site, where a buyer takes the step of expressing intent to purchase — is presented in English: "PURCHASE ORDER," "Individuals," "Corporate," "Finance," "Cash," "Total salary in ATM," "Total commitments," "Is there a mortgage loan?", "Working sector," "Bank account," "Driving License Status." Every other page of the site is in Arabic. The language switch at the commitment moment is jarring; for a buyer who has been reading Arabic throughout their journey, arriving at an English form signals either an error or a different audience. "Total salary in ATM" in particular is a mistranslation ("ATM" for "ATM card"/"bank" rather than the intended "total monthly salary") that compounds the confusion. The form should be presented in the same language as the rest of the site, with an accurate translation of every field label.</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">34</span>
-        <div class="ititle">The Favourites/Save Affordance Has No Persistent Account Behind It</div>
-      </div>
-      <div class="ibody">The car detail page displays a heart icon (favourites) in the sticky sidebar alongside a share icon. For a buyer comparing multiple cars across sessions — a routine behaviour for any purchase at this price level — the expectation is that tapping the heart saves the car to a retrievable list. No sign-in link, no "saved cars" section, and no account system is visible anywhere in the navigation, which means either the save action does nothing meaningful across sessions or it relies on local storage with no cross-device access. In both cases the affordance makes a promise the site cannot keep. A favoured car that disappears when the browser closes, or cannot be accessed on a different device, is a broken experience that weakens trust at the consideration stage.</div>
-    </div>
-  </div>
-
-  <!-- ─── SEARCH VISIBILITY & SHARING ─── -->
-  <div class="cat-head">Search Visibility &amp; Sharing — Findings 35–42</div>
-  <div class="flat-list">
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">35</span>
-        <div class="ititle">The Meta Description Is an Empty String</div>
-      </div>
-      <div class="ibody">The homepage ships <code>&lt;meta name="description" content=""&gt;</code> — the tag exists and is empty, and the meta keywords tag is equally blank. The text Google shows under the site's name in search results is the single highest-leverage copy on the web, and it is currently blank. PageSpeed's own SEO audit flags this ("Description text is empty"). Every page on the site shares this condition.</div>
-    </div>
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">36</span>
-        <div class="ititle">No H1 Heading Exists, and the Title Tag Carries Zero Keywords</div>
-      </div>
-      <div class="ibody">The homepage has no H1 element at all, and its title tag reads "السبر | الرئيسية" ("Al Saber | Home") — no "cars," no "luxury," no city, no brand names. Google's two strongest on-page relevance signals are the title and H1; the site provides one of them empty of meaning and the other not at all. Searches like "معارض سيارات فاخرة الرياض" have no reason to surface this site.</div>
-    </div>
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">37</span>
-        <div class="ititle">No Sitemap and No robots.txt — Google Crawls Blind</div>
-      </div>
-      <div class="ibody">Both /sitemap.xml and /robots.txt return 404 (the robots URL renders an English "Not Found" error page). A sitemap is how a dealer site tells Google "here are my 200 cars, and this one arrived today." Without it, new inventory is discovered only by chance, and there is no crawl guidance whatsoever. For a business whose product rotates weekly, this structurally disconnects the inventory from search.</div>
-    </div>
-
-    <div class="icard icard-c">
-      <div class="icard-top">
-        <span class="icode icode-c">38</span>
-        <div class="ititle">125 of 126 Images Have No Alt Text — the Inventory Is Invisible to Google Images</div>
-      </div>
-      <div class="ibody">Effectively every image on the homepage — every car, every brand — carries an empty or missing alt attribute. Google Images is a major discovery channel for car shoppers ("G63 2019 black"), and the entire inventory is excluded from it. The alt gap also contributes to the accessibility failures in finding 43 and wastes the image-heavy nature of the site entirely.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">39</span>
-        <div class="ititle">Zero Structured Data — No Car Can Appear as a Rich Result</div>
-      </div>
-      <div class="ibody">No JSON-LD or microdata exists on any page: no <code>Vehicle</code>, no <code>AutoDealer</code>, no <code>Offer</code> markup. Structured data is what lets Google show a car with its price, year, and mileage directly in results, and what feeds "car dealer near me" surfaces. Competitors with marked-up inventory occupy this space unchallenged.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">40</span>
-        <div class="ititle">Zero Open Graph Tags — Shared Links Show as Bare URLs</div>
-      </div>
-      <div class="ibody">The site has no Open Graph or Twitter Card tags. When anyone shares a car on WhatsApp — the primary way cars circulate socially in the Kingdom — the message shows a naked link with no photo, no car name, no price. Every organic share, the cheapest marketing the dealership can get, arrives stripped of its selling power. For a luxury car business this is arguably the single most costly small gap on the list.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">41</span>
-        <div class="ititle">Arabic Only — the English-Speaking Luxury Market Cannot Use the Site</div>
-      </div>
-      <div class="ibody">The site exists in a single language with no English version and no hreflang configuration. Riyadh and Jeddah host a substantial international and expatriate segment that shops for premium cars in English — searches like "Rolls Royce for sale Riyadh" or "Ferrari dealer Saudi Arabia" cannot land on this site in any meaningful way. Half the addressable luxury market is structurally excluded.</div>
-    </div>
-
-    <div class="icard icard-h">
-      <div class="icard-top">
-        <span class="icode icode-h">42</span>
-        <div class="ititle">The Server Rejects Non-Browser Clients With HTTP 406</div>
-      </div>
-      <div class="ibody">Direct HTTP requests without full browser headers receive a 406 "Not Acceptable" response. Standard browsers work, but this configuration can silently block or degrade SEO tools, some crawler user-agents, link-preview bots, and monitoring services. Combined with the missing robots.txt, the site's relationship with automated clients — which is what search engines are — is unmanaged and partially hostile.</div>
-    </div>
-  </div>
-
-  <!-- ─── ACCESSIBILITY & QUALITY ─── -->
-  <div class="cat-head">Accessibility &amp; Quality — Findings 43–45</div>
-  <div class="flat-list">
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">43</span>
-        <div class="ititle">Accessibility Score 82 — Unnamed Controls, Contrast Failures, Small Touch Targets</div>
-      </div>
-      <div class="ibody">PageSpeed's accessibility audit flags buttons without accessible names, links without discernible text, foreground/background contrast failures, touch targets below minimum size, no main landmark, and heading levels out of order. Beyond the users it excludes, these are the mechanics behind mis-taps and hard-to-read text for <i>every</i> mobile user — and several of them overlap with the SEO gaps (unnamed links are unreadable to Google too).</div>
-    </div>
-
-    <div class="icard icard-m">
-      <div class="icard-top">
-        <span class="icode icode-m">44</span>
-        <div class="ititle">Images Served at Low Resolution and Wrong Aspect Ratios</div>
-      </div>
-      <div class="ibody">The Best Practices audit flags images displayed at incorrect aspect ratios and images served below the resolution of the screens displaying them. In practice: on a modern phone or retina display, photographs of six-figure cars render slightly stretched or slightly blurred. Paradoxically, the site is both too heavy (34 MB) and too low-quality where it counts — the worst of both trades.</div>
-    </div>
-
-    <div class="icard icard-l">
-      <div class="icard-top">
-        <span class="icode icode-l">45</span>
-        <div class="ititle">Google Has Too Little Traffic Data to Even Assess the Site</div>
-      </div>
-      <div class="ibody">The Core Web Vitals field assessment returns "Not applicable" — the site does not receive enough real-user traffic for Google's Chrome UX Report to compile data on it. This is a low-severity finding only because it is a symptom rather than a cause: it independently confirms that the visibility problems documented in findings 35–42 translate into a traffic level below Google's measurement floor.</div>
-    </div>
-  </div>
-
-  </div>
-
-</div>
-
-<!-- FOOTER -->
-<footer class="report-footer">
-  <span>Website Audit Report</span>
-  <span class="footer-sep">·</span>
-  <span>alsabercars.com</span>
-  <span class="footer-sep">·</span>
-  <span>8 July 2026</span>
-  <span class="footer-sep">·</span>
-  <span>Google PageSpeed Insights · Technical Crawl · Manual UX Walkthrough</span>
-</footer>
-
 </body>
 </html>
