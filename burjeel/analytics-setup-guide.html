@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhysioTrio · Analytics Setup Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple:       #880772;
+    --purple-dark:  #5E0450;
+    --purple-light: #A8389A;
+    --purple-muted: rgba(136,7,114,0.07);
+    --purple-border:rgba(136,7,114,0.15);
+    --green:        #4caf50;
+    --green-muted:  rgba(76,175,80,0.08);
+    --body:         #1a1a2e;
+    --muted:        #64748B;
+    --mid:          #374151;
+    --surface:      #F8FAFC;
+    --border:       #E2E8F0;
+    --white:        #ffffff;
+    --gblue:        #1a73e8;
+    --amber:        #B45309;
+    --red:          #C0392B;
+    /* shadows — soft, never hard-offset */
+    --shadow-card:  0 4px 24px rgba(136,7,114,0.08);
+    --shadow-hover: 0 12px 40px rgba(136,7,114,0.14);
+    --shadow-sm:    0 1px 4px rgba(0,0,0,0.06);
+    --shadow-md:    0 4px 16px rgba(0,0,0,0.08);
+    --shadow-lg:    0 8px 32px rgba(0,0,0,0.10);
+    --r-card:       12px;
+    --r-pill:       9999px;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
+  html { scroll-behavior:smooth }
+
+  body {
+    background: var(--white);
+    color: var(--body);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    /* subtle grid — matches WhyPhysioTrio section */
+    background-image:
+      linear-gradient(rgba(11,22,44,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,22,44,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  ::selection { background: rgba(136,7,114,0.18); color: var(--purple-dark) }
+
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px }
+
+  /* ── sticky nav ─────────────────────────────────────────── */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  nav .wrap {
+    display: flex; gap: 4px; overflow-x: auto;
+    padding: 10px 24px; align-items: center;
+    max-width: 1920px; justify-content: center;
+    scrollbar-width: none;
+  }
+  nav .wrap::-webkit-scrollbar { display: none }
+  @media(max-width:1023px){ nav .wrap { justify-content: flex-start } }
+  nav a {
+    flex: 0 0 auto; text-decoration: none;
+    color: var(--mid); font-size: 13px; font-weight: 600;
+    padding: 5px 12px; border-radius: var(--r-pill);
+    border: 1px solid transparent; white-space: nowrap;
+    transition: color .15s, background .15s, border-color .15s;
+  }
+  nav a:hover { color: var(--purple); border-color: var(--purple-border); background: var(--purple-muted) }
+  .nav-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+    color: var(--purple); font-size: 14px; margin-right: 10px;
+    letter-spacing: -.01em; flex: 0 0 auto;
+  }
+  .nav-divider { width: 1px; height: 18px; background: var(--border); flex: 0 0 auto; margin: 0 4px }
+
+  /* ── cover ──────────────────────────────────────────────── */
+  header { padding: 72px 0 60px; position: relative }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--purple);
+    border: 1.5px solid var(--purple-border); border-radius: var(--r-pill);
+    padding: 5px 14px; margin-bottom: 24px;
+    background: var(--purple-muted);
+  }
+  .kicker-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--purple);
+    display: inline-block;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif; font-weight: 900;
+    font-size: clamp(36px, 6vw, 58px); line-height: 1.05; letter-spacing: -.02em;
+    color: var(--body);
+  }
+  h1 em { font-style: italic; color: var(--purple) }
+
+  .lede {
+    margin-top: 18px; font-size: 17px; color: var(--muted);
+    max-width: 540px; line-height: 1.65; font-weight: 400;
+  }
+  .lede b { color: var(--body); font-weight: 700 }
+
+  .cover-meta { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px }
+  .meta-chip {
+    background: var(--white); border: 1px solid var(--border); border-radius: var(--r-card);
+    padding: 14px 20px; box-shadow: var(--shadow-sm); min-width: 100px;
+    transition: box-shadow .2s;
+  }
+  .meta-chip:hover { box-shadow: var(--shadow-card) }
+  .meta-chip b {
+    display: block; font-family: 'Fraunces', serif; font-size: 24px;
+    color: var(--purple); line-height: 1; margin-bottom: 3px;
+  }
+  .meta-chip span {
+    font-size: 11px; color: var(--muted); font-weight: 600;
+    text-transform: uppercase; letter-spacing: .07em;
+  }
+
+  /* ── diagram ────────────────────────────────────────────── */
+  .diagram {
+    display: flex; align-items: stretch; gap: 0;
+    margin: 36px 0 12px; flex-wrap: wrap;
+  }
+  .dg {
+    flex: 1 1 180px; background: var(--white);
+    border: 1px solid var(--border); border-radius: var(--r-card);
+    padding: 24px 20px; text-align: center;
+    box-shadow: var(--shadow-sm); position: relative; min-width: 168px; margin: 8px;
+    transition: box-shadow .2s, border-color .2s;
+  }
+  .dg:hover { box-shadow: var(--shadow-card); border-color: var(--purple-border) }
+  .dg-ico {
+    width: 44px; height: 44px; border-radius: 12px; margin: 0 auto 14px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--purple-muted);
+  }
+  .dg-ico svg { color: var(--purple) }
+  .dg h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+    font-size: 15px; margin-bottom: 7px; color: var(--body);
+  }
+  .dg p { font-size: 13px; color: var(--muted); line-height: 1.55 }
+  .dg .tagid {
+    display: inline-block; margin-top: 12px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700;
+    background: var(--purple-muted); border: 1.5px dashed var(--purple-border);
+    color: var(--purple); border-radius: 8px; padding: 4px 10px;
+  }
+  .dg-arrow {
+    align-self: center; color: var(--muted); padding: 0 4px; font-size: 20px; font-weight: 300;
+  }
+
+  /* ── section heading ─────────────────────────────────────── */
+  section { padding: 60px 0 16px }
+
+  .part-head {
+    display: flex; align-items: baseline; gap: 16px;
+    border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 10px;
+  }
+  .part-num {
+    font-family: 'Fraunces', serif; font-weight: 900; font-size: 48px;
+    color: var(--purple); line-height: 1;
+  }
+  .part-head h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+    font-size: clamp(22px, 3vw, 30px); letter-spacing: -.02em; color: var(--body);
+  }
+  .part-head .where {
+    margin-left: auto; font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .09em; text-align: right; line-height: 1.4;
+  }
+  @media(max-width:640px){
+    .part-head { flex-wrap: wrap }
+    .part-head .where { flex-basis: 100%; margin-left: 0; text-align: left }
+    .part-head .where br { display: none }
+  }
+  .part-goal {
+    font-size: 15px; color: var(--muted); margin: 14px 0 8px; max-width: 640px;
+    line-height: 1.65;
+  }
+  .part-goal b { color: var(--body); font-weight: 700 }
+
+  /* ── steps ───────────────────────────────────────────────── */
+  .step { margin: 36px 0 10px }
+  .step-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap }
+  .step-dot {
+    flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%;
+    background: var(--purple); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 15px;
+    box-shadow: 0 4px 12px rgba(136,7,114,0.30);
+  }
+  .step-head h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;
+    font-size: 17px; color: var(--body); flex: 1;
+  }
+  .step-head .link-pill {
+    font-size: 12px; font-weight: 700; color: var(--gblue);
+    background: var(--white); border: 1px solid rgba(26,115,232,0.25);
+    border-radius: var(--r-pill); padding: 5px 13px; text-decoration: none;
+    white-space: nowrap; transition: background .15s, border-color .15s;
+  }
+  .step-head .link-pill:hover { background: #E8F0FE; border-color: var(--gblue) }
+
+  /* ── checklist rows ──────────────────────────────────────── */
+  .acts {
+    margin: 0 0 14px 52px;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r-card); overflow: hidden; box-shadow: var(--shadow-sm);
+  }
+  @media(max-width:640px){ .acts { margin-left: 0 } }
+
+  .act {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 18px; border-bottom: 1px solid var(--border); font-size: 14.5px;
+  }
+  .act:last-child { border-bottom: none }
+
+  .act-chip {
+    flex: 0 0 66px; text-align: center; font-size: 10px; font-weight: 800;
+    letter-spacing: .09em; text-transform: uppercase; border-radius: var(--r-pill); padding: 5px 0;
+  }
+  .act-chip.click { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE }
+  .act-chip.type  { background: #FAF5FF; color: #7C3AED; border: 1px solid #DDD6FE }
+  .act-chip.copy  { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A }
+  .act-chip.pick  { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0 }
+  .act-chip.skip  { background: #FFF1F2; color: #9F1239; border: 1px solid #FECDD3 }
+
+  .act .what { flex: 1; min-width: 0; color: var(--mid) }
+  .act .what b { color: var(--body); font-weight: 700 }
+  .act .val {
+    font-family: ui-monospace, Menlo, monospace; font-weight: 700;
+    font-size: 13px; color: var(--purple);
+    background: var(--purple-muted); border: 1px dashed var(--purple-border);
+    border-radius: 6px; padding: 2px 9px; white-space: nowrap;
+    display: inline-block; margin: 1px 0;
+  }
+  .act.hero { background: #FFFBEB }
+  .act.hero .val {
+    font-size: 13.5px; padding: 4px 12px; color: #92400E;
+    background: #FEF3C7; border: 1.5px dashed #F59E0B;
+  }
+
+  /* ── video embeds ─────────────────────────────────────────── */
+  .vid {
+    margin: 24px 0 8px; background: var(--white);
+    border: 1px solid var(--border); border-radius: var(--r-card);
+    overflow: hidden; box-shadow: var(--shadow-md);
+  }
+  .vid .vid-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; border-bottom: 1px solid var(--border); flex-wrap: wrap;
+    background: var(--surface);
+  }
+  .vid .play-badge {
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--red); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 10px;
+  }
+  .vid .vid-head b { font-weight: 700; font-size: 14px; color: var(--body) }
+  .vid .vid-head span { font-size: 12px; color: var(--muted); margin-left: auto; font-weight: 500 }
+  .vid .frame { position: relative; padding-top: 56.25%; background: #000 }
+  .vid iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0 }
+
+  /* ── callouts ─────────────────────────────────────────────── */
+  .callout {
+    display: flex; gap: 12px; align-items: flex-start;
+    border-radius: var(--r-card); padding: 14px 18px; margin: 16px 0 16px 52px;
+    font-size: 14px; border: 1px solid;
+  }
+  @media(max-width:640px){ .callout { margin-left: 0 } }
+  .callout .ci { font-size: 17px; line-height: 1.3; flex: 0 0 auto }
+  .callout.save { background: #FFFBEB; border-color: #FDE68A; color: #78350F }
+  .callout.warn { background: #FFF1F2; border-color: #FECDD3; color: #881337 }
+  .callout.good { background: #F0FDF4; border-color: #BBF7D0; color: #14532D }
+  .callout.info { background: #EFF6FF; border-color: #BFDBFE; color: #1E3A5F }
+  .callout b { font-weight: 800 }
+
+  /* ── browser chrome ───────────────────────────────────────── */
+  .browser {
+    background: var(--white); border: 1px solid var(--border); border-radius: var(--r-card);
+    overflow: hidden; box-shadow: var(--shadow-lg); margin: 0 0 14px 52px;
+  }
+  @media(max-width:640px){ .browser { margin-left: 0 } }
+
+  .b-bar {
+    display: flex; align-items: center; gap: 10px;
+    background: #F1F5F9; padding: 9px 14px; border-bottom: 1px solid var(--border);
+  }
+  .b-dots { display: flex; gap: 5px }
+  .b-dots i { width: 10px; height: 10px; border-radius: 50%; display: block }
+  .b-dots i:nth-child(1){ background: #FF5F57 }
+  .b-dots i:nth-child(2){ background: #FEBC2E }
+  .b-dots i:nth-child(3){ background: #28C840 }
+  .b-url {
+    flex: 1; background: var(--white); border: 1px solid var(--border); border-radius: var(--r-pill);
+    font-size: 12px; color: #5f6368; padding: 5px 14px;
+    font-family: ui-monospace, Menlo, monospace; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap;
+  }
+  .b-url b { color: var(--body) }
+  .b-body { background: var(--white) }
+
+  /* ── step-annotation highlight (replaces pulsing ring) ──────
+     Elegant solid ring — clearly visible, no animation distraction */
+  .hl {
+    outline: 2px solid var(--purple) !important;
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+  .hl-tag {
+    position: absolute; top: -11px; right: -6px;
+    background: var(--purple); color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    border-radius: var(--r-pill); padding: 3px 9px;
+    box-shadow: 0 2px 8px rgba(136,7,114,0.30); z-index: 5; white-space: nowrap;
+  }
+
+  /* ── PhysioTrio admin replica ─────────────────────────────── */
+  /* mirrors components/admin/seo/SEOManager.tsx — inner UI unchanged */
+  .sm {
+    background: #F8FAFC; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #1E293B; font-size: 13px;
+  }
+  .sm svg { flex-shrink: 0 }
+  .sm-head {
+    background: var(--white); border-bottom: 1px solid rgba(226,232,240,.6);
+    border-radius: 0 0 20px 20px; padding: 14px 22px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .sm-kicker { font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: .12em }
+  .sm-title { font-size: 17px; font-weight: 900; color: #1E293B; margin-top: 2px }
+  .sm-actions { display: flex; align-items: center; gap: 10px }
+  .sm-view {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500;
+    color: #475569; background: var(--white); border: 1px solid #E2E8F0;
+    border-radius: 8px; padding: 7px 12px; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  }
+  .sm-savebtn {
+    display: inline-flex; align-items: center; gap: 7px; padding: 8px 18px;
+    border-radius: 9px; font-size: 13px; font-weight: 700;
+    background: var(--purple); color: #fff; letter-spacing: .03em; border: none;
+  }
+  .sm-grid {
+    display: grid; grid-template-columns: 200px 1fr; gap: 18px; padding: 20px; align-items: start;
+  }
+  @media(max-width:640px){ .sm-grid { grid-template-columns: 1fr } }
+  .sm-panel { background: var(--white); border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.05) }
+  .sm-item {
+    display: flex; align-items: center; gap: 10px; padding: 11px 14px;
+    border-bottom: 1px solid #E2E8F0; color: #475569;
+  }
+  .sm-item:last-child { border-bottom: none }
+  .sm-item .lbl { font-size: 13px; font-weight: 500; line-height: 1 }
+  .sm-item .dsc { font-size: 10px; color: #94A3B8; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+  .sm-item.on { background: rgba(136,7,114,.06) }
+  .sm-item.on .lbl { color: var(--purple) }
+  .sm-quick { padding: 14px }
+  .sm-quick .qt { font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 9px }
+  .sm-quick a { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748B; text-decoration: none; margin-top: 7px }
+  .sm-h2 { font-size: 15px; font-weight: 600; color: #1E293B }
+  .sm-sub { font-size: 13px; color: #64748B; margin-top: 3px }
+  .sm-how {
+    padding: 14px; border-radius: 12px;
+    background: rgba(136,7,114,.05); border: 1px solid rgba(136,7,114,.12); margin-top: 14px;
+  }
+  .sm-how .ht { font-size: 12px; font-weight: 600; color: var(--purple); margin-bottom: 6px }
+  .sm-how ul { font-size: 12px; color: #475569; padding-left: 16px; display: flex; flex-direction: column; gap: 3px }
+  .sm-card {
+    background: var(--white); border: 1px solid #E2E8F0; border-radius: 16px;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.05); margin-top: 14px;
+  }
+  .sm-card-head { padding: 12px 18px; border-bottom: 1px solid #F1F5F9; display: flex; align-items: center; gap: 12px }
+  .sm-ico { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center }
+  .sm-card-head .ct { font-size: 13px; font-weight: 600; color: #1E293B }
+  .sm-card-head .cd { font-size: 11px; color: #64748B; margin-top: 2px }
+  .sm-card-body { padding: 16px 18px }
+  .sm-label { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #475569; margin-bottom: 6px }
+  .sm-input {
+    width: 100%; max-width: 420px; border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 9px 12px; font-size: 13px; background: var(--white); color: #1E293B;
+  }
+  .sm-input .ph { color: #94A3B8 }
+  .sm-links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px }
+  .sm-links a { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--purple); font-weight: 500; text-decoration: none }
+
+  /* ── done strip ──────────────────────────────────────────── */
+  .done-strip {
+    display: flex; gap: 10px; align-items: center;
+    background: #0B162C; color: #fff;
+    border-radius: var(--r-card); padding: 16px 22px; margin: 32px 0 8px;
+    font-weight: 600; font-size: 15px;
+  }
+  .done-strip .tick {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; flex: 0 0 auto; font-size: 14px;
+  }
+
+  /* ── level-up cards ───────────────────────────────────────── */
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px 0 }
+  .xcard {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r-card); padding: 22px;
+    box-shadow: var(--shadow-sm); transition: box-shadow .2s, border-color .2s;
+  }
+  .xcard:hover { box-shadow: var(--shadow-card); border-color: var(--purple-border) }
+  .xcard.featured { border-color: var(--purple-border); background: var(--purple-muted) }
+  .xcard .ico { font-size: 24px; display: block; margin-bottom: 10px }
+  .xcard h4 {
+    font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+    font-size: 15px; margin-bottom: 8px; color: var(--body);
+  }
+  .xcard p { font-size: 13px; color: var(--muted); line-height: 1.6 }
+  .xcard p code {
+    font-family: ui-monospace, Menlo, monospace; font-weight: 700; font-size: 12px;
+    color: var(--purple); background: var(--purple-muted); border-radius: 5px; padding: 1px 6px;
+  }
+
+  /* ── cheat sheet ─────────────────────────────────────────── */
+  .cheat {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r-card); overflow-x: auto; box-shadow: var(--shadow-md); margin: 24px 0;
+  }
+  .cheat table { width: 100%; border-collapse: collapse; font-size: 14px }
+  .cheat th {
+    background: #0B162C; color: rgba(255,255,255,0.9); text-align: left;
+    padding: 12px 16px; font-size: 11px; letter-spacing: .09em; text-transform: uppercase;
+    font-weight: 700;
+  }
+  .cheat td { padding: 12px 16px; border-top: 1px solid var(--border); color: var(--mid) }
+  .cheat td:first-child { color: var(--body); font-weight: 600 }
+  .cheat td code {
+    font-family: ui-monospace, Menlo, monospace; font-weight: 700;
+    color: var(--purple); background: var(--purple-muted);
+    border-radius: 6px; padding: 2px 8px; font-size: 12.5px;
+  }
+  .cheat tr:nth-child(even) td { background: var(--surface) }
+
+  /* ── footer ──────────────────────────────────────────────── */
+  footer {
+    padding: 56px 0 72px; margin-top: 40px;
+    border-top: 1px solid var(--border);
+    background: var(--white);
+  }
+  .footer-inner { display: flex; flex-direction: column; gap: 8px }
+  .sig {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 19px; color: var(--body); margin-bottom: 8px; font-weight: 700;
+  }
+  footer p { font-size: 13px; color: var(--muted) }
+  footer b { color: var(--purple); font-weight: 700 }
+
+  /* ── section separator accent ─────────────────────────────── */
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .18em;
+    color: var(--green);
+  }
+  .section-label-line { display: inline-block; width: 20px; height: 2px; background: var(--green) }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <span class="nav-brand">PhysioTrio</span>
+  <span class="nav-divider"></span>
+  <a href="#map">The Map</a>
+  <a href="#p1">1 · GA4</a>
+  <a href="#p2">2 · GTM</a>
+  <a href="#p3">3 · Connect</a>
+  <a href="#p4">4 · Website</a>
+  <a href="#p5">5 · Verify</a>
+  <a href="#p6">6 · Search Console</a>
+  <a href="#p7">7 · Level Up</a>
+  <a href="#cheat">Cheat Sheet</a>
+</div></nav>
+
+<!-- ═══════════════════ COVER ═══════════════════ -->
+<header><div class="wrap">
+  <span class="kicker"><span class="kicker-dot"></span>Analytics Setup · Field Guide</span>
+  <h1>Get PhysioTrio<br>measuring <em>everything</em>,<br>in one afternoon.</h1>
+  <p class="lede">Watch a real video walkthrough, then follow a short checklist with the <b>exact values for PhysioTrio</b>. Written for someone doing this for the <b>first time</b>. No code. No developer.</p>
+  <div class="cover-meta">
+    <div class="meta-chip"><b>7</b><span>parts</span></div>
+    <div class="meta-chip"><b>~45 min</b><span>incl. videos</span></div>
+    <div class="meta-chip"><b>0</b><span>lines of code</span></div>
+    <div class="meta-chip"><b>2</b><span>IDs to copy</span></div>
+  </div>
+</div></header>
+
+<!-- ═══════════════════ THE MAP ═══════════════════ -->
+<section id="map"><div class="wrap">
+  <div class="part-head">
+    <span class="part-num" style="font-size:36px;line-height:1.2">≡</span>
+    <h2>The map — how the pieces fit</h2>
+  </div>
+  <p class="part-goal">Three things talk to each other. You create two of them and paste <b>one ID</b> into the website. That's the whole job.</p>
+
+  <div class="diagram">
+    <div class="dg">
+      <div class="dg-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <h3>The Website</h3>
+      <p>physiotrio.com — already built with a slot waiting for your Tag&nbsp;Manager ID.</p>
+      <span class="tagid">needs: GTM-XXXXXXX</span>
+    </div>
+    <span class="dg-arrow">→</span>
+    <div class="dg">
+      <div class="dg-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      </div>
+      <h3>Google Tag Manager</h3>
+      <p>A toolbox. It installs tracking tools (GA4, ad pixels) on the site — <b>without a developer</b>.</p>
+      <span class="tagid">gives: GTM-XXXXXXX</span>
+    </div>
+    <span class="dg-arrow">→</span>
+    <div class="dg">
+      <div class="dg-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <h3>Google Analytics 4</h3>
+      <p>The dashboard. Visitors, pages, cities, conversions — all your numbers live here.</p>
+      <span class="tagid">gives: G-XXXXXXXXXX</span>
+    </div>
+  </div>
+
+  <div class="callout info" style="margin-left:0"><span class="ci">💡</span><div><b>Plain English:</b> GA4 is the <b>report</b>. Tag Manager is the <b>messenger</b> that feeds it. The website already knows how to talk to the messenger — you just give it the messenger's phone number (the GTM ID).</div></div>
+  <div class="callout save" style="margin-left:0"><span class="ci">🎬</span><div><b>How this guide works:</b> each part starts with a real video tutorial — watch it once. Below it, a short checklist gives the <b>exact PhysioTrio values</b> to click, type and copy. Video = the how. Checklist = the what.</div></div>
+</div></section>
+
+<!-- ═══════════════════ PART 1 · GA4 ═══════════════════ -->
+<section id="p1"><div class="wrap">
+  <div class="part-head"><span class="part-num">1</span><h2>Create your Google Analytics 4 property</h2><span class="where">at<br>analytics.google.com</span></div>
+  <p class="part-goal"><b>Goal:</b> walk out of this part holding a Measurement ID that looks like <b>G-XXXXXXXXXX</b>. Sign in with the Google account that the client team will keep long-term.</p>
+
+  <div class="vid">
+    <div class="vid-head"><span class="play-badge">▶</span><b>Watch: GA4 setup, start to finish</b><span>Loves Data · real screens · press play</span></div>
+    <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/YCCWXp408h0" title="Google Analytics 4 Tutorial (2026) — Loves Data" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  </div>
+
+  <div class="step">
+    <div class="step-head"><span class="step-dot">✓</span><h3>Your checklist — with PhysioTrio's exact values</h3><a class="link-pill" href="https://analytics.google.com" target="_blank">open analytics.google.com ↗</a></div>
+    <div class="acts">
+      <div class="act"><span class="act-chip click">Click</span><div class="what"><b>Admin</b> (gear icon, bottom-left) → <b>Create</b> → <b>Property</b></div></div>
+      <div class="act"><span class="act-chip type">Type</span><div class="what">Property name → <span class="val">PhysioTrio</span></div></div>
+      <div class="act"><span class="act-chip pick">Pick</span><div class="what">Time zone → <span class="val">(GMT+03:00) Riyadh</span> &nbsp; Currency → <span class="val">Saudi Riyal (SAR)</span></div></div>
+      <div class="act"><span class="act-chip click">Click</span><div class="what"><b>Next</b> → answer the short business questions however you like → <b>Create</b></div></div>
+      <div class="act"><span class="act-chip pick">Pick</span><div class="what">Platform → <b>Web</b> → Website URL → <span class="val">https://physiotrio.com</span> → Stream name → <span class="val">PhysioTrio Website</span></div></div>
+      <div class="act hero"><span class="act-chip copy">Copy</span><div class="what">The <b>Measurement ID</b> (top-right of the stream page) → <span class="val">G-XXXXXXXXXX</span> — save it in your notes</div></div>
+      <div class="act"><span class="act-chip click">Click</span><div class="what">One-time setting: <b>Admin → Data collection and modification → Data retention</b> → Event data → <span class="val">14 months</span> → Save (the default is only 2 months — this protects your history)</div></div>
+    </div>
+    <div class="callout warn"><span class="ci">🚫</span><div>GA4 will now show <b>installation instructions with code</b>. <b>Ignore all of it.</b> You never touch code — Tag Manager handles installation in Part&nbsp;3.</div></div>
+    <div class="callout info"><span class="ci">👥</span><div><b>Add a backup admin:</b> GA4 → Admin → <b>Property access management</b> → invite a second trusted person (do the same later in GTM: Admin → User Management). If the only account gets locked out, all the data goes with it.</div></div>
+  </div>
+
+  <div class="done-strip"><span class="tick">✓</span> Part 1 done — you're holding a <b>&nbsp;G-XXXXXXXXXX&nbsp;</b> ID. That's the hard part of GA4, finished.</div>
+</div></section>
+
+<!-- ═══════════════════ PART 2 · GTM ═══════════════════ -->
+<section id="p2"><div class="wrap">
+  <div class="part-head"><span class="part-num">2</span><h2>Create your Tag Manager container</h2><span class="where">at<br>tagmanager.google.com</span></div>
+  <p class="part-goal"><b>Goal:</b> a Container ID that looks like <b>GTM-XXXXXXX</b>. Takes 3 minutes.</p>
+
+  <div class="vid">
+    <div class="vid-head"><span class="play-badge">▶</span><b>Watch: Tag Manager explained for beginners</b><span>Analytics Mania · what GTM is + setup</span></div>
+    <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/hc4EOTiCpA4" title="Google Tag Manager tutorial for beginners (2026) — Analytics Mania" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  </div>
+
+  <div class="step">
+    <div class="step-head"><span class="step-dot">✓</span><h3>Your checklist</h3><a class="link-pill" href="https://tagmanager.google.com" target="_blank">open tagmanager.google.com ↗</a></div>
+    <div class="acts">
+      <div class="act"><span class="act-chip click">Click</span><div class="what"><b>Create Account</b></div></div>
+      <div class="act"><span class="act-chip type">Type</span><div class="what">Account name → <span class="val">PhysioTrio</span> &nbsp; Country → <span class="val">Saudi Arabia</span></div></div>
+      <div class="act"><span class="act-chip type">Type</span><div class="what">Container name → <span class="val">physiotrio.com</span> &nbsp; Platform → <b>Web</b> → <b>Create</b></div></div>
+      <div class="act"><span class="act-chip skip">Skip</span><div class="what">A popup shows <b>installation code</b> — <b>close it</b>. The developers already built this into the website.</div></div>
+      <div class="act hero"><span class="act-chip copy">Copy</span><div class="what">The <b>Container ID</b> (always visible in the top bar) → <span class="val">GTM-XXXXXXX</span> — save it in your notes (7 or 8 characters after "GTM-", both are fine)</div></div>
+    </div>
+    <div class="callout good"><span class="ci">😌</span><div><b>Why you can skip the code:</b> the site is wired to load any GTM container the moment you paste the ID into the admin panel (Part&nbsp;4). Zero code, ever.</div></div>
+  </div>
+
+  <div class="done-strip"><span class="tick">✓</span> Part 2 done — you now hold both IDs: <b>&nbsp;G-XXXXXXXXXX&nbsp;</b> and <b>&nbsp;GTM-XXXXXXX&nbsp;</b>.</div>
+</div></section>
+
+<!-- ═══════════════════ PART 3 · CONNECT ═══════════════════ -->
+<section id="p3"><div class="wrap">
+  <div class="part-head"><span class="part-num">3</span><h2>Put GA4 inside Tag Manager</h2><span class="where">inside<br>your new GTM workspace</span></div>
+  <p class="part-goal"><b>Goal:</b> tell the toolbox (GTM) to run the report (GA4) on every page. This is the step everyone gets stuck on — the video below shows this <b>exact task</b> on real screens.</p>
+
+  <div class="vid">
+    <div class="vid-head"><span class="play-badge">▶</span><b>Watch: putting GA4 inside GTM — this exact task</b><span>Loves Data · step-by-step</span></div>
+    <div class="frame"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/m-pbs7qgYJs" title="How to Set Up GA4 with Google Tag Manager — Loves Data" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  </div>
+
+  <div class="step">
+    <div class="step-head"><span class="step-dot">✓</span><h3>Your checklist</h3></div>
+    <div class="acts">
+      <div class="act"><span class="act-chip click">Click</span><div class="what"><b>Tags</b> (left menu) → <b>New</b></div></div>
+      <div class="act"><span class="act-chip type">Type</span><div class="what">Tag name (top-left) → <span class="val">GA4 — PhysioTrio</span></div></div>
+      <div class="act"><span class="act-chip pick">Pick</span><div class="what">Tag Configuration → <b>Google Tag</b> (not "GA4 Event")</div></div>
+      <div class="act"><span class="act-chip type">Type</span><div class="what">Tag ID → paste your <span class="val">G-XXXXXXXXXX</span> from Part 1</div></div>
+      <div class="act"><span class="act-chip pick">Pick</span><div class="what">Triggering → <b>Initialization – All Pages</b> → <b>Save</b></div></div>
+      <div class="act hero"><span class="act-chip click">Click</span><div class="what"><b>Submit</b> (top-right) → name it <span class="val">GA4 launch</span> → <b>Publish</b></div></div>
+    </div>
+    <div class="callout warn"><span class="ci">⚠️</span><div><b>#1 beginner mistake:</b> forgetting to <b>Publish</b>. A saved tag is a <i>draft</i>. If your numbers show zero later, come back and check you published.</div></div>
+  </div>
+
+  <div class="done-strip"><span class="tick">✓</span> Part 3 done — GA4 now lives inside your toolbox. One paste left.</div>
+</div></section>
+
+<!-- ═══════════════════ PART 4 · WEBSITE ═══════════════════ -->
+<section id="p4"><div class="wrap">
+  <div class="part-head"><span class="part-num">4</span><h2>Paste the GTM ID into the website</h2><span class="where">at<br>physiotrio.com/admin</span></div>
+  <p class="part-goal"><b>Goal:</b> the moment you press Save here, tracking goes live on every page of the site — English and Arabic. This is the <b>only</b> thing you do on the website itself. Below is the actual screen you'll see in the PhysioTrio admin panel:</p>
+
+  <div class="step">
+    <div class="step-head"><span class="step-dot">✓</span><h3>Admin → SEO Settings → "Analytics" in the left menu → paste → Save</h3></div>
+    <div class="browser">
+      <div class="b-bar"><div class="b-dots"><i></i><i></i><i></i></div><div class="b-url">🔒 <b>physiotrio.com</b>/admin/seo</div></div>
+      <div class="b-body sm">
+
+        <div class="sm-head">
+          <div>
+            <div class="sm-kicker">Settings &amp; Modules</div>
+            <div class="sm-title">SEO Settings</div>
+          </div>
+          <div class="sm-actions">
+            <span class="sm-view"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> View Site</span>
+            <span class="sm-savebtn hl" style="position:relative"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save Changes<span class="hl-tag">step ③ — save!</span></span>
+          </div>
+        </div>
+
+        <div class="sm-grid">
+          <div>
+            <div class="sm-panel">
+              <div class="sm-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div><div class="lbl">Pages</div><div class="dsc">Per-page metadata</div></div></div>
+              <div class="sm-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><div><div class="lbl">Global</div><div class="dsc">Title template &amp; defaults</div></div></div>
+              <div class="sm-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><div><div class="lbl">Schema</div><div class="dsc">Structured data</div></div></div>
+              <div class="sm-item on hl" style="position:relative"><span class="hl-tag">step ① — click</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#880772" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><div style="flex:1"><div class="lbl">Analytics</div><div class="dsc">GA4 &amp; Tag Manager</div></div><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#880772" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+              <div class="sm-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><div><div class="lbl">Robots</div><div class="dsc">Crawling rules</div></div></div>
+              <div class="sm-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg><div><div class="lbl">Redirects</div><div class="dsc">301/302 manager</div></div></div>
+            </div>
+            <div class="sm-panel sm-quick" style="margin-top:12px">
+              <div class="qt">Quick Links</div>
+              <a><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Search Console</a>
+              <a><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> robots.txt</a>
+              <a><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> sitemap.xml</a>
+            </div>
+          </div>
+
+          <div>
+            <div class="sm-h2">Analytics &amp; Tag Manager</div>
+            <div class="sm-sub">Connect Google Analytics and Tag Manager.</div>
+
+            <div class="sm-how">
+              <div class="ht">How it works</div>
+              <ul>
+                <li>If both are set, only GTM loads — configure GA4 inside GTM</li>
+                <li>Use GTM for flexibility across multiple tags</li>
+                <li>Use GA4 alone for a simpler direct integration</li>
+              </ul>
+            </div>
+
+            <div class="sm-card">
+              <div class="sm-card-head">
+                <div class="sm-ico" style="background:rgba(245,158,11,.1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                <div><div class="ct">Google Tag Manager</div><div class="cd">Recommended if you manage multiple tracking tags</div></div>
+              </div>
+              <div class="sm-card-body">
+                <div class="sm-label">GTM Container ID <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                <div class="sm-input hl" style="position:relative;font-family:ui-monospace,Menlo,monospace;font-weight:600">GTM-XXXXXXX<span class="hl-tag">step ② — paste your GTM ID</span></div>
+              </div>
+            </div>
+
+            <div class="sm-card" style="opacity:.6">
+              <div class="sm-card-head">
+                <div class="sm-ico" style="background:rgba(16,185,129,.1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                <div><div class="ct">Google Analytics 4</div><div class="cd">Direct GA4 integration without Tag Manager</div></div>
+              </div>
+              <div class="sm-card-body">
+                <div class="sm-label">GA4 Measurement ID <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                <div class="sm-input"><span class="ph">G-XXXXXXXXXX &nbsp;— leave this empty ✋</span></div>
+              </div>
+            </div>
+
+            <div class="sm-card">
+              <div class="sm-card-body">
+                <div style="font-size:13px;font-weight:600;color:#334155">Open in Google</div>
+                <div class="sm-links">
+                  <a><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Tag Manager</a>
+                  <a><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Analytics</a>
+                  <a><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Search Console</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="callout info"><span class="ci">⏱️</span><div>Changes go live in about <b>30 seconds</b>. No deployment, no developer, no waiting. The <b>Save Changes</b> button is at the <b>top-right</b> of the page.</div></div>
+    <div class="callout warn"><span class="ci">☝️</span><div><b>Why leave GA4 empty?</b> You installed GA4 <i>inside</i> GTM in Part&nbsp;3 — exactly what the purple "How it works" box on that page says. One ID, one field.</div></div>
+    <div class="callout save"><span class="ci">🔒</span><div><b>Privacy check before going live:</b> confirm the website's privacy policy mentions Google Analytics / Tag Manager usage — Saudi Arabia's data protection law (PDPL) applies, and PhysioTrio is a healthcare business. If the clinic's legal advisor wants a consent banner, add it before pasting the ID.</div></div>
+  </div>
+
+  <div class="done-strip"><span class="tick">✓</span> Part 4 done — tracking is LIVE. Now let's prove it.</div>
+</div></section>
+
+<!-- ═══════════════════ PART 5 · VERIFY ═══════════════════ -->
+<section id="p5"><div class="wrap">
+  <div class="part-head"><span class="part-num">5</span><h2>Prove it works (the fun part)</h2><span class="where">2 quick checks<br>5 minutes</span></div>
+  <p class="part-goal"><b>Goal:</b> see yourself appear as a live visitor. Two checks — do both once, then you never have to doubt the setup again. (The Part&nbsp;3 video above also demonstrates both checks on real screens.)</p>
+
+  <div class="step">
+    <div class="step-head"><span class="step-dot">①</span><h3>Check 1 — GTM Preview mode</h3></div>
+    <div class="acts">
+      <div class="act"><span class="act-chip click">Click</span><div class="what">In GTM: <b>Preview</b> (next to Submit) → type <span class="val">https://physiotrio.com</span> → <b>Connect</b></div></div>
+      <div class="act"><span class="act-chip pick">Look</span><div class="what">A new tab opens with the site + Tag Assistant. Under <b>"Tags Fired"</b> you should see <span class="val">GA4 — PhysioTrio</span> ✅</div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-head"><span class="step-dot">②</span><h3>Check 2 — see yourself in GA4 Realtime</h3></div>
+    <div class="acts">
+      <div class="act"><span class="act-chip click">Click</span><div class="what">Open <span class="val">physiotrio.com</span> on your phone and browse a few pages</div></div>
+      <div class="act"><span class="act-chip pick">Look</span><div class="what">In GA4: <b>Reports → Realtime overview</b> → within a minute, the <b>"Active users in last 30 minutes"</b> card shows <b>1</b>. <b>That's you</b> 👋</div></div>
+    </div>
+    <div class="callout good"><span class="ci">🎉</span><div><b>If you see yourself — you're done.</b> Everything from here on is bonus. Data starts filling the main reports within 24–48 hours.</div></div>
+    <div class="callout info"><span class="ci">📊</span><div><b>Two things to know:</b> Enhanced measurement is on by default — scrolls, outbound clicks and site search are already tracked, nothing to set up. And your own visits count as traffic, so early numbers include you and the clinic team.</div></div>
+  </div>
+
+  <div class="done-strip"><span class="tick">✓</span> Part 5 done — verified, live, and collecting data.</div>
+</div></section>
+
+<!-- ═══════════════════ PART 6 · SEARCH CONSOLE ═══════════════════ -->
+<section id="p6"><div class="wrap">
+  <div class="part-head"><span class="part-num">6</span><h2>Google Search Console + sitemap</h2><span class="where">at<br>search.google.com/search-console</span></div>
+  <p class="part-goal"><b>Goal:</b> tell Google Search about every page. The site auto-generates a sitemap of all services, articles, packages, team members &amp; jobs — in English <b>and</b> Arabic. You just hand Google the link.</p>
+
+  <div class="step">
+    <div class="step-head"><span class="step-dot">✓</span><h3>Your checklist</h3><a class="link-pill" href="https://search.google.com/search-console" target="_blank">open Search Console ↗</a></div>
+    <div class="acts">
+      <div class="act"><span class="act-chip click">Click</span><div class="what"><b>Add property</b> → choose <b>URL prefix</b> → type <span class="val">https://physiotrio.com</span></div></div>
+      <div class="act"><span class="act-chip pick">Pick</span><div class="what">Verification: since your Google tag is already live (Part 5 ✓), Google verifies <b>automatically</b>. If it doesn't, pick the <b>Google Analytics</b> or <b>Google Tag Manager</b> method on the same screen — signed in with the account from Part 1</div></div>
+      <div class="act hero"><span class="act-chip type">Type</span><div class="what"><b>Sitemaps</b> (left menu) → add <span class="val">sitemap.xml</span> → <b>Submit</b> → status flips to <b style="color:#166534">Success</b> within a few hours — check back tomorrow, don't worry</div></div>
+      <div class="act"><span class="act-chip click">Click</span><div class="what">Bonus: GA4 → Admin → <b>Product links → Search Console</b> — then publish the Search Console reports from GA4's <b>Reports → Library</b> so they show up in the menu</div></div>
+    </div>
+  </div>
+
+  <div class="done-strip"><span class="tick">✓</span> Part 6 done — Google Search now indexes every page, in both languages, forever.</div>
+</div></section>
+
+<!-- ═══════════════════ PART 7 · LEVEL UP ═══════════════════ -->
+<section id="p7"><div class="wrap">
+  <div class="part-head"><span class="part-num">7</span><h2>Level up — all inside GTM, no developer</h2><span class="where">whenever<br>you're ready</span></div>
+  <p class="part-goal">Because GTM is installed site-wide, everything below is done from <b>tagmanager.google.com → New Tag → Publish</b>. The website never changes again.</p>
+
+  <div class="grid3">
+    <div class="xcard featured">
+      <span class="ico">💬</span>
+      <h4>WhatsApp click = your #1 conversion</h4>
+      <p>Bookings on this site happen via WhatsApp. In GTM: new <b>Trigger → Just Links → Click URL contains "wa.me"</b> → attach a <b>GA4 Event</b> tag named <code>whatsapp_click</code>. Now you can see exactly which pages create bookings.</p>
+    </div>
+    <div class="xcard">
+      <span class="ico">📞</span>
+      <h4>Phone-call clicks</h4>
+      <p>Same trick: trigger on Click URL contains <b>"tel:"</b> → GA4 event <code>phone_click</code>. Two triggers = both conversion paths measured.</p>
+    </div>
+    <div class="xcard">
+      <span class="ico">📣</span>
+      <h4>Ad pixels, when campaigns start</h4>
+      <p>Meta Pixel, TikTok, Snap, Google Ads — each is just another tag in GTM. Add → Publish → live. No code, no tickets, no waiting.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-head"><span class="step-dot">✓</span><h3>The WhatsApp recipe, step by step</h3></div>
+    <div class="acts">
+      <div class="act"><span class="act-chip click">Click</span><div class="what">In GTM: <b>Triggers → New</b> → trigger type <b>Just Links</b></div></div>
+      <div class="act"><span class="act-chip pick">Pick</span><div class="what"><b>Some Link Clicks</b> → condition: <b>Click URL</b> → contains → <span class="val">wa.me</span> (if "Click URL" isn't in the dropdown, click <b>Choose Built-In Variable</b> and enable it) → Save as <span class="val">WhatsApp Link Click</span></div></div>
+      <div class="act"><span class="act-chip click">Click</span><div class="what"><b>Tags → New</b> → tag type <b>Google Analytics: GA4 Event</b></div></div>
+      <div class="act"><span class="act-chip type">Type</span><div class="what">Measurement ID → your <span class="val">G-XXXXXXXXXX</span> &nbsp; Event Name → <span class="val">whatsapp_click</span></div></div>
+      <div class="act"><span class="act-chip pick">Pick</span><div class="what">Triggering → your new <b>WhatsApp Link Click</b> trigger → <b>Save</b></div></div>
+      <div class="act hero"><span class="act-chip click">Click</span><div class="what">Test in <b>Preview</b> (click a WhatsApp button, watch the tag fire) → <b>Submit → Publish</b>. Yes, again — <b>every</b> GTM change needs Publish</div></div>
+    </div>
+  </div>
+
+  <div class="callout save" style="margin-left:0"><span class="ci">⭐</span><div><b>Mark it as a conversion:</b> after clicks start flowing, go to GA4 → Admin → <b>Data display → Events</b> → flip the "Mark as key event" toggle on <code>whatsapp_click</code>. Note: the event appears in that list <b>up to 24 hours after</b> it first fires — if it's not there the same afternoon, that's normal, check tomorrow.</div></div>
+</div></section>
+
+<!-- ═══════════════════ CHEAT SHEET ═══════════════════ -->
+<section id="cheat"><div class="wrap">
+  <div class="part-head">
+    <span class="part-num" style="font-size:36px;line-height:1.2">✂</span>
+    <h2>Cheat sheet — print this bit</h2>
+  </div>
+
+  <div class="cheat"><table>
+    <tr><th>Thing</th><th>Where</th><th>Looks like</th></tr>
+    <tr><td>GA4 Measurement ID</td><td>analytics.google.com → Admin → Data streams</td><td><code>G-XXXXXXXXXX</code></td></tr>
+    <tr><td>GTM Container ID</td><td>tagmanager.google.com → top bar</td><td><code>GTM-XXXXXXX</code></td></tr>
+    <tr><td>Where the GTM ID goes</td><td>physiotrio.com/admin → SEO → Analytics</td><td>one field + Save</td></tr>
+    <tr><td>Sitemap to submit</td><td>Search Console → Sitemaps</td><td><code>sitemap.xml</code></td></tr>
+    <tr><td>Live visitor check</td><td>GA4 → Reports → Realtime overview</td><td>you = "1 active user"</td></tr>
+    <tr><td>Data retention (day-1 setting)</td><td>GA4 → Admin → Data collection and modification</td><td><code>14 months</code></td></tr>
+  </table></div>
+
+  <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;margin:32px 0 8px;color:var(--body)">"Help, it's not working!" — 30-second fixes</h3>
+  <div class="callout warn" style="margin-left:0"><span class="ci">0️⃣</span><div><b>GA4 shows zero users:</b> 90% of the time you forgot <b>Submit → Publish</b> in GTM (Part 3). Check that first, always.</div></div>
+  <div class="callout warn" style="margin-left:0"><span class="ci">🕐</span><div><b>Realtime works but reports are empty:</b> normal — main reports take <b>24–48 hours</b> to populate. Trust Realtime.</div></div>
+  <div class="callout warn" style="margin-left:0"><span class="ci">🔁</span><div><b>Pasted the ID but nothing loads:</b> double-check there's no space before/after the ID in the admin field, press Save again, wait 30 seconds, hard-refresh the site (Ctrl/Cmd+Shift+R).</div></div>
+  <div class="callout warn" style="margin-left:0"><span class="ci">🧱</span><div><b>Tag Assistant won't connect:</b> disable ad-blockers for physiotrio.com, or test in a normal (non-incognito) Chrome window.</div></div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="footer-inner">
+    <p class="sig">You've got this. Three videos, two IDs, one Save button.</p>
+    <p>Prepared for the <b>PhysioTrio</b> digital marketing team · IDs shown as GTM-XXXXXXX / G-XXXXXXXXXX are placeholders — use your real ones · Questions? Ping the dev team.</p>
+  </div>
+</div></footer>
+
+</body>
+</html>
