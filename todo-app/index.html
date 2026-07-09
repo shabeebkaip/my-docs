@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Todos</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✅</text></svg>">
+<style>
+  /* ─── Design tokens ─────────────────────────────────────────── */
+  :root {
+    --bg:          #f5f0eb;
+    --bg2:         #efe9e1;
+    --card:        #fffdf9;
+    --card-border: rgba(200,185,165,.45);
+    --ink:         #1c1a17;
+    --ink2:        #4a4540;
+    --muted:       #9a9088;
+    --accent:      #c96a3b;
+    --accent-soft: #f5e8df;
+    --accent-glow: rgba(201,106,59,.18);
+    --done-line:   #b0a89e;
+    --check-done:  #c96a3b;
+    --progress-bg: rgba(201,106,59,.14);
+    --radius-card: 20px;
+    --radius-item: 10px;
+    --shadow:      0 2px 18px rgba(100,70,40,.09), 0 1px 3px rgba(100,70,40,.06);
+  }
+
+  /* ─── Reset ─────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+                 Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 16px 80px;
+    /* ponytail: CSS gradient texture, no image requests */
+    background-image: radial-gradient(ellipse at 70% 0%, #ede3d4 0%, transparent 60%),
+                      radial-gradient(ellipse at 10% 90%, #e8ddd0 0%, transparent 55%);
+  }
+
+  .wrap { width: 100%; max-width: 580px; }
+
+  /* ─── Header ─────────────────────────────────────────────────── */
+  .header { padding: 0 4px 28px; }
+  .greeting {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .header h1 {
+    font-size: clamp(26px, 5vw, 34px);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .header .tagline {
+    margin-top: 6px;
+    font-size: 15px;
+    color: var(--ink2);
+    line-height: 1.5;
+  }
+  .snapshot-date {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: .02em;
+  }
+
+  /* ─── Connect banner ─────────────────────────────────────────── */
+  .connect-banner {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .connect-banner p {
+    font-size: 14px;
+    color: var(--ink2);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .btn {
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), #e07a52);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 26px;
+    cursor: pointer;
+    box-shadow: 0 3px 12px var(--accent-glow);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 5px 16px var(--accent-glow); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: .5; cursor: default; transform: none; }
+  .connect-error {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #b3462a;
+  }
+  .hidden { display: none !important; }
+
+  /* ─── Progress card ──────────────────────────────────────────── */
+  .progress-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .ring-wrap { flex-shrink: 0; position: relative; width: 64px; height: 64px; }
+  .ring-wrap svg { transform: rotate(-90deg); overflow: visible; }
+  .ring-bg { fill: none; stroke: var(--progress-bg); stroke-width: 5; }
+  .ring-fg {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 5;
+    stroke-linecap: round;
+    transition: stroke-dashoffset .6s ease;
+  }
+  .ring-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1;
+  }
+  .ring-label .num { font-size: 17px; font-weight: 700; color: var(--ink); }
+  .ring-label .denom { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+  .progress-text { flex: 1; min-width: 0; }
+  .progress-text .pct {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -.03em;
+    line-height: 1;
+  }
+  .progress-text .pct-label { font-size: 13px; color: var(--ink2); margin-top: 3px; }
+  .progress-bar-wrap {
+    margin-top: 10px;
+    height: 6px;
+    background: var(--progress-bg);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #e07a52);
+    border-radius: 99px;
+    transition: width .6s ease;
+  }
+
+  /* ─── Add bar ────────────────────────────────────────────────── */
+  .add-bar {
+    display: flex;
+    gap: 10px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .add-bar input {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .add-bar input::placeholder { color: var(--muted); }
+  .add-bar input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .add-bar .btn { padding: 11px 20px; border-radius: 12px; }
+
+  /* ─── Cards & lists ──────────────────────────────────────────── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 24px 12px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .section-header h2 {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex: 1;
+  }
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .badge.done-badge { background: rgba(154,144,136,.12); color: var(--muted); }
+
+  ul { list-style: none; padding: 8px 0; }
+
+  li.todo {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 24px;
+    transition: background .15s ease;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink2);
+    cursor: pointer;
+  }
+  li.todo:hover { background: rgba(201,106,59,.04); }
+
+  .cb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #cfcac3;
+    flex-shrink: 0;
+    margin-top: 3px;
+    position: relative;
+    background: #fff;
+    transition: border-color .2s, background .2s;
+  }
+  li.todo:hover .cb { border-color: var(--accent); }
+  .cb.checked { background: var(--check-done); border-color: var(--check-done); }
+  .cb.checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1.5px;
+    width: 5px;
+    height: 9px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  li.done-item .cb { opacity: .6; }
+  li.done-item .txt {
+    color: var(--done-line);
+    text-decoration: line-through;
+    text-decoration-color: rgba(154,144,136,.55);
+  }
+
+  li.placeholder {
+    display: flex;
+    gap: 12px;
+    padding: 11px 24px;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  li.placeholder .cb { border-style: dashed; border-color: #d8d0c8; cursor: default; }
+
+  /* ─── Footer note ────────────────────────────────────────────── */
+  .note {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    text-align: center;
+    padding: 0 4px;
+  }
+  .note code {
+    font-family: "SF Mono", "Fira Code", "Fira Mono", "Courier New", monospace;
+    font-size: 11px;
+    background: rgba(154,144,136,.13);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 420px) {
+    body { padding: 24px 12px 60px; }
+    .section-header { padding: 16px 16px 10px; }
+    li.todo, li.placeholder { padding: 10px 16px; }
+    .add-bar { padding: 12px 16px; }
+    .progress-card { padding: 18px 16px; gap: 14px; }
+    .header { padding-bottom: 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress-bar, .ring-fg { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="header">
+    <p class="greeting" id="greeting">Good day</p>
+    <h1>What will you<br>get done today?</h1>
+    <p class="tagline">Every great list starts with one thing. Yours starts now.</p>
+    <span class="snapshot-date" id="today"></span>
+  </header>
+
+  <!-- Connect banner: shown until todos.md is connected -->
+  <div class="connect-banner" id="connect-banner">
+    <p id="connect-msg">Connect your <strong>todos.md</strong> file once — after that, everything
+    you add or check off here is saved straight into it.</p>
+    <button class="btn" id="connect-btn">Connect todos.md</button>
+    <p class="connect-error hidden" id="connect-error"></p>
+  </div>
+
+  <div id="app" class="hidden">
+    <div class="progress-card" id="progress-card">
+      <div class="ring-wrap">
+        <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
+          <circle class="ring-bg" cx="32" cy="32" r="27"/>
+          <circle class="ring-fg" id="ring-fg" cx="32" cy="32" r="27"
+                  stroke-dasharray="169.6" stroke-dashoffset="169.6"/>
+        </svg>
+        <div class="ring-label">
+          <span class="num" id="ring-num">0</span>
+          <span class="denom" id="ring-denom">of 0</span>
+        </div>
+      </div>
+      <div class="progress-text">
+        <div class="pct" id="pct">0%</div>
+        <div class="pct-label" id="pct-label">completed</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="bar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="add-bar">
+        <input id="new-todo" type="text" placeholder="Add a todo and press Enter…"
+               autocomplete="off" aria-label="New todo">
+        <button class="btn" id="add-btn">Add</button>
+      </div>
+      <div class="section-header">
+        <h2>Open</h2>
+        <span class="badge" id="open-count">0</span>
+      </div>
+      <ul id="open-list" aria-label="Open todos"></ul>
+    </div>
+
+    <div class="card">
+      <div class="section-header">
+        <h2>Completed</h2>
+        <span class="badge done-badge" id="done-count">0</span>
+      </div>
+      <ul id="done-list" aria-label="Completed todos"></ul>
+    </div>
+  </div>
+
+  <p class="note">
+    Everything saves to <code>todos.md</code> — the same file your scheduled
+    Claude reminders (9am · 1pm · 6pm) read and update.
+  </p>
+
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const $ = id => document.getElementById(id);
+
+  /* ── Greeting & date ──────────────────────────────────────── */
+  const h = new Date().getHours();
+  $('greeting').textContent = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  $('today').textContent = new Date().toLocaleDateString('en-GB', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+
+  /* ── Markdown parse / serialize ───────────────────────────── */
+  // todos.md shape: <header text>\n## Open\n\n- [ ] item\n\n## Completed\n\n- [x] item\n
+  function parseMd(text) {
+    const lines = text.split('\n');
+    const openIdx = lines.findIndex(l => l.trim() === '## Open');
+    const doneIdx = lines.findIndex(l => l.trim() === '## Completed');
+    const header = lines.slice(0, openIdx === -1 ? lines.length : openIdx).join('\n');
+    const items = (from, to) => lines.slice(from, to)
+      .map(l => l.match(/^- \[( |x)\] (.*)$/))
+      .filter(Boolean)
+      .map(m => m[2]);
+    return {
+      header,
+      open: openIdx === -1 ? [] : items(openIdx + 1, doneIdx === -1 ? lines.length : doneIdx),
+      done: doneIdx === -1 ? [] : items(doneIdx + 1, lines.length),
+    };
+  }
+
+  function serializeMd(state) {
+    return state.header.replace(/\n*$/, '') + '\n\n## Open\n\n' +
+      state.open.map(t => `- [ ] ${t}\n`).join('') +
+      '\n## Completed\n\n' +
+      state.done.map(t => `- [x] ${t}\n`).join('');
+  }
+
+  /* ── File handle persistence (IndexedDB) ──────────────────── */
+  const DB = 'todo-app', STORE = 'handles';
+  function idb() {
+    return new Promise((res, rej) => {
+      const req = indexedDB.open(DB, 1);
+      req.onupgradeneeded = () => req.result.createObjectStore(STORE);
+      req.onsuccess = () => res(req.result);
+      req.onerror = () => rej(req.error);
+    });
+  }
+  async function saveHandle(handle) {
+    const db = await idb();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      tx.objectStore(STORE).put(handle, 'todos');
+      tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+    });
+  }
+  async function loadHandle() {
+    const db = await idb();
+    return new Promise((res, rej) => {
+      const req = db.transaction(STORE).objectStore(STORE).get('todos');
+      req.onsuccess = () => res(req.result || null);
+      req.onerror = () => rej(req.error);
+    });
+  }
+
+  /* ── App state ────────────────────────────────────────────── */
+  let handle = null;
+  let state = { header: '# Todos', open: [], done: [] };
+
+  const PLACEHOLDER_RE = /^\(add your first todo/;
+
+  async function readFile() {
+    const file = await handle.getFile();
+    state = parseMd(await file.text());
+  }
+  async function writeFile() {
+    const w = await handle.createWritable();
+    await w.write(serializeMd(state));
+    await w.close();
+  }
+
+  /* ── Render ───────────────────────────────────────────────── */
+  function esc(s) {
+    const d = document.createElement('span');
+    d.textContent = s;
+    return d;
+  }
+
+  function render() {
+    const openUl = $('open-list'), doneUl = $('done-list');
+    openUl.innerHTML = ''; doneUl.innerHTML = '';
+
+    const realOpen = state.open.filter(t => !PLACEHOLDER_RE.test(t));
+
+    if (!realOpen.length) {
+      const li = document.createElement('li');
+      li.className = 'placeholder';
+      li.innerHTML = '<span class="cb" aria-hidden="true"></span>';
+      li.appendChild(esc('Nothing open — add your first todo above ☝️'));
+      openUl.appendChild(li);
+    }
+    realOpen.forEach(t => {
+      const li = document.createElement('li');
+      li.className = 'todo';
+      li.setAttribute('role', 'button');
+      li.tabIndex = 0;
+      li.title = 'Click to mark done';
+      li.innerHTML = '<span class="cb" aria-hidden="true"></span>';
+      li.appendChild(Object.assign(esc(t), { className: 'txt' }));
+      const complete = () => toggle(t, true);
+      li.addEventListener('click', complete);
+      li.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); complete(); } });
+      openUl.appendChild(li);
+    });
+
+    if (!state.done.length) {
+      const li = document.createElement('li');
+      li.className = 'placeholder';
+      li.innerHTML = '<span class="cb checked" aria-hidden="true"></span>';
+      li.appendChild(esc('Nothing finished yet — your first check-off is coming.'));
+      doneUl.appendChild(li);
+    }
+    state.done.forEach(t => {
+      const li = document.createElement('li');
+      li.className = 'todo done-item';
+      li.setAttribute('role', 'button');
+      li.tabIndex = 0;
+      li.title = 'Click to move back to open';
+      li.innerHTML = '<span class="cb checked" aria-hidden="true"></span>';
+      li.appendChild(Object.assign(esc(t), { className: 'txt' }));
+      const reopen = () => toggle(t, false);
+      li.addEventListener('click', reopen);
+      li.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reopen(); } });
+      doneUl.appendChild(li);
+    });
+
+    const done = state.done.length, total = realOpen.length + done;
+    const pct = total ? Math.round(done / total * 100) : 0;
+    $('open-count').textContent = realOpen.length;
+    $('done-count').textContent = done;
+    $('ring-num').textContent = done;
+    $('ring-denom').textContent = 'of ' + total;
+    $('pct').textContent = pct + '%';
+    $('pct-label').textContent = total
+      ? `completed · ${realOpen.length} open`
+      : 'add a todo to get started';
+    $('bar').style.width = pct + '%';
+    $('ring-fg').style.strokeDashoffset = (169.6 * (1 - pct / 100)).toFixed(1);
+    $('progress-card').setAttribute('aria-label', `Progress: ${done} of ${total} completed`);
+  }
+
+  /* ── Mutations ────────────────────────────────────────────── */
+  async function persist() {
+    try { await writeFile(); }
+    catch (e) { alert('Could not save to todos.md: ' + e.message); await readFile(); }
+    render();
+  }
+
+  async function addTodo() {
+    const input = $('new-todo');
+    const text = input.value.trim();
+    if (!text) return;
+    await readFile(); // pick up outside edits before writing
+    state.open = state.open.filter(t => !PLACEHOLDER_RE.test(t));
+    state.open.push(text);
+    input.value = '';
+    await persist();
+    input.focus();
+  }
+
+  async function toggle(text, complete) {
+    await readFile();
+    if (complete) {
+      const i = state.open.indexOf(text);
+      if (i !== -1) { state.open.splice(i, 1); state.done.push(text); }
+    } else {
+      const i = state.done.indexOf(text);
+      if (i !== -1) { state.done.splice(i, 1); state.open.push(text); }
+    }
+    await persist();
+  }
+
+  /* ── Connect flow ─────────────────────────────────────────── */
+  function showApp() {
+    $('connect-banner').classList.add('hidden');
+    $('app').classList.remove('hidden');
+    render();
+  }
+  function showError(msg) {
+    const el = $('connect-error');
+    el.textContent = msg;
+    el.classList.remove('hidden');
+  }
+
+  async function connectExisting(h) {
+    if (await h.queryPermission({ mode: 'readwrite' }) !== 'granted' &&
+        await h.requestPermission({ mode: 'readwrite' }) !== 'granted') return false;
+    handle = h;
+    await readFile();
+    showApp();
+    return true;
+  }
+
+  async function pickFile() {
+    try {
+      const [h] = await window.showOpenFilePicker({
+        types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }],
+        multiple: false,
+      });
+      handle = h;
+      await saveHandle(h).catch(() => {}); // persistence is best-effort
+      await readFile();
+      showApp();
+    } catch (e) {
+      if (e.name !== 'AbortError') showError('Could not open the file: ' + e.message);
+    }
+  }
+
+  async function init() {
+    if (!window.showOpenFilePicker) {
+      $('connect-msg').textContent = 'This app needs Google Chrome (or Edge) — your browser does not support saving to local files.';
+      $('connect-btn').disabled = true;
+      return;
+    }
+    $('connect-btn').addEventListener('click', async () => {
+      const saved = await loadHandle().catch(() => null);
+      if (saved) {
+        try { if (await connectExisting(saved)) return; } catch (e) { /* stale handle — fall through to picker */ }
+      }
+      await pickFile();
+    });
+    // If a handle is already saved, one click re-grants; tailor the copy.
+    const saved = await loadHandle().catch(() => null);
+    if (saved) {
+      $('connect-msg').innerHTML = 'Welcome back! Click below to reconnect <strong>todos.md</strong>.';
+      $('connect-btn').textContent = 'Reconnect todos.md';
+      // Try silently — succeeds if Chrome persisted the permission.
+      if (await saved.queryPermission({ mode: 'readwrite' }) === 'granted') {
+        handle = saved;
+        try { await readFile(); showApp(); } catch (e) { /* file moved — keep banner */ }
+      }
+    }
+    $('add-btn').addEventListener('click', addTodo);
+    $('new-todo').addEventListener('keydown', e => { if (e.key === 'Enter') addTodo(); });
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
