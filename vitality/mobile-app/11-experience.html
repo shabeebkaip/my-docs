@@ -1,0 +1,1159 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Vitality — A New Kind of Care</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+/* ── Tokens (Doc 08 exact) ─────────────────────────────── */
+:root {
+  --n900:#001229; --n800:#001C3D; --n700:#002B5B;
+  --g500:#C5A059; --g400:#D4B67C; --g300:#E8CA95; --g700:#9E7D41;
+  --i50:#FDFCFA; --i100:#F7F5F0; --i200:#F0EBE0; --i300:#E5DED0;
+  --s500:#A89A82; --s700:#6E6353; --ink:#16233A;
+  --sage2:#E3EBE1; --sage5:#8FAE8B; --sage7:#4C6B48;
+  --sky2:#E1EBF2; --sky7:#3D6480;
+  --blush2:#F5E6E0; --blush7:#9A5B48;
+  --apr2:#FAEBD9; --apr7:#8A6224;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-snap-type:y mandatory;overflow-y:scroll;height:100%}
+body{
+  font-family:-apple-system,'Segoe UI',system-ui,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  height:100%;
+  background:var(--n900);
+}
+
+/* ── Chapter engine ─────────────────────────────────────── */
+.chapter{
+  min-height:100vh;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+
+/* ── Scroll hint ────────────────────────────────────────── */
+.scroll-hint{
+  position:fixed;
+  bottom:28px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  z-index:100;
+  opacity:1;
+  transition:opacity .6s;
+  pointer-events:none;
+}
+.scroll-hint.hidden{opacity:0}
+.scroll-mouse{
+  width:22px;height:34px;
+  border:1.5px solid rgba(197,160,89,.4);
+  border-radius:11px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding-top:5px;
+}
+.scroll-wheel{
+  width:3px;height:7px;
+  background:var(--g500);
+  border-radius:2px;
+  animation:scrollWheel 1.8s ease-in-out infinite;
+}
+@keyframes scrollWheel{0%{transform:translateY(0);opacity:1}100%{transform:translateY(10px);opacity:0}}
+.scroll-label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(197,160,89,.5)}
+
+/* ── Progress bar ───────────────────────────────────────── */
+.progress-track{
+  position:fixed;right:24px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:8px;z-index:100;
+}
+.progress-pip{
+  width:4px;height:4px;border-radius:50%;
+  background:rgba(197,160,89,.25);
+  transition:background .4s,height .4s;
+  cursor:pointer;
+}
+.progress-pip.active{background:var(--g500);height:20px;border-radius:2px}
+
+/* ═══════════════════════════════════════════════════════════
+   CH 0 · THE OPENING — dark, breathing, Arabic appears
+═══════════════════════════════════════════════════════════ */
+#ch0{
+  background:var(--n900);
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 40%, rgba(0,43,91,.7) 0%, transparent 70%);
+}
+.ch0-time{
+  font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(197,160,89,.45);
+  margin-bottom:40px;
+  animation:fadeUp 1.2s ease both;
+}
+.ch0-ar{
+  font-size:clamp(32px,5vw,64px);font-weight:300;
+  color:rgba(242,239,232,.9);
+  direction:rtl;
+  line-height:1.3;
+  text-align:center;
+  letter-spacing:-.01em;
+  animation:fadeUp 1.4s .3s ease both;
+  font-family:'Geeza Pro','Simplified Arabic','Arabic',system-ui;
+}
+.ch0-ar span{color:var(--g400)}
+.ch0-en{
+  font-size:clamp(13px,1.4vw,17px);
+  color:rgba(242,239,232,.35);
+  margin-top:20px;
+  letter-spacing:.04em;
+  animation:fadeUp 1.4s .7s ease both;
+  text-align:center;
+}
+.ch0-line{
+  width:1px;height:60px;
+  background:linear-gradient(to bottom,rgba(197,160,89,.4),transparent);
+  margin-top:48px;
+  animation:fadeUp 1.4s 1s ease both;
+}
+.ch0-ambient{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 40% 40% at 50% 50%,rgba(0,43,91,.35) 0%,transparent 70%);
+  animation:ambientBreath 8s ease-in-out infinite;
+}
+@keyframes ambientBreath{
+  0%,100%{opacity:.5;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.08)}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CH 1 · THE HOME — ivory day, phone materialises
+═══════════════════════════════════════════════════════════ */
+#ch1{
+  background:var(--i50);
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23001C3D' fill-opacity='0.022'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E");
+}
+.ch1-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+  max-width:960px;
+  width:100%;
+  padding:60px 40px;
+}
+.ch1-text{}
+.chapter-eye{
+  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--g700);margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.chapter-eye::after{content:'';height:1px;width:32px;background:var(--g500)}
+.ch1-headline{
+  font-size:clamp(28px,3.5vw,44px);font-weight:300;line-height:1.15;
+  letter-spacing:-.02em;color:var(--n800);
+  text-wrap:balance;
+}
+.ch1-headline strong{font-weight:700}
+.ch1-body{
+  font-size:16px;line-height:1.75;color:var(--s700);
+  margin-top:20px;max-width:380px;
+}
+.ch1-ar-note{
+  font-size:15px;color:var(--n800);direction:rtl;text-align:right;
+  margin-top:16px;padding-top:16px;
+  border-top:1px solid var(--i300);
+  font-family:'Geeza Pro','Simplified Arabic',system-ui;
+  line-height:1.7;
+}
+
+/* ── Phone ── */
+.phone-3d{
+  width:260px;
+  background:var(--n800);
+  border-radius:42px;
+  padding:10px;
+  box-shadow:
+    0 40px 80px rgba(22,35,58,.18),
+    0 8px 24px rgba(22,35,58,.12),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  position:relative;
+  flex-shrink:0;
+  margin:0 auto;
+}
+.phone-3d::before{/* dynamic island */
+  content:'';position:absolute;
+  top:18px;left:50%;transform:translateX(-50%);
+  width:86px;height:26px;
+  background:#000;border-radius:18px;z-index:10;
+}
+.phone-screen{
+  border-radius:34px;overflow:hidden;
+  background:var(--i50);
+  min-height:500px;
+  display:flex;flex-direction:column;
+}
+.ps-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 18px 8px;font-size:11px;font-weight:600;color:var(--ink);
+  flex-shrink:0;
+}
+.ps-greeting{
+  padding:6px 18px 14px;flex-shrink:0;
+}
+.ps-greeting-name{
+  font-size:13px;font-weight:300;color:var(--n800);line-height:1.3;
+}
+.ps-greeting-name strong{font-weight:700;font-size:18px;display:block;margin-top:2px}
+.ps-greeting-ar{
+  font-size:12px;color:var(--s700);direction:rtl;margin-top:3px;
+  font-family:'Geeza Pro','Simplified Arabic',system-ui;
+}
+.ps-cards{
+  flex:1;padding:0 14px 14px;
+  display:flex;flex-direction:column;gap:9px;
+}
+/* Visit card */
+.ps-visit{
+  background:var(--n800);border-radius:20px;padding:14px;position:relative;overflow:hidden;
+}
+.ps-visit::after{
+  content:'';position:absolute;top:-15px;right:-15px;
+  width:70px;height:70px;border-radius:50%;
+  background:rgba(197,160,89,.14);
+}
+.ps-v-eye{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400);margin-bottom:8px}
+.ps-v-row{display:flex;align-items:center;gap:9px}
+.ps-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--sage2),var(--sage5));
+  border:1.5px solid rgba(197,160,89,.4);
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
+}
+.ps-v-name{font-size:13px;font-weight:700;color:#F2EFE8}
+.ps-v-role{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px}
+.ps-v-time{font-size:11px;font-weight:600;color:var(--g400);margin-top:9px;display:flex;align-items:center;gap:4px}
+/* Ring card */
+.ps-ring-card{
+  background:#fff;border:1px solid var(--i300);border-radius:16px;
+  padding:12px 14px;display:flex;align-items:center;gap:12px;
+  box-shadow:0 2px 8px rgba(22,35,58,.06);
+}
+.mini-ring{width:44px;height:44px;flex-shrink:0;position:relative}
+.mini-ring svg{width:44px;height:44px;transform:rotate(-90deg)}
+.mini-ring .rt{fill:none;stroke:var(--i200);stroke-width:4.5}
+.mini-ring .rf{
+  fill:none;stroke:var(--g500);stroke-width:4.5;stroke-linecap:round;
+  stroke-dasharray:116;stroke-dashoffset:46;
+  animation:ringFill 1.8s .5s ease both;
+}
+@keyframes ringFill{from{stroke-dashoffset:116}to{stroke-dashoffset:46}}
+.mini-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--n800)}
+.ps-ring-info{}
+.ps-ring-title{font-size:12px;font-weight:600;color:var(--ink)}
+.ps-ring-sub{font-size:10px;color:var(--s500);margin-top:1px}
+.session-dots{display:flex;gap:4px;margin-top:6px}
+.sd{width:7px;height:7px;border-radius:50%}
+.sd-d{background:var(--g500)}.sd-c{background:var(--g400);box-shadow:0 0 0 3px rgba(197,160,89,.2)}
+.sd-f{background:var(--i300)}
+/* Score */
+.ps-score{
+  background:var(--sage2);border-radius:16px;padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.ps-score-num{font-size:28px;font-weight:300;color:var(--n800);line-height:1;letter-spacing:-.02em;flex-shrink:0}
+.ps-score-sentence{font-size:11px;color:var(--sage7);direction:rtl;line-height:1.5;
+  font-family:'Geeza Pro','Simplified Arabic',system-ui;}
+/* Bottom nav */
+.ps-nav{
+  display:flex;border-top:1px solid var(--i300);background:rgba(253,252,250,.95);
+  padding:8px 0 10px;flex-shrink:0;
+}
+.ps-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.ps-nav-dot{width:18px;height:18px;border-radius:50%;background:var(--i300)}
+.ps-nav-dot.active{background:var(--n800)}
+.ps-nav-label{font-size:8px;font-weight:600;color:var(--s500);letter-spacing:.04em}
+.ps-nav-item.active .ps-nav-label{color:var(--n800)}
+
+
+/* ═══════════════════════════════════════════════════════════
+   CH 2 · THE BOOKING — step by step, you feel momentum
+═══════════════════════════════════════════════════════════ */
+#ch2{
+  background:var(--i50);
+  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23001C3D' fill-opacity='0.022'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E");
+}
+.ch2-layout{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+  max-width:960px;width:100%;padding:60px 40px;
+}
+.booking-steps{
+  display:flex;flex-direction:column;gap:0;
+  position:relative;
+}
+.booking-steps::before{
+  content:'';position:absolute;left:18px;top:36px;bottom:36px;
+  width:1px;background:var(--i300);
+}
+.bstep{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:16px 0;position:relative;
+}
+.bstep-num{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--i200);border:1.5px solid var(--i300);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--s700);
+  flex-shrink:0;z-index:1;transition:all .3s;
+}
+.bstep.done .bstep-num{background:var(--g500);border-color:var(--g500);color:var(--n800)}
+.bstep.active .bstep-num{background:var(--n800);border-color:var(--n800);color:#fff;box-shadow:0 4px 16px rgba(0,28,61,.3)}
+.bstep-content{}
+.bstep-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--s500);margin-bottom:3px}
+.bstep-title{font-size:15px;font-weight:600;color:var(--ink)}
+.bstep-detail{font-size:13px;color:var(--s700);margin-top:3px;line-height:1.5}
+.bstep.done .bstep-label,.bstep.done .bstep-title,.bstep.done .bstep-detail{color:var(--g700)}
+.bstep.active .bstep-title{color:var(--n800)}
+
+/* Booking phone */
+.booking-phone{
+  width:260px;
+  background:var(--n800);
+  border-radius:42px;padding:10px;
+  box-shadow:0 40px 80px rgba(22,35,58,.18),0 8px 24px rgba(22,35,58,.12);
+  position:relative;flex-shrink:0;margin:0 auto;
+}
+.booking-phone::before{
+  content:'';position:absolute;top:18px;left:50%;transform:translateX(-50%);
+  width:86px;height:26px;background:#000;border-radius:18px;z-index:10;
+}
+.bps{border-radius:34px;overflow:hidden;background:var(--i50);min-height:500px;display:flex;flex-direction:column}
+.bps-bar{display:flex;justify-content:space-between;padding:18px 18px 8px;font-size:11px;font-weight:600;color:var(--ink);flex-shrink:0}
+.bps-header{display:flex;align-items:center;gap:8px;padding:4px 16px 12px;flex-shrink:0}
+.bps-back{width:28px;height:28px;border-radius:50%;background:var(--i200);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bps-title{font-size:15px;font-weight:600;color:var(--ink)}
+.bps-rail{display:flex;gap:5px;padding:0 16px 14px;flex-shrink:0}
+.bps-pip{height:3.5px;border-radius:2px;flex:1}
+.bps-pip.done{background:var(--g500)}.bps-pip.cur{background:var(--g400)}.bps-pip.fut{background:var(--i300)}
+.bps-body{flex:1;padding:0 16px;display:flex;flex-direction:column;gap:10px}
+.bps-section-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--s500)}
+.week-row-sm{display:flex;gap:4px}
+.wd-sm{flex:1;border-radius:12px;padding:8px 2px;text-align:center;border:1.5px solid var(--i300);background:#fff}
+.wd-sm.sel{background:var(--n800);border-color:var(--n800)}
+.wd-name-sm{font-size:8px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--s500)}
+.wd-num-sm{font-size:12px;font-weight:700;color:var(--ink);margin-top:1px}
+.wd-sm.sel .wd-name-sm,.wd-sm.sel .wd-num-sm{color:#fff}
+.slots-sm{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.slot-sm{border-radius:10px;padding:8px 6px;font-size:11px;font-weight:600;text-align:center;border:1.5px solid var(--i300);background:#fff;color:var(--ink)}
+.slot-sm.sel{background:var(--n800);border-color:var(--n800);color:#fff}
+.slot-sm.prayer{background:var(--sage2);border-color:var(--sage5);color:var(--sage7);font-size:10px}
+.prayer-note-sm{font-size:9px;color:var(--sage7);background:var(--sage2);border-radius:8px;padding:6px 8px;line-height:1.4}
+.bps-cta{background:var(--n800);border-radius:14px;padding:12px;text-align:center;font-size:13px;font-weight:700;color:#fff;margin:8px 16px 14px;flex-shrink:0}
+
+/* ═══════════════════════════════════════════════════════════
+   CH 3 · THE CONFIRMATION — relief lands
+═══════════════════════════════════════════════════════════ */
+#ch3{background:var(--n900)}
+#ch3::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 35%,rgba(0,43,91,.9) 0%,transparent 70%);
+}
+.ch3-inner{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  gap:28px;max-width:440px;width:100%;padding:40px 24px;
+  text-align:center;
+}
+.ch3-check{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--sage2);display:flex;align-items:center;justify-content:center;
+  animation:checkPop .5s .2s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes checkPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.ch3-head{font-size:clamp(22px,3vw,32px);font-weight:300;color:#F2EFE8;letter-spacing:-.01em}
+.ch3-head strong{font-weight:700}
+.ch3-ar{font-size:15px;color:rgba(242,239,232,.5);direction:rtl;
+  font-family:'Geeza Pro','Simplified Arabic',system-ui;line-height:1.6}
+/* Artifact card */
+.artifact{
+  width:100%;
+  background:var(--n800);border-radius:24px;padding:22px;
+  position:relative;overflow:hidden;
+  animation:artifactDrop .7s .4s cubic-bezier(.22,.61,.36,1) both;
+  box-shadow:0 32px 64px rgba(0,0,0,.4),0 0 0 1px rgba(197,160,89,.15);
+}
+@keyframes artifactDrop{from{transform:translateY(28px);opacity:0}to{transform:translateY(0);opacity:1}}
+/* Gold corners */
+.artifact::before{
+  content:'';position:absolute;top:0;right:0;
+  width:48px;height:48px;
+  border-top:1.5px solid rgba(197,160,89,.5);
+  border-right:1.5px solid rgba(197,160,89,.5);
+}
+.artifact::after{
+  content:'';position:absolute;bottom:0;left:0;
+  width:36px;height:36px;
+  border-bottom:1.5px solid rgba(197,160,89,.5);
+  border-left:1.5px solid rgba(197,160,89,.5);
+}
+.art-eye{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--g400);margin-bottom:12px}
+.art-ref{font-size:24px;font-weight:300;color:#F2EFE8;letter-spacing:.06em;font-variant-numeric:tabular-nums;margin-bottom:14px}
+.art-rows{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.art-row{display:flex;justify-content:space-between;align-items:baseline}
+.art-lbl{font-size:10px;color:rgba(255,255,255,.4)}
+.art-val{font-size:13px;font-weight:600;color:#F2EFE8}
+.art-div{height:1px;background:rgba(197,160,89,.18);margin-bottom:14px}
+.art-cg{display:flex;align-items:center;gap:10px}
+.art-av{
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--sage2),var(--sage5));
+  border:1.5px solid rgba(197,160,89,.3);
+  display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;
+}
+.art-cg-name{font-size:13px;font-weight:700;color:#F2EFE8}
+.art-cg-role{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px}
+.art-gender{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:100px;font-size:10px;font-weight:700;background:rgba(197,160,89,.14);color:var(--g400);margin-top:6px;letter-spacing:.04em}
+.art-actions{display:flex;gap:8px;margin-top:16px}
+.art-btn{flex:1;padding:10px 6px;border-radius:12px;font-size:11px;font-weight:700;text-align:center}
+.art-btn-p{background:var(--g500);color:var(--n800)}
+.art-btn-s{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+
+/* ═══════════════════════════════════════════════════════════
+   CH 4 · EN-ROUTE — pulsing, alive
+═══════════════════════════════════════════════════════════ */
+#ch4{background:var(--i50)}
+.ch4-layout{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+  max-width:960px;width:100%;padding:60px 40px;
+}
+.ch4-text{}
+.ch4-time-display{
+  font-size:clamp(80px,12vw,140px);font-weight:300;
+  color:var(--n800);letter-spacing:-.04em;line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.ch4-time-label{font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--s500);margin-top:8px}
+.ch4-body{font-size:16px;line-height:1.75;color:var(--s700);margin-top:24px;max-width:340px}
+.ch4-ar{font-size:14px;color:var(--n800);direction:rtl;margin-top:12px;
+  font-family:'Geeza Pro','Simplified Arabic',system-ui;line-height:1.65}
+/* Enroute phone */
+.er-phone{
+  width:260px;background:var(--n800);border-radius:42px;padding:10px;
+  box-shadow:0 40px 80px rgba(22,35,58,.18),0 8px 24px rgba(22,35,58,.12);
+  position:relative;flex-shrink:0;margin:0 auto;
+}
+.er-phone::before{content:'';position:absolute;top:18px;left:50%;transform:translateX(-50%);width:86px;height:26px;background:#000;border-radius:18px;z-index:10}
+.er-screen{border-radius:34px;overflow:hidden;background:var(--i50);min-height:500px;display:flex;flex-direction:column}
+.er-bar{display:flex;justify-content:space-between;padding:18px 18px 8px;font-size:11px;font-weight:600;color:var(--ink);flex-shrink:0}
+.er-card{
+  background:var(--n800);margin:8px 12px;border-radius:20px;padding:16px;
+  position:relative;overflow:hidden;flex-shrink:0;
+}
+.er-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(197,160,89,.12)}
+.er-live-row{display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;box-shadow:0 0 0 3px rgba(76,175,80,.25);animation:livePulse 1.5s ease infinite}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 3px rgba(76,175,80,.25)}50%{box-shadow:0 0 0 6px rgba(76,175,80,.1)}}
+.er-live-label{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g400)}
+.er-cg-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.er-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--sage2),var(--sage5));border:2px solid var(--g500);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.er-name{font-size:14px;font-weight:700;color:#F2EFE8}
+.er-role{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px}
+.er-gender-check{font-size:10px;color:var(--sage5);font-weight:600;margin-top:3px;display:flex;align-items:center;gap:3px;
+  font-family:'Geeza Pro','Simplified Arabic',system-ui;}
+.er-eta-box{background:rgba(255,255,255,.07);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.er-eta-lbl{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.er-eta-num{font-size:24px;font-weight:300;color:#7FA8C4;font-variant-numeric:tabular-nums;line-height:1}
+.er-eta-sub{font-size:9px;color:rgba(255,255,255,.35);margin-top:2px}
+.er-map{height:56px;border-radius:12px;background:linear-gradient(135deg,#0B2C4E,#0A2240);overflow:hidden;position:relative;margin-bottom:10px}
+.er-map-inner{position:absolute;inset:0;display:flex;align-items:center;padding:0 16px;gap:8px}
+.er-map-dot{width:8px;height:8px;border-radius:50%}
+.er-map-dot.start{background:var(--g500);box-shadow:0 0 0 3px rgba(197,160,89,.2)}
+.er-map-dot.end{background:#7FA8C4;box-shadow:0 0 0 3px rgba(127,168,196,.2)}
+.er-map-line{flex:1;height:1.5px;background:repeating-linear-gradient(90deg,var(--g400) 0,var(--g400) 7px,transparent 7px,transparent 13px)}
+.er-car{position:absolute;top:50%;left:40%;transform:translateY(-50%);font-size:14px}
+.er-btns{display:flex;gap:6px}
+.er-btn{flex:1;padding:8px 4px;border-radius:10px;font-size:9px;font-weight:700;text-align:center;background:rgba(255,255,255,.08);color:rgba(255,255,255,.65)}
+.er-prep{
+  background:var(--i200);border-radius:14px;padding:10px 12px;margin:8px 12px;
+  font-size:11px;color:var(--s700);line-height:1.5;flex-shrink:0;
+  display:flex;gap:8px;align-items:flex-start;
+}
+.er-prep strong{color:var(--ink)}
+
+/* ═══════════════════════════════════════════════════════════
+   CH 5 · THE RECOVERY — dots fill, pain falls
+═══════════════════════════════════════════════════════════ */
+#ch5{background:var(--n900)}
+#ch5::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(0,43,91,.8) 0%,transparent 65%);
+}
+.ch5-inner{
+  position:relative;z-index:2;
+  max-width:680px;width:100%;padding:40px 32px;
+  display:flex;flex-direction:column;align-items:center;
+  gap:40px;text-align:center;
+}
+.ch5-head{font-size:clamp(24px,3.5vw,42px);font-weight:300;color:#F2EFE8;letter-spacing:-.015em;line-height:1.15}
+.ch5-head strong{font-weight:700;color:var(--g400)}
+.journey-visual{
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;
+  width:100%;
+}
+.jv-dot{
+  width:18px;height:18px;border-radius:50%;
+  transition:all .4s ease;
+}
+.jv-done{background:var(--g500);box-shadow:0 0 12px rgba(197,160,89,.4)}
+.jv-current{background:var(--g400);box-shadow:0 0 0 4px rgba(197,160,89,.2),0 0 16px rgba(197,160,89,.3)}
+.jv-future{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15)}
+.jv-rest{background:var(--sage2);opacity:.6}
+.journey-flag{
+  font-size:13px;color:rgba(255,255,255,.5);
+  display:flex;align-items:center;gap:8px;
+  font-style:italic;
+}
+.pain-display{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.pain-number{
+  font-size:clamp(64px,10vw,100px);font-weight:300;color:var(--g400);
+  line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;
+  animation:countDown 2s .5s ease both;
+}
+@keyframes countDown{from{color:rgba(197,160,89,.3)}to{color:var(--g400)}}
+.pain-label{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.pain-arrow{font-size:32px;color:var(--sage5)}
+.score-sentence-big{
+  font-size:clamp(16px,2.2vw,22px);color:rgba(242,239,232,.7);
+  direction:rtl;line-height:1.6;
+  font-family:'Geeza Pro','Simplified Arabic',system-ui;
+  max-width:480px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CH 6 · CELEBRATION — full gold
+═══════════════════════════════════════════════════════════ */
+#ch6{background:var(--n900);overflow:hidden}
+#ch6::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 20%,rgba(197,160,89,.2) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 60% at 30% 80%,rgba(0,43,91,.7) 0%,transparent 60%);
+}
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particle{
+  position:absolute;border-radius:50%;background:var(--g400);
+  animation:particleFall linear infinite;
+}
+@keyframes particleFall{
+  0%{transform:translateY(-10px) rotate(0deg);opacity:.6}
+  100%{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+.ch6-inner{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  gap:22px;max-width:560px;width:100%;padding:40px 32px;text-align:center;
+}
+.ch6-dots{display:flex;gap:8px;margin-bottom:4px}
+.ch6-dot{width:12px;height:12px;border-radius:50%;background:var(--g500);box-shadow:0 0 12px rgba(197,160,89,.5)}
+.ch6-arabic{
+  font-size:clamp(36px,6vw,72px);font-weight:700;
+  color:var(--g400);
+  direction:rtl;line-height:1.2;
+  font-family:'Geeza Pro','Simplified Arabic','Traditional Arabic',system-ui;
+  text-shadow:0 4px 24px rgba(197,160,89,.3);
+  animation:celebrationAppear 1s .2s cubic-bezier(.22,.61,.36,1) both;
+}
+@keyframes celebrationAppear{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.ch6-sub{font-size:clamp(15px,1.8vw,19px);font-weight:300;color:rgba(242,239,232,.65);letter-spacing:.02em;line-height:1.5}
+.ch6-milestone{
+  background:rgba(255,255,255,.06);border:1px solid rgba(197,160,89,.2);
+  border-radius:20px;padding:18px 22px;width:100%;
+}
+.ch6-ml-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--g400);margin-bottom:12px}
+.ch6-ml-dots{display:flex;gap:5px;justify-content:center;margin-bottom:10px}
+.ch6-ml-dot{width:12px;height:12px;border-radius:50%;background:var(--g500);box-shadow:0 0 8px rgba(197,160,89,.4)}
+.ch6-ml-text{font-size:13px;color:rgba(242,239,232,.7);line-height:1.5}
+.voice-note{
+  background:rgba(143,174,139,.12);border:1px solid rgba(143,174,139,.25);
+  border-radius:16px;padding:14px 16px;
+  display:flex;align-items:center;gap:12px;width:100%;
+}
+.vn-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--sage2),var(--sage5));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.vn-info{}
+.vn-from{font-size:11px;font-weight:600;color:var(--sage5)}
+.vn-time{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+.vn-play{width:32px;height:32px;border-radius:50%;background:var(--sage5);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;flex-shrink:0;margin-left:auto}
+.ch6-share{font-size:13px;font-weight:600;color:var(--g400);display:flex;align-items:center;gap:6px;cursor:pointer}
+
+/* ═══════════════════════════════════════════════════════════
+   CH 7 · FAMILY — Noura's view, handoff
+═══════════════════════════════════════════════════════════ */
+#ch7{background:var(--i50);background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23001C3D' fill-opacity='0.022'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3C/g%3E%3C/svg%3E")}
+.ch7-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:960px;width:100%;padding:60px 40px}
+.ch7-phone{
+  width:260px;background:var(--n800);border-radius:42px;padding:10px;
+  box-shadow:0 40px 80px rgba(22,35,58,.18),0 8px 24px rgba(22,35,58,.12);
+  position:relative;flex-shrink:0;margin:0 auto;
+}
+.ch7-phone::before{content:'';position:absolute;top:18px;left:50%;transform:translateX(-50%);width:86px;height:26px;background:#000;border-radius:18px;z-index:10}
+.ch7-screen{border-radius:34px;overflow:hidden;background:var(--i50);min-height:500px;display:flex;flex-direction:column}
+.ch7-bar{display:flex;justify-content:space-between;padding:18px 18px 8px;font-size:11px;font-weight:600;color:var(--ink);flex-shrink:0}
+.ch7-header{padding:6px 16px 14px;flex-shrink:0}
+.ch7-title{font-size:18px;font-weight:700;color:var(--n800)}
+.ch7-sub{font-size:11px;color:var(--s500);margin-top:1px}
+.ch7-members{display:flex;gap:10px;padding:0 16px;flex-shrink:0}
+.ch7-member{display:flex;flex-direction:column;align-items:center;gap:4px}
+.ch7-av-wrap{position:relative}
+.ch7-av{width:48px;height:48px;border-radius:50%;background:var(--i200);display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid var(--i300)}
+.ch7-av.a{border-color:var(--n800)}
+.ch7-state-dot{position:absolute;bottom:0;right:0;width:12px;height:12px;border-radius:50%;border:2px solid var(--i50)}
+.ch7-state-dot.gold{background:var(--g500)}
+.ch7-state-dot.sage{background:var(--sage5)}
+.ch7-mname{font-size:9px;font-weight:600;color:var(--s700)}
+.ch7-detail{
+  background:#fff;margin:10px 12px 0;border-radius:18px;padding:14px;border:1px solid var(--i300);
+  box-shadow:0 2px 8px rgba(22,35,58,.06);flex-shrink:0;
+}
+.ch7-d-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.ch7-d-name{font-size:14px;font-weight:700;color:var(--n800)}
+.ch7-d-rel{font-size:10px;color:var(--s500);margin-top:1px}
+.ch7-visit{background:var(--sage2);border-radius:10px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ch7-v-label{font-size:10px;color:var(--sage7);font-weight:600}
+.ch7-v-time{font-size:11px;color:var(--sage7);font-weight:700}
+.ch7-prog-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--s500);margin-bottom:5px}
+.ch7-prog-dots{display:flex;gap:4px}
+.ch7-privacy{
+  background:var(--sky2);border-radius:12px;padding:8px 10px;
+  font-size:10px;color:var(--sky7);line-height:1.4;margin:6px 12px 0;
+  display:flex;align-items:flex-start;gap:5px;flex-shrink:0;
+}
+.ch7-book{
+  background:var(--n800);border-radius:14px;padding:11px;text-align:center;font-size:12px;font-weight:700;color:#fff;
+  margin:8px 12px 14px;flex-shrink:0;direction:rtl;
+  font-family:'Geeza Pro','Simplified Arabic',system-ui;
+}
+/* Right side text */
+.ch7-text{}
+.ch7-close-headline{font-size:clamp(28px,3.5vw,44px);font-weight:300;color:var(--n800);letter-spacing:-.02em;line-height:1.15;text-wrap:balance}
+.ch7-close-headline strong{font-weight:700}
+.ch7-close-body{font-size:16px;line-height:1.75;color:var(--s700);margin-top:20px;max-width:380px}
+.ch7-codeox{
+  display:flex;align-items:center;gap:12px;margin-top:32px;
+  padding-top:24px;border-top:1px solid var(--i300);
+}
+.ch7-ox-logo{
+  width:40px;height:40px;border-radius:10px;background:var(--n800);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.ch7-ox-name{font-size:14px;font-weight:700;color:var(--n800)}
+.ch7-ox-contact{font-size:12px;color:var(--s700);margin-top:2px}
+
+/* ═══════════════════════════════════════════════════════════
+   Responsive
+═══════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  .ch1-layout,.ch2-layout,.ch4-layout,.ch7-layout{
+    grid-template-columns:1fr;gap:40px;padding:40px 24px;
+  }
+  .ch2-layout .booking-steps{display:none}
+  .progress-track{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .ch0-ambient,.scroll-wheel,.live-dot,.mini-ring .rf{animation:none}
+  .artifact,.ch3-check,.ch6-arabic,.ch6-dot,.pain-number{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Progress pips -->
+<nav class="progress-track" aria-label="Chapters">
+  <div class="progress-pip active" data-ch="0" onclick="goTo(0)" title="The Opening"></div>
+  <div class="progress-pip" data-ch="1" onclick="goTo(1)" title="The Home"></div>
+  <div class="progress-pip" data-ch="2" onclick="goTo(2)" title="The Booking"></div>
+  <div class="progress-pip" data-ch="3" onclick="goTo(3)" title="The Confirmation"></div>
+  <div class="progress-pip" data-ch="4" onclick="goTo(4)" title="The Visit"></div>
+  <div class="progress-pip" data-ch="5" onclick="goTo(5)" title="The Recovery"></div>
+  <div class="progress-pip" data-ch="6" onclick="goTo(6)" title="The Milestone"></div>
+  <div class="progress-pip" data-ch="7" onclick="goTo(7)" title="The Family"></div>
+</nav>
+
+<div class="scroll-hint" id="scrollHint">
+  <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+  <span class="scroll-label">Scroll to begin</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     CH 0 · THE OPENING
+══════════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch0">
+  <div class="ch0-ambient"></div>
+  <div class="ch0-time">Riyadh · 5:47 AM</div>
+  <div class="ch0-ar">رفيقك في التعافي<br><span>في كل بيت تخدمه فيتاليتي</span></div>
+  <div class="ch0-en">Your caring companion · in every Saudi home Vitality serves</div>
+  <div class="ch0-line"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CH 1 · THE HOME
+══════════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch1">
+  <div class="ch1-layout">
+    <div class="ch1-text">
+      <div class="chapter-eye">The Home Screen</div>
+      <h2 class="ch1-headline">The app never opens<br>on a list.<br><strong>It opens on a person.</strong></h2>
+      <p class="ch1-body">Abu Khalid opens the app at 7am. His knee aches. He wants to know: is today's visit confirmed, how far along is he, and is the pain normal?<br><br>All three answers are on this screen before he taps anything.</p>
+      <div class="ch1-ar-note">مساء الخير يا أبو خالد — أمال زيارتك غداً في الساعة الرابعة والنصف</div>
+    </div>
+    <div class="phone-3d">
+      <div class="phone-screen">
+        <div class="ps-bar">
+          <span>9:41</span>
+          <span style="display:flex;gap:4px;align-items:center;font-size:10px">▌▌▌▌ 5G 🔋</span>
+        </div>
+        <div class="ps-greeting">
+          <div class="ps-greeting-name">Good morning,<strong>Abu Khalid</strong></div>
+          <div class="ps-greeting-ar">صباح الخير يا أبو خالد ☀️</div>
+        </div>
+        <div class="ps-cards">
+          <div class="ps-visit">
+            <div class="ps-v-eye">Your next visit</div>
+            <div class="ps-v-row">
+              <div class="ps-avatar">👩‍⚕️</div>
+              <div>
+                <div class="ps-v-name">Amal Al-Rashidi</div>
+                <div class="ps-v-role">Physiotherapist · MOH ✓</div>
+              </div>
+            </div>
+            <div class="ps-v-time">⏱ Tuesday · 4:30 PM</div>
+          </div>
+          <div class="ps-ring-card">
+            <div class="mini-ring">
+              <svg viewBox="0 0 44 44">
+                <circle class="rt" cx="22" cy="22" r="18"/>
+                <circle class="rf" cx="22" cy="22" r="18"/>
+              </svg>
+              <div class="mini-ring-label">4/12</div>
+            </div>
+            <div class="ps-ring-info">
+              <div class="ps-ring-title">Recovery Journey</div>
+              <div class="ps-ring-sub">Post-Knee Surgery · Week 3</div>
+              <div class="session-dots">
+                <div class="sd sd-d"></div><div class="sd sd-d"></div>
+                <div class="sd sd-d"></div><div class="sd sd-c"></div>
+                <div class="sd sd-f"></div><div class="sd sd-f"></div>
+                <div class="sd sd-f"></div><div class="sd sd-f"></div>
+              </div>
+            </div>
+          </div>
+          <div class="ps-score">
+            <div class="ps-score-num">74</div>
+            <div class="ps-score-sentence">جسمك يتعافى بشكل ممتاز — استمر على هذا الإيقاع</div>
+          </div>
+        </div>
+        <nav class="ps-nav">
+          <div class="ps-nav-item active"><div class="ps-nav-dot active"></div><div class="ps-nav-label" style="color:var(--n800)">Home</div></div>
+          <div class="ps-nav-item"><div class="ps-nav-dot"></div><div class="ps-nav-label">Book</div></div>
+          <div class="ps-nav-item"><div class="ps-nav-dot"></div><div class="ps-nav-label">Wellness</div></div>
+          <div class="ps-nav-item"><div class="ps-nav-dot"></div><div class="ps-nav-label">Care</div></div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CH 2 · THE BOOKING
+══════════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch2">
+  <div class="ch2-layout">
+    <div class="booking-steps">
+      <div class="chapter-eye" style="margin-bottom:20px">The Booking</div>
+      <div class="bstep done">
+        <div class="bstep-num">✓</div>
+        <div class="bstep-content">
+          <div class="bstep-label">Step 1</div>
+          <div class="bstep-title">Physiotherapy selected</div>
+          <div class="bstep-detail">250 SAR · Home visit · Gender guarantee set</div>
+        </div>
+      </div>
+      <div class="bstep active">
+        <div class="bstep-num">2</div>
+        <div class="bstep-content">
+          <div class="bstep-label">Step 2</div>
+          <div class="bstep-title">Choose a date & time</div>
+          <div class="bstep-detail">Real availability from Nixpend. Prayer windows respected — never blocked.</div>
+        </div>
+      </div>
+      <div class="bstep">
+        <div class="bstep-num">3</div>
+        <div class="bstep-content">
+          <div class="bstep-label">Step 3</div>
+          <div class="bstep-title">Your details</div>
+          <div class="bstep-detail">Saved address, entry notes, insurance — all pre-filled.</div>
+        </div>
+      </div>
+      <div class="bstep">
+        <div class="bstep-num">4</div>
+        <div class="bstep-content">
+          <div class="bstep-label">Step 4</div>
+          <div class="bstep-title">Pay with Mada or Apple Pay</div>
+          <div class="bstep-detail">Lama finishes in 11 seconds. Abdulrahman never feels rushed.</div>
+        </div>
+      </div>
+    </div>
+    <div class="booking-phone">
+      <div class="bps">
+        <div class="bps-bar"><span>9:41</span><span style="font-size:10px">▌▌▌▌ 5G</span></div>
+        <div class="bps-header">
+          <div class="bps-back">←</div>
+          <div class="bps-title">Choose a time</div>
+        </div>
+        <div class="bps-rail">
+          <div class="bps-pip done"></div>
+          <div class="bps-pip cur"></div>
+          <div class="bps-pip fut"></div>
+          <div class="bps-pip fut"></div>
+        </div>
+        <div class="bps-body">
+          <div class="bps-section-label">Week of 14 July</div>
+          <div class="week-row-sm">
+            <div class="wd-sm"><div class="wd-name-sm">Mon</div><div class="wd-num-sm">13</div></div>
+            <div class="wd-sm"><div class="wd-name-sm">Tue</div><div class="wd-num-sm">14</div></div>
+            <div class="wd-sm"><div class="wd-name-sm">Wed</div><div class="wd-num-sm">15</div></div>
+            <div class="wd-sm sel"><div class="wd-name-sm">Thu</div><div class="wd-num-sm">16</div></div>
+            <div class="wd-sm"><div class="wd-name-sm">Fri</div><div class="wd-num-sm">17</div></div>
+          </div>
+          <div class="bps-section-label">Morning</div>
+          <div class="slots-sm">
+            <div class="slot-sm">9:00 AM</div>
+            <div class="slot-sm">10:30 AM</div>
+            <div class="slot-sm sel">11:00 AM</div>
+            <div class="slot-sm">11:30 AM</div>
+          </div>
+          <div class="bps-section-label">Afternoon</div>
+          <div class="slots-sm">
+            <div class="slot-sm prayer">🌙 12:30 PM<br>Dhuhr</div>
+            <div class="slot-sm">2:00 PM</div>
+            <div class="slot-sm">3:30 PM</div>
+            <div class="slot-sm">4:00 PM</div>
+          </div>
+          <div class="prayer-note-sm">Prayer slots are always available — your caregiver adapts. Tap to select.</div>
+        </div>
+        <div class="bps-cta">Next — Confirm details →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CH 3 · THE CONFIRMATION
+══════════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch3">
+  <div class="ch3-inner">
+    <div class="ch3-check">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4C6B48" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="ch3-head">Booking<br><strong>Confirmed.</strong></h2>
+    <div class="ch3-ar">تم الحجز — نشوفك الخميس ✓</div>
+    <div class="artifact">
+      <div class="art-eye">Vitality Home Care · Booking Reference</div>
+      <div class="art-ref">#VHC-2026-4831</div>
+      <div class="art-rows">
+        <div class="art-row"><span class="art-lbl">Service</span><span class="art-val">Physiotherapy · Home Visit</span></div>
+        <div class="art-row"><span class="art-lbl">Date & Time</span><span class="art-val">Thursday 16 Jul · 11:00 AM</span></div>
+        <div class="art-row"><span class="art-lbl">Location</span><span class="art-val">Al Olaya, Riyadh</span></div>
+        <div class="art-row"><span class="art-lbl">Payment</span><span class="art-val">250 SAR · Apple Pay ✓</span></div>
+      </div>
+      <div class="art-div"></div>
+      <div class="art-cg">
+        <div class="art-av">👩‍⚕️</div>
+        <div>
+          <div class="art-cg-name">Amal Al-Rashidi</div>
+          <div class="art-cg-role">Physiotherapist · 7 yrs · License #MOH-4429</div>
+          <div class="art-gender">♀ Female caregiver · guaranteed</div>
+        </div>
+      </div>
+      <div class="art-actions">
+        <div class="art-btn art-btn-p">Add to Calendar</div>
+        <div class="art-btn art-btn-s">Share with Family</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CH 4 · THE VISIT — EN-ROUTE
+══════════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch4">
+  <div class="ch4-layout">
+    <div class="ch4-text">
+      <div class="chapter-eye">Visit Day</div>
+      <div class="ch4-time-display">12<span style="color:var(--g500);font-size:.5em;vertical-align:middle">min</span></div>
+      <div class="ch4-time-label">Until Amal arrives</div>
+      <p class="ch4-body">The number that ends the chasing phone calls. Your caregiver's photo, name, license, gender guarantee, and vehicle number — ready for the compound gate before she rings the bell.</p>
+      <div class="ch4-ar">أمال في الطريق إليك — ستصل خلال ١٢ دقيقة</div>
+    </div>
+    <div class="er-phone">
+      <div class="er-screen">
+        <div class="er-bar"><span style="font-size:10px">10:48</span><span style="font-size:10px">▌▌▌▌ 5G</span></div>
+        <div class="er-card">
+          <div class="er-live-row">
+            <div class="live-dot"></div>
+            <span class="er-live-label">Amal is on her way</span>
+          </div>
+          <div class="er-cg-row">
+            <div class="er-avatar">👩‍⚕️</div>
+            <div>
+              <div class="er-name">Amal Al-Rashidi</div>
+              <div class="er-role">Physiotherapist · License #MOH-4429</div>
+              <div class="er-gender-check">✓ ممرضة — كما طلبت</div>
+            </div>
+          </div>
+          <div class="er-eta-box">
+            <div>
+              <div class="er-eta-lbl">Arriving in</div>
+              <div class="er-eta-num">12</div>
+              <div class="er-eta-sub">~11:03 AM</div>
+            </div>
+            <div style="font-size:32px">⏱</div>
+          </div>
+          <div class="er-map">
+            <div class="er-map-inner">
+              <div class="er-map-dot start"></div>
+              <div class="er-map-line"></div>
+              <div class="er-map-dot end"></div>
+            </div>
+            <div class="er-car">🚗</div>
+          </div>
+          <div class="er-btns">
+            <div class="er-btn">📞 Call</div>
+            <div class="er-btn">💬 Message</div>
+            <div class="er-btn">🪪 Gate ID</div>
+          </div>
+        </div>
+        <div class="er-prep">
+          <span>📋</span>
+          <span><strong>Before she arrives:</strong> clear a 2×2m space · fill the water cup · have your exercise band ready.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CH 5 · THE RECOVERY
+══════════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch5">
+  <div class="ch5-inner">
+    <div class="chapter-eye" style="color:var(--g400)">Recovery in Progress</div>
+    <h2 class="ch5-head">Progress you can see<br>is progress that <strong>renews</strong>.</h2>
+    <div class="journey-visual">
+      <div class="jv-dot jv-done"></div>
+      <div class="jv-dot jv-done"></div>
+      <div class="jv-dot jv-done"></div>
+      <div class="jv-dot jv-done"></div>
+      <div class="jv-dot jv-done"></div>
+      <div class="jv-dot jv-done"></div>
+      <div class="jv-dot jv-current"></div>
+      <div class="jv-dot jv-rest"></div>
+      <div class="jv-dot jv-future"></div>
+      <div class="jv-dot jv-future"></div>
+      <div class="jv-dot jv-future"></div>
+      <div class="jv-dot jv-future"></div>
+    </div>
+    <div class="journey-flag">
+      <span style="font-size:18px">🏁</span>
+      <span>Walking unaided — المشي بدون مساعدة · 5 sessions away</span>
+    </div>
+    <div class="pain-display">
+      <div class="pain-number">−40%</div>
+      <div class="pain-label">Pain reduction since session 1</div>
+      <div class="pain-arrow">↓</div>
+    </div>
+    <div class="score-sentence-big">جسمك يتعافى بشكل ممتاز — أمال ستقول لك نفس الشيء غداً</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CH 6 · THE CELEBRATION
+══════════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch6">
+  <div class="particles" id="particles"></div>
+  <div class="ch6-inner">
+    <div class="ch6-dots">
+      <div class="ch6-dot"></div><div class="ch6-dot"></div><div class="ch6-dot"></div>
+      <div class="ch6-dot"></div><div class="ch6-dot"></div><div class="ch6-dot"></div>
+    </div>
+    <div class="ch6-arabic">مبروك يا أبو خالد</div>
+    <div class="ch6-sub">6 sessions completed. Halfway to walking unaided.<br>Amal says you're ahead of schedule.</div>
+    <div class="ch6-milestone">
+      <div class="ch6-ml-label">Your journey — all 6 done</div>
+      <div class="ch6-ml-dots">
+        <div class="ch6-ml-dot"></div><div class="ch6-ml-dot"></div><div class="ch6-ml-dot"></div>
+        <div class="ch6-ml-dot"></div><div class="ch6-ml-dot"></div><div class="ch6-ml-dot"></div>
+      </div>
+      <div class="ch6-ml-text">Pain reduced 40% since session 1. Range of motion up 55%.</div>
+    </div>
+    <div class="voice-note">
+      <div class="vn-av">👩‍⚕️</div>
+      <div class="vn-info">
+        <div class="vn-from">Voice note from Amal</div>
+        <div class="vn-time">0:34 · Tap to listen</div>
+      </div>
+      <div class="vn-play">▶</div>
+    </div>
+    <div class="ch6-share">
+      <span>↗</span> Share with family circle
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CH 7 · THE FAMILY · HANDOFF
+══════════════════════════════════════════════════════════ -->
+<section class="chapter" id="ch7">
+  <div class="ch7-layout">
+    <div class="ch7-phone">
+      <div class="ch7-screen">
+        <div class="ch7-bar"><span style="font-size:10px">9:41</span><span style="font-size:10px">5G ▌▌▌▌</span></div>
+        <div class="ch7-header">
+          <div class="ch7-title">Family Circle</div>
+          <div class="ch7-sub">Managing care for 2 members</div>
+        </div>
+        <div class="ch7-members">
+          <div class="ch7-member">
+            <div class="ch7-av-wrap">
+              <div class="ch7-av a">👴</div>
+              <div class="ch7-state-dot gold"></div>
+            </div>
+            <div class="ch7-mname">Father</div>
+          </div>
+          <div class="ch7-member">
+            <div class="ch7-av-wrap">
+              <div class="ch7-av">👩‍🦳</div>
+              <div class="ch7-state-dot sage"></div>
+            </div>
+            <div class="ch7-mname">Mother</div>
+          </div>
+          <div class="ch7-member">
+            <div class="ch7-av-wrap">
+              <div class="ch7-av" style="border:2px dashed var(--i400);background:none;font-size:18px;color:var(--i400)">+</div>
+            </div>
+            <div class="ch7-mname" style="color:var(--i400)">Invite</div>
+          </div>
+        </div>
+        <div class="ch7-detail">
+          <div class="ch7-d-head">
+            <div>
+              <div class="ch7-d-name">Umm Khalid</div>
+              <div class="ch7-d-rel">Mother · Home Care Plus · Week 3/12</div>
+            </div>
+            <span style="font-size:16px">🔒</span>
+          </div>
+          <div class="ch7-visit">
+            <div class="ch7-v-label">Next visit confirmed</div>
+            <div class="ch7-v-time">Tue · 4:30 PM · Amal ✓</div>
+          </div>
+          <div class="ch7-prog-label">Progress</div>
+          <div class="ch7-prog-dots">
+            <div class="sd sd-d" style="width:9px;height:9px"></div>
+            <div class="sd sd-d" style="width:9px;height:9px"></div>
+            <div class="sd sd-d" style="width:9px;height:9px"></div>
+            <div class="sd sd-c" style="width:9px;height:9px"></div>
+            <div class="sd sd-f" style="width:9px;height:9px"></div>
+            <div class="sd sd-f" style="width:9px;height:9px"></div>
+            <div class="sd sd-f" style="width:9px;height:9px"></div>
+            <div class="sd sd-f" style="width:9px;height:9px"></div>
+          </div>
+        </div>
+        <div class="ch7-privacy">
+          <span>🔒</span>
+          <span>Mood check-ins are private. Umm Khalid controls what you see.</span>
+        </div>
+        <div class="ch7-book">احجز لوالدتك — نفس الوقت الأسبوع القادم؟</div>
+      </div>
+    </div>
+    <div class="ch7-text">
+      <div class="chapter-eye">The Family Circle</div>
+      <h2 class="ch7-close-headline">The family is the<br>care unit.<br><strong>The app knows this.</strong></h2>
+      <p class="ch7-close-body">Noura books for her mother, sees the visit confirmed, watches the recovery dots — without a single chasing call. Her mother controls what Noura can see. The privacy lock is always visible.</p>
+      <div class="ch7-codeox">
+        <div class="ch7-ox-logo">⚡</div>
+        <div>
+          <div class="ch7-ox-name">Ready to build this. · CodeOx</div>
+          <div class="ch7-ox-contact">shabeeb.k@code-ox.com · +966 53 571 6437</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* Gold particles for CH6 */
+(function(){
+  const c = document.getElementById('particles');
+  for(let i=0;i<22;i++){
+    const p = document.createElement('div');
+    p.className='particle';
+    const sz = 2+Math.random()*5;
+    p.style.cssText = `
+      width:${sz}px;height:${sz}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      animation-duration:${4+Math.random()*8}s;
+      animation-delay:${Math.random()*6}s;
+      opacity:${0.2+Math.random()*.4};
+    `;
+    c.appendChild(p);
+  }
+})();
+
+/* Nav pips — IntersectionObserver */
+const chapters = document.querySelectorAll('.chapter');
+const pips = document.querySelectorAll('.progress-pip');
+const hint = document.getElementById('scrollHint');
+
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const idx = [...chapters].indexOf(e.target);
+      pips.forEach((p,i)=>p.classList.toggle('active',i===idx));
+      hint.classList.toggle('hidden', idx > 0);
+    }
+  });
+},{threshold:.5});
+
+chapters.forEach(c=>obs.observe(c));
+
+function goTo(n){
+  chapters[n].scrollIntoView({behavior:'smooth'});
+}
+
+/* Keyboard nav */
+document.addEventListener('keydown',e=>{
+  const active = [...pips].findIndex(p=>p.classList.contains('active'));
+  if(e.key==='ArrowDown'||e.key==='ArrowRight') goTo(Math.min(active+1,chapters.length-1));
+  if(e.key==='ArrowUp'||e.key==='ArrowLeft') goTo(Math.max(active-1,0));
+});
+</script>
+</body>
+</html>
