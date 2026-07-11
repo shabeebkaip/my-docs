@@ -58,27 +58,33 @@
   .stat-card .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:8px}
   .stat-card p{font-size:13px;color:var(--grey);margin-top:10px}
 
-  /* icon gap grid */
-  .gap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  .gap-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
-  .gap-card .ico{font-size:20px;margin-bottom:8px}
-  .gap-card .t{font-family:var(--display);font-size:14px;font-weight:600;color:#fff;margin-bottom:6px}
-  .gap-card .now{font-size:12.5px;color:var(--red-2)}
-  .gap-card .now::before{content:"✕ ";color:var(--red-2)}
-  .gap-card .goal{font-size:12.5px;color:var(--ok);margin-top:3px}
-  .gap-card .goal::before{content:"✓ ";color:var(--ok)}
+  /* icon gap grid -> readiness gauges */
+  .gap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .gap-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+  .gap-card .t{font-family:var(--display);font-size:14px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .gap-card .t .ico{font-size:16px}
+  .gap-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .gap-row:last-child{margin-bottom:0}
+  .gap-row .rl{width:38px;flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+  .gap-track{flex:1;height:9px;border-radius:5px;background:var(--bg-2);border:1px solid var(--line);overflow:hidden}
+  .gap-fill{height:100%;border-radius:5px}
+  .gap-fill.now{background:var(--red-2);width:12%}
+  .gap-fill.goal{background:var(--ok);width:95%}
+  .gap-row .rt{width:auto;flex-shrink:0;font-size:11px;color:var(--grey);max-width:150px;text-align:right}
 
   /* strengths chips */
   .chips{display:flex;flex-wrap:wrap;gap:10px}
   .chip{background:var(--blue-soft);border:1px solid var(--blue-line);color:var(--blue-2);font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:999px}
 
-  /* competitor score cards */
-  .score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-  .score-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center}
-  .score-card .sc{font-family:var(--num);font-weight:700;font-size:30px;color:var(--blue-2);line-height:1}
-  .score-card .sc span{font-size:12px;color:var(--dim)}
-  .score-card .nm{font-family:var(--display);font-size:12.5px;font-weight:600;color:#fff;margin:8px 0 4px}
-  .score-card .tag{font-size:10.5px;color:var(--dim);font-family:var(--mono)}
+  /* competitor scoreboard -> horizontal bar chart */
+  .bar-chart{display:flex;flex-direction:column;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 56px;align-items:center;gap:14px}
+  .bar-row .nm{font-family:var(--display);font-size:13.5px;font-weight:600;color:#fff}
+  .bar-row .nm .tag{display:block;font-family:var(--mono);font-size:10px;font-weight:400;color:var(--dim);margin-top:2px;text-transform:none;letter-spacing:0}
+  .bar-track{height:20px;border-radius:5px;background:var(--bg-2);border:1px solid var(--line);overflow:hidden}
+  .bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--blue),var(--blue-2))}
+  .bar-row .sc{font-family:var(--num);font-weight:700;font-size:19px;color:var(--blue-2);text-align:right}
+  .bar-row .sc span{font-size:11px;color:var(--dim);font-weight:600}
   .verdict{margin-top:20px;background:var(--blue-soft);border:1px solid var(--blue-line);border-radius:var(--radius);padding:16px 22px;font-size:13.5px;color:var(--blue-2);text-align:center}
   .verdict b{color:#fff}
 
@@ -96,31 +102,57 @@
   .mini h4{font-family:var(--display);font-size:13.5px;color:var(--blue-2);margin-bottom:5px}
   .mini p{font-size:12px;color:var(--grey)}
 
-  /* topical map badges */
-  .map-callout{display:flex;align-items:center;gap:28px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 28px;margin-bottom:18px;flex-wrap:wrap}
-  .map-callout .mv{text-align:center}
-  .map-callout .mv .n{font-family:var(--num);font-weight:700;font-size:40px;color:var(--blue-2);line-height:1}
-  .map-callout .mv .l{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
-  .map-callout .arrow{font-size:22px;color:var(--dim)}
-  .map-callout p{font-size:13px;color:var(--grey);flex:1;min-width:220px}
-  .badges{display:flex;flex-wrap:wrap;gap:10px}
-  .badge{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12.5px;color:var(--grey);display:flex;align-items:center;gap:8px}
-  .badge b{color:var(--white);font-family:var(--num);font-size:15px}
+  /* topical map -> growth bar + segmented cluster bar */
+  .map-callout{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 28px;margin-bottom:18px}
+  .growth-bar{display:flex;align-items:center;gap:16px;margin-bottom:10px}
+  .growth-bar .mv{text-align:center;flex-shrink:0}
+  .growth-bar .mv .n{font-family:var(--num);font-weight:700;font-size:36px;color:var(--blue-2);line-height:1}
+  .growth-bar .mv .l{font-family:var(--mono);font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+  .growth-track{flex:1;height:26px;border-radius:6px;background:var(--bg-2);border:1px solid var(--line);position:relative;overflow:hidden}
+  .growth-fill{height:100%;border-radius:6px 0 0 6px;background:linear-gradient(90deg,rgba(47,169,216,.35),var(--blue));position:relative}
+  .growth-fill::after{content:"";position:absolute;top:0;right:0;bottom:0;width:2px;background:var(--blue-2)}
+  .map-callout p{font-size:13px;color:var(--grey);margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+  .cluster-bar{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-bottom:14px}
+  .cluster-seg{display:flex;align-items:center;justify-content:center;font-family:var(--num);font-size:11px;font-weight:700;color:#fff;border-right:1px solid var(--bg);white-space:nowrap;overflow:hidden}
+  .cluster-seg:last-child{border-right:none}
+  .cluster-legend{display:flex;flex-wrap:wrap;gap:10px 18px}
+  .cluster-legend .lg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--grey)}
+  .cluster-legend .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+  .cluster-legend b{color:var(--white);font-family:var(--num);font-weight:700}
 
-  /* roadmap phases */
-  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  .phase{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
-  .phase .pnum{font-family:var(--display);font-size:28px;color:var(--blue);opacity:.55;line-height:1;margin-bottom:6px}
-  .phase h4{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px}
-  .phase .psub{font-family:var(--mono);font-size:10px;color:var(--blue-2);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px}
-  .phase p{font-size:12px;color:var(--grey)}
+  /* roadmap -> gantt timeline */
+  .gantt{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px 18px}
+  .gantt-axis{position:relative;height:20px;margin-bottom:8px;margin-left:0}
+  .gantt-axis span{position:absolute;top:0;transform:translateX(-50%);font-family:var(--mono);font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em}
+  .gantt-axis span:first-child{transform:translateX(0)}
+  .gantt-axis span:last-child{transform:translateX(-100%)}
+  .gantt-rows{display:flex;flex-direction:column;gap:10px}
+  .gantt-row{position:relative;height:40px}
+  .gantt-track{position:absolute;top:0;bottom:0;left:0;right:0;border-top:1px dashed var(--line)}
+  .gantt-bar{position:absolute;top:4px;height:32px;border-radius:8px;background:var(--panel-2);border:1px solid var(--blue-line);padding:5px 12px;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+  .gantt-bar::before{content:"";position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--blue)}
+  .gantt-bar .gh{display:flex;align-items:baseline;gap:7px;white-space:nowrap}
+  .gantt-bar .gnum{font-family:var(--display);font-size:11px;color:var(--blue-2);font-weight:700}
+  .gantt-bar h4{font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gantt-bar .psub{font-family:var(--mono);font-size:8.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+  .phase-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 18px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+  .phase-legend .pl{font-size:11.5px;color:var(--grey)}
+  .phase-legend .pl b{color:var(--white);font-family:var(--display);font-size:12px}
 
-  /* checklist */
-  .checklist{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-  .check-item{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:12.5px;color:var(--grey);display:flex;gap:10px;align-items:flex-start}
-  .check-item .dot{width:8px;height:8px;border-radius:50%;background:var(--red-2);margin-top:5px;flex-shrink:0}
-  .check-item .dot.ok{background:var(--ok)}
-  .check-item b{color:var(--white);display:block;margin-bottom:2px}
+  /* checklist -> donut + severity bars */
+  .fix-layout{display:grid;grid-template-columns:180px 1fr;gap:30px;align-items:center}
+  .donut-wrap{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .donut-svg-box{position:relative;width:160px;height:160px}
+  .donut-svg-box .dn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--num);font-weight:700;font-size:34px;color:var(--red-2);line-height:1}
+  .donut-wrap .dl{font-family:var(--mono);font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:10px;max-width:150px}
+  .checklist{display:flex;flex-direction:column;gap:9px}
+  .check-item{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 16px;display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:center}
+  .check-item b{color:var(--white);font-size:12.5px;font-family:var(--display);font-weight:600}
+  .check-item .sev-track{height:8px;border-radius:4px;background:var(--bg-2);border:1px solid var(--line);overflow:hidden;position:relative}
+  .check-item .sev-fill{height:100%;border-radius:4px;background:var(--red-2)}
+  .check-item .sev-fill.ok{background:var(--ok)}
+  .check-item .txt{font-size:11.5px;color:var(--grey);margin-top:4px;display:block}
+  @media (max-width:900px){.fix-layout{grid-template-columns:1fr}.check-item{grid-template-columns:1fr}}
 
   /* deliverables */
   .deliv{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
@@ -161,15 +193,22 @@
   footer .contact a{color:var(--blue-2);text-decoration:none}
 
   @media (max-width:900px){
-    .stats3,.score-grid,.pillars,.mini-grid,.phases,.checklist,.deliv,.steps,.kpi-grid,.qas{grid-template-columns:repeat(2,1fr)}
+    .stats3,.pillars,.mini-grid,.deliv,.steps,.kpi-grid,.qas{grid-template-columns:repeat(2,1fr)}
     .gap-grid{grid-template-columns:1fr}
+    .bar-row{grid-template-columns:110px 1fr 46px;gap:8px}
   }
   @media (max-width:600px){
-    .stats3,.score-grid,.pillars,.mini-grid,.phases,.checklist,.deliv,.steps,.kpi-grid,.qas{grid-template-columns:1fr}
+    .stats3,.pillars,.mini-grid,.deliv,.steps,.kpi-grid,.qas{grid-template-columns:1fr}
     section{padding:40px 0}
     .wrap{padding:0 20px}
     .hero{padding:48px 0 36px}
-    .map-callout{flex-direction:column;text-align:center}
+    .bar-row{grid-template-columns:1fr;gap:6px;text-align:left}
+    .bar-row .sc{text-align:left}
+    .growth-bar{flex-direction:column;align-items:stretch}
+    .growth-bar .mv{flex-direction:row;display:flex;align-items:baseline;gap:8px;justify-content:center}
+    .cluster-legend{grid-template-columns:1fr 1fr}
+    .gantt-bar h4{overflow:visible;white-space:normal}
+    .phase-legend{grid-template-columns:1fr}
   }
   @media print{ body{background:#fff;color:#111} section{page-break-inside:avoid} }
 </style>
@@ -212,12 +251,36 @@
     <h2>Where Al Saber Stands Today</h2>
     <p class="lead">A live-review snapshot of alsabercars.com. Al Saber hasn't been measured in a keyword tool yet — that's the first task of Phase 1.</p>
     <div class="gap-grid">
-      <div class="gap-card"><div class="ico">🏷️</div><div class="t">Brand pages</div><div class="now">Filters only, no content</div><div class="goal">A real page per brand</div></div>
-      <div class="gap-card"><div class="ico">💰</div><div class="t">Price content</div><div class="now">None on the site</div><div class="goal">A price guide per model</div></div>
-      <div class="gap-card"><div class="ico">⚖️</div><div class="t">Comparisons</div><div class="now">None</div><div class="goal">Head-to-head pages</div></div>
-      <div class="gap-card"><div class="ico">❓</div><div class="t">FAQ page</div><div class="now">Exists, zero questions</div><div class="goal">20–30 real Qs + schema</div></div>
-      <div class="gap-card"><div class="ico">🔖</div><div class="t">Meta descriptions</div><div class="now">Blank, every page</div><div class="goal">Keyword-aware, per page</div></div>
-      <div class="gap-card"><div class="ico">🚗</div><div class="t">Model pages</div><div class="now">Die when the car sells</div><div class="goal">Evergreen, never expire</div></div>
+      <div class="gap-card">
+        <div class="t"><span class="ico">🏷️</span>Brand pages</div>
+        <div class="gap-row"><span class="rl">Now</span><div class="gap-track"><div class="gap-fill now"></div></div><span class="rt">Filters only, no content</span></div>
+        <div class="gap-row"><span class="rl">Goal</span><div class="gap-track"><div class="gap-fill goal"></div></div><span class="rt">A real page per brand</span></div>
+      </div>
+      <div class="gap-card">
+        <div class="t"><span class="ico">💰</span>Price content</div>
+        <div class="gap-row"><span class="rl">Now</span><div class="gap-track"><div class="gap-fill now" style="width:2%"></div></div><span class="rt">None on the site</span></div>
+        <div class="gap-row"><span class="rl">Goal</span><div class="gap-track"><div class="gap-fill goal"></div></div><span class="rt">A price guide per model</span></div>
+      </div>
+      <div class="gap-card">
+        <div class="t"><span class="ico">⚖️</span>Comparisons</div>
+        <div class="gap-row"><span class="rl">Now</span><div class="gap-track"><div class="gap-fill now" style="width:2%"></div></div><span class="rt">None</span></div>
+        <div class="gap-row"><span class="rl">Goal</span><div class="gap-track"><div class="gap-fill goal"></div></div><span class="rt">Head-to-head pages</span></div>
+      </div>
+      <div class="gap-card">
+        <div class="t"><span class="ico">❓</span>FAQ page</div>
+        <div class="gap-row"><span class="rl">Now</span><div class="gap-track"><div class="gap-fill now" style="width:15%"></div></div><span class="rt">Exists, zero questions</span></div>
+        <div class="gap-row"><span class="rl">Goal</span><div class="gap-track"><div class="gap-fill goal"></div></div><span class="rt">20–30 real Qs + schema</span></div>
+      </div>
+      <div class="gap-card">
+        <div class="t"><span class="ico">🔖</span>Meta descriptions</div>
+        <div class="gap-row"><span class="rl">Now</span><div class="gap-track"><div class="gap-fill now"></div></div><span class="rt">Blank, every page</span></div>
+        <div class="gap-row"><span class="rl">Goal</span><div class="gap-track"><div class="gap-fill goal"></div></div><span class="rt">Keyword-aware, per page</span></div>
+      </div>
+      <div class="gap-card">
+        <div class="t"><span class="ico">🚗</span>Model pages</div>
+        <div class="gap-row"><span class="rl">Now</span><div class="gap-track"><div class="gap-fill now" style="width:25%"></div></div><span class="rt">Die when the car sells</span></div>
+        <div class="gap-row"><span class="rl">Goal</span><div class="gap-track"><div class="gap-fill goal"></div></div><span class="rt">Evergreen, never expire</span></div>
+      </div>
     </div>
     <p class="lead" style="margin:24px 0 10px;font-size:13px">The real advantages, though:</p>
     <div class="chips">
@@ -235,12 +298,32 @@
     <span class="kicker">Who's Winning This Market</span>
     <h2>Competitor Scoreboard</h2>
     <p class="lead">Scored out of 10 for fit with a Riyadh dealer that has a strong brand and a thin content footprint today.</p>
-    <div class="score-grid">
-      <div class="score-card"><div class="sc">9<span>/10</span></div><div class="nm">Syarah</div><div class="tag">325 guides, $82M raised</div></div>
-      <div class="score-card"><div class="sc">8<span>/10</span></div><div class="nm">YallaMotor KSA</div><div class="tag">Evergreen structure</div></div>
-      <div class="score-card"><div class="sc">7<span>/10</span></div><div class="nm">CarDekho</div><div class="tag">Quality bar (India)</div></div>
-      <div class="score-card"><div class="sc">7<span>/10</span></div><div class="nm">Motory</div><div class="tag">Financing framing</div></div>
-      <div class="score-card"><div class="sc">6<span>/10</span></div><div class="nm">dubizzle / CarWale</div><div class="tag">Volume, not depth</div></div>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="nm">Syarah<span class="tag">325 guides, $82M raised</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+        <div class="sc">9<span>/10</span></div>
+      </div>
+      <div class="bar-row">
+        <div class="nm">YallaMotor KSA<span class="tag">Evergreen structure</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+        <div class="sc">8<span>/10</span></div>
+      </div>
+      <div class="bar-row">
+        <div class="nm">CarDekho<span class="tag">Quality bar (India)</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
+        <div class="sc">7<span>/10</span></div>
+      </div>
+      <div class="bar-row">
+        <div class="nm">Motory<span class="tag">Financing framing</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
+        <div class="sc">7<span>/10</span></div>
+      </div>
+      <div class="bar-row">
+        <div class="nm">dubizzle / CarWale<span class="tag">Volume, not depth</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
+        <div class="sc">6<span>/10</span></div>
+      </div>
     </div>
     <div class="verdict"><b>YallaMotor's structure + Syarah's depth</b>, held to CarDekho's quality bar, wrapped in the <b>75-year import + murabaha authority</b> none of them have.</div>
   </div>
@@ -282,20 +365,36 @@
     <span class="kicker">The Content Build</span>
     <h2>One Topical Map, Built in Phases</h2>
     <div class="map-callout">
-      <div class="mv"><div class="n">205</div><div class="l">Phase 1 pages</div></div>
-      <div class="arrow">→</div>
-      <div class="mv"><div class="n">~735</div><div class="l">Mature map, 12–24mo</div></div>
+      <div class="growth-bar">
+        <div class="mv"><div class="n">205</div><div class="l">Phase 1 pages</div></div>
+        <div class="growth-track"><div class="growth-fill" style="width:28%"></div></div>
+        <div class="mv"><div class="n">~735</div><div class="l">Mature map, 12–24mo</div></div>
+      </div>
       <p>Every brand becomes its own mini map — sized by how much it sells. Worked example: <b style="color:var(--white)">Mercedes-Benz = 18 pages</b> (hub, 8 model guides, 4 comparisons, 2 new-vs-used, 2 trust guides). Full page-by-page list available as a separate workbook.</p>
     </div>
-    <div class="badges">
-      <span class="badge"><b>65</b>Brand hubs</span>
-      <span class="badge"><b>40</b>Price &amp; buying guides</span>
-      <span class="badge"><b>15</b>Comparisons</span>
-      <span class="badge"><b>15</b>New vs. used guides</span>
-      <span class="badge"><b>8</b>Murabaha &amp; financing</span>
-      <span class="badge"><b>8</b>Import education</span>
-      <span class="badge"><b>14</b>EV &amp; Chinese brands</span>
-      <span class="badge"><b>4</b>Local &amp; branch pages</span>
+    <div class="cluster-bar" role="img" aria-label="205 phase-1 pages split into 65 brand hubs, 40 price and buying guides, 15 comparisons, 15 new vs used guides, 8 murabaha and financing, 8 import education, 14 EV and Chinese brands, 4 local and branch pages, 16 FAQ hub and entries, 20 reviews and journal pilot">
+      <div class="cluster-seg" style="width:31.71%;background:var(--blue)">65</div>
+      <div class="cluster-seg" style="width:19.51%;background:var(--blue-2);color:#0A111C">40</div>
+      <div class="cluster-seg" style="width:7.32%;background:#3E7EA8">15</div>
+      <div class="cluster-seg" style="width:7.32%;background:#5A96BC">15</div>
+      <div class="cluster-seg" style="width:3.90%;background:var(--high)"></div>
+      <div class="cluster-seg" style="width:3.90%;background:#6B8C7C"></div>
+      <div class="cluster-seg" style="width:6.83%;background:#8C6B2E">14</div>
+      <div class="cluster-seg" style="width:1.95%;background:var(--dim)"></div>
+      <div class="cluster-seg" style="width:7.80%;background:var(--ok);color:#0A111C">16</div>
+      <div class="cluster-seg" style="width:9.76%;background:#5B6EA0">20</div>
+    </div>
+    <div class="cluster-legend">
+      <span class="lg"><i class="sw" style="background:var(--blue)"></i><b>65</b>&nbsp;Brand hubs</span>
+      <span class="lg"><i class="sw" style="background:var(--blue-2)"></i><b>40</b>&nbsp;Price &amp; buying guides</span>
+      <span class="lg"><i class="sw" style="background:#3E7EA8"></i><b>15</b>&nbsp;Comparisons</span>
+      <span class="lg"><i class="sw" style="background:#5A96BC"></i><b>15</b>&nbsp;New vs. used guides</span>
+      <span class="lg"><i class="sw" style="background:var(--high)"></i><b>8</b>&nbsp;Murabaha &amp; financing</span>
+      <span class="lg"><i class="sw" style="background:#6B8C7C"></i><b>8</b>&nbsp;Import education</span>
+      <span class="lg"><i class="sw" style="background:#8C6B2E"></i><b>14</b>&nbsp;EV &amp; Chinese brands</span>
+      <span class="lg"><i class="sw" style="background:var(--dim)"></i><b>4</b>&nbsp;Local &amp; branch pages</span>
+      <span class="lg"><i class="sw" style="background:var(--ok)"></i><b>16</b>&nbsp;FAQ hub &amp; entries</span>
+      <span class="lg"><i class="sw" style="background:#5B6EA0"></i><b>20</b>&nbsp;Reviews &amp; journal (pilot)</span>
     </div>
   </div>
 </section>
@@ -336,16 +435,33 @@
   <div class="wrap">
     <span class="kicker">Confirmed on Our Own Audit</span>
     <h2>What's Actually Broken, Right Now</h2>
-    <div class="checklist">
-      <div class="check-item"><div class="dot"></div><div><b>Meta &amp; H1s</b>Blank/missing sitewide, every page checked.</div></div>
-      <div class="check-item"><div class="dot"></div><div><b>Sitemap</b>404. robots.txt has no Sitemap line.</div></div>
-      <div class="check-item"><div class="dot"></div><div><b>Structured data</b>Zero schema anywhere on the site.</div></div>
-      <div class="check-item"><div class="dot"></div><div><b>Open Graph</b>Shared WhatsApp links show as bare URLs.</div></div>
-      <div class="check-item"><div class="dot"></div><div><b>English version</b>Session-based, invisible to search.</div></div>
-      <div class="check-item"><div class="dot"></div><div><b>www vs. apex</b>Both live — ranking signals split in half.</div></div>
-      <div class="check-item"><div class="dot"></div><div><b>Image alt text</b>125 of 126 images have none.</div></div>
-      <div class="check-item"><div class="dot"></div><div><b>Core Web Vitals</b>Mobile score 55, 57.5s LCP measured.</div></div>
-      <div class="check-item"><div class="dot ok"></div><div><b>HTTPS &amp; robots.txt</b>Both valid — a clean base to build on.</div></div>
+    <div class="fix-layout">
+      <div class="donut-wrap">
+        <div class="donut-svg-box">
+          <svg width="160" height="160" viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="66" fill="none" stroke="#16253B" stroke-width="20"/>
+            <circle cx="80" cy="80" r="66" fill="none" stroke="#E8442A" stroke-width="20"
+              stroke-dasharray="368.6 414.7" stroke-dashoffset="0" stroke-linecap="round"
+              transform="rotate(-90 80 80)"/>
+            <circle cx="80" cy="80" r="66" fill="none" stroke="#55B98A" stroke-width="20"
+              stroke-dasharray="46.1 414.7" stroke-dashoffset="-368.6" stroke-linecap="round"
+              transform="rotate(-90 80 80)"/>
+          </svg>
+          <div class="dn">8/9</div>
+        </div>
+        <div class="dl">Checks failing our own audit</div>
+      </div>
+      <div class="checklist">
+        <div class="check-item"><div><b>Meta &amp; H1s</b><span class="txt">Blank/missing sitewide, every page checked.</span></div><div class="sev-track"><div class="sev-fill" style="width:95%"></div></div></div>
+        <div class="check-item"><div><b>Sitemap</b><span class="txt">404. robots.txt has no Sitemap line.</span></div><div class="sev-track"><div class="sev-fill" style="width:90%"></div></div></div>
+        <div class="check-item"><div><b>Structured data</b><span class="txt">Zero schema anywhere on the site.</span></div><div class="sev-track"><div class="sev-fill" style="width:100%"></div></div></div>
+        <div class="check-item"><div><b>Open Graph</b><span class="txt">Shared WhatsApp links show as bare URLs.</span></div><div class="sev-track"><div class="sev-fill" style="width:70%"></div></div></div>
+        <div class="check-item"><div><b>English version</b><span class="txt">Session-based, invisible to search.</span></div><div class="sev-track"><div class="sev-fill" style="width:80%"></div></div></div>
+        <div class="check-item"><div><b>www vs. apex</b><span class="txt">Both live — ranking signals split in half.</span></div><div class="sev-track"><div class="sev-fill" style="width:75%"></div></div></div>
+        <div class="check-item"><div><b>Image alt text</b><span class="txt">125 of 126 images have none.</span></div><div class="sev-track"><div class="sev-fill" style="width:99%"></div></div></div>
+        <div class="check-item"><div><b>Core Web Vitals</b><span class="txt">Mobile score 55, 57.5s LCP measured.</span></div><div class="sev-track"><div class="sev-fill" style="width:85%"></div></div></div>
+        <div class="check-item"><div><b>HTTPS &amp; robots.txt</b><span class="txt">Both valid — a clean base to build on.</span></div><div class="sev-track"><div class="sev-fill ok" style="width:100%"></div></div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -355,13 +471,38 @@
   <div class="wrap">
     <span class="kicker">The Roadmap</span>
     <h2>12 Months, Sequenced by What Pays Off First</h2>
-    <div class="phases">
-      <div class="phase"><div class="pnum">I</div><h4>Foundation</h4><div class="psub">Mo. 1–2</div><p>Sitemap, meta, schema, canonical, hreflang, GA4/GSC set up.</p></div>
-      <div class="phase"><div class="pnum">II</div><h4>Evergreen Content</h4><div class="psub">Mo. 2–4</div><p>First 20 brand hubs + 40 price guides go live.</p></div>
-      <div class="phase"><div class="pnum">III</div><h4>Local SEO</h4><div class="psub">Mo. 3–5</div><p>Both Google Business Profiles claimed, reviews flowing.</p></div>
-      <div class="phase"><div class="pnum">IV</div><h4>The Moat Content</h4><div class="psub">Mo. 5–9</div><p>Murabaha, import &amp; comparison clusters — first AI citations.</p></div>
-      <div class="phase"><div class="pnum">V</div><h4>Authority</h4><div class="psub">Mo. 8–12</div><p>Digital PR on the 75-year story, citations, backlinks.</p></div>
-      <div class="phase"><div class="pnum">VI</div><h4>Refresh &amp; Scale</h4><div class="psub">Mo. 11–12</div><p>Real-data refresh, plan the full Arabic rollout.</p></div>
+    <div class="gantt">
+      <div class="gantt-axis">
+        <span style="left:0%">Mo 1</span><span style="left:25%">Mo 4</span><span style="left:50%">Mo 7</span><span style="left:75%">Mo 10</span><span style="left:100%">Mo 12</span>
+      </div>
+      <div class="gantt-rows">
+        <div class="gantt-row"><div class="gantt-track"></div>
+          <div class="gantt-bar" style="left:0%;width:16.67%"><div class="gh"><span class="gnum">I</span><h4>Foundation</h4></div><div class="psub">Mo. 1–2</div></div>
+        </div>
+        <div class="gantt-row"><div class="gantt-track"></div>
+          <div class="gantt-bar" style="left:8.33%;width:25%"><div class="gh"><span class="gnum">II</span><h4>Evergreen Content</h4></div><div class="psub">Mo. 2–4</div></div>
+        </div>
+        <div class="gantt-row"><div class="gantt-track"></div>
+          <div class="gantt-bar" style="left:16.67%;width:25%"><div class="gh"><span class="gnum">III</span><h4>Local SEO</h4></div><div class="psub">Mo. 3–5</div></div>
+        </div>
+        <div class="gantt-row"><div class="gantt-track"></div>
+          <div class="gantt-bar" style="left:33.33%;width:41.67%"><div class="gh"><span class="gnum">IV</span><h4>The Moat Content</h4></div><div class="psub">Mo. 5–9</div></div>
+        </div>
+        <div class="gantt-row"><div class="gantt-track"></div>
+          <div class="gantt-bar" style="left:58.33%;width:41.67%"><div class="gh"><span class="gnum">V</span><h4>Authority</h4></div><div class="psub">Mo. 8–12</div></div>
+        </div>
+        <div class="gantt-row"><div class="gantt-track"></div>
+          <div class="gantt-bar" style="left:83.33%;width:16.67%"><div class="gh"><span class="gnum">VI</span><h4>Refresh &amp; Scale</h4></div><div class="psub">Mo. 11–12</div></div>
+        </div>
+      </div>
+      <div class="phase-legend">
+        <div class="pl"><b>I · Foundation</b> — Sitemap, meta, schema, canonical, hreflang, GA4/GSC set up.</div>
+        <div class="pl"><b>II · Evergreen Content</b> — First 20 brand hubs + 40 price guides go live.</div>
+        <div class="pl"><b>III · Local SEO</b> — Both Google Business Profiles claimed, reviews flowing.</div>
+        <div class="pl"><b>IV · The Moat Content</b> — Murabaha, import &amp; comparison clusters — first AI citations.</div>
+        <div class="pl"><b>V · Authority</b> — Digital PR on the 75-year story, citations, backlinks.</div>
+        <div class="pl"><b>VI · Refresh &amp; Scale</b> — Real-data refresh, plan the full Arabic rollout.</div>
+      </div>
     </div>
   </div>
 </section>
