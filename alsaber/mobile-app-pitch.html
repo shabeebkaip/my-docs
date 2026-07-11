@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Al Saber Cars — The Mobile App Proposal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&family=Titillium+Web:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A111C; --bg-2:#0E1828; --panel:#121E30; --panel-2:#16253B;
+    --line:#22344D; --line-2:#2E4363;
+    --white:#F2F6FA; --grey:#A6B4C6; --dim:#6B7D93;
+    --cyan:#2FA9D8; --cyan-2:#7BCCEC; --cyan-soft:rgba(47,169,216,.10); --cyan-line:rgba(47,169,216,.38);
+    --crit:#E8442A; --crit-2:#F1684B; --crit-soft:rgba(232,68,42,.12);
+    --high:#D9A441; --high-soft:rgba(217,164,65,.12);
+    --ok:#55B98A; --ok-soft:rgba(85,185,138,.12);
+    --display:'Chakra Petch','Arial Narrow',sans-serif;
+    --num:'Rajdhani','Arial Narrow',sans-serif;
+    --sans:'Titillium Web',-apple-system,BlinkMacSystemFont,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--bg);color:var(--white);line-height:1.6}
+  section{padding:80px 0;border-bottom:1px solid var(--line)}
+  section:last-of-type{border-bottom:none}
+  .alt{background:var(--bg-2)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 36px}
+  .kicker{display:inline-block;font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:18px}
+  h2{font-family:var(--display);font-size:clamp(26px,3.4vw,40px);font-weight:600;line-height:1.18;letter-spacing:.2px;margin-bottom:14px;color:#fff}
+  p.lead{font-size:clamp(15px,1.5vw,17px);color:var(--grey);max-width:72ch;margin-bottom:36px}
+  p.lead b{color:var(--cyan-2);font-weight:600}
+
+  /* hero */
+  .hero{padding:100px 0 76px;background:
+    radial-gradient(1100px 520px at 82% -10%, rgba(47,169,216,.16), transparent 60%),
+    linear-gradient(180deg,#0A111C 0%,#0E1828 100%)}
+  .brandline{display:flex;justify-content:space-between;align-items:center;margin-bottom:70px;flex-wrap:wrap;gap:16px}
+  .brandline img{height:38px}
+  .doc-tag{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .hero h1{font-family:var(--display);font-size:clamp(32px,4.8vw,54px);font-weight:600;line-height:1.14;max-width:880px;margin-bottom:22px;color:#fff}
+  .hero h1 em{font-style:normal;color:var(--cyan-2)}
+  .hero p.lede{font-size:clamp(16px,1.7vw,19px);color:var(--grey);max-width:720px;margin-bottom:48px}
+  .hero-meta{display:flex;gap:48px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:26px}
+  .hero-meta div span{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--dim);margin-bottom:5px}
+  .hero-meta div strong{font-size:15.5px;font-weight:600;color:var(--white)}
+
+  /* proof cards */
+  .proof{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .proof-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:28px;position:relative;overflow:hidden}
+  .proof-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--cyan)}
+  .proof-card .stat{font-family:var(--num);font-size:clamp(32px,3.6vw,44px);font-weight:700;color:var(--cyan-2);line-height:1;margin-bottom:10px}
+  .proof-card .tag{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+  .proof-card p{font-size:14px;color:var(--grey)}
+  .proof-card p b{color:var(--white)}
+
+  /* website vs app */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:10px}
+  .duo-panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:30px}
+  .duo-panel .role{font-family:var(--mono);font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+  .duo-panel h3{font-family:var(--display);font-size:21px;color:#fff;margin-bottom:8px}
+  .duo-panel p{font-size:14px;color:var(--grey)}
+
+  /* benchmark */
+  .bench-group{margin-bottom:34px}
+  .bench-group h4{font-family:var(--display);font-size:16px;letter-spacing:.05em;color:var(--cyan-2);margin-bottom:16px;text-transform:uppercase}
+  .bench-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .app-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .app-card .name{font-family:var(--display);font-size:15px;font-weight:600;color:#fff;margin-bottom:6px}
+  .app-card p{font-size:13px;color:var(--grey)}
+  .app-card .feat{display:inline-block;margin-top:9px;font-family:var(--mono);font-size:11px;color:var(--cyan-2);background:var(--cyan-soft);border:1px solid var(--cyan-line);border-radius:999px;padding:4px 11px}
+
+  /* signals grid */
+  .signals{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .signal{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;display:flex;gap:14px;align-items:flex-start}
+  .signal.rec{border-color:var(--cyan-line);background:linear-gradient(135deg,var(--cyan-soft),transparent 70%)}
+  .signal .n{font-family:var(--num);font-size:22px;font-weight:700;color:var(--cyan);min-width:28px}
+  .signal .n-body h5{font-size:14.5px;font-weight:700;color:var(--white);margin-bottom:4px}
+  .signal .n-body p{font-size:13px;color:var(--grey)}
+  .signal .rec-pill{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--cyan);border-radius:999px;padding:2px 9px;font-weight:700}
+
+  /* phone mockups */
+  .phones{display:flex;gap:22px;overflow-x:auto;padding:10px 2px 26px;scrollbar-width:thin}
+  .phone{flex:0 0 auto;width:220px}
+  .phone .frame{width:220px;height:452px;border-radius:34px;border:2px solid var(--line-2);background:var(--bg);padding:8px;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+  .phone .screen{width:100%;height:100%;border-radius:26px;overflow:hidden;position:relative;display:flex;flex-direction:column;justify-content:flex-end}
+  .phone .screen.hero-scr{background:linear-gradient(200deg,#1a2b40 0%,#0d1420 55%,#2a1210 100%)}
+  .phone .screen.vip-scr{background:linear-gradient(200deg,#101c2c 0%,#0A111C 100%)}
+  .phone .screen.push-scr{background:linear-gradient(200deg,#0d1420 0%,#0A111C 100%)}
+  .phone .screen.fast-scr{background:linear-gradient(200deg,#0f2333 0%,#0A111C 100%)}
+  .phone .topbar{position:absolute;top:14px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--dim);z-index:2}
+  .phone .topbar .mark{font-family:var(--display);font-weight:700;color:var(--cyan-2);letter-spacing:.08em}
+  .phone .content{position:relative;z-index:2;padding:16px}
+  .phone .spec-strip{background:rgba(10,17,28,.72);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:16px}
+  .phone .spec-row{display:flex;justify-content:space-between;margin-bottom:8px}
+  .phone .spec-row span{font-family:var(--mono);font-size:9.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+  .phone .spec-row strong{font-family:var(--num);font-size:16px;color:#fff;font-weight:700}
+  .phone .price-line{font-family:var(--mono);font-size:11px;color:var(--cyan-2);margin-bottom:10px}
+  .phone .cta{background:var(--cyan);color:var(--bg);font-family:var(--display);font-size:12px;font-weight:700;text-align:center;padding:11px;border-radius:9px;letter-spacing:.02em}
+  .phone .cta.ghost{background:transparent;border:1px solid var(--cyan-line);color:var(--cyan-2)}
+  .phone .vip-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:auto}
+  .phone .vip-card .who{font-family:var(--display);font-size:13px;color:#fff;margin-bottom:2px}
+  .phone .vip-card .sub{font-family:var(--mono);font-size:9.5px;color:var(--dim);margin-bottom:10px}
+  .phone .vip-row{display:flex;justify-content:space-between;font-size:11px;color:var(--grey);padding:6px 0;border-top:1px solid var(--line)}
+  .phone .lock-time{font-family:var(--num);font-size:46px;font-weight:600;color:#fff;text-align:center;margin:60px 0 18px}
+  .phone .notif{background:rgba(18,30,48,.92);border:1px solid var(--cyan-line);border-radius:14px;padding:12px 14px;margin:0 6px}
+  .phone .notif .from{font-family:var(--mono);font-size:9px;color:var(--cyan-2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+  .phone .notif .t{font-family:var(--display);font-size:12.5px;color:#fff;margin-bottom:3px}
+  .phone .notif .b{font-size:11px;color:var(--grey)}
+  .phone .calc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:auto}
+  .phone .calc .amt{font-family:var(--num);font-size:30px;font-weight:700;color:var(--ok)}
+  .phone .calc .per{font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:10px}
+  .phone .label{text-align:center;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-top:14px}
+
+  /* roadmap */
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .phase{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+  .phase .pnum{font-family:var(--display);font-size:40px;color:var(--cyan);opacity:.55;line-height:1;margin-bottom:12px}
+  .phase h4{font-size:16.5px;font-weight:700;color:#fff;margin-bottom:4px}
+  .phase .psub{font-family:var(--mono);font-size:11.5px;color:var(--cyan-2);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+  .phase ul{list-style:none}
+  .phase li{font-size:13px;color:var(--grey);padding:7px 0 7px 18px;position:relative}
+  .phase li::before{content:"·";position:absolute;left:2px;color:var(--cyan);font-weight:900;font-size:18px;line-height:1}
+
+  /* objections */
+  .qas{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .qa{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .qa .q{font-family:var(--mono);font-size:12px;color:var(--high);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  .qa .a{font-size:14px;color:var(--grey)}
+  .qa .a b{color:var(--white)}
+
+  /* closing / footer */
+  .closing{background:radial-gradient(900px 420px at 20% 110%, rgba(47,169,216,.12), transparent 60%),var(--bg-2)}
+  .closing h2{max-width:720px}
+  footer{padding:44px 0;text-align:center}
+  footer .logo-chip{display:inline-flex;align-items:center;gap:10px;background:#fff;border-radius:999px;padding:8px 18px;margin-bottom:16px}
+  footer .logo-chip img{height:24px;display:block}
+  footer .contact{font-size:13.5px;color:var(--dim)}
+  footer .contact a{color:var(--cyan-2);text-decoration:none}
+
+  @media (max-width:840px){
+    .proof,.duo,.bench-grid,.signals,.phases,.qas{grid-template-columns:1fr}
+    section{padding:52px 0}
+    .wrap{padding:0 22px}
+    .hero{padding:64px 0 48px}
+    .phones{padding-bottom:16px}
+  }
+  @media print{ body{background:#fff;color:#111} section{page-break-inside:avoid} }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="brandline">
+      <img src="assets/alsaber-logo.png" alt="Al Saber Cars Co.">
+      <span class="doc-tag">Mobile App Proposal</span>
+    </div>
+    <h1>The Showroom Fits In Their Pocket. <em>Right Now, It Doesn't.</em></h1>
+    <p class="lede">Your inventory runs from Rolls-Royce to Elantra — a curated range few dealers in the Kingdom can match. This is the case for a branded mobile app that carries that range everywhere your customer goes, turns a one-time buyer into a repeat one, and gives Al Saber a permanent line to its market instead of a single browser tab.</p>
+    <div class="hero-meta">
+      <div><span>Prepared for</span><strong>Al Saber Cars Co.</strong></div>
+      <div><span>Date</span><strong>July 2026</strong></div>
+      <div><span>Scope</span><strong>Mobile App Strategy &amp; Concept</strong></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ WHY NOW ============ -->
+<section class="alt">
+  <div class="wrap">
+    <span class="kicker">Why Now</span>
+    <h2>Three Facts That Point the Same Direction</h2>
+    <p class="lead">These aren't opinions — the first is measured from your own site, the second is how the Kingdom already buys, the third is a KSA competitor proving the model works.</p>
+    <div class="proof">
+      <div class="proof-card">
+        <div class="stat">57.5s</div>
+        <div class="tag">Measured · your mobile site</div>
+        <p>Google PageSpeed measured <b>57.5 seconds</b> to load your main content on mobile — the device almost every buyer uses first. A website that slow can't hold attention long enough to sell a car. An app installed once opens instantly, every time.</p>
+      </div>
+      <div class="proof-card">
+        <div class="stat">1 tap</div>
+        <div class="tag">How KSA actually buys</div>
+        <p>Saudi car buyers close deals on <b>WhatsApp</b>, not contact forms. Your own site has a footer WhatsApp link but nothing per-car. An app puts "message my advisor about this exact car" one tap away, every screen.</p>
+      </div>
+      <div class="proof-card">
+        <div class="stat">Syarah</div>
+        <div class="tag">Proof, not theory</div>
+        <p>Syarah — the Kingdom's largest car marketplace — runs financing, delivery and its entire buying journey through its app. Saudi buyers already trust a phone to buy a car; the only question is whose app they trust it with.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WEBSITE VS APP ============ -->
+<section>
+  <div class="wrap">
+    <span class="kicker">Two Jobs, Not One</span>
+    <h2>The Website Wins the Customer. The App Keeps Them.</h2>
+    <p class="lead">This isn't a replacement for the website work already underway — it's the next layer. Once the front door converts, the app is what makes every buyer worth three buyers.</p>
+    <div class="duo">
+      <div class="duo-panel">
+        <div class="role">The Website + SEO</div>
+        <h3>Wins the customer</h3>
+        <p>Found through Google, Instagram, a shared link. Its job is the first impression and the first enquiry — every search click and every ad riyal lands here first.</p>
+      </div>
+      <div class="duo-panel">
+        <div class="role">The Mobile App</div>
+        <h3>Keeps the customer</h3>
+        <p>Lives on their phone as a private line to Al Saber: new arrivals before the public, saved cars, a named advisor on WhatsApp, financing that's already pre-filled. It turns one sale into the next three.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GLOBAL BENCHMARK ============ -->
+<section class="alt">
+  <div class="wrap">
+    <span class="kicker">Who Else Is Doing This</span>
+    <h2>Premium Car Sales Is Already an App Business, Worldwide</h2>
+    <p class="lead">From manufacturer owner-apps to enthusiast marketplaces to your own regional competitors — every serious player in this category has already moved browsing and buying onto a phone.</p>
+
+    <div class="bench-group">
+      <h4>Manufacturer &amp; Owner Apps</h4>
+      <div class="bench-grid">
+        <div class="app-card"><div class="name">My Porsche</div><p>Full ownership app — remote vehicle control, service booking, and factory-to-dealer build tracking so the customer watches their own car being made.</p><span class="feat">Owner retention</span></div>
+        <div class="app-card"><div class="name">Rolls-Royce Whispers</div><p>Invitation-only owners' app: private concierge, exclusive events, a direct line to the brand. The industry benchmark for "app as VIP club."</p><span class="feat">Concierge</span></div>
+        <div class="app-card"><div class="name">Ferrari UNIVERSE / MyFerrari</div><p>Ownership services, exclusive content and dealer connection built around the owner community, not just the sale.</p><span class="feat">Community</span></div>
+        <div class="app-card"><div class="name">Mercedes me &amp; My BMW</div><p>Mass-premium standard-setters: digital garage, service scheduling, personalised offers baked into daily use.</p><span class="feat">Daily utility</span></div>
+      </div>
+    </div>
+
+    <div class="bench-group">
+      <h4>Enthusiast &amp; Luxury Marketplaces</h4>
+      <div class="bench-grid">
+        <div class="app-card"><div class="name">Cars &amp; Bids</div><p>Enthusiast auctions with outbid alerts, watchlists and lock-screen live updates — urgency and obsession turned into a habit loop.</p><span class="feat">Push urgency</span></div>
+        <div class="app-card"><div class="name">Bring a Trailer / Collecting Cars / PCarMarket</div><p>Curated auction listings with deep photo sets and expert write-ups — scarcity presented beautifully, not just listed.</p><span class="feat">Curation</span></div>
+        <div class="app-card"><div class="name">JamesEdition / duPont Registry</div><p>Global luxury classifieds built for aspirational browsing — high-res galleries, saved searches, direct-to-dealer enquiry.</p><span class="feat">Aspirational browse</span></div>
+        <div class="app-card"><div class="name">Carvana / CarGurus / AutoTrader</div><p>Mainstream standard-setters: instant financing calculators, trade-in valuation, e-paperwork, price-drop alerts.</p><span class="feat">Instant financing</span></div>
+      </div>
+    </div>
+
+    <div class="bench-group">
+      <h4>GCC &amp; KSA Region — Your Actual Competitors</h4>
+      <div class="bench-grid">
+        <div class="app-card"><div class="name">Syarah</div><p>KSA's largest marketplace app: 200-point inspection, 10-day return, in-app financing, free delivery anywhere in Saudi.</p><span class="feat">Full funnel in-app</span></div>
+        <div class="app-card"><div class="name">Motory.sa</div><p>Marketplace plus an online dealership and live digital auctions ("Mazad") — buying entirely without a showroom visit.</p><span class="feat">Digital auctions</span></div>
+        <div class="app-card"><div class="name">dubizzle Cars / CarSwitch</div><p>UAE + KSA: tiered inspections, warranty, financing and delivery — filtered search built for speed.</p><span class="feat">Speed &amp; trust</span></div>
+        <div class="app-card"><div class="name">YallaMotor</div><p>GCC-wide research and pricing tools across 500+ dealers — where buyers compare before they ever call one.</p><span class="feat">Regional reach</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SIGNALS OF A PREMIUM APP ============ -->
+<section>
+  <div class="wrap">
+    <span class="kicker">What Separates the Two</span>
+    <h2>Ten Signals of a Premium App vs. a Generic Listings App</h2>
+    <p class="lead">Every app above earns its download with a version of these. Four matter most for a dealer spanning Ferrari to Elantra in a WhatsApp-first market — marked below.</p>
+    <div class="signals">
+      <div class="signal rec"><div class="n">01</div><div class="n-body"><h5>Early-access alerts</h5><p>Push the moment a car arrives, before it's public — the exact "private club" feeling your logo already promises.</p><span class="rec-pill">Recommended</span></div></div>
+      <div class="signal rec"><div class="n">02</div><div class="n-body"><h5>One-tap WhatsApp concierge</h5><p>Every car card opens straight into WhatsApp with the car attached — the channel your buyers already use, one tap faster.</p><span class="rec-pill">Recommended</span></div></div>
+      <div class="signal"><div class="n">03</div><div class="n-body"><h5>Live video viewing</h5><p>Remote walkarounds for out-of-town or international buyers who can't visit the showroom first.</p></div></div>
+      <div class="signal"><div class="n">04</div><div class="n-body"><h5>Cinematic presentation</h5><p>Full-screen galleries, 360° views, engine sound — showroom theatre for cars that deserve more than a thumbnail.</p></div></div>
+      <div class="signal rec"><div class="n">05</div><div class="n-body"><h5>Financing calculator + reserve deposit</h5><p>Instant monthly-payment math on every car, with a deposit button that locks it in before someone else does.</p><span class="rec-pill">Recommended</span></div></div>
+      <div class="signal"><div class="n">06</div><div class="n-body"><h5>Trade-in valuation</h5><p>In-app estimate that feeds your own inventory and unlocks upgrade offers to existing owners.</p></div></div>
+      <div class="signal"><div class="n">07</div><div class="n-body"><h5>Saved cars &amp; alerts</h5><p>Turns window-shoppers into a re-marketable list you can message the moment the right car lands.</p></div></div>
+      <div class="signal"><div class="n">08</div><div class="n-body"><h5>Digital reservation</h5><p>A deposit or hold placed in-app, so high-intent buyers never lose a car to a slower phone call.</p></div></div>
+      <div class="signal"><div class="n">09</div><div class="n-body"><h5>After-sale layer</h5><p>Service booking and ownership perks that keep the app installed — and Al Saber top of mind — long after the sale.</p></div></div>
+      <div class="signal rec"><div class="n">10</div><div class="n-body"><h5>Arabic-first, true RTL</h5><p>Not a translated afterthought — the primary experience, done properly, for the market you actually sell to.</p><span class="rec-pill">Recommended</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE CONCEPT ============ -->
+<section class="alt">
+  <div class="wrap">
+    <span class="kicker">The Concept</span>
+    <h2>Two Doors, One Brand: The Al Saber App</h2>
+    <p class="lead">One app, one identity — but the experience forks by intent. A Rolls-Royce browser gets <b>VIP Desk</b>: concierge tone, no financing prompts in sight. An Elantra browser gets <b>Fast Track</b>: monthly payment first, pre-qualify in seconds. Same shell, same trust — because the range that makes Al Saber unique deserves one home, not two apps.</p>
+    <div class="phones">
+      <div class="phone">
+        <div class="frame"><div class="screen hero-scr">
+          <div class="topbar"><span class="mark">AL SABER</span><span>♡</span></div>
+          <div class="spec-strip">
+            <div class="price-line">VIP DESK · FROM SAR 1,450,000</div>
+            <div class="spec-row"><span>0–100</span><strong>3.2s</strong></div>
+            <div class="spec-row"><span>Power</span><strong>730 HP</strong></div>
+            <div class="cta">Reserve a Private Viewing</div>
+          </div>
+        </div></div>
+        <div class="label">Hero Vehicle Screen</div>
+      </div>
+      <div class="phone">
+        <div class="frame"><div class="screen vip-scr">
+          <div class="topbar"><span class="mark">AL SABER</span><span>⚙</span></div>
+          <div class="content" style="display:flex;flex-direction:column;height:100%">
+            <div class="vip-card" style="margin-bottom:10px">
+              <div class="who">Ahmed's Garage</div>
+              <div class="sub">VIP MEMBER SINCE 2024</div>
+              <div class="vip-row"><span>Saved vehicles</span><span>4</span></div>
+              <div class="vip-row"><span>Your advisor</span><span>Faisal — WhatsApp</span></div>
+            </div>
+            <div class="cta ghost" style="margin-top:auto">Message Your Advisor</div>
+          </div>
+        </div></div>
+        <div class="label">VIP Concierge Profile</div>
+      </div>
+      <div class="phone">
+        <div class="frame"><div class="screen push-scr">
+          <div class="content">
+            <div class="lock-time">9:41</div>
+            <div class="notif">
+              <div class="from">Al Saber — New Arrival</div>
+              <div class="t">A 2024 Porsche 911 GT3 just landed.</div>
+              <div class="b">You're seeing it 24 hours before anyone else.</div>
+            </div>
+          </div>
+        </div></div>
+        <div class="label">Early-Access Push Alert</div>
+      </div>
+      <div class="phone">
+        <div class="frame"><div class="screen fast-scr">
+          <div class="topbar"><span class="mark">AL SABER</span><span>♡</span></div>
+          <div class="content" style="display:flex;flex-direction:column;height:100%">
+            <div style="margin-top:auto"></div>
+            <div class="calc">
+              <div class="per">FAST TRACK · HYUNDAI ELANTRA 2024</div>
+              <div class="amt">SAR 1,290</div>
+              <div class="per">per month · 60 months</div>
+              <div class="cta" style="margin-top:10px">Get Pre-Qualified</div>
+            </div>
+          </div>
+        </div></div>
+        <div class="label">Fast Track Screen</div>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:6px;font-size:13px;color:var(--dim)">Illustrative concept renders — final screens designed against real inventory photography once scoped.</p>
+  </div>
+</section>
+
+<!-- ============ BUSINESS CASE ============ -->
+<section>
+  <div class="wrap">
+    <span class="kicker">The Business Case</span>
+    <h2>What This Fixes That the Website Alone Can't</h2>
+    <div class="duo">
+      <div class="duo-panel">
+        <div class="role">The Leak We Already Measured</div>
+        <h3>The purchase page drops the car</h3>
+        <p>Today, clicking "Buy" on a specific car discards it — the buyer re-finds it in a 782-option dropdown, then faces a salary/bank interrogation before any human contact. In-app, the selected car, its price and a financing estimate travel with the buyer all the way to a named advisor. No re-selecting, no cold form.</p>
+      </div>
+      <div class="duo-panel">
+        <div class="role">The Channel That Doesn't Exist Yet</div>
+        <h3>No way to reach past buyers</h3>
+        <p>Right now, once a visitor leaves alsabercars.com, they're gone until they think to come back. The app is a permanent, owned channel — push notifications for new arrivals, price drops and trade-in offers — that costs nothing extra to use, unlike ads to win the same customer back.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROADMAP ============ -->
+<section class="alt">
+  <div class="wrap">
+    <span class="kicker">The Road Ahead</span>
+    <h2>Three Phases, Each Justifying the Next</h2>
+    <p class="lead">A working app in customers' hands fast, with the concierge and financing depth added once the core loop is proven.</p>
+    <div class="phases">
+      <div class="phase">
+        <div class="pnum">I</div>
+        <h4>MVP — The Private Line</h4>
+        <div class="psub">Launch in weeks, not quarters</div>
+        <ul>
+          <li>Browse the full inventory, VIP Desk / Fast Track split</li>
+          <li>Saved cars, price &amp; new-arrival alerts</li>
+          <li>One-tap WhatsApp to a named advisor, per car</li>
+          <li>Push notifications — the core retention loop</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="pnum">II</div>
+        <h4>Depth — Close Faster</h4>
+        <div class="psub">Once the loop is proven</div>
+        <ul>
+          <li>In-app financing pre-qualification</li>
+          <li>VIP private-viewing scheduler</li>
+          <li>Trade-in valuation tool</li>
+          <li>Digital reservation deposit</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="pnum">III</div>
+        <h4>Loyalty — Keep Them</h4>
+        <div class="psub">The ownership layer</div>
+        <ul>
+          <li>Service booking &amp; ownership perks</li>
+          <li>Loyalty / referral program</li>
+          <li>Owner-to-owner resale marketplace</li>
+          <li>CRM feeding every advisor's pipeline</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OBJECTIONS ============ -->
+<section>
+  <div class="wrap">
+    <span class="kicker">What You Might Be Thinking</span>
+    <h2>The Honest Answers</h2>
+    <div class="qas">
+      <div class="qa"><div class="q">"We already have a website."</div><div class="a">Different job. The website wins a stranger's first click; the app keeps a buyer you've already met. <b>Both are needed — neither replaces the other.</b></div></div>
+      <div class="qa"><div class="q">"An app sounds expensive."</div><div class="a">Phase I is scoped to launch fast on shared inventory data from the website work — <b>one recovered luxury sale a quarter</b> covers it many times over.</div></div>
+      <div class="qa"><div class="q">"Our customers just use WhatsApp anyway."</div><div class="a">Agreed — and that's the design, not a contradiction. The app's job is getting them into <b>WhatsApp one tap faster, with the right car already attached</b>, not competing with it.</div></div>
+      <div class="qa"><div class="q">"We need to think about it."</div><div class="a">Fair. Rather than a blind commitment, we can scope a <b>clickable Phase I prototype</b> first — see it before deciding on it.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSING ============ -->
+<section class="closing">
+  <div class="wrap">
+    <span class="kicker">Next Step</span>
+    <h2>The Cars Already Deserve It. Now Give Them a Pocket to Live In.</h2>
+    <p class="lead">A 30-minute walkthrough is enough to align on the MVP scope and see the first concept screens against your real inventory.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="logo-chip">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-OX" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+    <span style="display:none;font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:0.18em;color:#0A111C;">CODE-OX</span>
+  </div>
+  <div class="contact">
+    <b>Shabeeb Kaip</b> · Head of Operations, Code-OX<br>
+    <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a> · +966 53 571 6437 · code-ox.com
+  </div>
+</footer>
+
+</body>
+</html>
