@@ -5,118 +5,210 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Al Saber Cars — Mobile App Pitch Deck</title>
 <style>
-  html,body{margin:0;background:#0A111C;}
+  html,body{margin:0;height:100%;overflow:hidden;background:#000;}
   *{box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+
+  .stage{position:fixed;inset:0;background:#000}
   .slide{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
+    position:absolute;inset:0;
+    display:none;
     align-items:center;
     justify-content:center;
-    position:relative;
-    border-bottom:1px solid #22344D;
   }
+  .slide.active{display:flex}
   .slide img{
-    width:100%;
+    max-width:100%;
+    max-height:100%;
+    width:auto;
+    height:auto;
     display:block;
   }
-  /* Fallback shown until the real ChatGPT-exported slide image is dropped in at the path below */
-  .fallback{
-    display:none;
-    width:100%;
-    min-height:100vh;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:40px;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    color:#A6B4C6;
+
+  /* click zones */
+  .zone{position:absolute;top:0;bottom:0;width:40%;cursor:pointer;z-index:5}
+  .zone.left{left:0}
+  .zone.right{right:0;width:60%}
+
+  /* nav arrows */
+  .arrow{
+    position:fixed;top:50%;transform:translateY(-50%);
+    width:44px;height:44px;border-radius:50%;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.16);
+    color:#fff;font-size:20px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;z-index:10;
+    transition:background .15s,opacity .2s;
+    opacity:0;pointer-events:none;
   }
-  .fallback .n{font-family:ui-monospace,monospace;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#2FA9D8;margin-bottom:18px}
-  .fallback h2{font-size:clamp(22px,4vw,36px);color:#F2F6FA;font-weight:600;max-width:800px;margin-bottom:14px}
-  .fallback p{font-size:14px;color:#6B7D93;max-width:520px}
-  img.slide-img{ }
+  .arrow.show{opacity:1;pointer-events:auto}
+  .arrow:hover{background:rgba(255,255,255,.14)}
+  .arrow.prev{left:18px}
+  .arrow.next{right:18px}
+  .arrow.disabled{opacity:.15!important;pointer-events:none}
+
+  /* counter + progress */
+  .hud{
+    position:fixed;left:0;right:0;bottom:16px;
+    display:flex;align-items:center;justify-content:center;
+    z-index:10;pointer-events:none;
+  }
+  .counter{
+    background:rgba(10,10,10,.72);
+    border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(6px);
+    color:#fff;
+    font-family:ui-monospace,"JetBrains Mono",monospace;
+    font-size:12px;letter-spacing:.08em;
+    padding:7px 14px;border-radius:999px;
+  }
+  .counter b{color:#E8442A;font-weight:600}
+  .progress{position:fixed;top:0;left:0;right:0;height:2px;background:rgba(255,255,255,.08);z-index:11}
+  .progress-fill{height:100%;background:#E8442A;transition:width .25s ease}
+
+  .hint{
+    position:fixed;top:18px;left:50%;transform:translateX(-50%);
+    z-index:10;color:rgba(255,255,255,.55);
+    font-family:ui-monospace,"JetBrains Mono",monospace;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    opacity:1;transition:opacity 1.2s ease;
+  }
+  .hint.hide{opacity:0}
+
+  .fs-btn{
+    position:fixed;top:16px;right:16px;z-index:10;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.16);
+    color:#fff;font-size:13px;
+    padding:7px 12px;border-radius:8px;cursor:pointer;
+    font-family:ui-monospace,"JetBrains Mono",monospace;
+    opacity:.5;transition:opacity .15s;
+  }
+  .fs-btn:hover{opacity:1}
+
+  @media (prefers-reduced-motion: reduce){
+    .arrow,.hint,.progress-fill{transition:none}
+  }
 </style>
 </head>
 <body>
 
-<!-- Slide viewer for the Al Saber mobile app pitch. Each <section> is one slide.
-     Drop ChatGPT-exported slide images into assets/deck/ using the filenames
-     referenced below (01-cover.png, 02-why-now.png, etc.) and they render
-     automatically — no HTML changes needed. Until an image exists at that
-     path, the section shows a text fallback with the slide's title so the
-     deck's structure is visible before the artwork is ready. -->
+<div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+<div class="hint" id="hint">Click, tap, or use arrow keys to navigate</div>
+<button class="fs-btn" id="fsBtn" title="Toggle fullscreen (F)">⛶ Fullscreen</button>
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/01-cover.png" alt="Slide 1 — Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 01</div><h2>Cover — The Showroom Fits In Their Pocket</h2><p>Title slide: Al Saber Cars Co. · Mobile App Proposal · July 2026.</p></div>
-</section>
+<div class="stage" id="stage">
+  <section class="slide active" data-n="1"><img src="assets/mobile-apps/slide-1.png" alt="Cover — The Future of Automotive Retail Starts in the Customer's Pocket. Mobile Strategy Proposal for Al Saber Cars." /></section>
+  <section class="slide" data-n="2"><img src="assets/mobile-apps/slide-2.png" alt="The Smartphone Is the New Showroom — customers discover, compare, and shortlist vehicles long before visiting a dealership." /></section>
+  <section class="slide" data-n="3"><img src="assets/mobile-apps/slide-3.png" alt="Saudi Arabia Is Mobile First — one of the world's most digitally connected markets, where mobile is already how customers search and buy." /></section>
+  <section class="slide" data-n="4"><img src="assets/mobile-apps/slide-4.png" alt="Automotive Retail Has Shifted — comparing the short 'Then' customer journey to the longer, mobile-driven 'Now' journey." /></section>
+  <section class="slide" data-n="5"><img src="assets/mobile-apps/slide-5.png" alt="Own the Customer Relationship — traditional dealership model ends at the sale; the mobile app model continues into ownership, service, loyalty and support." /></section>
+  <section class="slide" data-n="6"><img src="assets/mobile-apps/slide-6.png" alt="Maximize Customer Lifetime Value — from initial sale through service, upgrade, trade-in, and the next vehicle purchase." /></section>
+  <section class="slide" data-n="7"><img src="assets/mobile-apps/slide-7.png" alt="Elevate the Ownership Experience — personalization, priority access, exclusive privileges, and concierge services build loyalty after the sale." /></section>
+  <section class="slide" data-n="8"><img src="assets/mobile-apps/slide-8.png" alt="Accelerate Purchase Decisions — vehicle alerts, personalized recommendations, instant consultation and test drive booking around the purchase decision." /></section>
+  <section class="slide" data-n="9"><img src="assets/mobile-apps/slide-9.png" alt="Own the Customer Connection — moving from third-party dependence (paid media, algorithms) to a connected model with owned customer access and direct communication." /></section>
+  <section class="slide" data-n="10"><img src="assets/mobile-apps/slide-10.png" alt="Build a Compounding Digital Asset — the Al Saber App accumulates customer data, behavior, relationships and trust that compound in value over time." /></section>
+  <section class="slide" data-n="11"><img src="assets/mobile-apps/slide-11.png" alt="One App, Two Experiences — a single strategic platform serving both Fast Track (simple, fast, effortless) and VIP Desk (personalized, private, exclusive) customer journeys." /></section>
+  <section class="slide" data-n="12"><img src="assets/mobile-apps/slide-12.png" alt="VIP Desk — Personalized Ownership. A private, curated experience for Al Saber's most valued customers: personal guidance, curated access, priority privileges, concierge ownership." /></section>
+  <section class="slide" data-n="13"><img src="assets/mobile-apps/slide-13.png" alt="Fast Track — Seamless Convenience. Built for customers who value speed, simplicity and control: instant access, self-directed journey, minimal friction." /></section>
+  <section class="slide" data-n="14"><img src="assets/mobile-apps/slide-14.png" alt="Business Opportunity — Value Across the Entire Customer Lifecycle. Every interaction, from discovery to next vehicle, creates business value." /></section>
+</div>
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/02-why-now.png" alt="Slide 2 — Why Now" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 02</div><h2>Why Now</h2><p>57.5s measured mobile load time · 60% of Saudi buyers now prefer online channels · Syarah's $82M+ raised, app-first model.</p></div>
-</section>
+<div class="arrow prev" id="prevBtn" aria-label="Previous slide">‹</div>
+<div class="zone left" id="zoneLeft"></div>
+<div class="zone right" id="zoneRight"></div>
+<div class="arrow next" id="nextBtn" aria-label="Next slide">›</div>
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/03-market-opportunity.png" alt="Slide 3 — Market Opportunity" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 03</div><h2>Market Opportunity</h2><p>SAR 122.8bn KSA new-car market · 98% smartphone penetration · 90%+ WhatsApp usage as the dominant commerce channel.</p></div>
-</section>
+<div class="hud"><div class="counter"><span id="counterNum">01</span> / <span id="counterTotal">14</span></div></div>
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/04-the-gap.png" alt="Slide 4 — The Core Problem" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 04</div><h2>The Core Problem</h2><p>What Al Saber sells (Ferrari to Elantra) vs. what the website currently delivers — the broken purchase hand-off and the brand mismatch.</p></div>
-</section>
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length;
+  var current = 0;
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/05-benchmark-luxury.png" alt="Slide 5 — Global Benchmark: Luxury Owner Apps" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 05</div><h2>Global Benchmark — Luxury &amp; OEM Owner Apps</h2><p>My Porsche · Rolls-Royce Whispers · MyFerrari · Bentley Mulliner Visualiser — what "premium" looks like digitally.</p></div>
-</section>
+  var counterNum = document.getElementById('counterNum');
+  var progressFill = document.getElementById('progressFill');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var hint = document.getElementById('hint');
+  var fsBtn = document.getElementById('fsBtn');
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/06-benchmark-gcc.png" alt="Slide 6 — Global Benchmark: GCC Competitors" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 06</div><h2>Global Benchmark — Your Actual Competitors</h2><p>Syarah · Motory · CarSwitch · dubizzle Motors — the KSA/GCC bar Al Saber must meet or beat.</p></div>
-</section>
+  document.getElementById('counterTotal').textContent = total;
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/07-concept-two-doors.png" alt="Slide 7 — The Concept: VIP Desk vs Fast Track" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 07</div><h2>The Concept — Two Doors, One Brand</h2><p>One app, one identity, forked by intent: VIP Desk (concierge, Ferrari/Rolls/G63) vs. Fast Track (financing-first, MG/Elantra).</p></div>
-</section>
+  function render(){
+    slides.forEach(function(s, i){ s.classList.toggle('active', i === current); });
+    counterNum.textContent = ('0' + (current + 1)).slice(-2);
+    progressFill.style.width = ((current + 1) / total * 100) + '%';
+    prevBtn.classList.toggle('disabled', current === 0);
+    nextBtn.classList.toggle('disabled', current === total - 1);
+  }
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/08-screen-vip.png" alt="Slide 8 — Concept Screen: VIP Desk" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 08</div><h2>Concept Screen — VIP Desk</h2><p>Vehicle hero, understated price, concierge CTA ("Request a Private Viewing"), advisor contact card.</p></div>
-</section>
+  function go(delta){
+    var next = current + delta;
+    if (next < 0 || next > total - 1) return;
+    current = next;
+    render();
+  }
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/09-screen-fasttrack.png" alt="Slide 9 — Concept Screen: Fast Track" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 09</div><h2>Concept Screen — Fast Track</h2><p>Monthly-payment-first pricing, inline financing calculator, trust badges, "Reserve for SAR 500."</p></div>
-</section>
+  function goTo(n){
+    if (n < 0 || n > total - 1) return;
+    current = n;
+    render();
+  }
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/10-retention.png" alt="Slide 10 — Push Notifications & Retention" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 10</div><h2>Push Notifications &amp; Retention</h2><p>The channel a website can never build — early-access alerts, saved cars, and a permanent line to past buyers.</p></div>
-</section>
+  prevBtn.addEventListener('click', function(e){ e.stopPropagation(); go(-1); });
+  nextBtn.addEventListener('click', function(e){ e.stopPropagation(); go(1); });
+  document.getElementById('zoneLeft').addEventListener('click', function(){ go(-1); });
+  document.getElementById('zoneRight').addEventListener('click', function(){ go(1); });
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/11-business-case.png" alt="Slide 11 — Business Case & ROI" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 11</div><h2>Business Case &amp; ROI</h2><p>Recovered-sales model, SAR 90K–200K MVP cost range, under-one-month payback at mid-case.</p></div>
-</section>
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+    else if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+  });
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/12-roadmap.png" alt="Slide 12 — Phased Roadmap" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 12</div><h2>Phased Roadmap</h2><p>MVP — The Private Line · Phase 2 — Close Faster · Phase 3 — Loyalty &amp; Ownership.</p></div>
-</section>
+  // swipe support
+  var touchStartX = null;
+  document.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function(e){
+    if (touchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { go(dx < 0 ? 1 : -1); }
+    touchStartX = null;
+  }, { passive: true });
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/13-objections.png" alt="Slide 13 — Objections & Answers" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 13</div><h2>What You Might Be Thinking</h2><p>"We already have a website" · "An app is expensive" · "Our customers just use WhatsApp" — answered.</p></div>
-</section>
+  function toggleFullscreen(){
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(function(){});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+  fsBtn.addEventListener('click', toggleFullscreen);
 
-<section class="slide">
-  <img class="slide-img" src="assets/deck/14-next-steps.png" alt="Slide 14 — Next Steps" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="fallback"><div class="n">Slide 14</div><h2>Next Step</h2><p>A 30-minute walkthrough, and a small clickable Phase 1 prototype as the de-risked first move.</p></div>
-</section>
+  // preload neighbors for snappier nav
+  function preload(n){
+    if (n < 0 || n > total - 1) return;
+    var img = slides[n].querySelector('img');
+    if (img && !img.complete) { var pre = new Image(); pre.src = img.getAttribute('src'); }
+  }
+  render();
+  preload(1);
+
+  var origRender = render;
+  render = function(){
+    origRender();
+    preload(current - 1);
+    preload(current + 1);
+  };
+
+  setTimeout(function(){ hint.classList.add('hide'); }, 3500);
+})();
+</script>
 
 </body>
 </html>
