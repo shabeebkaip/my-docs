@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KSA/GCC Wearable Integration — Feature Research</title>
+<style>
+  :root {
+    --confirmed: #1a7f37;
+    --confirmed-bg: #e6f4ea;
+    --not: #8a1f1f;
+    --not-bg: #fbe9e9;
+    --unable: #8a6d1f;
+    --unable-bg: #fbf3e0;
+    --border: #ddd;
+    --text: #222;
+    --muted: #666;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+    color: var(--text);
+    line-height: 1.55;
+    background: #fafafa;
+  }
+  h1 { font-size: 1.6em; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-bottom: 24px; font-size: 0.95em; }
+  h2 {
+    font-size: 1.15em;
+    margin-top: 40px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  .bottom-line {
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 24px 0;
+  }
+  .bottom-line h2 { border: none; margin-top: 0; font-size: 1.05em; }
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left-width: 6px;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .card.confirmed { border-left-color: var(--confirmed); }
+  .card.not { border-left-color: var(--not); }
+  .card.unable { border-left-color: var(--unable); }
+  .card h3 { margin: 0 0 8px; font-size: 1.05em; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .badge {
+    display: inline-block;
+    font-size: 0.7em;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .badge.confirmed { background: var(--confirmed-bg); color: var(--confirmed); }
+  .badge.not { background: var(--not-bg); color: var(--not); }
+  .badge.unable { background: var(--unable-bg); color: var(--unable); }
+  .card p { margin: 6px 0; font-size: 0.95em; }
+  .card blockquote {
+    margin: 8px 0;
+    padding: 8px 12px;
+    background: #f6f6f6;
+    border-left: 3px solid #bbb;
+    font-style: italic;
+    font-size: 0.92em;
+  }
+  .caveat {
+    margin-top: 8px;
+    font-size: 0.87em;
+    color: var(--muted);
+  }
+  a { color: #1554b3; }
+  .source-list { font-size: 0.85em; margin-top: 6px; }
+  .source-list a { display: inline-block; margin-right: 10px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.92em; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: #f0f0f0; }
+  .note {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 0.9em;
+    margin-top: 30px;
+  }
+  .legend { display: flex; gap: 14px; margin: 10px 0 20px; flex-wrap: wrap; font-size: 0.85em; }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+</style>
+</head>
+<body>
+
+<h1>What wearable-integration features already exist in KSA/GCC health apps?</h1>
+<div class="subtitle">Researched 2026-07-12 &middot; Apple Health / HealthKit, Google Health Connect, WHOOP, Garmin, Samsung Health &mdash; organized by feature, not by app</div>
+
+<div class="legend">
+  <span><span class="dot" style="background:var(--confirmed)"></span> Confirmed — direct source quote</span>
+  <span><span class="dot" style="background:var(--not)"></span> Likely not — searched, no evidence</span>
+  <span><span class="dot" style="background:var(--unable)"></span> Unable to verify</span>
+</div>
+
+<div class="bottom-line">
+  <h2>Bottom line</h2>
+  <p>Four distinct wearable-related features already exist somewhere in this market: <b>(1) passive step/activity sync</b> (Sehhaty, via HealthKit/CareKit), <b>(2) physiological-data partnership at national-platform level</b> (Sehhaty/Seha/Nphies + WHOOP deal), <b>(3) vitals-into-app-dashboard</b> pulling blood pressure, heart rate, SpO2, blood glucose from HealthKit into a dedicated in-app "Wearable Devices" section (Fakeeh Care, Cleveland Clinic Abu Dhabi), and <b>(4) wellness-data consolidation</b> across multiple wearable brands in one health-record app (Malaffi). None of these features include AI-driven suggestions or motivation messaging based on the data &mdash; they display or store it. That's the gap: nobody found is turning wearable data into a suggestion or motivational nudge. A read-only sync that then actually acts on the data (physiotherapy/wellness suggestions, motivation copy) is not something any researched competitor does today.</p>
+  <p>See <code>09-wearable-integration.md</code> in this folder for the full feasibility verdict, persona fit, and build recommendation &mdash; wearable integration remains a v2+ roadmap idea under consideration, not a confirmed v1 commitment.</p>
+</div>
+
+<h2>Feature 1 &mdash; Passive step/activity sync (read-only, no analysis shown to user)</h2>
+
+<div class="card confirmed">
+  <h3>Sehhaty (صحتي) &mdash; Saudi MOH official app <span class="badge confirmed">Confirmed</span></h3>
+  <blockquote>"Sehhaty app needs access to your HealthApp via HealthKit and CareKit to share your walking activities and the number of steps."</blockquote>
+  <p>Verbatim text from the iOS App Store listing. Scope is limited to steps/walking activity &mdash; no evidence of heart rate, sleep, SpO2, or a native Apple Watch companion app.</p>
+  <p>Separately: WHOOP and Lean Business Services (which operates Sehhaty, Seha, and Nphies for the Saudi MOH) announced a partnership on <b>27 Oct 2025</b> in Riyadh to integrate WHOOP physiological data into these national platforms &mdash; confirmed via WHOOP's own press release and the Saudi Press Agency, independently corroborated by Gulf Business.</p>
+  <div class="source-list">
+    <a href="https://apps.apple.com/sa/app/%D8%B5%D8%AD%D8%AA%D9%8A-sehhaty/id1459266578" target="_blank">App Store listing</a>
+    <a href="https://www.whoop.com/de/en/press-center/whoop-and-lean-business-services-partner/" target="_blank">WHOOP press release</a>
+    <a href="https://www.spa.gov.sa/en/N2431038" target="_blank">Saudi Press Agency</a>
+    <a href="https://gulfbusiness.com/whoop-and-lean-business-services-team-in-saudi/" target="_blank">Gulf Business</a>
+  </div>
+  <p class="caveat">Gap: Android / Health Connect equivalent not directly confirmed (absence of evidence, not evidence of absence). No suggestion or motivation feature built on top of this data &mdash; it's a silent sync only.</p>
+</div>
+
+<h2>Feature 2 &mdash; National-platform physiological-data partnership (infrastructure-level, not yet a shipped user feature)</h2>
+
+<div class="card confirmed">
+  <h3>Sehhaty / Seha / Nphies &times; WHOOP data partnership <span class="badge confirmed">Confirmed</span></h3>
+  <p>WHOOP and Lean Business Services (which operates Sehhaty, Seha, and Nphies for the Saudi MOH) announced a partnership on <b>27 Oct 2025</b> in Riyadh to integrate WHOOP physiological data into these national platforms &mdash; confirmed via WHOOP's own press release and the Saudi Press Agency, independently corroborated by Gulf Business.</p>
+  <div class="source-list">
+    <a href="https://www.whoop.com/de/en/press-center/whoop-and-lean-business-services-partner/" target="_blank">WHOOP press release</a>
+    <a href="https://www.spa.gov.sa/en/N2431038" target="_blank">Saudi Press Agency</a>
+    <a href="https://gulfbusiness.com/whoop-and-lean-business-services-team-in-saudi/" target="_blank">Gulf Business</a>
+  </div>
+  <p class="caveat">This is a data-partnership announcement, not yet a described in-app feature with a specific user-facing suggestion/motivation layer &mdash; treat as directional, not a shipped feature to match against.</p>
+</div>
+
+<h2>Feature 3 &mdash; Vitals-into-dashboard (HealthKit data displayed in a dedicated in-app section)</h2>
+
+<div class="card confirmed">
+  <h3>Fakeeh Care &mdash; Fakeeh Health (Jeddah / Dubai hospital group) <span class="badge confirmed">Confirmed</span></h3>
+  <blockquote>"This app helps you monitor key health metrics by securely integrating with Health Kit... All health vitals (such as Blood Pressure, Heart Rate, Oxygen Saturation, and Blood Glucose) are fetched directly from Health Kit."</blockquote>
+  <p>Vitals are displayed in a dedicated <b>"Wearable Devices"</b> section in-app. Specific wearable brands (Apple Watch, Garmin, etc.) are not named in the description text &mdash; HealthKit sourcing is what's explicit. The feature is display-only: no suggestion, motivation, or coaching layer built on top of the vitals.</p>
+  <div class="source-list">
+    <a href="https://apps.apple.com/sa/app/fakeeh-care/id1478742827" target="_blank">App Store listing</a>
+  </div>
+</div>
+
+<div class="card confirmed">
+  <h3>Cleveland Clinic Abu Dhabi (CCAD) patient app <span class="badge confirmed">Confirmed</span></h3>
+  <blockquote>"Connect your account to Apple Health to pull health-related data from your personal device right into the CCAD patient portal app."</blockquote>
+  <p>Version 6.8.1 (28 June 2022) release notes list <i>"Health kit Integration (Blood pressure)"</i> as a shipped feature. App also lists Apple Watch compatibility (watchOS 9.0+). Again, this is a data-import-and-display feature for the clinical team to review &mdash; not a consumer-facing suggestion/motivation engine.</p>
+  <div class="source-list">
+    <a href="https://apps.apple.com/us/app/cleveland-clinic-abu-dhabi/id1397700458" target="_blank">App Store listing</a>
+  </div>
+</div>
+
+<h2>Feature 4 &mdash; Multi-brand wellness-data consolidation (health record apps, not physiotherapy/wellness apps)</h2>
+
+<div class="card confirmed">
+  <h3>Malaffi Health Portal &mdash; Abu Dhabi's official Health Information Exchange (DoH) <span class="badge confirmed">Confirmed (moderate)</span></h3>
+  <p>Multiple independent search passes describe a "Wellness" tab that connects to Apple Health / HealthKit and consolidates wearable data. One pass surfaced specific brand names (Fitbit, Garmin, Withings); a second, independent pass only reconfirmed generic "wearables" wording. Direct fetch of the App Store page returned a 404, so the brand-specific list rests on search-engine-surfaced text, not a page fetched directly.</p>
+  <p class="caveat">Treat the Apple Health/HealthKit integration as confirmed. Treat the Fitbit/Garmin/Withings brand list as likely but not independently re-verified. Consolidation only &mdash; no suggestion/motivation feature described.</p>
+  <div class="source-list">
+    <a href="https://apps.apple.com/ae/app/malaffi-health-portal/id1638093047" target="_blank">App Store (listing page, fetch failed — 404)</a>
+  </div>
+</div>
+
+<div class="card confirmed">
+  <h3>Nabta Health &mdash; UAE-based MENA women's health app <span class="badge confirmed">Confirmed (generic)</span></h3>
+  <blockquote>"NABTA blends clinical support with AI-driven tracking and wearable integrations."</blockquote>
+  <p>Directly fetched App Store description. No specific platform (HealthKit / Health Connect / brand) named in the text itself &mdash; the claim is real but vague, and it's the closest any researched app comes to claiming an AI layer on top of wearable data. Not enough detail published to know if it produces suggestions or just tracks trends.</p>
+  <div class="source-list">
+    <a href="https://apps.apple.com/us/app/nabta-your-health-companion/id1508198107" target="_blank">App Store listing</a>
+  </div>
+</div>
+
+<h2>The gap: no researched app turns wearable data into suggestions or motivation</h2>
+
+<table>
+  <tr><th>App</th><th>What was checked</th></tr>
+  <tr><td><b>Sanar</b></td><td>App Store + Google Play descriptions reviewed directly. Core features: telemedicine + home medical care + pharmacy. No wearable/HealthKit/Health Connect mention at all.</td></tr>
+  <tr><td><b>Cura</b> (cura.sa, Saudi telehealth)</td><td>Identity confirmed and disambiguated from unrelated "Cura" 3D-printing software and an unrelated US/Nepal clinic-booking app. Detailed feature descriptions across site, Play listing, and press &mdash; zero wearable mention.</td></tr>
+  <tr><td><b>DarDoc</b> (UAE)</td><td>App Store listing + release notes through June 2026 fetched directly. Detailed feature list (IV drips, labs, GLP-1 programs, home nursing). No wearable/HealthKit/Health Connect mention.</td></tr>
+  <tr><td><b>Thaat</b> (Saudi home healthcare)</td><td>App Store description fetched directly in full. No wearable mention.</td></tr>
+  <tr><td><b>Justlife</b> (UAE home services)</td><td>App Store listing fetched directly. Healthcare services are human-delivered (doctor/nurse at home). No wearable/HealthKit mention.</td></tr>
+  <tr><td><b>Okadoc</b> (UAE, Vezeeta group)</td><td>App Store listing and privacy section fetched directly. No wearable/HealthKit mention.</td></tr>
+  <tr><td><b>Vezeeta</b></td><td>App Store listing (Saudi storefront) fetched directly. No wearable mention in description. Privacy label lists a generic "Health & Fitness: Health" data category under "Data Not Linked to You" &mdash; suggestive of some device health-data read, but not confirmation of a marketed feature.</td></tr>
+  <tr><td><b>Altibbi</b></td><td>App Store presence reviewed across consumer and clinic app variants. No wearable/HealthKit mention.</td></tr>
+  <tr><td><b>SEHA</b> (Abu Dhabi Health Services Co., UAE)</td><td>App Store listing fetched directly. No wearable mention &mdash; only a calendar-app integration noted.</td></tr>
+  <tr><td><b>Cera</b></td><td>Confirmed UK/Germany-only home healthcare company. No GCC/Gulf presence found &mdash; excluded as out of market.</td></tr>
+</table>
+
+<h2>Unresolved / partial signals (not counted as a feature either way)</h2>
+
+<div class="card unable">
+  <h3>Babylon Health's Saudi partnership (with THIQAH) <span class="badge unable">Unable to verify</span></h3>
+  <p>Babylon Health globally collapsed in August 2023 (US bankruptcy, UK administration); the UK "GP at Hand" business was absorbed into a new brand, <b>eMed</b>. No evidence found that the Saudi/THIQAH AI-health joint venture is still operating under any consumer-facing app as of 2026 &mdash; likely defunct, but no explicit wind-down statement specific to the Saudi deal was found.</p>
+</div>
+
+<div class="card unable">
+  <h3>Seha Virtual Hospital (Saudi national virtual hospital) <span class="badge unable">Unable to verify</span></h3>
+  <p>One secondary source made a general strategic claim about "wearable tech integration" as part of the broader Seha Virtual Hospital vision &mdash; this reads as forward-looking/marketing language about the initiative overall, not a sourced feature confirmation tied to a specific app.</p>
+</div>
+
+<div class="card unable">
+  <h3>Health at Hand (UAE) <span class="badge unable">Unable to verify</span></h3>
+  <p>Identified as a DHA-licensed video consultation app. Description text obtained did not include wearable-specific claims either way; not independently fetched from the App Store to close the gap in the time available.</p>
+</div>
+
+<div class="note">
+  <b>What this means for Vitality's candidate feature</b> (proposed, not yet committed: read-only Apple Health / Google Health Connect &rarr; app adjusts tone of its existing narrated score/exercise player): every feature found above stops at import-and-display. None close the loop into a suggestion or motivational message. That's the honest, checkable differentiation claim &mdash; not "nobody syncs wearables" (Sehhaty, Fakeeh Care, CCAD, and Malaffi all do, at varying depth), but "nobody found turns that data into an active suggestion the way a physiotherapy/wellness app would." This is a real potential differentiator if the feature is greenlit &mdash; see <code>09-wearable-integration.md</code> for why it's currently scoped as v2+, not v1.
+</div>
+
+<div class="note">
+  <b>Process note.</b> Five parallel research passes were run. Two background research agents completed independently (Cura/DarDoc/Thaat; Sehhaty/Sanar, the latter also surfacing the WHOOP deal). Three others hit a session limit and returned nothing &mdash; that gap (Justlife, Okadoc, Vezeeta, Altibbi, Cleveland Clinic AD, SEHA, Seha Virtual Hospital, Babylon, plus additional finds: Malaffi, Fakeeh Care, Nabta Health) was closed by running the same App Store / Google Play fetches and targeted searches directly. Every "Confirmed" verdict above is backed by directly quoted App Store/Google Play text or a named press release, not inference.
+</div>
+
+</body>
+</html>

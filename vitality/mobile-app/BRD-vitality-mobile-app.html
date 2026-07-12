@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Requirements Document — Vitality Mobile App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#1ECFC0;
+  --green-dark:#0D3B30;
+  --green-light:#F0FDFB;
+  --green-mid:#B2EDEA;
+  --navy:#091827;
+  --navy-2:#0F2436;
+  --bg:#F4F3EF;
+  --paper:#FFFFFF;
+  --text:#0F172A;
+  --text-2:#334155;
+  --text-3:#64748B;
+  --text-4:#94A3B8;
+  --line:rgba(9,24,39,0.08);
+  --line-2:rgba(9,24,39,0.13);
+  --serif:'Inter',-apple-system,sans-serif;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:'Inter',-apple-system,sans-serif;
+  --accent:#1ECFC0;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+.page{max-width:860px;margin:0 auto;padding:0 28px 60px}
+
+/* ── COVER BLOCK ── */
+.cover{
+  background:var(--navy);
+  border-radius:0 0 16px 16px;
+  padding:52px 48px 44px;
+  margin-bottom:40px;
+  position:relative;overflow:hidden;
+}
+.cover::before{
+  content:"";position:absolute;
+  bottom:-80px;right:-80px;
+  width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(30,207,192,0.18),transparent 65%);
+  pointer-events:none;
+}
+.cover::after{
+  content:"";position:absolute;
+  top:-40px;left:30%;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(30,207,192,0.08),transparent 65%);
+  pointer-events:none;
+}
+.cover-meta{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);
+  margin-bottom:22px;
+}
+.cover h1{
+  font-family:var(--serif);
+  font-size:clamp(32px,4.5vw,52px);
+  font-weight:700;letter-spacing:-0.02em;
+  color:#fff;line-height:1.05;
+  margin-bottom:16px;
+}
+.cover h1 em{font-style:italic;color:var(--accent)}
+.cover-lead{
+  font-size:15px;color:rgba(255,255,255,0.55);
+  max-width:56ch;line-height:1.65;
+  margin-bottom:36px;
+}
+.cover-price-bar{
+  display:flex;align-items:center;gap:24px;
+  flex-wrap:wrap;
+  padding-top:28px;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.price-big{
+  font-family:var(--serif);font-size:34px;
+  font-weight:700;color:var(--accent);
+  letter-spacing:-0.025em;line-height:1.15;
+}
+.price-details{
+  display:flex;flex-direction:column;gap:4px;
+}
+.price-details .pd-main{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(255,255,255,0.5);font-weight:600;
+}
+.price-details .pd-note{
+  font-size:13px;color:rgba(255,255,255,0.35);
+}
+.cover-badges{
+  display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;
+}
+.cover-badge{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(255,255,255,0.45);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:4px;padding:5px 12px;
+}
+
+/* ── PILOT / NOTICE BAR ── */
+.pilot-bar{
+  background:var(--green-light);
+  border:1px solid var(--green-mid);
+  border-left:4px solid var(--green);
+  border-radius:0 8px 8px 0;
+  padding:14px 20px;
+  margin-bottom:36px;
+  display:flex;align-items:center;gap:14px;
+}
+.pilot-bar .pb-icon{font-size:18px;flex-shrink:0}
+.pilot-bar p{
+  font-size:13.5px;color:var(--green-dark);line-height:1.5;
+}
+.pilot-bar p strong{font-weight:700}
+
+/* ── PART BANNER (section divider) ── */
+.part-banner{
+  background:var(--navy);
+  border-radius:8px;
+  padding:13px 18px;
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:18px;
+  margin-top:44px;
+}
+.part-badge{
+  flex-shrink:0;width:28px;height:28px;border-radius:50%;
+  background:var(--green);color:var(--green-dark);
+  font-family:var(--sans);font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+.part-banner-sub{
+  font-size:9px;letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(255,255,255,0.45);font-weight:600;margin-bottom:2px;
+}
+.part-banner-title{
+  font-size:13px;font-weight:700;color:#fff;letter-spacing:-0.005em;
+}
+
+h2.doc-h2{
+  font-family:var(--serif);font-size:22px;font-weight:700;
+  color:var(--navy);margin-bottom:14px;letter-spacing:-0.01em;
+}
+p.doc-p{font-size:13.5px;color:var(--text-2);margin-bottom:12px;max-width:74ch}
+ul.doc-list{margin:0 0 14px 20px;font-size:13.5px;color:var(--text-2)}
+ul.doc-list li{margin-bottom:6px;line-height:1.55}
+ul.doc-list li strong{color:var(--text)}
+
+/* ── FEATURE GRID ── */
+.feat-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+.feat-grid.three{grid-template-columns:repeat(3,1fr)}
+
+.feat-card{
+  background:var(--paper);
+  border:1px solid var(--line-2);
+  border-radius:10px;
+  padding:20px 18px;
+  position:relative;
+}
+.feat-card::before{
+  content:"";
+  position:absolute;top:0;left:0;right:0;
+  height:3px;border-radius:10px 10px 0 0;
+  background:var(--green);
+}
+.feat-card .fc-icon{font-size:22px;margin-bottom:12px}
+.feat-card .fc-title{
+  font-size:14px;font-weight:700;
+  color:var(--navy);margin-bottom:6px;
+  line-height:1.3;
+}
+.feat-card .fc-desc{
+  font-size:12.5px;color:var(--text-3);
+  line-height:1.6;
+}
+.feat-card .fc-tag{
+  display:inline-block;
+  margin-top:10px;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--green-dark);
+  background:var(--green-light);
+  border-radius:3px;padding:3px 8px;
+  font-weight:600;
+}
+
+/* Future / won't-this-horizon cards */
+.feat-card.future::before{background:rgba(9,24,39,0.2)}
+.feat-card.future .fc-title{color:var(--text-2)}
+.feat-card.future .fc-tag{
+  color:var(--text-3);background:var(--bg);
+}
+
+/* ── USAGE / REQUIREMENT TABLE (row block) ── */
+.usage-block{
+  background:var(--paper);
+  border:1px solid var(--line-2);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.usage-row{
+  display:flex;align-items:center;
+  padding:16px 20px;
+  border-bottom:1px solid var(--line);
+  gap:16px;
+}
+.usage-row:last-child{border-bottom:none}
+.usage-icon{font-size:18px;width:28px;text-align:center;flex-shrink:0}
+.usage-label{
+  font-size:13.5px;font-weight:600;color:var(--text);flex:1;
+}
+.usage-desc{font-size:12px;color:var(--text-3);margin-top:2px}
+.usage-value{
+  font-family:var(--mono);font-size:12px;
+  font-weight:700;color:var(--green-dark);
+  text-align:right;flex-shrink:0;
+  letter-spacing:0.02em;
+}
+.usage-value.moscow-must{color:var(--green-dark)}
+.usage-value.moscow-should{color:#9A6B00}
+.usage-value.moscow-could{color:var(--text-3)}
+.usage-value.moscow-wont{color:#A03A3A}
+
+/* ── REAL TABLE (stakeholders, phasing) ── */
+table.doc-table{
+  width:100%;border-collapse:collapse;
+  background:var(--paper);border:1px solid var(--line-2);
+  border-radius:10px;overflow:hidden;font-size:12.5px;
+  margin-bottom:20px;
+}
+table.doc-table th{
+  background:var(--navy);color:#fff;
+  font-family:var(--mono);font-size:9.5px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  text-align:left;padding:10px 14px;font-weight:600;
+}
+table.doc-table td{
+  padding:12px 14px;border-top:1px solid var(--line);
+  color:var(--text-2);vertical-align:top;
+}
+table.doc-table tr:first-child td{border-top:none}
+table.doc-table td strong{color:var(--text)}
+
+/* ── PHASE BLOCKS ── */
+.phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.phase-card{
+  background:var(--paper);border:1px solid var(--line-2);
+  border-radius:10px;padding:18px 16px;
+}
+.phase-card .ph-eyebrow{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:6px;
+}
+.phase-card h3{font-family:var(--serif);font-size:16px;color:var(--navy);margin-bottom:8px}
+.phase-card p{font-size:12px;color:var(--text-3);line-height:1.6}
+
+/* ── RISK / ASSUMPTION CALLOUT ── */
+.callout{
+  border:1px solid var(--line-2);border-left:4px solid var(--text-4);
+  border-radius:0 8px 8px 0;padding:14px 20px;margin-bottom:14px;
+  background:var(--paper);
+}
+.callout.risk{border-left-color:#A03A3A}
+.callout.assumption{border-left-color:#9A6B00}
+.callout p{font-size:12.5px;color:var(--text-2);line-height:1.55}
+.callout p strong{color:var(--text)}
+
+/* ── PRICING-STYLE SUMMARY (reused as "scope summary") ── */
+.pricing-block{
+  background:var(--navy);
+  border-radius:12px;
+  padding:32px 36px;
+  margin-top:40px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+}
+.pb-left .pbl-eyebrow{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(255,255,255,0.4);margin-bottom:10px;
+}
+.pb-left .pbl-rows{display:flex;flex-direction:column;gap:8px}
+.pbl-row{display:flex;align-items:baseline;gap:12px}
+.pbl-row .pr-label{font-size:13px;color:rgba(255,255,255,0.5);min-width:170px}
+.pbl-row .pr-value{font-family:var(--mono);font-size:13px;font-weight:700;color:rgba(255,255,255,0.85)}
+.pbl-row .pr-value.highlight{color:var(--accent)}
+.pb-divider{width:1px;height:100px;background:rgba(255,255,255,0.1);flex-shrink:0}
+.pb-right{text-align:right}
+.pb-right .pbr-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.16em;
+  text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:6px;
+}
+.pb-right .pbr-price{
+  font-family:var(--serif);font-size:38px;font-weight:700;
+  color:var(--accent);letter-spacing:-0.025em;line-height:1;
+}
+.pb-right .pbr-sub{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:6px;
+}
+
+/* ── FOOTER ── */
+.doc-footer{
+  margin-top:32px;padding:16px 0;
+  border-top:1px solid var(--line);
+  display:flex;justify-content:center;align-items:center;
+}
+.doc-footer p{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-4);
+}
+
+/* ── TOC ── */
+.toc{
+  background:var(--paper);border:1px solid var(--line-2);
+  border-radius:10px;padding:18px 24px;margin-bottom:20px;
+  columns:2;column-gap:32px;
+}
+.toc a{
+  display:block;font-size:12.5px;color:var(--text-2);
+  text-decoration:none;padding:5px 0;break-inside:avoid;
+}
+.toc a:hover{color:var(--green)}
+.toc a .toc-num{font-family:var(--mono);color:var(--green);margin-right:8px}
+
+/* ── MOBILE ── */
+@media(max-width:680px){
+  .page{padding:0 16px 40px}
+  .cover{padding:36px 24px 32px;border-radius:0 0 12px 12px}
+  .cover h1{font-size:26px}
+  .cover-badges{margin-left:0}
+  .feat-grid,.feat-grid.three,.phase-grid{grid-template-columns:1fr}
+  .pricing-block{flex-direction:column;padding:24px 20px;gap:20px;text-align:left}
+  .pb-divider{display:none}
+  .pb-right{text-align:left}
+  .doc-footer{flex-direction:column;gap:8px;text-align:center}
+  .toc{columns:1}
+  table.doc-table{display:block;overflow-x:auto}
+}
+
+/* ── PRINT ── */
+@page{margin:0;size:A4}
+@page{
+  @bottom-right{
+    content:counter(page) " / " counter(pages);
+    font-family:'Inter',sans-serif;font-size:9pt;color:#94A3B8;
+  }
+}
+@media print{
+  body{background:#fff;padding:0}
+  .page{padding:10mm 12mm 14mm;max-width:100%}
+  .cover{break-inside:avoid;page-break-inside:avoid;border-radius:0 0 10px 10px;padding:28px 32px 24px;margin-bottom:24px}
+  .cover h1{font-size:28px;margin-bottom:8px}
+  .cover-lead{font-size:12px;margin-bottom:18px}
+  .pilot-bar{break-inside:avoid;page-break-inside:avoid;margin-bottom:16px;padding:10px 15px}
+  .pilot-bar p{font-size:11.5px}
+  .part-banner{break-after:avoid;page-break-after:avoid;break-inside:avoid;page-break-inside:avoid;margin-top:26px;margin-bottom:12px;padding:9px 14px}
+  .part-badge{width:20px;height:20px;font-size:9px}
+  .part-banner-sub{font-size:7.5px}
+  .part-banner-title{font-size:10.5px}
+  h2.doc-h2{font-size:17px;margin-bottom:10px}
+  p.doc-p{margin-bottom:14px}
+  ul.doc-list{margin-bottom:16px}
+  .feat-grid{gap:7px;margin-bottom:8px}
+  .feat-grid.three{grid-template-columns:repeat(3,1fr) !important}
+  .feat-card{break-inside:avoid;page-break-inside:avoid;padding:12px 11px;border-radius:6px}
+  .feat-card .fc-icon{font-size:16px;margin-bottom:6px}
+  .feat-card .fc-title{font-size:11.5px;margin-bottom:3px}
+  .feat-card .fc-desc{font-size:10px;line-height:1.5}
+  .feat-card .fc-tag{font-size:8.5px;padding:2px 5px;margin-top:6px}
+  .usage-block{break-inside:avoid;page-break-inside:avoid;margin-bottom:16px}
+  .usage-row{break-inside:avoid;page-break-inside:avoid;padding:10px 14px}
+  table.doc-table{break-inside:avoid;page-break-inside:avoid;font-size:10.5px;margin-bottom:16px}
+  table.doc-table + table.doc-table{margin-top:6px}
+  .phase-grid{gap:7px;margin-bottom:8px}
+  .phase-card{break-inside:avoid;page-break-inside:avoid;padding:12px}
+  .callout{break-inside:avoid;page-break-inside:avoid;margin-bottom:10px}
+  .pricing-block{break-inside:avoid;page-break-inside:avoid;padding:20px 26px;margin-top:22px;margin-bottom:18px;border-radius:8px}
+  .doc-footer{break-inside:avoid;page-break-inside:avoid;margin-top:14px;padding:10px 0}
+  .toc{break-inside:avoid;page-break-inside:avoid;margin-top:4px;margin-bottom:8px}
+  a[href^="#"]::after{content:""}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-meta">Business Requirements Document &middot; July 2026</div>
+    <h1>Business Requirements<br>for the <em>Vitality</em> Mobile App</h1>
+    <p class="cover-lead">The full functional scope for Vitality Home Care's member-facing mobile app — booking, wellness tracking, family coordination, and read-only wearable integration — organized by requirement, priority, and release phase.</p>
+    <div class="cover-price-bar">
+      <div class="price-details">
+        <span class="pd-main">32 requirements &middot; 5 functional layers &middot; 3 release phases</span>
+        <span class="pd-note">Companion-first, Arabic-first, family-inclusive home healthcare</span>
+      </div>
+      <div class="cover-badges">
+        <span class="cover-badge">v1.0 &rarr; v2.0</span>
+        <span class="cover-badge">iOS &amp; Android</span>
+        <span class="cover-badge">Arabic + English</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCUMENT CONTROL -->
+  <div class="part-banner" id="doc-control">
+    <div class="part-badge">00</div>
+    <div>
+      <div class="part-banner-sub">Section 00</div>
+      <div class="part-banner-title">Document Control</div>
+    </div>
+  </div>
+  <table class="doc-table">
+    <tr><th>Attribute</th><th>Detail</th></tr>
+    <tr><td><strong>Document Title</strong></td><td>Business Requirements Document &mdash; Vitality Mobile App</td></tr>
+    <tr><td><strong>Document ID</strong></td><td>VIT-BRD-2026-001</td></tr>
+    <tr><td><strong>Client</strong></td><td>Vitality Home Health Services (Burjeel Arabia Healthcare Network)</td></tr>
+    <tr><td><strong>Classification</strong></td><td>Confidential &mdash; for Vitality internal use only</td></tr>
+    <tr><td><strong>Status</strong></td><td>Draft for review &mdash; pending stakeholder sign-off</td></tr>
+  </table>
+  <table class="doc-table">
+    <tr><th>Version</th><th>Date</th><th>Change Summary</th></tr>
+    <tr><td>1.0</td><td>2026-07-12</td><td>Initial BRD compiled from approved product strategy (00&ndash;08), experience/feature spec, and confirmed wearable-integration scope</td></tr>
+  </table>
+
+  <!-- TOC -->
+  <div class="toc">
+    <a href="#exec-summary"><span class="toc-num">01</span>Executive Summary</a>
+    <a href="#purpose"><span class="toc-num">02</span>Purpose &amp; Scope</a>
+    <a href="#stakeholders"><span class="toc-num">03</span>Stakeholders</a>
+    <a href="#objectives"><span class="toc-num">04</span>Business Objectives</a>
+    <a href="#layer-a"><span class="toc-num">05</span>FR &mdash; Core Experience (Booking)</a>
+    <a href="#layer-b"><span class="toc-num">06</span>FR &mdash; Wellness Experience</a>
+    <a href="#layer-c"><span class="toc-num">07</span>FR &mdash; Emotional Support Layer</a>
+    <a href="#layer-d"><span class="toc-num">08</span>FR &mdash; Communication Layer</a>
+    <a href="#layer-e"><span class="toc-num">09</span>FR &mdash; Family Layer</a>
+    <a href="#acceptance"><span class="toc-num">10</span>Acceptance Criteria</a>
+    <a href="#moscow"><span class="toc-num">11</span>Prioritization (MoSCoW)</a>
+    <a href="#phasing"><span class="toc-num">12</span>Release Phasing</a>
+    <a href="#nonfunctional"><span class="toc-num">13</span>Non-Functional Requirements</a>
+    <a href="#risks"><span class="toc-num">14</span>Assumptions &amp; Risks</a>
+    <a href="#glossary"><span class="toc-num">15</span>Glossary</a>
+    <a href="#signoff"><span class="toc-num">16</span>Approval &amp; Sign-off</a>
+  </div>
+
+  <!-- 01 EXECUTIVE SUMMARY -->
+  <div class="part-banner" id="exec-summary">
+    <div class="part-badge">01</div>
+    <div>
+      <div class="part-banner-sub">Section 01</div>
+      <div class="part-banner-title">Executive Summary</div>
+    </div>
+  </div>
+  <h2 class="doc-h2">The business problem, in one paragraph</h2>
+  <p class="doc-p">Vitality Home Health Services has no functioning mobile booking experience today: every "Book Now" on the website exits to a plain WhatsApp chat or an external hospital-intake-style portal (patients.nixpend.com), with no live availability, no confirmation artifact, no payment flow, and no member accounts or history. Meanwhile every GCC digital-health competitor researched &mdash; Sehhaty, Sanar, Cura, Thaat, DarDoc, Justlife &mdash; competes on transactional breadth, not on being a trusted companion through a recovery journey. This BRD defines the mobile app that closes both gaps at once: a real native booking experience, plus a companion-first wellness layer (narrated scores, session-dot journeys, celebrations, family coordination) that no direct competitor currently offers.</p>
+  <p class="doc-p"><strong>Scope at a glance:</strong> 32 functional requirements across 5 layers, 25 of them MUST-have for v1.0, delivered across 3 release phases (v1.0 &rarr; v1.5 &rarr; v2.0), for iOS and Android, in Arabic (RTL-first) and English.</p>
+
+  <!-- 02 PURPOSE -->
+  <div class="part-banner" id="purpose">
+    <div class="part-badge">02</div>
+    <div>
+      <div class="part-banner-sub">Section 02</div>
+      <div class="part-banner-title">Purpose &amp; Scope</div>
+    </div>
+  </div>
+  <h2 class="doc-h2">What this document defines</h2>
+  <p class="doc-p">This BRD defines the complete functional scope of the Vitality member-facing mobile app (iOS + Android), replacing the current experience where every "Book Now" exits to a plain WhatsApp chat or an external hospital-style portal (patients.nixpend.com). It captures 32 requirements across 5 functional layers, each with a unique FR ID, priority (MoSCoW), owning dependency (App-native vs. Nixpend HMS vs. AIWA/AIKA), and target release phase.</p>
+
+  <h2 class="doc-h2" style="font-size:16px;margin-top:22px">In Scope</h2>
+  <ul class="doc-list">
+    <li>Native iOS and Android member-facing app covering booking, wellness tracking, emotional/motivational layer, in-app communication, and family coordination (FR-A1 through FR-E6, 32 requirements total).</li>
+    <li>Read-only wearable and health-platform data sync (FR-B9): <strong>Apple Health</strong>, <strong>Samsung Health</strong> (via Google Health Connect), and <strong>WHOOP</strong>.</li>
+    <li>Integration contracts with Nixpend HMS (availability, bookings, plans, visit summaries, red-flag routing), AIWA (WhatsApp/chat), and AIKA (voice) at the level of what data crosses each boundary &mdash; not their internal implementation.</li>
+    <li>Bilingual (Arabic RTL-first / English), prayer-time-aware, and Ramadan-aware behavior as system-wide non-functional requirements.</li>
+  </ul>
+
+  <h2 class="doc-h2" style="font-size:16px;margin-top:18px">Out of Scope</h2>
+  <ul class="doc-list">
+    <li>Visual design specification and design tokens &mdash; see <code>08-design-direction.md</code>.</li>
+    <li>Screen-by-screen UX flows and interaction detail &mdash; see <code>10-screens.html</code> / <code>11-experience.html</code>.</li>
+    <li>Commercial terms, pricing, and payment schedule &mdash; see the separate commercial quotation.</li>
+    <li>Nixpend HMS, AIWA, and AIKA internal architecture &mdash; owned by their respective system specs, referenced here only at the integration-contract level.</li>
+    <li>Computer-vision exercise feedback, telehealth video consults, pharmacy/marketplace breadth, wearable write-back, fall-detection escalation, and community features &mdash; explicitly deferred, see Section 11 (WON'T).</li>
+  </ul>
+
+  <!-- 03 STAKEHOLDERS -->
+  <div class="part-banner" id="stakeholders">
+    <div class="part-badge">03</div>
+    <div>
+      <div class="part-banner-sub">Section 03</div>
+      <div class="part-banner-title">Stakeholders</div>
+    </div>
+  </div>
+  <h2 class="doc-h2">Roles &amp; responsibilities</h2>
+  <table class="doc-table">
+    <tr><th>Role</th><th>Responsibility on this project</th></tr>
+    <tr><td><strong>Executive Sponsor</strong> (Vitality)</td><td>Final scope and budget authority; resolves escalations between phases</td></tr>
+    <tr><td><strong>Product Owner</strong> (Vitality)</td><td>Owns this BRD's accuracy; approves scope changes and re-prioritization</td></tr>
+    <tr><td><strong>Medical Director</strong> (Vitality)</td><td>Clinical sign-off on wellness-score logic, red-flag routing thresholds, and any wearable-derived guidance (FR-B9 guardrails)</td></tr>
+    <tr><td><strong>Nixpend HMS Owner</strong> (Vitality)</td><td>Confirms and maintains the API contract this BRD assumes (availability, booking, plan, visit-summary, red-flag endpoints, <strong>payment processing</strong>)</td></tr>
+    <tr><td><strong>Delivery Team</strong></td><td>Design, build, integration, and testing of all in-scope requirements</td></tr>
+    <tr><td><strong>QA / Acceptance Owner</strong></td><td>Verifies each FR against its acceptance criteria (Section 10) before release sign-off</td></tr>
+  </table>
+
+  <!-- 04 OBJECTIVES -->
+  <div class="part-banner" id="objectives">
+    <div class="part-badge">04</div>
+    <div>
+      <div class="part-banner-sub">Section 04</div>
+      <div class="part-banner-title">Business Objectives</div>
+    </div>
+  </div>
+  <h2 class="doc-h2">Why this app is being built</h2>
+  <ul class="doc-list">
+    <li><strong>Close the digital gap.</strong> A full bilingual 4-step booking wizard already exists in the website's codebase but was never shipped as real UI. No live availability, no confirmation artifact, no payment flow, no accounts/history exist today.</li>
+    <li><strong>Own the empty "companion" quadrant.</strong> Sehhaty, Sanar, Cura, Thaat, DarDoc, and Justlife all sit in the transactional half of the market. No GCC competitor combines clinical credibility with a wellness-grade, companion-first experience.</li>
+    <li><strong>Make recovery visible.</strong> Session-dot journeys, narrated wellness scores, and outcome-evidence charts turn a service grid into a journey with a visible ending.</li>
+    <li><strong>Support the family, not just the patient.</strong> The Family Care Circle lets one account (e.g. Noura) coordinate care for a dependent, with patient-controlled, per-datatype privacy.</li>
+    <li><strong>Arabic-first, not Arabic-translated.</strong> RTL-first design, gender-guaranteed caregiver matching, prayer-time-aware scheduling, and Ramadan mode are infrastructure, not add-ons.</li>
+  </ul>
+
+  <!-- 04 LAYER A -->
+  <div class="part-banner" id="layer-a">
+    <div class="part-badge">05</div>
+    <div>
+      <div class="part-banner-sub">Section 05</div>
+      <div class="part-banner-title">FR-A &mdash; Core Experience: Booking &amp; Transactions (7 requirements)</div>
+    </div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="fc-icon">📅</div>
+      <div class="fc-title">FR-A1 &middot; Native 4-Step Booking Wizard</div>
+      <div class="fc-desc">Select Service &rarr; Date &amp; Time (real Nixpend availability, prayer-time-aware slots) &rarr; Your Details &rarr; Payment &rarr; confirmation artifact with booking reference, caregiver card, calendar add, reminder cadence.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">📦</div>
+      <div class="fc-title">FR-A2 &middot; Package &amp; Program Booking</div>
+      <div class="fc-desc">Flagship programs (Post-Surgery Recovery, Home Care Plus, Diabetes Care) bookable as multi-session journeys with a session-dot journey instantiated on confirmation.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🧑‍⚕️</div>
+      <div class="fc-title">FR-A3 &middot; Home Physio Booking with Therapist Matching</div>
+      <div class="fc-desc">Gender preference first (guaranteed forever), language, specialty, style &rarr; theatrical matching wait &rarr; Match Reveal: named human, photo, credentials, intro video.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🗺️</div>
+      <div class="fc-title">FR-A4 &middot; Home Visit Scheduling with District Coverage</div>
+      <div class="fc-desc">Riyadh district picker, coverage-aware slotting, saved addresses with home-entry notes, household protocol capture (mahram flags).</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🔁</div>
+      <div class="fc-title">FR-A5 &middot; 2-Tap Rebooking &amp; Favorites ("My Usual")</div>
+      <div class="fc-desc">Post-visit card — "Book Amal again, same time next week?" Saved rituals extend to family dependents.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">💳</div>
+      <div class="fc-title">FR-A6 &middot; Payments &amp; Insurance</div>
+      <div class="fc-desc">Mada + Apple Pay mandatory, Tabby/Tamara installments, STC Pay fast-follow, insurance capture (Bupa, Tawuniya, MedGulf, Al-Rajhi Takaful, AXA), cash-on-visit toggle. Payment processing integration is owned by <strong>Nixpend</strong> (HMS) &mdash; API contract (supported methods, tokenization, refunds, webhook/callback handling) not yet confirmed. See risk below.</div>
+      <span class="fc-tag">MUST (Tabby: SHOULD)</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">👤</div>
+      <div class="fc-title">FR-A7 &middot; Member Profile &amp; Care Memory</div>
+      <div class="fc-desc">Deferred-until-booking identity, biometric unlock thereafter, visit history as a warm timeline, returning-member recognition.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+  </div>
+
+  <!-- 05 LAYER B -->
+  <div class="part-banner" id="layer-b">
+    <div class="part-badge">06</div>
+    <div>
+      <div class="part-banner-sub">Section 06</div>
+      <div class="part-banner-title">FR-B &mdash; Wellness Experience: Plans, Tracking, Progress (9 requirements)</div>
+    </div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="fc-icon">🗓️</div>
+      <div class="fc-title">FR-B1 &middot; Daily Recovery Plans</div>
+      <div class="fc-desc">The active care plan rendered as Today's Care Plan cards, sourced from the physio-authored plan in Nixpend, one day at a time. When the therapist updates the clinical plan in Nixpend after a visit (progression, regression, or new exercises), the app's plan refreshes automatically &mdash; the therapist's visit notes are the plan's source of truth, not a separate copy the app can drift from.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🎥</div>
+      <div class="fc-title">FR-B2 &middot; Guided Exercise Player</div>
+      <div class="fc-desc">Video demo (own therapist where possible), Arabic voiceover, guided timer, landscape floor-exercise mode, interruptible 5&ndash;10 min chunks, "how did it feel?" adapting the next assignment.</div>
+      <span class="fc-tag">MUST (CV feedback: WON'T)</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">☀️</div>
+      <div class="fc-title">FR-B3 &middot; Wellness Tracking &mdash; Daily Check-ins</div>
+      <div class="fc-desc">30-second morning ritual: pain, mood, sleep sliders, plus one physio-standard functional question tied to the member's plan (e.g. "could you do today's key movement without stopping?" &mdash; a plain-language stand-in for a range-of-motion/functional outcome measure, not a raw clinical scale shown on screen). Feeds the recovery score and the ring; red flags route quietly to the care team via Nixpend/AIWA.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">📈</div>
+      <div class="fc-title">FR-B4 &middot; Progress Visualization &mdash; Ring, Dots, Evidence</div>
+      <div class="fc-desc">Daily progress ring, session-dot journey per plan, outcome evidence charts ("pain down 40% since session 1") reviewed with the caregiver at visits.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🗣️</div>
+      <div class="fc-title">FR-B5 &middot; Narrated Daily Wellness Score</div>
+      <div class="fc-desc">One readiness number computed from check-in inputs (no wearable required), always subordinate to its warm Arabic-first sentence. Never a grade, never alarm-red.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🧪</div>
+      <div class="fc-title">FR-B6 &middot; Health Check Results, Presented Warmly</div>
+      <div class="fc-desc">Lab results delivered behind a humanized summary layer: "what does this mean and am I okay?" first, detail available for those who want it.</div>
+      <span class="fc-tag">SHOULD</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🌿</div>
+      <div class="fc-title">FR-B7 &middot; Wellness Programs as Journeys</div>
+      <div class="fc-desc">Glow, Shape It, and IV-therapy courses rendered as care plans: session dots, milestones, celebrations, maintenance cadence nudges.</div>
+      <span class="fc-tag">SHOULD</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">📚</div>
+      <div class="fc-title">FR-B8 &middot; Arabic Wellness Content Shelf</div>
+      <div class="fc-desc">Small curated library, original Arabic first: recovery sleep audio, gentle mobility videos, caregiver-authored tips, Ramadan-aware content.</div>
+      <span class="fc-tag">SHOULD</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">⌚</div>
+      <div class="fc-title">FR-B9 &middot; Wearable &amp; Health-Platform Sync (read-only)</div>
+      <div class="fc-desc">Connect <strong>Apple Health</strong>, <strong>Samsung Health</strong> (via Google Health Connect), or <strong>WHOOP</strong> &mdash; read-only, no write-back. Feeds the existing narrated score, recovery-plan tone, and exercise suggestions, plus new motivation copy calibrated to real activity levels. Mi Health (Xiaomi) unverified &mdash; no confirmed public API found; do not commit until checked.</div>
+      <span class="fc-tag">MUST &middot; confirmed 2026-07-12</span>
+    </div>
+  </div>
+
+  <!-- 06 LAYER C -->
+  <div class="part-banner" id="layer-c">
+    <div class="part-badge">07</div>
+    <div>
+      <div class="part-banner-sub">Section 07</div>
+      <div class="part-banner-title">FR-C &mdash; Emotional Support Layer: the Differentiator (5 requirements)</div>
+    </div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="fc-icon">💬</div>
+      <div class="fc-title">FR-C1 &middot; Encouragement Engine</div>
+      <div class="fc-desc">Context-aware warm-copy system behind all loop messaging: ring closed, streak week, hard day, pre-visit eve, plateau, return-after-absence. Miss-messages meet compassion by contract.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🎉</div>
+      <div class="fc-title">FR-C2 &middot; Recovery Celebrations</div>
+      <div class="fc-desc">Full-screen gold celebration moments: first session, first week, halfway, ring-close micro-moments, graduation with journey recap. Shareable to the Family Care Circle at the patient's choice.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🏅</div>
+      <div class="fc-title">FR-C3 &middot; Achievement Milestones</div>
+      <div class="fc-desc">The milestone ladder per plan/program: life-termed names, next-milestone visibility on the home screen, milestone history as the member's story.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🫶</div>
+      <div class="fc-title">FR-C4 &middot; Care Companion Presence</div>
+      <div class="fc-desc">The ambient layer that makes the app feel inhabited: time-aware greetings, caregiver-forward header, prayer-quiet defaults, Ramadan mode, returning-member welcome.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">📝</div>
+      <div class="fc-title">FR-C5 &middot; Post-Visit Caregiver Notes</div>
+      <div class="fc-desc">Warm plain-language summary after each visit &mdash; what we did, how you're doing, what's next &mdash; plus the caregiver's personal note. Major milestones upgrade to voice/video notes.</div>
+      <span class="fc-tag">MUST (voice notes: SHOULD)</span>
+    </div>
+  </div>
+
+  <!-- 07 LAYER D -->
+  <div class="part-banner" id="layer-d">
+    <div class="part-badge">08</div>
+    <div>
+      <div class="part-banner-sub">Section 08</div>
+      <div class="part-banner-title">FR-D &mdash; Communication Layer: One Care Brain, Three Doors (5 requirements)</div>
+    </div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="fc-icon">💭</div>
+      <div class="fc-title">FR-D1 &middot; Care Thread</div>
+      <div class="fc-desc">Always-open persistent chat with the caregiver/care team: photos, "is this normal?" questions, voice notes. AIWA powers first-line responses with honest human escalation.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">📞</div>
+      <div class="fc-title">FR-D2 &middot; Voice Support (AIKA)</div>
+      <div class="fc-desc">One-tap call surface: AIKA answers as Vitality, handles booking status, rescheduling, prep questions, escalates warmly to the hotline/coordinators.</div>
+      <span class="fc-tag">SHOULD (call button: MUST)</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">⏰</div>
+      <div class="fc-title">FR-D3 &middot; Follow-up Reminders</div>
+      <div class="fc-desc">Care-only reminder system: T-24h visit reminder with caregiver face + prep checklist, exercise nudges, medication cadence, post-visit follow-ups. Marketing is contractually banned from push.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">✅</div>
+      <div class="fc-title">FR-D4 &middot; Appointment Assistance</div>
+      <div class="fc-desc">Reschedule/cancel with grace, running visit status, coordinator escalation for complex cases &mdash; the app + AIWA/AIKA absorbing routine work.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🕌</div>
+      <div class="fc-title">FR-D5 &middot; Prayer-Time-Aware Notifications</div>
+      <div class="fc-desc">System-wide notification governor: no pushes across the five prayer windows, Friday-family-day awareness, Ramadan-shifted schedules, member-tunable quiet hours.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+  </div>
+
+  <!-- 08 LAYER E -->
+  <div class="part-banner" id="layer-e">
+    <div class="part-badge">09</div>
+    <div>
+      <div class="part-banner-sub">Section 09</div>
+      <div class="part-banner-title">FR-E &mdash; Family Layer: the Family Care Circle (6 requirements)</div>
+    </div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="fc-icon">✉️</div>
+      <div class="fc-title">FR-E1 &middot; Circle Invite Flow</div>
+      <div class="fc-desc">One account invites family into a dependent's circle: WhatsApp-native invite, role assignment (coordinator, viewer), zero education cost via the Sehhaty/Tawakkalna mental model.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">📊</div>
+      <div class="fc-title">FR-E2 &middot; Family Dashboard</div>
+      <div class="fc-desc">The dependent's week at a glance: visits confirmed/done, ring days closed, latest caregiver note, next appointment &mdash; one Thursday-evening glance replacing three WhatsApp threads.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">📢</div>
+      <div class="fc-title">FR-E3 &middot; Care Updates &amp; Shared Progress</div>
+      <div class="fc-desc">Push channel for the circle: visit-completed notes, milestone celebrations, en-route forwarding on visit days, weekly recap. Good news by default, never surveillance.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🔒</div>
+      <div class="fc-title">FR-E4 &middot; Patient-Controlled Privacy (Per Data Type)</div>
+      <div class="fc-desc">The patient controls sharing per data type: mobility progress shared, mood check-ins private, visit confirmations circle-wide &mdash; with conservative defaults.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🤝</div>
+      <div class="fc-title">FR-E5 &middot; Booking-on-Behalf</div>
+      <div class="fc-desc">Book, pay, renew, and manage for a dependent from one's own phone &mdash; proxy intake, saved entry notes, female-caregiver guarantee locked in and remembered forever.</div>
+      <span class="fc-tag">MUST</span>
+    </div>
+    <div class="feat-card">
+      <div class="fc-icon">🎁</div>
+      <div class="fc-title">FR-E6 &middot; Shareable Celebration Moments</div>
+      <div class="fc-desc">Milestone celebrations exportable as elegant, on-brand cards to the family circle and (patient's choice) beyond &mdash; the referral surface that never feels like marketing.</div>
+      <span class="fc-tag">SHOULD</span>
+    </div>
+  </div>
+
+  <!-- 09 MOSCOW -->
+  <!-- 10 ACCEPTANCE CRITERIA -->
+  <div class="part-banner" id="acceptance">
+    <div class="part-badge">10</div>
+    <div>
+      <div class="part-banner-sub">Section 10</div>
+      <div class="part-banner-title">Acceptance Criteria &mdash; Key Requirements</div>
+    </div>
+  </div>
+  <h2 class="doc-h2">How "done" is verified for the highest-risk requirements</h2>
+  <p class="doc-p">Every MUST-have requirement needs a testable acceptance criterion before QA sign-off. The table below covers the requirements with the most ambiguity risk; remaining MUST items follow the same pattern at build time.</p>
+  <table class="doc-table">
+    <tr><th>Criterion</th><th>Requirement</th><th>Acceptance Criteria</th></tr>
+    <tr><td><strong>AC-01</strong></td><td>FR-A1 Booking Wizard</td><td>A member can complete Select Service &rarr; Date/Time &rarr; Details &rarr; Payment and receive a confirmation artifact (booking reference, caregiver card, calendar add) in under 4 taps beyond required data entry, using live Nixpend availability, with prayer-time windows excluded from bookable slots.</td></tr>
+    <tr><td><strong>AC-02</strong></td><td>FR-A3 Therapist Matching</td><td>Gender preference captured once is never asked again for that member across all future bookings; the Match Reveal screen displays a named caregiver with photo, credentials, and MOH license badge before any booking is finalized.</td></tr>
+    <tr><td><strong>AC-03</strong></td><td>FR-B3 Daily Check-ins</td><td>A check-in (pain/mood/sleep sliders) completes in &le;30 seconds; any red-flag threshold breach triggers a Nixpend/AIWA routing event within 5 minutes without surfacing an alarming UI state to the member.</td></tr>
+    <tr><td><strong>AC-04</strong></td><td>FR-B5 Narrated Wellness Score</td><td>The score is never displayed without its accompanying Arabic-first narrated sentence; no numeric value renders in red or any alarm-associated color under any data condition.</td></tr>
+    <tr><td><strong>AC-05</strong></td><td>FR-B9 Wearable Sync</td><td>Connecting <strong>Apple Health</strong>, <strong>Samsung Health</strong>, or <strong>WHOOP</strong> requires no data entry beyond the platform's native permission prompt; disconnecting or leaving a device unworn falls back silently to manual check-in with no reconnect nagging; no raw clinical number or wearable brand name appears on the home screen.</td></tr>
+    <tr><td><strong>AC-06</strong></td><td>FR-D5 Prayer-Time Notifications</td><td>Zero push notifications are delivered during any of the five daily prayer windows (Riyadh timings) across a 7-day test window, verified against the published prayer calendar.</td></tr>
+    <tr><td><strong>AC-07</strong></td><td>FR-E4 Per-Data-Type Privacy</td><td>A patient can independently toggle sharing for at least 3 distinct data types (e.g. mobility progress, mood check-ins, visit confirmations) to the Family Circle, with defaults matching the conservative baseline defined in FR-E4, verified by inspecting what a linked family member's dashboard actually renders after each toggle change.</td></tr>
+    <tr><td><strong>AC-08</strong></td><td>FR-E5 Booking-on-Behalf</td><td>A Circle coordinator (e.g. Noura) can complete a full booking for a dependent from her own authenticated session, with the female-caregiver guarantee and saved entry notes carried over automatically from the dependent's profile.</td></tr>
+    <tr><td><strong>AC-09</strong></td><td>FR-A6 Payments &amp; Insurance</td><td>A member can pay via Mada or Apple Pay end-to-end through the Nixpend payment integration without leaving the app; a failed or declined payment returns a clear retry state without losing the in-progress booking; refunds and payment status are reflected in the member's payment history within 24 hours. <strong>Blocked pending confirmation of Nixpend's payment API contract</strong> &mdash; see risk below.</td></tr>
+    <tr><td><strong>AC-10</strong></td><td>FR-B3 Functional Check-in</td><td>The daily check-in includes one plan-linked functional question in plain language (never a numeric ROM/clinical scale shown to the member); a declining trend over 3+ consecutive days routes to the care team the same way a pain red-flag does.</td></tr>
+    <tr><td><strong>AC-11</strong></td><td>FR-B1 Plan Sync from Clinical Notes</td><td>When a therapist updates the care plan in Nixpend after a visit, the member's Today's Care Plan reflects the change within 1 hour without requiring an app update or manual refresh by the member.</td></tr>
+  </table>
+
+  <div class="part-banner" id="moscow">
+    <div class="part-badge">11</div>
+    <div>
+      <div class="part-banner-sub">Section 11</div>
+      <div class="part-banner-title">Prioritization &mdash; MoSCoW Summary</div>
+    </div>
+  </div>
+  <div class="usage-block">
+    <div class="usage-row">
+      <div class="usage-icon">🟢</div>
+      <div>
+        <div class="usage-label">MUST</div>
+        <div class="usage-desc">A1&ndash;A7 (Tabby&rarr;SHOULD), B1&ndash;B5, B9 wearable sync (read-only), C1&ndash;C5 (voice notes&rarr;SHOULD), D1, D3, D4, D5 (+ D2 call button), E1&ndash;E5</div>
+      </div>
+      <div class="usage-value moscow-must">25 requirements</div>
+    </div>
+    <div class="usage-row">
+      <div class="usage-icon">🟡</div>
+      <div>
+        <div class="usage-label">SHOULD</div>
+        <div class="usage-desc">A6-Tabby installments, B6 warm results, B7 wellness journeys, B8 content shelf, C5 caregiver voice notes, D2 AIKA full flows, E6 shareable celebrations</div>
+      </div>
+      <div class="usage-value moscow-should">7 requirements</div>
+    </div>
+    <div class="usage-row">
+      <div class="usage-icon">⚪</div>
+      <div>
+        <div class="usage-label">COULD</div>
+        <div class="usage-desc">Membership tier ladder (A2 extension), STC Pay, CHI insurance linkage, home-screen widgets, weekly "wrapped" recaps</div>
+      </div>
+      <div class="usage-value moscow-could">Not counted</div>
+    </div>
+    <div class="usage-row">
+      <div class="usage-icon">🔴</div>
+      <div>
+        <div class="usage-label">WON'T (this horizon)</div>
+        <div class="usage-desc">Computer-vision exercise feedback (B2), telehealth video consults, pharmacy/marketplace/symptom-checker breadth, wearable write-back / fall-detection / Family Circle escalation (v2+ if ever), community features</div>
+      </div>
+      <div class="usage-value moscow-wont">Deferred</div>
+    </div>
+  </div>
+
+  <!-- 10 PHASING -->
+  <div class="part-banner" id="phasing">
+    <div class="part-badge">12</div>
+    <div>
+      <div class="part-banner-sub">Section 12</div>
+      <div class="part-banner-title">Release Phasing</div>
+    </div>
+  </div>
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="ph-eyebrow">v1.0</div>
+      <h3>The Companion Arrives</h3>
+      <p>Core booking (Layer A), daily check-ins and narrated score (B1&ndash;B5), read-only wearable sync (B9), the full emotional support layer (C1&ndash;C5), care thread and reminders (D1, D3&ndash;D5), and the complete Family Care Circle (E1&ndash;E5). The feeling is the scope.</p>
+    </div>
+    <div class="phase-card">
+      <div class="ph-eyebrow">v1.5</div>
+      <h3>The Companion Speaks</h3>
+      <p>AIKA full voice flows (D2), Tabby/Tamara installments, warm health-check results (B6), wellness programs as journeys (B7), the Arabic content shelf (B8), and shareable celebration cards (E6).</p>
+    </div>
+    <div class="phase-card">
+      <div class="ph-eyebrow">v2.0</div>
+      <h3>The Membership</h3>
+      <p>Membership tier ladder, STC Pay, CHI insurance linkage, home-screen widgets, weekly recaps &mdash; and, if re-scoped with the client, wearable write-back, fall-detection escalation, and Family Circle safety alerts.</p>
+    </div>
+  </div>
+
+  <!-- 11 NON-FUNCTIONAL -->
+  <div class="part-banner" id="nonfunctional">
+    <div class="part-badge">13</div>
+    <div>
+      <div class="part-banner-sub">Section 13</div>
+      <div class="part-banner-title">Non-Functional Requirements</div>
+    </div>
+  </div>
+  <ul class="doc-list">
+    <li><strong>NFR-01 Bilingual, RTL-first.</strong> Every screen designed RTL-first with English as the faithful mirror; warm MSA copy localized to English, not the reverse.</li>
+    <li><strong>NFR-02 Data residency &amp; compliance.</strong> Health data is Sensitive/Tier-4 under Saudi PDPL (SDAIA). Cross-border transfer (relevant to <strong>WHOOP</strong>/Mi Health cloud APIs) needs contractual safeguards, not an assumption &mdash; formal legal review required before committing to any cloud-based wearable pipeline.</li>
+    <li><strong>NFR-03 Prayer-time and cultural awareness as infrastructure.</strong> No pushes across the five daily prayer windows, Ramadan-shifted schedules, Friday-family-day awareness &mdash; on by default, not configurable per feature.</li>
+    <li><strong>NFR-04 Privacy by design.</strong> Per-datatype consent model (FR-E4) applies system-wide, including any future wearable data &mdash; conservative defaults, plain-language sharing summaries.</li>
+    <li><strong>NFR-05 Performance &amp; pacing.</strong> Matching wait screen minimum 2400ms (theatrical, even if backend is instant) &mdash; deliberate pacing is a UX requirement, not a performance gap.</li>
+    <li><strong>NFR-06 Integration boundary.</strong> Nixpend HMS is system of record for availability, bookings, and clinical facts; the app never becomes a second source of truth for clinical data.</li>
+    <li><strong>NFR-07 Availability.</strong> Booking and check-in flows must degrade gracefully (cached last-known state, clear retry messaging) during any Nixpend API outage &mdash; never a blank or crashed screen.</li>
+    <li><strong>NFR-08 Accessibility.</strong> Minimum WCAG 2.1 AA contrast and type-size floor across both language directions, consistent with the "premium, not just pretty" brand requirement.</li>
+    <li><strong>NFR-09 Security.</strong> Biometric unlock for returning members after deferred-until-booking identity; step-up authentication required specifically for payment and medical-record actions.</li>
+  </ul>
+
+  <!-- 12 RISKS -->
+  <div class="part-banner" id="risks">
+    <div class="part-badge">14</div>
+    <div>
+      <div class="part-banner-sub">Section 14</div>
+      <div class="part-banner-title">Assumptions &amp; Risks</div>
+    </div>
+  </div>
+  <div class="callout assumption">
+    <p><strong>Assumption:</strong> Nixpend HMS exposes the read/write APIs this BRD assumes (availability read, booking write, plan read, visit summary, red-flag write). Confirm API contract with Nixpend before Layer A/B implementation begins.</p>
+  </div>
+  <div class="callout risk">
+    <p><strong>Risk (open, needs verification):</strong> Payment processing for FR-A6 (Mada, Apple Pay, Tabby/Tamara, STC Pay, cash-on-visit) is owned by <strong>Nixpend</strong>, not built directly into the app. Nixpend's payment API contract &mdash; supported methods, tokenization/PCI scope, refund flow, webhook/callback handling, and settlement reporting &mdash; has not yet been confirmed. This must be checked with Nixpend before FR-A6 implementation begins; it directly affects checkout UX and go-live timeline.</p>
+  </div>
+  <div class="callout risk">
+    <p><strong>Risk:</strong> Mi Health (Xiaomi) has no confirmed public third-party API. If unavailable, B9 ships with <strong>Apple Health</strong>, <strong>Samsung Health</strong>/Health Connect, and <strong>WHOOP</strong> only &mdash; do not commit Mi Health to the client until verified.</p>
+  </div>
+  <div class="callout risk">
+    <p><strong>Risk:</strong> Garmin Connect and <strong>Samsung Health</strong>'s own Partner Apps Program were reportedly not accepting new applicants as of last check (unconfirmed beyond forum signals) &mdash; verify directly with each vendor before relying on this for B9 beyond the Health Connect route.</p>
+  </div>
+  <div class="callout assumption">
+    <p><strong>Assumption:</strong> "Companion quadrant is empty in the GCC" remains true at launch. Sehhaty (HealthKit/CareKit steps sync) and the Sehhaty&times;<strong>WHOOP</strong> national-platform partnership exist but are narrower than Vitality's proposed depth &mdash; re-verify competitive claims before final go-to-market copy.</p>
+  </div>
+
+  <!-- 15 GLOSSARY -->
+  <div class="part-banner" id="glossary">
+    <div class="part-badge">15</div>
+    <div>
+      <div class="part-banner-sub">Section 15</div>
+      <div class="part-banner-title">Glossary</div>
+    </div>
+  </div>
+  <table class="doc-table">
+    <tr><th>Term</th><th>Definition</th></tr>
+    <tr><td><strong>Nixpend</strong></td><td>Vitality's Home Management System (HMS) &mdash; system of record for therapist availability, bookings, care plans, and visit facts.</td></tr>
+    <tr><td><strong>AIWA</strong></td><td>The AI WhatsApp/chat agent handling first-line member conversation with human escalation.</td></tr>
+    <tr><td><strong>AIKA</strong></td><td>The AI voice agent answering calls as Vitality on the SIP trunk.</td></tr>
+    <tr><td><strong>Family Care Circle</strong></td><td>The account structure letting one member (e.g. a coordinating daughter) manage care for a linked dependent, with per-datatype privacy controls.</td></tr>
+    <tr><td><strong>Narrated Wellness Score</strong></td><td>A single readiness number computed from check-in inputs, always paired with an interpretive sentence and never shown as a bare number or alarm color.</td></tr>
+    <tr><td><strong>Match Reveal</strong></td><td>The onboarding screen presenting the assigned caregiver (photo, credentials, MOH license, intro video) as the app's first emotional peak.</td></tr>
+    <tr><td><strong>Health Connect</strong></td><td>Google's on-device health-data API on Android; <strong>Samsung Health</strong> has synced into it since October 2022, so Health Connect integration covers most <strong>Samsung Health</strong> data without a separate SDK.</td></tr>
+    <tr><td><strong>HealthKit</strong></td><td>Apple's on-device health-data framework on iOS; the basis for FR-B9's <strong>Apple Health</strong> integration.</td></tr>
+    <tr><td><strong>MoSCoW</strong></td><td>Prioritization framework: Must have, Should have, Could have, Won't have (this horizon).</td></tr>
+    <tr><td><strong>PDPL</strong></td><td>Saudi Personal Data Protection Law, enforced by SDAIA; governs handling of Sensitive/Tier-4 data including health data.</td></tr>
+  </table>
+
+  <!-- SCOPE SUMMARY -->
+  <div class="pricing-block">
+    <div class="pb-left">
+      <div class="pbl-eyebrow">Scope summary</div>
+      <div class="pbl-rows">
+        <div class="pbl-row"><span class="pr-label">Total requirements</span><span class="pr-value highlight">32</span></div>
+        <div class="pbl-row"><span class="pr-label">MUST (v1.0 core)</span><span class="pr-value">25</span></div>
+        <div class="pbl-row"><span class="pr-label">SHOULD (v1.5)</span><span class="pr-value">7</span></div>
+        <div class="pbl-row"><span class="pr-label">Functional layers</span><span class="pr-value">5 (Core, Wellness, Emotional, Communication, Family)</span></div>
+        <div class="pbl-row"><span class="pr-label">Release phases</span><span class="pr-value">3 (v1.0, v1.5, v2.0)</span></div>
+      </div>
+    </div>
+    <div class="pb-divider"></div>
+    <div class="pb-right">
+      <div class="pbr-label">Platforms</div>
+      <div class="pbr-price">iOS + Android</div>
+      <div class="pbr-sub">Arabic (RTL) + English</div>
+    </div>
+  </div>
+
+  <!-- SIGN-OFF -->
+  <div class="part-banner" id="signoff">
+    <div class="part-badge">16</div>
+    <div>
+      <div class="part-banner-sub">Section 16</div>
+      <div class="part-banner-title">Approval &amp; Sign-off</div>
+    </div>
+  </div>
+  <p class="doc-p">This BRD is considered approved for build once the roles below confirm the scope, priorities, and phasing above reflect agreed requirements. Any change after sign-off follows the standard change-request process, not a silent edit to this document.</p>
+  <table class="doc-table">
+    <tr><th>Role</th><th>Name</th><th>Signature</th><th>Date</th></tr>
+    <tr><td>Executive Sponsor (Vitality)</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>Medical Director (Vitality)</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>Product Owner</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+  </table>
+
+  <!-- FOOTER -->
+  <footer class="doc-footer">
+    <p>Vitality Home Care &middot; Mobile App BRD &middot; July 2026</p>
+  </footer>
+
+</div>
+</body>
+</html>

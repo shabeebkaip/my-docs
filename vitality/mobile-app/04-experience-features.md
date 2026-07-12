@@ -181,6 +181,7 @@ Every feature traces to at least one strategic pillar (P1–P5) and serves named
 | B6 | **Health Check Results, Presented Warmly** | Lab results and health-check reports (Health Check at Home, chronic monitoring) delivered behind a humanized summary layer: "what does this mean and am I okay?" first, the caregiver's one-line note, then the detail for those who want it. Never a raw table as the primary surface. | S, L, N | Relief — interpretation before information | NX (results read) + App (narration layer) | **S** |
 | B7 | **Wellness Programs as Journeys** | Glow, Shape It, and IV-therapy courses rendered exactly like care plans: session dots, milestones, celebrations — the wellness revenue engine given the journey treatment. Maintenance cadence nudges ("quarterly health check due — same nurse?"). | L | Belonging — "Vitality is part of how I live well" | NX (program) + App | **S** |
 | B8 | **Arabic Wellness Content Shelf** | Small curated library, original Arabic first: recovery sleep audio, gentle mobility videos, caregiver-authored tips, post-surgical FAQs, Ramadan-aware seasonal content. The between-episode heartbeat and the soft re-entry after discharge. | All | Belonging — presence between episodes | App (CMS) | **S** |
+| B9 | **Wearable & Health-Platform Sync (read-only)** | Connect Apple Health, Samsung Health (via Google Health Connect), or WHOOP, read-only, no write-back. The app reads whatever activity/sleep/vitals data the platform already has and feeds it into the existing narrated score, recovery plan tone, and exercise suggestions, plus new motivation copy calibrated to real activity levels, not just check-in answers. No new raw-number dashboard; anomalies shift a sentence's tone, never introduce an alarm color. Mi Health (Xiaomi) is unverified, no confirmed public API found; do not commit it until checked. See 09-wearable-integration.md for full feasibility, guardrails, and compliance notes. | S, A, R | Confidence, the app notices more without the member doing more | App (HealthKit/Health Connect SDK, on-device) + WHOOP API (cloud, read-only) | **M** |
 
 ## Layer C — EMOTIONAL SUPPORT LAYER (the differentiator)
 
@@ -213,7 +214,7 @@ Every feature traces to at least one strategic pillar (P1–P5) and serves named
 | E5 | **Booking-on-Behalf** | Noura's key job: book, pay, renew, and manage for her mother from her own phone — proxy intake, saved entry notes, the female-caregiver guarantee locked in once and remembered forever, package renewal, payment methods held by the coordinator. Validated by the ≥30% proxy-booking success metric. | N | Relief — everything handled from anywhere in Riyadh | NX (booking write) + App | **M** |
 | E6 | **Shareable Celebration Moments** | Milestone celebrations exportable as elegant, on-brand cards to the family circle and (patient's choice) beyond — Reem's "I'm coming back" moment, Abdulrahman's proof to his sons. The referral surface that never feels like marketing. | R, A, N | Recovery + pride — a shareable "I did this" | App (native) | **S** |
 
-**Feature count: 31** — Core 7 · Wellness 8 · Emotional 5 · Communication 5 · Family 6.
+**Feature count: 32** — Core 7 · Wellness 9 · Emotional 5 · Communication 5 · Family 6.
 
 ---
 
@@ -223,10 +224,10 @@ Every feature traces to at least one strategic pillar (P1–P5) and serves named
 
 | Priority | Features | Count |
 |---|---|---|
-| **MUST** | A1–A7 (Tabby→S), B1–B5, C1–C5 (voice notes→S), D1, D3, D4, D5 (+ D2's call button), E1–E5 | **24** |
+| **MUST** | A1–A7 (Tabby→S), B1–B5, B9 wearable sync (read-only), C1–C5 (voice notes→S), D1, D3, D4, D5 (+ D2's call button), E1–E5 | **25** |
 | **SHOULD** | A6-Tabby installments, B6 warm results, B7 wellness journeys, B8 content shelf, C5 caregiver voice notes, D2 AIKA full flows, E6 shareable celebrations | **7** |
-| **COULD** | Membership tier ladder (A2 extension), STC Pay, CHI insurance linkage, home-screen widgets, Apple Health import, weekly "wrapped" recaps | — |
-| **WON'T (this horizon)** | Computer-vision exercise feedback (B2), telehealth video consults, pharmacy/marketplace/symptom-checker breadth (Anti-pattern 12), wearable integrations, community features | — |
+| **COULD** | Membership tier ladder (A2 extension), STC Pay, CHI insurance linkage, home-screen widgets, weekly "wrapped" recaps | — |
+| **WON'T (this horizon)** | Computer-vision exercise feedback (B2), telehealth video consults, pharmacy/marketplace/symptom-checker breadth (Anti-pattern 12), wearable write-back / fall-detection / Family Circle escalation (v2+ if ever), community features | — |
 
 ## C2. Release Phasing
 

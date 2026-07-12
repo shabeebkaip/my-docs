@@ -6,7 +6,9 @@ You can also edit it by hand any time — just keep the `- [ ]` / `- [x]` checkb
 
 ## Open
 
-- [ ] (add your first todo — reply to the 9am reminder, or type it here)
+- [ ] Burjeel Vitality App Presentation
+- [ ] My todo app completion
+- [ ] Alsaber Mobile presentation and its advantage
 
 ## Completed
 
