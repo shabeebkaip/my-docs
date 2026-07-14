@@ -94,10 +94,13 @@ footer p{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
   <p>The current site (audited 9 July 2026, scored 46/100) is a template-based build that is slow, invisible to search, and loses buyers at the point of purchase. Rather than patch it, this document scopes a <strong>full rebuild from scratch</strong> on a new brand-led design system suited to what Al Saber actually sells: used sports cars and premium vehicles, not economy inventory.</p>
   <h3>In scope</h3>
   <ul>
+    <li>UI/UX design (wireframes → mockups) with client approval <strong>before</strong> development starts</li>
     <li>New visual identity and design system reflecting a premium/sporty dealer, built on Al Saber's existing brand tokens</li>
     <li>Full rebuild of every page: home, inventory/browse, car detail, purchase/enquiry, brand pages, about, contact</li>
+    <li>Content Management System — staff add, edit, and remove car listings without a developer</li>
     <li>SEO built in from day one (not retrofitted): metadata, structured data, sitemap, performance</li>
     <li>SEO Management Module — an admin panel so staff control search metadata without a developer</li>
+    <li>Enquiry notifications — admin panel lead list + email alert on every submission</li>
     <li>Financing and trust-signal features standard in the premium-used-car category</li>
     <li>Bilingual Arabic/English, mobile-first</li>
   </ul>
@@ -117,17 +120,8 @@ footer p{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
   <h3>Why dark</h3>
   <p>A dark canvas is the correct choice for this inventory specifically: chrome, paint, and headlights photograph better against navy than white. Every premium car configurator (Porsche, Ferrari, Bentley) uses a dark or dark-staged canvas for exactly this reason.</p>
 
-  <h3>Design tokens — already established for Al Saber, reused here</h3>
-  <table>
-    <tr><th>Token</th><th>Hex</th><th>Role</th></tr>
-    <tr><td>Background</td><td>#0A111C</td><td>Page canvas</td></tr>
-    <tr><td>Panel</td><td>#121E30</td><td>Cards, sheets</td></tr>
-    <tr><td>Accent (cyan)</td><td>#2FA9D8</td><td>Structure, CTAs, price — the "instrument light"</td></tr>
-    <tr><td>Accent bright</td><td>#7BCCEC</td><td>Numerals, prices, bright highlights</td></tr>
-    <tr><td>Alert (red)</td><td>#E8442A</td><td>Urgency/operational only — never used for price</td></tr>
-    <tr><td>Text primary</td><td>#F2F6FA</td><td>Body copy</td></tr>
-  </table>
-  <p>Fonts: <strong>Chakra Petch</strong> for headings, <strong>Rajdhani</strong> for prices/specs/numerals, <strong>Titillium Web</strong> for body copy, <strong>JetBrains Mono</strong> for labels and meta text. All four are already in use on the existing brand system — the rebuild continues it, it doesn't reinvent it.</p>
+  <h3>Follow Al Saber's existing brand identity</h3>
+  <p>The rebuild is designed around Al Saber's own logo and identity, not a new palette invented for this document. The logo is white, with the "S" split into red and blue — the site's color system, typography, and component styling are derived from this mark during the design phase (Section 02's Design &amp; Approval Gate), not fixed here. The exact palette, type pairing, and component details are a design-phase deliverable for client review, not a BRD-level decision.</p>
 
   <h3>Two registers, one system</h3>
   <p>Al Saber's inventory spans both a used-Elantra-range buyer and a Ferrari/Rolls-Royce buyer — these are genuinely different emotional needs, and the site should not show both the same way:</p>
@@ -154,6 +148,16 @@ footer p{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
   <p>Both registers share the same tokens and components — the site never feels like two sites bolted together, only two moods within one system.</p>
 
   <div class="note"><strong>Reference points used for this direction</strong> (from the competitive research already done for Al Saber): Porsche's disciplined, named-token design system; Bentley's swatch-driven configurator; Ferrari's cinematic dark staging and role-based navigation; Syarah's monthly-payment-first, trust-badge-heavy approach for standard inventory. Full detail in <code>mobile-app-design-spec.md</code>.</div>
+
+  <h3>UI/UX Design &amp; Approval Gate</h3>
+  <p>The website is <strong>designed before it is built</strong>. Development does not start on a page until Al Saber has approved its design.</p>
+  <ol>
+    <li><strong>Wireframes</strong> — page layout and content structure for Home, Browse, Car Detail, and Purchase, in both VIP and Standard treatment</li>
+    <li><strong>Visual design (high-fidelity mockups)</strong> — full-color, on-brand screens for the same pages, desktop and mobile</li>
+    <li><strong>Client review &amp; sign-off</strong> — Al Saber approves the mockups in writing before any page is built</li>
+    <li><strong>Build</strong> — development follows the approved design; changes after this point go through a change request, not a silent redesign mid-build</li>
+  </ol>
+  <div class="note"><strong>Why this order:</strong> a full rebuild on a new brand direction carries real disagreement risk (a Ferrari-tier "understated pricing" page can look wrong to someone expecting a shouted number). Catching that in a mockup costs an afternoon; catching it after build costs a rebuild.</div>
 </section>
 
 <section>
@@ -213,6 +217,7 @@ footer p{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
     <tr><td class="fr-id">FR-3.2</td><td>Short lead form first — name, phone, car; finance details become an optional follow-up, not the entry gate</td><td><span class="pri must">MUST</span></td></tr>
     <tr><td class="fr-id">FR-3.3</td><td>Per-car WhatsApp and call CTAs, carrying the car's name into the message</td><td><span class="pri must">MUST</span></td></tr>
     <tr><td class="fr-id">FR-3.4</td><td>Required fields, inline validation, correct input types (no number-spinners on money fields)</td><td><span class="pri should">SHOULD</span></td></tr>
+    <tr><td class="fr-id">FR-3.5</td><td>Every enquiry appears in the admin panel in real time (lead list — car, buyer name, phone, message, timestamp) and triggers an email notification to the sales team</td><td><span class="pri must">MUST</span></td></tr>
   </table>
 
   <h3>SEO Foundation</h3>
@@ -226,15 +231,27 @@ footer p{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
     <tr><td class="fr-id">FR-4.6</td><td>URL-based bilingual routing (/en/, /ar/) with hreflang pairs — not the current session-based language toggle, which hides English content from search entirely</td><td><span class="pri should">SHOULD</span></td></tr>
   </table>
 
+  <h3>Content Management System &amp; Inventory Management</h3>
+  <p>Al Saber staff add, edit, and remove cars directly — no developer involved in listing a car.</p>
+  <table>
+    <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+    <tr><td class="fr-id">FR-5.1</td><td>Add/edit/remove car listings — make, model, year, price, mileage, gearbox, fuel type, condition, VIP/Standard tier, description (Arabic + English)</td><td><span class="pri must">MUST</span></td></tr>
+    <tr><td class="fr-id">FR-5.2</td><td>Multi-photo upload per car with drag-to-reorder gallery order</td><td><span class="pri must">MUST</span></td></tr>
+    <tr><td class="fr-id">FR-5.3</td><td>Mark a car as sold/reserved — removes it from Browse and triggers the redirect (see FR-5.7)</td><td><span class="pri must">MUST</span></td></tr>
+    <tr><td class="fr-id">FR-5.4</td><td>Bulk import for existing inventory migration from the current site (~780 cars) at rebuild time</td><td><span class="pri must">MUST</span></td></tr>
+    <tr><td class="fr-id">FR-5.5</td><td>Role-based access — sales staff can add/edit listings; only admins can delete or manage users</td><td><span class="pri should">SHOULD</span></td></tr>
+    <tr><td class="fr-id">FR-5.6</td><td>Draft/preview state — a car can be staged before it goes live on the site</td><td><span class="pri could">COULD</span></td></tr>
+  </table>
+
   <h3>SEO Management Module</h3>
   <p>The rebuild makes the site findable once. This module keeps it findable without a developer.</p>
   <table>
     <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
-    <tr><td class="fr-id">FR-5.1</td><td>Meta title/description editor per page and per car, with sensible auto-generated defaults from car data</td><td><span class="pri must">MUST</span></td></tr>
-    <tr><td class="fr-id">FR-5.2</td><td>Automatic sitemap regeneration when inventory changes — no manual step</td><td><span class="pri must">MUST</span></td></tr>
-    <tr><td class="fr-id">FR-5.3</td><td>Redirect manager — sold cars 301 to their model/brand listing instead of a 404</td><td><span class="pri must">MUST</span></td></tr>
-    <tr><td class="fr-id">FR-5.4</td><td>SEO health checklist per listing — flags a car missing photos, alt text, or a meta description</td><td><span class="pri should">SHOULD</span></td></tr>
-    <tr><td class="fr-id">FR-5.5</td><td>Search Console verification and indexing status surfaced in the admin</td><td><span class="pri could">COULD</span></td></tr>
+    <tr><td class="fr-id">FR-5.7</td><td>Meta title/description editor per page and per car, with sensible auto-generated defaults from car data</td><td><span class="pri must">MUST</span></td></tr>
+    <tr><td class="fr-id">FR-5.8</td><td>Automatic sitemap regeneration when inventory changes — no manual step</td><td><span class="pri must">MUST</span></td></tr>
+    <tr><td class="fr-id">FR-5.9</td><td>Redirect manager — sold cars 301 to their model/brand listing instead of a 404</td><td><span class="pri must">MUST</span></td></tr>
+    <tr><td class="fr-id">FR-5.10</td><td>SEO health checklist per listing — flags a car missing photos, alt text, or a meta description</td><td><span class="pri should">SHOULD</span></td></tr>
+    <tr><td class="fr-id">FR-5.11</td><td>Search Console verification and indexing status surfaced in the admin</td><td><span class="pri could">COULD</span></td></tr>
   </table>
 
   <h3>Performance</h3>
@@ -267,6 +284,8 @@ footer p{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
     <tr><td><strong>AC-4 · Conversion</strong></td><td>Opening the enquiry form from any car page shows that car pre-selected; short form submits with name, phone, and car only</td></tr>
     <tr><td><strong>AC-5 · SEO module</strong></td><td>Staff can edit a car's metadata and create a redirect from the admin panel with no developer involved</td></tr>
     <tr><td><strong>AC-6 · Mobile</strong></td><td>No horizontal scroll at 375px and 320px widths on any page</td></tr>
+    <tr><td><strong>AC-7 · CMS</strong></td><td>A staff member adds a new car (details + photos) from the admin panel and it appears live on Browse with no developer involved</td></tr>
+    <tr><td><strong>AC-8 · Enquiries</strong></td><td>Submitting the enquiry form appears in the admin lead list within seconds and arrives by email within 2 minutes</td></tr>
   </table>
 </section>
 
@@ -275,9 +294,9 @@ footer p{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
   <h2>Delivery Phases</h2>
   <table>
     <tr><th>Phase</th><th>Covers</th></tr>
-    <tr><td><strong>Phase 1 — Design</strong></td><td>Brand-led design system, key page mockups (home, car detail, browse), client approval before build starts</td></tr>
-    <tr><td><strong>Phase 2 — Core Build</strong></td><td>Home, browse, car detail, purchase flow, SEO foundation, performance pipeline</td></tr>
-    <tr><td><strong>Phase 3 — Admin &amp; Polish</strong></td><td>SEO Management Module, brand landing pages, bilingual URLs, accessibility pass, security hardening</td></tr>
+    <tr><td><strong>Phase 1 — Design</strong></td><td>Wireframes → high-fidelity mockups (home, car detail, browse, purchase, VIP + Standard), client sign-off before build starts</td></tr>
+    <tr><td><strong>Phase 2 — Core Build</strong></td><td>Home, browse, car detail, purchase flow with enquiry notifications, CMS/inventory management, SEO foundation, performance pipeline</td></tr>
+    <tr><td><strong>Phase 3 — Admin &amp; Polish</strong></td><td>SEO Management Module, inventory bulk-import migration, brand landing pages, bilingual URLs, accessibility pass, security hardening</td></tr>
   </table>
 </section>
 
