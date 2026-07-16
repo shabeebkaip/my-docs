@@ -9,6 +9,11 @@ You can also edit it by hand any time — just keep the `- [ ]` / `- [x]` checkb
 - [ ] Burjeel Vitality App Presentation
 - [ ] My todo app completion
 - [ ] Alsaber Mobile presentation and its advantage
+- [ ] Create Website Audit report for Fadinternation
+- [ ] Create Website audit report for King Khaled Foundation
+- [ ] Create Website Proposal for Alsaber.com
+- [ ] Clear Aleef Concepts invoice
+- [ ] Setup Saudi Accounts
 
 ## Completed
 
