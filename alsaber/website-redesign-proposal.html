@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Al Saber Cars — Website Redesign Proposal · COX-2026-ALS-01</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Rajdhani:wght@600;700&family=Titillium+Web:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body, table, td, th, div, p, span, ul, li { direction: ltr; text-align: left; }
+
+    body {
+      font-family: 'Titillium Web', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #D5D9E0;
+      color: #1A202C;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 24px;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.14);
+    }
+
+    @media print {
+      body { background: none; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+    }
+    @page { size: A4; margin: 0; }
+
+    /* ═══ COVER ═══ */
+    .cover { background: #0A111C; color: #fff; min-height: 297mm; display: flex; flex-direction: column; position: relative; }
+    .cover-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px); background-size: 36px 36px; pointer-events: none; z-index: 1; }
+    .cover-accent-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, #2FA9D8 0%, #E8442A 100%); z-index: 3; }
+
+    .cover-topbar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 16px 26px 16px 32px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .cover-topbar-left { display: flex; align-items: center; gap: 14px; }
+    .cover-client-name { font-family:'Chakra Petch'; font-size: 13px; font-weight: 700; color: #fff; letter-spacing: .02em; }
+    .cover-client-sub  { font-family: 'JetBrains Mono'; font-size: 9px; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+    .cover-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.13); }
+    .cover-prepby-label { font-family: 'JetBrains Mono'; font-size: 8.5px; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 3px; }
+    .cover-prepby-name  { font-family:'Chakra Petch'; font-size: 13px; font-weight: 600; color: #fff; }
+    .doc-type-pill { border: 1.5px solid #2FA9D8; color: #7BCCEC; font-family:'JetBrains Mono'; font-size: 8.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 13px; border-radius: 4px; }
+
+    .cover-hero { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; padding: 32px 26px 0 32px; }
+    .cover-overline { font-family: 'JetBrains Mono'; font-size: 8.5px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: 16px; }
+    .cover-title { font-family:'Chakra Petch'; font-size: 36px; font-weight: 700; line-height: 1.1; color: #fff; margin-bottom: 8px; }
+    .cover-title-accent { color: #7BCCEC; }
+    .cover-subtitle { font-family:'Titillium Web'; font-weight: 300; font-size: 12px; color: rgba(255,255,255,0.52); line-height: 1.7; max-width: 420px; margin-bottom: 26px; }
+
+    .cover-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 30px; }
+    .cover-tag { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); border-radius: 4px; padding: 5px 11px; font-size: 10px; color: rgba(255,255,255,0.65); }
+    .cover-tag strong { color: #fff; font-weight: 600; }
+
+    .cover-ref-box { position: relative; z-index: 2; margin: 0 26px 14px 32px; background: rgba(47,169,216,0.07); border: 1px solid rgba(47,169,216,0.24); border-radius: 6px; display: grid; grid-template-columns: repeat(4,1fr); overflow: hidden; }
+    .cover-ref-item { padding: 14px 16px; border-right: 1px solid rgba(47,169,216,0.14); }
+    .cover-ref-item:last-child { border-right: none; }
+    .cover-ref-label { font-family: 'JetBrains Mono'; font-size: 8px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 5px; }
+    .cover-ref-value { font-family:'Chakra Petch'; font-size: 11.5px; font-weight: 600; color: #fff; }
+    .cover-ref-value.blue { color: #7BCCEC; }
+
+    .cover-total-banner { position: relative; z-index: 2; margin: 0 26px 14px 32px; background: #2FA9D8; border-radius: 6px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .cover-total-label { font-family: 'JetBrains Mono'; font-size: 9px; font-weight: 700; color: #06344a; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+    .cover-total-amount { font-family: 'Rajdhani'; font-size: 30px; font-weight: 700; color: #0A111C; line-height: 1; }
+    .cover-total-sub { font-size: 10px; color: rgba(10,17,28,0.62); margin-top: 4px; }
+    .cover-total-right { text-align: right; }
+    .cover-total-vat-label { font-family: 'JetBrains Mono'; font-size: 9px; color: rgba(10,17,28,0.55); margin-bottom: 4px; }
+    .cover-total-vat-amount { font-family:'Chakra Petch'; font-size: 15px; font-weight: 700; color: #0A111C; }
+
+    .cover-note { position: relative; z-index: 2; margin: 0 26px 20px 32px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 5px; padding: 12px 16px; display: flex; align-items: flex-start; gap: 12px; }
+    .cover-note-label { font-family: 'JetBrains Mono'; font-size: 8px; font-weight: 700; color: #7BCCEC; letter-spacing: 0.13em; text-transform: uppercase; white-space: nowrap; margin-top: 2px; min-width: 62px; }
+    .cover-note-text  { font-size: 10px; color: rgba(255,255,255,0.52); line-height: 1.65; }
+
+    .cover-footer { position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.07); padding: 13px 26px 13px 32px; display: flex; align-items: center; gap: 14px; }
+    .cover-footer img { height: 22px; }
+    .cover-footer-sep { width: 1px; height: 14px; background: rgba(255,255,255,0.14); }
+    .cover-footer-text { font-family: 'JetBrains Mono'; font-size: 9px; color: rgba(255,255,255,0.38); }
+
+    /* ═══ INNER PAGES ═══ */
+    .inner-page { display: flex; flex-direction: column; min-height: 297mm; }
+    .inner-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 26px; border-bottom: 1px solid #E2E8F0; background: #FAFBFC; }
+    .inner-header img { height: 18px; }
+    .inner-header-title { font-family: 'JetBrains Mono'; font-size: 9.5px; color: #64748B; }
+    .inner-header-ref   { font-family: 'JetBrains Mono'; font-size: 9.5px; color: #94A3B8; }
+    .inner-content { flex: 1; padding: 26px 26px; }
+    .inner-footer { border-top: 1px solid #E2E8F0; padding: 11px 26px; display: flex; align-items: center; gap: 10px; background: #FAFBFC; }
+    .inner-footer img { height: 15px; opacity: 0.5; }
+    .inner-footer-sep { width: 1px; height: 11px; background: #CBD5E1; }
+    .inner-footer-text { font-family: 'JetBrains Mono'; font-size: 8px; color: #94A3B8; flex: 1; }
+    .inner-footer-page { font-family: 'JetBrains Mono'; font-size: 8.5px; color: #94A3B8; font-weight: 500; }
+
+    .section-label { font-family: 'JetBrains Mono'; font-size: 8.5px; font-weight: 700; color: #1E86AC; text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 8px; }
+    .section-heading { font-family:'Chakra Petch'; font-size: 22px; font-weight: 700; color: #0A111C; margin-bottom: 10px; line-height: 1.15; }
+    .section-intro { font-size: 10.5px; color: #475569; line-height: 1.75; margin-bottom: 16px; }
+
+    .part-banner { background: #0A111C; color: #fff; border-radius: 6px; padding: 13px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .part-badge { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #2FA9D8; display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani'; font-size: 13px; font-weight: 700; color: #0A111C; }
+    .part-banner-sub   { font-family: 'JetBrains Mono'; font-size: 8px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2px; }
+    .part-banner-title { font-family:'Chakra Petch'; font-size: 13px; font-weight: 600; }
+
+    .note-box { border-radius: 5px; padding: 12px 14px; font-size: 10px; line-height: 1.65; margin-bottom: 14px; }
+    .note-box.blue  { background: #EFF9FD; border: 1px solid #B9E4F3; border-left: 3px solid #2FA9D8; }
+    .note-box.amber { background: #FFFBEB; border: 1px solid #FDE68A; border-left: 3px solid #D9A441; }
+    .note-box.navy  { background: #F0F4F8; border: 1px solid #CBD5E1; border-left: 3px solid #0A111C; }
+    .note-box .note-label { font-family: 'JetBrains Mono'; font-size: 7.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 5px; }
+    .note-box.blue  .note-label { color: #1E86AC; }
+    .note-box.amber .note-label { color: #92650F; }
+    .note-box.navy  .note-label { color: #334155; }
+    .note-box p     { color: #374151; }
+    .note-box strong { font-weight: 600; }
+
+    .section-hr { border: none; border-top: 1px solid #E2E8F0; margin: 18px 0; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 16px; }
+    .info-card { border: 1px solid #E2E8F0; border-radius: 6px; padding: 12px 13px; }
+    .info-card-label { font-family:'Chakra Petch'; font-size: 9.5px; font-weight: 700; color: #0A111C; margin-bottom: 3px; }
+    .info-card-value { font-size: 10px; color: #64748B; line-height: 1.55; }
+
+    .pricing-table { width: 100%; border-collapse: collapse; font-size: 9.5px; margin-bottom: 14px; }
+    .pricing-table thead th { background: #0A111C; color: #fff; padding: 9px 10px; text-align: left; font-family:'JetBrains Mono'; font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+    .pricing-table tbody tr:nth-child(even) { background: #F8FAFC; }
+    .pricing-table tbody td { padding: 8px 10px; border-bottom: 1px solid #EEF2F7; color: #334155; vertical-align: top; line-height: 1.45; }
+    .pricing-table .row-num { font-family:'JetBrains Mono'; font-size: 8.5px; color: #94A3B8; font-weight: 600; min-width: 18px; }
+    .pricing-table .module-name { font-family:'Chakra Petch'; font-weight: 600; color: #0A111C; display: block; margin-bottom: 2px; }
+    .pricing-table .module-desc { font-size: 8.5px; color: #64748B; line-height: 1.45; }
+
+    .milestone-table, .timeline-table, .psched-table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 14px; }
+    .milestone-table thead th, .psched-table thead th { background: #F1F5F9; color: #475569; padding: 9px 12px; text-align: left; font-family:'JetBrains Mono'; font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 2px solid #E2E8F0; }
+    .psched-table thead th { background:#0A111C; color:#fff; border-bottom:none; }
+    .milestone-table thead th:last-child, .psched-table thead th:last-child { text-align: right; }
+    .milestone-table tbody tr, .psched-table tbody tr { border-bottom: 1px solid #EEF2F7; }
+    .milestone-table tbody tr:nth-child(even) { background: #FAFBFD; }
+    .milestone-table tbody td, .psched-table tbody td { padding: 11px 12px; color: #334155; vertical-align: middle; }
+    .milestone-table tbody td:last-child, .psched-table tbody td:last-child { text-align: right; font-weight: 700; color: #0A111C; }
+    .milestone-pct { display: inline-block; background: #2FA9D8; color: #0A111C; font-family: 'Rajdhani'; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 12px; margin-right: 8px; }
+    .psched-table tbody td:first-child { font-family:'Chakra Petch'; font-weight: 700; color: #0A111C; }
+    .psched-table .sched-total td { background:#0A111C; color:#fff; padding:12px 14px; font-weight:700; font-size:11px; }
+    .psched-table .sched-total td:last-child { color:#7BCCEC; font-size:14px; }
+
+    .assumptions-list { list-style: none; margin-bottom: 14px; }
+    .assumptions-list li { display: flex; align-items: flex-start; gap: 9px; padding: 8px 10px; border-bottom: 1px solid #F1F5F9; font-size: 10px; color: #334155; line-height: 1.55; }
+    .assumptions-list li:first-child { border-top: 1px solid #F1F5F9; }
+    .assumptions-list li:nth-child(even) { background: #FAFBFD; }
+    .assumption-icon { width: 16px; height: 16px; min-width: 16px; border-radius: 3px; background: #F1F5F9; border: 1px solid #CBD5E1; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px; }
+    .assumption-icon svg { width: 8px; height: 8px; }
+
+    .signoff-block { border: 1.5px solid #E2E8F0; border-radius: 6px; overflow: hidden; margin-top: 16px; }
+    .signoff-header { background: #0A111C; color: #fff; padding: 10px 16px; font-family:'JetBrains Mono'; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .signoff-body { padding: 14px 16px; background: #FAFBFC; }
+    .signoff-statement { font-size: 10px; color: #374151; line-height: 1.65; margin-bottom: 18px; font-style: italic; }
+    .signoff-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .signoff-col-header { font-family:'Chakra Petch'; font-size: 8.5px; font-weight: 700; color: #0A111C; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; padding-bottom: 5px; border-bottom: 2px solid #2FA9D8; }
+    .signoff-field { margin-bottom: 14px; }
+    .signoff-field-label { font-family: 'JetBrains Mono'; font-size: 8px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; }
+    .signoff-field-line { border-bottom: 1.5px solid #CBD5E1; height: 24px; }
+
+    .tl-phase-header { font-family: 'JetBrains Mono'; font-size: 8.5px; font-weight: 700; color: #1E86AC; text-transform: uppercase; letter-spacing: 0.2em; border-bottom: 1.5px solid #2FA9D8; padding-bottom: 7px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .tl-phase-header::before { content: ''; display: inline-block; width: 3px; height: 14px; background: #2FA9D8; border-radius: 2px; }
+    .tl-items { position: relative; padding-left: 4px; }
+    .tl-items::before { content: ''; position: absolute; left: 12px; top: 26px; bottom: 14px; width: 1.5px; background: #E2E8F0; z-index: 0; }
+    .tl-item { display: flex; gap: 14px; margin-bottom: 14px; position: relative; }
+    .tl-badge { width: 26px; height: 26px; min-width: 26px; border-radius: 50%; background: #2FA9D8; display: flex; align-items: center; justify-content: center; font-family: 'Rajdhani'; font-size: 11px; font-weight: 700; color: #0A111C; position: relative; z-index: 1; flex-shrink: 0; box-shadow: 0 0 0 3px #fff; }
+    .tl-content { flex: 1; padding-top: 2px; }
+    .tl-week-label { font-family: 'JetBrains Mono'; font-size: 8px; font-weight: 700; color: #1E86AC; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 2px; }
+    .tl-week-title { font-family:'Chakra Petch'; font-size: 11px; font-weight: 700; color: #0A111C; margin-bottom: 6px; }
+    .tl-bullets { list-style: none; }
+    .tl-bullets li { display: flex; gap: 7px; align-items: flex-start; font-size: 9.2px; color: #475569; line-height: 1.5; margin-bottom: 3px; }
+    .tl-bullet-dot { width: 5px; height: 5px; min-width: 5px; border-radius: 50%; background: #94A3B8; margin-top: 5px; flex-shrink: 0; }
+
+    .invest-table { width:100%; border-collapse:collapse; font-size:10px; margin-bottom:16px; }
+    .invest-table thead th { background:#0A111C; color:#fff; padding:10px 14px; text-align:left; font-family:'JetBrains Mono'; font-size:7.5px; font-weight:700; letter-spacing:0.13em; text-transform:uppercase; }
+    .invest-table thead th:last-child { text-align:right; }
+    .invest-table .phase-group-row td { background:#EFF9FD; color:#1E86AC; font-family: 'JetBrains Mono'; font-size:8px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:8px 14px; border-bottom:1px solid #B9E4F3; }
+    .invest-table tbody tr { border-bottom:1px solid #EEF2F7; }
+    .invest-table .item-name { font-family:'Chakra Petch'; font-weight:600; color:#0A111C; padding:9px 14px; }
+    .invest-table .item-cat  { padding:9px 8px; }
+    .invest-table .item-amt  { text-align:right; color:#64748B; padding:9px 14px; font-size:9.5px; }
+    .cat-pill { display:inline-block; padding:3px 9px; border-radius:20px; font-family:'JetBrains Mono'; font-size:8px; font-weight:600; border:1px solid; }
+    .cat-design { border-color:#C7D2FE; color:#4F46E5; background:#EEF2FF; }
+    .cat-dev    { border-color:#BBF7D0; color:#16A34A; background:#F0FDF4; }
+    .cat-seo    { border-color:#DDD6FE; color:#7C3AED; background:#F5F3FF; }
+    .cat-qa     { border-color:#FBCFE8; color:#BE185D; background:#FDF2F8; }
+    .invest-table .phase-total-row td { background:#F8FAFC; border-top:1.5px solid #E2E8F0; padding:10px 14px; font-weight:700; }
+    .invest-table .phase-total-label { color:#1E86AC; font-size:10.5px; }
+    .invest-table .phase-total-amount { text-align:right; color:#1E86AC; font-size:13px; font-weight:800; }
+    .invest-table .grand-total-row td { background:#0A111C; color:#fff; padding:13px 14px; font-weight:700; font-size:11px; }
+    .invest-table .grand-total-row td:last-child { color:#7BCCEC; font-size:14px; text-align:right; }
+    .grand-total-sub { font-size:9px; color:rgba(255,255,255,0.45); font-weight:400; }
+
+    .terms-list { list-style:none; }
+    .terms-list li { display:flex; gap:10px; align-items:flex-start; font-size:10px; color:#374151; line-height:1.65; padding:8px 0; border-bottom:1px solid #F1F5F9; }
+    .terms-list li:last-child { border-bottom:none; }
+    .terms-dot { width:7px; height:7px; min-width:7px; border-radius:50%; background:#2FA9D8; margin-top:6px; flex-shrink:0; }
+
+    .warranty-strip { background: linear-gradient(135deg, #0A111C 0%, #14243a 100%); border-radius: 6px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .warranty-icon { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: rgba(47,169,216,0.15); border: 1.5px solid rgba(47,169,216,0.35); display: flex; align-items: center; justify-content: center; }
+    .warranty-title { font-family:'Chakra Petch'; font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .warranty-sub { font-size: 10px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ PAGE 1 — COVER ═══ -->
+<div class="page cover">
+  <div class="cover-grid"></div>
+  <div class="cover-accent-bar"></div>
+
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <div>
+        <div class="cover-client-name">Al Saber Cars Co.</div>
+        <div class="cover-client-sub">Multi-Brand Automotive Showroom · Kingdom of Saudi Arabia</div>
+      </div>
+      <div class="cover-divider"></div>
+      <div>
+        <div class="cover-prepby-label">Prepared by</div>
+        <div class="cover-prepby-name">Code-ox Technologies</div>
+      </div>
+    </div>
+    <div class="doc-type-pill">Website Redesign Proposal</div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">Commercial Proposal &nbsp;·&nbsp; July 2026</div>
+    <div class="cover-title">
+      Complete Website<br>
+      Redesign<br>
+      <span class="cover-title-accent">for Al Saber Cars Co.</span>
+    </div>
+    <div class="cover-subtitle">
+      A ground-up rebuild of alsabercars.com — brand-true design, bilingual Arabic/English delivery, and a conversion-ready inventory experience — built directly on the findings of our independent Website Audit Report.
+    </div>
+
+    <div class="cover-tags">
+      <div class="cover-tag"><strong>Full</strong> Redesign</div>
+      <div class="cover-tag"><strong>Bilingual</strong> AR / EN</div>
+      <div class="cover-tag"><strong>Luxury / Value</strong> Split Experience</div>
+      <div class="cover-tag"><strong>WhatsApp</strong> Integration</div>
+      <div class="cover-tag"><strong>SEO</strong> Foundation</div>
+      <div class="cover-tag"><strong>CMS</strong> Included</div>
+    </div>
+  </div>
+
+  <div class="cover-ref-box">
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Proposal No.</div>
+      <div class="cover-ref-value blue">COX-2026-ALS-01</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Date</div>
+      <div class="cover-ref-value">16 July 2026</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Currency</div>
+      <div class="cover-ref-value">SAR (Saudi Riyal)</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Prepared By</div>
+      <div class="cover-ref-value">Code-ox Technologies</div>
+    </div>
+  </div>
+
+  <div class="cover-total-banner">
+    <div class="cover-total-left">
+      <div class="cover-total-label">Total Project Investment</div>
+      <div class="cover-total-amount">SAR 11,250</div>
+      <div class="cover-total-sub">Exclusive of VAT &nbsp;·&nbsp; 15% VAT applicable per KSA regulations</div>
+    </div>
+    <div class="cover-total-right">
+      <div class="cover-total-vat-label">Timeline</div>
+      <div class="cover-total-vat-amount">4 Weeks</div>
+    </div>
+  </div>
+
+  <div class="cover-note">
+    <div class="cover-note-label">Prepared For</div>
+    <div class="cover-note-text">
+      Al Saber Cars Co. &nbsp;·&nbsp; Kingdom of Saudi Arabia. This proposal is based on our independent Website Audit Report (8–9 July 2026, 47 verified findings) and is valid for 30 days from the date of issuance.
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox Technologies">
+    <div class="cover-footer-sep"></div>
+    <div class="cover-footer-text">shabeeb.k@code-ox.com &nbsp;|&nbsp; +966 535 716 437 &nbsp;|&nbsp; code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 2 — EXECUTIVE SUMMARY ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Al Saber Cars Co. — Website Redesign Proposal</div>
+    <div class="inner-header-ref">COX-2026-ALS-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Overview</div>
+    <div class="section-heading">Executive Summary</div>
+    <div class="section-intro">
+      Code-ox Technologies is pleased to submit this proposal for the complete redesign of alsabercars.com. Our independent audit — 47 verified findings, cross-checked against Google PageSpeed data — found a showroom carrying Rolls-Royce, Ferrari and Lamborghini presented on a generic template that takes up to 57.5 seconds to show a car on mobile, is nearly invisible to Google, and mixes a 465,000 SAR G63 AMG with a 180,000 SAR family SUV in one undifferentiated grid.
+      <br><br>
+      This proposal covers a full rebuild: a brand-true, bilingual (Arabic/English) website that separates the luxury and everyday-value buying journeys, gives every car a proper detail page with WhatsApp and viewing-request actions, and ships with the technical SEO foundation the current site never had.
+    </div>
+
+    <div class="info-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 9px; margin-bottom: 18px;">
+      <div class="info-card" style="border-top: 3px solid #2FA9D8;">
+        <div class="info-card-label">Prepared For</div>
+        <div class="info-card-value">Al Saber Cars Co.<br>Kingdom of Saudi Arabia</div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #2FA9D8;">
+        <div class="info-card-label">Prepared By</div>
+        <div class="info-card-value">Code-ox Technologies<br>shabeeb.k@code-ox.com<br>+966 535 716 437</div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #2FA9D8;">
+        <div class="info-card-label">Proposal Details</div>
+        <div class="info-card-value">No: COX-2026-ALS-01<br>Date: 16 July 2026<br>Currency: SAR (Saudi Riyal)</div>
+      </div>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="section-label" style="margin-bottom: 12px;">What We Will Deliver</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:10px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#2FA9D8;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0A111C;font-weight:600;">Brand-True Design System</strong><br>Identity built from the Al Saber logo — not a template — carried across every page.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:10px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#2FA9D8;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0A111C;font-weight:600;">Luxury / Value Split Experience</strong><br>The Salon for premium & exotic inventory; The Smart Choice for everyday cars.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:10px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#2FA9D8;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0A111C;font-weight:600;">Conversion-Ready Car Pages</strong><br>Full galleries, specs, click-to-WhatsApp and "Request a Viewing" on every car.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:10px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#2FA9D8;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0A111C;font-weight:600;">Bilingual Arabic / English</strong><br>Full RTL/LTR implementation — half the current market can finally read the site.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:10px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#2FA9D8;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0A111C;font-weight:600;">Technical SEO Foundation</strong><br>Meta titles/descriptions, image alt text, sitemap.xml, robots.txt — none of which exist today.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:10px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#2FA9D8;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0A111C;font-weight:600;">CMS, Performance & Launch</strong><br>Staff-editable inventory, sub-3-second mobile loads, QA and production go-live.</div>
+      </div>
+    </div>
+
+    <div class="note-box blue">
+      <div class="note-label">Grounded in Evidence</div>
+      <p>Every item in this proposal maps directly to a finding in our Website Audit Report (47 verified issues, independently re-verified 9 July 2026) — this is not a generic redesign, it is the fix for the specific problems measured on alsabercars.com today.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 2</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 3 — SCOPE (PHASE 1: DESIGN) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Al Saber Cars Co. — Website Redesign Proposal</div>
+    <div class="inner-header-ref">COX-2026-ALS-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">1</div>
+      <div>
+        <div class="part-banner-sub">Phase 1 · Weeks 1–2</div>
+        <div class="part-banner-title">Scope of Work — Design</div>
+      </div>
+    </div>
+
+    <table class="pricing-table">
+      <thead>
+        <tr><th style="width:24px;">#</th><th>Module / Deliverable &amp; Scope Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-num">01</td>
+          <td><span class="module-name">Discovery &amp; Content Audit</span><span class="module-desc">Review of current inventory structure, brand assets, and the audit report findings to confirm sitemap and page list.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">02</td>
+          <td><span class="module-name">UX Wireframes</span><span class="module-desc">Low-fidelity structure for Home, Inventory Listing, Car Detail, About, and Contact — mobile-first, bilingual layout logic.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">03</td>
+          <td><span class="module-name">Brand-True Visual Identity</span><span class="module-desc">Colour system, typography, and component language built from the Al Saber logo — replacing the current generic template look.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">04</td>
+          <td><span class="module-name">High-Fidelity Mockups — The Salon</span><span class="module-desc">Premium/exotic inventory experience: cinematic imagery, dark accent identity, built to create desire for Rolls-Royce, Ferrari, Lamborghini-tier stock.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">05</td>
+          <td><span class="module-name">High-Fidelity Mockups — The Smart Choice</span><span class="module-desc">Everyday/value inventory experience: fast, practical browsing with clear filters for family and economy stock.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">06</td>
+          <td><span class="module-name">Car Detail Page Design</span><span class="module-desc">Gallery, specs, and enquiry-action layout — replacing today's single watermarked photo and two-word description.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">07</td>
+          <td><span class="module-name">Client Review &amp; Sign-Off</span><span class="module-desc">Design walkthrough with Al Saber, revisions incorporated, and approval before development begins.</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box navy" style="margin-bottom:0;">
+      <div class="note-label">Continued on next page</div>
+      <p>Phase 2 — Development modules (08–12) and the complete project pricing summary are on the following page.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 3</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 4 — SCOPE (PHASE 2: DEVELOPMENT) + TOTAL ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Al Saber Cars Co. — Website Redesign Proposal</div>
+    <div class="inner-header-ref">COX-2026-ALS-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">2</div>
+      <div>
+        <div class="part-banner-sub">Phase 2 · Weeks 3–4</div>
+        <div class="part-banner-title">Scope of Work — Development</div>
+      </div>
+    </div>
+
+    <table class="pricing-table">
+      <thead>
+        <tr><th style="width:24px;">#</th><th>Module / Deliverable &amp; Scope Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-num">08</td>
+          <td><span class="module-name">Frontend Build — All Pages</span><span class="module-desc">Home, Inventory Listing (luxury/value split), Car Detail, About, Contact — fully responsive from the approved designs.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">09</td>
+          <td><span class="module-name">CMS Integration</span><span class="module-desc">Staff-editable inventory — add, edit, and remove cars and listing details without developer involvement.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">10</td>
+          <td><span class="module-name">Car Detail Page Build</span><span class="module-desc">Photo gallery, structured specs, click-to-WhatsApp button, and "Request a Viewing" enquiry form on every car.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">11</td>
+          <td><span class="module-name">Bilingual (AR/EN) Implementation</span><span class="module-desc">Full RTL/LTR switching with language toggle — addressing the current Arabic-only limitation.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">12</td>
+          <td><span class="module-name">On-Page SEO Foundation</span><span class="module-desc">Meta titles/descriptions, image alt text, sitemap.xml, robots.txt, single canonical domain — replacing the current 0-word meta description and missing sitemap.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">13</td>
+          <td><span class="module-name">Performance Optimisation</span><span class="module-desc">Image compression and caching targeting sub-3-second mobile loads — against today's measured 57.5-second first render.</span></td>
+        </tr>
+        <tr>
+          <td class="row-num">14</td>
+          <td><span class="module-name">QA, Cross-Browser Testing &amp; Launch</span><span class="module-desc">Desktop/mobile QA across major browsers, staging-to-production deployment, and go-live.</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="background:#0A111C; border-radius:6px; padding:18px 22px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-family:'JetBrains Mono'; font-size:8px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.15em; margin-bottom:5px;">Complete Project Investment</div>
+        <div style="font-family:'Rajdhani'; font-size:28px; font-weight:700; color:#7BCCEC; line-height:1;">SAR 11,250</div>
+        <div style="font-size:9.5px; color:rgba(255,255,255,0.45); margin-top:5px;">Exclusive of VAT &nbsp;·&nbsp; 14 modules &nbsp;·&nbsp; complete redesign</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'JetBrains Mono'; font-size:8px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.13em; margin-bottom:5px;">Timeline</div>
+        <div style="font-family:'Chakra Petch'; font-size:16px; font-weight:700; color:#fff;">4 Weeks</div>
+        <div style="font-size:9px; color:rgba(255,255,255,0.4); margin-top:3px;">2 weeks design · 2 weeks development</div>
+      </div>
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">Important Note</div>
+      <p>Domain, hosting, and any car-listing data-entry beyond the initial migrated inventory are not included and remain Al Saber's responsibility. Payment gateway and mobile app are out of scope for this proposal — see our separate Digital Audit &amp; Growth Proposal for the full 3-phase roadmap.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 4</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 5 — TIMELINE ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Al Saber Cars Co. — Website Redesign Proposal</div>
+    <div class="inner-header-ref">COX-2026-ALS-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Schedule</div>
+    <div class="section-heading" style="margin-bottom:20px;">Project Timeline — 4 Weeks</div>
+
+    <div class="tl-phase-header">Phase 1 — Design (Weeks 1–2)</div>
+    <div class="tl-items">
+      <div class="tl-item">
+        <div class="tl-badge">1</div>
+        <div class="tl-content">
+          <div class="tl-week-label">Week 1</div>
+          <div class="tl-week-title">Discovery &amp; Wireframes</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>Kickoff call — goals, sitemap, and content requirements confirmed</li>
+            <li><span class="tl-bullet-dot"></span>Inventory and brand asset audit against the existing site</li>
+            <li><span class="tl-bullet-dot"></span>UX wireframes for Home, Inventory Listing, Car Detail, About, Contact</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">2</div>
+        <div class="tl-content">
+          <div class="tl-week-label">Week 2</div>
+          <div class="tl-week-title">Visual Design &amp; Approval</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>Brand-true design system — colour, typography, components</li>
+            <li><span class="tl-bullet-dot"></span>High-fidelity mockups for the Salon (luxury) and Smart Choice (value) experiences</li>
+            <li><span class="tl-bullet-dot"></span>Client review session; revisions incorporated and design signed off</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-phase-header" style="margin-top:28px;">Phase 2 — Development (Weeks 3–4)</div>
+    <div class="tl-items">
+      <div class="tl-item">
+        <div class="tl-badge">3</div>
+        <div class="tl-content">
+          <div class="tl-week-label">Week 3</div>
+          <div class="tl-week-title">Build — Pages, CMS &amp; Bilingual Setup</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>Frontend build of all approved pages, fully responsive</li>
+            <li><span class="tl-bullet-dot"></span>CMS integrated for staff-managed inventory</li>
+            <li><span class="tl-bullet-dot"></span>Bilingual AR/EN structure implemented across the site</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">4</div>
+        <div class="tl-content">
+          <div class="tl-week-label">Week 4</div>
+          <div class="tl-week-title">SEO, QA &amp; Launch</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>On-page SEO applied — meta tags, alt text, sitemap, robots.txt</li>
+            <li><span class="tl-bullet-dot"></span>Performance optimisation and cross-browser/device QA</li>
+            <li><span class="tl-bullet-dot"></span>Staging-to-production deployment and go-live</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="warranty-strip" style="margin-top:28px;">
+      <div class="warranty-icon"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z" stroke="#7BCCEC" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+      <div>
+        <div class="warranty-title">14-Day Post-Launch Support</div>
+        <div class="warranty-sub">Bug fixes and minor adjustments included free for two weeks after go-live.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 5</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 6 — INVESTMENT SUMMARY & PAYMENT SCHEDULE ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Al Saber Cars Co. — Website Redesign Proposal</div>
+    <div class="inner-header-ref">COX-2026-ALS-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Financials</div>
+    <div class="section-heading" style="margin-bottom:14px;">Investment Summary</div>
+
+    <table class="invest-table">
+      <thead>
+        <tr><th style="width:46%;">Deliverable</th><th style="width:22%;">Category</th><th style="text-align:right;">Amount (SAR)</th></tr>
+      </thead>
+      <tbody>
+        <tr class="phase-group-row"><td colspan="3">PHASE 1 — DESIGN (WEEKS 1–2)</td></tr>
+        <tr><td class="item-name">UX Wireframes — All Key Pages</td><td class="item-cat"><span class="cat-pill cat-design">Design</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">Brand-True Visual Identity &amp; Design System</td><td class="item-cat"><span class="cat-pill cat-design">Design</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">High-Fidelity Mockups — Salon &amp; Smart Choice</td><td class="item-cat"><span class="cat-pill cat-design">Design</span></td><td class="item-amt">Included</td></tr>
+        <tr class="phase-group-row"><td colspan="3">PHASE 2 — DEVELOPMENT (WEEKS 3–4)</td></tr>
+        <tr><td class="item-name">Frontend Build — All Pages, Fully Responsive</td><td class="item-cat"><span class="cat-pill cat-dev">Development</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">CMS Integration for Inventory Management</td><td class="item-cat"><span class="cat-pill cat-dev">Development</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">Bilingual (AR/EN) RTL/LTR Implementation</td><td class="item-cat"><span class="cat-pill cat-dev">Development</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">Car Detail Pages — Gallery, WhatsApp &amp; Viewing Request</td><td class="item-cat"><span class="cat-pill cat-dev">Development</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">On-Page SEO Foundation</td><td class="item-cat"><span class="cat-pill cat-seo">SEO</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">Performance Optimisation</td><td class="item-cat"><span class="cat-pill cat-dev">Development</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">QA, Cross-Browser Testing &amp; Production Go-Live</td><td class="item-cat"><span class="cat-pill cat-qa">QA &amp; Launch</span></td><td class="item-amt">Included</td></tr>
+        <tr class="phase-total-row"><td class="phase-total-label" colspan="2">Project Total</td><td class="phase-total-amount">11,250</td></tr>
+        <tr class="grand-total-row"><td>Total Project Investment</td><td><span class="grand-total-sub">Exclusive of VAT</span></td><td>SAR 11,250</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-hr">
+
+    <div class="section-heading" style="font-size:16px; margin-bottom:12px;">Payment Schedule</div>
+
+    <table class="psched-table">
+      <thead><tr><th>Milestone</th><th>Trigger</th><th style="text-align:right;">Amount (SAR)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="milestone-pct">50%</span>Advance Payment</td><td>Upon proposal sign-off and project commencement</td><td>5,625</td></tr>
+        <tr><td><span class="milestone-pct">50%</span>Final Payment</td><td>Upon QA completion and website go-live</td><td>5,625</td></tr>
+        <tr class="sched-total"><td>Total</td><td></td><td>SAR 11,250</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note-box amber" style="margin-bottom:0;">
+      <div class="note-label">VAT</div>
+      <p>15% VAT applicable per KSA regulations will be added to each invoice. Domain and hosting costs are not included and are borne directly by Al Saber Cars Co.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 6</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 7 — TERMS & SIGN-OFF ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Al Saber Cars Co. — Website Redesign Proposal</div>
+    <div class="inner-header-ref">COX-2026-ALS-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Terms &amp; Conditions</div>
+    <div class="section-heading" style="margin-bottom:16px;">General Terms</div>
+
+    <ul class="terms-list">
+      <li><span class="terms-dot"></span><div><strong>Scope of Work:</strong> This proposal covers the design and development work described in Phases 1 and 2. Any features outside this scope — payment gateway, mobile app, or SEO growth program beyond the on-page foundation — require a separate written agreement and are covered in our companion Digital Audit &amp; Growth Proposal and SEO &amp; AI Search Growth Strategy documents.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Client Responsibilities:</strong> Al Saber agrees to provide all required content (car listings, images, brand assets) and timely feedback. Delays caused by the client may impact the project timeline.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Third-Party Costs:</strong> Hosting and domain registration are not included and are the client's responsibility.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Intellectual Property:</strong> Upon receipt of full payment, all custom code and design deliverables become the property of Al Saber Cars Co. Third-party libraries remain subject to their respective licences.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Revisions:</strong> The design phase includes up to two (2) rounds of revisions. Additional revision rounds will be charged separately at an agreed rate.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Post-Launch Support:</strong> Bug fixes and minor adjustments are included free for 14 days after go-live. Ongoing support and content updates beyond this window can be engaged separately.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Confidentiality:</strong> Both parties agree to keep the contents of this proposal confidential and not disclose them to any third party without prior written consent.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Governing Law:</strong> This agreement shall be governed by the laws of the Kingdom of Saudi Arabia.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Proposal Validity:</strong> This proposal is valid for 30 days from the date of issue. After this period, pricing may be subject to revision.</div></li>
+    </ul>
+
+    <div class="signoff-block">
+      <div class="signoff-header">Agreement &amp; Sign-Off</div>
+      <div class="signoff-body">
+        <div class="signoff-statement">By signing below, both parties confirm their agreement to the scope, pricing, and terms outlined in this proposal.</div>
+        <div class="signoff-cols">
+          <div>
+            <div class="signoff-col-header">On Behalf of Al Saber Cars Co.</div>
+            <div class="signoff-field"><div class="signoff-field-label">Authorised Signatory — Name &amp; Designation</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date</div><div class="signoff-field-line"></div></div>
+          </div>
+          <div>
+            <div class="signoff-col-header">On Behalf of Code-ox Technologies</div>
+            <div class="signoff-field"><div class="signoff-field-label">Shabeeb K — Head of Operations</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date — 16 July 2026</div><div class="signoff-field-line"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 7</div>
+  </div>
+</div>
+
+</body>
+</html>
