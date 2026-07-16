@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Implementation Proposal · COX-2026-KGM-01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body, table, td, th, div, p, span, ul, li { direction: ltr; text-align: left; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #D0D5DF;
+      color: #1A202C;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto 24px; position: relative; overflow: hidden; background: #fff; box-shadow: 0 4px 28px rgba(0,0,0,0.14); }
+
+    @media print {
+      body { background: none; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+    }
+    @page { size: A4; margin: 0; }
+
+    /* ══ COVER ══ */
+    .cover { background: #FFFFFF; color: #0F172A; min-height: 297mm; display: flex; flex-direction: column; position: relative; }
+    .cover-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px); background-size: 36px 36px; pointer-events: none; z-index: 1; }
+    .cover-accent-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, #1ECFC0 0%, rgba(30,207,192,0.2) 100%); z-index: 3; }
+    .cover-topbar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 11px 26px 11px 32px; border-bottom: 1px solid #E2E8F0; }
+    .cover-topbar-left { display: flex; align-items: center; gap: 14px; }
+    .cover-client-name { font-size: 15px; font-weight: 700; color: #0F172A; }
+    .cover-client-sub  { font-size: 11px; color: #94A3B8; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+    .cover-divider { width: 1px; height: 30px; background: #E2E8F0; }
+    .cover-prepby-label { font-size: 10px; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2px; }
+    .cover-prepby-name  { font-size: 15px; font-weight: 600; color: #0F172A; }
+    .doc-type-pill { border: 1.5px solid #0D9488; color: #0D9488; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 13px; border-radius: 4px; }
+    .cover-hero { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; padding: 12px 26px 0 32px; }
+    .cover-overline { font-size: 10px; font-weight: 600; color: #94A3B8; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px; }
+    .cover-title { font-size: 32px; font-weight: 800; line-height: 1.15; color: #0F172A; margin-bottom: 6px; }
+    .cover-title-accent { color: #0D9488; }
+    .cover-subtitle { font-size: 14px; color: #475569; line-height: 1.6; max-width: 500px; margin-bottom: 13px; }
+    .cover-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 13px; }
+    .cover-tag { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 6px 12px; font-size: 12.5px; color: #475569; }
+    .cover-tag strong { color: #0F172A; font-weight: 600; }
+
+    /* — Partner showcase strip (hero element, silver-metal effect) — */
+    .partner-strip { position: relative; display: flex; align-items: center; gap: 22px; background: linear-gradient(115deg, #EDEEF1 0%, #FFFFFF 18%, #DADDE2 38%, #FFFFFF 58%, #E3E5E9 78%, #F5F6F8 100%); border: 1px solid #D5D8DD; border-radius: 14px; padding: 17px 26px; margin-bottom: 13px; box-shadow: 0 14px 30px rgba(90,100,115,0.18), inset 0 1px 0 rgba(255,255,255,0.9); }
+    .partner-strip-logo-chip { position: relative; background: #fff; border: 1px solid #E7E9ED; border-radius: 10px; padding: 9px 16px; display: flex; align-items: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(60,68,80,0.12); }
+    .partner-strip img { height: 70px; width: auto; display: block; }
+    .partner-strip-divider { position: relative; width: 1px; align-self: stretch; background: rgba(15,23,42,0.14); }
+    .partner-strip-eyebrow { position: relative; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #0D9488; margin-bottom: 6px; }
+    .partner-strip-title { position: relative; font-size: 18px; font-weight: 800; color: #0F172A; margin-bottom: 5px; line-height: 1.25; }
+    .partner-strip-text { position: relative; font-size: 13px; color: #475569; line-height: 1.65; max-width: 460px; }
+    .partner-strip-badges { position: relative; margin-left: auto; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+    .partner-strip-badge { font-size: 11px; font-weight: 700; color: #fff; background: #091827; border-radius: 20px; padding: 6px 14px; white-space: nowrap; text-align: center; }
+
+    /* — Coverage grid — */
+    .cover-coverage-label { font-size: 11px; font-weight: 700; color: #94A3B8; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 7px; }
+    .cover-coverage { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 12px; }
+    .cc-item { background: #F8FAFC; border: 1px solid #E2E8F0; border-top: 3px solid #1ECFC0; border-radius: 7px; padding: 12px 13px; }
+    .cc-num { font-size: 23px; font-weight: 800; color: #0D9488; line-height: 1; margin-bottom: 4px; }
+    .cc-name { font-size: 12.5px; font-weight: 600; color: #334155; line-height: 1.35; }
+
+    .cover-ref-box { position: relative; z-index: 2; margin: 0 26px 8px 32px; background: #F0FDFB; border: 1px solid #B2EDEA; border-radius: 6px; display: grid; grid-template-columns: repeat(4,1fr); overflow: hidden; }
+    .cover-ref-item { padding: 8px 15px; border-right: 1px solid #B2EDEA; }
+    .cover-ref-item:last-child { border-right: none; }
+    .cover-ref-label { font-size: 10px; color: #64748B; text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 4px; }
+    .cover-ref-value { font-size: 13.5px; font-weight: 600; color: #0F172A; }
+    .cover-ref-value.teal { color: #0D9488; }
+    .cover-total-banner { position: relative; z-index: 2; margin: 0 26px 8px 32px; background: #1ECFC0; border-radius: 6px; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .cover-total-label { font-size: 11px; font-weight: 700; color: #065f5b; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 3px; }
+    .cover-total-amount { font-size: 26px; font-weight: 800; color: #091827; line-height: 1; }
+    .cover-total-sub { font-size: 12px; color: rgba(9,24,39,0.6); margin-top: 3px; }
+    .cover-total-right { text-align: right; }
+    .cover-total-vat-label { font-size: 11px; color: rgba(9,24,39,0.55); margin-bottom: 3px; }
+    .cover-total-vat-amount { font-size: 15px; font-weight: 700; color: #091827; }
+    .cover-note { position: relative; z-index: 2; margin: 0 26px 6px 32px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 5px; padding: 7px 15px; display: flex; align-items: flex-start; gap: 12px; }
+    .cover-note-label { font-size: 10px; font-weight: 700; color: #0D9488; letter-spacing: 0.13em; text-transform: uppercase; white-space: nowrap; margin-top: 2px; min-width: 70px; }
+    .cover-note-text  { font-size: 12px; color: #64748B; line-height: 1.65; }
+    .cover-footer { position: relative; z-index: 2; border-top: 1px solid #E2E8F0; padding: 8px 26px 8px 32px; display: flex; align-items: center; gap: 14px; }
+    .cover-footer img { height: 16px; opacity: 0.85; }
+    .cover-footer-sep { width: 1px; height: 14px; background: #E2E8F0; }
+    .cover-footer-text { font-size: 10.5px; color: #94A3B8; }
+
+    /* ══ INNER PAGES ══ */
+    .inner-page { display: flex; flex-direction: column; min-height: 297mm; }
+    .inner-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 26px; border-bottom: 1px solid #E2E8F0; background: #FAFBFC; }
+    .inner-header img { height: 14px; }
+    .inner-header-title { font-size: 10.5px; color: #64748B; }
+    .inner-header-ref   { font-size: 10.5px; color: #94A3B8; }
+    .inner-content { flex: 1; padding: 18px 26px; }
+    .inner-footer { border-top: 1px solid #E2E8F0; padding: 10px 26px; display: flex; align-items: center; gap: 10px; background: #FAFBFC; }
+    .inner-footer img { height: 12px; opacity: 0.45; }
+    .inner-footer-sep { width: 1px; height: 11px; background: #CBD5E1; }
+    .inner-footer-text { font-size: 9px; color: #94A3B8; flex: 1; }
+    .inner-footer-page { font-size: 9.5px; color: #94A3B8; font-weight: 500; }
+
+    .section-label { font-size: 11px; font-weight: 700; color: #1ECFC0; text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 6px; }
+    .section-heading { font-size: 24px; font-weight: 800; color: #0F172A; margin-bottom: 8px; line-height: 1.2; }
+    .section-intro { font-size: 13px; color: #475569; line-height: 1.62; margin-bottom: 10px; }
+    .section-hr { border: none; border-top: 1px solid #E2E8F0; margin: 10px 0; }
+
+    .part-banner { background: #091827; color: #fff; border-radius: 6px; padding: 12px 16px; display: flex; align-items: center; gap: 11px; margin-bottom: 12px; }
+    .part-badge { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #1ECFC0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #091827; }
+    .part-banner-sub   { font-size: 9.5px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2px; }
+    .part-banner-title { font-size: 14.5px; font-weight: 700; }
+    .part-banner-count { margin-left: auto; font-size: 11px; color: rgba(255,255,255,0.5); white-space: nowrap; }
+    .part-banner-count b { color: #1ECFC0; font-size: 15px; }
+
+    .note-box { border-radius: 5px; padding: 12px 15px; font-size: 12.5px; line-height: 1.65; margin-bottom: 12px; }
+    .note-box.teal  { background: #F0FDFB; border: 1px solid #B2EDEA; border-left: 3px solid #1ECFC0; }
+    .note-box.amber { background: #FFFBEB; border: 1px solid #FDE68A; border-left: 3px solid #F59E0B; }
+    .note-box.navy  { background: #F0F4F8; border: 1px solid #CBD5E1; border-left: 3px solid #091827; }
+    .note-box .note-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+    .note-box.teal  .note-label { color: #0D9488; }
+    .note-box.amber .note-label { color: #B45309; }
+    .note-box.navy  .note-label { color: #334155; }
+    .note-box p { color: #374151; }
+    .note-box strong { font-weight: 600; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 9px; }
+    .info-card { border: 1px solid #E2E8F0; border-radius: 6px; padding: 11px 13px; }
+    .info-card-label { font-size: 11px; font-weight: 700; color: #0F172A; margin-bottom: 2px; }
+    .info-card-value { font-size: 12.5px; color: #64748B; line-height: 1.55; }
+
+    /* ══ scope summary table ══ */
+    table.scope-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 12px; }
+    table.scope-table thead th { background: #091827; color: #fff; padding: 9px 10px; text-align: left; font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    table.scope-table thead th.num { text-align: center; width: 60px; }
+    table.scope-table tbody tr:nth-child(even) { background: #F8FAFC; }
+    table.scope-table tbody td { padding: 8px 10px; border-bottom: 1px solid #EEF2F7; color: #334155; vertical-align: top; line-height: 1.5; }
+    table.scope-table tbody td.num { text-align: center; font-weight: 700; color: #0D9488; font-size: 14px; }
+    table.scope-table tbody td b { color: #0F172A; }
+    table.scope-table tfoot td { padding: 9px 10px; font-weight: 700; background: #091827; color: #fff; }
+    table.scope-table tfoot td.num { text-align: center; color: #1ECFC0; font-size: 15px; }
+
+    /* ══ requirement tables (dense, ID + text) ══ */
+    table.req-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 10px; }
+    table.req-table thead th { background: #091827; color: #fff; padding: 8px 10px; text-align: left; font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    table.req-table thead th.idcol { width: 68px; }
+    table.req-table tbody tr:nth-child(even) { background: #F8FAFC; }
+    table.req-table tbody td { padding: 6px 10px; border-bottom: 1px solid #EEF2F7; color: #334155; vertical-align: top; line-height: 1.55; }
+    table.req-table tbody td.idcell { font-family: monospace; font-size: 10px; font-weight: 700; color: #0D9488; white-space: nowrap; }
+
+    /* ══ methodology / timeline tables ══ */
+    table.method-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }
+    table.method-table thead th { background: #F1F5F9; color: #475569; padding: 9px 12px; text-align: left; font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 2px solid #E2E8F0; }
+    table.method-table tbody tr { border-bottom: 1px solid #EEF2F7; }
+    table.method-table tbody tr:nth-child(even) { background: #FAFBFD; }
+    table.method-table tbody td { padding: 10px 12px; color: #334155; vertical-align: top; }
+    table.method-table tbody td b { color: #0F172A; }
+    .phase-num-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #1ECFC0; color: #091827; font-size: 11px; font-weight: 800; }
+
+    /* ══ milestone / support tables ══ */
+    table.milestone-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }
+    table.milestone-table thead th { background: #F1F5F9; color: #475569; padding: 9px 12px; text-align: left; font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 2px solid #E2E8F0; }
+    table.milestone-table thead th:last-child { text-align: right; }
+    table.milestone-table tbody tr { border-bottom: 1px solid #EEF2F7; }
+    table.milestone-table tbody tr:nth-child(even) { background: #FAFBFD; }
+    table.milestone-table tbody td { padding: 10px 12px; color: #334155; }
+    table.milestone-table tbody td:last-child { text-align: right; font-weight: 700; color: #0F172A; }
+    table.milestone-table tr.sched-total td { background: #091827 !important; color: #fff; font-weight: 700; }
+    table.milestone-table tr.sched-total td:last-child { color: #1ECFC0; }
+    .milestone-pct { display: inline-block; background: #1ECFC0; color: #091827; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 12px; margin-right: 8px; }
+
+    /* ══ terms / assumptions ══ */
+    .terms-list { list-style: none; margin-bottom: 0; }
+    .terms-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #374151; line-height: 1.65; padding: 8px 0; border-bottom: 1px solid #F1F5F9; }
+    .terms-list li:last-child { border-bottom: none; }
+    .terms-dot { width: 6px; height: 6px; min-width: 6px; border-radius: 50%; background: #1ECFC0; margin-top: 7px; flex-shrink: 0; }
+    .terms-list strong { color: #0F172A; }
+
+    .signoff-block { border: 1.5px solid #E2E8F0; border-radius: 6px; overflow: hidden; margin-top: 14px; }
+    .signoff-header { background: #091827; color: #fff; padding: 10px 15px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .signoff-body { padding: 14px 16px; background: #FAFBFC; }
+    .signoff-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .signoff-col-header { font-size: 10.5px; font-weight: 700; color: #0F172A; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid #1ECFC0; }
+    .signoff-field { margin-bottom: 12px; }
+    .signoff-field-label { font-size: 9.5px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 3px; }
+    .signoff-field-line { border-bottom: 1.5px solid #CBD5E1; height: 24px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ PAGE 1 — COVER ═══ -->
+<div class="page cover">
+  <div class="cover-grid"></div>
+  <div class="cover-accent-bar"></div>
+
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <div>
+        <div class="cover-client-name">KGM Abdullah Al-Bazie Motors</div>
+        <div class="cover-client-sub">Automotive Dealership Group · Riyadh, Kingdom of Saudi Arabia</div>
+      </div>
+      <div class="cover-divider"></div>
+      <div>
+        <div class="cover-prepby-label">Prepared by</div>
+        <div class="cover-prepby-name">Code-ox Technologies</div>
+      </div>
+    </div>
+    <div class="doc-type-pill">Commercial Proposal</div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">Commercial Proposal &nbsp;·&nbsp; July 2026</div>
+    <div class="cover-title">
+      Odoo 19 ERP<br>
+      Implementation<br>
+      <span class="cover-title-accent">for KGM Abdullah Al-Bazie Motors</span>
+    </div>
+    <div class="cover-subtitle">
+      A fresh, independently-owned Odoo 19 platform covering vehicle sales, spare parts, workshop and after-sales, finance, HR, marketing, call centre operations and business intelligence — engineered around 165 requirements captured across your ten functional areas.
+    </div>
+
+    <div class="cover-tags">
+      <div class="cover-tag"><strong>165</strong> Requirements</div>
+      <div class="cover-tag"><strong>10</strong> Functional Areas</div>
+      <div class="cover-tag"><strong>Odoo 19</strong> Fresh Build</div>
+      <div class="cover-tag"><strong>Data</strong> Migration</div>
+      <div class="cover-tag"><strong>Grandstream</strong> VoIP Integration</div>
+      <div class="cover-tag"><strong>Offline</strong> Training</div>
+    </div>
+
+    <div class="partner-strip">
+      <div class="partner-strip-logo-chip">
+        <img src="odoo_silver_partner.avif" alt="Odoo Silver Partner">
+      </div>
+      <div class="partner-strip-divider"></div>
+      <div>
+        <div class="partner-strip-eyebrow">Official Odoo Partnership</div>
+        <div class="partner-strip-title">Delivered by a Certified Odoo Silver Partner</div>
+        <div class="partner-strip-text">Code-ox Technologies holds official Odoo Silver Partner status — authorised to sell, implement, configure and support Odoo ERP deployments, with direct access to Odoo's partner support channels and release resources.</div>
+      </div>
+      <div class="partner-strip-badges">
+        <div class="partner-strip-badge">Official Partner</div>
+        <div class="partner-strip-badge">Certified Team</div>
+      </div>
+    </div>
+
+    <div class="cover-coverage-label">Scope at a Glance — 165 Requirements Across 10 Functional Areas</div>
+    <div class="cover-coverage">
+      <div class="cc-item"><div class="cc-num">15</div><div class="cc-name">HR &amp; Attendance</div></div>
+      <div class="cc-item"><div class="cc-num">14</div><div class="cc-name">Document Automation</div></div>
+      <div class="cc-item"><div class="cc-num">24</div><div class="cc-name">Sales &amp; CRM</div></div>
+      <div class="cc-item"><div class="cc-num">20</div><div class="cc-name">Inventory &amp; Logistics</div></div>
+      <div class="cc-item"><div class="cc-num">30</div><div class="cc-name">Finance &amp; Accounting</div></div>
+      <div class="cc-item"><div class="cc-num">25</div><div class="cc-name">After-Sales &amp; Workshop</div></div>
+      <div class="cc-item"><div class="cc-num">6</div><div class="cc-name">Marketing &amp; Leads</div></div>
+      <div class="cc-item"><div class="cc-num">11</div><div class="cc-name">Call Centre &amp; VoIP</div></div>
+      <div class="cc-item"><div class="cc-num">14</div><div class="cc-name">Dashboard &amp; BI</div></div>
+      <div class="cc-item"><div class="cc-num">6</div><div class="cc-name">Cross-Cutting</div></div>
+    </div>
+  </div>
+
+  <div class="cover-ref-box">
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Document No.</div>
+      <div class="cover-ref-value teal">COX-2026-KGM-01</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Date of Issue</div>
+      <div class="cover-ref-value">16 July 2026</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Version</div>
+      <div class="cover-ref-value">1.0</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Prepared By</div>
+      <div class="cover-ref-value">Code-ox Technologies</div>
+    </div>
+  </div>
+
+  <div class="cover-total-banner">
+    <div class="cover-total-left">
+      <div class="cover-total-label">Engagement Type</div>
+      <div class="cover-total-amount" style="font-size:22px;">Fresh Odoo 19 Implementation</div>
+      <div class="cover-total-sub">Full commercial terms inside — see Section 9</div>
+    </div>
+    <div class="cover-total-right">
+      <div class="cover-total-vat-label">Estimated Timeline</div>
+      <div class="cover-total-vat-amount">45–50 Business Days</div>
+    </div>
+  </div>
+
+  <div class="cover-note">
+    <div class="cover-note-label">Prepared For</div>
+    <div class="cover-note-text">
+      KGM Abdullah Al-Bazie Motors &nbsp;·&nbsp; Riyadh, Kingdom of Saudi Arabia. This proposal is based on a consolidated requirements file covering 165 requirements across ten functional areas, and is valid for 30 days from the date of issuance.
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox Technologies">
+    <div class="cover-footer-sep"></div>
+    <div class="cover-footer-text">info@code-ox.com &nbsp;|&nbsp; www.code-ox.com &nbsp;|&nbsp; Odoo Silver Partner &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 2 — EXECUTIVE SUMMARY & APPROACH ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">1 · Overview</div>
+    <div class="section-heading">Executive Summary</div>
+    <div class="section-intro">
+      Code-ox Technologies is pleased to submit this proposal for the implementation of a new Odoo 19 ERP system for your automotive dealership operations, covering vehicle sales, spare parts, workshop and after-sales service, finance, HR, marketing, call centre operations, and business intelligence reporting.
+      <br><br>
+      This proposal has been developed based on our review of your detailed requirements document covering <strong>165 requirements across ten functional areas</strong> of your business. We understand that your current Odoo system is not meeting your operational needs, and that a decision has been made to proceed with a new implementation rather than continued development on the existing platform, for the reasons set out below.
+      <br><br>
+      Our recommended approach is to build a new Odoo 19 database from the ground up, engineered around your actual operational requirements, with historical data carried forward from your existing system. This gives you a clean, modern, fully-owned platform without dependency on your current implementation partner.
+    </div>
+
+    <div class="info-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px;">
+      <div class="info-card" style="border-top: 3px solid #1ECFC0;">
+        <div class="info-card-label">Prepared For</div>
+        <div class="info-card-value">KGM Abdullah Al-Bazie Motors<br>Riyadh, Kingdom of Saudi Arabia</div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #1ECFC0;">
+        <div class="info-card-label">Prepared By</div>
+        <div class="info-card-value">Code-ox Technologies<br>Odoo Silver Partner<br>info@code-ox.com</div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #1ECFC0;">
+        <div class="info-card-label">Document Details</div>
+        <div class="info-card-value">No: COX-2026-KGM-01<br>Version: 1.0<br>Date: 16 July 2026</div>
+      </div>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="section-label">2 · Situation</div>
+    <div class="section-heading" style="font-size:19px;">Current Situation &amp; Recommended Approach</div>
+
+    <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">2.1 &nbsp; Current Situation</div>
+    <div class="section-intro">
+      Your dealership currently operates on Odoo 17, implemented and hosted by your existing service provider. Based on our discussions, the source code for the custom modules built on your existing system is retained by that provider and is not available to us, and the system itself is hosted on infrastructure controlled by them.
+      <br><br>
+      This means that a direct migration of your existing customisations to Odoo 19 is not practically achievable — we cannot migrate or extend code we do not have access to, and we cannot assume reliable access to the underlying server for a like-for-like upgrade.
+    </div>
+
+    <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:6px;">2.2 &nbsp; Recommended Approach: Fresh Odoo 19 Implementation</div>
+    <div class="section-intro">
+      Given the above, we recommend building your new system as a fresh Odoo 19 database, developed independently by Code-ox Technologies according to your operational requirements. This approach gives you full ownership of the new platform, a clean and modern architecture with no inherited technical debt, and complete independence from your current provider going forward.
+      <br><br>
+      Historical data — customers, vehicles, sales history, financial records and other operational data — will be extracted from your existing system and migrated into the new Odoo 19 database as part of this engagement.
+    </div>
+
+    <div class="note-box amber" style="margin-bottom:0;">
+      <div class="note-label">Note — Inventory Data Migration</div>
+      <p>Certain inventory-related data (such as vehicle stock records, reservations, and VIN-level history) carry known limitations for a clean migration given the structure of the current system. The precise scope and method of inventory data migration will be discussed and finalised in detail once this proposal is approved, as part of the requirement gathering phase.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 2</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 3 — SCOPE SUMMARY ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">3 · Scope of Work</div>
+    <div class="section-heading">Scope Summary</div>
+    <div class="section-intro">
+      This engagement covers <strong>165 requirements across ten functional areas</strong> of your business, captured from your consolidated requirements file and translated into a structured Odoo 19 implementation plan.
+    </div>
+
+    <table class="scope-table">
+      <thead>
+        <tr><th>Functional Area</th><th class="num">Reqs.</th><th>Summary</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>HR &amp; Attendance</b></td><td class="num">15</td><td>Full integration of Time Off, Permissions (Isti'zan) and Attendance, with accurate leave balances, violation calculations, and end-of-service settlement handling.</td></tr>
+        <tr><td><b>Document Automation (QWeb)</b></td><td class="num">14</td><td>Automated, access-controlled generation of the Certificate of Origin, supplementary invoice, and clearance letters, tied to full payment collection and audit-logged throughout.</td></tr>
+        <tr><td><b>Sales &amp; CRM</b></td><td class="num">24</td><td>Duplicate-safe contact and opportunity management, controlled quotation-to-order flow, and detailed sales, waiting-vehicle and lead reporting.</td></tr>
+        <tr><td><b>Inventory &amp; Logistics</b></td><td class="num">20</td><td>Accurate stock visibility with Reserved/On Hand separation, VIN-level tracking through Production, Shipping and PDI stages, and warehouse-level access control.</td></tr>
+        <tr><td><b>Finance &amp; Accounting</b></td><td class="num">30</td><td>Mandatory analytic cost-centre governance, credit-limit control, a redesigned service invoice and labour costing engine, and consolidated financial reporting.</td></tr>
+        <tr><td><b>After-Sales &amp; Workshop</b></td><td class="num">25</td><td>End-to-end workshop workflow from inspection through job card, technician scheduling and timers, to warranty tracking and customer satisfaction surveys.</td></tr>
+        <tr><td><b>Marketing &amp; Lead Capture</b></td><td class="num">6</td><td>Unified lead capture and attribution across advertising channels, feeding directly into CRM.</td></tr>
+        <tr><td><b>Call Centre &amp; VoIP</b></td><td class="num">11</td><td>Grandstream VoIP integration with Odoo covering caller-ID pop-ups, click-to-call, automated logging, and live call-centre performance visibility.</td></tr>
+        <tr><td><b>Master Dashboard &amp; BI</b></td><td class="num">14</td><td>A consolidated, real-time management dashboard spanning sales, inventory, workshop and finance, with global search and filtering.</td></tr>
+        <tr><td><b>Cross-Cutting</b></td><td class="num">6</td><td>Screen consolidation, end-to-end audit logging, and a redesigned role/access-rights model spanning every department.</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td>Total</td><td class="num">165</td><td style="color:rgba(255,255,255,0.6);font-weight:400;">Full requirement register detailed in Section 3.2, by functional area.</td></tr>
+      </tfoot>
+    </table>
+
+    <div class="note-box navy" style="margin-bottom:0;">
+      <div class="note-label">Detailed Requirements Follow</div>
+      <p>Every requirement listed on the following pages is drawn directly from your consolidated requirements file. Each is in scope for this implementation unless flagged otherwise in Section 10 (Assumptions &amp; Exclusions) or resolved differently during the requirement gathering phase.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 3</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 4 — 3.2.1 HR & ATTENDANCE ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">1</div>
+      <div><div class="part-banner-sub">Section 3.2.1</div><div class="part-banner-title">HR &amp; Attendance</div></div>
+      <div class="part-banner-count"><b>15</b> reqs</div>
+    </div>
+    <div class="section-intro">Full integration of Time Off, Permissions (Isti'zan) and Attendance, with accurate leave balances, violation calculations, and end-of-service settlement handling.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">HRM-01</td><td>Full integration between Time Off, Permissions and Attendance. Every approved request reflects on attendance records automatically, with no manual intervention, while keeping violation calculations and leave balances accurate.</td></tr>
+        <tr><td class="idcell">HRM-02</td><td>Creation and classification of permission types (at minimum: hourly permission, early exit, morning lateness), with the list kept extensible.</td></tr>
+        <tr><td class="idcell">HRM-03</td><td>On approval of a permission request, the system automatically adjusts the check-in or check-out time by the approved duration.</td></tr>
+        <tr><td class="idcell">HRM-04</td><td>An approved permission does not generate any lateness or working-hours shortfall, and is excluded from violation calculations.</td></tr>
+        <tr><td class="idcell">HRM-05</td><td>Permission appears in the monthly attendance report, with its type and duration visible inside the attendance record.</td></tr>
+        <tr><td class="idcell">HRM-06</td><td>On leave approval, the employee's status in the attendance log shows 'On Leave' for the full leave period.</td></tr>
+        <tr><td class="idcell">HRM-07</td><td>Approved leave days are not counted as absence or lateness and are excluded automatically from all violation and discipline reports.</td></tr>
+        <tr><td class="idcell">HRM-08</td><td>Leave balance is deducted automatically per company policy and leave type, with the remaining balance updating immediately after approval.</td></tr>
+        <tr><td class="idcell">HRM-09</td><td>Validation rules on the return-from-leave date: cannot be before the leave start date, and cannot exceed three days after the approved leave end date except through an approved procedure.</td></tr>
+        <tr><td class="idcell">HRM-10</td><td>End-of-service settlement can be amended directly after HR approval when notes or corrections arise, without restarting the full cycle.</td></tr>
+        <tr><td class="idcell">HRM-11</td><td>All settlement amendments are written to an audit log with the user who made the change, the timestamp and the reason.</td></tr>
+        <tr><td class="idcell">HRM-12</td><td>Monthly attendance report covering presence, absence, lateness, early exit, permissions and leaves.</td></tr>
+        <tr><td class="idcell">HRM-13</td><td>Detailed leave balance report per employee showing entitled, used and remaining balance.</td></tr>
+        <tr><td class="idcell">HRM-14</td><td>Monthly violations report produced after excluding all approved leaves and permissions.</td></tr>
+        <tr><td class="idcell">HRM-15</td><td>Export of all HR reports to Excel and PDF, with search and filter by employee, department, branch, period, and leave or permission type.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 4</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 5 — 3.2.2 DOCUMENT AUTOMATION (QWEB) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">2</div>
+      <div><div class="part-banner-sub">Section 3.2.2</div><div class="part-banner-title">Document Automation (QWeb)</div></div>
+      <div class="part-banner-count"><b>14</b> reqs</div>
+    </div>
+    <div class="section-intro">Automated, access-controlled generation of the Certificate of Origin, supplementary invoice, and clearance letters, tied to full payment collection and audit-logged throughout.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">DOC-01</td><td>Block manual creation of the Certificate of Origin and the supplementary Invoice document by any user.</td></tr>
+        <tr><td class="idcell">DOC-02</td><td>Both documents are generated automatically only after full invoicing and full collection, i.e. once the linked invoice is Fully Paid.</td></tr>
+        <tr><td class="idcell">DOC-03</td><td>Automatic data mapping from the sales order, customer file and vehicle card: customer name, nationality, ID/Iqama number, mobile; vehicle type, model, dynamic trim, full VIN, exterior/interior colour, engine power; purchase date, total price, and product specification.</td></tr>
+        <tr><td class="idcell">DOC-04</td><td>Dynamic country-of-origin rule driven by the vehicle brand: brand 212 prints 'China'; any other brand (KGM, SsangYong, etc.) prints 'Korea'.</td></tr>
+        <tr><td class="idcell">DOC-05</td><td>Print and export buttons hidden/restricted for sales reps and standard users. Printing granted exclusively to approved senior roles: supervisor, sales manager, finance.</td></tr>
+        <tr><td class="idcell">DOC-06</td><td>Every view, print or export of these documents is recorded in the audit log with user name, date and exact time.</td></tr>
+        <tr><td class="idcell">DOC-07</td><td>QWeb template: single-page Certificate of Origin following the exact approved wording and table supplied by the client.</td></tr>
+        <tr><td class="idcell">DOC-08</td><td>QWeb template: single-page supplementary Invoice following the exact approved wording and table supplied by the client.</td></tr>
+        <tr><td class="idcell">DOC-09</td><td>Three clearance letters (Cash, Finance, Export) generated automatically once invoicing and full collection are confirmed.</td></tr>
+        <tr><td class="idcell">DOC-10</td><td>The 'Type' field inside the clearance letter is set programmatically from the financial data and the sales order: cash/card prints 'Cash'; sale through a bank or financier prints 'Finance'; international/export shipment prints 'Export'.</td></tr>
+        <tr><td class="idcell">DOC-11</td><td>QWeb templates for the three clearance letters using the approved columns (customer, user, vehicle, model, VIN, colour, type, amount), fitting a single page with no field overlap.</td></tr>
+        <tr><td class="idcell">DOC-12</td><td>System blocks printing of a clearance letter or sending of the customs card before full collection and before the invoice status becomes Paid.</td></tr>
+        <tr><td class="idcell">DOC-13</td><td>Clearance letter printing fully locked for sales reps and available exclusively to Finance and the Sales Coordinator.</td></tr>
+        <tr><td class="idcell">DOC-14</td><td>Every clearance-letter print is recorded in the audit log with the sales order number and the accountant's name.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 5</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 6 — 3.2.3 SALES & CRM (1/2) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">3</div>
+      <div><div class="part-banner-sub">Section 3.2.3</div><div class="part-banner-title">Sales &amp; CRM — Part 1</div></div>
+      <div class="part-banner-count"><b>24</b> reqs</div>
+    </div>
+    <div class="section-intro">Duplicate-safe contact and opportunity management, controlled quotation-to-order flow, and detailed sales, waiting-vehicle and lead reporting.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">SLS-01</td><td>Restrict contact creation to the Contacts screen only. Creating a new contact from CRM or Sales is blocked.</td></tr>
+        <tr><td class="idcell">SLS-02</td><td>Prevent duplicate customer records and duplicate mobile numbers across Contacts, CRM and Opportunities, with an immediate 'similar customers' warning.</td></tr>
+        <tr><td class="idcell">SLS-03</td><td>Phone number normalisation and instant lookup: entering a number in any format (05..., 5..., 9665...) retrieves and displays the existing customer to prevent duplication.</td></tr>
+        <tr><td class="idcell">SLS-04</td><td>Fix the missing pipeline and log for opportunities transferred from Marketing to Sales. Track the full stage history through to Won or Lost with a loss reason, linked to reporting.</td></tr>
+        <tr><td class="idcell">SLS-05</td><td>Automated customer messaging sent directly from Odoo, including location, appointment and after-sales service, with the ability for the customer to rate the service.</td></tr>
+        <tr><td class="idcell">SLS-06</td><td>Invoice governance: the system does not issue any sales invoice until the sale has been fully collected.</td></tr>
+        <tr><td class="idcell">SLS-07</td><td>Pin sale notes (e.g. free services granted at point of sale) to the customer file and to the workshop, so they appear automatically when a work order is opened.</td></tr>
+        <tr><td class="idcell">SLS-08</td><td>Previous notes are never deleted when another user takes over an open opportunity, and the customer is never silently reassigned away from the original owner.</td></tr>
+        <tr><td class="idcell">SLS-09</td><td>Withdraw the right of sales staff to edit vehicle specifications on the quotation and the sales order.</td></tr>
+        <tr><td class="idcell">SLS-10</td><td>Allow a confirmed sales order to be amended without cancelling it, restricted to the Sales Manager only.</td></tr>
+        <tr><td class="idcell">SLS-11</td><td>Vehicle specifications become dynamic and adapt automatically to the selected vehicle trim (e.g. Trendy or Smart).</td></tr>
+        <tr><td class="idcell">SLS-12</td><td>Spare-parts sales orders carry the actual user who created them as the salesperson, with no manual reassignment by a supervisor.</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box navy" style="margin-bottom:0;"><div class="note-label">Continued on next page</div><p>SLS-13 through SLS-24 continue overleaf.</p></div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 6</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 7 — 3.2.3 SALES & CRM (2/2) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">3</div>
+      <div><div class="part-banner-sub">Section 3.2.3 — Continued</div><div class="part-banner-title">Sales &amp; CRM — Part 2</div></div>
+    </div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">SLS-13</td><td>Detailed sales report with separate, filterable columns: creation date, customer name/phone, product category/name, trim, VIN, colours, amount paid, remaining amount, total amount, delivery date, invoice date.</td></tr>
+        <tr><td class="idcell">SLS-14</td><td>Report showing the count and breakdown of vehicles actually sold, compared across product categories.</td></tr>
+        <tr><td class="idcell">SLS-15</td><td>Fast direct search for vehicles and stock by chassis number (VIN) across the system.</td></tr>
+        <tr><td class="idcell">SLS-16</td><td>Receipt vouchers linked to the sales order number, and included within the 'amount paid' figures in reports.</td></tr>
+        <tr><td class="idcell">SLS-17</td><td>Report on lead transfers from CRM to sales reps or other departments, showing the number of transfers and the lead source.</td></tr>
+        <tr><td class="idcell">SLS-18</td><td>Remaining balance shown clearly on printed documents and on follow-up screens.</td></tr>
+        <tr><td class="idcell">SLS-19</td><td>Strict constraint that the sales order prints on a single page only, with a tidy, compact layout.</td></tr>
+        <tr><td class="idcell">SLS-20</td><td>Invoice print showing vehicle type/value, model, VIN, salesperson, price before discount, discount value and additional details, with mandatory-field validation to prevent incomplete invoices.</td></tr>
+        <tr><td class="idcell">SLS-21</td><td>Waiting and reserved vehicles report: every vehicle sold or covered by a sales agreement still On Hold, Waiting or Reserved before physical delivery, with booking date, customer details, VIN/variant, colours, value, amounts, PDI status and location.</td></tr>
+        <tr><td class="idcell">SLS-22</td><td>Advanced filtering inside the waiting-vehicles report by VIN, customer/mobile, and vehicle location (production, shipping, or workshop pending PDI repair).</td></tr>
+        <tr><td class="idcell">SLS-23</td><td>Link the waiting-vehicles report to receipt vouchers and sales orders so it shows outstanding amounts precisely and compares them against the customer's approved credit limit before delivery is permitted.</td></tr>
+        <tr><td class="idcell">SLS-24</td><td>Export of the full waiting-vehicles report to Excel and PDF for periodic review by senior and sales management.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 7</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 8 — 3.2.4 INVENTORY & LOGISTICS (1/2) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">4</div>
+      <div><div class="part-banner-sub">Section 3.2.4</div><div class="part-banner-title">Inventory &amp; Logistics — Part 1</div></div>
+      <div class="part-banner-count"><b>20</b> reqs</div>
+    </div>
+    <div class="section-intro">Accurate stock visibility with Reserved/On Hand separation, VIN-level tracking through Production, Shipping and PDI stages, and warehouse-level access control.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">INV-01</td><td>Inventory screen shows the storage location clearly and correctly, with VIN and engine number visible on the main list view.</td></tr>
+        <tr><td class="idcell">INV-02</td><td>Fix stock transparency so movement and live status are clear, with accurate expected arrival dates and instant updates.</td></tr>
+        <tr><td class="idcell">INV-03</td><td>Accurate control and separation of Reserved quantities from On Hand quantities to prevent overlapping sales of the same unit.</td></tr>
+        <tr><td class="idcell">INV-04</td><td>A fully automated digital path for electronic delivery of vehicles and orders through the system, with documentation of the handover.</td></tr>
+        <tr><td class="idcell">INV-05</td><td>Custom field on the vehicle card for the plate number, updated as soon as the plate is issued by the authorities, to enable later tracking.</td></tr>
+        <tr><td class="idcell">INV-06</td><td>Automated warranty start/end date fields derived from the actual delivery date, linked to the vehicle file in the workshop for automatic warranty validation.</td></tr>
+        <tr><td class="idcell">INV-07</td><td>A sold vehicle moves automatically into the sold-stock category, with the VIN searchable from every screen in the system.</td></tr>
+        <tr><td class="idcell">INV-08</td><td>New stock location named 'Production'. Vehicles in this location are not linked to a VIN and are recorded only by product variant and trim.</td></tr>
+        <tr><td class="idcell">INV-09</td><td>When a product sits in the Production location, the system creates a 'Sales Agreement' carrying the vehicle specification instead of a direct Sales Order.</td></tr>
+        <tr><td class="idcell">INV-10</td><td>When vehicles move to the Shipping location, they are matched automatically to open sales agreements based on the arriving VINs, and converted into a formal Sales Order.</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box navy" style="margin-bottom:0;"><div class="note-label">Continued on next page</div><p>INV-11 through INV-20 continue overleaf.</p></div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 8</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 9 — 3.2.4 INVENTORY & LOGISTICS (2/2) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">4</div>
+      <div><div class="part-banner-sub">Section 3.2.4 — Continued</div><div class="part-banner-title">Inventory &amp; Logistics — Part 2</div></div>
+    </div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">INV-11</td><td>PDI case 1: the vehicle is transferred to the workshop on a PDI card and held pending repair, with the fault reason recorded, spare-parts entries separated from labour, and PDI status set to In Progress or On Hold.</td></tr>
+        <tr><td class="idcell">INV-12</td><td>PDI case 2: sound and ready vehicles are marked PDI Approved and released.</td></tr>
+        <tr><td class="idcell">INV-13</td><td>PDI case 3: the system prevents any movement or amendment on a VIN except through approved procedures, and pins the movement date and expected delivery date visibly on follow-up screens.</td></tr>
+        <tr><td class="idcell">INV-14</td><td>Dedicated detailed vehicle stock report: vehicle type, model, VIN, date added, cost, plate number, warranty status and current location.</td></tr>
+        <tr><td class="idcell">INV-15</td><td>Completely disable negative selling for vehicles and spare parts, to protect stock valuation and cost of goods sold.</td></tr>
+        <tr><td class="idcell">INV-16</td><td>Force selection of a sub storage location at goods receipt instead of defaulting parts into the main warehouse location.</td></tr>
+        <tr><td class="idcell">INV-17</td><td>Pin the warehouse chosen on the quotation. Stop the system automatically switching the warehouse to the Al-Kharj warehouse when the quotation is confirmed into a sales order.</td></tr>
+        <tr><td class="idcell">INV-18</td><td>Spare-parts items are issued exclusively and directly from the spare-parts warehouse.</td></tr>
+        <tr><td class="idcell">INV-19</td><td>Allow a single sales order to be fulfilled from more than one storage location, with instant search of a part's balance and location.</td></tr>
+        <tr><td class="idcell">INV-20</td><td>Restrict warehouse transactions for maintenance department users to the Riyadh warehouse only.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 9</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 10 — 3.2.5 FINANCE & ACCOUNTING (1/3) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">5</div>
+      <div><div class="part-banner-sub">Section 3.2.5</div><div class="part-banner-title">Finance &amp; Accounting — Part 1</div></div>
+      <div class="part-banner-count"><b>30</b> reqs</div>
+    </div>
+    <div class="section-intro">Mandatory analytic cost-centre governance, credit-limit control, a redesigned service invoice and labour costing engine, and consolidated financial reporting.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">FIN-01</td><td>Mandatory analytic cost centre on every journal entry, expense and revenue. Posting or saving is blocked without it, extended across vendor bills, purchases, journal entries and every financial movement.</td></tr>
+        <tr><td class="idcell">FIN-02</td><td>Cost centre populated automatically from product category, branch and salesperson.</td></tr>
+        <tr><td class="idcell">FIN-03</td><td>Re-map and automate cost centre routing to match the new brand structure.</td></tr>
+        <tr><td class="idcell">FIN-04</td><td>Investigate and fix the Amount Paid field, which currently reads zero, so that it measures actual payments accurately.</td></tr>
+        <tr><td class="idcell">FIN-05</td><td>Custom print layout for journal entries, printable directly from the system for paper filing and archiving.</td></tr>
+        <tr><td class="idcell">FIN-06</td><td>Credit limit governance on credit sales: a sales order cannot exceed the customer's approved credit limit; override authority restricted to named Finance-approved users.</td></tr>
+        <tr><td class="idcell">FIN-07</td><td>Redesign the service invoice, which currently carries no vehicle data, to show model, type, VIN and odometer reading.</td></tr>
+        <tr><td class="idcell">FIN-08</td><td>Lock manual editing of service prices in the service centre and enforce the approved price lists.</td></tr>
+        <tr><td class="idcell">FIN-09</td><td>Clear governance and defined permissions for adding or updating parts and labour on repair orders, requiring customer approval when extra work is requested.</td></tr>
+        <tr><td class="idcell">FIN-10</td><td>Allow the actual salesperson to be named on a service transaction even when created by a different rep during the original sale, so commissions and performance are attributed correctly.</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box navy" style="margin-bottom:0;"><div class="note-label">Continued on next page</div><p>FIN-11 through FIN-30 continue over the next two pages.</p></div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 10</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 11 — 3.2.5 FINANCE & ACCOUNTING (2/3) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">5</div>
+      <div><div class="part-banner-sub">Section 3.2.5 — Continued</div><div class="part-banner-title">Finance &amp; Accounting — Part 2</div></div>
+    </div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">FIN-11</td><td>Service items sold report: quantitative and analytical breakdown of services sold (e.g. 10,000 km / 20,000 km service counts).</td></tr>
+        <tr><td class="idcell">FIN-12</td><td>Additional custom columns on the Sales Order list view to speed up filtering and follow-up by Finance and Sales.</td></tr>
+        <tr><td class="idcell">FIN-13</td><td>A dedicated, continuous technical support arrangement for fast response to operational and financial issues.</td></tr>
+        <tr><td class="idcell">FIN-14</td><td>Advisory input and end-to-end automation recommendations delivered to Odoo best practice.</td></tr>
+        <tr><td class="idcell">FIN-15</td><td>The employee appears as the partner on the payroll journal entry, on both debit and credit sides, so leave and end-of-service provision can be queried per employee.</td></tr>
+        <tr><td class="idcell">FIN-16</td><td>Non-accountants may only create draft entries; posting is restricted to accountants (e.g. receipt vouchers, petty cash).</td></tr>
+        <tr><td class="idcell">FIN-17</td><td>Ability to generate the journal entry for an employee's end-of-service settlement.</td></tr>
+        <tr><td class="idcell">FIN-18</td><td>Prevent deletion of payments by Sales or by any other unauthorised user.</td></tr>
+        <tr><td class="idcell">FIN-19</td><td>Full analytic accounts on payroll, not the department dimension alone.</td></tr>
+        <tr><td class="idcell">FIN-20</td><td>Add invoice number and invoice date to the monthly sales reports.</td></tr>
+        <tr><td class="idcell">FIN-21</td><td>Discount account shows the discount per product category rather than aggregating into a single account.</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box navy" style="margin-bottom:0;"><div class="note-label">Continued on next page</div><p>FIN-22 through FIN-30 continue overleaf.</p></div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 11</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 12 — 3.2.5 FINANCE & ACCOUNTING (3/3) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">5</div>
+      <div><div class="part-banner-sub">Section 3.2.5 — Continued</div><div class="part-banner-title">Finance &amp; Accounting — Part 3</div></div>
+    </div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">FIN-22</td><td>Block creation of a company customer without a VAT number; block an individual customer without a mobile number; block duplicate registration of the same mobile number.</td></tr>
+        <tr><td class="idcell">FIN-23</td><td>Employee balance enquiry and statement of account on demand: total leave provision, end-of-service provision and salaries due.</td></tr>
+        <tr><td class="idcell">FIN-24</td><td>Service centre expense handling: link expenses/additional costs to their sales or repair order, and add a configurable markup to the customer invoice.</td></tr>
+        <tr><td class="idcell">FIN-25</td><td>Labour charge computed from the factory standard repair time multiplied by the company hourly rate.</td></tr>
+        <tr><td class="idcell">FIN-26</td><td>Service centre report inside service sales orders showing the technician who performed the work and hours billed per repair order, plus total billed hours per technician over a chosen period.</td></tr>
+        <tr><td class="idcell">FIN-27</td><td>Documentation and demonstration of how to read the results of operations for each cost centre (management, department or branch) after the analytic plan is restructured.</td></tr>
+        <tr><td class="idcell">FIN-28</td><td>Link customer payments to sales orders, so the system asks which sales order a payment belongs to, enabling accurate reservation and outstanding-balance reporting.</td></tr>
+        <tr><td class="idcell">FIN-29</td><td>Service invoice report including parts value, labour value, oils value, VIN, customer/vehicle data and discount.</td></tr>
+        <tr><td class="idcell">FIN-30</td><td>Complete sales order and sales invoice reports across all activities (vehicles, spare parts, service), including invoice number, sales order, customer, value before/after VAT, discount, VIN, customer data and salesperson.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 12</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 13 — 3.2.6 AFTER-SALES & WORKSHOP (1/2) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">6</div>
+      <div><div class="part-banner-sub">Section 3.2.6</div><div class="part-banner-title">After-Sales &amp; Workshop — Part 1</div></div>
+      <div class="part-banner-count"><b>25</b> reqs</div>
+    </div>
+    <div class="section-intro">End-to-end workshop workflow from inspection through job card, technician scheduling and timers, to warranty tracking and customer satisfaction surveys.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">SVC-01</td><td>The vehicle record is linked to the customer automatically once the sale is completed, on sales order confirmation or invoicing.</td></tr>
+        <tr><td class="idcell">SVC-02</td><td>Support a change of owner while retaining the vehicle's base data: sale date, warranty start date, offers and other notes.</td></tr>
+        <tr><td class="idcell">SVC-03</td><td>Hide the 'Create' new customer button when the phone number or name already exists, restricting manual creation/duplicate override to the service manager or supervisor.</td></tr>
+        <tr><td class="idcell">SVC-04</td><td>Support two maintenance types: periodic maintenance, and diagnostic maintenance where the customer does not know the fault.</td></tr>
+        <tr><td class="idcell">SVC-05</td><td>Reception opens an 'Inspection and Estimate Request'. The inspection itself is a product in the system with a fixed price.</td></tr>
+        <tr><td class="idcell">SVC-06</td><td>After the inspection, a quotation is issued covering the required parts and services.</td></tr>
+        <tr><td class="idcell">SVC-07</td><td>Custom fields on the maintenance request for terms and conditions, shareable with the customer for approval.</td></tr>
+        <tr><td class="idcell">SVC-08</td><td>On customer approval of the quotation, the request is converted programmatically into a Job Card or Work Order.</td></tr>
+        <tr><td class="idcell">SVC-09</td><td>Stock is checked and the required spare parts are issued against the maintenance request.</td></tr>
+        <tr><td class="idcell">SVC-10</td><td>If a spare part is unavailable, it is linked automatically to the chassis number so it is reserved for that customer when it arrives.</td></tr>
+        <tr><td class="idcell">SVC-11</td><td>The quotation can be updated and extra spare parts added while the work is in progress.</td></tr>
+        <tr><td class="idcell">SVC-12</td><td>Service manager dashboard (Gantt view) showing technician availability in real time, covering both online bookings and walk-in visits.</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box navy" style="margin-bottom:0;"><div class="note-label">Continued on next page</div><p>SVC-13 through SVC-25 continue overleaf.</p></div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 13</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 14 — 3.2.6 AFTER-SALES & WORKSHOP (2/2) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">6</div>
+      <div><div class="part-banner-sub">Section 3.2.6 — Continued</div><div class="part-banner-title">After-Sales &amp; Workshop — Part 2</div></div>
+    </div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">SVC-13</td><td>Booking is made through the system by the number of hours each service requires.</td></tr>
+        <tr><td class="idcell">SVC-14</td><td>The manager selects and assigns an available technician to the task.</td></tr>
+        <tr><td class="idcell">SVC-15</td><td>Technician kiosk screen: the technician logs in with an employee number or barcode and sees only the job cards assigned to him.</td></tr>
+        <tr><td class="idcell">SVC-16</td><td>The technician starts the timer when actual work begins.</td></tr>
+        <tr><td class="idcell">SVC-17</td><td>Pausing the timer forces the technician to select a mandatory reason from a dropdown (e.g. end of working hours, spare parts unavailable).</td></tr>
+        <tr><td class="idcell">SVC-18</td><td>On completion, the timer is closed and the task is closed out.</td></tr>
+        <tr><td class="idcell">SVC-19</td><td>Time spent on operations is reflected automatically as a report inside the vehicle record in the Fleet module, giving an accurate service history per vehicle.</td></tr>
+        <tr><td class="idcell">SVC-20</td><td>Timeline report per vehicle showing the operations it passed through, when work was paused and why.</td></tr>
+        <tr><td class="idcell">SVC-21</td><td>Maintenance request age (SLA): total elapsed time from the moment reception opens the request until final closure.</td></tr>
+        <tr><td class="idcell">SVC-22</td><td>KPI reporting linking actual time spent on services to each technician's productivity, comparing standard time against actual time.</td></tr>
+        <tr><td class="idcell">SVC-23</td><td>Automatic satisfaction survey sent to the customer through the system or WhatsApp once the maintenance request is closed.</td></tr>
+        <tr><td class="idcell">SVC-24</td><td>Labour value calculated as the model's standard factory time multiplied by the hourly rate.</td></tr>
+        <tr><td class="idcell">SVC-25</td><td>Service invoice per the client's approved sample, showing the full chassis number, odometer reading and other required fields.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 14</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 15 — 3.2.7 MARKETING & LEAD CAPTURE ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">7</div>
+      <div><div class="part-banner-sub">Section 3.2.7</div><div class="part-banner-title">Marketing &amp; Lead Capture</div></div>
+      <div class="part-banner-count"><b>6</b> reqs</div>
+    </div>
+    <div class="section-intro">Unified lead capture and attribution across advertising channels, feeding directly into CRM.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">MKT-01</td><td>Fix the current defect where advertising campaign data and social media ad data do not flow into the CRM.</td></tr>
+        <tr><td class="idcell">MKT-02</td><td>Integrate advertising pixels (Meta Pixel, TikTok Pixel, Google Tag Manager) with Odoo so customer behaviour is tracked from the ad click to the creation of the lead.</td></tr>
+        <tr><td class="idcell">MKT-03</td><td>Automatic lead source attribution based on UTM tracking parameters and pixels, surfaced in a 'customer entry path' report showing the specific campaign the lead came from.</td></tr>
+        <tr><td class="idcell">MKT-04</td><td>ROAS reporting linking advertising spend to the quotations and actual sales orders generated from converted leads.</td></tr>
+        <tr><td class="idcell">MKT-05</td><td>Integrate Odoo with the website, social media platforms and test drive tools, so all lead capture channels are unified and flow automatically into the database.</td></tr>
+        <tr><td class="idcell">MKT-06</td><td>WhatsApp integration for customer communication: quotations, appointment reminders, service updates and invoice notifications.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="part-banner" style="margin-top:20px;">
+      <div class="part-badge">8</div>
+      <div><div class="part-banner-sub">Section 3.2.8</div><div class="part-banner-title">Call Centre &amp; VoIP</div></div>
+      <div class="part-banner-count"><b>11</b> reqs</div>
+    </div>
+    <div class="section-intro">Grandstream VoIP integration with Odoo covering caller-ID pop-ups, click-to-call, automated logging, and live call-centre performance visibility.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">CCT-01</td><td>Integrate the Grandstream VoIP system with Odoo to connect inbound and outbound calls to customer files, sales orders and service bookings.</td></tr>
+        <tr><td class="idcell">CCT-02</td><td>Caller-ID pop-up on an inbound call showing customer data, owned vehicles with registered VIN, latest sales orders/pending invoices, and the status of the last maintenance request.</td></tr>
+        <tr><td class="idcell">CCT-03</td><td>For an unregistered number, a pop-up lets the agent create a customer file in one click with the phone number pulled in automatically, with duplicate-name blocking rules still applying.</td></tr>
+        <tr><td class="idcell">CCT-04</td><td>Smart routing of the caller to the salesperson or service advisor responsible for their file or vehicle, based on the last activity recorded in Odoo.</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box navy" style="margin-bottom:0;"><div class="note-label">Continued on next page</div><p>CCT-05 through CCT-11 continue overleaf.</p></div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 15</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 16 — 3.2.8 CALL CENTRE & VOIP (2/2) ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">8</div>
+      <div><div class="part-banner-sub">Section 3.2.8 — Continued</div><div class="part-banner-title">Call Centre &amp; VoIP — Part 2</div></div>
+    </div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">CCT-05</td><td>The agent can open an inspection and estimate request, a periodic service appointment or a test drive appointment directly from the call screen, linked to the unified service scheduler.</td></tr>
+        <tr><td class="idcell">CCT-06</td><td>A complaint or technical enquiry can be converted in one click into a Helpdesk ticket assigned to service, finance or sales, with response/closure time tracked as an SLA.</td></tr>
+        <tr><td class="idcell">CCT-07</td><td>Click-to-call enabled across all Odoo screens (sales, service, accounting), so the agent can click a customer's number and dial through the headset.</td></tr>
+        <tr><td class="idcell">CCT-08</td><td>Every call, whether outbound, inbound or missed, is logged automatically in the customer's chatter with date, time, duration and handling employee.</td></tr>
+        <tr><td class="idcell">CCT-09</td><td>A link to the call recording is stored inside the customer file or the ticket for quality checks and complaint handling.</td></tr>
+        <tr><td class="idcell">CCT-10</td><td>Live call centre dashboard for customer service and sales managers: total daily/weekly/monthly calls, missed calls and answer rate, average talk time per agent, and conversion percentage to bookings or opportunities.</td></tr>
+        <tr><td class="idcell">CCT-11</td><td>Post-call automation: as soon as a booking call ends, the system sends an SMS or WhatsApp message with appointment details and a map link, plus a short survey rating the agent.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note-box amber" style="margin-top:16px;margin-bottom:0;">
+      <div class="note-label">Note — Telephony Integration</div>
+      <p>Telephony (Grandstream) integration depth is subject to confirmation of your PBX model and available integration interface, and will be scoped in detail during the requirement gathering phase.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 16</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 17 — 3.2.9 MASTER DASHBOARD & BI ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">9</div>
+      <div><div class="part-banner-sub">Section 3.2.9</div><div class="part-banner-title">Master Dashboard &amp; BI — Part 1</div></div>
+      <div class="part-banner-count"><b>14</b> reqs</div>
+    </div>
+    <div class="section-intro">A consolidated, real-time management dashboard spanning sales, inventory, workshop and finance, with global search and filtering.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">BID-01</td><td>Master dashboard with a dual view: numeric KPI cards and detailed tables for financial analysis, switchable to a charts view for trend and ratio analysis.</td></tr>
+        <tr><td class="idcell">BID-02</td><td>A global filter bar pinned at the top of the dashboard, linking vehicle sales, spare parts, workshop and inventory, refreshing every figure and chart instantly.</td></tr>
+        <tr><td class="idcell">BID-03</td><td>VIN search (full number or last six digits), returning the vehicle's sale, stock status and full service history.</td></tr>
+        <tr><td class="idcell">BID-04</td><td>Flexible customer search accepting name or mobile number in any format, filtering their sales and paid/outstanding invoices.</td></tr>
+        <tr><td class="idcell">BID-05</td><td>Product and variant filter by model and dynamic specifications such as trim, exterior colour and interior colour.</td></tr>
+        <tr><td class="idcell">BID-06</td><td>Category filter separating vehicles, spare parts, service labour and oils.</td></tr>
+        <tr><td class="idcell">BID-07</td><td>Date filter with today, this month, last month, or a custom range, for daily and monthly sales views.</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box navy" style="margin-bottom:0;"><div class="note-label">Continued on next page</div><p>BID-08 through BID-14 continue overleaf.</p></div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 17</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 18 — 3.2.9 (2/2) + 3.2.10 CROSS-CUTTING ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="part-banner">
+      <div class="part-badge">9</div>
+      <div><div class="part-banner-sub">Section 3.2.9 — Continued</div><div class="part-banner-title">Master Dashboard &amp; BI — Part 2</div></div>
+    </div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">BID-08</td><td>Sales and collection KPIs: total sales for the selected period, total actually collected, total outstanding/unpaid, and average selling price.</td></tr>
+        <tr><td class="idcell">BID-09</td><td>Sales charts: a line chart of daily/monthly sales movement, and a pie chart of each category's share of total revenue.</td></tr>
+        <tr><td class="idcell">BID-10</td><td>Inventory KPIs: vehicles on hand, vehicles reserved, vehicles at Production without a VIN vs. vehicles at Shipping under sales agreements, and vehicles under PDI inspection.</td></tr>
+        <tr><td class="idcell">BID-11</td><td>Inventory chart: a bar chart comparing stock volume across warehouses (Riyadh, Al-Kharj, spare parts).</td></tr>
+        <tr><td class="idcell">BID-12</td><td>Cost centre and profitability view: revenue/expense distribution by cost centre, margin on external services, and a chart comparing expense against revenue per branch/cost centre.</td></tr>
+        <tr><td class="idcell">BID-13</td><td>Dashboard built on the advanced Odoo Dashboard module together with Spreadsheet BI, allowing export of numeric tables to Excel with one click.</td></tr>
+        <tr><td class="idcell">BID-14</td><td>Real-time automatic refresh of data as soon as any journal entry is posted, sales order placed, stock move happens, or job card is closed.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="part-banner" style="margin-top:16px;">
+      <div class="part-badge">10</div>
+      <div><div class="part-banner-sub">Section 3.2.10</div><div class="part-banner-title">Cross-Cutting</div></div>
+      <div class="part-banner-count"><b>6</b> reqs</div>
+    </div>
+    <div class="section-intro">Screen consolidation, end-to-end audit logging, and a redesigned role/access-rights model spanning every department.</div>
+    <table class="req-table">
+      <thead><tr><th class="idcol">ID</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td class="idcell">XCT-01</td><td>HR Hub: consolidate Leave, Permission and Attendance screens into one unified main screen for both the HR officer and the employee.</td></tr>
+        <tr><td class="idcell">XCT-02</td><td>Apply screen consolidation as a general rule to other departments suffering from screen sprawl (Sales, Inventory, Maintenance), merging sub-screens into a single main screen using dynamic tabs or embedded dashboards.</td></tr>
+        <tr><td class="idcell">XCT-03</td><td>Unified interfaces allow smooth movement between processes (e.g. opportunity to sales order, maintenance request to parts issue) based on approved user rights, without leaving the screen.</td></tr>
+        <tr><td class="idcell">XCT-04</td><td>Audit log coverage across all controlled documents and sensitive actions: who viewed, printed, exported or amended, with date and time.</td></tr>
+        <tr><td class="idcell">XCT-05</td><td>A full redesign of the role and access-rights model across sales, finance, workshop, warehouse and call centre.</td></tr>
+        <tr><td class="idcell">XCT-06</td><td>A formal mechanism to capture further observations arising during operation, sent directly and continuously by the client.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 18</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 19 — IMPLEMENTATION METHODOLOGY ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">4 · Methodology</div>
+    <div class="section-heading">Implementation Methodology</div>
+    <div class="section-intro">We follow a structured, phase-gated methodology designed to ensure the delivered system matches your approved requirements before go-live:</div>
+
+    <table class="method-table">
+      <thead><tr><th style="width:34px;">#</th><th style="width:22%;">Phase</th><th style="width:18%;">Typical Duration</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="phase-num-badge">1</span></td><td><b>Requirement Gathering</b></td><td>3–8 days</td><td>Our team conducts structured working sessions with each of your departments to capture and validate the full requirement set, confirm process flows, and resolve open questions.</td></tr>
+        <tr><td><span class="phase-num-badge">2</span></td><td><b>Statement of Work (SOW) Submission</b></td><td>—</td><td>Based on requirement gathering, we submit a final, detailed Statement of Work for your review and formal approval before development begins.</td></tr>
+        <tr><td><span class="phase-num-badge">3</span></td><td><b>Development</b></td><td>—</td><td>Our development team builds and configures the system in line with the approved SOW, across all scoped functional areas.</td></tr>
+        <tr><td><span class="phase-num-badge">4</span></td><td><b>User Acceptance Testing (UAT)</b></td><td>—</td><td>You test the delivered system against the approved SOW. Feedback is addressed and the system is refined until it is accepted.</td></tr>
+        <tr><td><span class="phase-num-badge">5</span></td><td><b>Go-Live</b></td><td>—</td><td>Once UAT is accepted, the system is deployed to production and your team transitions to full operational use.</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-hr">
+
+    <div class="section-label">5 · Timeline</div>
+    <div class="section-heading" style="font-size:19px;">Project Timeline</div>
+    <div class="section-intro">
+      The total estimated timeline for full implementation of this project, from requirement gathering through to go-live, is <strong>45–50 business days</strong>. This covers all phases described above across the full scope of work.
+      <br><br>
+      The actual schedule will be confirmed within the Statement of Work following the requirement gathering phase, and will account for the availability of your teams for review, testing and sign-off at each stage.
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="section-label">6 · Training</div>
+    <div class="section-heading" style="font-size:19px;">Training</div>
+    <div class="section-intro" style="margin-bottom:0;">
+      Offline (in-person) training for your team is included within this proposal. Training will be scheduled around go-live to ensure your users are confident operating the new system across all implemented modules.
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 19</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 20 — SUPPORT, CHANGE REQUEST & COMMERCIAL ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">7 · Support</div>
+    <div class="section-heading">Support &amp; Maintenance</div>
+
+    <table class="method-table">
+      <thead><tr><th style="width:30%;">Period</th><th>Support Coverage</th></tr></thead>
+      <tbody>
+        <tr><td><b>First 3 months post go-live</b></td><td>24-hour support coverage for critical issues.</td></tr>
+        <tr><td><b>Up to 6 months post go-live</b></td><td>Free support included at no additional cost.</td></tr>
+        <tr><td><b>From month 7 onward</b></td><td>Annual Maintenance Contract (AMC) at 20% of the total implementation cost per year.</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-hr">
+
+    <div class="section-label">8 · Change Requests</div>
+    <div class="section-heading" style="font-size:19px;">Change Request Policy</div>
+    <div class="section-intro">
+      Any requirement identified after the Statement of Work has been approved, or any new requirement arising after go-live, will be treated as a formal Change Request. Change Requests must be submitted formally in writing and will be scoped, estimated and billed separately at a rate of <strong>USD 40 per hour</strong>.
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="section-label">9 · Commercial</div>
+    <div class="section-heading" style="font-size:19px;">Commercial Proposal</div>
+
+    <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:8px;">9.1 &nbsp; Implementation Cost</div>
+
+    <div style="background:#091827; border-radius:6px; padding:16px 20px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:10.5px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.15em; margin-bottom:5px;">Total Estimated Implementation Cost</div>
+        <div style="font-size:28px; font-weight:800; color:#1ECFC0; line-height:1;">USD 16,000</div>
+        <div style="font-size:12px; color:rgba(255,255,255,0.45); margin-top:5px;">Odoo licensing &amp; hosting quoted separately</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:10.5px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.13em; margin-bottom:5px;">Timeline</div>
+        <div style="font-size:18px; font-weight:700; color:#fff;">45–50 Business Days</div>
+      </div>
+    </div>
+
+    <div class="note-box amber" style="margin-bottom:12px;">
+      <div class="note-label">Scope of This Cost</div>
+      <p>This cost covers the full scope of work described in Section 3, including requirement gathering, development, data migration, UAT support, offline training and go-live support as described in this proposal. Odoo licensing fees and server / hosting costs are not included in the above and will be quoted separately based on the final user count and infrastructure requirements confirmed during the requirement gathering phase.</p>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;color:#0F172A;margin-bottom:8px;">9.2 &nbsp; Payment Terms</div>
+    <table class="milestone-table">
+      <thead><tr><th>Milestone</th><th style="text-align:right;">Percentage</th></tr></thead>
+      <tbody>
+        <tr><td><span class="milestone-pct">50%</span>Advance payment (project kick-off)</td><td>50%</td></tr>
+        <tr><td><span class="milestone-pct">25%</span>Submission for User Acceptance Testing (UAT)</td><td>25%</td></tr>
+        <tr><td><span class="milestone-pct">25%</span>UAT approval / go-live</td><td>25%</td></tr>
+        <tr class="sched-total"><td>Total</td><td>100%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 20</div>
+  </div>
+</div>
+
+
+<!-- ═══ PAGE 21 — ASSUMPTIONS & EXCLUSIONS ═══ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">KGM Abdullah Al-Bazie Motors — Odoo 19 ERP Proposal</div>
+    <div class="inner-header-ref">COX-2026-KGM-01 &nbsp;·&nbsp; July 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">10 · Assumptions</div>
+    <div class="section-heading" style="margin-bottom:14px;">Assumptions &amp; Exclusions</div>
+    <div class="section-intro">This proposal is based on the requirements document and discovery discussions shared with Code-ox Technologies to date.</div>
+
+    <ul class="terms-list">
+      <li><span class="terms-dot"></span><div>Odoo licensing costs, Odoo server/hosting costs, and any third-party or PBX licensing costs are excluded from the implementation cost and will be quoted separately.</div></li>
+      <li><span class="terms-dot"></span><div>The scope and feasibility of inventory-related data migration will be confirmed jointly with the client during the requirement gathering phase, following approval of this proposal.</div></li>
+      <li><span class="terms-dot"></span><div>Telephony (Grandstream VoIP) integration scope is subject to confirmation of the PBX model, hosting (cloud/on-premise) and available integration interface.</div></li>
+      <li><span class="terms-dot"></span><div>Any requirement not captured in the approved Statement of Work will be handled under the Change Request policy described in Section 8.</div></li>
+      <li><span class="terms-dot"></span><div>This proposal is valid for 30 days from the date of issue.</div></li>
+    </ul>
+
+    <div class="note-box teal" style="margin-top:16px;">
+      <div class="note-label">Closing Note</div>
+      <p>We look forward to partnering with you on this project and building a system that finally works the way your business needs it to.</p>
+    </div>
+
+    <div class="signoff-block">
+      <div class="signoff-header">Authorization Signatures &nbsp;·&nbsp; Return signed copy to info@code-ox.com</div>
+      <div class="signoff-body">
+        <div class="signoff-cols">
+          <div>
+            <div class="signoff-col-header">For &amp; On Behalf of Code-ox Technologies</div>
+            <div class="signoff-field"><div class="signoff-field-label">Authorized Signatory</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Name &amp; Title</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date</div><div class="signoff-field-line"></div></div>
+          </div>
+          <div>
+            <div class="signoff-col-header">For &amp; On Behalf of KGM Abdullah Al-Bazie Motors</div>
+            <div class="signoff-field"><div class="signoff-field-label">Authorized Signatory</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Name &amp; Title</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date</div><div class="signoff-field-line"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; background:#0D1B2A; border-radius:10px; padding:18px 22px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:10.5px; color:rgba(255,255,255,0.35); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:9px;">Questions? Get in Touch</div>
+        <div style="font-size:17px; font-weight:700; color:#fff; margin-bottom:8px;">Code-ox Technologies &nbsp;·&nbsp; Odoo Silver Partner</div>
+        <div style="font-size:13px;">
+          <span style="color:#1ECFC0;">info@code-ox.com</span>
+          <span style="color:rgba(255,255,255,0.4);"> &nbsp;·&nbsp; www.code-ox.com</span>
+        </div>
+        <div style="font-size:12px;margin-top:5px;">
+          <span style="color:rgba(255,255,255,0.35);">3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0; margin-left:20px; display:flex; align-items:center; gap:14px;">
+        <img src="odoo_silver_partner.avif" alt="Odoo Silver Partner" style="height:30px; width:auto; border-radius:4px;">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CODE OX" style="height:24px; filter:brightness(0) invert(1); opacity:0.45;">
+      </div>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; info@code-ox.com &nbsp;·&nbsp; www.code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 21</div>
+  </div>
+</div>
+
+</body>
+</html>
