@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facility Vision + Electrical AI Agent · POC Concept · WeCare Tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0e14;--bg-2:#0f141d;--panel:#131a25;--panel-2:#182130;
+  --line:#243141;--line-2:#31435a;
+  --ink:#eef3f8;--ink-2:#aab8c8;--ink-3:#6f8092;
+  --gold:#e8b64c;--gold-2:#f4cf7a;--teal:#3fd0c9;--teal-2:#6fe3dd;
+  --mint:#7ee08a;--rose:#ff6b7d;--amber:#ff9d42;--blue:#5aa9ff;
+  --r:14px;--mono:'JetBrains Mono',monospace;--disp:'Bricolage Grotesque',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+a{color:inherit;text-decoration:none}
+
+.topbar{position:sticky;top:0;z-index:50;background:rgba(10,14,20,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--disp);font-weight:700;letter-spacing:-.02em;font-size:1.02rem;white-space:nowrap;flex:0 0 auto}
+.brand .dot{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--gold),var(--teal));display:grid;place-items:center;color:#0a0e14;font-size:.8rem;flex:0 0 auto}
+.tag-internal{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--teal-2);border:1px solid var(--teal);padding:3px 8px;border-radius:5px;text-transform:uppercase;white-space:nowrap;flex:0 0 auto}
+.topnav{display:flex;gap:18px;font-size:.8rem;color:var(--ink-2);flex:1 1 auto;justify-content:center;min-width:0}
+.topnav a{transition:color .2s;white-space:nowrap}
+.topnav a:hover{color:var(--gold)}
+@media(max-width:1180px){.topnav{display:none}}
+
+.hero{position:relative;padding:96px 0 72px;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(680px 340px at 78% 8%,rgba(63,208,201,.10),transparent 60%),radial-gradient(620px 320px at 12% 92%,rgba(232,182,76,.09),transparent 60%);pointer-events:none}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--teal);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.eyebrow .bar{width:34px;height:1px;background:var(--teal)}
+.hero h1{font-family:var(--disp);font-weight:800;font-size:clamp(2.3rem,5.6vw,4rem);line-height:1.05;letter-spacing:-.03em;max-width:19ch}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .lede{margin-top:26px;font-size:1.12rem;color:var(--ink-2);max-width:68ch}
+.hero-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);margin-top:46px;overflow:hidden}
+.hm{background:var(--panel);padding:20px 22px}
+.hm .k{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+.hm .v{font-family:var(--disp);font-weight:700;font-size:1.28rem;margin-top:8px;letter-spacing:-.01em}
+.hm .v.teal{color:var(--teal)}.hm .v.gold{color:var(--gold)}
+@media(max-width:760px){.hero-meta{grid-template-columns:repeat(2,1fr)}}
+
+.section{padding:80px 0;border-top:1px solid var(--line)}
+.section.alt{background:var(--bg-2)}
+.sec-head{margin-bottom:44px;max-width:76ch}
+.sec-num{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sec-num span{color:var(--ink-3)}
+.sec-head h2{font-family:var(--disp);font-weight:800;font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.1;letter-spacing:-.025em}
+.sec-head h2 em{font-style:normal;color:var(--teal)}
+.sec-head .desc{margin-top:16px;color:var(--ink-2);font-size:1.04rem}
+
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.card h4{font-family:var(--disp);font-weight:700;font-size:1.08rem;letter-spacing:-.01em;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.card p{color:var(--ink-2);font-size:.93rem}
+.card .ic{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;font-size:.98rem;margin-bottom:14px}
+.ic.teal{background:rgba(63,208,201,.13);color:var(--teal)}
+.ic.gold{background:rgba(232,182,76,.13);color:var(--gold)}
+.ic.rose{background:rgba(255,107,125,.13);color:var(--rose)}
+.ic.blue{background:rgba(90,169,255,.13);color:var(--blue)}
+.ic.mint{background:rgba(126,224,138,.13);color:var(--mint)}
+.ic.amber{background:rgba(255,157,66,.13);color:var(--amber)}
+
+.tbl{width:100%;border-collapse:collapse;font-size:.9rem;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.tbl-wrap{overflow-x:auto;border-radius:var(--r)}
+.tbl th{background:var(--panel-2);text-align:left;padding:13px 15px;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:13px 15px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:nth-child(even) td{background:rgba(255,255,255,.012)}
+.tbl td strong{color:var(--ink);font-weight:600}
+.tbl code{font-family:var(--mono);font-size:.8rem;color:var(--gold-2);background:rgba(232,182,76,.08);padding:2px 6px;border-radius:5px;white-space:nowrap}
+.tbl .rec td{background:rgba(63,208,201,.06)!important}
+
+.callout{border-radius:var(--r);padding:20px 22px;display:flex;gap:15px;align-items:flex-start;font-size:.93rem}
+.callout i{font-size:1.05rem;margin-top:2px}
+.callout p{color:var(--ink-2)}
+.callout strong{color:var(--ink)}
+.callout.info{background:rgba(90,169,255,.07);border:1px solid rgba(90,169,255,.28)}
+.callout.info i{color:var(--blue)}
+.callout.warn{background:rgba(255,157,66,.07);border:1px solid rgba(255,157,66,.3)}
+.callout.warn i{color:var(--amber)}
+.callout.risk{background:rgba(255,107,125,.07);border:1px solid rgba(255,107,125,.3)}
+.callout.risk i{color:var(--rose)}
+.callout.good{background:rgba(126,224,138,.07);border:1px solid rgba(126,224,138,.3)}
+.callout.good i{color:var(--mint)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{font-family:var(--mono);font-size:.72rem;background:var(--panel-2);border:1px solid var(--line);color:var(--ink-2);padding:5px 11px;border-radius:20px}
+.chip.gold{border-color:rgba(232,182,76,.4);color:var(--gold-2)}
+.chip.teal{border-color:rgba(63,208,201,.4);color:var(--teal-2)}
+
+.flow{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;overflow-x:auto}
+.flow-row{display:flex;align-items:stretch;gap:0;min-width:900px}
+.fnode{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:16px 15px}
+.fnode.hl{border-color:rgba(63,208,201,.4)}
+.fnode .fn-k{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:9px}
+.fnode h5{font-family:var(--disp);font-weight:700;font-size:.96rem;margin-bottom:6px}
+.fnode ul{list-style:none;font-size:.78rem;color:var(--ink-2)}
+.fnode ul li{padding:2px 0 2px 14px;position:relative}
+.fnode ul li:before{content:"";position:absolute;left:0;top:10px;width:5px;height:5px;border-radius:50%;background:var(--teal)}
+.farrow{display:grid;place-items:center;width:42px;color:var(--ink-3);font-size:.9rem;flex:0 0 42px}
+.flow-note{text-align:center;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--ink-3);margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+
+.layer{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:12px;display:flex;gap:18px;align-items:flex-start}
+.layer .lk{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;flex:0 0 96px;padding-top:3px}
+.layer .lc h5{font-family:var(--disp);font-weight:700;font-size:1.02rem;margin-bottom:5px}
+.layer .lc p{font-size:.88rem;color:var(--ink-2);margin-bottom:9px}
+
+.ask{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.ask h5{font-family:var(--disp);font-weight:700;font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.ask h5 .qn{font-family:var(--mono);font-size:.66rem;color:var(--gold);border:1px solid var(--line);padding:2px 7px;border-radius:5px}
+.ask p{font-size:.9rem;color:var(--ink-2)}
+
+.tl{list-style:none;padding-left:30px;position:relative}
+.tl:before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:1.5px;background:var(--line)}
+.tl li{position:relative;padding-bottom:26px}
+.tl li:last-child{padding-bottom:0}
+.tl li:before{content:"";position:absolute;left:-30px;top:3px;width:11px;height:11px;border-radius:50%;background:var(--teal);border:3px solid var(--bg-2)}
+.tl .tk{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+.tl h5{font-family:var(--disp);font-weight:700;font-size:1.02rem;margin-bottom:5px}
+.tl p{font-size:.88rem;color:var(--ink-2)}
+
+.foot{padding:56px 0 46px;border-top:1px solid var(--line);background:var(--bg-2)}
+.foot .fnote{font-size:.86rem;color:var(--ink-3);max-width:72ch}
+.foot .fmeta{font-family:var(--mono);font-size:.68rem;color:var(--ink-3);margin-top:22px;letter-spacing:.04em}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mt32{margin-top:32px}
+.subh{font-family:var(--disp);font-weight:700;font-size:1.22rem;letter-spacing:-.01em;margin:40px 0 14px}
+.subh:first-child{margin-top:0}
+.ptext{color:var(--ink-2);font-size:.95rem;line-height:1.7;max-width:80ch;margin:0 0 4px}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase;margin-bottom:12px}
+.state-split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.state-split{grid-template-columns:1fr}}
+.state{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.state .st-h{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;font-size:1.06rem;margin-bottom:12px}
+.state.off .st-h i{color:var(--amber)}
+.state.on .st-h i{color:var(--mint)}
+.state ul{list-style:none;font-size:.9rem}
+.state ul li{padding:7px 0 7px 20px;position:relative;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.state ul li:last-child{border-bottom:none}
+.state ul li:before{content:"";position:absolute;left:0;top:14px;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+
+@media(max-width:640px){
+  .wrap{padding:0 18px}
+  .section{padding:52px 0}
+  .sec-head{margin-bottom:30px}
+  .hero{padding:64px 0 48px}
+  .hero .lede{font-size:1rem;margin-top:20px}
+  .hero-meta{grid-template-columns:1fr;margin-top:34px}
+  .hm{padding:16px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+  .hm .v{margin-top:0;font-size:1.14rem}
+  .sec-head .desc{font-size:.96rem}
+  .card{padding:20px}
+  .subh{font-size:1.1rem;margin:30px 0 12px}
+  .callout{padding:16px 18px;font-size:.9rem}
+  .layer{flex-direction:column;gap:8px;padding:16px 18px}
+  .layer .lk{flex-basis:auto}
+  .ask h5{font-size:.95rem}
+  .tbl th,.tbl td{padding:11px 12px;font-size:.86rem}
+  .flow{padding:20px 14px}
+  .tl{padding-left:24px}
+  .brand{font-size:.94rem}
+  .eyebrow{font-size:.62rem;letter-spacing:.14em}
+  .state{padding:18px}
+}
+@media(max-width:400px){
+  .hero h1{font-size:2rem}
+  .sec-head h2{font-size:1.5rem}
+  .hm .v{font-size:1.05rem}
+}
+@media(max-width:1024px){
+  .flow,.tbl-wrap{-webkit-overflow-scrolling:touch}
+  .flow{position:relative}
+  .flow:after{content:"scroll \2192";position:absolute;top:10px;right:14px;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase;pointer-events:none;opacity:.7}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <div class="brand"><img src="wecaretech.webp" alt="WeCare Tech" style="height:28px;width:auto;border-radius:6px"></div>
+    <nav class="topnav">
+      <a href="#asks">What You Asked</a>
+      <a href="#scope">POC Scope</a>
+      <a href="#access">Access Control</a>
+      <a href="#routing">Routing Check</a>
+      <a href="#ups">UPS Agent</a>
+      <a href="#firepump">Fire Pump</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#plan">POC Plan</a>
+      <a href="#need">We Need</a>
+    </nav>
+    <span class="tag-internal">POC Concept</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="bar"></span> Presales Concept · Prepared by WeCare Tech · 19 July 2026</div>
+    <h1 class="reveal">One AI agent watching your doors, your dispatch line, and your backup power — <em>so your team doesn't have to.</em></h1>
+    <p class="lede reveal">Built directly from this morning's call. Three requests, one underlying pattern: point a camera or a sensor at something that already happens on a schedule or a rule, and have an agent watch it continuously, flag the exception, and notify the right person — without waiting for someone to walk the floor or trip a breaker.</p>
+    <div class="hero-meta reveal">
+      <div class="hm"><div class="k">POC Scope</div><div class="v teal">5–10 Cameras</div></div>
+      <div class="hm"><div class="k">Agents in Scope</div><div class="v gold">3</div></div>
+      <div class="hm"><div class="k">Notification Channel</div><div class="v">WhatsApp + Dashboard</div></div>
+      <div class="hm"><div class="k">Client</div><div class="v">To Be Confirmed</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="asks">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">01 <span>/ What you asked for</span></div>
+      <h2>Four requests, restated back <em>so we start from the same page.</em></h2>
+      <p class="desc">Pulled directly from the call. Two items are grounded in exact language used; two use our best reading of a live phone transcript — flagged below so nothing gets built on a guess.</p>
+    </div>
+
+    <div class="ask reveal">
+      <h5><span class="qn">Ask 01</span> Restricted-area access control (CCTV)</h5>
+      <p>A camera watches a controlled area — the call named a "control drug area" as the example. When someone enters, the agent checks whether they're authorized and sends a notification either way: entry by an authorized person logs quietly, entry by anyone else fires an alert immediately.</p>
+    </div>
+    <div class="ask reveal">
+      <h5><span class="qn">Ask 02</span> Wrong-site equipment / shipment detection (CCTV)</h5>
+      <p>Dispatch tags equipment by destination using a colour system — as described: red for one site, green for Jeddah, yellow for a third. A camera on the main line watches for a labourer placing equipment tagged for a specific site onto the main line by mistake, and alerts when that happens.</p>
+    </div>
+    <div class="ask reveal">
+      <h5><span class="qn">Ask 03</span> Scheduled UPS load-transfer test</h5>
+      <p>Once a month — the example given was the 26th at a fixed time — a technician currently trips the breaker manually to force a transfer to UPS power, then checks the panel to confirm it's healthy. The ask is to configure that date and time, run the check automatically, produce a report, and flag any battery or maintenance issue.</p>
+    </div>
+    <div class="ask reveal">
+      <h5><span class="qn">Ask 04</span> Scheduled fire pump test</h5>
+      <p>Same pattern as Ask 03, applied to the fire pump system — a scheduled automatic test with a report and a maintenance alert on failure.</p>
+    </div>
+
+    <div class="callout warn mt16 reveal">
+      <i class="fas fa-circle-question"></i>
+      <p><strong>Two details we're reading from a live phone transcript, not confirming as fact:</strong> the exact site each colour maps to (red — possibly "Mecca/Makkah" or a site named "Al-Mount", to confirm), and whether "the main line" refers to a production line, an assembly line, or a delivery/dispatch line. Neither blocks the concept below — both need one confirmed sentence from your team in the technical call.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="scope">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">02 <span>/ POC scope</span></div>
+      <h2>5–10 cameras, split across the two <em>CCTV use cases.</em></h2>
+      <p class="desc">The UPS and fire pump agents run on a separate track — they depend on what's actually on those panels, which we can only confirm on site.</p>
+    </div>
+
+    <div class="grid g3">
+      <div class="card reveal">
+        <div class="ic teal"><i class="fas fa-door-open"></i></div>
+        <h4>3–5 cameras · Access control</h4>
+        <p>Positioned at the entry point(s) of the restricted / controlled area(s) named on the call, to validate the entry-detection and authorization logic end to end.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ic gold"><i class="fas fa-dolly"></i></div>
+        <h4>2–5 cameras · Dispatch line</h4>
+        <p>Positioned to cover the main line and the hand-off point where colour-tagged equipment is placed, to validate colour/label detection and the mis-route alert.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ic rose"><i class="fas fa-plug-circle-bolt"></i></div>
+        <h4>Site assessment · UPS &amp; fire pump</h4>
+        <p>Not camera-count scope — this is a panel and controller assessment. Outcome decides whether the agent reads a screen (Tier A) or talks to the panel directly (Tier B, recommended). See section 05–06.</p>
+      </div>
+    </div>
+
+    <div class="callout good mt24 reveal">
+      <i class="fas fa-flag-checkered"></i>
+      <p><strong>POC success criteria:</strong> the agent correctly flags an unauthorized entry and a correctly-tagged-but-misplaced shipment in live testing, with a notification landing on WhatsApp or the dashboard within seconds — plus one full automated UPS (or fire pump) test cycle producing a report, on whichever system the site assessment clears first.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="access">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">03 <span>/ Agent 1 — Restricted-area access control</span></div>
+      <h2>Every entry gets checked. <em>Only the exceptions interrupt anyone.</em></h2>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow-row">
+        <div class="fnode"><div class="fn-k">Step 1</div><h5>Camera at entry point</h5><ul><li>RTSP feed, existing or new camera</li><li>Continuous person detection</li></ul></div>
+        <div class="farrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="fnode hl"><div class="fn-k">Step 2</div><h5>Authorization check</h5><ul><li>Match against allow-list or</li><li>Cross-check existing access-control log</li></ul></div>
+        <div class="farrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="fnode"><div class="fn-k">Step 3</div><h5>Rules engine</h5><ul><li>Authorized → logged, silent</li><li>Unauthorized → alert fires</li></ul></div>
+        <div class="farrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="fnode"><div class="fn-k">Step 4</div><h5>Notification + audit log</h5><ul><li>WhatsApp / dashboard alert</li><li>Timestamped snapshot stored</li></ul></div>
+      </div>
+      <div class="flow-note">Every entry is logged either way — the audit trail is the byproduct, the real-time alert is the point.</div>
+    </div>
+
+    <div class="subh">Three ways to define "authorized" — POC uses the fastest one</div>
+    <div class="grid g3 mt16">
+      <div class="card reveal">
+        <h4><span class="ic teal"><i class="fas fa-clock"></i></span></h4>
+        <h4>Tier 1 · Time-window rule</h4>
+        <p>Simplest POC version: any entry outside an approved schedule (e.g. after hours) is treated as unauthorized. No integration needed — ships fastest.</p>
+      </div>
+      <div class="card reveal">
+        <h4><span class="ic gold"><i class="fas fa-id-card"></i></span></h4>
+        <h4>Tier 2 · Access-log cross-check</h4>
+        <p>If a badge/turnstile system already logs who entered, the agent cross-references camera detection against that log for a true authorized/unauthorized read.</p>
+      </div>
+      <div class="card reveal">
+        <h4><span class="ic blue"><i class="fas fa-user-check"></i></span></h4>
+        <h4>Tier 3 · Face enrolment</h4>
+        <p>Enrolled-personnel face matching for sites without an access-control system to cross-reference. Highest accuracy, needs a one-time enrolment step and written consent per local data-privacy practice.</p>
+      </div>
+    </div>
+    <div class="callout info mt16 reveal">
+      <i class="fas fa-comments"></i>
+      <p><strong>One question for the technical call:</strong> does the site already run a badge or turnstile access-control system? If yes, Tier 2 is the POC default — it's more accurate than Tier 1 and needs no enrolment step like Tier 3.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="routing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">04 <span>/ Agent 2 — Wrong-site equipment detection</span></div>
+      <h2>If a red-tagged shipment lands on the main line, <em>someone gets told before it moves further.</em></h2>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow-row">
+        <div class="fnode"><div class="fn-k">Step 1</div><h5>Camera on the line</h5><ul><li>Watches the hand-off / main-line point</li></ul></div>
+        <div class="farrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="fnode hl"><div class="fn-k">Step 2</div><h5>Colour / label detection</h5><ul><li>Classifies tag colour on equipment</li><li>Reads label text if present (OCR)</li></ul></div>
+        <div class="farrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="fnode"><div class="fn-k">Step 3</div><h5>Routing rule check</h5><ul><li>Expected destination per colour/tag</li><li>Flags mismatch with the line it's on</li></ul></div>
+        <div class="farrow"><i class="fas fa-arrow-right"></i></div>
+        <div class="fnode"><div class="fn-k">Step 4</div><h5>Instant alert</h5><ul><li>Dispatch supervisor notified</li><li>Snapshot attached for verification</li></ul></div>
+      </div>
+      <div class="flow-note">Same detection engine as Agent 1 — a different rule set, not a different system.</div>
+    </div>
+
+    <div class="callout warn mt24 reveal">
+      <i class="fas fa-map-pin"></i>
+      <p><strong>Needs confirming before build:</strong> the full colour-to-site map (red / green / yellow and any others), what "the main line" physically is, and whether tags are colour-only or carry printed text/barcodes too — printed text or a barcode makes this meaningfully more reliable than colour detection alone, since lighting can distort colour but not a barcode.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ups">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">05 <span>/ Agent 3 — UPS automated monthly test</span></div>
+      <h2>Configure it once. <em>It runs itself every month after that.</em></h2>
+      <p class="desc">Two build tiers, because the right approach depends entirely on what the UPS panel can actually expose — this is the one thing that can't be answered without seeing the panel.</p>
+    </div>
+
+    <div class="state-split">
+      <div class="state off reveal">
+        <div class="st-h"><i class="fas fa-camera"></i> Tier A — Camera-based (fast POC)</div>
+        <ul>
+          <li>Camera reads the panel display via OCR at the scheduled time</li>
+          <li>Technician still manually trips the breaker as today</li>
+          <li>Agent logs pass/fail, generates the report, flags anomalies it can read off-screen</li>
+          <li>Ships without any electrical integration — good for proving the reporting/alerting loop fast</li>
+        </ul>
+      </div>
+      <div class="state on reveal">
+        <div class="st-h"><i class="fas fa-bolt"></i> Tier B — Direct panel integration (recommended)</div>
+        <ul>
+          <li>UPS talks to the agent over Modbus/SNMP/BMS, if the panel supports it</li>
+          <li>Agent can trigger the transfer test itself — no technician needed at the breaker</li>
+          <li>Reads real battery telemetry (voltage, runtime, health), not just a screen reading</li>
+          <li>The reliable, production-grade path — needs the panel spec sheet to confirm feasibility</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="subh">What the scheduled run does, either tier</div>
+    <div class="grid g4 mt16">
+      <div class="card reveal"><h4><span class="ic gold"><i class="fas fa-calendar-check"></i></span></h4><h4>Configurable schedule</h4><p>Set once — e.g. 26th of every month, 5:00 PM. Change anytime from the dashboard.</p></div>
+      <div class="card reveal"><h4><span class="ic teal"><i class="fas fa-vial"></i></span></h4><h4>Automated test run</h4><p>Fires the transfer test (Tier B) or the observation window (Tier A) exactly on schedule.</p></div>
+      <div class="card reveal"><h4><span class="ic blue"><i class="fas fa-file-lines"></i></span></h4><h4>Auto-generated report</h4><p>Pass/fail, readings captured, timestamped — ready for compliance filing, no manual write-up.</p></div>
+      <div class="card reveal"><h4><span class="ic rose"><i class="fas fa-triangle-exclamation"></i></span></h4><h4>Maintenance alert</h4><p>Battery degradation or any out-of-range reading pushes an immediate alert, separate from the routine report.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="firepump">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">06 <span>/ Agent 3 (continued) — Fire pump automated test</span></div>
+      <h2>Same engine, <em>same schedule logic, a different panel.</em></h2>
+      <p class="desc">Not a separate build — this reuses the exact scheduler, reporting, and alerting logic from the UPS agent above. The only new work is the panel-specific reading (pressure, flow, jockey-pump cycling) once the controller type is confirmed on site.</p>
+    </div>
+    <div class="callout good reveal">
+      <i class="fas fa-check-double"></i>
+      <p><strong>Why this is low-risk to add:</strong> once the UPS agent's scheduler, report generator, and alert pipeline exist, pointing the same pipeline at a second controller is configuration, not a new system. The fire pump test can typically launch in the same POC window as the UPS test, once the site visit confirms the controller type.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="architecture">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">07 <span>/ How it all fits together</span></div>
+      <h2>One platform, <em>three agents running on it.</em></h2>
+    </div>
+
+    <div class="layer reveal">
+      <div class="lk">Input</div>
+      <div class="lc"><h5>Cameras (RTSP) + electrical panel data (OCR or Modbus/SNMP)</h5><p>Existing CCTV feeds where available; new cameras only where the POC needs new coverage. UPS/fire pump input tier depends on the site assessment.</p></div>
+    </div>
+    <div class="layer reveal">
+      <div class="lk">Edge / Inference</div>
+      <div class="lc"><h5>Local detection models — person, colour/label, panel OCR</h5><p>Runs close to the cameras to keep alert latency low and avoid pushing raw video off-site unnecessarily.</p></div>
+    </div>
+    <div class="layer reveal">
+      <div class="lk">Rules Engine</div>
+      <div class="lc"><h5>Per-agent logic: authorization checks, routing rules, test scheduler</h5><p>This is where "who's authorized," "what colour goes where," and "test on the 26th at 5 PM" live — configurable without touching the detection models.</p></div>
+    </div>
+    <div class="layer reveal">
+      <div class="lk">Notification</div>
+      <div class="lc"><h5>WhatsApp, email, and a live dashboard</h5><p>Unauthorized entry, mis-routed shipment, or a failed test all land the same way — instantly, on the channel your team already checks.</p></div>
+    </div>
+    <div class="layer reveal">
+      <div class="lk">Audit &amp; Reporting</div>
+      <div class="lc"><h5>Every event logged with a timestamped snapshot; monthly reports auto-compiled</h5><p>Doubles as your compliance record for UPS/fire pump testing and as an incident log for access events.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="plan">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">08 <span>/ POC plan</span></div>
+      <h2>Four weeks, <em>from site visit to a live pilot.</em></h2>
+    </div>
+    <ul class="tl">
+      <li class="reveal">
+        <div class="tk">Week 1</div>
+        <h5>Site visit &amp; assessment</h5>
+        <p>Confirm camera network access, walk the restricted area and dispatch line, and inspect the UPS/fire pump panels to decide Tier A vs Tier B. This is also where we confirm the colour-map and "main line" questions from section 04.</p>
+      </li>
+      <li class="reveal">
+        <div class="tk">Week 2</div>
+        <h5>Build — access control &amp; routing agents</h5>
+        <p>Configure the 5–10 POC cameras, deploy person and colour/label detection, wire up the authorization and routing rules confirmed in Week 1.</p>
+      </li>
+      <li class="reveal">
+        <div class="tk">Week 3</div>
+        <h5>Build — UPS &amp; fire pump scheduler</h5>
+        <p>Configure the test schedule, reporting template, and alert thresholds against whichever tier the Week 1 assessment cleared.</p>
+      </li>
+      <li class="reveal">
+        <div class="tk">Week 4</div>
+        <h5>Live pilot &amp; review</h5>
+        <p>Run all three agents live for a full cycle, tune false-positive/negative rates with your team, and walk through the results together before scoping the full rollout.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="need">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">09 <span>/ What we need from you to start</span></div>
+      <h2>A short checklist, <em>mostly access and one site visit.</em></h2>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal"><h4><span class="ic teal"><i class="fas fa-video"></i></span> Camera / network access</h4><p>RTSP access or camera credentials for the 5–10 POC cameras, plus network access at the site for the edge box.</p></div>
+      <div class="card reveal"><h4><span class="ic gold"><i class="fas fa-list-check"></i></span> Authorization rules</h4><p>Which areas are restricted, who's authorized, and whether an existing badge/access-control system exists to cross-reference.</p></div>
+      <div class="card reveal"><h4><span class="ic blue"><i class="fas fa-palette"></i></span> Colour-code map</h4><p>The confirmed red/green/yellow-to-site mapping and a walk of the dispatch/main line.</p></div>
+      <div class="card reveal"><h4><span class="ic rose"><i class="fas fa-plug"></i></span> UPS &amp; fire pump panel specs</h4><p>Make/model or spec sheet for both panels — this alone decides Tier A vs Tier B for section 05–06.</p></div>
+      <div class="card reveal"><h4><span class="ic amber"><i class="fas fa-user-tie"></i></span> One technical point of contact</h4><p>Someone who can walk the site with us and answer the open questions flagged throughout this document.</p></div>
+      <div class="card reveal"><h4><span class="ic mint"><i class="fas fa-calendar"></i></span> A confirmed meeting slot</h4><p>You offered today, 10 AM–12 PM or 2 PM–6 PM — reply with what works and we'll lock the technical call, with an on-site visit to follow if useful.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="fnote">
+      This is a presales concept built from a live call transcript — the colour-map and "main line" details in sections 01 and 04 are our best reading, not confirmed fact, and are flagged accordingly. Nothing above commits to a specific hardware vendor or model count; that follows the site visit in Week 1.
+    </p>
+    <p class="fmeta">FACILITY VISION + ELECTRICAL AI AGENT · POC CONCEPT · WECARE TECH · JULY 2026</p>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(function(e){io.observe(e);});
+});
+</script>
+</body>
+</html>
