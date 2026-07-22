@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>In-Vehicle Vision AI · Platform Hardware &amp; Software Requirements · Internal Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0e14;--bg-2:#0f141d;--panel:#131a25;--panel-2:#182130;
+  --line:#243141;--line-2:#31435a;
+  --ink:#eef3f8;--ink-2:#aab8c8;--ink-3:#6f8092;
+  --gold:#e8b64c;--gold-2:#f4cf7a;--teal:#3fd0c9;--teal-2:#6fe3dd;
+  --mint:#7ee08a;--rose:#ff6b7d;--amber:#ff9d42;--blue:#5aa9ff;
+  --r:14px;--mono:'JetBrains Mono',monospace;--disp:'Bricolage Grotesque',sans-serif;--body:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+a{color:inherit;text-decoration:none}
+
+.topbar{position:sticky;top:0;z-index:50;background:rgba(10,14,20,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--disp);font-weight:700;letter-spacing:-.02em;font-size:1.02rem;white-space:nowrap;flex:0 0 auto}
+.brand .dot{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--gold),var(--teal));display:grid;place-items:center;color:#0a0e14;font-size:.8rem;flex:0 0 auto}
+.tag-internal{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--rose);border:1px solid var(--rose);padding:3px 8px;border-radius:5px;text-transform:uppercase;white-space:nowrap;flex:0 0 auto}
+.topnav{display:flex;gap:18px;font-size:.8rem;color:var(--ink-2);flex:1 1 auto;justify-content:center;min-width:0}
+.topnav a{transition:color .2s;white-space:nowrap}
+.topnav a:hover{color:var(--gold)}
+@media(max-width:1180px){.topnav{display:none}}
+
+.hero{position:relative;padding:96px 0 72px;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(680px 340px at 78% 8%,rgba(63,208,201,.10),transparent 60%),radial-gradient(620px 320px at 12% 92%,rgba(232,182,76,.09),transparent 60%);pointer-events:none}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;color:var(--teal);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.eyebrow .bar{width:34px;height:1px;background:var(--teal)}
+.hero h1{font-family:var(--disp);font-weight:800;font-size:clamp(2.3rem,5.6vw,4rem);line-height:1.02;letter-spacing:-.03em;max-width:17ch}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .lede{margin-top:26px;font-size:1.12rem;color:var(--ink-2);max-width:66ch}
+.hero-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);margin-top:46px;overflow:hidden}
+.hm{background:var(--panel);padding:20px 22px}
+.hm .k{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase}
+.hm .v{font-family:var(--disp);font-weight:700;font-size:1.28rem;margin-top:8px;letter-spacing:-.01em}
+.hm .v.teal{color:var(--teal)}.hm .v.gold{color:var(--gold)}
+@media(max-width:760px){.hero-meta{grid-template-columns:repeat(2,1fr)}}
+
+.section{padding:80px 0;border-top:1px solid var(--line)}
+.section.alt{background:var(--bg-2)}
+.sec-head{margin-bottom:44px;max-width:76ch}
+.sec-num{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sec-num span{color:var(--ink-3)}
+.sec-head h2{font-family:var(--disp);font-weight:800;font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.06;letter-spacing:-.025em}
+.sec-head h2 em{font-style:normal;color:var(--teal)}
+.sec-head .desc{margin-top:16px;color:var(--ink-2);font-size:1.04rem}
+
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.card h4{font-family:var(--disp);font-weight:700;font-size:1.08rem;letter-spacing:-.01em;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.card p{color:var(--ink-2);font-size:.93rem}
+.card .ic{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;font-size:.98rem;margin-bottom:14px}
+.ic.teal{background:rgba(63,208,201,.13);color:var(--teal)}
+.ic.gold{background:rgba(232,182,76,.13);color:var(--gold)}
+.ic.rose{background:rgba(255,107,125,.13);color:var(--rose)}
+.ic.blue{background:rgba(90,169,255,.13);color:var(--blue)}
+.ic.mint{background:rgba(126,224,138,.13);color:var(--mint)}
+.ic.amber{background:rgba(255,157,66,.13);color:var(--amber)}
+
+.tbl{width:100%;border-collapse:collapse;font-size:.9rem;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.tbl-wrap{overflow-x:auto;border-radius:var(--r)}
+.tbl th{background:var(--panel-2);text-align:left;padding:13px 15px;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:13px 15px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:nth-child(even) td{background:rgba(255,255,255,.012)}
+.tbl td strong{color:var(--ink);font-weight:600}
+.tbl code{font-family:var(--mono);font-size:.8rem;color:var(--gold-2);background:rgba(232,182,76,.08);padding:2px 6px;border-radius:5px;white-space:nowrap}
+.tbl .rec td{background:rgba(63,208,201,.06)!important}
+
+.callout{border-radius:var(--r);padding:20px 22px;display:flex;gap:15px;align-items:flex-start;font-size:.93rem}
+.callout i{font-size:1.05rem;margin-top:2px}
+.callout p{color:var(--ink-2)}
+.callout strong{color:var(--ink)}
+.callout.info{background:rgba(90,169,255,.07);border:1px solid rgba(90,169,255,.28)}
+.callout.info i{color:var(--blue)}
+.callout.warn{background:rgba(255,157,66,.07);border:1px solid rgba(255,157,66,.3)}
+.callout.warn i{color:var(--amber)}
+.callout.risk{background:rgba(255,107,125,.07);border:1px solid rgba(255,107,125,.3)}
+.callout.risk i{color:var(--rose)}
+.callout.good{background:rgba(126,224,138,.07);border:1px solid rgba(126,224,138,.3)}
+.callout.good i{color:var(--mint)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{font-family:var(--mono);font-size:.72rem;background:var(--panel-2);border:1px solid var(--line);color:var(--ink-2);padding:5px 11px;border-radius:20px}
+.chip.gold{border-color:rgba(232,182,76,.4);color:var(--gold-2)}
+.chip.teal{border-color:rgba(63,208,201,.4);color:var(--teal-2)}
+
+.scn{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;transition:border-color .2s,transform .2s}
+.scn:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.scn .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.scn .prio{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;padding:3px 8px;border-radius:5px;text-transform:uppercase;font-weight:700}
+.prio.p1{background:rgba(255,107,125,.15);color:var(--rose)}
+.prio.p2{background:rgba(255,157,66,.15);color:var(--amber)}
+.prio.p3{background:rgba(90,169,255,.15);color:var(--blue)}
+.scn h4{font-family:var(--disp);font-weight:700;font-size:1.04rem;margin-bottom:7px;letter-spacing:-.01em}
+.scn p{font-size:.86rem;color:var(--ink-2)}
+.scn.later{opacity:.9}
+.scn .postmvp{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--line-2);padding:3px 8px;border-radius:5px;margin-top:12px;display:inline-block}
+
+.flow{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:30px 22px;overflow-x:auto}
+.flow-row{display:flex;align-items:stretch;gap:0;min-width:900px}
+.fnode{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:16px 15px}
+.fnode.hl{border-color:rgba(63,208,201,.4)}
+.fnode .fn-k{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:9px}
+.fnode h5{font-family:var(--disp);font-weight:700;font-size:.96rem;margin-bottom:6px}
+.fnode ul{list-style:none;font-size:.78rem;color:var(--ink-2)}
+.fnode ul li{padding:2px 0 2px 14px;position:relative}
+.fnode ul li:before{content:"";position:absolute;left:0;top:10px;width:5px;height:5px;border-radius:50%;background:var(--teal)}
+.farrow{display:grid;place-items:center;width:42px;color:var(--ink-3);font-size:.9rem;flex:0 0 42px}
+.flow-note{text-align:center;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--ink-3);margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+
+.recbadge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);background:rgba(63,208,201,.1);border:1px solid rgba(63,208,201,.35);padding:5px 11px;border-radius:6px}
+.mvpbadge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);background:rgba(232,182,76,.1);border:1px solid rgba(232,182,76,.35);padding:5px 11px;border-radius:6px}
+
+.layer{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:12px;display:flex;gap:18px;align-items:flex-start}
+.layer .lk{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;flex:0 0 88px;padding-top:3px}
+.layer .lc h5{font-family:var(--disp);font-weight:700;font-size:1.02rem;margin-bottom:5px}
+.layer .lc p{font-size:.88rem;color:var(--ink-2);margin-bottom:9px}
+
+.ask{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.ask h5{font-family:var(--disp);font-weight:700;font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.ask h5 .qn{font-family:var(--mono);font-size:.66rem;color:var(--gold);border:1px solid var(--line);padding:2px 7px;border-radius:5px}
+.ask p{font-size:.9rem;color:var(--ink-2)}
+
+.foot{padding:56px 0 46px;border-top:1px solid var(--line);background:var(--bg-2)}
+.foot .fnote{font-size:.86rem;color:var(--ink-3);max-width:72ch}
+.foot .fmeta{font-family:var(--mono);font-size:.68rem;color:var(--ink-3);margin-top:22px;letter-spacing:.04em}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mt32{margin-top:32px}
+.subh{font-family:var(--disp);font-weight:700;font-size:1.22rem;letter-spacing:-.01em;margin:40px 0 14px;padding:0;text-indent:0}
+.subh:first-child{margin-top:0}
+.ptext{color:var(--ink-2);font-size:.95rem;line-height:1.7;max-width:80ch;margin:0 0 4px;padding:0;text-indent:0}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase;margin-bottom:12px}
+.state-split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.state-split{grid-template-columns:1fr}}
+.state{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.state .st-h{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;font-size:1.06rem;margin-bottom:12px}
+.state.off .st-h i{color:var(--amber)}
+.state.on .st-h i{color:var(--mint)}
+.state ul{list-style:none;font-size:.9rem}
+.state ul li{padding:7px 0 7px 20px;position:relative;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.state ul li:last-child{border-bottom:none}
+.state ul li:before{content:"";position:absolute;left:0;top:14px;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+
+/* ---------- mobile ---------- */
+@media(max-width:640px){
+  .wrap{padding:0 18px}
+  .section{padding:52px 0}
+  .sec-head{margin-bottom:30px}
+  .hero{padding:64px 0 48px}
+  .hero .lede{font-size:1rem;margin-top:20px}
+  .hero-meta{grid-template-columns:1fr;margin-top:34px}
+  .hm{padding:16px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+  .hm .v{margin-top:0;font-size:1.14rem}
+  .sec-head .desc{font-size:.96rem}
+  .card{padding:20px}
+  .subh{font-size:1.1rem;margin:30px 0 12px}
+  .callout{padding:16px 18px;font-size:.9rem}
+  .layer{flex-direction:column;gap:8px;padding:16px 18px}
+  .layer .lk{flex-basis:auto}
+  .ask h5{font-size:.95rem}
+  .tbl th,.tbl td{padding:11px 12px;font-size:.86rem}
+  .flow{padding:20px 14px}
+  .tl{padding-left:24px}
+  .brand{font-size:.94rem}
+  .eyebrow{font-size:.62rem;letter-spacing:.14em}
+  .state{padding:18px}
+}
+@media(max-width:400px){
+  .hero h1{font-size:2rem}
+  .sec-head h2{font-size:1.5rem}
+  .hm .v{font-size:1.05rem}
+}
+@media(max-width:1024px){
+  .flow,.tbl-wrap{-webkit-overflow-scrolling:touch}
+  .flow{position:relative}
+  .flow:after{content:"scroll \2192";position:absolute;top:10px;right:14px;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase;pointer-events:none;opacity:.7}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <div class="brand"><span class="dot"><i class="fas fa-bus"></i></span> Fleet Vision AI</div>
+    <nav class="topnav">
+      <a href="#scope">Scope</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#infra">Infrastructure</a>
+      <a href="#server">Server &amp; Storage</a>
+      <a href="#software">Software</a>
+      <a href="#alerting">Alerting</a>
+      <a href="#scale">Scaling</a>
+      <a href="#lifecycle">AI Lifecycle</a>
+      <a href="#challenges">Our Challenges</a>
+      <a href="#partner">Requirements</a>
+    </nav>
+    <span class="tag-internal">Internal Spec</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow reveal"><span class="bar"></span> Internal Requirements Spec · In-Vehicle Edge Deployment</div>
+    <h1 class="reveal">Intelligence on <em>every bus.</em> Nothing leaves the vehicle until it has to.</h1>
+    <p class="lede reveal">
+      A self-contained Vision AI node on each bus analyses 8 CCTV streams in real time, detects safety and security events
+      on-board with no internet dependency, and alerts the driver instantly. When a connection is available, events, clips
+      and analytics sync to a central fleet server and the wider team is looped in. This document defines the full platform
+      infrastructure we need end to end, what runs where, our own delivery challenges, and exactly what we need to get
+      started.
+    </p>
+    <div class="hero-meta reveal">
+      <div class="hm"><div class="k">Fleet Scale</div><div class="v gold">14,000+ buses</div></div>
+      <div class="hm"><div class="k">Per-Bus Cameras</div><div class="v">8 streams</div></div>
+      <div class="hm"><div class="k">On-Bus Processing</div><div class="v teal">Offline-first</div></div>
+      <div class="hm"><div class="k">Central</div><div class="v">Server + storage</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- 01 SCOPE -->
+<section class="section" id="scope">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">01 <span>/ What we are building</span></div>
+      <h2>One <em>self-contained</em> intelligence unit per bus, one server behind them all.</h2>
+      <p class="desc">
+        This is a mobile, in-vehicle edge deployment, not fixed-site analytics run from a data centre. The bus moves, loses
+        signal in tunnels and remote routes, and sits in cabin heat. So every time-critical decision happens on-board. A
+        central server sits behind the fleet to receive events, store evidence, run the dashboard and route notifications to
+        the team when buses are connected.
+      </p>
+    </div>
+
+    <div class="grid g3">
+      <div class="card reveal"><div class="ic microchip teal"><i class="fas fa-microchip"></i></div><h4>On-Bus Compute</h4><p>A rugged in-vehicle AI computer per bus, wired to the 8 cabin and door cameras. Decodes every stream, runs all analytics locally, buffers events and clips. No feed needs to leave the bus to be understood.</p></div>
+      <div class="card reveal"><div class="ic gold"><i class="fas fa-triangle-exclamation"></i></div><h4>Real-Time Detection</h4><p>Nine scenarios, from a sleeping driver to a weapon in frame, detected on-board in real time. Because detection runs locally, a dead zone never blinds the system.</p></div>
+      <div class="card reveal"><div class="ic mint"><i class="fas fa-bell-concierge"></i></div><h4>Alerting</h4><p>Offline, the node alerts the driver directly in the cabin. Once a connection exists, escalations route to the team through AIWA chat and AIKA voice.</p></div>
+      <div class="card reveal"><div class="ic blue"><i class="fas fa-cloud-arrow-up"></i></div><h4>Store-and-Forward Sync</h4><p>Events, metadata and evidence clips are written locally first, then synced to the central server when a link returns. Nothing is lost during offline stretches.</p></div>
+      <div class="card reveal"><div class="ic amber"><i class="fas fa-server"></i></div><h4>Central Server &amp; Storage</h4><p>An off-vehicle server stores all events, clips and (optionally) full-journey recordings, runs the fleet dashboard and analytics, and manages notification routing across the fleet.</p></div>
+      <div class="card reveal"><div class="ic rose"><i class="fas fa-shield-halved"></i></div><h4>Privacy by Design</h4><p>Detection runs on pose, object geometry and behaviour, not stored facial identity. Only flagged clips are retained and synced by default, which keeps the system defensible and bandwidth low.</p></div>
+    </div>
+
+    <div class="subh">1.1 · The nine scenarios</div>
+    <p style="color:var(--ink-2);font-size:.96rem;max-width:74ch;margin-bottom:22px">
+      Every scenario below is detected on-board. Priority reflects response urgency. Seven scenarios are in the MVP scope;
+      two are marked as a later phase, since they need more tuning data to hit a reliable accuracy.
+    </p>
+    <div class="grid g3">
+      <div class="scn reveal"><div class="top"><span class="prio p1">P1 · Safety</span><i class="fas fa-bed" style="color:var(--rose)"></i></div><h4>Drowsy / Sleeping Driver</h4><p>Detects a driver who has fallen asleep or is showing sustained drowsiness at the wheel.</p></div>
+      <div class="scn reveal"><div class="top"><span class="prio p1">P1 · Safety</span><i class="fas fa-hand-fist" style="color:var(--rose)"></i></div><h4>Passenger Assault / Fight</h4><p>Flags a physical altercation between passengers in the cabin.</p></div>
+      <div class="scn reveal"><div class="top"><span class="prio p1">P1 · Security</span><i class="fas fa-gun" style="color:var(--rose)"></i></div><h4>Weapon Detection</h4><p>Flags a firearm or knife visible at boarding or in the cabin.</p></div>
+      <div class="scn reveal"><div class="top"><span class="prio p1">P1 · Safety</span><i class="fas fa-fire" style="color:var(--rose)"></i></div><h4>Smoke / Fire</h4><p>Detects smoke or flames inside the cabin.</p></div>
+      <div class="scn reveal"><div class="top"><span class="prio p1">P1 · Safety</span><i class="fas fa-person-falling" style="color:var(--rose)"></i></div><h4>Passenger Fell / Fell From Bus</h4><p>Flags a passenger collapsing in the aisle, or a person falling out through an open door.</p></div>
+      <div class="scn reveal later"><div class="top"><span class="prio p2">P2 · Medical</span><i class="fas fa-heart-pulse" style="color:var(--amber)"></i></div><h4>Sick / Unwell Passenger</h4><p>Flags a passenger who appears unwell, unresponsive or is behaving abnormally for a sustained period.</p><span class="postmvp"><i class="fas fa-clock"></i> Later phase, not in MVP</span></div>
+      <div class="scn reveal"><div class="top"><span class="prio p2">P2 · Compliance</span><i class="fas fa-mobile-screen-button" style="color:var(--amber)"></i></div><h4>Driver Phone / No Seatbelt</h4><p>Flags the driver using a phone or not wearing a seatbelt while driving.</p></div>
+      <div class="scn reveal"><div class="top"><span class="prio p3">P3 · Ops</span><i class="fas fa-users" style="color:var(--blue)"></i></div><h4>People Counting / Crowd</h4><p>Counts passengers boarding and exiting and flags cabin overcrowding.</p></div>
+      <div class="scn reveal later"><div class="top"><span class="prio p3">P3 · Security</span><i class="fas fa-suitcase" style="color:var(--blue)"></i></div><h4>Unattended Bag</h4><p>Flags a bag left behind after its owner has moved away or left the bus.</p><span class="postmvp"><i class="fas fa-clock"></i> Later phase, not in MVP</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 ARCHITECTURE -->
+<section class="section alt" id="architecture">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">02 <span>/ How it fits together</span></div>
+      <h2>Detect on the bus. Alert the driver. <em>Sync to the server</em> when connected.</h2>
+      <p class="desc">Four tiers. Everything time-critical happens on the bus, with no dependency on the network. Losing connectivity degrades sync and team escalation, never detection or the driver alert.</p>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow-row">
+        <div class="fnode">
+          <div class="fn-k">Tier 0 · Source</div>
+          <h5>8 Cameras</h5>
+          <ul><li>Cabin + door CCTV</li><li>Driver-facing cam</li><li>Multiple zones</li></ul>
+        </div>
+        <div class="farrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="fnode hl">
+          <div class="fn-k">Tier 1 · On-Bus Edge</div>
+          <h5>AI Compute + Network</h5>
+          <ul><li>PoE switch + edge box</li><li>Runs all analytics</li><li>Local event + clip store</li><li>Alerts driver instantly</li><li>Runs offline indefinitely</li></ul>
+        </div>
+        <div class="farrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="fnode">
+          <div class="fn-k">Tier 2 · Transport</div>
+          <h5>Store &amp; Forward</h5>
+          <ul><li>4G/5G on route</li><li>Depot Wi-Fi on return</li><li>Metadata + clips</li><li>Resumable, deduplicated</li></ul>
+        </div>
+        <div class="farrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="fnode hl">
+          <div class="fn-k">Tier 3 · Central Server</div>
+          <h5>Server + Storage</h5>
+          <ul><li>Event + clip storage</li><li>Fleet dashboard</li><li>Analytics + search</li><li>AIWA / AIKA routing</li></ul>
+        </div>
+      </div>
+      <div class="flow-note">DATA FLOW · EVENTS + CLIPS SYNC WHEN CONNECTED · RAW FEEDS STAY ON THE BUS UNLESS FULL-JOURNEY RECORDING IS ENABLED</div>
+    </div>
+
+    <div class="grid g4 mt24">
+      <div class="card reveal"><div class="lbl">Property 01</div><h4 style="font-size:1rem">Detection is offline-first</h4><p>The node never waits on the server to decide something is wrong. Signal loss affects only sync and team alerts.</p></div>
+      <div class="card reveal"><div class="lbl">Property 02</div><h4 style="font-size:1rem">Bandwidth is small</h4><p>By default only structured events and short clips move. A day of activity is megabytes, not the gigabytes of raw HD.</p></div>
+      <div class="card reveal"><div class="lbl">Property 03</div><h4 style="font-size:1rem">Each bus is autonomous</h4><p>One bus failing is one bus. No shared point of failure across the fleet.</p></div>
+      <div class="card reveal"><div class="lbl">Property 04</div><h4 style="font-size:1rem">Scales by replication</h4><p>Bus number 14,000 runs the identical image as bus number 1. Growth is enrolment, not re-architecture.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 INFRASTRUCTURE (ON-BUS) -->
+<section class="section" id="infra">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">03 <span>/ On-bus infrastructure · what we need</span></div>
+      <h2>The complete on-bus stack to <em>run the platform.</em></h2>
+      <p class="desc">
+        Everything required inside one bus for the AI, analytics and alerting to run. We recommend the production-grade,
+        vehicle-ready setup from day one and only suggest a lighter option for the MVP bench build. Focus here is on what
+        the platform needs to run, not general vehicle-fit accessories.
+      </p>
+    </div>
+
+    <div class="subh">3.1 · On-bus components</div>
+    <div class="tbl-wrap reveal">
+      <table class="tbl">
+        <thead><tr><th>Component</th><th>Recommended (production)</th><th>Why the platform needs it</th></tr></thead>
+        <tbody>
+          <tr class="rec"><td><strong>AI compute unit</strong></td><td>Rugged in-vehicle <code>Jetson AGX Orin 64GB</code> class box (fanless, wide-temp, ignition-aware power)</td><td>Runs all detection, pose and analytics for 8 concurrent streams on-board. GPU plus dedicated video-decode and DL accelerators handle the load with headroom.</td></tr>
+          <tr><td><strong>Camera network</strong></td><td>8-port <code>PoE switch</code> (or the MDVR's own PoE ports) over Cat5e/Cat6</td><td>Cameras connect to the edge box over a single Ethernet cable each, carrying both power and video. This is the on-bus intranet that feeds the AI.</td></tr>
+          <tr><td><strong>Local storage</strong></td><td>1&ndash;2 TB <code>NVMe SSD</code> (expandable)</td><td>Holds the OS, models, the rolling clip buffer and the event queue that waits out offline stretches. Larger if full-journey recording is enabled locally.</td></tr>
+          <tr><td><strong>Connectivity</strong></td><td>4G/5G modem + Wi-Fi + GPS/GNSS (usually built into the box)</td><td>Cellular for on-route sync and team escalation, depot Wi-Fi for bulk sync, GPS to geotag every event.</td></tr>
+          <tr><td><strong>Driver alert output</strong></td><td>One or more of: cabin buzzer, indicator light, voice/spoken prompt via a small speaker, or a small cabin display (final method to be decided)</td><td>The offline alert path. Fires the instant a driver-facing event is detected, with no network involved. Several methods are possible; we pick the best fit during design, so this stays open for now.</td></tr>
+          <tr><td><strong>Power feed</strong></td><td>Switched vehicle DC with ignition control + hold-up</td><td>Runs the box off bus power and shuts it down cleanly on engine cycles so nothing corrupts.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info mt16 reveal">
+      <i class="fas fa-network-wired"></i>
+      <p><strong>On the "intranet if needed, cable if needed" question:</strong> yes, each bus has a small onboard network.
+        The cameras link to the edge box through a PoE switch (or the existing MDVR's PoE ports) over standard Ethernet
+        cable, one cable per camera carrying power and video together. No separate power runs, no coax. If the installed
+        cameras are analog or GMSL2 instead of IP, we adapt at the box; see the requirement on camera interface below.</p>
+    </div>
+
+    <div class="subh">3.2 · MVP suggestion (bench and single-bus test only)</div>
+    <div class="callout warn reveal">
+      <i class="fas fa-flask"></i>
+      <p>
+        For the MVP we can start on a <strong>Jetson AGX Orin Developer Kit</strong> with a small PoE switch and USB/PoE
+        capture to get running quickly on the bench. It runs the identical software stack, so nothing is wasted. It is not
+        rated for cabin heat or vehicle power, so for the live in-bus portion we still recommend the production rugged box.
+        <strong>Recommendation stands: use the production box for anything running inside a real bus.</strong> The MVP is a
+        smaller footprint of the same platform, not a different one.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 SERVER & STORAGE -->
+<section class="section alt" id="server">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">04 <span>/ Central server &amp; storage · what we need</span></div>
+      <h2>The server behind the fleet, <em>and the storage question.</em></h2>
+      <p class="desc">
+        Yes, we need an off-vehicle server. It receives everything the buses sync, stores it, runs the dashboard and
+        analytics, and routes notifications. How big the storage needs to be depends entirely on one decision: do we keep
+        only event clips, or full journey recordings.
+      </p>
+    </div>
+
+    <div class="subh">4.1 · What the central server does</div>
+    <div class="grid g3">
+      <div class="card reveal"><div class="ic teal"><i class="fas fa-inbox"></i></div><h4>Ingest</h4><p>Receives events, metadata and clips synced from every connected bus, deduplicated and ordered.</p></div>
+      <div class="card reveal"><div class="ic gold"><i class="fas fa-database"></i></div><h4>Store</h4><p>Keeps event history, evidence clips, and optionally full-journey video, on tiered storage.</p></div>
+      <div class="card reveal"><div class="ic blue"><i class="fas fa-table-columns"></i></div><h4>Serve</h4><p>Runs the fleet dashboard, clip playback, search and analytics for operators and supervisors.</p></div>
+      <div class="card reveal"><div class="ic mint"><i class="fas fa-diagram-project"></i></div><h4>Route</h4><p>Decides who is notified for which event class and pushes to AIWA and AIKA.</p></div>
+      <div class="card reveal"><div class="ic amber"><i class="fas fa-brain"></i></div><h4>Train</h4><p>Central GPU capacity to retrain and improve models on real footage, then push updates to the fleet.</p></div>
+      <div class="card reveal"><div class="ic rose"><i class="fas fa-lock"></i></div><h4>Secure</h4><p>Access control, encryption, and retention policy so stored footage stays compliant.</p></div>
+    </div>
+
+    <div class="subh">4.2 · The storage reality (this is the big sizing decision)</div>
+    <p style="color:var(--ink-2);font-size:.95rem;max-width:80ch;margin-bottom:18px">
+      Two very different storage worlds, and the client needs to choose which one they want. The gap between them is enormous
+      at fleet scale.
+    </p>
+    <div class="state-split reveal">
+      <div class="state on">
+        <div class="st-h"><i class="fas fa-bolt"></i> Events + clips only (default)</div>
+        <ul>
+          <li>Only short clips around each detected event are stored</li>
+          <li>Roughly megabytes per bus per day, driven by how many events fire</li>
+          <li>Across the whole fleet this stays modest and cheap to hold</li>
+          <li>This is what we recommend as the default</li>
+        </ul>
+      </div>
+      <div class="state off">
+        <div class="st-h"><i class="fas fa-film"></i> Full-journey recording (optional)</div>
+        <ul>
+          <li>Every camera recorded continuously for the whole route</li>
+          <li>8 cameras at 1080p H.265 is on the order of 15 to 20 GB per bus per day</li>
+          <li>Across 14,000+ buses that becomes multiple petabytes per month</li>
+          <li>Needs a large tiered storage back end and a clear retention window</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout warn mt24 reveal">
+      <i class="fas fa-hard-drive"></i>
+      <p><strong>If the client wants full traveling clips, storage grows fast.</strong> The event-clips default is small.
+        Continuous full-journey recording for 14,000+ buses is a multi-petabyte problem that needs a proper storage design:
+        keep footage on the bus and only pull on request, or sync everything and hold it centrally on tiered storage
+        (fast disk for recent, cheaper bulk for archive) with a defined retention window. We need the client to tell us
+        which model they want, because it changes the storage sizing by orders of magnitude. Practical middle ground:
+        keep full journeys on the bus for a short rolling window, sync only event clips by default, and pull a full journey
+        centrally only when an incident needs it.</p>
+    </div>
+
+    <div class="subh">4.3 · Server sizing follows the fleet</div>
+    <p class="ptext">
+      For the MVP we can simply spin up a modest cloud server instance to receive the one bus, hold its clips and run the
+      dashboard. That is fast to stand up and needs no hardware procurement. As buses are enrolled and, especially, if
+      full-journey recording is turned on, storage and load grow. The straightforward first move is to vertically scale
+      that instance (more CPU, RAM, GPU and storage), but bigger instances cost more, and storage cost climbs with
+      retention. Past a point, scaling out horizontally with tiered storage becomes the cheaper path than one ever-larger
+      server. The growth path is covered in the scaling section next, and training capacity is planned separately from the
+      always-on ingest and dashboard workload.
+    </p>
+  </div>
+</section>
+
+<!-- 05 SOFTWARE -->
+<section class="section" id="software">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">05 <span>/ What runs on the platform</span></div>
+      <h2>The software stack, <em>on-bus and central.</em></h2>
+      <p class="desc">Every time-critical layer runs on the bus. The central layers run on the server. Model choices are benchmarked per deployment; the ones below are the starting stack. This stack is indicative, and we may refine or swap components as we finalise the full architecture and design.</p>
+    </div>
+
+    <div class="lbl mt16">On the bus</div>
+    <div class="layer reveal"><div class="lk">Layer 01</div><div class="lc"><h5>Video Ingest &amp; Decode</h5><p>Pulls all 8 streams, hardware-decodes them, and applies motion gating so idle cameras cost almost no compute.</p><div class="chips"><span class="chip">Frigate / DeepStream</span><span class="chip">GStreamer</span></div></div></div>
+    <div class="layer reveal"><div class="lk">Layer 02</div><div class="lc"><h5>Detection &amp; Behaviour</h5><p>Object detection for weapons, bags, phones, seatbelt, smoke and fire, plus pose analysis for falls, fights, medical distress and driver drowsiness.</p><div class="chips"><span class="chip">Detection models</span><span class="chip">Pose estimation</span><span class="chip">Driver monitoring</span></div></div></div>
+    <div class="layer reveal"><div class="lk">Layer 03</div><div class="lc"><h5>Tracking &amp; Counting</h5><p>Links a person or object across frames for unattended-bag ownership, people counting at the door, and dwell-duration logic.</p><div class="chips"><span class="chip">Multi-object tracking</span><span class="chip">Line-crossing counter</span></div></div></div>
+    <div class="layer reveal"><div class="lk">Layer 04</div><div class="lc"><h5>Event Engine &amp; Alerts</h5><p>Turns detections into structured events with confidence, zone, camera, GPS and time. Fires the driver alert instantly and queues escalations for sync.</p><div class="chips"><span class="chip">Rule engine</span><span class="chip">Local event store</span><span class="chip">Store &amp; forward</span></div></div></div>
+
+    <div class="lbl mt24">On the central server</div>
+    <div class="layer reveal"><div class="lk">Layer 05</div><div class="lc"><h5>Fleet Dashboard &amp; Analytics</h5><p>Per-bus status, event feed, clip playback, search and fleet-wide analytics. Built to render one bus or thousands.</p><div class="chips"><span class="chip">Dashboard</span><span class="chip">Event + clip store</span><span class="chip">Search</span></div></div></div>
+    <div class="layer reveal"><div class="lk">Layer 06</div><div class="lc"><h5>Notification Routing</h5><p>Central rules decide who is notified for which event class, and whether it goes to AIWA chat, AIKA voice, or both.</p><div class="chips teal"><span class="chip teal">AIWA</span><span class="chip teal">AIKA</span></div></div></div>
+    <div class="layer reveal"><div class="lk">Layer 07</div><div class="lc"><h5>Model Training &amp; Improvement</h5><p>Uses collected real footage to retrain and improve models, then pushes updated models out to the fleet. Runs on central GPU capacity.</p><div class="chips"><span class="chip">Training pipeline</span><span class="chip">Model versioning</span></div></div></div>
+  </div>
+</section>
+
+<!-- 06 ALERTING -->
+<section class="section alt" id="alerting">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">06 <span>/ How alerting behaves</span></div>
+      <h2>Offline, we alert the driver. <em>Online, we loop in the team.</em></h2>
+      <p class="desc">This is the exact behaviour you described, made explicit. The system always does something useful, even with zero signal.</p>
+    </div>
+    <div class="state-split reveal">
+      <div class="state off">
+        <div class="st-h"><i class="fas fa-wifi" style="opacity:.5"></i> No connection (on route)</div>
+        <ul>
+          <li>Detection keeps running fully on the bus</li>
+          <li>Driver is alerted directly in the cabin (buzzer / indicator) for driver-facing events</li>
+          <li>All events and clips are stored locally, queued for later</li>
+          <li>Nothing is lost, nothing waits on a server</li>
+        </ul>
+      </div>
+      <div class="state on">
+        <div class="st-h"><i class="fas fa-wifi"></i> Connected (cellular or depot)</div>
+        <ul>
+          <li>Queued events and clips sync to the central server</li>
+          <li>Escalations route to the team through AIWA and AIKA</li>
+          <li>Supervisors and dispatch see events on the dashboard</li>
+          <li>The driver alert has already happened locally; this adds the team layer</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout good mt24 reveal">
+      <i class="fas fa-circle-check"></i>
+      <p><strong>The key promise:</strong> the driver is never left un-alerted just because the bus has no signal. Team
+        notification is an escalation layer on top, activated by connectivity, not a dependency for the core safety alert.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 07 SCALING -->
+<section class="section" id="scale">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">07 <span>/ Scaling from 1 to 14,000+</span></div>
+      <h2>The bus side scales by replication. <em>The server side scales up, then out.</em></h2>
+      <p class="desc">Two different scaling stories, because the two sides grow differently.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <div class="ic teal"><i class="fas fa-copy"></i></div>
+        <h4>On-bus: horizontal by nature</h4>
+        <p>Every bus is an identical, independent node. Adding buses does not add load to any shared component, it just adds
+          more self-contained units. Bus 14,000 runs the same image as bus 1. This is the easy half.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ic gold"><i class="fas fa-arrows-up-down"></i></div>
+        <h4>Central: vertical first, then horizontal</h4>
+        <p>The central server starts small for the MVP. As buses enrol, we scale it up (more CPU, RAM, GPU and storage on a
+          bigger server) until a single machine is no longer sensible, then scale out horizontally (multiple servers behind
+          a load balancer, sharded storage, separate ingest and dashboard tiers). Storage in particular scales
+          independently and tiered.</p>
+      </div>
+    </div>
+    <div class="callout info mt24 reveal">
+      <i class="fas fa-layer-group"></i>
+      <p><strong>Where the central load actually comes from.</strong> Not per-frame video, that stays on the bus. The
+        central load is event ingest, clip storage, dashboard queries, notification fan-out and model training. Ingest and
+        storage grow linearly with the number of active buses and the retention policy. Training is bursty and planned
+        separately so it never competes with always-on ingest. This is why the storage decision in section 4 matters so
+        much: full-journey recording is what turns a manageable central footprint into a heavy one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 AI LIFECYCLE -->
+<section class="section" id="lifecycle">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">08 <span>/ The AI lifecycle</span></div>
+      <h2>How we <em>build, ship and improve</em> the models across the fleet.</h2>
+      <p class="desc">
+        This is the layer behind the runtime, the part that makes us the AI provider rather than an installer. The bus box
+        and the central server (sections 3 and 4) run the intelligence in front of the client. This section is how that
+        intelligence gets made, versioned, pushed out safely to thousands of buses, and kept accurate over time. It is a
+        continuous loop, not a one-off build.
+      </p>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow-row">
+        <div class="fnode">
+          <div class="fn-k">Step 1 · Data</div>
+          <h5>Footage In</h5>
+          <ul><li>Real clips from buses</li><li>Edge cases collected</li><li>Low-confidence samples</li></ul>
+        </div>
+        <div class="farrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="fnode">
+          <div class="fn-k">Step 2 · Prepare</div>
+          <h5>Dataset</h5>
+          <ul><li>Curate footage</li><li>Per-scenario sets</li><li>Quality checks</li></ul>
+        </div>
+        <div class="farrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="fnode hl">
+          <div class="fn-k">Step 3 · Train</div>
+          <h5>Training GPUs</h5>
+          <ul><li>Train and fine-tune</li><li>Separate from the bus</li><li>Model registry</li></ul>
+        </div>
+        <div class="farrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="fnode">
+          <div class="fn-k">Step 4 · Test</div>
+          <h5>Evaluation</h5>
+          <ul><li>Score on held-out footage</li><li>Precision and recall</li><li>Gate before release</li></ul>
+        </div>
+        <div class="farrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="fnode hl">
+          <div class="fn-k">Step 5 · Ship</div>
+          <h5>OTA to Fleet</h5>
+          <ul><li>Staged rollout</li><li>Rollback ready</li><li>Version tracking</li></ul>
+        </div>
+      </div>
+      <div class="flow-note">CONTINUOUS LOOP · FIELD FOOTAGE FEEDS THE NEXT TRAINING ROUND · MODELS IMPROVE OVER TIME</div>
+    </div>
+
+    <div class="subh">8.1 · What this layer needs</div>
+    <div class="grid g3">
+      <div class="card reveal"><div class="ic gold"><i class="fas fa-microchip"></i></div><h4>Training GPUs</h4><p>Training-class GPU capacity on our side to train and fine-tune the models. This is heavier, separate hardware from the inference GPU on the bus. The bus box runs finished models; this builds them.</p></div>
+      <div class="card reveal"><div class="ic blue"><i class="fas fa-box-archive"></i></div><h4>Model Registry</h4><p>Versioned storage of every model, so we always know what is deployed where, and can pin or roll back a specific version.</p></div>
+      <div class="card reveal"><div class="ic mint"><i class="fas fa-tower-broadcast"></i></div><h4>Fleet Control Plane</h4><p>A management layer to see which buses are online, which model version each runs, and their health, and to push updates and config out to them remotely.</p></div>
+      <div class="card reveal"><div class="ic amber"><i class="fas fa-code-branch"></i></div><h4>OTA Update Pipeline</h4><p>Safe over-the-air model and software updates with staged rollout (a few buses first, then wider) and instant rollback if a new model misbehaves.</p></div>
+      <div class="card reveal"><div class="ic rose"><i class="fas fa-wave-square"></i></div><h4>Model Monitoring</h4><p>Tracking confidence, false positives and drift per scenario in the field, so we know when a model is degrading and needs retraining, closing the loop back to step 1.</p></div>
+    </div>
+
+    <div class="callout info mt24 reveal">
+      <i class="fas fa-circle-info"></i>
+      <p><strong>Two different GPUs, two different jobs.</strong> The GPU on the bus does live inference and is covered in
+        section 3. The GPU capacity here does training and is on our side. They are not the same hardware and not
+        interchangeable, which is why training capacity is planned separately from the always-on runtime.</p>
+    </div>
+
+    <div class="callout info mt16 reveal">
+      <i class="fas fa-note-sticky"></i>
+      <p><strong>Indicative, not final.</strong> The exact tooling for training, registry and OTA is chosen as
+        we finalise the architecture. What matters here is that these capabilities are part of what we run, and are
+        accounted for from the start rather than discovered later.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 09 OUR CHALLENGES -->
+<section class="section alt" id="challenges">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">09 <span>/ Our delivery challenges</span></div>
+      <h2>What is <em>hard on our side</em>, stated honestly.</h2>
+      <p class="desc">Named up front so we plan for them, not discover them mid-project.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <div class="ic amber"><i class="fas fa-brain"></i></div>
+        <h4>Models need real training</h4>
+        <p>Out-of-box models will not be accurate enough on these specific camera angles, lighting and cabin layouts. We
+          need to train and tune on real footage from these buses. That takes annotated data, iteration, and central GPU
+          capacity for training runs, which is a real cost and time investment before accuracy is where it should be.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ic rose"><i class="fas fa-gun"></i></div>
+        <h4>Rare events are hard to validate</h4>
+        <p>Weapons, fights and falls may not occur naturally in a short window. We validate these with controlled staged
+          tests and, where needed, synthetic and augmented training data, so we can prove detection without waiting on a
+          real incident.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ic blue"><i class="fas fa-crosshairs"></i></div>
+        <h4>False positives take tuning</h4>
+        <p>Fresh models over-alert. Getting from noisy to trustworthy takes a tuning cycle per scenario. Day-one numbers are
+          not final numbers, and we report precision and recall honestly rather than one inflated accuracy figure.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ic gold"><i class="fas fa-temperature-high"></i></div>
+        <h4>The environment is unforgiving</h4>
+        <p>Cabin heat, vibration, dirty power and intermittent connectivity all have to be handled for the system to run
+          reliably for weeks unattended. We design for it, but it is genuinely harder than a fixed-site install.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 REQUIREMENTS TO START -->
+<section class="section" id="partner">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">10 <span>/ What we need to start</span></div>
+      <h2>The checklist to <em>start.</em></h2>
+      <p class="desc">Blocking items must be answered before we can order hardware or install.</p>
+    </div>
+
+    <div class="ask reveal"><h5><span class="qn">Ask 01</span> Camera &amp; MDVR details <span class="mvpbadge" style="margin-left:auto">Blocking</span></h5><p>Make/model of the installed cameras and NVR/MDVR on the target bus, and how streams are exposed (RTSP, ONVIF, or MDVR export). Decides the camera-input variant of the edge box and whether we need any adapters.</p></div>
+    <div class="ask reveal"><h5><span class="qn">Ask 02</span> Target bus + route access <span class="mvpbadge" style="margin-left:auto">Blocking</span></h5><p>One nominated in-service bus, its typical route, and depot access to install and check. The route helps us anticipate dead zones for the sync behaviour.</p></div>
+    <div class="ask reveal"><h5><span class="qn">Ask 03</span> Power tap &amp; install slot <span class="mvpbadge" style="margin-left:auto">Blocking</span></h5><p>A switched vehicle power tap point and a booked install window to mount the box, wire power, connect the camera network, and fit the driver alert indicator.</p></div>
+    <div class="ask reveal"><h5><span class="qn">Ask 04</span> Storage preference</h5><p>Whether the client wants event clips only (default) or full-journey recording, and for how long. This sizes the central storage. See section 4.</p></div>
+    <div class="ask reveal"><h5><span class="qn">Ask 05</span> Camera positions</h5><p>Which of the 8 cameras covers driver, doors, aisle and cabin. Drives which scenario runs on which feed.</p></div>
+    <div class="ask reveal"><h5><span class="qn">Ask 06</span> Connectivity for sync</h5><p>A data SIM (or approval to use ours) and depot Wi-Fi for the sync demonstration. The system runs offline regardless; this enables team escalation and central sync.</p></div>
+    <div class="ask reveal"><h5><span class="qn">Ask 07</span> Alert recipients</h5><p>Who receives which alert once online (supervisor for compliance, dispatch for safety-critical), so we wire AIWA / AIKA routing.</p></div>
+    <div class="ask reveal"><h5><span class="qn">Ask 08</span> Sample footage</h5><p>Any existing recorded clips from these buses to pre-train and tune models to the real angles and lighting before install. Directly improves accuracy in the live window.</p></div>
+  </div>
+</section>
+
+<!-- 11 SUFFICIENCY -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num">11 <span>/ Is this enough for now</span></div>
+      <h2>What this covers, and the <em>one thing that unlocks the rest.</em></h2>
+    </div>
+    <div class="callout good reveal">
+      <i class="fas fa-clipboard-check"></i>
+      <p><strong>This is sufficient to move.</strong> It defines the full platform: on-bus compute and camera network, the
+        central server and the storage decision, the software stack on both sides, the alerting behaviour, the scaling path,
+        our own challenges, and the checklist to start. Nothing structural is missing to begin.</p>
+    </div>
+    <div class="callout warn mt16 reveal">
+      <i class="fas fa-key"></i>
+      <p><strong>The one blocker before we can finalise hardware</strong> is the camera and MDVR interface answer (Ask 01),
+        because it decides the exact edge-box variant and whether adapters are needed. Everything else can proceed in
+        parallel. The storage preference (Ask 04) is the second decision to lock, since it sizes the central side.</p>
+    </div>
+    <div class="callout info mt16 reveal">
+      <i class="fas fa-forward"></i>
+      <p><strong>Client-facing version to follow.</strong> This is the internal spec. The client version for the Saudi
+        operator will lead with the outcome, collapse the internal detail into a single recommended approach, keep the same
+        no-timeline and content-first posture, and share the proposal URL directly.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="fnote">
+      Internal requirements specification. Hardware part classes reflect 2026 availability and are directional. Detection
+      accuracy is set per scenario after tuning and reported as precision and recall together, never as a single headline
+      number.
+    </p>
+    <p class="fmeta">IN-VEHICLE VISION AI · PLATFORM SPEC · INTERNAL · v2</p>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(function(e){io.observe(e);});
+});
+</script>
+</body>
+</html>
