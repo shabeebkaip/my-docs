@@ -58,6 +58,12 @@
     margin-bottom: 6px;
     page-break-after: avoid;
   }
+  h4 {
+    font-size: 11.5px;
+    color: #0A3D2E;
+    margin-top: 14px;
+    margin-bottom: 4px;
+  }
   p { margin: 6px 0; text-align: justify; }
   ul, ol { margin: 6px 0; padding-left: 22px; }
   li { margin-bottom: 4px; }
@@ -102,6 +108,37 @@
   }
   .callout strong { color: #8a6d1f; }
 
+  .risk {
+    background: #fdecec;
+    border-left: 4px solid #c0392b;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 10.5px;
+  }
+  .risk strong { color: #a5281a; }
+
+  .correction {
+    background: #eef3fb;
+    border-left: 4px solid #2c5aa0;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 10.5px;
+  }
+  .correction strong { color: #1f3f73; }
+
+  .d1-tag, .d2-tag {
+    display: inline-block;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .d1-tag { background: #dff0e6; color: #0A3D2E; }
+  .d2-tag { background: #eee6f7; color: #4a2e7a; }
+
   .toc { margin: 20px 0 30px; }
   .toc ol { padding-left: 18px; column-count: 2; column-gap: 30px; }
   .toc li { break-inside: avoid; }
@@ -134,12 +171,12 @@
 <div class="cover">
   <div class="doc-type">Business Requirements Document</div>
   <h1>NADEC Website Redesign</h1>
-  <div class="subtitle">Business &amp; Technical Requirements for Website Design, Development &amp; SEO</div>
+  <div class="subtitle">Deliverable 1 — Website Design (Mandatory) &amp; Deliverable 2 — Umbraco CMS Implementation (Optional)</div>
   <table class="meta-table">
     <tr><td>Client</td><td>National Agricultural Development Company (NADEC)</td></tr>
     <tr><td>Document Type</td><td>Business Requirements Document (BRD)</td></tr>
     <tr><td>Status</td><td>Draft — pending client confirmation on open decisions (Section 13)</td></tr>
-    <tr><td>Scope Reference</td><td>RFP Items 1–3: Website Design &amp; Development / 2-Year Support / SEO</td></tr>
+    <tr><td>Scope Reference</td><td>NADEC_Website_RFP.docx, issued 22 Jul 2026</td></tr>
   </table>
 </div>
 
@@ -153,12 +190,12 @@
     <li><a href="#s5">Design Requirements</a></li>
     <li><a href="#s6">Functional Requirements</a></li>
     <li><a href="#s7">Non-Functional Requirements</a></li>
-    <li><a href="#s8">Technical Architecture Decisions</a></li>
+    <li><a href="#s8">Technical Architecture</a></li>
     <li><a href="#s9">SEO / Technical Requirements</a></li>
     <li><a href="#s10">Content Migration Requirements</a></li>
     <li><a href="#s11">Support &amp; Maintenance</a></li>
     <li><a href="#s12">Assumptions &amp; Constraints</a></li>
-    <li><a href="#s13">Open Decisions Required From Client</a></li>
+    <li><a href="#s13">Open Decisions Required Before Submission</a></li>
     <li><a href="#s14">Acceptance Criteria</a></li>
     <li><a href="#s15">Out of Scope</a></li>
     <li><a href="#s16">Glossary</a></li>
@@ -168,222 +205,255 @@
 
 <div class="section" id="s1">
 <h2>1. Project Overview</h2>
-<p>Rebuild nadec.com covering three RFP scope items:</p>
+<p>The RFP defines <strong>one mandatory deliverable and one optional deliverable</strong> — a structural requirement, not a phasing preference:</p>
 <ol>
-  <li><strong>Website Design &amp; Development</strong> — UX/UI, design system, front-end + back-end, CMS, bilingual AR/EN</li>
-  <li><strong>Annual Website Support &amp; Maintenance</strong> — 2 years, security patching, SLA-tiered support</li>
-  <li><strong>SEO</strong> — technical, on-page, Core Web Vitals, off-page, content strategy, Local SEO</li>
+  <li><strong>Deliverable 1 — Website Design</strong> <span class="d1-tag">MANDATORY · FIRM PRICE</span><br>Discovery, IA/UX, bilingual AR/EN high-fidelity design, design system, interactive prototypes, and production-ready <strong>static</strong> front-end templates (HTML5/CSS3/JS + Bootstrap or Tailwind). No CMS, backend application, or database.</li>
+  <li><strong>Deliverable 2 — Umbraco CMS Implementation</strong> <span class="d2-tag">OPTIONAL · SEPARATE PRICE</span><br>Proceeds only on NADEC's formal written activation. Full Umbraco CMS on Microsoft .NET/SQL Server, built on the approved Deliverable 1 templates: content modeling, bilingual culture variants, editorial workflow, legacy migration, SEO, testing, deployment, training, hypercare.</li>
 </ol>
-<p>Not a greenfield build: the current site is live, Drupal-based, and carries real content volume (investor documents, governance filings, multilingual news, product catalog) that must migrate cleanly.</p>
+<p>Not a greenfield build: the current site (nadec.com) is live on Drupal and carries real content volume (investor documents, governance filings, multilingual news, product catalog). Drupal is the <strong>legacy system being migrated from</strong> — not the target platform. If Deliverable 2 is activated, the target CMS is <strong>Umbraco</strong>, per the RFP's explicit technology mandate (Section 8.2).</p>
+<div class="correction"><strong>Correction note.</strong> An earlier draft of this BRD assumed CMS + migration + 2-year support were core, undifferentiated scope, and separately assumed a Drupal-foundation rebuild (then a MERN/Next.js migration) as the target platform. Neither matches the RFP as issued. This revision aligns strictly to the RFP's own Deliverable 1 / Deliverable 2 split and its Umbraco/.NET/SQL Server mandate.</div>
 </div>
 
 <div class="section" id="s2">
 <h2>2. Stakeholders</h2>
 <table class="data">
   <tr><th>Role</th><th>Responsibility</th></tr>
-  <tr><td>NADEC — Digital Media Manager</td><td>Primary client point of contact; owns requirement approval and content-priority decisions.</td></tr>
-  <tr><td>NADEC — Quality/Regulatory Team</td><td>Owns and provides nutrition, ingredient, and SKU-level product data; sign-off on regulated product claims.</td></tr>
-  <tr><td>NADEC — Compliance/Governance Team</td><td>Sign-off gate for investor-disclosure and governance-document content before publish.</td></tr>
-  <tr><td>NADEC — IT/Hosting Owner</td><td>Grants infrastructure access required for backend performance remediation (Section 8.5).</td></tr>
-  <tr><td>Delivery Team — Project Lead</td><td>Owns delivery against this BRD; single point of accountability for scope, timeline, and quality gates.</td></tr>
+  <tr><td>NADEC — Marketing (Project Owner)</td><td>Owns Deliverable 1 requirement approval, brand/content sign-off, and the decision to activate Deliverable 2.</td></tr>
+  <tr><td>NADEC — D&amp;T (Digital &amp; Technology)</td><td>Technical approval authority: Bootstrap-vs-Tailwind choice, Umbraco/.NET/SQL Server version approval, environment/hosting decisions.</td></tr>
+  <tr><td>NADEC — Quality/Regulatory Team</td><td>Owns nutrition, ingredient, and SKU-level product data and sign-off on regulated claims (relevant once content is populated, D2).</td></tr>
+  <tr><td>NADEC — Compliance/Governance Team</td><td>Sign-off gate for investor-disclosure and governance-document content before publish (D2).</td></tr>
+  <tr><td>NADEC — IT/Hosting Owner</td><td>Grants environment access for Deliverable 2 (DEV/TEST/STAGING/PROD) and hosting/infra access for performance remediation.</td></tr>
+  <tr><td>Delivery Team — Project Lead</td><td>Owns delivery against this BRD; single point of accountability for scope, timeline, and quality gates across D1 and (if activated) D2.</td></tr>
   <tr><td>Delivery Team — QA Lead</td><td>Independently verifies each milestone against acceptance criteria (Section 14) before sign-off.</td></tr>
 </table>
 </div>
 
 <div class="section" id="s3">
 <h2>3. Scope of Work</h2>
-<p>13 deliverables under RFP Scope Item 1 (Website Design &amp; Development). Items 9–11 extend directly into RFP Scope Item 3 (SEO).</p>
+
+<h3>3.1 Deliverable 1 — Website Design <span class="d1-tag">MANDATORY</span></h3>
 <table class="data">
   <tr><th class="num">#</th><th>Deliverable</th><th>Description</th></tr>
-  <tr><td class="num">01</td><td>UX Discovery &amp; Information Architecture</td><td>Audience-first IA restructure (Consumers / Our Farms &amp; Sustainability / Investors / Media &amp; Corporate / Careers), replacing the current flat department-first menu.</td></tr>
-  <tr><td class="num">02</td><td>Wireframes — All Core Templates</td><td>Low-fidelity structure for homepage, product category, product detail, investor relations, news/article, recipes/nutrition hub, and branch-locator templates — mobile-first, bilingual layout logic from first sketch.</td></tr>
-  <tr><td class="num">03</td><td>Interactive Prototypes</td><td>Clickable, reviewable prototypes of the homepage and two representative inner templates, validated with NADEC stakeholders before visual design begins.</td></tr>
-  <tr><td class="num">04</td><td>UI Design &amp; Complete Design System</td><td>"Grounded Premium" visual direction (Section 5) with governed design tokens and full component library — buttons, cards, navigation, forms, investor data tables.</td></tr>
-  <tr><td class="num">05</td><td>Bilingual Arabic/English Design &amp; Layout</td><td>Native RTL design for every template (not a mirrored afterthought); paired Arabic/Latin typography in the same visual register.</td></tr>
-  <tr><td class="num">06</td><td>Front-End Development</td><td>Responsive build of all approved templates, component-driven, single-<code>&lt;h1&gt;</code>-per-page governance, semantic landmarks, WCAG 2.2-aligned markup.</td></tr>
-  <tr><td class="num">07</td><td>Back-End Development &amp; CMS</td><td>Node.js/Express API layer on MongoDB with structured content models for products, news, investor documents, and recipes, plus a custom or headless admin interface — staff-editable without developer involvement.</td></tr>
-  <tr><td class="num">08</td><td>Bilingual Content Implementation</td><td>Parallel Arabic/English content structure for every page type, reciprocal <code>hreflang</code> annotation, regenerated XML sitemap listing both language versions as first-class entries.</td></tr>
-  <tr><td class="num">09</td><td>Product Catalog Content Structure</td><td>Structured fields for nutrition information, ingredients, and usage occasions across Dairy, Juice, Meat, and Produce — CMS scaffolding for NADEC's quality/regulatory team to populate.</td></tr>
-  <tr><td class="num">10</td><td>Recipes &amp; Nutrition Hub</td><td>Net-new content destination, positioned as a top-level navigation item and cross-linked from product pages.</td></tr>
-  <tr><td class="num">11</td><td>Investor Relations Template Family</td><td>Same visual system as consumer pages — Financial Information, Share Information, Governance, Annual Reports/Disclosures — with all existing PDF URLs preserved during migration.</td></tr>
-  <tr><td class="num">12</td><td>QA, Cross-Browser &amp; RTL Testing, Launch</td><td>Desktop/tablet/mobile QA across major browsers for both language versions, dedicated RTL visual-parity pass, staging-to-production deployment, go-live.</td></tr>
-  <tr><td class="num">13</td><td>Content Accuracy Pass &amp; Brand Asset Pack</td><td>Reconcile conflicting published figures (e.g. daily quality-test counts), standardize social-media handle naming across all platforms, produce a downloadable press/media kit.</td></tr>
+  <tr><td class="num">01</td><td>Discovery &amp; Assessment</td><td>Kickoff and stakeholder workshops; review of existing site, analytics/SEO findings supplied by NADEC, audiences, content, navigation, brand guidelines, dependencies.</td></tr>
+  <tr><td class="num">02</td><td>Information Architecture &amp; UX</td><td>Audience-first IA (Consumers / Our Farms &amp; Sustainability / Investors / Media &amp; Corporate / Careers), replacing the current flat department-first menu; sitemap, navigation model, user journeys, wireframes for English LTR and Arabic RTL.</td></tr>
+  <tr><td class="num">03</td><td>Interactive Prototypes</td><td>Clickable, reviewable prototypes of key journeys, validated with NADEC stakeholders before final visual design.</td></tr>
+  <tr><td class="num">04</td><td>UI Design &amp; Design System</td><td>"Grounded Premium" visual direction (Section 5) with governed design tokens and full component library — buttons, cards, navigation, forms, tables, banners, tabs, accordions, states, accessibility guidance.</td></tr>
+  <tr><td class="num">05</td><td>Bilingual Arabic/English Design</td><td>Native RTL design for every template (not a mirrored afterthought), equal-quality typography and component mirroring.</td></tr>
+  <tr><td class="num">06</td><td>Additional Pages</td><td>Any additional corporate page, template, component, or layout requested by Marketing/D&amp;T during requirements, design, UAT, or rollout.</td></tr>
+  <tr><td class="num">07</td><td>Production-Ready Static Front-End</td><td>Responsive, semantic HTML5/CSS3/JS templates using the D&amp;T-approved Bootstrap <strong>or</strong> Tailwind CSS version (open decision, Section 13.1). <strong>Static only — no CMS, backend, or database.</strong></td></tr>
+  <tr><td class="num">08</td><td>Handover</td><td>Design specifications, asset exports, editable design source files, complete HTML/CSS/JS source code, build instructions, dependency details.</td></tr>
 </table>
+<p><strong>Acceptance:</strong> all agreed screens/states complete; AR/EN and responsive behavior approved; accessibility and brand comments closed; static templates verified on agreed browsers/devices; source code and design files transferred; NADEC Marketing and D&amp;T issue formal written acceptance.</p>
+
+<h3>3.2 Deliverable 2 — Umbraco CMS Implementation <span class="d2-tag">OPTIONAL — activates only on NADEC's written request</span></h3>
+<table class="data">
+  <tr><th class="num">#</th><th>Deliverable</th><th>Description</th></tr>
+  <tr><td class="num">01</td><td>CMS Architecture</td><td>Latest stable Umbraco release (LTS preferred), D&amp;T-approved, on Microsoft .NET runtime + SQL Server; documented DEV/TEST-UAT/STAGING/PROD environments; secure config, source control, repeatable deployment.</td></tr>
+  <tr><td class="num">02</td><td>Content Model &amp; Page Building</td><td>Structured document types, compositions, data types, block-based components for all approved page types.</td></tr>
+  <tr><td class="num">03</td><td>Bilingual Content (CMS)</td><td>AR/EN culture variants, linked language versions, localized URLs, independent language-specific SEO fields.</td></tr>
+  <tr><td class="num">04</td><td>Editorial Governance</td><td>Roles (admin/editor/reviewer/approver/publisher); draft/review/approve/reject/publish workflow; scheduled publish/unpublish; version history/rollback; recycle-bin recovery; audit logs.</td></tr>
+  <tr><td class="num">05</td><td>Media &amp; Global Content</td><td>Governed media library; CMS-managed navigation, footer, social links, contacts, alerts, banners, legal content.</td></tr>
+  <tr><td class="num">06</td><td>Search, Forms, Integrations</td><td>Bilingual site search; secure configurable forms; NADEC-approved API/service integrations; no secrets exposed client-side.</td></tr>
+  <tr><td class="num">07</td><td>Front-End Integration</td><td>Pixel-accurate integration of Deliverable 1 templates into Umbraco; material visual/framework changes require prior approval.</td></tr>
+  <tr><td class="num">08</td><td>Legacy Migration</td><td>Inventory of current AR/EN content; source-to-target mapping; trial migration; final delta migration; reconciliation report; URL preservation or tested 301 redirects.</td></tr>
+  <tr><td class="num">09</td><td>SEO, Performance, Accessibility, Security</td><td>Site audit; keyword/page mapping; canonical/hreflang; sitemap/robots.txt; structured data; Core Web Vitals; WCAG 2.1 AA; secure coding, secrets management, backup/restore.</td></tr>
+  <tr><td class="num">10</td><td>Testing, Deployment, Training</td><td>Full functional/bilingual/responsive/browser/accessibility/SEO/performance/security/migration/regression/UAT testing; deployment/cutover/rollback plans; hands-on training.</td></tr>
+  <tr><td class="num">11</td><td>Handover &amp; Hypercare</td><td>Architecture, configuration, code, deployment, admin/support documentation; minimum 60–90 calendar day warranty/hypercare post go-live.</td></tr>
+</table>
+<p><strong>Acceptance:</strong> all agreed page types, workflows, roles, bilingual content, search, forms, integrations operate correctly; migration reconciled; critical redirects/SEO controls validated; critical/high defects closed; production deployment and hypercare complete; NADEC issues formal written acceptance.</p>
+<div class="callout"><strong>Note on ongoing services.</strong> The RFP explicitly scopes hypercare to 60–90 days only. Ongoing maintenance and ongoing SEO beyond hypercare are <strong>not</strong> part of Deliverable 2 — they are separate optional line items (Appendix B), not folded into the D2 firm price.</div>
 </div>
 
 <div class="section" id="s4">
 <h2>4. Current State</h2>
 <p>Verified via live crawl/audit, not assumption.</p>
 <ul>
-  <li><strong>Stack:</strong> Drupal 9/10, custom theme (<code>nadec_theme</code>), Cloudflare CDN/WAF. TLS and security headers already correctly configured — preserve, don't regress.</li>
+  <li><strong>Stack (legacy, migrated from):</strong> Drupal 9/10, custom theme (<code>nadec_theme</code>), Cloudflare CDN/WAF. TLS and security headers already correctly configured — preserve, don't regress, if/when D2 goes live.</li>
   <li><strong>Performance:</strong> Mobile Lighthouse Performance 44/100, mobile LCP 4.8s (fail), desktop CLS 0.62 (fail), TTFB fails on both platforms. Homepage payload ~7.4MB, with 3 animated GIF stat-counters accounting for ~2.9MB of that. No WebP/AVIF anywhere.</li>
-  <li><strong>i18n:</strong> Root domain always serves Arabic regardless of <code>Accept-Language</code>. Arabic pages link <code>hreflang</code> to English; English pages do not link back (one-directional gap). No <code>x-default</code>.</li>
+  <li><strong>i18n:</strong> Root domain always serves Arabic regardless of <code>Accept-Language</code>. Arabic pages link <code>hreflang</code> to English; English pages do not link back. No <code>x-default</code>.</li>
   <li><strong>SEO baseline:</strong> Zero structured data sitewide. Sitemap lists only ~37 URLs against a real catalog of ~130+ combined items. 4 confirmed duplicate-URL pairs. 1 insecure HTTP video embed. Missing SPF record.</li>
   <li><strong>Content gaps:</strong> 0/141 sampled products have nutrition/ingredient/SKU data. Recipes/Departments/Initiatives pages render fully empty despite existing UI scaffolding.</li>
   <li><strong>Accessibility:</strong> Strengths to preserve — font-size toggle, dark mode, voice toolbar, labeled contact form. Gaps — multiple <code>&lt;h1&gt;</code>s per page, missing ARIA landmarks.</li>
-  <li><strong>Local/branches:</strong> NAP data + branches page exist, but the map is a JS-rendered widget exposing only the HQ record to crawlers — full branch network needs headless (Playwright) enumeration before schema work.</li>
-  <li><strong>Security note:</strong> Careers page currently leaks an internal employee email via a raw Outlook Safelinks URL — quick-win fix.</li>
+  <li><strong>Local/branches:</strong> NAP data + branches page exist, but the map is a JS-rendered widget exposing only the HQ record to crawlers — full branch network needs headless (Playwright) enumeration before schema work (D2).</li>
+  <li><strong>Security note:</strong> Careers page currently leaks an internal employee email via a raw Outlook Safelinks URL (D2 fix — requires a live/editable page).</li>
 </ul>
+<p>These findings are <strong>inputs to Deliverable 1 design decisions</strong> and become <strong>live remediation targets under Deliverable 2</strong> if and when it is activated.</p>
 </div>
 
 <div class="section" id="s5">
-<h2>5. Design Requirements</h2>
+<h2>5. Design Requirements <span class="d1-tag">D1</span></h2>
 <p><strong>Direction: "Grounded Premium"</strong> — chosen for NADEC's brand equity as a trusted, 45-year-old publicly listed institution serving both mainstream households and investors, not a generic "modern and clean" brief.</p>
 <ul>
   <li><strong>Real over synthetic:</strong> actual farm and plant photography/video — drone footage of dairy farms, real processing-line footage — as the primary visual language, not stock imagery or default synthetic 3D.</li>
-  <li><strong>One 3D moment, not a 3D site:</strong> a single, purpose-built "farm to carton" 3D/scroll hero on the homepage only. Every other page uses photography, CSS parallax, and scroll-reveal — no added Core Web Vitals risk beyond that one hero.</li>
+  <li><strong>One 3D moment, not a 3D site:</strong> a single, purpose-built "farm to carton" 3D/scroll hero on the homepage only, built as a static/interactive front-end asset. Every other page uses photography, CSS parallax, and scroll-reveal.</li>
   <li><strong>Brand palette carried forward:</strong> NADEC's existing blue (<code>#2B338C</code> / <code>#001971</code>) and green (<code>#7FBC42</code>) formalized as governed design tokens, not replaced.</li>
   <li><strong>Typography carries "premium":</strong> a confident type system — warm/humanist serif for headlines, clean grotesque for UI/body — paired equivalently for Arabic and Latin scripts.</li>
 </ul>
-<div class="callout"><strong>Performance-safe by design.</strong> The 3D hero is capability-gated: mobile and low-bandwidth devices receive a static art-directed image or a short sub-2MB video loop instead of the WebGL scene. The 3D bundle is never requested on a device that fails the capability check, and the hero is never the LCP-blocking element.</div>
-<p><strong>Explicitly avoided:</strong> a WebGL-playground site (3D scoped to exactly one hero); a novelty/challenger tone (NADEC is the incumbent, not the disruptor); any palette change (existing brand colors are formalized, not discarded).</p>
-<p>Full curated reference gallery and technical guardrails (draw-call budget, off-main-thread shader compilation, compressed assets) are maintained in the companion design-direction document.</p>
+<div class="callout"><strong>Performance-safe by design.</strong> The 3D hero is capability-gated at the static template level: mobile and low-bandwidth devices receive a static art-directed image or a short sub-2MB video loop instead of the WebGL scene. The hero must never be the LCP-blocking element in the delivered templates.</div>
+<p><strong>Explicitly avoided:</strong> a WebGL-playground site; a novelty/challenger tone (NADEC is the incumbent, not the disruptor); any palette change.</p>
+<p>Per RFP §2.1: WCAG 2.1 AA design considerations apply at the design/template level regardless of whether Deliverable 2 is activated. All visual assets and fonts must be licensed, disclosed, and transferable to NADEC without vendor lock-in.</p>
+<p>Full curated reference gallery and technical guardrails are maintained in the companion design-direction document.</p>
 </div>
 
 <div class="section" id="s6">
 <h2>6. Functional Requirements</h2>
 
-<h3>6.1 Information Architecture</h3>
+<h3>6.1 Information Architecture <span class="d1-tag">D1</span></h3>
 <p>Restructure from the current flat department-first menu to an audience-first IA: <strong>Consumers / Our Farms &amp; Sustainability / Investors / Media &amp; Corporate / Careers</strong>.</p>
 
-<h3>6.2 CMS Content Types</h3>
+<h3>6.2 Content Types / Templates</h3>
+<p>For <strong>Deliverable 1</strong>, these are page templates to design — no database. For <strong>Deliverable 2</strong> (if activated), each becomes a structured Umbraco content type.</p>
 <table class="data">
-  <tr><th>Content Type</th><th>Requirement</th></tr>
-  <tr><td>Product</td><td>Category (Dairy/Juice/Meat/Produce), nutrition table, ingredients list, usage occasions, SKU. Fields must exist even if populated post-launch.</td></tr>
-  <tr><td>News/Press</td><td>Bilingual pair relationship (AR node ↔ EN node), publish date, category.</td></tr>
-  <tr><td>Investor document</td><td>Financial Information / Share Information / Governance / Annual Reports. All existing PDF URLs preserved 1:1 during migration.</td></tr>
-  <tr><td>Recipe</td><td>Currently empty in production — needs full content model (ingredients, steps, linked products, imagery).</td></tr>
-  <tr><td>Branch/Distribution point</td><td>Structured location entity to back <code>LocalBusiness</code> schema and sitemap entries.</td></tr>
-  <tr><td>Career/Job</td><td>Safe outbound contact method, no raw internal email in markup.</td></tr>
+  <tr><th>Type</th><th>Deliverable 1 (template)</th><th>Deliverable 2 (content type, if activated)</th></tr>
+  <tr><td>Product</td><td>Category layout, nutrition table layout, ingredients/usage layout</td><td>Structured fields: category, nutrition table, ingredients, usage occasions, SKU</td></tr>
+  <tr><td>News/Press</td><td>Article template, AR/EN paired layout</td><td>Bilingual culture variant pair, publish date, category taxonomy</td></tr>
+  <tr><td>Investor document</td><td>Document library layout</td><td>Structured document entity; all existing PDF URLs preserved 1:1</td></tr>
+  <tr><td>Recipe</td><td>New template (currently empty in production)</td><td>Full content model with linked-product relationships</td></tr>
+  <tr><td>Branch/Distribution point</td><td>Location template</td><td>Structured location entity backing <code>LocalBusiness</code> schema</td></tr>
+  <tr><td>Career/Job</td><td>Listing template, safe outbound contact method</td><td>Structured job entity, workflow-gated publish</td></tr>
 </table>
 
 <h3>6.3 Bilingual (AR/EN)</h3>
-<p>Every content type is a translation-paired node set, not a bolted-on translation layer over English-only fields. Language switch must be genuinely reciprocal (template requirement, see Section 8.3).</p>
+<p>Equal-quality AR/EN design is a <strong>Deliverable 1</strong> requirement (RFP §2.1). Genuinely reciprocal <code>hreflang</code> and culture-variant content relationships are a <strong>Deliverable 2</strong> requirement.</p>
 
-<h3>6.4 Search / Sitemap</h3>
-<p>Sitemap must be CMS-generated, reflecting the full catalog and both language versions of every page as first-class entries.</p>
+<h3>6.4 Search / Sitemap <span class="d2-tag">D2</span></h3>
+<p>CMS-generated sitemap reflecting the full catalog and both language versions as first-class entries — requires a live CMS to generate.</p>
 
 <h3>6.5 E-commerce / Store</h3>
-<div class="callout"><strong>Open decision required from client.</strong> No D2C e-commerce exists at any of the 5 benchmarked competitors either — category norm, not a NADEC-specific gap. Confirm: full store vs. store-locator vs. B2B portal vs. none. Materially changes timeline/effort.</div>
+<div class="callout"><strong>Not listed in the RFP's expected website sections (§4.1) or anywhere in the deliverable scope.</strong> No D2C e-commerce exists at any of the 5 benchmarked competitors either — category norm, not a NADEC-specific gap. Treat as out of current RFP scope; do not design or estimate for it unless NADEC explicitly requests it as an additional item.</div>
 </div>
 
 <div class="section" id="s7">
 <h2>7. Non-Functional Requirements</h2>
 <table class="data">
-  <tr><th>Area</th><th>Current (Measured)</th><th>Target</th></tr>
-  <tr><td>Mobile LCP</td><td>4.8s (fail)</td><td>&lt; 2.5s</td></tr>
+  <tr><th>Area</th><th>Current (Measured, Legacy Site)</th><th>Target</th></tr>
+  <tr><td>Mobile LCP</td><td>4.8s (fail)</td><td>&lt; 2.5s — validated once D2 is live</td></tr>
   <tr><td>Desktop CLS</td><td>0.62 (fail)</td><td>&lt; 0.1</td></tr>
-  <tr><td>TTFB</td><td>Fails both platforms</td><td>Backend/hosting fix — profile Drupal render path + origin cache</td></tr>
-  <tr><td>Homepage payload</td><td>~7.4MB</td><td>Materially reduced — remove animated-GIF counters, convert imagery to WebP/AVIF with responsive <code>srcset</code></td></tr>
-  <tr><td>Static asset cache</td><td>4h <code>max-age</code></td><td>Long-lived immutable caching</td></tr>
-  <tr><td>Mobile / reduced-motion</td><td>N/A</td><td>Never request the 3D/WebGL hero bundle</td></tr>
+  <tr><td>TTFB</td><td>Fails both platforms</td><td>Backend/hosting fix — profile Umbraco/.NET render path + origin cache (D2)</td></tr>
+  <tr><td>Homepage payload</td><td>~7.4MB</td><td>Materially reduced in D1 templates — no animated-GIF counters, WebP/AVIF with responsive <code>srcset</code></td></tr>
+  <tr><td>Static asset cache</td><td>4h <code>max-age</code></td><td>Long-lived immutable caching (D2 hosting config)</td></tr>
+  <tr><td>Mobile / reduced-motion</td><td>N/A</td><td>Never request the 3D/WebGL hero bundle (D1 template requirement)</td></tr>
 </table>
-<p><strong>Security:</strong> CMS core/module/framework patches applied proactively, including emergency out-of-cycle patching for critical vulnerabilities — also a 2-year support-contract SLA item, not just a launch-day task.</p>
-<p><strong>Accessibility:</strong> Preserve existing toolbar features; fix multiple <code>&lt;h1&gt;</code>s and missing ARIA landmarks; do not regress the working labeled contact form.</p>
+<p>Deliverable 1 is responsible for performance-conscious static templates. Full Core Web Vitals validation against live traffic is only possible once Deliverable 2 deploys the site.</p>
+<p><strong>Security (D2):</strong> CMS/framework patches applied proactively, including emergency out-of-cycle patching for critical vulnerabilities — an ongoing-support SLA item once a maintenance term is separately agreed.</p>
+<p><strong>Accessibility:</strong> preserve existing toolbar features; fix multiple <code>&lt;h1&gt;</code>s and missing ARIA landmarks; do not regress the working labeled contact form.</p>
 </div>
 
 <div class="section" id="s8">
-<h2>8. Technical Architecture Decisions</h2>
+<h2>8. Technical Architecture</h2>
 
-<h3>8.1 Technology Stack — Decided</h3>
-<p><strong>Confirmed:</strong> full platform migration off Drupal to a <strong>MERN stack with Next.js</strong> — MongoDB (data store), Express/Node.js (API layer), React via Next.js (front-end, SSR/ISR rendering). This is a full rebuild, not a Drupal-foundation rebuild — the investor-document library, multilingual content, and webform infrastructure are re-modeled natively in MongoDB rather than carried over from Drupal's content system.</p>
-<p><strong>CMS layer:</strong> MERN has no built-in content-editing admin, so a custom Node/Express-backed admin interface (or an integrated headless CMS connected to MongoDB) is required to meet the "staff-editable without developer involvement" requirement (Scope Item 07). This choice — fully custom-built admin vs. headless CMS on top of MongoDB — should be confirmed at kickoff (Section 12).</p>
+<h3>8.1 Deliverable 1 Front-End Stack — Open Decision</h3>
+<p>RFP mandates HTML5/CSS3/JavaScript with either the latest stable <strong>Bootstrap or Tailwind CSS</strong> version, approved by D&amp;T. Recommend Tailwind for the governed-design-token/component approach in Section 5, but D&amp;T approval is required before build starts (Section 13.1).</p>
 
-<h3>8.2 Front-End Delivery</h3>
-<p>Next.js app with component-driven architecture against a governed design-token system (color/type-scale/spacing). SSR/ISR used for SEO-sensitive pages (product, news, investor documents) so content is crawlable without a client-side render wait. Image pipeline uses Next.js's built-in image optimization for WebP/AVIF with responsive <code>srcset</code>, replacing the current unoptimized Drupal image-styles output.</p>
+<h3>8.2 Deliverable 2 CMS Platform — RFP-Mandated, Capability Open Risk</h3>
+<div class="risk"><strong>RFP mandates Umbraco (latest stable, LTS preferred) on Microsoft .NET runtime + SQL Server</strong> for Deliverable 2 — fixed by the client, not a recommendation we can substitute. Drupal and any other CMS/stack do not satisfy Appendix A compliance. <strong>Open risk, unconfirmed:</strong> whether the delivery team has direct Umbraco/.NET/SQL Server production experience to stand behind the RFP §6.1 vendor-qualification claim and Appendix A compliance line. Must be resolved — confirmed in-house, confirmed via a named subcontractor (disclosed per RFP §7.1), or the compliance matrix marks Deliverable 2 "N" and the bid proceeds on Deliverable 1 only — before this BRD or the proposal are finalized for submission.</div>
 
-<h3>8.3 Internationalization Fix</h3>
-<p>Reciprocal <code>hreflang="ar"</code>/<code>hreflang="en"</code> plus <code>x-default</code> across every paired AR/EN template, generated automatically from the CMS content-translation relationship — not hand-maintained per page.</p>
+<h3>8.3 Internationalization</h3>
+<p>Deliverable 1: equal-quality AR RTL / EN LTR templates, component mirroring. Deliverable 2: reciprocal <code>hreflang="ar"</code>/<code>hreflang="en"</code> + <code>x-default</code> generated automatically from the Umbraco content-translation relationship.</p>
 
-<h3>8.4 CDN &amp; Edge</h3>
+<h3>8.4 CDN &amp; Edge <span class="d2-tag">D2</span></h3>
 <p>Cloudflare configuration retained. Static asset cache headers corrected from 4h <code>max-age</code> to long-lived immutable for content-hashed bundles.</p>
 
-<h3>8.5 Hosting &amp; Backend Response Time</h3>
-<p>TTFB is a server/backend issue, not front-end — on the new stack this means profiling Node/Express API response time and MongoDB query performance, plus using Next.js ISR/caching so high-traffic templates aren't rendered fresh on every request. Correct static-asset cache headers. Requires hosting/infra access during remediation (Section 13).</p>
+<h3>8.5 Hosting &amp; Backend Response Time <span class="d2-tag">D2</span></h3>
+<p>TTFB is a server/backend issue. Profile backend rendering path, implement page-level cache warming, correct static-asset cache headers. Requires hosting/infra access during remediation (Section 13).</p>
 
-<h3>8.6 Domain Consolidation</h3>
+<h3>8.6 Domain Consolidation <span class="d2-tag">D2</span></h3>
 <p>Legacy <code>/index.php/en/X</code> duplicate URLs (meat/about/feed/juice confirmed) must resolve via canonical/redirect, not remain as duplicate-content pairs.</p>
 </div>
 
 <div class="section" id="s9">
-<h2>9. SEO / Technical Requirements</h2>
+<h2>9. SEO / Technical Requirements <span class="d2-tag">D2</span></h2>
+<p>Per RFP §3.2, SEO is scoped under Deliverable 2, not Deliverable 1:</p>
 <ul>
   <li>Structured data: <code>LocalBusiness</code>/<code>Organization</code> schema referencing fully-enumerated branch data (post Playwright enumeration).</li>
   <li>Sitemap regeneration: CMS-driven, both language versions per page, first-class cross-annotated entries.</li>
   <li>Fix 4 broken 404 assets, 1 insecure HTTP video embed, missing SPF record.</li>
-  <li>Local SEO: confirm current Google Business Profile status with NADEC first, then build/optimize multi-location GBP (HQ, processing plants, branch network). Enforce NAP consistency across GBP, site, social, directories.</li>
+  <li>Local SEO: confirm current Google Business Profile status with NADEC first, then build/optimize multi-location GBP. Enforce NAP consistency across GBP, site, social, directories.</li>
   <li>Off-page: current backlink profile (3,426 backlinks / 852 referring domains) has spam anchor text and authority concentrated on a secondary microsite, not nadec.com — flag as risk needing full backlink-tool review before final scoping.</li>
   <li><strong>Caution:</strong> do not overstate the ISO 42001 AI-governance angle in AI-search-visibility copy — homepage ISO mentions may reference food-safety certification, not AI governance. Confirm with NADEC before using that narrative.</li>
 </ul>
+<div class="callout"><strong>Note:</strong> if NADEC activates Deliverable 1 only, none of the above SEO work is in scope or priced — it depends entirely on a live CMS.</div>
 </div>
 
 <div class="section" id="s10">
-<h2>10. Content Migration Requirements</h2>
+<h2>10. Content Migration Requirements <span class="d2-tag">D2 only</span></h2>
 <ul>
   <li>All investor-document PDF URLs preserved 1:1 — broken investor links are not acceptable.</li>
-  <li>Product/nutrition/SKU data entry requires NADEC quality/regulatory team input — development delivers CMS structure and content-entry support, not regulatory sign-off on claims.</li>
-  <li>Content touching investor disclosures, governance documents, or regulated product/nutrition claims routes through NADEC's own compliance sign-off workflow before publish — build the CMS workflow to support that gate, don't bypass it.</li>
+  <li>Product/nutrition/SKU data entry requires NADEC quality/regulatory team input — vendor delivers CMS structure and content-entry support, not regulatory sign-off on claims.</li>
+  <li>Content touching investor disclosures, governance documents, or regulated product/nutrition claims routes through NADEC's own compliance sign-off workflow before publish.</li>
+  <li>At least one trial migration required before final cutover, with migration reports, counts, exceptions, and reconciliation (RFP §3.1).</li>
 </ul>
 </div>
 
 <div class="section" id="s11">
-<h2>11. Support &amp; Maintenance (2-Year Contract Scope)</h2>
+<h2>11. Support &amp; Maintenance</h2>
+<p><strong>RFP-mandated (part of Deliverable 2 firm price):</strong> minimum 60–90 calendar day warranty/hypercare after go-live, covering vendor-developed code, CMS configuration, migration, responsive behavior, SEO, performance, and approved integrations.</p>
+<p><strong>Separately priced options</strong> (not RFP-mandated, proposed per RFP §3.3 — "price ongoing maintenance and SEO separately as options"):</p>
 <table class="data">
   <tr><th>Tier</th><th>Definition</th><th>Response</th></tr>
   <tr><td>P1</td><td>Site down / CMS admin broken</td><td>Fastest tier</td></tr>
   <tr><td>P2</td><td>Key template, form, or CMS admin badly degraded, site still reachable</td><td>2 business days</td></tr>
   <tr><td>P3</td><td>Routine issue</td><td>Standard cycle</td></tr>
 </table>
-<p><strong>Covers:</strong> security updates (proactive + emergency out-of-cycle), technical support (named channel), browser/device compatibility fixes from new browser/OS/Node.js/Next.js updates, minor operational content modifications.</p>
+<p><strong>Covers</strong> (as an optional term): proactive + emergency out-of-cycle security updates, named-channel technical support, browser/device compatibility fixes from new browser/OS/Umbraco-core updates, minor operational content modifications.</p>
+<div class="correction"><strong>Correction note.</strong> Do not present this as "RFP Item 2 / 2-year support contract" in client-facing material — the RFP does not mandate a 2-year term. Present it as a Code-OX-recommended optional service, priced and labeled separately from the Deliverable 2 firm price, per RFP §3.3 and §6.2.</div>
 </div>
 
 <div class="section" id="s12">
 <h2>12. Assumptions &amp; Constraints</h2>
 <ul>
-  <li>Nutrition, ingredient, and SKU-level product content is authored with input from NADEC's quality/regulatory team — development provides CMS structure and content-entry support, not regulatory sign-off on claims.</li>
-  <li>Technology stack is decided (MERN + Next.js, full migration off Drupal). The CMS-admin approach underneath it (custom-built vs. headless-on-MongoDB) and e-commerce scope (full store vs. store-locator vs. B2B portal) are confirmed at kickoff — both materially affect timeline and effort.</li>
-  <li>Hosting/infrastructure access sufficient to profile and remediate TTFB is made available during the performance-remediation phase.</li>
+  <li>Nutrition, ingredient, and SKU-level product content is authored with input from NADEC's quality/regulatory team (D2).</li>
+  <li>Bootstrap-vs-Tailwind (D1) and Umbraco/.NET delivery-capability (D2) are both open and must be resolved before final commercial commitment (Section 13).</li>
+  <li>E-commerce is treated as out of RFP scope unless NADEC explicitly requests it.</li>
+  <li>Hosting/infrastructure access sufficient to profile and remediate TTFB is made available during the D2 performance-remediation phase, if activated.</li>
   <li>Content touching investor disclosures, governance documents, or regulated claims routes through NADEC's own compliance/regulatory sign-off before publication.</li>
-  <li>A ~14-week design-and-build timeline is a planning baseline for a public-company site of this content depth; final scheduling is confirmed once the CMS-path and e-commerce-scope decisions are settled at kickoff.</li>
-  <li>Off-page backlink remediation requires licensed tool access (Ahrefs/SEMrush) not yet confirmed as available.</li>
+  <li>A design-and-build timeline for Deliverable 1 is proposed separately from Deliverable 2's timeline, per RFP §6.2.</li>
+  <li>Off-page backlink remediation (D2) requires licensed tool access (Ahrefs/SEMrush) not yet confirmed as available.</li>
+  <li>NADEC may award Deliverable 1 only, and activate Deliverable 2 later through written request, at its sole discretion (RFP §7.2).</li>
 </ul>
 </div>
 
 <div class="section" id="s13">
-<h2>13. Open Decisions Required From Client</h2>
+<h2>13. Open Decisions Required Before Submission</h2>
 <ol>
-  <li><strong>CMS admin approach:</strong> fully custom-built Node/Express admin interface vs. a headless CMS integrated on top of MongoDB. (Technology stack itself — MERN + Next.js — is decided; this is the remaining CMS-layer question underneath it.)</li>
-  <li><strong>E-commerce scope:</strong> full store / store-locator / B2B portal / none.</li>
-  <li><strong>Hosting/infra access:</strong> sufficient access granted during performance-remediation phase to profile and fix TTFB on the Node/MongoDB backend.</li>
-  <li><strong>GBP/licensed SEO-tool access</strong> for off-page/backlink review.</li>
+  <li><strong>Bootstrap vs. Tailwind CSS</strong> for Deliverable 1 — recommend Tailwind, requires D&amp;T approval.</li>
+  <li><strong>Umbraco/.NET/SQL Server delivery capability</strong> — confirm in-house capability, or name a disclosed subcontractor, or bid Deliverable 1 only. Currently unresolved.</li>
+  <li><strong>E-commerce scope</strong> — confirm with NADEC whether it is wanted at all; if so, it is additional scope outside this RFP's deliverables.</li>
+  <li><strong>Hosting/infra access</strong> — sufficient access granted during D2 performance-remediation phase to profile and fix TTFB.</li>
+  <li><strong>GBP/licensed SEO-tool access</strong> (Ahrefs/SEMrush) for off-page review, if D2/SEO is activated.</li>
+  <li><strong>Submission logistics</strong> — the RFP document itself leaves Submission Contact, Email, and Deadline blank; obtain actual values from NADEC Procurement before finalizing the proposal package.</li>
+  <li><strong>Three client references</strong> and subcontractor disclosures required for RFP §6.1/6.2 — confirm which reference projects to use.</li>
 </ol>
-<div class="callout">These four decisions materially change timeline and effort — development should not start against assumptions on any of them.</div>
+<div class="callout">These materially change scope, technology commitments, and pricing — do not finalize the proposal against assumptions on any of them.</div>
 </div>
 
 <div class="section" id="s14">
 <h2>14. Acceptance Criteria</h2>
 <table class="data">
   <tr><th>Requirement Area</th><th>Verified When</th></tr>
+  <tr><td>Deliverable 1 sign-off</td><td>All agreed screens/states complete, AR/EN + responsive approved, accessibility/brand comments closed, static templates verified on agreed browsers/devices, source code + design files transferred, NADEC Marketing/D&amp;T issue written acceptance.</td></tr>
   <tr><td>Information Architecture</td><td>All 5 audience-first top-level sections live; no orphaned pages from the old department-first menu.</td></tr>
-  <tr><td>Bilingual reciprocity</td><td>Every AR page links <code>hreflang="en"</code> to its EN pair and vice versa, plus <code>x-default</code>, validated sitewide — not spot-checked.</td></tr>
-  <tr><td>Core Web Vitals</td><td>Mobile LCP &lt; 2.5s and desktop CLS &lt; 0.1 confirmed via field data (CrUX/PageSpeed), not lab data alone.</td></tr>
-  <tr><td>TTFB</td><td>Passing threshold on both mobile and desktop, confirmed post-hosting-remediation.</td></tr>
-  <tr><td>Structured data</td><td><code>LocalBusiness</code>/<code>Organization</code> schema validates with zero errors in Google's Rich Results Test for every enumerated branch location.</td></tr>
-  <tr><td>Sitemap</td><td>Regenerated sitemap count matches full live catalog (both languages), zero dead/404 URLs.</td></tr>
-  <tr><td>Investor documents</td><td>100% of existing investor PDF URLs resolve post-migration (zero broken links) — spot-audit plus automated crawl.</td></tr>
-  <tr><td>Accessibility</td><td>Single <code>&lt;h1&gt;</code> per page sitewide, ARIA landmarks present, existing toolbar features (dark mode/font-size/read-aloud) still functional.</td></tr>
+  <tr><td>Bilingual reciprocity (D2)</td><td>Every AR page links <code>hreflang="en"</code> to its EN pair and vice versa, plus <code>x-default</code>, validated sitewide.</td></tr>
+  <tr><td>Core Web Vitals (D2)</td><td>Mobile LCP &lt; 2.5s and desktop CLS &lt; 0.1 confirmed via field data (CrUX/PageSpeed), not lab data alone.</td></tr>
+  <tr><td>Structured data (D2)</td><td><code>LocalBusiness</code>/<code>Organization</code> schema validates with zero errors in Google's Rich Results Test for every enumerated branch location.</td></tr>
+  <tr><td>Sitemap (D2)</td><td>Regenerated sitemap count matches full live catalog (both languages), zero dead/404 URLs.</td></tr>
+  <tr><td>Investor documents (D2)</td><td>100% of existing investor PDF URLs resolve post-migration (zero broken links).</td></tr>
+  <tr><td>Accessibility</td><td>Single <code>&lt;h1&gt;</code> per page sitewide, ARIA landmarks present, existing toolbar features still functional.</td></tr>
   <tr><td>RTL parity</td><td>Dedicated RTL visual-parity pass signed off across chevrons, carousels, form direction, and the homepage hero sequence.</td></tr>
-  <tr><td>Security leak fix</td><td>Careers page no longer exposes internal employee email in page source.</td></tr>
+  <tr><td>Security leak fix (D2)</td><td>Careers page no longer exposes internal employee email in page source.</td></tr>
+  <tr><td>Deliverable 2 sign-off (if activated)</td><td>All RFP §3.4 acceptance conditions met; migration reconciled; critical/high defects closed; hypercare and training complete; NADEC issues written acceptance.</td></tr>
 </table>
 </div>
 
 <div class="section" id="s15">
-<h2>15. Out of Scope (This Phase)</h2>
+<h2>15. Out of Scope</h2>
 <ul>
+  <li>Deliverable 2 entirely, unless and until NADEC issues formal written activation (RFP §1, §7.2).</li>
+  <li>E-commerce / online store (not in RFP's expected sections).</li>
   <li>Regulatory/nutrition claim sign-off (client-owned).</li>
   <li>Full backlink remediation execution (data gap, needs licensed tool access first).</li>
   <li>Large-scale content authoring beyond CMS scaffolding (client data-entry responsibility, with support).</li>
-  <li>Large-scale content migration, bulk rewrites, new catalog categories, or full-catalog-scale nutrition/ingredient data entry beyond the support contract's routine-update allowance (change-request territory).</li>
+  <li>Ongoing maintenance/SEO beyond the 60–90 day hypercare, unless separately activated as a priced add-on.</li>
 </ul>
 </div>
 
@@ -392,28 +462,27 @@
 <table class="data">
   <tr><th>Term</th><th>Meaning</th></tr>
   <tr><td>CWV — Core Web Vitals</td><td>Google's user-experience performance metrics (LCP, CLS, and related), used as an SEO ranking signal.</td></tr>
-  <tr><td>LCP — Largest Contentful Paint</td><td>Time until the largest visible element on a page finishes rendering; a page-load speed metric.</td></tr>
+  <tr><td>LCP — Largest Contentful Paint</td><td>Time until the largest visible element on a page finishes rendering.</td></tr>
   <tr><td>CLS — Cumulative Layout Shift</td><td>Measure of unexpected visual layout movement during page load.</td></tr>
-  <tr><td>TTFB — Time to First Byte</td><td>Server response time between request and the first byte of response — a backend/hosting metric.</td></tr>
+  <tr><td>TTFB — Time to First Byte</td><td>Server response time between request and first byte of response.</td></tr>
   <tr><td><code>hreflang</code></td><td>HTML attribute telling search engines which language/region version of a page to serve.</td></tr>
   <tr><td>RTL</td><td>Right-to-left text direction, required for Arabic layout.</td></tr>
-  <tr><td>WCAG</td><td>Web Content Accessibility Guidelines — the accessibility standard being targeted (2.2).</td></tr>
-  <tr><td>GBP</td><td>Google Business Profile — the listing that powers local search/maps presence.</td></tr>
-  <tr><td>NAP</td><td>Name, Address, Phone — consistency of this data across the web is a local-SEO ranking factor.</td></tr>
-  <tr><td>Structured data / schema</td><td>Machine-readable markup (e.g. <code>LocalBusiness</code>) that helps search engines understand page content.</td></tr>
-  <tr><td>SPF record</td><td>Email-authentication DNS record that helps prevent domain spoofing.</td></tr>
-  <tr><td>SKU</td><td>Stock Keeping Unit — a unique product identifier.</td></tr>
-  <tr><td>CMS</td><td>Content Management System — the platform NADEC's team uses to edit site content without developer involvement.</td></tr>
+  <tr><td>WCAG</td><td>Web Content Accessibility Guidelines (targeting 2.1 AA per RFP).</td></tr>
+  <tr><td>GBP</td><td>Google Business Profile.</td></tr>
+  <tr><td>NAP</td><td>Name, Address, Phone — consistency across the web is a local-SEO ranking factor.</td></tr>
+  <tr><td>Umbraco</td><td>Open-source .NET CMS mandated by the RFP for Deliverable 2.</td></tr>
+  <tr><td>Culture variant</td><td>Umbraco's mechanism for per-language content on a shared content structure.</td></tr>
+  <tr><td>SKU</td><td>Stock Keeping Unit.</td></tr>
 </table>
 </div>
 
 <div class="section" id="s17">
 <h2>17. Sign-Off</h2>
-<p>By signing below, each party confirms the requirements in this document are understood and approved as the baseline for delivery.</p>
+<p>By signing below, each party confirms the requirements in this document — including the Deliverable 1 / Deliverable 2 split and open decisions in Section 13 — are understood and approved as the baseline for delivery.</p>
 <table class="sign-table">
   <tr><th>Role</th><th>Name</th><th>Signature</th><th>Date</th></tr>
-  <tr><td>NADEC — Digital Media Manager</td><td></td><td></td><td></td></tr>
-  <tr><td>NADEC — Compliance/Governance Representative</td><td></td><td></td><td></td></tr>
+  <tr><td>NADEC — Marketing (Project Owner)</td><td></td><td></td><td></td></tr>
+  <tr><td>NADEC — D&amp;T Representative</td><td></td><td></td><td></td></tr>
   <tr><td>Delivery Team — Project Lead</td><td></td><td></td><td></td></tr>
 </table>
 </div>
