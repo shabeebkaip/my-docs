@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NADEC — Media Assets Summary</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; color: #1a1a1a; line-height: 1.6; font-size: 14px; max-width: 880px; margin: 0 auto; padding: 40px 24px 70px; background: #F3F5F8; }
+  .doc-header { background: #0A111C; color: #fff; margin: -40px -24px 34px; padding: 34px 28px 28px; }
+  .doc-header .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: #7BCCEC; margin-bottom: 10px; }
+  .doc-header h1 { font-size: 22px; margin: 0; }
+  h2 { font-size: 16px; color: #0A3D2E; border-bottom: 2px solid #0A3D2E; padding-bottom: 6px; margin: 28px 0 14px; }
+  p { margin: 6px 0; }
+  ul { margin: 6px 0; padding-left: 22px; }
+  li { margin-bottom: 5px; }
+  strong { color: #0A3D2E; }
+  code { background: #eef2ef; border: 1px solid #dbe5e0; border-radius: 3px; padding: 1px 5px; font-family: 'Courier New', monospace; font-size: 12px; word-break: break-word; }
+  a.back-link { display: inline-block; margin-bottom: 18px; font-family: 'Courier New', monospace; font-size: 11.5px; color: #64748B; text-decoration: none; border: 1px solid #E2E8F0; padding: 4px 10px; border-radius: 20px; background: #fff; }
+  a.back-link:hover { color: #1E86AC; border-color: #1E86AC; }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="/nadec/index.html">← NADEC Project Index</a>
+
+<div class="doc-header">
+  <div class="eyebrow">Code-OX Technologies · Internal — Knowledge Base · 06 Media</div>
+  <h1>NADEC — Media Assets Summary</h1>
+</div>
+
+<p>This folder catalogs media asset URLs and alt-text patterns discovered during the crawl (per mission scope: image/video URLs and alt text captured as metadata, binaries not downloaded/re-hosted).</p>
+
+<h2>Image hosting pattern</h2>
+<p>All product, leadership, award, and news images are served from Drupal's managed file system under <code>/sites/default/files/</code>, with responsive "image styles" subpaths, e.g.:</p>
+<ul>
+  <li>Product thumbnails: <code>/sites/default/files/styles/item_sm/public/{yyyy-mm}/{filename}</code></li>
+  <li>Product detail hero: <code>/sites/default/files/styles/product_detail_style/public/{yyyy-mm}/{filename}</code></li>
+  <li>Leadership photos: <code>/sites/default/files/styles/members_card/public/{yyyy-mm}/{filename}</code> (board) and <code>/sites/default/files/styles/member_lg/public/{yyyy-mm}/{filename}</code> (CEO)</li>
+  <li>Awards/certificates: <code>/sites/default/files/styles/media_style/public/{yyyy-mm}/{filename}</code> and <code>/sites/default/files/styles/medium/public/{yyyy-mm}/{filename}</code></li>
+</ul>
+<p>This confirms Drupal's image style pipeline is actively used for responsive cropping (per <a href="/nadec/website-audit-findings.html">website-audit-findings.html</a> Finding 2.3), though not yet for format conversion (no WebP/AVIF variants found).</p>
+
+<h2>File naming quality observations</h2>
+<ul>
+  <li>Many product images retain literal Arabic filenames (URL-encoded), e.g. <code>%D9%84%D8%AD%D9%85%20%D8%A7%D9%84%D8%B8%D9%87%D8%B1_1.png</code> (meat products) — functional but not SEO-friendly (no descriptive English alt-equivalent filename), and not ideal for CDN caching/readability.</li>
+  <li>Some filenames carry internal production artifacts, e.g. "Eyad" (apparent photographer/designer initials) appended to dozens of dairy product filenames — cosmetic but indicates raw production files were uploaded without a file-naming convention pass.</li>
+  <li>Leadership photos show inconsistent source quality: some are professionally cropped/background-removed (<code>-removebg-preview.png</code> suffix on Board photos), others are plain phone-camera-style crops (e.g., VP photos using original camera filenames like <code>IMG_4854.JPEG</code>, <code>9.jpeg</code>).</li>
+</ul>
+
+<h2>Video content</h2>
+<p>No embedded video players or video file URLs were found on any crawled page (homepage, news, about, products). The <code>/en/news/604</code> article title references "a film documenting the journey of agriculture and food in the Kingdom" (Founding Day content) but the film itself was not verified as embedded/playable on the article page in this pass.</p>
+
+<h2>Animated GIFs (carried over from website-audit-findings.html, confirmed relevant to Media asset strategy)</h2>
+<p>Three animated GIFs power the homepage statistics/counter section (<code>truk.gif</code>, <code>+ 1.5.gif</code>, <code>+ 20000.gif</code>), totaling ~2.9MB — the single largest fixable asset-weight issue on the site (Finding 2.2). Relevant to any redesign's media-asset strategy: these should become the model case for "replace legacy heavy media with lightweight code-driven equivalents."</p>
+
+<h2>Not Publicly Available</h2>
+<p>A dedicated media/press-kit download page (logos, brand guidelines, high-res photography for press use) was not found anywhere in the crawled navigation or footer.</p>
+
+</body>
+</html>

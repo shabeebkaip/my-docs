@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NADEC — Contact &amp; Branches</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; color: #1a1a1a; line-height: 1.6; font-size: 14px; max-width: 880px; margin: 0 auto; padding: 40px 24px 70px; background: #F3F5F8; }
+  .doc-header { background: #0A111C; color: #fff; margin: -40px -24px 34px; padding: 34px 28px 28px; }
+  .doc-header .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: #7BCCEC; margin-bottom: 10px; }
+  .doc-header h1 { font-size: 22px; margin: 0 0 10px; }
+  .doc-header .meta { font-size: 11.5px; color: rgba(255,255,255,.65); }
+  .doc-header .meta a { color: #7BCCEC; }
+  h2 { font-size: 16px; color: #0A3D2E; border-bottom: 2px solid #0A3D2E; padding-bottom: 6px; margin: 28px 0 14px; }
+  p { margin: 6px 0; }
+  ul { margin: 6px 0; padding-left: 22px; }
+  li { margin-bottom: 5px; }
+  strong { color: #0A3D2E; }
+  code { background: #eef2ef; border: 1px solid #dbe5e0; border-radius: 3px; padding: 1px 5px; font-family: 'Courier New', monospace; font-size: 12px; word-break: break-word; }
+  .risk { background: #fdecec; border-left: 4px solid #c0392b; padding: 12px 16px; margin: 14px 0; font-size: 13px; border-radius: 0 6px 6px 0; }
+  .risk strong { color: #a5281a; }
+  a.back-link { display: inline-block; margin-bottom: 18px; font-family: 'Courier New', monospace; font-size: 11.5px; color: #64748B; text-decoration: none; border: 1px solid #E2E8F0; padding: 4px 10px; border-radius: 20px; background: #fff; }
+  a.back-link:hover { color: #1E86AC; border-color: #1E86AC; }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="/nadec/index.html">← NADEC Project Index</a>
+
+<div class="doc-header">
+  <div class="eyebrow">Code-OX Technologies · Internal — Knowledge Base · 08 Contact</div>
+  <h1>NADEC — Contact &amp; Branches</h1>
+  <div class="meta">Source: <code>/en/contact-us</code>, <code>/en/branches</code> · Full structured data: <a href="/nadec/NADEC-Knowledge-Base/12-json-data/contacts.json">contacts.json</a>, <a href="/nadec/NADEC-Knowledge-Base/12-json-data/branches.json">branches.json</a></div>
+</div>
+
+<h2>Contact Channels</h2>
+<ul>
+  <li><strong>Customer service:</strong> +966 11 202 7777</li>
+  <li><strong>Toll-free:</strong> 800 124 1199</li>
+  <li><strong>General email:</strong> info@nadec.com.sa</li>
+  <li><strong>Contact form</strong> (<code>/en/contact-us</code>): Your Name, Your Email, Communication Number, Subject, Message, CAPTCHA — per <a href="/nadec/website-audit-findings.html">website-audit-findings.html</a> Finding 4.5, this form is well-built accessibility-wise (proper label associations, aria-required).</li>
+  <li><strong>Whistleblowing portal:</strong> external EthicsPoint instance (<code>secure.ethicspoint.eu/domain/media/en/gui/114655/index.html</code>) — a genuine, properly outsourced whistleblowing channel, a positive governance signal.</li>
+  <li><strong>Supplier registration:</strong> external Ariba portal (<code>nadec.sourcing.ksaprv.cloud.ariba.com</code>)</li>
+  <li><strong>Careers:</strong> routes through jobs2web.com ATS via an unbranded Microsoft Safelinks-wrapped URL that exposes an internal staff email (<code>em.ishaq@nadec.com.sa</code>) in plain page-source text — flagged previously in <a href="/nadec/website-audit-findings.html">website-audit-findings.html</a> Finding 5.5, confirmed still present in this crawl.</li>
+</ul>
+
+<h2>Branches</h2>
+<p>The <code>/en/branches</code> page (labeled "Head Quarter" in nav) is built around an <strong>interactive map/locator widget</strong>, which is JS-rendered and did not return individual branch records via static page-text extraction. Only the general administration/HQ entry was extractable as text:</p>
+<ul>
+  <li><strong>General Administration:</strong> Riyadh, Saudi Arabia. Phone 011 202 7777 / 800 124 1199. Hours 9:00 AM–5:00 PM.</li>
+</ul>
+<div class="risk"><strong>Crawl limitation:</strong> Given NADEC's stated scale (six dairy farms, two plants, a nationwide distribution network feeding 38,000+ outlets), the live site almost certainly has more branch/location records loaded into the map widget than were extractable via WebFetch's static HTML rendering. This is the one clearly JS-rendered section encountered in this crawl (see workaround note below) — a headless-browser pass (Playwright/Chrome DevTools) would be needed to enumerate the full branch list, which was outside this pass's tool allocation.</div>
+
+<h2>Workaround attempted</h2>
+<p>WebFetch (HTML→markdown conversion) does not execute client-side JS map/locator widgets. No headless browser session was used for this specific page in this pass. Recommendation for a follow-up run: use the Playwright or Chrome-in-browser tools to load <code>/en/branches</code>, wait for the map widget to populate, and extract branch markers/list-view data directly from the rendered DOM.</p>
+
+<h2>Not Publicly Available</h2>
+<ul>
+  <li>Individual branch addresses, cities, GPS coordinates beyond HQ</li>
+  <li>Branch-level services or phone numbers</li>
+  <li>Farm/plant physical addresses (only project names and regions — Hail, Wadi Al-Dawasir, Haradh, Al-Jouf — are named, not street addresses)</li>
+</ul>
+
+</body>
+</html>

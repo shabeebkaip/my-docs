@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NADEC — Product Catalog Summary</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; color: #1a1a1a; line-height: 1.6; font-size: 14px; max-width: 880px; margin: 0 auto; padding: 40px 24px 70px; background: #F3F5F8; }
+  .doc-header { background: #0A111C; color: #fff; margin: -40px -24px 34px; padding: 34px 28px 28px; }
+  .doc-header .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: #7BCCEC; margin-bottom: 10px; }
+  .doc-header h1 { font-size: 22px; margin: 0 0 10px; }
+  .doc-header .meta { font-size: 11.5px; color: rgba(255,255,255,.65); }
+  .doc-header .meta a { color: #7BCCEC; }
+  h2 { font-size: 16px; color: #0A3D2E; border-bottom: 2px solid #0A3D2E; padding-bottom: 6px; margin: 28px 0 14px; }
+  p { margin: 6px 0; }
+  ul { margin: 6px 0; padding-left: 22px; }
+  li { margin-bottom: 5px; }
+  strong { color: #0A3D2E; }
+  code { background: #eef2ef; border: 1px solid #dbe5e0; border-radius: 3px; padding: 1px 5px; font-family: 'Courier New', monospace; font-size: 12.5px; }
+  table.data { width: 100%; border-collapse: collapse; margin: 12px 0 18px; font-size: 12.5px; }
+  table.data th { background: #0A3D2E; color: #fff; text-align: left; padding: 8px 10px; font-weight: 600; }
+  table.data td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+  table.data tr:nth-child(even) td { background: #f8faf9; }
+  a.back-link { display: inline-block; margin-bottom: 18px; font-family: 'Courier New', monospace; font-size: 11.5px; color: #64748B; text-decoration: none; border: 1px solid #E2E8F0; padding: 4px 10px; border-radius: 20px; background: #fff; }
+  a.back-link:hover { color: #1E86AC; border-color: #1E86AC; }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="/nadec/index.html">← NADEC Project Index</a>
+
+<div class="doc-header">
+  <div class="eyebrow">Code-OX Technologies · Internal — Knowledge Base · 03 Products</div>
+  <h1>NADEC — Product Catalog Summary</h1>
+  <div class="meta">Full structured data: <a href="/nadec/NADEC-Knowledge-Base/12-json-data/products.json">products.json</a> (141 products) and <a href="/nadec/NADEC-Knowledge-Base/12-json-data/products.csv">products.csv</a> (same schema, flat file)</div>
+</div>
+
+<h2>Coverage note</h2>
+<p>This is a <strong>partial but representative</strong> catalog crawl, not exhaustive. Site-reported pagination:</p>
+<ul>
+  <li>Dairy (<code>/en/milk</code>): 11 pages total — <strong>6 of 11 pages crawled</strong> (~72 of an estimated 130+ products)</li>
+  <li>Juice (<code>/en/juice</code>): 2-3 pages total — <strong>all pages crawled</strong> (36 of 36 products, complete)</li>
+  <li>Meat (<code>/en/meat</code>): 2 pages total — <strong>1 of 2 pages crawled</strong> (22 products captured; page 2 not fetched)</li>
+  <li>Food &amp; Vegetables (<code>/en/feed</code>): 1 page, no pagination — <strong>complete</strong> (11 of 11 products)</li>
+</ul>
+<p><strong>Total captured: 141 products.</strong> Remaining dairy pages (7-11) and meat page 2 were not crawled in this pass due to crawl-budget prioritization toward breadth across all site sections (org, investors, news, documents) rather than full-depth product-catalog exhaustion. A follow-up run can resume from <code>/en/milk?page=6</code> through <code>?page=10</code> and <code>/en/meat?page=2</code> to close this gap.</p>
+
+<h2>Category breakdown (this crawl)</h2>
+<table class="data">
+<tr><th>Category</th><th>Products captured</th></tr>
+<tr><td>Dairy (Milk and Cheese)</td><td>72</td></tr>
+<tr><td>Juices</td><td>36</td></tr>
+<tr><td>Red Meat (Protein)</td><td>22</td></tr>
+<tr><td>Food and Vegetables</td><td>11</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>141</strong></td></tr>
+</table>
+
+<h2>Product detail page depth</h2>
+<p>Only one product detail page was fully extracted at the individual-SKU level (<code>/en/products/284</code>, Pineapple with Mix Fruit Nectar 1.3L) to establish the template pattern. Finding: <strong>no nutrition facts table, no ingredients list, and no SKU code were present on the product detail page</strong> — confirming <a href="/nadec/seo-audit-findings.html">seo-audit-findings.html</a>'s "thin product content" finding (Section 2) at the full-catalog level, not just the single sample page that audit checked. This is a structural content gap across the entire catalog, not an isolated page issue.</p>
+
+<h2>Product naming/data patterns observed</h2>
+<ul>
+  <li>Product URLs are numeric IDs, inconsistently prefixed with <code>/index.php/en/products/{id}</code> or <code>/en/products/{id}</code> for the same underlying content (duplicate URL forms, consistent with the site-wide pattern noted in <a href="/nadec/website-audit-findings.html">website-audit-findings.html</a> Finding 6.4).</li>
+  <li>Product names embed size/weight directly in the title (e.g., "Full Fat Milk 1L") rather than as a separate structured field — there is no separate SKU/weight/packaging metadata surfaced anywhere in the page markup.</li>
+  <li>A parallel "Al Hilal" sub-brand line appears within the dairy catalog (flavored long-life milk, launched ~May 2025) — not mentioned anywhere in company/about copy, suggesting either a sub-brand strategy not yet reflected in corporate messaging, or a private-label/co-branded line.</li>
+  <li>"Innovative" tagging exists as a page-level curation (<code>/en/innovation</code>) rather than a per-product filter/badge visible on category listing pages.</li>
+</ul>
+
+<h2>Not Publicly Available</h2>
+<ul>
+  <li>Pricing (no product on the site displays price — consistent with the no-e-commerce, retail-distribution go-to-market model noted in <a href="/nadec/competitor-benchmark.html">competitor-benchmark.html</a>)</li>
+  <li>Nutrition facts, ingredients, allergen information</li>
+  <li>SKU/barcode data</li>
+  <li>Product launch dates (except where inferable from image-upload folder dates, e.g., <code>2025-05</code> for Al Hilal line)</li>
+</ul>
+
+</body>
+</html>
