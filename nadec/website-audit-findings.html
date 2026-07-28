@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NADEC — Website UX/UI Audit Findings</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    color: #1a1a1a;
+    line-height: 1.6;
+    font-size: 14px;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 40px 24px 70px;
+    background: #F3F5F8;
+  }
+  .doc-header {
+    background: #0A111C;
+    color: #fff;
+    margin: -40px -24px 34px;
+    padding: 34px 28px 28px;
+  }
+  .doc-header .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: #7BCCEC; margin-bottom: 10px; }
+  .doc-header h1 { font-size: 24px; margin: 0 0 10px; }
+  .doc-header .meta { display: flex; flex-wrap: wrap; gap: 18px; font-size: 11.5px; color: rgba(255,255,255,.65); }
+  .doc-header .meta strong { color: #fff; }
+  .doc-header p.scope { font-size: 12.5px; color: rgba(255,255,255,.75); margin-top: 14px; max-width: 720px; }
+
+  h2 { font-size: 17px; color: #0A3D2E; border-bottom: 2px solid #0A3D2E; padding-bottom: 6px; margin: 38px 0 16px; }
+  h3 { font-size: 13px; color: #1a1a1a; margin: 20px 0 4px; }
+  p { margin: 6px 0; }
+  ul, ol { margin: 6px 0; padding-left: 22px; }
+  li { margin-bottom: 4px; }
+  strong { color: #0A3D2E; }
+  code { background: #eef2ef; border: 1px solid #dbe5e0; border-radius: 3px; padding: 1px 5px; font-family: 'Courier New', monospace; font-size: 12.5px; }
+  .flag { display: inline-block; font-size: 10px; font-weight: 700; background: #FEF3C7; color: #92650F; padding: 1px 7px; border-radius: 3px; margin-left: 2px; }
+
+  .finding {
+    background: #fff; border: 1px solid #E2E8F0; border-left: 4px solid #1E86AC;
+    border-radius: 6px; padding: 16px 20px; margin: 14px 0;
+  }
+  .finding h3 { margin-top: 0; color: #0A3D2E; font-size: 13.5px; }
+  .finding p { font-size: 13px; }
+  .finding .label { color: #64748B; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+
+  table.data { width: 100%; border-collapse: collapse; margin: 12px 0 18px; font-size: 12.5px; }
+  table.data th { background: #0A3D2E; color: #fff; text-align: left; padding: 8px 10px; font-weight: 600; }
+  table.data td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+  table.data tr:nth-child(even) td { background: #f8faf9; }
+  table.data td.num { width: 26px; color: #6b7280; font-weight: 600; }
+
+  .divider { border: none; border-top: 1px solid #E2E8F0; margin: 30px 0; }
+  .closing { font-size: 11.5px; color: #64748B; font-style: italic; margin-top: 30px; }
+
+  a.back-link { display: inline-block; margin-bottom: 18px; font-family: 'Courier New', monospace; font-size: 11.5px; color: #64748B; text-decoration: none; border: 1px solid #E2E8F0; padding: 4px 10px; border-radius: 20px; background: #fff; }
+  a.back-link:hover { color: #1E86AC; border-color: #1E86AC; }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="index.html">← NADEC Project Index</a>
+
+<div class="doc-header">
+  <div class="eyebrow">Code-OX Technologies · Internal — Audits &amp; Research</div>
+  <h1>NADEC (www.nadec.com) — Current State Findings</h1>
+  <div class="meta">
+    <span><strong>Prepared for:</strong> RFP response — website revamp scope</span>
+    <span><strong>Audit date:</strong> 22 July 2026</span>
+  </div>
+  <p class="scope"><strong>Scope covered:</strong> Homepage (AR + EN), About/Investors, Contact, News, Milk (product), Quality, Careers pathway, robots.txt, sitemap.xml, response headers, SSL configuration, aggregated CSS/JS and image assets referenced from the homepage.</p>
+  <p class="scope"><strong>Method:</strong> Direct HTTP inspection (headers, HTML source, sitemap/robots, asset payloads, redirect chains, SSL certificate) plus static analysis of responsive CSS. No authenticated/CMS-admin access was available, and no headless-browser rendering (Lighthouse, real-device testing) was run in this pass — items that require that kind of tooling are explicitly marked <span class="flag">Verify with tool</span> below with the recommended method.</p>
+</div>
+
+<p>This document is written as a neutral technical/UX baseline of the current site, consistent with the RFP's framing of this engagement as a revamp. It is organized by review area, then closes with a condensed list suitable for internal cost scoping.</p>
+
+<h2>1. Technology Stack &amp; Infrastructure</h2>
+
+<div class="finding">
+  <h3>Finding 1.1 — CMS and hosting stack</h3>
+  <p><span class="label">What was found:</span> Response headers (<code>x-drupal-cache</code>, <code>x-drupal-dynamic-cache</code>) and URL patterns (<code>/index.php/...</code>, <code>/sites/default/files/...</code>, <code>/themes/custom/nadec_theme/...</code>) confirm the site runs on <strong>Drupal</strong> (9 or 10, custom theme <code>nadec_theme</code>), fronted by <strong>Cloudflare</strong> (CDN, DDoS/WAF, HSTS injection). Static asset URLs use Drupal's content-hashed CSS/JS aggregation.</p>
+  <p><span class="label">Why it matters:</span> This is directly relevant to scoping — a revamp can either (a) restyle/rebuild on the existing Drupal instance, preserving the investor-relations document library and webform infrastructure, or (b) migrate to a new stack (headless CMS, Next.js, etc.), which is a materially larger undertaking given the content volume (annual reports, board bios, news archive, multilingual content).</p>
+  <p><span class="label">Suggested direction:</span> Confirm with NADEC's IT/marketing team which path the RFP expects before estimating. If Drupal is retained, budget for theme-layer rebuild + content migration; if replaced, budget for full CMS migration including the investor documents library and bilingual workflow.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 1.2 — SSL/TLS and transport security</h3>
+  <p><span class="label">What was found:</span> Valid certificate (Google Trust Services, expires 31 Aug 2026), HTTP→HTTPS redirect (301) and apex→<code>www</code> redirect (301) both function correctly. <code>Strict-Transport-Security: max-age=31536000; includeSubDomains</code> is set. A Content-Security-Policy, <code>X-Content-Type-Options: nosniff</code>, <code>X-Frame-Options: SAMEORIGIN</code>, and <code>X-XSS-Protection</code> are all present.</p>
+  <p><span class="label">Why it matters:</span> The security header baseline is already solid — this is not an area requiring urgent remediation.</p>
+  <p><span class="label">Suggested direction:</span> Carry forward the existing header configuration into the new build; no rework needed here. Note for the proposal: this reduces one category of risk/effort versus a typical legacy-site revamp.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 1.3 — Static asset caching policy</h3>
+  <p><span class="label">What was found:</span> Content-hashed CSS/JS bundles and images are served with <code>Cache-Control: max-age=14400</code> (4 hours) rather than long-lived/immutable caching, despite filenames already containing content hashes that make them safe to cache indefinitely.</p>
+  <p><span class="label">Why it matters:</span> Returning visitors re-download the same CSS/JS/image bytes every few hours instead of once. This is a low-effort, high-value performance fix.</p>
+  <p><span class="label">Suggested direction:</span> In the revamp, set <code>Cache-Control: public, max-age=31536000, immutable</code> for hashed static assets. Small effort, measurable repeat-visit speed gain.</p>
+</div>
+
+<h2>2. Performance (Core Web Vitals — estimated)</h2>
+
+<div class="finding">
+  <h3>Finding 2.1 — Homepage payload weight</h3>
+  <p><span class="label">What was found</span> (measured directly, not estimated): the EN homepage's own HTML is ~111 KB. Its two aggregated CSS bundles total <strong>~1.43 MB</strong>, its aggregated JS totals <strong>~560 KB</strong>, and the 49 images referenced directly on the homepage total <strong>~5.36 MB</strong> — a combined homepage payload of roughly <strong>7.4 MB</strong> before fonts/third-party tags (Google Tag Manager) are counted.</p>
+  <p><span class="label">Why it matters:</span> 7+ MB on a single landing page is heavy by 2026 standards, especially for mobile users on throttled or metered connections, which make up a large share of KSA retail/consumer traffic. This directly affects LCP and bounce rate on mobile.</p>
+  <p><span class="label">Suggested direction:</span> In the revamp, set an explicit homepage weight budget (e.g., &lt;1.5 MB initial load) and treat it as an acceptance criterion.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 2.2 — Animated GIFs used for what appear to be statistics/counter graphics</h3>
+  <p><span class="label">What was found:</span> Three of the homepage's images are animated <code>.gif</code> files — <code>truk.gif</code> (992 KB), <code>+ 1.5.gif</code> (1.28 MB), <code>+ 20000.gif</code> (659 KB) — together accounting for <strong>~2.9 MB</strong>, more than half of the homepage's total image weight. These sit inside a "statistics" view block (likely a counters/achievements section).</p>
+  <p><span class="label">Why it matters:</span> Animated GIF is one of the least efficient formats available for this kind of content; the same visual effect (an animated counter or truck icon) is achievable with a few KB of CSS/JS animation or a short MP4/WebM, at a fraction of the size.</p>
+  <p><span class="label">Suggested direction:</span> Rebuild the statistics/counters section as a CSS or lightweight JS number-count animation instead of pre-rendered GIFs. This alone would remove ~2.9 MB from the homepage.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 2.3 — No next-generation image formats</h3>
+  <p><span class="label">What was found:</span> Homepage images are served as <code>.png</code>, <code>.jpg</code>/<code>.gif</code>, and <code>.svg</code>. No <code>.webp</code> or <code>.avif</code> variants were found, and no <code>srcset</code>/responsive image markup was observed on the sampled pages.</p>
+  <p><span class="label">Why it matters:</span> WebP/AVIF typically cut image payload 25–50% at equivalent visual quality versus PNG/JPG, and responsive <code>srcset</code> avoids shipping desktop-sized images to mobile viewports.</p>
+  <p><span class="label">Suggested direction:</span> Standard practice for the revamp: serve WebP/AVIF with fallback, and generate responsive <code>srcset</code> variants through the CMS's image styles pipeline (Drupal already has this capability via image styles, currently used for cropping but not format conversion).</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 2.4 — Time to first byte and lazy loading</h3>
+  <p><span class="label">What was found:</span> TTFB on the EN homepage measured ~712 ms in this test (single sample, not a statistically robust benchmark). <code>loading="lazy"</code> is already applied to 34 of the homepage's images — a good practice already in place, though not applied site-wide/consistently (some menu icons and above-the-fold images lack it, appropriately, but coverage should be audited page-by-page).</p>
+  <p><span class="label">Why it matters:</span> TTFB in the 700ms range is on the higher side of "acceptable" and worth profiling further; lazy-loading adoption is a genuine existing strength to preserve.</p>
+  <p><span class="label">Suggested direction:</span> <span class="flag">Verify with tool</span> Run PageSpeed Insights / Lighthouse and WebPageTest against both AR and EN homepages to get authoritative LCP/INP/CLS field or lab data before finalizing the performance section of the proposal — the figures above are server-side measurements, not full-page rendering metrics.</p>
+</div>
+
+<h2>3. Bilingual (Arabic/English) Experience</h2>
+
+<div class="finding">
+  <h3>Finding 3.1 — Root domain defaults to Arabic regardless of browser language</h3>
+  <p><span class="label">What was found:</span> Requesting <code>https://www.nadec.com/</code> — with or without an <code>Accept-Language: en-US</code> header — always returns the Arabic homepage (<code>&lt;html lang="ar" dir="rtl"&gt;</code>), served at the bare <code>/</code> URL rather than redirecting to <code>/ar</code>. The English site lives at the separate path <code>/en</code>.</p>
+  <p><span class="label">Why it matters:</span> This is a deliberate, defensible choice for a Saudi-headquartered company (Arabic-first is appropriate), but it means English-preferring visitors arriving via the bare domain (e.g., from a business card, search result, or backlink to <code>nadec.com</code>) land on Arabic content with no automatic language-preference detection, and must self-navigate to <code>/en</code>.</p>
+  <p><span class="label">Suggested direction:</span> Decide deliberately in the revamp whether to (a) keep Arabic-default at the bare domain (current behavior, valid choice), or (b) add <code>Accept-Language</code>-based redirect with a persistent cookie/user override, or (c) serve a lightweight language-selector splash on first visit. Either way, document it as an intentional decision rather than default behavior.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 3.2 — Missing <code>hreflang</code> alternate tags on English pages</h3>
+  <p><span class="label">What was found:</span> The Arabic homepage's <code>&lt;head&gt;</code> correctly includes <code>hreflang="en"</code> pointing to the English equivalent, but the English homepage (<code>/en</code>) does <strong>not</strong> include a reciprocal <code>hreflang="ar"</code> alternate tag back to the Arabic version (checked directly in page source).</p>
+  <p><span class="label">Why it matters:</span> <code>hreflang</code> should be bidirectional. One-directional tagging is a common and easy-to-miss technical SEO gap; search engines may not reliably associate the two language versions as alternates of each other, which can affect which version ranks for a given user's locale/language.</p>
+  <p><span class="label">Suggested direction:</span> Add reciprocal <code>hreflang="ar"</code>/<code>hreflang="en"</code> (plus <code>x-default</code>) tags across all paired AR/EN templates in the revamp. This is a template-level fix, not a per-page content fix.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 3.3 — Content parity between AR and EN sections</h3>
+  <p><span class="label">What was found:</span> Spot-checking the URLs listed only under <code>/ar/...</code> in the XML sitemap (e.g., <code>board-of-directors</code>, <code>branches</code>, <code>departments</code>, <code>food-safety</code>, <code>faqs</code>, <code>news</code>, <code>initiatives</code>, <code>innovation</code>, <code>awards</code>, <code>vice-presidents</code>, <code>recipes</code>, <code>social-media</code>) against their <code>/en/...</code> equivalents shows all of them <strong>do</strong> resolve with HTTP 200 in English — so English content exists for these sections even though the sitemap only formally lists the Arabic URL with an alternate-language link for some, and omits several <code>/en/</code> entries entirely as first-class sitemap entries.</p>
+  <p><span class="label">Why it matters:</span> The underlying bilingual content appears reasonably complete (a genuine strength worth carrying into the proposal), but the sitemap's incomplete/asymmetric listing of English URLs means Google may be crawling and indexing the English pages less consistently than the Arabic ones.</p>
+  <p><span class="label">Suggested direction:</span> Regenerate the XML sitemap in the revamp so both language versions of every page are listed as first-class entries with correct reciprocal <code>hreflang</code> annotations (ties to Finding 3.2 and 6.2).</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 3.4 — RTL layout implementation</h3>
+  <p><span class="label">What was found:</span> The CSS bundle includes 261 <code>@media</code> responsive breakpoint rules and only 4 explicit <code>[dir=...]</code>-scoped RTL override rules. The <code>&lt;html dir="rtl"&gt;</code> attribute is correctly set on Arabic pages, and the framework in use (Bootstrap-derived, based on class naming and default color variables observed in the stylesheet) has built-in RTL-aware utilities, which likely accounts for most of the mirroring without needing many custom overrides.</p>
+  <p><span class="label">Why it matters:</span> Low explicit RTL rule count is not automatically a problem if the base framework handles mirroring — but it can't be fully confirmed without visual/rendered inspection across both language versions.</p>
+  <p><span class="label">Suggested direction:</span> <span class="flag">Verify with tool</span> During discovery, do a side-by-side rendered screenshot comparison of AR vs EN across key templates (homepage, product page, article, form) at 375px/768px/1440px to confirm icons, carousels, and directional UI elements (chevrons, progress bars, back buttons) mirror correctly. Budget for RTL QA as a distinct line item — it is consistently underestimated in bilingual rebuilds.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 3.5 — Brand tagline not present in homepage markup</h3>
+  <p><span class="label">What was found:</span> The tagline referenced in the brand brief ("Nourishing your life everyday") does not appear as text anywhere in the EN or AR homepage HTML (searched directly). It may exist only inside a logo/hero image (not extractable via HTML inspection) or may not currently be surfaced on the homepage at all.</p>
+  <p><span class="label">Why it matters:</span> If the tagline is baked into an image, it's invisible to search engines, screen readers, and translation — and can't be verified without OCR/visual inspection.</p>
+  <p><span class="label">Suggested direction:</span> <span class="flag">Verify visually</span> Confirm during discovery whether the tagline appears as an image or is simply not featured on the current homepage. Either way, the revamp should render the tagline (in both languages) as real text in the hero/header, which also benefits SEO and accessibility.</p>
+</div>
+
+<h2>4. Accessibility (WCAG 2.2 basics)</h2>
+
+<div class="finding">
+  <h3>Finding 4.1 — Existing accessibility toolbar (strength)</h3>
+  <p><span class="label">What was found:</span> The site already ships a visible accessibility toolbar with a dark-mode toggle, three font-size options, and a "voice" control (likely a text-to-speech/read-aloud widget), plus a working "Skip to main content" link.</p>
+  <p><span class="label">Why it matters:</span> This is a genuine, above-baseline accessibility investment already present on the site and should be explicitly preserved (and ideally extended) in the revamp rather than treated as a gap to fix.</p>
+  <p><span class="label">Suggested direction:</span> Carry these features forward; consider adding a visible focus-outline standard and a contrast-boost mode alongside the existing toggles.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 4.2 — Multiple <code>&lt;h1&gt;</code> elements per page</h3>
+  <p><span class="label">What was found:</span> The EN homepage contains <strong>five</strong> <code>&lt;h1&gt;</code> elements (plus 4 h2, 31 h3, 9 h4, 1 h5, 6 h6).</p>
+  <p><span class="label">Why it matters:</span> WCAG/semantic-HTML best practice calls for a single <code>&lt;h1&gt;</code> per page representing its primary topic, both for screen-reader users navigating by heading and for SEO topical clarity. Multiple H1s (common in component-driven/block-based page builders, which this appears to be) flatten that hierarchy.</p>
+  <p><span class="label">Suggested direction:</span> In the revamp's component library, restrict <code>&lt;h1&gt;</code> to the page title template slot; give repeating content blocks/widgets <code>&lt;h2&gt;</code>/<code>&lt;h3&gt;</code> starting points instead. This is a template-governance fix, not a per-page content fix.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 4.3 — Missing ARIA landmark roles</h3>
+  <p><span class="label">What was found:</span> A <code>&lt;nav&gt;</code> element is present, but no <code>role="banner"</code>, <code>role="main"</code>, <code>role="navigation"</code>, or <code>role="contentinfo"</code> landmarks were found on the homepage; the only ARIA roles present relate to a dialog/tab-panel widget (<code>role="dialog"</code>, <code>role="tablist"</code>, <code>role="tabpanel"</code>, etc.).</p>
+  <p><span class="label">Why it matters:</span> Landmark roles let screen-reader and switch-device users jump directly to header/nav/main/footer regions instead of tabbing through the whole page linearly.</p>
+  <p><span class="label">Suggested direction:</span> Add semantic HTML5 landmarks (<code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>) or explicit ARIA roles in the new template layer — a small, low-cost addition once the component library is being rebuilt anyway.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 4.4 — Image alt text: present but partly non-descriptive</h3>
+  <p><span class="label">What was found:</span> All 51 images sampled on the EN homepage do have an <code>alt</code> attribute (a genuine strength — no missing-alt violations found), but a number of them use the generic value <code>alt="Menu Icon"</code> repeated across visually distinct navigation icons (food safety, social media, dairy, etc.), and 5 images use <code>alt=""</code> (acceptable only if those are purely decorative — not independently confirmed here).</p>
+  <p><span class="label">Why it matters:</span> Screen-reader users hear "Menu Icon" repeated many times with no way to distinguish one navigation item from another, which defeats the purpose of the alt text.</p>
+  <p><span class="label">Suggested direction:</span> Replace generic icon alt text with the actual label of each menu item (e.g., <code>alt="Food Safety"</code>, <code>alt="Social Responsibility"</code>) as part of the navigation rebuild; confirm the empty-alt images are genuinely decorative and mark them <code>aria-hidden="true"</code> if so.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 4.5 — Contact form accessibility (strength)</h3>
+  <p><span class="label">What was found:</span> The <code>/en/contact-us</code> Webform is well-built from an accessibility standpoint: every input has a properly associated <code>&lt;label for="..."&gt;</code>, required fields carry both <code>required</code> and <code>aria-required="true"</code>, and the search field uses a visually-hidden label rather than a placeholder-only pattern.</p>
+  <p><span class="label">Why it matters:</span> This is a solid, standards-compliant form implementation already in place — a pattern worth replicating across any new forms added in the revamp (e.g., product inquiry, distributor contact).</p>
+  <p><span class="label">Suggested direction:</span> No fix needed; use this form as the internal accessibility reference pattern for new form components.</p>
+</div>
+
+<h2>5. Information Architecture, Navigation &amp; Content</h2>
+
+<div class="finding">
+  <h3>Finding 5.1 — Primary navigation and site structure</h3>
+  <p><span class="label">What was found:</span> Main navigation surfaces core sections (About, Awards, Feed, Juice, Meat, Milk, News, Statistics), with deeper content (Board of Directors, Investors, Quality, Food Safety, Research, Careers-adjacent links, Documents Library, FAQs) reachable but not all present in the top-level menu based on homepage markup alone.</p>
+  <p><span class="label">Why it matters:</span> For a diversified FMCG + publicly listed company, the site is effectively serving three audiences at once — consumers (products/recipes), B2B/media (news, partnerships), and investors (financial disclosures, governance) — and the current top-level nav appears weighted toward the corporate/consumer side rather than clearly branching by audience.</p>
+  <p><span class="label">Suggested direction:</span> Consider an audience-based IA in the revamp (e.g., persistent top-level split between "Consumers," "Investors," "Media/Corporate," "Careers") rather than a flat single menu, which is a common and effective pattern for public-company FMCG sites.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 5.2 — No e-commerce or "where to buy" functionality</h3>
+  <p><span class="label">What was found:</span> No shop/cart/checkout functionality or "where to buy"/store-locator content was found anywhere in the homepage or the sampled Milk product page.</p>
+  <p><span class="label">Why it matters:</span> This is consistent with NADEC's actual go-to-market (retail distribution through supermarkets/hypermarkets, not direct online sales), so its absence is not inherently a deficiency — but if the RFP scope includes e-commerce, that would be a net-new capability, not a redesign of an existing one, which has significant cost/scope implications.</p>
+  <p><span class="label">Suggested direction:</span> Confirm explicitly with the client whether "e-commerce" in scope means (a) full transactional online store, (b) a lighter "where to buy / store locator" feature, or (c) B2B ordering portal for retail partners. These are very different-sized builds and should be priced separately.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 5.3 — Investor Relations content is substantive and current</h3>
+  <p><span class="label">What was found:</span> The <code>/en/investors</code> page links directly to annual reports through fiscal year 2025 (a PDF dated with a 2026-03 upload timestamp) and a Disclosure &amp; Transparency Policy PDF, indicating the investor relations content is being actively maintained.</p>
+  <p><span class="label">Why it matters:</span> For a Tadawul-listed company, IR content freshness and completeness is a governance-visible area; this is a strength to preserve, not rebuild from scratch.</p>
+  <p><span class="label">Suggested direction:</span> In the revamp, prioritize migrating the investor documents library with correct URLs/redirects intact (financial analysts and index providers often bookmark direct PDF links), and consider adding a structured financial calendar / disclosures RSS feed if not already present.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 5.4 — News content is current</h3>
+  <p><span class="label">What was found:</span> The News listing includes articles dated as recently as 6 July 2026 (audit conducted 22 July 2026), indicating active content operations.</p>
+  <p><span class="label">Why it matters:</span> Freshness signals (to users and to search engines) are healthy here — this is not an area needing a "make it look active" fix.</p>
+  <p><span class="label">Suggested direction:</span> Preserve the existing editorial cadence; ensure the CMS migration doesn't lose publish dates/authorship metadata for existing articles.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 5.5 — Careers pathway routes through a raw third-party redirect link</h3>
+  <p><span class="label">What was found:</span> The careers link on the homepage points to a long, unbranded Microsoft "Safelinks" redirect URL wrapping a third-party <code>jobs2web.com</code> careers portal. The raw URL also exposes an internal NADEC employee email address (<code>em.ishaq@nadec.com.sa</code>) in plain text within the public page source, as an artifact of how the link was copied from an Outlook-forwarded email into the CMS.</p>
+  <p><span class="label">Why it matters:</span> Functionally the link works, but it is unbranded (breaks the user's sense of staying on a trusted NADEC-operated experience) and incidentally exposes an internal staff email address in public HTML — a minor information-hygiene issue worth cleaning up regardless of revamp scope.</p>
+  <p><span class="label">Suggested direction:</span> Replace with a clean, branded URL to the careers/jobs portal (either a direct link or a <code>careers.nadec.com</code>-style redirect the client controls), removing the Safelinks wrapper and the embedded internal email.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 5.6 — Trust/certification signals exist but are not surfaced prominently</h3>
+  <p><span class="label">What was found:</span> ISO 22000 and ISO 9001 certification mentions were found on the deeper <code>/en/quality</code> page, but no certification badges, ISO/SFDA/HACCP marks, or similar trust indicators appear on the homepage or the sampled product page.</p>
+  <p><span class="label">Why it matters:</span> For a food/dairy FMCG brand, quality/safety certifications are a high-value trust signal best placed where most visitors actually land (homepage, product pages) rather than several clicks deep.</p>
+  <p><span class="label">Suggested direction:</span> Surface certification badges/logos in the homepage footer or a dedicated "Quality &amp; Food Safety" trust strip, linking through to the existing <code>/quality</code> content.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 5.7 — No customer testimonials or third-party social proof found</h3>
+  <p><span class="label">What was found:</span> No testimonial content, review snippets, or similar social-proof modules were found on the homepage or product page sampled.</p>
+  <p><span class="label">Why it matters:</span> For a consumer FMCG brand this is a lower-priority gap than for a B2B service business (purchase decisions happen at retail shelf, not on-site), but a "trusted by households since 1981 / award recognitions" module (the site does have an Awards section already) could still strengthen brand credibility on-site.</p>
+  <p><span class="label">Suggested direction:</span> Low priority; consider surfacing existing Awards content as a homepage trust module rather than building net-new testimonial infrastructure.</p>
+</div>
+
+<h2>6. Technical SEO</h2>
+
+<div class="finding">
+  <h3>Finding 6.1 — XML sitemap contains a dead, malformed URL</h3>
+  <p><span class="label">What was found:</span> <code>sitemap.xml</code> includes the literal entry <code>http://www.nadec.com/achievements</code> — using the non-HTTPS scheme and no language prefix. Requesting this exact URL returns <strong>HTTP 404</strong>.</p>
+  <p><span class="label">Why it matters:</span> This is a confirmed, verifiable defect: a URL submitted to search engines via the XML sitemap does not resolve. Sitemap errors like this are flagged directly in Google Search Console's Sitemaps report and can slightly erode crawl-budget efficiency and indexing trust signals.</p>
+  <p><span class="label">Suggested direction:</span> Remove or correct this entry in the new sitemap; ensure the sitemap generator only emits canonical, live, HTTPS URLs (ties to Finding 3.3's broader sitemap regeneration recommendation).</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 6.2 — Sitemap coverage is sparse relative to actual site size</h3>
+  <p><span class="label">What was found:</span> The full <code>sitemap.xml</code> lists only 37 <code>&lt;url&gt;</code> entries — essentially the top-level corporate/informational pages. Individual news articles, product sub-pages, recipe detail pages, and document-library filtered views do not appear to be individually listed.</p>
+  <p><span class="label">Why it matters:</span> A sparse sitemap means search engines rely more heavily on internal-link discovery for deeper content (news articles, recipes), which is less reliable for timely indexing of new content such as press releases or disclosures.</p>
+  <p><span class="label">Suggested direction:</span> In the revamp, generate the sitemap programmatically from actual content types (news, recipes, documents) rather than a curated/manual list, so new content is auto-included.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 6.3 — No structured data (Schema.org/JSON-LD) detected</h3>
+  <p><span class="label">What was found:</span> Zero instances of <code>application/ld+json</code> structured data were found on the homepage.</p>
+  <p><span class="label">Why it matters:</span> For a company of NADEC's profile, <code>Organization</code>/<code>Corporation</code> schema (logo, social profiles, contact points) and, ideally, <code>NewsArticle</code> schema on news pages and <code>BreadcrumbList</code> on deep pages, all support richer search-result presentation (knowledge panel eligibility, sitelinks search box, rich snippets).</p>
+  <p><span class="label">Suggested direction:</span> Add structured data as a standard part of the new template layer — this is a well-understood, low-risk addition with clear SEO upside for a brand-name/public-company query profile.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 6.4 — Inconsistent URL structure (clean URLs vs. <code>/index.php/</code> paths)</h3>
+  <p><span class="label">What was found:</span> Some internal links point to clean URLs (<code>/en/about</code>), while others — including the Investors and Privacy Policy links referenced from the homepage — point to <code>/index.php/en/investors</code> and <code>/index.php/en/privacy-policy</code> style paths. Both resolve, but the pattern is inconsistent.</p>
+  <p><span class="label">Why it matters:</span> This is a low-severity but visible technical inconsistency (Drupal's clean-URL routing is enabled but not consistently used when generating internal links), and can occasionally cause duplicate-URL/canonicalization ambiguity if both forms get linked-to or indexed separately.</p>
+  <p><span class="label">Suggested direction:</span> Normalize all internal link generation to clean URL form during the rebuild; add canonical tags as a safety net regardless.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 6.5 — robots.txt is standard/conservative</h3>
+  <p><span class="label">What was found:</span> <code>robots.txt</code> follows Drupal's default pattern, disallowing admin/system paths only; nothing indexable appears to be unintentionally blocked.</p>
+  <p><span class="label">Why it matters:</span> This is healthy and needs no remediation.</p>
+  <p><span class="label">Suggested direction:</span> Carry forward as-is; revisit only if the new platform changes URL structure.</p>
+</div>
+
+<h2>7. Visual Design &amp; Brand Consistency</h2>
+
+<div class="finding">
+  <h3>Finding 7.1 — Brand color palette is implemented consistently in code</h3>
+  <p><span class="label">What was found:</span> The stylesheet's most-used colors are <code>#2b338c</code>/<code>#2B338C</code> (dark blue, 63 occurrences) and <code>#001971</code> (navy, 32 occurrences), with <code>#7fbc42</code> (green, 19 occurrences) — consistent with the stated NADEC blue/green brand identity.</p>
+  <p><span class="label">Why it matters:</span> This confirms the brand palette is genuinely encoded in the design system rather than applied ad hoc — a solid foundation to carry into the revamp's design tokens.</p>
+  <p><span class="label">Suggested direction:</span> Extract these as formal CSS custom properties/design tokens in the new build (if not already) so brand color governance is centralized rather than repeated as literal hex values throughout the stylesheet.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 7.2 — Leftover default framework colors alongside brand palette</h3>
+  <p><span class="label">What was found:</span> Alongside the brand colors, the stylesheet also contains unmodified Bootstrap default utility colors (<code>#0d6efd</code> primary blue, <code>#198754</code> success green, <code>#dc3545</code> danger red, <code>#ffc107</code> warning, <code>#0dcaf0</code> info, <code>#6c757d</code> secondary gray) at meaningful frequency.</p>
+  <p><span class="label">Why it matters:</span> This suggests the theme was built on top of Bootstrap's default color system without fully remapping every utility class to brand tokens, which can cause inconsistent-looking UI elements (buttons, alerts, badges) that don't quite match the primary brand palette.</p>
+  <p><span class="label">Suggested direction:</span> In the revamp, remap the framework's theme variables (<code>$primary</code>, <code>$secondary</code>, etc., or CSS custom properties if using a newer Bootstrap) to the brand palette at the source, rather than overriding per-component.</p>
+</div>
+
+<div class="finding">
+  <h3>Finding 7.3 — Visual/rendered design quality</h3>
+  <p><span class="label">What was found:</span> Not independently assessed via rendered screenshots in this pass (text/code-level audit only).</p>
+  <p><span class="label">Why it matters:</span> Layout composition, spacing, typography scale, and overall visual polish are best judged from rendered views, not raw HTML/CSS.</p>
+  <p><span class="label">Suggested direction:</span> <span class="flag">Verify visually</span> Recommend a rendered screenshot pass (desktop/tablet/mobile, AR + EN) before finalizing the design-direction section of the proposal, to support specific before/after visual comparisons — these tend to land well in competitive RFP presentations.</p>
+</div>
+
+<h2>8. Mobile Responsiveness (inferred from code; not device-tested)</h2>
+
+<div class="finding">
+  <h3>Finding 8.1 — Responsive framework is genuinely in place</h3>
+  <p><span class="label">What was found:</span> The viewport meta tag is correctly configured (<code>width=device-width, initial-scale=1.0</code>), and the CSS bundle contains 261 <code>@media</code> rules across a full range of breakpoints (376px, 400px, 450px, 500px, 576px, 767px, 768px, 991px, 992px, 1200px, 1399px, 1600px, 1700px) — consistent with a genuinely responsive, Bootstrap-derived grid system rather than a fixed desktop layout with minimal mobile patching.</p>
+  <p><span class="label">Why it matters:</span> This indicates mobile responsiveness is architecturally real, not superficial — a meaningful positive to note in the proposal rather than a gap to sell against.</p>
+  <p><span class="label">Suggested direction:</span> <span class="flag">Verify with tool</span> Confirm with real-device or emulated testing (Chrome DevTools device mode, BrowserStack) at 320/375/768/1024px that touch targets, the accessibility toolbar, and the statistics/carousel widgets behave correctly — code-level inference is a strong signal but not a substitute for rendered verification, especially given the two page-weight/GIF issues already flagged (Finding 2.1–2.2), which will disproportionately affect mobile load times.</p>
+</div>
+
+<h2>Condensed List for Internal Scoping (Design + Dev Estimation)</h2>
+
+<table class="data">
+<tr><th>#</th><th>Item</th><th>Type</th><th>Relative Effort</th></tr>
+<tr><td class="num">1.1</td><td>Decide: rebuild on existing Drupal vs. migrate stack</td><td>Scoping decision</td><td>Determines whole-project sizing</td></tr>
+<tr><td class="num">1.3</td><td>Fix static asset cache headers</td><td>Infra config</td><td>Trivial</td></tr>
+<tr><td class="num">2.1–2.3</td><td>Homepage payload optimization (image compression, WebP/AVIF, responsive images, replace 3 GIFs with CSS/video)</td><td>Performance</td><td>Small–Medium</td></tr>
+<tr><td class="num">3.1</td><td>Decide language-default/redirect strategy for bare domain</td><td>Scoping decision + Small dev</td><td>Small</td></tr>
+<tr><td class="num">3.2, 6.2</td><td>Rebuild sitemap generation + reciprocal hreflang across templates</td><td>Technical SEO</td><td>Small–Medium</td></tr>
+<tr><td class="num">3.4</td><td>RTL QA pass across all key templates</td><td>QA</td><td>Medium (often underestimated)</td></tr>
+<tr><td class="num">3.5</td><td>Confirm/implement tagline as real text, both languages</td><td>Content/Design</td><td>Trivial</td></tr>
+<tr><td class="num">4.2–4.4</td><td>Semantic heading structure, ARIA landmarks, descriptive icon alt text</td><td>Accessibility</td><td>Small–Medium (template-level)</td></tr>
+<tr><td class="num">5.1</td><td>Audience-based IA redesign (Consumer / Investor / Media / Careers)</td><td>UX/IA</td><td>Medium–Large</td></tr>
+<tr><td class="num">5.2</td><td>Clarify e-commerce scope (full store vs. store-locator vs. B2B portal)</td><td>Scoping decision</td><td>Determines a major cost variable</td></tr>
+<tr><td class="num">5.3</td><td>Migrate investor documents library with URL/redirect integrity</td><td>Content migration</td><td>Medium</td></tr>
+<tr><td class="num">5.5</td><td>Replace careers link with clean branded URL</td><td>Content fix</td><td>Trivial</td></tr>
+<tr><td class="num">5.6</td><td>Surface ISO/quality certifications on homepage/product pages</td><td>Content/Design</td><td>Small</td></tr>
+<tr><td class="num">6.1, 6.3, 6.4</td><td>Fix sitemap dead URL, add structured data, normalize clean URLs</td><td>Technical SEO</td><td>Small–Medium</td></tr>
+<tr><td class="num">7.1–7.2</td><td>Formalize brand design tokens; remap framework default colors to brand palette</td><td>Design system</td><td>Medium</td></tr>
+<tr><td class="num">8.1</td><td>Device/emulator responsive QA pass</td><td>QA</td><td>Small–Medium</td></tr>
+</table>
+
+<p><strong>Items requiring tools not available in this pass</strong> (recommend running before finalizing the proposal's performance claims):</p>
+<ul>
+  <li>Lighthouse / PageSpeed Insights (LCP, INP, CLS field + lab data) for both AR and EN homepages</li>
+  <li>Rendered screenshot comparison across breakpoints and both languages</li>
+  <li>Real-device RTL layout QA</li>
+  <li>Browser console error check (JS errors not visible via static HTML inspection)</li>
+</ul>
+
+<hr class="divider">
+<p class="closing">Findings are based on direct inspection of publicly accessible pages, HTTP headers, robots.txt/sitemap.xml, and CSS assets on 22 July 2026. No credentials, admin access, or private analytics data were used. Figures marked "Verify with tool" or "Verify visually" should be confirmed with the appropriate tooling before being quoted as final metrics in the client-facing proposal.</p>
+
+</body>
+</html>
