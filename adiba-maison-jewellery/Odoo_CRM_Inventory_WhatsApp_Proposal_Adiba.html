@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odoo 19 Proposal — Adiba Maison Jewellery</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:        #1D4ED8;
+  --blue-dark:   #0F2057;
+  --blue-mid:    #3B82F6;
+  --blue-light:  #DBEAFE;
+  --blue-pale:   #EFF6FF;
+  --gold:        #B8860B;
+  --gold-bg:     #FDF6E3;
+  --gold-border: #E8D28A;
+  --green:       #059669;
+  --green-bg:    #D1FAE5;
+  --amber:       #D97706;
+  --amber-bg:    #FEF3C7;
+  --red:         #B91C1C;
+  --red-bg:      #FEE2E2;
+  --ink:         #0F172A;
+  --ink-soft:    #475569;
+  --border:      #E2E8F0;
+  --stripe:      #F8FAFC;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #CBD5E1;
+  color: var(--ink);
+  font-size: 10px;
+  line-height: 1.6;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.16);
+  display: flex;
+  flex-direction: column;
+}
+
+@media print {
+  body { background: none; }
+  .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+}
+@page { size: A4; margin: 0; }
+
+/* ── COVER ── */
+.cover {
+  background: #fff;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  border-top: 5px solid var(--blue-dark);
+  padding: 36px 40px 32px;
+}
+.cover-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+.logo-tagline { font-size: 8px; color: var(--ink-soft); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 4px; }
+.cover-date-badge { background: var(--blue-pale); border: 1px solid var(--blue-light); border-radius: 6px; padding: 6px 12px; text-align: right; }
+.cover-date-badge .label { font-size: 7.5px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.5px; }
+.cover-date-badge .val   { font-size: 10px; font-weight: 600; color: var(--blue-dark); }
+.cover-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 0 24px; }
+.cover-tag { display: inline-block; background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-border); font-size: 8px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; margin-bottom: 16px; width: fit-content; }
+.cover-title { font-size: 32px; font-weight: 900; color: var(--blue-dark); line-height: 1.1; letter-spacing: -1.2px; margin-bottom: 10px; }
+.cover-subtitle { font-size: 11.5px; color: var(--ink-soft); font-weight: 400; margin-bottom: 28px; line-height: 1.6; }
+.cover-divider { width: 56px; height: 3px; background: var(--gold); border-radius: 2px; margin-bottom: 28px; }
+.cover-cred { background: var(--blue-pale); border: 1px solid var(--blue-light); border-left: 4px solid var(--blue); border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 9px; color: var(--blue-dark); line-height: 1.6; }
+.cover-cred strong { font-weight: 700; }
+.meta-table { width: 100%; border-collapse: collapse; }
+.meta-table td { padding: 7.5px 12px; font-size: 9.5px; border-bottom: 1px solid var(--border); }
+.meta-table td:first-child { width: 34%; color: var(--ink-soft); font-weight: 500; background: var(--stripe); }
+.meta-table td:last-child { color: var(--ink); font-weight: 600; }
+.meta-table tr:first-child td { border-top: 1px solid var(--border); }
+.cover-footer-note { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); font-size: 7.5px; color: var(--ink-soft); line-height: 1.5; }
+
+/* ── INNER LAYOUT ── */
+.inner-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; border-bottom: 1px solid var(--border); background: var(--blue-pale); flex-shrink: 0; }
+.ih-title { font-size: 8px; font-weight: 700; color: var(--blue-dark); letter-spacing: 0.3px; }
+.ih-sub   { font-size: 7.5px; color: var(--ink-soft); }
+.inner-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding: 9px 28px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.if-left  { font-size: 7.5px; color: var(--ink-soft); }
+.if-page  { font-size: 7.5px; color: var(--ink-soft); font-weight: 600; }
+.if-right { font-size: 7.5px; color: var(--blue-dark); font-weight: 600; }
+.content  { flex: 1; padding: 18px 28px; display: flex; flex-direction: column; gap: 15px; }
+
+/* ── HEADINGS ── */
+.sec-title { font-size: 12px; font-weight: 800; color: var(--blue-dark); letter-spacing: -0.3px; padding-bottom: 6px; border-bottom: 2px solid var(--blue-light); margin-bottom: 9px; }
+.sec-title span { display: inline-block; background: var(--blue-dark); color: #fff; font-size: 7.5px; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-right: 7px; vertical-align: middle; }
+
+/* ── PAIN TABLE ── */
+.pain-table { width: 100%; border-collapse: collapse; }
+.pain-table th { padding: 6px 10px; text-align: left; font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); }
+.pain-table th:first-child { color: var(--red); width: 43%; }
+.pain-table th:last-child  { color: var(--green); }
+.pain-table td { padding: 7px 10px; font-size: 8px; vertical-align: top; border-bottom: 1px solid var(--border); line-height: 1.45; }
+.pain-table tr:nth-child(even) td { background: var(--stripe); }
+.pain-table td:first-child { color: var(--ink-soft); }
+.pain-table td:last-child  { color: var(--ink); font-weight: 500; }
+.pain-table td:last-child::before { content: '→ '; color: var(--blue-mid); font-weight: 700; }
+
+/* ── MODULE HEADER BAR ── */
+.module-bar { display: flex; gap: 8px; }
+.module-chip { flex: 1; border-radius: 8px; padding: 9px 12px; display: flex; align-items: center; gap: 8px; }
+.module-chip .mi { font-size: 18px; }
+.module-chip .mt { font-size: 9px; font-weight: 800; }
+.module-chip .ms { font-size: 7px; opacity: 0.85; margin-top: 1px; }
+.module-chip.crm  { background: var(--blue-pale); border: 1px solid var(--blue-light); }
+.module-chip.crm .mt, .module-chip.crm .ms { color: var(--blue-dark); }
+.module-chip.inv  { background: var(--gold-bg); border: 1px solid var(--gold-border); }
+.module-chip.inv .mt, .module-chip.inv .ms { color: #7A5A00; }
+.module-chip.wa   { background: #E7F9F1; border: 1px solid #A7E6C8; }
+.module-chip.wa .mt, .module-chip.wa .ms { color: #0B6B4E; }
+
+/* ── ADMIN BOX ── */
+.admin-box { background: var(--blue-pale); border: 1px solid var(--blue-light); border-left: 4px solid var(--blue); border-radius: 8px; padding: 10px 14px; }
+.admin-box-title { font-size: 8.5px; font-weight: 700; color: var(--blue-dark); margin-bottom: 7px; }
+.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; }
+.ag-item { font-size: 8px; color: var(--ink-soft); padding-left: 11px; position: relative; line-height: 1.4; }
+.ag-item::before { content: '›'; position: absolute; left: 0; color: var(--blue-mid); font-weight: 700; }
+
+/* ── USER ROLE CARDS ── */
+.role-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.role-card { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; }
+.role-card.admin { border-color: var(--blue); }
+.role-card.daily { border-color: var(--gold-border); }
+.role-head { padding: 9px 12px; font-size: 9.5px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 7px; }
+.role-head.admin { background: var(--blue-dark); }
+.role-head.daily { background: #8A6A00; }
+.role-body { padding: 9px 12px; display: flex; flex-direction: column; gap: 3px; }
+.role-body .ri { font-size: 8px; color: var(--ink-soft); padding-left: 11px; position: relative; line-height: 1.4; }
+.role-body .ri::before { content: '›'; position: absolute; left: 0; color: var(--blue-mid); font-weight: 700; }
+
+/* ── INTEGRATION CARDS ── */
+.int-card { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.int-head { display: flex; align-items: center; gap: 8px; padding: 9px 12px; font-size: 9.5px; font-weight: 700; color: #fff; }
+.int-head.wa    { background: #128C7E; }
+.int-head.inv { background: #8A6A00; }
+.int-body { padding: 10px 12px; }
+.int-body ul { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.int-body ul li { font-size: 8px; color: var(--ink-soft); padding-left: 11px; position: relative; line-height: 1.4; }
+.int-body ul li::before { content: '›'; position: absolute; left: 0; color: var(--blue-mid); font-weight: 700; }
+.ksa-note { background: #FFF7ED; border: 1px solid #FED7AA; border-left: 4px solid var(--amber); border-radius: 6px; padding: 8px 12px; font-size: 8px; color: #92400E; line-height: 1.5; }
+.ksa-note strong { font-weight: 700; }
+
+/* ── FEATURE TILES ── */
+.feat-grid-visual { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.feat-tile { border: 1px solid var(--border); border-radius: 10px; padding: 14px 12px 12px; background: #fff; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.feat-tile.crm-t { border-top: 3px solid var(--blue-mid); }
+.feat-tile.inv-t { border-top: 3px solid var(--gold); }
+.feat-tile.wa-t  { border-top: 3px solid #128C7E; }
+.feat-icon-wrap { width: 36px; height: 36px; background: var(--blue-pale); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.feat-name { font-size: 9.5px; font-weight: 800; color: var(--blue-dark); line-height: 1.2; }
+.feat-desc { font-size: 8px; color: var(--ink-soft); line-height: 1.5; }
+
+/* ── INVESTMENT ── */
+.invest-box { background: var(--green-bg); border: 1px solid #6EE7B7; border-radius: 8px; padding: 12px 14px; }
+.invest-title { font-size: 7.5px; font-weight: 700; color: var(--blue-dark); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.invest-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; background: #fff; border: 1px solid #6EE7B7; border-radius: 6px; margin-bottom: 6px; }
+.invest-row:last-child { margin-bottom: 0; }
+.invest-name { font-size: 9.5px; font-weight: 700; color: var(--ink); }
+.invest-sub  { font-size: 7.5px; color: var(--ink-soft); margin-top: 2px; }
+.invest-val  { display: flex; align-items: center; gap: 3px; font-size: 17px; font-weight: 900; color: var(--blue-dark); white-space: nowrap; }
+.riyal { height: 14px; filter: brightness(0) saturate(100%) invert(8%) sepia(60%) saturate(900%) hue-rotate(200deg) brightness(60%); }
+
+/* ── REC BOX ── */
+.rec-box { background: var(--blue-dark); color: #fff; border-radius: 10px; padding: 14px 18px; }
+.rec-title { font-size: 11px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 5px; }
+.rec-body  { font-size: 8.5px; color: rgba(255,255,255,0.82); line-height: 1.6; margin-bottom: 10px; }
+.rec-steps { display: flex; flex-direction: column; gap: 5px; }
+.rec-step  { display: flex; align-items: flex-start; gap: 9px; }
+.sn { width: 18px; height: 18px; border-radius: 50%; background: var(--blue-mid); color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.st { font-size: 8.5px; color: rgba(255,255,255,0.85); line-height: 1.5; padding-top: 1px; }
+.st strong { color: #fff; }
+
+/* ── PILL ROW ── */
+.pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.pill { background: var(--blue-light); color: var(--blue-dark); font-size: 7.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; }
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — COVER
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-header">
+      <div>
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" style="height:30px; margin-bottom:4px; display:block;">
+        <div class="logo-tagline">Digital Transformation Partner</div>
+      </div>
+      <div class="cover-date-badge">
+        <div class="label">Prepared</div>
+        <div class="val">3 August 2026</div>
+      </div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-tag">Odoo 19 — CRM · Inventory · WhatsApp Marketing</div>
+      <div class="cover-title">Beyond the Till.<br>One System for Every Piece.</div>
+      <div class="cover-subtitle">
+        A solution proposal for Adiba Maison Jewellery — extending your existing Odoo POS with<br>
+        CRM, Inventory, and WhatsApp Marketing so every customer, every piece, and every message lives in one place.
+      </div>
+
+      <div class="cover-divider"></div>
+
+      <div style="margin:8px 0 18px;">
+        <div style="font-size:20px; font-weight:900; color:var(--gold); letter-spacing:-0.3px;">Adiba Maison Jewellery</div>
+      </div>
+
+      <div class="cover-cred">
+        Adiba Maison Jewellery already runs <strong>Odoo POS</strong> at the counter. This proposal covers the natural
+        next step — adding <strong>CRM, Inventory, and WhatsApp Marketing</strong> on the same Odoo platform, so stock,
+        customers, and communication are no longer separate from the till.
+      </div>
+
+      <table class="meta-table">
+        <tr><td>Client</td>            <td>Adiba Maison Jewellery — Jewellery Retail, KSA</td></tr>
+        <tr><td>Prepared by</td>       <td>CodeOx · shabeeb.k@code-ox.com · +966 53 571 6437</td></tr>
+        <tr><td>Platform</td>          <td>Odoo 19 (Existing installation — POS already live)</td></tr>
+        <tr><td>Current Users</td>     <td>1 User</td></tr>
+        <tr><td>Recommended Users</td> <td>2 Users — 1 Admin/Owner + 1 Daily Operations</td></tr>
+        <tr><td>Modules Added</td>     <td>CRM · Inventory · WhatsApp Marketing</td></tr>
+        <tr><td>Investment</td>        <td>SAR 8,000 — One-Time Implementation Fee</td></tr>
+        <tr><td>Document Ref</td>      <td>ADB-ODOO-2026-01 · Version 1.0</td></tr>
+      </table>
+    </div>
+
+    <div class="cover-footer-note">
+      This document is prepared exclusively for Adiba Maison Jewellery and is confidential. Pricing and timelines are indicative pending a discovery session.
+      &copy; 2026 CodeOx. All rights reserved. &nbsp;·&nbsp; code-ox.com
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — WHERE YOU STAND TODAY
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Where Adiba Stands Today &amp; What Changes</div>
+    <div class="ih-sub">ADB-ODOO-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>01</span>Today: POS Only</div>
+      <div class="module-bar">
+        <div class="module-chip crm" style="opacity:0.5;"><div class="mi">👥</div><div><div class="mt">CRM</div><div class="ms">Not active</div></div></div>
+        <div class="module-chip inv" style="opacity:0.5;"><div class="mi">💍</div><div><div class="mt">Inventory</div><div class="ms">Not active</div></div></div>
+        <div class="module-chip wa" style="opacity:0.5;"><div class="mi">💬</div><div><div class="mt">WhatsApp</div><div class="ms">Not active</div></div></div>
+      </div>
+      <p style="font-size:8px; color:var(--ink-soft); margin-top:6px; line-height:1.5;">
+        Odoo POS handles the sale at the counter — but everything before and after the sale (who the customer is,
+        what stock is really available, and how you follow up) still happens outside the system.
+      </p>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>02</span>What POS-Only Is Costing You</div>
+      <table class="pain-table">
+        <thead><tr><th>Today — POS Only</th><th>With CRM + Inventory + WhatsApp</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Customer purchase history lives only in scattered receipts — no single profile per customer</td>
+            <td>Every customer has one record: purchases, preferences, and occasions (weddings, Eid, anniversaries) in one place</td>
+          </tr>
+          <tr>
+            <td>Stock is counted at the till, not tracked by weight, purity, or piece — hard to know real-time stock across categories</td>
+            <td>Inventory tracked by weight, karat/purity, category, and item — accurate stock visible any time, not just at checkout</td>
+          </tr>
+          <tr>
+            <td>Custom order and bespoke piece requests are tracked on paper or memory — easy to lose or delay</td>
+            <td>CRM opportunity per custom order — status, deadline, and customer tied together, nothing forgotten</td>
+          </tr>
+          <tr>
+            <td>New arrivals, offers, and repair/order updates go out by personal phone calls — inconsistent, no record</td>
+            <td>WhatsApp Business messages sent from Odoo — order confirmations, repair status, and new collection broadcasts, all logged</td>
+          </tr>
+          <tr>
+            <td>Owner has no live view of stock or customer activity without asking staff or checking the counter</td>
+            <td>Owner dashboard: stock levels, top customers, and sales activity visible any time, from any device</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>03</span>One Platform, Same Odoo You Already Use</div>
+      <div class="admin-box">
+        <div class="admin-box-title">CRM, Inventory, and WhatsApp Marketing install directly into your existing Odoo — POS keeps working exactly as it does today.</div>
+        <div class="admin-grid">
+          <div class="ag-item">No new software to learn from scratch — same Odoo login, new modules alongside POS</div>
+          <div class="ag-item">POS sales automatically reduce inventory stock — no manual recount needed</div>
+          <div class="ag-item">Walk-in customers captured at POS flow straight into CRM for follow-up</div>
+          <div class="ag-item">Stock levels update in real time as pieces are sold, received, or transferred</div>
+          <div class="ag-item">WhatsApp messages linked to the customer's CRM record — full history in one thread</div>
+          <div class="ag-item">Everything accessible from desktop or the Odoo mobile app</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">CodeOx · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">Page 2 of 5</div>
+    <div class="if-right">Confidential — Adiba Maison Jewellery</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — FEATURES
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">CRM · Inventory · WhatsApp Marketing — Everything Included</div>
+    <div class="ih-sub">ADB-ODOO-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>04</span>Features — At a Glance</div>
+      <div class="feat-grid-visual">
+
+        <div class="feat-tile crm-t">
+          <div class="feat-icon-wrap">🗂️</div>
+          <div class="feat-name">Customer Profiles &amp; History</div>
+          <div class="feat-desc">One record per customer — every purchase, preference, and occasion. Find any customer's full history in seconds.</div>
+        </div>
+
+        <div class="feat-tile crm-t">
+          <div class="feat-icon-wrap">💍</div>
+          <div class="feat-name">Custom Order Tracking</div>
+          <div class="feat-desc">Bespoke pieces and special requests tracked as CRM opportunities — status, deadline, and customer linked together.</div>
+        </div>
+
+        <div class="feat-tile crm-t">
+          <div class="feat-icon-wrap">🔔</div>
+          <div class="feat-name">Follow-Up Reminders</div>
+          <div class="feat-desc">Odoo reminds staff to follow up on quotes, repairs, and occasions (weddings, Eid, anniversaries) — no customer forgotten.</div>
+        </div>
+
+        <div class="feat-tile inv-t">
+          <div class="feat-icon-wrap">⚖️</div>
+          <div class="feat-name">Stock by Weight &amp; Purity</div>
+          <div class="feat-desc">Track pieces by weight, karat/purity, and category — not just a generic quantity count.</div>
+        </div>
+
+        <div class="feat-tile inv-t">
+          <div class="feat-icon-wrap">📦</div>
+          <div class="feat-name">Real-Time Stock Visibility</div>
+          <div class="feat-desc">POS sales auto-deduct stock. Know exactly what's on hand, without a manual recount at the counter.</div>
+        </div>
+
+        <div class="feat-tile inv-t">
+          <div class="feat-icon-wrap">⚠️</div>
+          <div class="feat-name">Low-Stock Alerts</div>
+          <div class="feat-desc">Get notified before a fast-moving category runs out — reorder before you lose a sale.</div>
+        </div>
+
+        <div class="feat-tile wa-t">
+          <div class="feat-icon-wrap">💬</div>
+          <div class="feat-name">WhatsApp Business Messaging</div>
+          <div class="feat-desc">Message customers directly from Odoo. Full conversation history logged on their CRM record — nothing on personal phones.</div>
+        </div>
+
+        <div class="feat-tile wa-t">
+          <div class="feat-icon-wrap">🔧</div>
+          <div class="feat-name">Order &amp; Repair Updates</div>
+          <div class="feat-desc">Automated WhatsApp updates for custom order and repair status — customers stay informed without a phone call.</div>
+        </div>
+
+        <div class="feat-tile wa-t">
+          <div class="feat-icon-wrap">📣</div>
+          <div class="feat-name">Broadcast Campaigns</div>
+          <div class="feat-desc">Announce new collections, Eid or wedding-season offers, and promotions to your customer list in one send.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>05</span>Two Users, Two Roles</div>
+      <div class="role-row">
+        <div class="role-card admin">
+          <div class="role-head admin"><span style="font-size:15px;">👑</span>&nbsp; Admin / Owner</div>
+          <div class="role-body">
+            <div class="ri">Full visibility across CRM, Inventory, and POS</div>
+            <div class="ri">Sales reports, stock valuation, and customer analytics</div>
+            <div class="ri">Approves pricing, discounts, and stock adjustments</div>
+            <div class="ri">Sends WhatsApp broadcast campaigns</div>
+          </div>
+        </div>
+        <div class="role-card daily">
+          <div class="role-head daily"><span style="font-size:15px;">🧑‍💼</span>&nbsp; Daily Operations</div>
+          <div class="role-body">
+            <div class="ri">Runs POS sales — no change to current workflow</div>
+            <div class="ri">Logs walk-in customers and custom order requests into CRM</div>
+            <div class="ri">Updates stock on receiving and transfers</div>
+            <div class="ri">Sends order and repair status updates via WhatsApp</div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:7.5px; color:var(--ink-soft); margin-top:6px; line-height:1.5;">
+        Splitting Admin and Daily Operations keeps pricing and reporting control with the owner, while daily staff work
+        without needing owner-level access — standard practice for a single-outlet retail setup moving from 1 to 2 users.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">CodeOx · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">Page 3 of 5</div>
+    <div class="if-right">Confidential — Adiba Maison Jewellery</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 4 — CRM/WHATSAPP IN ACTION + INTEGRATION
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">See It in Action · WhatsApp &amp; Inventory Integration</div>
+    <div class="ih-sub">ADB-ODOO-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>06</span>Customer &amp; Communication Record</div>
+      <div style="border:1px solid var(--border); border-radius:10px; overflow:hidden; box-shadow:0 2px 16px rgba(0,0,0,0.08);">
+        <img src="screenshots/crm_communication.webp" alt="Odoo Customer Record" style="width:100%; display:block; max-height:60mm; object-fit:cover; object-position:top;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 12px; background:var(--stripe); border-top:1px solid var(--border);">
+          <span style="font-size:7.5px; color:var(--ink-soft);">Customer record — purchase history, planned activities, and WhatsApp communication in one view</span>
+          <span style="font-size:7px; color:var(--blue-dark); font-weight:600; white-space:nowrap; margin-left:12px;">Source: odoo.com</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-title"><span>07</span>WhatsApp &amp; Inventory — Built for Jewellery Retail</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="int-card">
+          <div class="int-head wa"><span style="font-size:15px;">💬</span>&nbsp; WhatsApp Marketing</div>
+          <div class="int-body">
+            <ul>
+              <li>Message customers directly from their CRM record</li>
+              <li>Full WhatsApp thread saved permanently</li>
+              <li>Pre-approved templates for order &amp; repair updates</li>
+              <li>Broadcast new collections to your customer list</li>
+              <li>One shared business number — no personal phones</li>
+            </ul>
+          </div>
+        </div>
+        <div class="int-card">
+          <div class="int-head inv"><span style="font-size:15px;">💍</span>&nbsp; Inventory</div>
+          <div class="int-body">
+            <ul>
+              <li>Fields for weight, karat/purity, and stone details</li>
+              <li>Category-wise stock: rings, necklaces, bangles, sets</li>
+              <li>Stock auto-deducted on every POS sale</li>
+              <li>Receiving and adjustment logged with full audit trail</li>
+              <li>Low-stock alerts by category</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="ksa-note">
+        <strong>KSA Context:</strong> WhatsApp is the primary customer channel in Saudi Arabia — especially for high-value,
+        relationship-driven purchases like jewellery. Odoo's native integration keeps every conversation on record, not on a personal device.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">CodeOx · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">Page 4 of 5</div>
+    <div class="if-right">Confidential — Adiba Maison Jewellery</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE 5 — INVESTMENT & RECOMMENDATION
+     ══════════════════════════════════════════ -->
+<div class="page">
+  <div class="inner-header">
+    <div class="ih-title">Investment &amp; Recommendation</div>
+    <div class="ih-sub">ADB-ODOO-2026-01 · Confidential</div>
+  </div>
+
+  <div class="content">
+
+    <div>
+      <div class="sec-title"><span>08</span>Investment Summary</div>
+      <div class="invest-box">
+        <div class="invest-title">One-Time Implementation — Paid to CodeOx</div>
+        <div class="invest-row">
+          <div>
+            <div class="invest-name">CRM + Inventory + WhatsApp Marketing — Setup, Configuration &amp; Training</div>
+            <div class="invest-sub">2 users (Admin/Owner + Daily Operations) · One-time · <span style="color:#B91C1C; font-weight:600;">Exclusive of VAT</span></div>
+          </div>
+          <div class="invest-val"><img src="Saudi_Riyal_Symbol.svg.png" class="riyal">8,000</div>
+        </div>
+        <p style="font-size:7.5px; color:var(--ink-soft); margin-top:2px; line-height:1.5;">
+          Odoo user licence fees are billed directly by Odoo per your subscription plan and are separate from this fee.
+          Adiba currently holds a 1-user licence for POS — moving to 2 users requires an upgrade on the Odoo plan,
+          which we will confirm exact pricing for during the discovery session.
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <div class="rec-box">
+        <div class="rec-title">CodeOx Recommendation — Add CRM, Inventory &amp; WhatsApp on Your Existing Odoo</div>
+        <div class="rec-body">
+          Adiba's POS is already live on Odoo — the fastest, lowest-risk path is extending the same platform rather than
+          adopting new software. CRM captures every customer relationship, Inventory brings weight- and purity-level
+          stock control, and WhatsApp Marketing keeps every customer conversation on record. Two users — Admin/Owner and
+          Daily Operations — gives the owner full oversight while daily staff work independently.
+        </div>
+        <div class="rec-steps">
+          <div class="rec-step">
+            <div class="sn">1</div>
+            <div class="st"><strong>Discovery Session</strong> — CodeOx maps Adiba's exact stock categories, customer touchpoints, and WhatsApp workflow.</div>
+          </div>
+          <div class="rec-step">
+            <div class="sn">2</div>
+            <div class="st"><strong>Setup &amp; Configuration</strong> — CRM, Inventory (weight/karat fields), WhatsApp Business API, and 2 user roles configured on your existing Odoo.</div>
+          </div>
+          <div class="rec-step">
+            <div class="sn">3</div>
+            <div class="st"><strong>Training &amp; Go-Live</strong> — Admin and Daily Operations users trained. Adiba goes live with CodeOx on standby support.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <div class="if-left">CodeOx · shabeeb.k@code-ox.com · +966 53 571 6437</div>
+    <div class="if-page">Page 5 of 5</div>
+    <div class="if-right">Confidential — Adiba Maison Jewellery</div>
+  </div>
+</div>
+
+</body>
+</html>
