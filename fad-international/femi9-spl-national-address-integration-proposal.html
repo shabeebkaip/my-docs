@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>femi9 — SPL National Address Integration · Capability Brief FAD-FEMI9-2026-SPL-01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body, table, td, th, div, p, span, ul, li { direction: ltr; text-align: left; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #D0D5DF;
+      color: #1A202C;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 24px;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.14);
+    }
+
+    @media print {
+      body { background: none; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+      }
+    }
+
+    @page { size: A4; margin: 0; }
+
+    /* ══════════════════════════════
+       COVER PAGE
+    ══════════════════════════════ */
+    .cover {
+      background: #091827;
+      color: #fff;
+      min-height: 297mm;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .cover-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none; z-index: 1;
+    }
+
+    .cover-accent-bar {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 5px;
+      background: linear-gradient(180deg, #1A6BFF 0%, rgba(26,107,255,0.2) 100%);
+      z-index: 3;
+    }
+
+    .cover-topbar {
+      position: relative; z-index: 2;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 26px 16px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .cover-topbar-left { display: flex; align-items: center; gap: 14px; }
+
+    .cover-client-name { font-size: 15.5px; font-weight: 700; color: #fff; }
+    .cover-client-sub  { font-size: 10.5px; color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+
+    .cover-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.13); }
+
+    .cover-prepby-label { font-size: 10px; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2px; }
+    .cover-prepby-name  { font-size: 15.5px; font-weight: 600; color: #fff; }
+
+    .doc-type-pill {
+      border: 1.5px solid #1A6BFF; color: #1A6BFF;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 6px 13px; border-radius: 4px;
+    }
+
+    .cover-hero {
+      position: relative; z-index: 2; flex: 1;
+      display: flex; flex-direction: column;
+      padding: 32px 26px 0 32px;
+    }
+
+    .cover-overline {
+      font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.38);
+      letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px;
+    }
+
+    .cover-title {
+      font-size: 40px; font-weight: 800; line-height: 1.1; color: #fff; margin-bottom: 6px;
+    }
+    .cover-title-accent { color: #1A6BFF; }
+
+    .cover-subtitle {
+      font-size: 14px; color: rgba(255,255,255,0.5);
+      line-height: 1.65; max-width: 420px; margin-bottom: 26px;
+    }
+
+    .cover-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 30px; }
+
+    .cover-tag {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 4px; padding: 5px 11px;
+      font-size: 12px; color: rgba(255,255,255,0.65);
+    }
+    .cover-tag strong { color: #fff; font-weight: 600; }
+
+    .cover-ref-box {
+      position: relative; z-index: 2;
+      margin: 0 26px 14px 32px;
+      background: rgba(26,107,255,0.07);
+      border: 1px solid rgba(26,107,255,0.22);
+      border-radius: 6px;
+      display: grid; grid-template-columns: repeat(4,1fr);
+      overflow: hidden;
+    }
+    .cover-ref-item {
+      padding: 14px 16px;
+      border-right: 1px solid rgba(26,107,255,0.12);
+    }
+    .cover-ref-item:last-child { border-right: none; }
+    .cover-ref-label { font-size: 9.5px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 5px; }
+    .cover-ref-value { font-size: 13.5px; font-weight: 600; color: #fff; }
+    .cover-ref-value.teal { color: #1A6BFF; }
+
+    .cover-total-banner {
+      position: relative; z-index: 2;
+      margin: 0 26px 14px 32px;
+      background: #1A6BFF;
+      border-radius: 6px;
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cover-total-label { font-size: 10.5px; font-weight: 700; color: #0B2C6B; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 3px; }
+    .cover-total-amount { font-size: 28.5px; font-weight: 800; color: #091827; line-height: 1; }
+    .cover-total-sub { font-size: 12px; color: rgba(9,24,39,0.6); margin-top: 3px; }
+    .cover-total-right { text-align: right; }
+    .cover-total-vat-label { font-size: 10.5px; color: rgba(9,24,39,0.55); margin-bottom: 3px; }
+    .cover-total-vat-amount { font-size: 16.5px; font-weight: 700; color: #091827; }
+
+    .cover-note {
+      position: relative; z-index: 2;
+      margin: 0 26px 20px 32px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 5px; padding: 12px 16px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .cover-note-label { font-size: 9.5px; font-weight: 700; color: #1A6BFF; letter-spacing: 0.13em; text-transform: uppercase; white-space: nowrap; margin-top: 2px; min-width: 76px; flex-shrink: 0; }
+    .cover-note-text  { font-size: 12px; color: rgba(255,255,255,0.52); line-height: 1.65; }
+
+    .cover-footer {
+      position: relative; z-index: 2;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 13px 26px 13px 32px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .cover-footer img { height: 34px; filter: brightness(0) invert(1); opacity: 0.9; }
+    .cover-footer-sep { width: 1px; height: 14px; background: rgba(255,255,255,0.14); }
+    .cover-footer-text { font-size: 10.5px; color: rgba(255,255,255,0.38); }
+
+    /* ══════════════════════════════
+       INNER PAGES
+    ══════════════════════════════ */
+    .inner-page { display: flex; flex-direction: column; min-height: 297mm; }
+
+    .inner-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 26px;
+      border-bottom: 1px solid #E2E8F0;
+      background: #FAFBFC;
+    }
+    .inner-header img { height: 28px; }
+    .inner-header-title { font-size: 11px; color: #64748B; }
+    .inner-header-ref   { font-size: 11px; color: #94A3B8; }
+
+    .inner-content { flex: 1; padding: 26px 26px; }
+
+    .inner-footer {
+      border-top: 1px solid #E2E8F0;
+      padding: 11px 26px;
+      display: flex; align-items: center; gap: 10px;
+      background: #FAFBFC;
+    }
+    .inner-footer img { height: 22px; opacity: 0.85; }
+    .inner-footer-sep { width: 1px; height: 11px; background: #CBD5E1; }
+    .inner-footer-text { font-size: 9.5px; color: #94A3B8; flex: 1; }
+    .inner-footer-page { font-size: 10px; color: #94A3B8; font-weight: 500; }
+
+    .section-label {
+      font-size: 10px; font-weight: 700; color: #1A6BFF;
+      text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 7px;
+    }
+    .section-heading {
+      font-size: 26px; font-weight: 800; color: #0F172A;
+      margin-bottom: 10px; line-height: 1.15;
+    }
+    .section-intro {
+      font-size: 12.5px; color: #475569; line-height: 1.72; margin-bottom: 16px;
+    }
+
+    .part-banner {
+      background: #091827; color: #fff;
+      border-radius: 6px; padding: 13px 16px;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 16px;
+    }
+    .part-badge {
+      width: 28px; height: 28px; min-width: 28px;
+      border-radius: 50%; background: #1A6BFF;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: #091827;
+    }
+    .part-banner-sub   { font-size: 9.5px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2px; }
+    .part-banner-title { font-size: 15.5px; font-weight: 700; }
+
+    .note-box {
+      border-radius: 5px; padding: 12px 14px;
+      font-size: 12px; line-height: 1.65; margin-bottom: 14px;
+    }
+    .note-box.teal  { background: #EFF4FF; border: 1px solid #C7DBFF; border-left: 3px solid #1A6BFF; }
+    .note-box.amber { background: #FFFBEB; border: 1px solid #FDE68A; border-left: 3px solid #F59E0B; }
+    .note-box.navy  { background: #F0F4F8; border: 1px solid #CBD5E1; border-left: 3px solid #091827; }
+    .note-box .note-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; margin-bottom: 5px;
+    }
+    .note-box.teal  .note-label { color: #1D4ED8; }
+    .note-box.amber .note-label { color: #B45309; }
+    .note-box.navy  .note-label { color: #334155; }
+    .note-box p     { color: #374151; }
+    .note-box strong { font-weight: 600; }
+
+    .section-hr { border: none; border-top: 1px solid #E2E8F0; margin: 18px 0; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 16px; }
+    .info-card { border: 1px solid #E2E8F0; border-radius: 6px; padding: 12px 13px; }
+    .info-card-label { font-size: 11px; font-weight: 700; color: #0F172A; margin-bottom: 3px; }
+    .info-card-value { font-size: 12px; color: #64748B; line-height: 1.55; }
+
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-bottom: 14px;
+      direction: ltr;
+    }
+    .pricing-table thead th {
+      background: #091827;
+      color: #fff;
+      padding: 9px 10px;
+      text-align: left;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      direction: ltr;
+    }
+    .pricing-table tbody tr:nth-child(even) { background: #F8FAFC; }
+    .pricing-table tbody td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #EEF2F7;
+      color: #334155;
+      vertical-align: top;
+      line-height: 1.45;
+      text-align: left;
+      direction: ltr;
+    }
+    .pricing-table .row-num {
+      font-size: 10px;
+      color: #94A3B8;
+      font-weight: 600;
+      min-width: 18px;
+      text-align: left;
+    }
+    .pricing-table .module-name {
+      font-weight: 600;
+      color: #0F172A;
+      display: block;
+      margin-bottom: 2px;
+      text-align: left;
+    }
+    .pricing-table .module-desc {
+      font-size: 10px;
+      color: #64748B;
+      line-height: 1.4;
+      text-align: left;
+    }
+    .pricing-table code {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 10px;
+      background: #EEF2F7;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #1D4ED8;
+    }
+
+    .assumptions-list { list-style: none; margin-bottom: 14px; }
+    .assumptions-list li {
+      display: flex; align-items: flex-start; gap: 9px;
+      padding: 8px 10px;
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 12px; color: #334155; line-height: 1.55;
+    }
+    .assumptions-list li:first-child { border-top: 1px solid #F1F5F9; }
+    .assumptions-list li:nth-child(even) { background: #FAFBFD; }
+    .assumption-icon {
+      width: 16px; height: 16px; min-width: 16px;
+      border-radius: 3px; background: #F1F5F9; border: 1px solid #CBD5E1;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+    .assumption-icon svg { width: 8px; height: 8px; }
+
+    .signoff-block {
+      border: 1.5px solid #E2E8F0;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+    .signoff-header {
+      background: #091827; color: #fff;
+      padding: 10px 16px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .signoff-body {
+      padding: 16px 18px;
+      background: #FAFBFC;
+    }
+    .signoff-statement {
+      font-size: 13px; color: #374151;
+      line-height: 1.7; margin-bottom: 4px;
+      font-style: italic;
+    }
+
+    .tl-phase-header {
+      font-size: 10px; font-weight: 700; color: #1A6BFF;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      border-bottom: 1.5px solid #1A6BFF;
+      padding-bottom: 7px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .tl-phase-header::before {
+      content: ''; display: inline-block;
+      width: 3px; height: 14px; background: #1A6BFF; border-radius: 2px;
+    }
+    .tl-items { position: relative; padding-left: 4px; margin-bottom: 6px; }
+    .tl-items::before {
+      content: ''; position: absolute;
+      left: 12px; top: 26px; bottom: 14px;
+      width: 1.5px; background: #E2E8F0; z-index: 0;
+    }
+    .tl-item { display: flex; gap: 14px; margin-bottom: 16px; position: relative; }
+    .tl-badge {
+      width: 26px; height: 26px; min-width: 26px;
+      border-radius: 50%; background: #1A6BFF;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; color: #091827;
+      position: relative; z-index: 1; flex-shrink: 0;
+      box-shadow: 0 0 0 3px #fff;
+    }
+    .tl-content { flex: 1; padding-top: 2px; }
+    .tl-week-label {
+      font-size: 9.5px; font-weight: 700; color: #1A6BFF;
+      text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 2px;
+    }
+    .tl-week-title {
+      font-size: 13.5px; font-weight: 700; color: #0F172A; margin-bottom: 6px;
+    }
+    .tl-bullets { list-style: none; }
+    .tl-bullets li {
+      display: flex; gap: 7px; align-items: flex-start;
+      font-size: 11px; color: #475569; line-height: 1.5;
+      margin-bottom: 3px;
+    }
+    .tl-bullet-dot {
+      width: 5px; height: 5px; min-width: 5px; border-radius: 50%;
+      background: #94A3B8; margin-top: 5px; flex-shrink: 0;
+    }
+
+    .compare-table { width:100%; border-collapse:collapse; font-size: 12px; margin-bottom:16px; }
+    .compare-table thead th {
+      padding:9px 12px; text-align:left; font-size: 9.5px; font-weight:700;
+      letter-spacing:0.1em; text-transform:uppercase;
+    }
+    .compare-table thead th:first-child { background:#F1F5F9; color:#475569; width:26%; }
+    .compare-table thead th.col-google { background:#FEF2F2; color:#B91C1C; }
+    .compare-table thead th.col-spl { background:#EFF4FF; color:#1D4ED8; }
+    .compare-table tbody td { padding:10px 12px; border-bottom:1px solid #EEF2F7; color:#334155; vertical-align:top; }
+    .compare-table tbody td:first-child { font-weight:600; color:#0F172A; background:#FAFBFC; }
+    .compare-table tbody tr:nth-child(even) td:not(:first-child) { background:#FAFBFC; }
+
+    /* ── Live screenshot / browser mock ── */
+    .browser-mock { border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; margin-bottom:6px; box-shadow:0 2px 10px rgba(15,23,42,0.07); }
+    .browser-mock-bar { background:#F1F5F9; padding:8px 12px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #E2E8F0; }
+    .browser-mock-dots { display:flex; gap:5px; }
+    .browser-mock-dots span { width:8px; height:8px; border-radius:50%; background:#CBD5E1; display:inline-block; }
+    .browser-mock-url { flex:1; background:#fff; border:1px solid #E2E8F0; border-radius:4px; padding:4px 10px; font-size:10.5px; color:#64748B; font-family: 'SFMono-Regular', Consolas, monospace; }
+    .screenshot-frame { position:relative; line-height:0; }
+    .screenshot-frame img { width:100%; display:block; }
+    .callout-box { position:absolute; border:2px dashed #DC2626; border-radius:6px; background:rgba(220,38,38,0.07); }
+    .callout-box.blue { border-color:#1A6BFF; background:rgba(26,107,255,0.08); }
+    .callout-badge { position:absolute; width:26px; height:26px; border-radius:50%; background:#DC2626; color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 3px #fff; transform:translate(-50%,-50%); }
+    .callout-badge.blue { background:#1A6BFF; }
+    .callout-legend { margin-top:14px; margin-bottom:14px; }
+    .callout-legend-item { display:flex; gap:11px; align-items:flex-start; font-size:11.5px; color:#334155; line-height:1.62; padding:9px 0; border-bottom:1px solid #F1F5F9; }
+    .callout-legend-item:first-child { border-top:1px solid #F1F5F9; }
+    .callout-legend-num { width:24px; height:24px; min-width:24px; border-radius:50%; color:#fff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+    .callout-legend-num.red { background:#DC2626; }
+    .callout-legend-num.blue { background:#1A6BFF; }
+
+    /* ── Before / after mockup ── */
+    .ba-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:6px; }
+    .ba-col { border-radius:8px; overflow:hidden; border:1px solid #E2E8F0; }
+    .ba-label { padding:9px 13px; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; }
+    .ba-label.before { background:#FEF2F2; color:#B91C1C; }
+    .ba-label.after { background:#EFF4FF; color:#1D4ED8; }
+    .ba-body { padding:15px; background:#fff; }
+    .ba-body img { width:100%; display:block; border-radius:4px; border:1px solid #F1F5F9; }
+    .mock-field-label { font-size:12px; color:#374151; margin-bottom:7px; font-weight:600; }
+    .mock-input { border:1px solid #CBD5E1; border-radius:3px; padding:11px 13px; font-size:12px; color:#0F172A; margin-bottom:11px; }
+    .mock-empty-input { border:1px solid #E2E8F0; border-radius:3px; padding:11px 13px; font-size:12px; color:#94A3B8; margin-bottom:11px; }
+    .mock-input.verified { border-color:#16A34A; background:#F0FDF4; display:flex; align-items:center; justify-content:space-between; }
+    .mock-check { color:#16A34A; font-weight:800; }
+    .mock-success-strip { background:#F0FDF4; border:1px solid #BBF7D0; color:#15803D; font-size:11px; font-weight:600; padding:7px 11px; border-radius:4px; margin-bottom:11px; display:flex; align-items:center; gap:7px; }
+    .mock-address-card { border:1px solid #E2E8F0; border-radius:6px; padding:11px 13px; background:#F8FAFC; font-size:11.5px; color:#334155; line-height:1.6; }
+    .mock-address-card strong { color:#0F172A; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════
+     PAGE 1 — COVER
+═══════════════════════════ -->
+<div class="page cover">
+  <div class="cover-grid"></div>
+  <div class="cover-accent-bar"></div>
+
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <div>
+        <div class="cover-client-name">femi9 · FAD International</div>
+        <div class="cover-client-sub">Fashion E-Commerce · Kingdom of Saudi Arabia</div>
+      </div>
+      <div class="cover-divider"></div>
+      <div>
+        <div class="cover-prepby-label">Prepared by</div>
+        <div class="cover-prepby-name">WeCare Technology</div>
+      </div>
+    </div>
+    <div class="doc-type-pill">Capability Brief</div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">Solution Brief &nbsp;·&nbsp; August 2026</div>
+    <div class="cover-title">
+      SPL National Address<br>
+      Integration<br>
+      <span class="cover-title-accent">for femi9.com</span>
+    </div>
+    <div class="cover-subtitle">
+      A confident, evidence-based plan to solve femi9's last-mile delivery accuracy problem by integrating Saudi Post's National Address system directly into the existing Magento 2 checkout — replacing guesswork pin-drops with government-verified, 1m²-accurate addresses.
+    </div>
+
+    <div class="cover-tags">
+      <div class="cover-tag"><strong>4</strong> SPL REST APIs Mapped</div>
+      <div class="cover-tag"><strong>1m²</strong> Address Accuracy</div>
+      <div class="cover-tag"><strong>Free</strong> SPL Registration</div>
+    </div>
+  </div>
+
+  <div class="cover-ref-box">
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Brief No.</div>
+      <div class="cover-ref-value teal">FAD-FEMI9-2026-SPL-01</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Date</div>
+      <div class="cover-ref-value">10 August 2026</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Platform</div>
+      <div class="cover-ref-value">Magento 2 (WeCare-Verified)</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Prepared By</div>
+      <div class="cover-ref-value">WeCare Technology</div>
+    </div>
+  </div>
+
+  <div class="cover-total-banner">
+    <div class="cover-total-left">
+      <div class="cover-total-label">Delivery Confidence</div>
+      <div class="cover-total-amount">Ready to Build</div>
+      <div class="cover-total-sub">All 4 SPL National Address APIs reviewed &amp; mapped to femi9's checkout</div>
+    </div>
+    <div class="cover-total-right">
+      <div class="cover-total-vat-label">Track Record</div>
+      <div class="cover-total-vat-amount">2 Live SPL Integrations</div>
+    </div>
+  </div>
+
+  <div class="cover-note">
+    <div class="cover-note-label">Prepared For</div>
+    <div class="cover-note-text">
+      FAD International &nbsp;·&nbsp; femi9.com. This brief is based on direct technical review of femi9's live Magento checkout, SPL's official National Address API documentation, and splonline.com.sa — not a generic pitch.
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="cover-footer-sep"></div>
+    <div class="cover-footer-text">shabeeb@wecaretech.com &nbsp;|&nbsp; +966 535 716 437 &nbsp;|&nbsp; wecaretech.com &nbsp;|&nbsp; Riyadh, Saudi Arabia</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════
+     PAGE 2 — EXECUTIVE SUMMARY
+═══════════════════════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-header-title">femi9 — SPL National Address Integration</div>
+    <div class="inner-header-ref">FAD-FEMI9-2026-SPL-01 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Overview</div>
+    <div class="section-heading">Executive Summary</div>
+    <div class="section-intro">
+      femi9 customers are experiencing missed and misdirected deliveries because the checkout's location capture — like most Magento stores — leans on Google Maps pin-dropping, which is often imprecise in newly developed or informally addressed Saudi neighborhoods. Saudi Post (SPL) solved this exact problem at a national level with the <strong>National Address</strong> system: every location in the Kingdom is surveyed to roughly 1 square meter of accuracy and expressed as a structured address or a memorable 8-character Short Address.
+      <br><br>
+      WeCare Technology has already built and shipped this integration for two other e-commerce clients — <strong>Feed</strong> and <strong>Planet Zero</strong>. This brief lays out exactly how the same proven approach applies to femi9's Magento 2 checkout, using SPL's own official API documentation and a direct technical review of femi9.com.
+    </div>
+
+    <div class="info-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 9px; margin-bottom: 18px;">
+      <div class="info-card" style="border-top: 3px solid #1A6BFF;">
+        <div class="info-card-label">Prepared For</div>
+        <div class="info-card-value">FAD International<br>femi9.com</div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #1A6BFF;">
+        <div class="info-card-label">Prepared By</div>
+        <div class="info-card-value">WeCare Technology<br>shabeeb@wecaretech.com<br>+966 535 716 437</div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #1A6BFF;">
+        <div class="info-card-label">Brief Details</div>
+        <div class="info-card-value">No: FAD-FEMI9-2026-SPL-01<br>Date: 10 August 2026<br>Platform: Magento 2</div>
+      </div>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="section-label" style="margin-bottom: 12px;">What This Brief Covers</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size: 12px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#1A6BFF;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0F172A;font-weight:600;">Root Cause of Missed Deliveries</strong><br>Why Google Maps pin-drop is the weak link in femi9's current checkout.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size: 12px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#1A6BFF;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0F172A;font-weight:600;">SPL National Address Explained</strong><br>What it is, how accurate it is, and why it is government-mandated.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size: 12px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#1A6BFF;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0F172A;font-weight:600;">Exact Technical Integration Plan</strong><br>Mapped against femi9's live Magento checkout and SPL's 4 REST APIs.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size: 12px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#1A6BFF;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0F172A;font-weight:600;">Proven Track Record</strong><br>The same integration already running in production for Feed and Planet Zero.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size: 12px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#1A6BFF;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0F172A;font-weight:600;">Delivery Roadmap</strong><br>Phased plan from SPL business registration through to production go-live.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size: 12px; color:#334155; line-height:1.5;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#1A6BFF;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#0F172A;font-weight:600;">What FAD Needs to Provide</strong><br>The one dependency outside our control: the SPL business API key.</div>
+      </div>
+    </div>
+
+    <div class="note-box teal">
+      <div class="note-label">Our Commitment</div>
+      <p>WeCare Technology has already delivered SPL National Address integrations in production for Feed and Planet Zero. This is not exploratory work for us — it is a repeatable playbook we are ready to execute on femi9's Magento 2 storefront with the same rigor and reliability.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">WeCare Technology &nbsp;·&nbsp; shabeeb@wecaretech.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; wecaretech.com &nbsp;|&nbsp; Riyadh, Saudi Arabia</div>
+    <div class="inner-footer-page">Page 2</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════
+     PAGE 3 — THE PROBLEM & THE SOLUTION
+═══════════════════════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-header-title">femi9 — SPL National Address Integration</div>
+    <div class="inner-header-ref">FAD-FEMI9-2026-SPL-01 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">1</div>
+      <div>
+        <div class="part-banner-sub">Section 1</div>
+        <div class="part-banner-title">The Problem — Why Orders Miss the Mark</div>
+      </div>
+    </div>
+
+    <div class="section-intro" style="margin-bottom:12px;">
+      We reviewed femi9.com's live checkout directly. It runs on Magento 2, and — like the overwhelming majority of Magento stores in the region — its address capture leans on Google Maps for pin-dropping and location lookup. Google Maps geocoding is built for global consistency, not for Saudi Arabia's addressing reality: many residential compounds, new districts, and informally named streets simply aren't mapped with building-level precision. The customer drops a pin that <em>looks</em> right on screen, and the courier still ends up at the wrong villa or the neighbor's gate.
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">What This Costs femi9</div>
+      <p>Every misdelivered order means a failed first attempt, a redelivery trip, a delayed customer, and — in fashion e-commerce, where first impressions drive repeat purchase — a real risk of return or lost trust. This is a fixable, structural problem, not a one-off logistics hiccup.</p>
+    </div>
+
+    <div class="part-banner">
+      <div class="part-badge">2</div>
+      <div>
+        <div class="part-banner-sub">Section 2</div>
+        <div class="part-banner-title">The Solution — SPL National Address</div>
+      </div>
+    </div>
+
+    <div class="section-intro" style="margin-bottom:12px;">
+      SPL (Saudi Post) operates the Kingdom's official <strong>National Address</strong> system — a government-mandated addressing standard where every location has been surveyed to roughly <strong>1 square meter of accuracy</strong>. Each address resolves to a structured format (building number, street, district, city, postcode, additional number) and to a memorable <strong>Short Address</strong>: 4 letters followed by 4 digits, e.g. <code>RRRD3005</code>. Registration is free for individuals and businesses, and short addresses can already be looked up through SPL Online, Absher, Tawakkalna, Sehhaty, and Maha — meaning most femi9 customers in Saudi Arabia either already have one or can get one in minutes.
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th class="col-google">Current: Google Maps Pin</th>
+          <th class="col-spl">With SPL National Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Accuracy</td>
+          <td>Variable — often 50–200m off in newer or informal districts</td>
+          <td>~1m² — government-surveyed</td>
+        </tr>
+        <tr>
+          <td>Source of truth</td>
+          <td>Crowd-sourced / commercial map data</td>
+          <td>Official Saudi Post national registry</td>
+        </tr>
+        <tr>
+          <td>Customer input</td>
+          <td>Drag a pin, hope it's right</td>
+          <td>Type an 8-character Short Address they already know</td>
+        </tr>
+        <tr>
+          <td>Verification</td>
+          <td>None — accepted as entered</td>
+          <td>Validated against SPL's live database before order is placed</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box navy" style="margin-bottom:0;">
+      <div class="note-label">Not an either/or</div>
+      <p>We are not proposing to rip out femi9's existing map-based address flow. SPL National Address is layered in as the primary, verified path, with the current pin-drop kept as a fallback for the small number of customers without a registered address yet — see Section 5 for the exact flow.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">WeCare Technology &nbsp;·&nbsp; shabeeb@wecaretech.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; wecaretech.com &nbsp;|&nbsp; Riyadh, Saudi Arabia</div>
+    <div class="inner-footer-page">Page 3</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════
+     PAGE 4 — LIVE WALKTHROUGH (WHAT'S ON FEMI9.COM TODAY)
+═══════════════════════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-header-title">femi9 — SPL National Address Integration</div>
+    <div class="inner-header-ref">FAD-FEMI9-2026-SPL-01 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">3</div>
+      <div>
+        <div class="part-banner-sub">Section 3</div>
+        <div class="part-banner-title">Live Walkthrough — What's Already on femi9.com</div>
+      </div>
+    </div>
+
+    <div class="section-intro" style="margin-bottom:12px;">
+      We didn't stop at reading about femi9's checkout — we walked through it ourselves, live, as a real customer would. Below is the actual shipping step at <strong>femi9.com/en/checkout/#shipping</strong>, captured during our review.
+    </div>
+
+    <div class="browser-mock">
+      <div class="browser-mock-bar">
+        <div class="browser-mock-dots"><span></span><span></span><span></span></div>
+        <div class="browser-mock-url">femi9.com/en/checkout/#shipping</div>
+      </div>
+      <div class="screenshot-frame">
+        <img src="screenshots/map-and-fields-tight.png" alt="femi9.com live checkout — shipping step">
+        <div class="callout-box" style="left:5%; top:3%; width:90%; height:50%;"></div>
+        <div class="callout-badge" style="left:5%; top:3%;">1</div>
+        <div class="callout-box blue" style="left:5%; top:68%; width:90%; height:31%;"></div>
+        <div class="callout-badge blue" style="left:5%; top:68%;">2</div>
+      </div>
+    </div>
+
+    <div class="callout-legend">
+      <div class="callout-legend-item">
+        <div class="callout-legend-num red">1</div>
+        <div><strong style="color:#0F172A;">Google Maps pin-drop.</strong> This is the imprecise step we cover in Section 1 — the customer drags a pin, and delivery accuracy depends entirely on how well Google has mapped that specific street.</div>
+      </div>
+      <div class="callout-legend-item">
+        <div class="callout-legend-num blue">2</div>
+        <div><strong style="color:#0F172A;">"Near By/District" and "National Address Code" — already on the form.</strong> This tells us someone at femi9 already scoped a National Address integration. But right now these are plain, disconnected text boxes: nothing validates them against SPL, nothing auto-fills the address fields, nothing corrects the map pin. A customer can type their real Short Address here today and it changes nothing about how the order is delivered.</div>
+      </div>
+    </div>
+
+    <div class="note-box amber" style="margin-bottom:0;">
+      <div class="note-label">What this means for scope</div>
+      <p>This isn't a build-from-zero project. femi9 already has the field, in the right place, on the right screen. The work is connecting it to SPL's live API — see the next section for exactly what that looks like.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">WeCare Technology &nbsp;·&nbsp; shabeeb@wecaretech.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; wecaretech.com &nbsp;|&nbsp; Riyadh, Saudi Arabia</div>
+    <div class="inner-footer-page">Page 4</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════
+     PAGE 5 — BEFORE / AFTER MOCKUP
+═══════════════════════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-header-title">femi9 — SPL National Address Integration</div>
+    <div class="inner-header-ref">FAD-FEMI9-2026-SPL-01 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">4</div>
+      <div>
+        <div class="part-banner-sub">Section 4</div>
+        <div class="part-banner-title">How WeCare Technology Activates It</div>
+      </div>
+    </div>
+
+    <div class="section-intro" style="margin-bottom:12px;">
+      No redesign. No new screen. The same "National Address Code" field femi9 already built, made to actually do something the moment SPL is wired in behind it.
+    </div>
+
+    <div class="ba-grid">
+      <div class="ba-col">
+        <div class="ba-label before">Today — field exists, does nothing</div>
+        <div class="ba-body">
+          <div class="mock-field-label">National Address Code</div>
+          <div class="mock-empty-input">&nbsp;</div>
+          <div class="mock-field-label" style="color:#94A3B8; font-weight:400; font-size:10.5px;">No validation. No auto-fill. Order ships on the map pin alone.</div>
+        </div>
+      </div>
+      <div class="ba-col">
+        <div class="ba-label after">With SPL connected</div>
+        <div class="ba-body">
+          <div class="mock-field-label">National Address Code</div>
+          <div class="mock-input verified">RRRD3005 <span class="mock-check">&#10003;</span></div>
+          <div class="mock-success-strip"><span class="mock-check">&#10003;</span> Verified via SPL National Address</div>
+          <div class="mock-address-card">
+            <strong>3005 Sulayman Ibn Murad St</strong> — Al Arid Dist.<br>
+            RIYADH 13342 &nbsp;·&nbsp; Additional No. 7221<br>
+            Map pin auto-corrected to rooftop accuracy.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box teal" style="margin-bottom:14px;">
+      <div class="note-label">Illustrative mockup</div>
+      <p>This panel demonstrates the target behavior using SPL's own documented response format (Section 5). Final field placement and styling will match femi9's exact design during build — we are not proposing to change how the checkout looks, only how this one field behaves.</p>
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px;">What Changes for the Customer</div>
+    <ul class="assumptions-list" style="margin-bottom:0;">
+      <li>
+        <span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1D4ED8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div>Types the Short Address they already have (or already got from Absher/Tawakkalna) into a field that already exists on the page today.</div>
+      </li>
+      <li>
+        <span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1D4ED8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div>Sees an instant green confirmation instead of silence — the field finally does something visible.</div>
+      </li>
+      <li>
+        <span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1D4ED8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div>The order that reaches the courier carries a verified building/street/district/postcode — not just a hopeful pin on a map.</div>
+      </li>
+    </ul>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">WeCare Technology &nbsp;·&nbsp; shabeeb@wecaretech.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; wecaretech.com &nbsp;|&nbsp; Riyadh, Saudi Arabia</div>
+    <div class="inner-footer-page">Page 5</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════
+     PAGE 6 — TECHNICAL INTEGRATION
+═══════════════════════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-header-title">femi9 — SPL National Address Integration</div>
+    <div class="inner-header-ref">FAD-FEMI9-2026-SPL-01 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">5</div>
+      <div>
+        <div class="part-banner-sub">Section 5</div>
+        <div class="part-banner-title">How It Plugs Into femi9's Magento 2 Checkout</div>
+      </div>
+    </div>
+
+    <div class="note-box navy">
+      <div class="note-label">Confirmed by direct technical review</div>
+      <p>femi9.com is built on <strong>Magento 2</strong> (confirmed via the checkout page's core Magento markup and <code>form_key</code> security token). The checkout already carries <strong>Tamara</strong> for buy-now-pay-later and an <strong>Aheadworks</strong> popup module, alongside a dormant "National Address Code" field (Section 3) and heavy reliance on Google for maps/address lookup. This tells us exactly where the integration needs to sit — inside the existing shipping-address step, reusing the field that's already there, without touching payment or promo logic.</p>
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px;">Checkout Flow</div>
+
+    <div class="tl-items">
+      <div class="tl-item">
+        <div class="tl-badge">1</div>
+        <div class="tl-content">
+          <div class="tl-week-title">Customer enters their SPL Short Address</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span><span>The dormant <code>National Address Code</code> field (Section 3) becomes live: the customer types their 8-character Short Address (e.g. <code>RRRD3005</code>), with the map pin kept as a visible fallback for anyone who doesn't have one yet.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">2</div>
+        <div class="tl-content">
+          <div class="tl-week-title">Magento calls SPL to verify and expand it</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span><span><code>FullNAByShortAddress</code> resolves the Short Address into the full verified address — building number, street, district, city, postcode, additional number — plus exact coordinates.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">3</div>
+        <div class="tl-content">
+          <div class="tl-week-title">Pin-drop customers get reverse-validated</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span><span>If a customer still drops a pin, <code>FullNationalAddressByGeocode</code> checks that latitude/longitude against the National Address database and offers the verified address as a one-click confirmation before checkout completes.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">4</div>
+        <div class="tl-content">
+          <div class="tl-week-title">Verified address travels with the order</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span><span>The verified address and precise geocode are saved to the Magento order and passed to the courier — no more guesswork on the last mile. <code>GeoCodeByShortAddress</code> and <code>NationalAddressByShortAddress</code> support lighter lookups for saved address books and repeat customers.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px; margin-top:6px;">The 4 SPL APIs This Integration Uses</div>
+
+    <table class="pricing-table">
+      <thead>
+        <tr>
+          <th style="width:24px;">#</th>
+          <th>API &amp; Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-num">01</td>
+          <td>
+            <span class="module-name">FullNationalAddressByGeocode</span>
+            <span class="module-desc">Input: latitude/longitude. Output: full verified address + Short Address. Used to validate/enrich a customer's map pin.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-num">02</td>
+          <td>
+            <span class="module-name">FullNAByShortAddress</span>
+            <span class="module-desc">Input: Short Address (e.g. <code>RRRD3005</code>). Output: full address + coordinates. The primary lookup used at checkout.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-num">03</td>
+          <td>
+            <span class="module-name">NationalAddressByShortAddress</span>
+            <span class="module-desc">Input: Short Address. Output: lightweight address payload (no coordinates) — used for address-book display and confirmation screens.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-num">04</td>
+          <td>
+            <span class="module-name">GeoCodeByShortAddress</span>
+            <span class="module-desc">Input: Short Address. Output: coordinates only — used to hand off precise pickup/drop coordinates to the courier's routing system.</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box teal" style="margin-bottom:0;">
+      <div class="note-label">Built-in safety net</div>
+      <p>SPL's own API contract already defines clean success/failure responses with error codes for every edge case (invalid address, quota limits, service downtime). We fall back to femi9's current manual address entry whenever SPL can't resolve a lookup — the new flow can only make checkout more accurate, never block an order.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">WeCare Technology &nbsp;·&nbsp; shabeeb@wecaretech.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; wecaretech.com &nbsp;|&nbsp; Riyadh, Saudi Arabia</div>
+    <div class="inner-footer-page">Page 6</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════
+     PAGE 5 — ROADMAP, TRACK RECORD & CLOSING
+═══════════════════════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-header-title">femi9 — SPL National Address Integration</div>
+    <div class="inner-header-ref">FAD-FEMI9-2026-SPL-01 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">6</div>
+      <div>
+        <div class="part-banner-sub">Section 6</div>
+        <div class="part-banner-title">Delivery Roadmap</div>
+      </div>
+    </div>
+
+    <table class="pricing-table">
+      <thead>
+        <tr>
+          <th style="width:24px;">#</th>
+          <th>Phase &amp; Scope</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-num">01</td>
+          <td>
+            <span class="module-name">Discovery &amp; SPL Business Registration</span>
+            <span class="module-desc">FAD registers femi9 for SPL National Address for Business to obtain the production <code>api_key</code>. WeCare Technology finalizes the exact checkout customization points alongside Tamara and Aheadworks.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-num">02</td>
+          <td>
+            <span class="module-name">Magento Module Build</span>
+            <span class="module-desc">Custom Magento 2 module: Short Address field on checkout, REST client for the 4 SPL endpoints, admin-configurable API key and sandbox/production toggle.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-num">03</td>
+          <td>
+            <span class="module-name">QA Against SPL Responses</span>
+            <span class="module-desc">Test every documented success and failure case (invalid address, quota limits, service downtime) plus fallback-to-manual-entry behavior.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="row-num">04</td>
+          <td>
+            <span class="module-name">Go-Live &amp; Monitoring</span>
+            <span class="module-desc">Production rollout on femi9.com, with delivery-accuracy tracking to quantify the reduction in misdelivered orders.</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="section-label" style="margin-bottom:10px;">What FAD Needs to Provide</div>
+    <ul class="assumptions-list">
+      <li>
+        <span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1D4ED8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong>SPL Business National Address registration and API key</strong> — the one dependency outside our control; SPL's registration is free and typically fast for a registered Saudi entity.</div>
+      </li>
+      <li>
+        <span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1D4ED8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong>Access to femi9's Magento admin / codebase</strong> (or its current agency) so the module can be installed cleanly alongside existing extensions.</div>
+      </li>
+      <li>
+        <span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1D4ED8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong>A staging environment</strong> to validate the checkout changes before they touch live orders.</div>
+      </li>
+    </ul>
+
+    <hr class="section-hr">
+
+    <div class="signoff-block">
+      <div class="signoff-header">Our Confidence</div>
+      <div class="signoff-body">
+        <div class="signoff-statement">
+          "We've already solved this exact problem for Feed and Planet Zero. The femi9 integration is a known playbook, applied to a checkout we've already reviewed and a platform — Magento 2 — we build on daily. We're ready to start as soon as the SPL API key is in hand."
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="wecaretech.webp" alt="WeCare Technology">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">WeCare Technology &nbsp;·&nbsp; shabeeb@wecaretech.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; wecaretech.com &nbsp;|&nbsp; Riyadh, Saudi Arabia</div>
+    <div class="inner-footer-page">Page 7</div>
+  </div>
+</div>
+
+</body>
+</html>
