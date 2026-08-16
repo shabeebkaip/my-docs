@@ -156,20 +156,26 @@ h3.subhead{font-family:var(--font-display);font-weight:800;font-size:clamp(1.1re
 .pill-row{display:flex;flex-wrap:wrap;gap:8px;}
 .pill{font-family:var(--font-mono);font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid;}
 
-/* ---------- feature tree ---------- */
-.tree{font-family:var(--font-mono);font-size:.8rem;line-height:1.95;margin-top:14px;white-space:pre;}
-.tree .tg{color:rgba(5,5,10,0.22);}
-.dark .tree .tg{color:rgba(255,255,255,0.18);}
-.tree .t-root{font-weight:800;color:var(--ink);}
-.dark .tree .t-root{color:var(--txt);}
-.tree .t-blue{font-weight:700;color:var(--blue);}
-.dark .tree .t-blue{color:#6d94ff;}
-.tree .t-teal{font-weight:700;color:#0aa88b;}
-.dark .tree .t-teal{color:#4fe0c4;}
-.tree .t-purple{font-weight:700;color:#7c4ee8;}
-.dark .tree .t-purple{color:#b39bfb;}
-.tree .t-leaf{color:var(--ink-soft);}
-.dark .tree .t-leaf{color:var(--txt-soft);}
+/* ---------- feature pyramid (org-chart tree) ---------- */
+.pyramid{margin-top:18px;display:flex;flex-direction:column;align-items:center;}
+.pyr-root{font-family:var(--font-display);font-weight:800;font-size:.9rem;padding:9px 20px;border-radius:10px;
+  background:rgba(5,5,10,0.035);border:1px solid rgba(5,5,10,0.14);color:var(--ink);white-space:nowrap;}
+.pyr-stem{width:2px;height:16px;background:rgba(5,5,10,0.16);}
+.pyr-branches{display:flex;justify-content:center;gap:26px;width:100%;padding-top:16px;flex-wrap:wrap;}
+.pyr-branch{position:relative;display:flex;flex-direction:column;align-items:center;flex:1 1 190px;max-width:230px;}
+.pyr-branch::before{content:'';position:absolute;top:-16px;left:50%;width:2px;height:16px;background:rgba(5,5,10,0.16);
+  transform:translateX(-50%);}
+@media (min-width:641px){
+  .pyr-branch:first-child::after{content:'';position:absolute;top:-16px;left:50%;width:13px;height:2px;background:rgba(5,5,10,0.16);}
+  .pyr-branch:last-child::after{content:'';position:absolute;top:-16px;left:calc(50% - 13px);width:13px;height:2px;background:rgba(5,5,10,0.16);}
+}
+.pyr-node{font-family:var(--font-mono);font-size:.78rem;font-weight:800;padding:7px 15px;border-radius:100px;white-space:nowrap;}
+.pyr-node.blue{background:rgba(26,86,255,0.08);border:1px solid rgba(26,86,255,0.32);color:var(--blue);}
+.pyr-node.teal{background:rgba(0,201,167,0.08);border:1px solid rgba(0,201,167,0.32);color:#0aa88b;}
+.pyr-node.purple{background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.32);color:#7c4ee8;}
+.pyr-leaves{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:13px;}
+.pyr-chip{font-family:var(--font-mono);font-size:10px;padding:5px 10px;border-radius:100px;background:rgba(5,5,10,0.035);
+  border:1px solid rgba(5,5,10,0.12);color:var(--ink-soft);white-space:nowrap;}
 
 /* ---------- flow row ---------- */
 .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-top:8px;}
@@ -1100,39 +1106,41 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
         <div class="icon bg-blue accent-blue"><svg class="ic"><use href="#i-users"/></svg></div>
         <h4>Marketplace Web App</h4>
         <p>One application, two role-based panels sharing the same login system and codebase.</p>
-        <div class="tree">
-<div><span class="t-root">Marketplace Web App</span></div>
-<div><span class="tg">├── </span><span class="t-blue">Buyer Panel</span></div>
-<div><span class="tg">│&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">Overview</span></div>
-<div><span class="tg">│&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">My Requests</span></div>
-<div><span class="tg">│&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">Proposals</span></div>
-<div><span class="tg">│&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">Compare</span></div>
-<div><span class="tg">│&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">Messages</span></div>
-<div><span class="tg">│&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">Projects</span></div>
-<div><span class="tg">│&nbsp;&nbsp;&nbsp;└── </span><span class="t-leaf">Ratings</span></div>
-<div><span class="tg">└── </span><span class="t-teal">Provider Panel</span></div>
-<div><span class="tg">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">Overview</span></div>
-<div><span class="tg">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">New Requests</span></div>
-<div><span class="tg">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">My Proposals</span></div>
-<div><span class="tg">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">Active Projects</span></div>
-<div><span class="tg">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">Messages</span></div>
-<div><span class="tg">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="t-leaf">Revenue</span></div>
-<div><span class="tg">&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="t-leaf">Ratings</span></div>
+        <div class="pyramid">
+          <div class="pyr-root">Marketplace Web App</div>
+          <div class="pyr-stem"></div>
+          <div class="pyr-branches">
+            <div class="pyr-branch">
+              <div class="pyr-node blue">Buyer Panel</div>
+              <div class="pyr-leaves">
+                <span class="pyr-chip">Overview</span><span class="pyr-chip">My Requests</span><span class="pyr-chip">Proposals</span>
+                <span class="pyr-chip">Compare</span><span class="pyr-chip">Messages</span><span class="pyr-chip">Projects</span>
+                <span class="pyr-chip">Ratings</span>
+              </div>
+            </div>
+            <div class="pyr-branch">
+              <div class="pyr-node teal">Provider Panel</div>
+              <div class="pyr-leaves">
+                <span class="pyr-chip">Overview</span><span class="pyr-chip">New Requests</span><span class="pyr-chip">My Proposals</span>
+                <span class="pyr-chip">Active Projects</span><span class="pyr-chip">Messages</span><span class="pyr-chip">Revenue</span>
+                <span class="pyr-chip">Ratings</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="card top-accent border-purple">
         <div class="icon bg-purple accent-purple"><svg class="ic"><use href="#i-shield"/></svg></div>
         <h4>Admin Dashboard</h4>
         <p>A separate application for NEXORA staff only — its own login, its own access, never public-facing.</p>
-        <div class="tree">
-<div><span class="t-root">Admin Dashboard</span></div>
-<div><span class="tg">├── </span><span class="t-purple">Users</span><span class="t-leaf"> — companies, providers, staff accounts</span></div>
-<div><span class="tg">├── </span><span class="t-purple">Providers</span><span class="t-leaf"> — verification, activate/suspend</span></div>
-<div><span class="tg">├── </span><span class="t-purple">Requests</span><span class="t-leaf"> — review, status, matching</span></div>
-<div><span class="tg">├── </span><span class="t-purple">Proposals</span><span class="t-leaf"> — tracking across requests</span></div>
-<div><span class="tg">├── </span><span class="t-purple">Transactions</span><span class="t-leaf"> — value, commission</span></div>
-<div><span class="tg">├── </span><span class="t-purple">Reviews</span><span class="t-leaf"> — ratings, disputes</span></div>
-<div><span class="tg">└── </span><span class="t-purple">Analytics</span><span class="t-leaf"> — platform-wide reporting</span></div>
+        <div class="pyramid">
+          <div class="pyr-root">Admin Dashboard</div>
+          <div class="pyr-stem"></div>
+          <div class="pyr-leaves" style="max-width:280px;">
+            <span class="pyr-chip">Users</span><span class="pyr-chip">Providers</span><span class="pyr-chip">Requests</span>
+            <span class="pyr-chip">Proposals</span><span class="pyr-chip">Transactions</span><span class="pyr-chip">Reviews</span>
+            <span class="pyr-chip">Analytics</span>
+          </div>
         </div>
       </div>
     </div>
