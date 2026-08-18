@@ -32,6 +32,7 @@
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;}
 body{margin:0;font-family:var(--font-body);background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5;}
 img,svg{max-width:100%;display:block;}
 .ic{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
@@ -74,12 +75,20 @@ img,svg{max-width:100%;display:block;}
   border:1px solid var(--line);color:#6d94ff;display:flex;align-items:center;justify-content:center;cursor:pointer;
   transition:transform 140ms var(--ease), border-color 140ms;}
 .jumpbtn:hover{border-color:var(--blue);transform:translateY(-2px);}
-@media (max-width:640px){ #jumpctl{display:none;} }
+.jumpbtn:disabled{opacity:.35;cursor:default;transform:none;}
+#slideCounter{position:fixed;left:22px;bottom:22px;z-index:80;font-family:var(--font-mono);font-size:11px;
+  letter-spacing:.08em;color:rgba(255,255,255,0.55);background:rgba(5,5,10,0.85);backdrop-filter:blur(12px);
+  border:1px solid var(--line);border-radius:100px;padding:9px 16px;}
+@media (max-width:640px){ #jumpctl{display:none;} #slideCounter{display:none;} }
 
-.sec{padding:110px 0;position:relative;overflow:hidden;}
+.sec{position:fixed;inset:0;width:100%;height:100vh;padding:96px 0 76px;overflow-y:auto;
+  display:flex;align-items:center;opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity 420ms var(--ease), transform 420ms var(--ease);transform:translateY(10px);}
+.sec .wrap{width:100%;margin:auto;}
+.sec.active{opacity:1;visibility:visible;pointer-events:auto;transform:none;z-index:5;}
 .sec.dark{background:var(--void);color:var(--txt);}
 .sec.cream{background:var(--cream);color:var(--ink);}
-@media (max-width:640px){ .sec{padding:72px 0;} }
+@media (max-width:640px){ .sec{padding:80px 0 64px;} }
 .sec-index{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;position:absolute;top:34px;right:32px;color:var(--txt-faint);}
 .cream .sec-index{color:var(--ink-faint);}
 
@@ -392,9 +401,10 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
 </nav>
 
 <div id="jumpctl">
-  <button class="jumpbtn" id="jumpUp" aria-label="Previous section">&uarr;</button>
-  <button class="jumpbtn" id="jumpDown" aria-label="Next section">&darr;</button>
+  <button class="jumpbtn" id="jumpUp" aria-label="Previous slide">&uarr;</button>
+  <button class="jumpbtn" id="jumpDown" aria-label="Next slide">&darr;</button>
 </div>
+<div id="slideCounter">01 / 13</div>
 
 <main>
 
@@ -438,15 +448,6 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
   </div>
   <div class="scroll-cue"><span class="ln"></span><span>Scroll to explore</span></div>
 </section>
-
-<div class="ticker-wrap">
-  <div class="ticker-track">
-    <span>AI Solutions Marketplace</span><span>Rule-Based Matching</span><span>Verified Providers</span><span>Double-Blind Reviews</span>
-    <span>Transparent Proposals</span><span>Trust Layer for B2B AI</span><span>Arabic + English · RTL/LTR</span><span>KSA → GCC</span>
-    <span>AI Solutions Marketplace</span><span>Rule-Based Matching</span><span>Verified Providers</span><span>Double-Blind Reviews</span>
-    <span>Transparent Proposals</span><span>Trust Layer for B2B AI</span><span>Arabic + English · RTL/LTR</span><span>KSA → GCC</span>
-  </div>
-</div>
 
 <!-- 01 PROBLEM -->
 <section class="sec cream" id="problem">
@@ -735,41 +736,13 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
 
 </main>
 
-<footer class="foot">
-  <div class="wrap">
-    <div class="foot-grid">
-      <div>
-        <div class="brand" style="margin-bottom:12px;"><span class="brand-mark"></span><span class="brand-word">NEXORA</span></div>
-        <p style="font-size:12.5px;line-height:1.6;color:var(--txt-faint);max-width:240px;">AI Solutions Marketplace. Qualification, matching, and trust — built for the KSA B2B market.</p>
-      </div>
-      <div class="foot-col"><div class="foot-col-title">Opportunity</div><ul>
-        <li><a href="#problem">Problem</a></li><li><a href="#solution">Solution</a></li><li><a href="#why-now">Why Now</a></li>
-      </ul></div>
-      <div class="foot-col"><div class="foot-col-title">Business</div><ul>
-        <li><a href="#market">Landscape</a></li><li><a href="#business-model">Business Model</a></li><li><a href="#gtm">Go-To-Market</a></li>
-      </ul></div>
-      <div class="foot-col"><div class="foot-col-title">Ask</div><ul>
-        <li><a href="#roadmap">Roadmap</a></li><li><a href="#team">Team</a></li><li><a href="#ask">The Ask</a></li>
-      </ul></div>
-    </div>
-    <div class="foot-bottom">
-      <span>NEXORA — Investor Pitch Deck</span>
-      <span>Team &amp; Ask sections pending NEXORA confirmation</span>
-    </div>
-  </div>
-  <div class="ghost-word"><span>NEXORA</span></div>
-</footer>
-
 <script>
 (function(){
   var progress = document.getElementById('progress');
-  function onScroll(){
-    var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    progress.style.width = pct + '%';
-  }
-  document.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
+  var counter = document.getElementById('slideCounter');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.sec'));
+  var total = sections.length;
+  var current = 0;
 
   var drawer = document.getElementById('drawer');
   var overlay = document.getElementById('drawer-overlay');
@@ -780,40 +753,69 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
   openBtn.addEventListener('click', openDrawer);
   closeBtn.addEventListener('click', closeDrawer);
   overlay.addEventListener('click', closeDrawer);
-  drawer.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeDrawer); });
 
-  var sections = Array.prototype.slice.call(document.querySelectorAll('.sec'));
-  var links = Array.prototype.slice.call(document.querySelectorAll('#drawer a'));
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        var id = e.target.id;
-        links.forEach(function(l){ l.classList.toggle('active', l.getAttribute('href') === '#'+id); });
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('#drawer a, .nav-links a'));
+  var upBtn = document.getElementById('jumpUp');
+  var downBtn = document.getElementById('jumpDown');
+
+  function pad(n){ return n<10 ? '0'+n : ''+n; }
+
+  function showSlide(i){
+    i = Math.max(0, Math.min(total-1, i));
+    sections.forEach(function(s,idx){
+      var on = idx===i;
+      s.classList.toggle('active', on);
+      if(on){ s.scrollTop = 0; }
+    });
+    current = i;
+    progress.style.width = ((i+1)/total*100) + '%';
+    if(counter){ counter.textContent = pad(i+1) + ' / ' + pad(total); }
+    var id = sections[i].id;
+    navLinks.forEach(function(l){ l.classList.toggle('active', l.getAttribute('href') === '#'+id); });
+    upBtn.disabled = i===0;
+    downBtn.disabled = i===total-1;
+    history.replaceState(null, '', '#'+id);
+    sections[i].querySelectorAll('.reveal').forEach(function(r){ r.classList.add('in'); });
+  }
+
+  function goToId(id){
+    var idx = sections.findIndex(function(s){ return s.id === id; });
+    if(idx > -1) showSlide(idx);
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var href = a.getAttribute('href');
+      if(href.length > 1){
+        e.preventDefault();
+        goToId(href.slice(1));
+        closeDrawer();
       }
     });
-  }, {rootMargin:'-45% 0px -50% 0px'});
-  sections.forEach(function(s){ io.observe(s); });
-
-  var reveals = document.querySelectorAll('.reveal');
-  var rio = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); rio.unobserve(e.target); } });
-  }, {threshold:0.12});
-  reveals.forEach(function(r){ rio.observe(r); });
-
-  function currentIndex(){
-    var mid = window.scrollY + window.innerHeight*0.3;
-    var idx = 0;
-    sections.forEach(function(s,i){ if(s.offsetTop <= mid) idx = i; });
-    return idx;
-  }
-  document.getElementById('jumpDown').addEventListener('click', function(){
-    var i = Math.min(currentIndex()+1, sections.length-1);
-    sections[i].scrollIntoView({behavior:'smooth'});
   });
-  document.getElementById('jumpUp').addEventListener('click', function(){
-    var i = Math.max(currentIndex()-1, 0);
-    sections[i].scrollIntoView({behavior:'smooth'});
+
+  upBtn.addEventListener('click', function(){ showSlide(current-1); });
+  downBtn.addEventListener('click', function(){ showSlide(current+1); });
+
+  document.addEventListener('keydown', function(e){
+    if(drawer.classList.contains('open')) return;
+    if(['ArrowRight','ArrowDown','PageDown',' '].indexOf(e.key) > -1){ e.preventDefault(); showSlide(current+1); }
+    else if(['ArrowLeft','ArrowUp','PageUp'].indexOf(e.key) > -1){ e.preventDefault(); showSlide(current-1); }
+    else if(e.key === 'Home'){ showSlide(0); }
+    else if(e.key === 'End'){ showSlide(total-1); }
   });
+
+  var touchStartY = null;
+  document.addEventListener('touchstart', function(e){ touchStartY = e.touches[0].clientY; }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if(touchStartY === null) return;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    if(Math.abs(dy) > 60){ dy < 0 ? showSlide(current+1) : showSlide(current-1); }
+    touchStartY = null;
+  }, {passive:true});
+
+  var startId = location.hash ? location.hash.slice(1) : sections[0].id;
+  goToId(startId);
 })();
 </script>
 </body>
