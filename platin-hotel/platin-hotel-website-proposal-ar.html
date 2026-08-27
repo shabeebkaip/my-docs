@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فندق بلاتين — عرض إعادة تصميم الموقع الإلكتروني · CX-PH-2026-001</title>
+  <link href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body, table, td, th, div, p, span, ul, li { direction: rtl; text-align: right; }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #DAD3C3;
+      color: #1A202C;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 24px;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 10px 40px -8px rgba(20,17,14,0.28);
+    }
+
+    @media print {
+      body { background: none; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+    }
+
+    @page { size: A4; margin: 0; }
+
+    .serif { font-family: 'Markazi Text', 'Playfair Display', serif; }
+    bdi { unicode-bidi: isolate; direction: ltr; }
+
+    /* ══════ COVER ══════ */
+    .cover {
+      color: #fff; min-height: 297mm; display: flex; flex-direction: column; position: relative;
+      background:
+        linear-gradient(180deg, rgba(14,17,14,.38) 0%, rgba(14,17,14,.5) 22%, rgba(12,15,12,.86) 48%, rgba(10,13,10,.97) 68%, #0B0E0B 88%),
+        url('https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1600,fit=crop,q=88/AQEVME6agvsg9nx2/edited-entrance-dOqbyleJ1Vf2E88B.jpeg') center 8%/cover no-repeat,
+        #14110E;
+    }
+
+    .cover-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 36px 36px; pointer-events: none; z-index: 1;
+    }
+    .cover-accent-bar { position: absolute; right: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, #C9A24B 0%, rgba(201,162,75,0.2) 100%); z-index: 3; }
+
+    .cover-topbar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 16px 32px 16px 26px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .cover-topbar-left { display: flex; align-items: center; gap: 14px; }
+    .cover-client-name { font-size: 17px; font-weight: 700; color: #fff; }
+    .cover-client-sub  { font-size: 14px; color: rgba(255,255,255,0.4); letter-spacing: 0.02em; margin-top: 2px; }
+    .cover-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.13); }
+    .cover-prepby-label { font-size: 13.5px; color: rgba(255,255,255,0.38); letter-spacing: 0.04em; margin-bottom: 2px; }
+    .cover-prepby-name  { font-size: 17px; font-weight: 600; color: #fff; }
+    .doc-type-pill { border: 1.5px solid #C9A24B; color: #C9A24B; font-size: 13px; font-weight: 700; letter-spacing: 0.02em; padding: 7px 14px; border-radius: 4px; white-space: nowrap; }
+
+    .cover-hero { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 32px 32px 0 26px; }
+    .cover-overline { font-size: 14px; font-weight: 600; color: #C9A24B; letter-spacing: 0.1em; margin-bottom: 9px; display: flex; align-items: center; gap: 10px; }
+    .cover-overline::before { content: ''; width: 26px; height: 1px; background: #C9A24B; }
+    .cover-title { font-family: 'Markazi Text', serif; font-size: 48px; font-weight: 700; line-height: 1.15; color: #fff; margin-bottom: 10px; text-shadow: 0 2px 24px rgba(0,0,0,.35); }
+    .cover-title-accent { color: #C9A24B; font-weight: 600; }
+    .cover-subtitle { font-size: 17px; color: rgba(255,255,255,0.68); line-height: 1.58; max-width: 440px; margin-bottom: 15px; }
+    .cover-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+    .cover-tag { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); border-radius: 4px; padding: 5px 11px; font-size: 15px; color: rgba(255,255,255,0.65); }
+    .cover-tag strong { color: #fff; font-weight: 600; }
+
+    .cover-ref-box { position: relative; z-index: 2; margin: 0 32px 14px 26px; background: rgba(201,162,75,0.08); border: 1px solid rgba(201,162,75,0.25); border-radius: 6px; display: grid; grid-template-columns: repeat(4,1fr); overflow: hidden; }
+    .cover-ref-item { padding: 15px 14px; border-left: 1px solid rgba(201,162,75,0.15); }
+    .cover-ref-item:last-child { border-left: none; }
+    .cover-ref-label { font-size: 13px; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; margin-bottom: 5px; }
+    .cover-ref-value { font-size: 16.5px; font-weight: 600; color: #fff; }
+    .cover-ref-value.gold { color: #C9A24B; }
+
+    .cover-total-banner { position: relative; z-index: 2; margin: 0 32px 14px 26px; background: #C9A24B; border-radius: 6px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .cover-total-label { font-size: 14px; font-weight: 700; color: #4A3A12; letter-spacing: 0.04em; margin-bottom: 3px; }
+    .cover-total-amount { font-size: 27px; font-weight: 800; color: #14110E; line-height: 1; }
+    .cover-total-sub { font-size: 14px; color: rgba(20,17,14,0.65); margin-top: 3px; }
+    .cover-total-right { text-align: left; }
+    .cover-total-vat-label { font-size: 14px; color: rgba(20,17,14,0.6); margin-bottom: 3px; }
+    .cover-total-vat-amount { font-size: 17px; font-weight: 700; color: #14110E; }
+
+    .cover-note { position: relative; z-index: 2; margin: 0 32px 20px 26px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 5px; padding: 14px 18px; display: flex; flex-direction: column; gap: 5px; }
+    .cover-note-label { font-size: 12px; font-weight: 700; color: #C9A24B; letter-spacing: 0.04em; }
+    .cover-note-text  { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.55; }
+
+    .cover-footer { position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.07); padding: 13px 32px 13px 26px; display: flex; align-items: center; gap: 14px; }
+    .cover-footer img { height: 17px; filter: brightness(0) invert(1); opacity: 0.75; }
+    .cover-footer-sep { width: 1px; height: 14px; background: rgba(255,255,255,0.14); }
+    .cover-footer-text { font-size: 13px; color: rgba(255,255,255,0.38); }
+
+    /* ══════ INNER PAGES ══════ */
+    .inner-page { display: flex; flex-direction: column; min-height: 297mm; }
+    .inner-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 26px; border-bottom: 1px solid #E2E8F0; background: #FAFBFC; }
+    .inner-header img { height: 15px; }
+    .inner-header-title { font-size: 14.5px; color: #64748B; }
+    .inner-header-ref   { font-size: 14.5px; color: #94A3B8; }
+    .inner-content { flex: 1; padding: 13px 26px; }
+    .inner-footer { border-top: 1px solid #E2E8F0; padding: 8px 26px; display: flex; align-items: center; gap: 10px; background: #FAFBFC; }
+    .inner-footer img { height: 13px; opacity: 0.45; }
+    .inner-footer-sep { width: 1px; height: 11px; background: #CBD5E1; }
+    .inner-footer-text { font-size: 13px; color: #94A3B8; flex: 1; }
+    .inner-footer-page { font-size: 13.5px; color: #94A3B8; font-weight: 500; }
+
+    .section-label { font-size: 13.5px; font-weight: 700; color: #C9A24B; letter-spacing: 0.06em; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .section-label::before { content: ''; width: 16px; height: 1px; background: #C9A24B; }
+    .section-heading { font-family: 'Markazi Text', serif; font-size: 30px; font-weight: 700; color: #14110E; margin-bottom: 9px; line-height: 1.2; }
+    .section-intro { font-size: 15.5px; color: #475569; line-height: 1.6; margin-bottom: 9px; }
+    .pull-quote { font-family: 'Markazi Text', serif; font-size: 25px; font-weight: 600; color: #14110E; line-height: 1.38; border-right: 2px solid #C9A24B; padding: 4px 20px 4px 0; margin: 20px 0; }
+    .photo-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 12px 0; }
+    .photo-strip figure { border-radius: 5px; overflow: hidden; }
+    .photo-strip img { width: 100%; height: 78px; object-fit: cover; display: block; }
+    .photo-strip figcaption { font-size: 13px; color: #94A3B8; padding: 5px 2px 0; text-align: center; }
+
+    .part-banner { background: #14110E; color: #fff; border-radius: 6px; padding: 13px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+    .part-badge { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #C9A24B; display: flex; align-items: center; justify-content: center; font-size: 16.5px; font-weight: 800; color: #14110E; }
+    .part-banner-sub   { font-size: 13px; color: rgba(255,255,255,0.45); letter-spacing: 0.04em; margin-bottom: 2px; }
+    .part-banner-title { font-size: 17px; font-weight: 700; }
+
+    .note-box { border-radius: 5px; padding: 7px 13px; font-size: 15px; line-height: 1.55; margin-bottom: 9px; }
+    .note-box.gold  { background: #FBF6EB; border: 1px solid #EBD9AC; border-right: 3px solid #C9A24B; }
+    .note-box.amber { background: #FFFBEB; border: 1px solid #FDE68A; border-right: 3px solid #F59E0B; }
+    .note-box.navy  { background: #F0F4F8; border: 1px solid #CBD5E1; border-right: 3px solid #14110E; }
+    .note-box .note-label { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 5px; }
+    .note-box.gold  .note-label { color: #97742B; }
+    .note-box.amber .note-label { color: #B45309; }
+    .note-box.navy  .note-label { color: #334155; }
+    .note-box p     { color: #374151; }
+    .note-box strong { font-weight: 600; }
+
+    .section-hr { border: none; border-top: 1px solid #E2E8F0; margin: 18px 0; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 9px; }
+    .info-card { border: 1px solid #E2E8F0; border-radius: 6px; padding: 9px 12px; }
+    .info-card-label { font-size: 14.5px; font-weight: 700; color: #14110E; margin-bottom: 3px; }
+    .info-card-value { font-size: 15px; color: #64748B; line-height: 1.48; }
+
+    /* ── Problem / Fix compare table ── */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 14.5px; margin-bottom: 9px; }
+    .compare-table thead th { background: #14110E; color: #fff; padding: 9px 12px; text-align: right; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+    .compare-table tbody tr { border-bottom: 1px solid #EEF2F7; }
+    .compare-table tbody tr:nth-child(even) { background: #F8FAFC; }
+    .compare-table tbody td { padding: 11px 12px; vertical-align: top; line-height: 1.45; }
+    .compare-table .area-name { font-weight: 700; color: #14110E; width: 18%; }
+    .compare-table .before-cell { color: #B91C1C; width: 41%; }
+    .compare-table .after-cell { color: #166534; width: 41%; }
+    .compare-table .before-cell::before, .compare-table .after-cell::before { content: '— '; opacity: 0.5; }
+
+    /* ── Pricing Table ── */
+    .pricing-table { width: 100%; border-collapse: collapse; font-size: 14.5px; margin-bottom: 9px; }
+    .pricing-table thead th { background: #14110E; color: #fff; padding: 9px 10px; text-align: right; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+    .pricing-table tbody tr:nth-child(even) { background: #F8FAFC; }
+    .pricing-table tbody td { padding: 8px 10px; border-bottom: 1px solid #EEF2F7; color: #334155; vertical-align: top; line-height: 1.42; text-align: right; }
+    .pricing-table .row-num { font-size: 13.5px; color: #94A3B8; font-weight: 600; min-width: 18px; text-align: right; }
+    .pricing-table .module-name { font-weight: 600; color: #14110E; display: block; margin-bottom: 2px; text-align: right; }
+    .pricing-table .module-desc { font-size: 13.5px; color: #64748B; line-height: 1.38; text-align: right; }
+
+    /* ── Investment Summary Table ── */
+    .invest-table { width:100%; border-collapse:collapse; font-size:15px; margin-bottom:9px; }
+    .invest-table thead th { background:#14110E; color:#fff; padding:10px 14px; text-align:right; font-size:13px; font-weight:700; letter-spacing:0.04em; }
+    .invest-table thead th:last-child { text-align:left; }
+    .invest-table .phase-group-row td { background:#FBF6EB; color:#97742B; font-size:13px; font-weight:700; letter-spacing:0.03em; padding:8px 14px; border-bottom:1px solid #EBD9AC; text-align:right; }
+    .invest-table tbody tr { border-bottom:1px solid #EEF2F7; }
+    .invest-table tbody td { text-align:right; }
+    .invest-table .item-name { font-weight:600; color:#14110E; padding:9px 14px; text-align:right; }
+    .invest-table .item-cat  { padding:9px 8px; text-align:right; }
+    .invest-table .item-amt  { text-align:left; color:#64748B; padding:9px 14px; font-size:14.5px; }
+    .cat-pill { display:inline-block; padding:3px 9px; border-radius:20px; font-size:13px; font-weight:600; border:1px solid; }
+    .cat-design { border-color:#C7D2FE; color:#4F46E5; background:#EEF2FF; }
+    .cat-dev    { border-color:#BBF7D0; color:#16A34A; background:#F0FDF4; }
+    .cat-int    { border-color:#FDE68A; color:#B45309; background:#FFFBEB; }
+    .cat-seo    { border-color:#DDD6FE; color:#7C3AED; background:#F5F3FF; }
+    .cat-qa     { border-color:#FBCFE8; color:#BE185D; background:#FDF2F8; }
+    .invest-table .phase-total-row td { background:#F8FAFC; border-top:1.5px solid #E2E8F0; padding:10px 14px; font-weight:700; }
+    .invest-table .phase-total-label { color:#C9A24B; font-size:15.5px; }
+    .invest-table .phase-total-amount { text-align:left; color:#C9A24B; font-size:17px; font-weight:800; }
+    .invest-table .grand-total-row td { background:#14110E; color:#fff; padding:13px 14px; font-weight:700; font-size:16px; }
+    .invest-table .grand-total-row td:last-child { color:#C9A24B; font-size:18px; text-align:left; }
+    .grand-total-sub { font-size:14px; color:rgba(255,255,255,0.45); font-weight:400; }
+
+    /* ── Payment Schedule Table ── */
+    .psched-table { width:100%; border-collapse:collapse; font-size:15px; margin-bottom:10px; }
+    .psched-table thead th { background:#14110E; color:#fff; padding:10px 14px; text-align:right; font-size:13px; font-weight:700; letter-spacing:0.04em; }
+    .psched-table thead th:last-child { text-align:left; }
+    .psched-table tbody tr { border-bottom:1px solid #EEF2F7; }
+    .psched-table tbody td { padding:12px 14px; color:#334155; text-align:right; }
+    .psched-table tbody td:first-child { font-weight:700; color:#14110E; text-align:right; }
+    .psched-table tbody td:last-child { text-align:left; font-weight:600; color:#14110E; }
+    .psched-table .sched-total td { background:#14110E; color:#fff; padding:12px 14px; font-weight:700; font-size:16px; text-align:right; }
+    .psched-table .sched-total td:last-child { color:#C9A24B; font-size:18px; text-align:left; }
+
+    /* ── Timeline ── */
+    .tl-phase-header { font-size: 13.5px; font-weight: 700; color: #C9A24B; letter-spacing: 0.06em; border-bottom: 1.5px solid #C9A24B; padding-bottom: 7px; margin-bottom: 11px; display: flex; align-items: center; gap: 10px; }
+    .tl-items { position: relative; padding-right: 4px; }
+    .tl-item { display: flex; gap: 14px; margin-bottom: 9px; position: relative; }
+    .tl-badge { width: 26px; height: 26px; min-width: 26px; border-radius: 50%; background: #C9A24B; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: #14110E; flex-shrink: 0; }
+    .tl-content { flex: 1; padding-top: 2px; }
+    .tl-week-label { font-size: 13px; font-weight: 700; color: #C9A24B; letter-spacing: 0.04em; margin-bottom: 2px; }
+    .tl-week-title { font-size: 16px; font-weight: 700; color: #14110E; margin-bottom: 6px; }
+    .tl-bullets { list-style: none; }
+    .tl-bullets li { display: flex; gap: 7px; align-items: flex-start; font-size: 14px; color: #475569; line-height: 1.45; margin-bottom: 3px; }
+    .tl-bullet-dot { width: 5px; height: 5px; min-width: 5px; border-radius: 50%; background: #94A3B8; margin-top: 5px; flex-shrink: 0; }
+
+    /* ── Terms / assumptions ── */
+    .terms-list { list-style:none; margin-bottom:0; }
+    .terms-list li { display:flex; gap:10px; align-items:flex-start; font-size:15px; color:#374151; line-height:1.55; padding:8px 0; border-bottom:1px solid #F1F5F9; }
+    .terms-list li:last-child { border-bottom:none; }
+    .terms-dot { width:7px; height:7px; min-width:7px; border-radius:50%; background:#C9A24B; margin-top:6px; flex-shrink:0; }
+
+    .assumptions-list { list-style: none; margin-bottom: 9px; }
+    .assumptions-list li { display: flex; align-items: flex-start; gap: 9px; padding: 8px 10px; border-bottom: 1px solid #F1F5F9; font-size: 15px; color: #334155; line-height: 1.48; }
+    .assumptions-list li:first-child { border-top: 1px solid #F1F5F9; }
+    .assumptions-list li:nth-child(even) { background: #FAFBFD; }
+    .assumption-icon { width: 16px; height: 16px; min-width: 16px; border-radius: 3px; background: #F1F5F9; border: 1px solid #CBD5E1; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px; }
+
+    /* ── Sign-off ── */
+    .signoff-block { border: 1.5px solid #E2E8F0; border-radius: 6px; overflow: hidden; margin-top: 16px; }
+    .signoff-header { background: #14110E; color: #fff; padding: 10px 16px; font-size: 14px; font-weight: 700; letter-spacing: 0.03em; }
+    .signoff-body { padding: 14px 16px; background: #FAFBFC; }
+    .signoff-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .signoff-col-header { font-size: 13.5px; font-weight: 700; color: #14110E; letter-spacing: 0.02em; margin-bottom: 9px; padding-bottom: 5px; border-bottom: 2px solid #C9A24B; }
+    .signoff-field { margin-bottom: 9px; }
+    .signoff-field-label { font-size: 13px; font-weight: 700; color: #94A3B8; letter-spacing: 0.03em; margin-bottom: 4px; }
+    .signoff-field-line { border-bottom: 1.5px solid #CBD5E1; height: 24px; }
+
+    /* ── Mood swatches ── */
+    .swatch-row { display: flex; gap: 8px; margin-bottom: 9px; }
+    .swatch { flex: 1; border-radius: 6px; padding: 26px 10px 8px; position: relative; }
+    .swatch-label { font-size: 13.5px; font-weight: 700; color: #fff; letter-spacing: 0.02em; }
+    .swatch-hex { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; direction: ltr; text-align: right; }
+  </style>
+</head>
+<body>
+
+<!-- الصفحة 1 — الغلاف -->
+<div class="page cover">
+  <div class="cover-grid"></div>
+  <div class="cover-accent-bar"></div>
+
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <div>
+        <div class="cover-client-name">فندق بلاتين</div>
+        <div class="cover-client-sub">ضيافة 4 نجوم · ينبع، المملكة العربية السعودية</div>
+      </div>
+      <div class="cover-divider"></div>
+      <div>
+        <div class="cover-prepby-label">إعداد</div>
+        <div class="cover-prepby-name"><bdi>Code-ox Technologies</bdi></div>
+      </div>
+    </div>
+    <div class="doc-type-pill">عرض إعادة تصميم الموقع</div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">عرض إعادة تصميم الموقع &nbsp;·&nbsp; أغسطس 2026</div>
+    <div class="cover-title">
+      موقع إلكتروني أنيق<br>
+      وسهل الحجز<br>
+      <span class="cover-title-accent">بما يليق بفندق بلاتين</span>
+    </div>
+    <div class="cover-subtitle">
+      تدقيق كامل للموقع الحالي مع عرض شامل لإعادة التصميم — بمستوى بصري يضاهي <bdi>Ritz-Carlton</bdi> و<bdi>Mövenpick</bdi>، ودعم ثنائي اللغة حقيقي بين العربية والإنجليزية، وتجربة حجز سلسة دون أي تعقيد في الدفع الإلكتروني.
+    </div>
+
+    <div class="cover-tags">
+      <div class="cover-tag"><strong>نظام تصميم</strong> أنيق</div>
+      <div class="cover-tag"><strong>ثنائي اللغة</strong> <bdi>AR/EN · RTL</bdi></div>
+      <div class="cover-tag"><strong>تدفق</strong> طلب الحجز</div>
+      <div class="cover-tag"><strong>بدون</strong> بوابة دفع</div>
+      <div class="cover-tag"><strong>تحويل</strong> عبر <bdi>WhatsApp</bdi></div>
+      <div class="cover-tag"><strong>تحسين</strong> لمحركات البحث</div>
+    </div>
+  </div>
+
+  <div class="cover-ref-box">
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">رقم العرض</div>
+      <div class="cover-ref-value gold"><bdi>CX-PH-2026-001</bdi></div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">التاريخ</div>
+      <div class="cover-ref-value">12 أغسطس 2026</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">العملة</div>
+      <div class="cover-ref-value">ريال سعودي (<bdi>SAR</bdi>)</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">إعداد</div>
+      <div class="cover-ref-value"><bdi>Code-ox Technologies</bdi></div>
+    </div>
+  </div>
+
+  <div class="cover-total-banner">
+    <div class="cover-total-left">
+      <div class="cover-total-label">الجدول الزمني</div>
+      <div class="cover-total-amount">أسبوعان</div>
+      <div class="cover-total-sub">من الانطلاق حتى الإطلاق &nbsp;·&nbsp; التسعير الكامل في صفحة ملخص الاستثمار</div>
+    </div>
+    <div class="cover-total-right">
+      <div class="cover-total-vat-label">النطاق</div>
+      <div class="cover-total-vat-amount">9 صفحات · <bdi>AR/EN</bdi></div>
+    </div>
+  </div>
+
+  <div class="cover-note">
+    <div class="cover-note-label">أُعدّ من أجل</div>
+    <div class="cover-note-text">
+      فندق بلاتين &nbsp;·&nbsp; حي المجد، طريق الملك عبدالعزيز، ينبع، منطقة المدينة المنورة، المملكة العربية السعودية. استنادًا إلى مكالمة الاستكشاف والتدقيق المباشر لموقع <bdi>platinhotel.com</bdi>، هذا العرض ساري لمدة 30 يومًا من تاريخ إصداره.
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox Technologies">
+    <div class="cover-footer-sep"></div>
+    <div class="cover-footer-text"><bdi>shabeeb.k@code-ox.com &nbsp;|&nbsp; +966 535 716 437 &nbsp;|&nbsp; code-ox.com</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+  </div>
+</div>
+
+
+<!-- الصفحة 2 — الملخص التنفيذي -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">فندق بلاتين — عرض إعادة تصميم الموقع</div>
+    <div class="inner-header-ref"><bdi>CX-PH-2026-001</bdi> &nbsp;·&nbsp; أغسطس 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">نظرة عامة</div>
+    <div class="section-heading">الملخص التنفيذي</div>
+    <div class="section-intro">
+      بعد مكالمة الاستكشاف، يسعى فندق بلاتين لرفع مستوى حضوره الرقمي ليضاهي مكانة منشأته المكوّنة من 65 جناحًا وتصنيف 4 نجوم — مع اعتماد <bdi>Ritz-Carlton</bdi> و<bdi>Mövenpick</bdi> كمرجع بصري. راجعنا موقع <bdi>platinhotel.com</bdi> مباشرة وحددنا الفجوات التي تحول دون تحقيق هذه المكانة: تجربة حجز مقطوعة وغير متوافقة مع الهوية، وغياب تجربة ثنائية اللغة فعلية، وتصميم عام يقلل من قيمة المنشأة.
+      <br><br>
+      يغطي هذا العرض إعادة تصميم كاملة — نظام تصميم أنيق قائم على التصوير الفوتوغرافي، ودعم ثنائي اللغة حقيقي بين العربية والإنجليزية مع تخطيط معكوس <bdi>RTL</bdi> كامل، وتدفق بسيط لطلب الحجز يحمل هوية الفندق. لا توجد بوابة دفع إلكتروني: يقوم الضيوف بالدفع مباشرة في الفندق، تمامًا كما طُلب.
+    </div>
+
+    <div class="pull-quote">"الوجهة التي ستعشقها للإقامة فيها" — كلمات بلاتين نفسها، أخيرًا بموقع يعكسها.</div>
+
+    <div class="info-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 9px; margin-bottom: 10px;">
+      <div class="info-card" style="border-top: 3px solid #C9A24B;">
+        <div class="info-card-label">أُعدّ من أجل</div>
+        <div class="info-card-value">فندق بلاتين<br>ينبع، المملكة العربية السعودية</div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #C9A24B;">
+        <div class="info-card-label">إعداد</div>
+        <div class="info-card-value"><bdi>Code-ox Technologies<br>shabeeb.k@code-ox.com<br>+966 535 716 437</bdi></div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #C9A24B;">
+        <div class="info-card-label">تفاصيل العرض</div>
+        <div class="info-card-value">الرقم: <bdi>CX-PH-2026-001</bdi><br>التاريخ: 12 أغسطس 2026<br>العملة: ريال سعودي (<bdi>SAR</bdi>)</div>
+      </div>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="section-label" style="margin-bottom: 9px;">ما سنقوم بتسليمه</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 7px;">
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.45;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">نظام تصميم أنيق</strong><br>تصوير فوتوغرافي بملء الشاشة، خطوط مصقولة، ولوحة ألوان ذهبية/فحمية مستمدة من هوية بلاتين الحالية — في مستوى <bdi>Ritz-Carlton</bdi> و<bdi>Mövenpick</bdi>.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.45;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">إعادة بناء كاملة للموقع</strong><br>9 صفحات، من الرئيسية حتى التواصل، لتحل محل القالب الموحد الحالي بتجربة منظمة وراقية.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.45;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">تدفق حجز يحمل الهوية</strong><br>التواريخ ونوع الجناح وبيانات الضيف تُرسل في تدفق واحد — يصل إلى بريد الفندق و<bdi>WhatsApp</bdi> للتأكيد اليدوي. يستبدل التحويل الخارجي الحالي بالكامل.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.45;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">ثنائية لغة حقيقية</strong><br>تخطيط عربي معكوس بالكامل (<bdi>RTL</bdi>) — وليس مجرد ترجمة نصية — مع مبدّل لغة ظاهر، بما يطابق المعيار الذي تتبعه كل العلامات المرجعية.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.45;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">تكامل مع <bdi>WhatsApp</bdi></strong><br>زر تواصل مباشر وتحويل الحجز، بحيث يتأكد الضيف والفندق فورًا دون أي خطوة دفع.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:9px 11px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.45;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">تحسين محركات البحث وضمان الجودة</strong><br>بيانات <bdi>Schema</bdi> خاصة بالفنادق، بنية <bdi>SEO</bdi> ثنائية اللغة، اختبار عبر الأجهزة، وتسليم سلس لفريق بلاتين.</div>
+      </div>
+    </div>
+
+    <div class="note-box gold">
+      <div class="note-label">التزامنا</div>
+      <p>ستقدم <bdi>Code-ox Technologies</bdi> موقعًا يليق أخيرًا بمستوى فندق 4 نجوم — أنيقًا وسريعًا وثنائي اللغة وسهل الإدارة لموظفي الفندق، دون أي تعقيد غير ضروري حول الدفع.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text"><bdi>Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+    <div class="inner-footer-page">صفحة 2</div>
+  </div>
+</div>
+
+
+<!-- الصفحة 3 — تقييم الموقع الحالي -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">فندق بلاتين — عرض إعادة تصميم الموقع</div>
+    <div class="inner-header-ref"><bdi>CX-PH-2026-001</bdi> &nbsp;·&nbsp; أغسطس 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">تدقيق مباشر — <bdi>platinhotel.com</bdi></div>
+    <div class="section-heading">أين يقصّر الموقع الحالي</div>
+    <div class="section-intro">
+      راجعنا الموقع المباشر بأنفسنا بدل الاعتماد على افتراضات. يمتلك الموقع الحالي أساسًا جيدًا — تصوير حقيقي، قائمة مرافق واضحة، وتشكيلة أجنحة محددة — لكن عدة فجوات تعمل فعليًا ضد المكانة الفاخرة التي يطمح إليها فندق بلاتين. هذه خطوات نضج طبيعية لموقع بُني على قالب سابق، وكل واحدة منها تُعالج مباشرة في إعادة التصميم.
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">أهم ملاحظة عاجلة</div>
+      <p>زر "<bdi>BOOK NOW</bdi>" لا يقود إلى تجربة فندق بلاتين على الإطلاق — بل يحوّل إلى محرك حجز خارجي بلا هوية (<bdi>booking.staygrid.com</bdi>، "<bdi>Powered by Hotelogix</bdi>"): قالب أزرق عام بلا شعار ولا تصوير ولا أي ارتباط بصري بالفندق. في أهم إجراء على الموقع بأكمله، يصل الضيف إلى مكان لا يشبه فندقًا من فئة 4 نجوم إطلاقًا.</p>
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th style="width:18%;">المجال</th><th style="width:41%;">التجربة الحالية</th><th style="width:41%;">التجربة بعد إعادة التصميم</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="area-name">الحجز</td>
+          <td class="before-cell">"<bdi>Book Now</bdi>" يخرج الضيف من الموقع إلى محرك حجز خارجي بلا هوية ولا تصميم — لا استمرارية للثقة.</td>
+          <td class="after-cell">أداة طلب حجز داخل الصفحة بتصميم بلاتين الخاص؛ لا يغادر الضيف الموقع أبدًا.</td>
+        </tr>
+        <tr>
+          <td class="area-name">ثنائية اللغة</td>
+          <td class="before-cell">عناصر التنقل مكتوبة يدويًا "<bdi>Home (EN)</bdi>"، "<bdi>Contact (EN)</bdi>" — مبدّل لغة لم يُستكمل قط. لا توجد نسخة عربية أصلًا.</td>
+          <td class="after-cell">موقع عربي/إنجليزي كامل بتخطيط معكوس <bdi>RTL</bdi> حقيقي ومبدّل لغة فعّال.</td>
+        </tr>
+        <tr>
+          <td class="area-name">الهوية البصرية</td>
+          <td class="before-cell">أقسام صندوقية، ألوان مسطحة بين الوردي الباهت والبيج، خطوط نظام عامة — يبدو كقالب جاهز.</td>
+          <td class="after-cell">تصوير سينمائي بملء الشاشة، خطوط مصقولة، ولوحة ذهبية/فحمية متزنة في مستوى <bdi>Ritz-Carlton</bdi> و<bdi>Mövenpick</bdi>.</td>
+        </tr>
+        <tr>
+          <td class="area-name">التصوير الفوتوغرافي</td>
+          <td class="before-cell">صورة غرفة واحدة مكررة عبر عدة أقسام؛ لا يوجد معرض صور.</td>
+          <td class="after-cell">خطة تصوير مخصصة لكل فئة جناح ومرفق ومساحة طعام — مع موجز تصوير عند الحاجة لصور جديدة.</td>
+        </tr>
+        <tr>
+          <td class="area-name">دعوة اتخاذ الإجراء</td>
+          <td class="before-cell">زر "<bdi>Book Now</bdi>" صغير ومدفون في منتصف الصفحة؛ لا يوجد تذكير حجز دائم.</td>
+          <td class="after-cell">أداة حجز عائمة وظاهرة دائمًا فوق الصورة الرئيسية، تمامًا كما تفعل كل علامة مرجعية.</td>
+        </tr>
+        <tr>
+          <td class="area-name">عرض الأجنحة</td>
+          <td class="before-cell">فئات الأجنحة مدرجة كفقرات نصية بلا أي مقارنة بصرية.</td>
+          <td class="after-cell">بطاقات أجنحة منظمة بالصور والمرافق والسعر، جنبًا إلى جنب لتسهيل المقارنة.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box navy" style="margin-bottom:0;">
+      <div class="note-label">لماذا يهم هذا</div>
+      <p>لا شيء من هذا يعكس تقصيرًا في الفندق نفسه — بل يعكس موقعًا لم يُستكمل قط بالمستوى الذي تطمح إليه المنشأة الآن للمنافسة به. إغلاق هذه الفجوات الست هو ما يحوّل <bdi>platinhotel.com</bdi> إلى موقع يثق به الضيوف بما يكفي للحجز المباشر، بدل التوجه إلى منصات الحجز الوسيطة.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text"><bdi>Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+    <div class="inner-footer-page">صفحة 3</div>
+  </div>
+</div>
+
+
+<!-- الصفحة 4 — التوجه التصميمي -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">فندق بلاتين — عرض إعادة تصميم الموقع</div>
+    <div class="inner-header-ref"><bdi>CX-PH-2026-001</bdi> &nbsp;·&nbsp; أغسطس 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">التوجه</div>
+    <div class="section-heading">التوجه التصميمي — بالاستناد إلى <bdi>Ritz-Carlton</bdi> و<bdi>Mövenpick</bdi></div>
+    <div class="section-intro">
+      راجعنا كلتا العلامتين المرجعيتين مباشرة لاستخلاص الأنماط الدقيقة التي تمنح إحساس "الفخامة"، بدل وصفها نظريًا. تشترك العلامتان في فكرة هيكلية واحدة تستحق الاقتباس المباشر: صورة رئيسية بملء الشاشة مع أداة حجز عائمة فوقها — لا صفحة حجز منفصلة ومنقطعة أبدًا.
+    </div>
+
+    <div class="info-grid" style="margin-bottom:9px;">
+      <div class="info-card">
+        <div class="info-card-label">نمط <bdi>Ritz-Carlton</bdi></div>
+        <div class="info-card-value">صورة رئيسية داكنة بملء الشاشة، شعار نصي مصقول، شريط بحث عن الوجهة والتاريخ عائم فوق الصورة مباشرة، تنقل علوي مبسّط، ومساحات بيضاء سخية في كل مكان.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">نمط <bdi>Mövenpick</bdi></div>
+        <div class="info-card-value">تصوير حياتي دافئ كصورة رئيسية، لمسات ذهبية/كريمية على الأبيض، بطاقة بحث "ابحث عن فندق" تتراكب فوق الصورة، تنقل بخط بسيط، ومبدّل لغة ظاهر.</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px;">لوحة الألوان المقترحة — مبنية على هوية بلاتين الذهبية الحالية</div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#14110E;"><div class="swatch-label">فحمي</div><div class="swatch-hex">#14110E</div></div>
+      <div class="swatch" style="background:#C9A24B;"><div class="swatch-label">ذهبي بلاتين</div><div class="swatch-hex">#C9A24B</div></div>
+      <div class="swatch" style="background:#F4EFE6; color:#14110E;"><div class="swatch-label" style="color:#14110E;">عاجي دافئ</div><div class="swatch-hex" style="color:#5b5648;">#F4EFE6</div></div>
+      <div class="swatch" style="background:#3A3227;"><div class="swatch-label">برونزي غامق</div><div class="swatch-hex">#3A3227</div></div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px;">صوركم الخاصة، بمستوى أرقى</div>
+    <div class="photo-strip">
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/edited-entrance-dOqbyleJ1Vf2E88B.jpeg" alt="مدخل فندق بلاتين">
+        <figcaption>المدخل — تصوير الواجهة الرئيسية</figcaption>
+      </figure>
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/king-bed-mjE5a3Ba7RHpKvG6.jpeg" alt="جناح بسرير كينج">
+        <figcaption>الجناح — تصوير المعرض</figcaption>
+      </figure>
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/corridor-ALpbka6K33cb6Pjb.jpeg" alt="ممر الفندق">
+        <figcaption>الممر — قصّة تحريرية</figcaption>
+      </figure>
+    </div>
+    <div class="note-box gold" style="margin-bottom:0;">
+      <div class="note-label">لا حاجة لإعادة التصوير</div>
+      <p>هذه صور بلاتين الحالية بعينها — إعادة التصميم لا تحتاج صورًا جديدة لتبدو كفندق مختلف. القص بملء الشاشة، ودرجات الألوان الموحدة، والمساحات البيضاء السخية هي ما يصنع الفارق.</p>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="section-label" style="margin-bottom:9px;">تطبيق التوجه على فندق بلاتين</div>
+    <ul class="assumptions-list">
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>الصورة الرئيسية للصفحة الرئيسية: صورة بملء الشاشة أو مقطع فيديو بطيء الحركة للمنشأة، مع أداة حجز عائمة فوقها — لا صفحة منفصلة.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>تنسيق الخطوط يجمع بين خط عرض مصقول للعناوين وخط بسيط للنص الأساسي، بما يعكس رصانة العلامتين المرجعيتين.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>يُحمل شعار بلاتين الذهبي الحالي كلون مميز بدلًا من استبداله — إعادة التصميم ترفع من قيمة الهوية ولا تعيد اختراعها.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>مبدّل اللغة يوضع أعلى يسار شريط التنقل، تمامًا حيث يظهر لدى <bdi>Ritz-Carlton</bdi> و<bdi>Mövenpick</bdi> معًا.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>فئات الأجنحة تُعرض كمعرض تحريري بصري بدل الفقرات النصية، بتخطيط يسهّل المقارنة.</span></li>
+    </ul>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text"><bdi>Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+    <div class="inner-footer-page">صفحة 4</div>
+  </div>
+</div>
+
+
+<!-- الصفحة 5 — نطاق العمل (الجزء الأول) -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">فندق بلاتين — عرض إعادة تصميم الموقع</div>
+    <div class="inner-header-ref"><bdi>CX-PH-2026-001</bdi> &nbsp;·&nbsp; أغسطس 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">1</div>
+      <div>
+        <div class="part-banner-sub">القسم 1</div>
+        <div class="part-banner-title">نطاق العمل — التصميم والصفحات الأساسية</div>
+      </div>
+    </div>
+
+    <table class="pricing-table">
+      <thead><tr><th style="width:24px;">#</th><th>الوحدة / التسليمة ووصف النطاق</th></tr></thead>
+      <tbody>
+        <tr><td class="row-num">01</td><td><span class="module-name">نظام تصميم الواجهة</span><span class="module-desc">نظام تصميم فاخر متكامل — الخطوط، اللوحة الذهبية/الفحمية، معالجة الصورة الرئيسية، مكتبة العناصر. تخطيطات ثنائية اللغة (<bdi>AR/EN</bdi>) ومتجاوبة أولًا مع الجوال.</span></td></tr>
+        <tr><td class="row-num">02</td><td><span class="module-name">الصفحة الرئيسية</span><span class="module-desc">صورة/فيديو رئيسي بملء الشاشة، أداة حجز عائمة بهوية الفندق، شريط أبرز المرافق، معرض تشويقي للأجنحة، آراء الضيوف، تشويق للموقع.</span></td></tr>
+        <tr><td class="row-num">03</td><td><span class="module-name">الأجنحة والإقامة</span><span class="module-desc">معرض كامل لفئات الأجنحة ببطاقات مقارنة — جناح جونيور، جناح ديلوكس توين، جناح ديلوكس كينج — المرافق لكل جناح، عرض السعر، زر "استفسار عن الحجز".</span></td></tr>
+        <tr><td class="row-num">04</td><td><span class="module-name">المرافق والخدمات</span><span class="module-desc">النادي الرياضي، المسبح، السبا، الاستقبال على مدار الساعة — بعرض أنيق يجمع الأيقونة والصورة، لا قائمة نصية.</span></td></tr>
+        <tr><td class="row-num">05</td><td><span class="module-name">المقهى والمطعم</span><span class="module-desc">صفحة تصوير محوري تُبرز تجربة المقهى والمطعم.</span></td></tr>
+        <tr><td class="row-num">06</td><td><span class="module-name">الاجتماعات والفعاليات</span><span class="module-desc">عرض قاعة الأفراح وقاعة الاجتماعات، تفاصيل السعة، زر استفسار مخصص.</span></td></tr>
+        <tr><td class="row-num">07</td><td><span class="module-name">الوجهات القريبة</span><span class="module-desc">واجهة ينبع البحرية، مسافة المطار، وسائل النقل — بمحتوى حياتي مع سياق خرائطي.</span></td></tr>
+        <tr><td class="row-num">08</td><td><span class="module-name">المعرض</span><span class="module-desc">شبكة صور منسّقة للغرف والمرافق والمطعم — تحل محل الصورة الواحدة المكررة.</span></td></tr>
+        <tr><td class="row-num">09</td><td><span class="module-name">التواصل</span><span class="module-desc">الموقع مع خريطة مضمّنة، نموذج تواصل، الهاتف والبريد الإلكتروني، زر تواصل عبر <bdi>WhatsApp</bdi>.</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="photo-strip" style="margin-top:2px;">
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/king-bed-mjE5a3Ba7RHpKvG6.jpeg" alt="جناح جونيور">
+        <figcaption>جناح جونيور · 410 ريال / الليلة</figcaption>
+      </figure>
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/corridor-ALpbka6K33cb6Pjb.jpeg" alt="جناح ديلوكس توين">
+        <figcaption>جناح ديلوكس توين · 490 ريال / الليلة</figcaption>
+      </figure>
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/whatsapp-image-2024-03-17-at-6.53.49-pm-mjE5arZPkrHlQzDq.jpeg" alt="جناح ديلوكس كينج">
+        <figcaption>جناح ديلوكس كينج · السعر عند الطلب</figcaption>
+      </figure>
+    </div>
+
+    <div class="note-box navy" style="margin-bottom:0;">
+      <div class="note-label">يتبع في الصفحة التالية</div>
+      <p>تدفق الحجز، والتنفيذ ثنائي اللغة، وتكامل <bdi>WhatsApp</bdi>، وتحسين محركات البحث وضمان الجودة — بالإضافة إلى ملخص التسعير الكامل — في الصفحات التالية.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text"><bdi>Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+    <div class="inner-footer-page">صفحة 5</div>
+  </div>
+</div>
+
+
+<!-- الصفحة 6 — نطاق العمل (الجزء الثاني) -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">فندق بلاتين — عرض إعادة تصميم الموقع</div>
+    <div class="inner-header-ref"><bdi>CX-PH-2026-001</bdi> &nbsp;·&nbsp; أغسطس 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">1</div>
+      <div>
+        <div class="part-banner-sub">القسم 1 — تابع</div>
+        <div class="part-banner-title">نطاق العمل — الحجز وثنائية اللغة والتكاملات</div>
+      </div>
+    </div>
+
+    <table class="pricing-table">
+      <thead><tr><th style="width:24px;">#</th><th>الوحدة / التسليمة ووصف النطاق</th></tr></thead>
+      <tbody>
+        <tr><td class="row-num">10</td><td><span class="module-name">تدفق طلب الحجز</span><span class="module-desc">يختار الضيف التواريخ ونوع الجناح ويرسل الاسم والهاتف والبريد الإلكتروني. يصل الطلب إلى بريد الفندق و<bdi>WhatsApp</bdi> للتأكيد اليدوي من الموظفين. لا بوابة دفع — يدفع الضيف في الفندق.</span></td></tr>
+        <tr><td class="row-num">11</td><td><span class="module-name">التنفيذ ثنائي اللغة (<bdi>AR/EN</bdi>)</span><span class="module-desc">موقع عربي/إنجليزي كامل بتخطيط معكوس <bdi>RTL</bdi> حقيقي (وليس ترجمة نصية فقط)، مع مبدّل لغة في شريط التنقل.</span></td></tr>
+        <tr><td class="row-num">12</td><td><span class="module-name">تكامل <bdi>WhatsApp</bdi></span><span class="module-desc">زر تواصل مباشر عبر كل الصفحات، إضافة إلى تحويل الحجز المباشر لتأكيد فوري ومتبادل.</span></td></tr>
+        <tr><td class="row-num">13</td><td><span class="module-name">تحسين محركات البحث</span><span class="module-desc">تحسين داخل الصفحة، بيانات <bdi>Schema</bdi> خاصة بالفنادق، خريطة الموقع، ملف <bdi>robots.txt</bdi>، بنية <bdi>SEO</bdi> ثنائية اللغة، نصوص بديلة للصور.</span></td></tr>
+        <tr><td class="row-num">14</td><td><span class="module-name">تحسين الأداء</span><span class="module-desc">ضغط الصور، التحميل الكسول، التخزين المؤقت، وضبط مؤشرات <bdi>Core Web Vitals</bdi> لتحميل سريع على الجوال.</span></td></tr>
+        <tr><td class="row-num">15</td><td><span class="module-name">ضمان الجودة والإطلاق</span><span class="module-desc">اختبار عبر المتصفحات والأجهزة، النشر من بيئة الاختبار إلى الإنتاج، وجولة تدريب لموظفي الفندق.</span></td></tr>
+      </tbody>
+    </table>
+
+    <div style="background:#14110E; border-radius:6px; padding:18px 22px; margin-bottom:9px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.4); letter-spacing:0.04em; margin-bottom:5px;">النطاق الكامل</div>
+        <div style="font-size:20px; font-weight:700; color:#C9A24B; line-height:1;">15 وحدة</div>
+        <div style="font-size:14.5px; color:rgba(255,255,255,0.45); margin-top:5px;">التسعير الكامل وجدول الدفعات في صفحة ملخص الاستثمار</div>
+      </div>
+      <div style="text-align:left;">
+        <div style="font-size:13px; color:rgba(255,255,255,0.4); letter-spacing:0.04em; margin-bottom:5px;">الجدول الزمني</div>
+        <div style="font-size:20px; font-weight:700; color:#fff;">أسبوعان</div>
+        <div style="font-size:14px; color:rgba(255,255,255,0.4); margin-top:3px;">من انطلاق المشروع</div>
+      </div>
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">ملاحظة مهمة</div>
+      <p>تكاليف النطاق والاستضافة غير مشمولة ويتحملها فندق بلاتين مباشرة. لا يوجد اشتراك بوابة دفع لأن الحجوزات تُؤكَّد يدويًا ويُسدَّد المبلغ في الفندق. يتطلب الجدول الزمني لمدة أسبوعين تسليم كل المحتوى والصور من فندق بلاتين في اليوم الأول من الانطلاق.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text"><bdi>Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+    <div class="inner-footer-page">صفحة 6</div>
+  </div>
+</div>
+
+
+<!-- الصفحة 7 — ملخص الاستثمار وجدول الدفعات -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">فندق بلاتين — عرض إعادة تصميم الموقع</div>
+    <div class="inner-header-ref"><bdi>CX-PH-2026-001</bdi> &nbsp;·&nbsp; أغسطس 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">الشؤون المالية</div>
+    <div class="section-heading" style="margin-bottom:9px;">ملخص الاستثمار</div>
+
+    <table class="invest-table">
+      <thead><tr><th style="width:46%;">التسليمة</th><th style="width:22%;">الفئة</th><th style="text-align:left;">المبلغ (ريال سعودي)</th></tr></thead>
+      <tbody>
+        <tr class="phase-group-row"><td colspan="3">الموقع الأنيق وتدفق طلب الحجز</td></tr>
+        <tr><td class="item-name">نظام تصميم الواجهة ومواءمة الهوية</td><td class="item-cat"><span class="cat-pill cat-design">تصميم</span></td><td class="item-amt">مشمول</td></tr>
+        <tr><td class="item-name">موقع من 9 صفحات — جميع الأقسام</td><td class="item-cat"><span class="cat-pill cat-dev">تطوير</span></td><td class="item-amt">مشمول</td></tr>
+        <tr><td class="item-name">تنفيذ ثنائي اللغة (<bdi>AR/EN</bdi>) — <bdi>RTL/LTR</bdi></td><td class="item-cat"><span class="cat-pill cat-dev">تطوير</span></td><td class="item-amt">مشمول</td></tr>
+        <tr><td class="item-name">تدفق طلب الحجز (بدون بوابة دفع)</td><td class="item-cat"><span class="cat-pill cat-dev">تطوير</span></td><td class="item-amt">مشمول</td></tr>
+        <tr><td class="item-name">تواصل عبر <bdi>WhatsApp</bdi> وتحويل الحجز</td><td class="item-cat"><span class="cat-pill cat-int">تكامل</span></td><td class="item-amt">مشمول</td></tr>
+        <tr><td class="item-name">تحسين محركات البحث وبيانات <bdi>Schema</bdi> وإعداد التحليلات</td><td class="item-cat"><span class="cat-pill cat-seo">تحسين محركات البحث</span></td><td class="item-amt">مشمول</td></tr>
+        <tr><td class="item-name">تحسين الأداء</td><td class="item-cat"><span class="cat-pill cat-dev">تطوير</span></td><td class="item-amt">مشمول</td></tr>
+        <tr><td class="item-name">ضمان الجودة والاختبار والإطلاق</td><td class="item-cat"><span class="cat-pill cat-qa">ضمان الجودة والإطلاق</span></td><td class="item-amt">مشمول</td></tr>
+        <tr class="phase-total-row"><td class="phase-total-label" colspan="2">إجمالي المشروع</td><td class="phase-total-amount"><bdi>8,000</bdi></td></tr>
+        <tr class="grand-total-row"><td>إجمالي استثمار المشروع</td><td><span class="grand-total-sub">غير شامل ضريبة القيمة المضافة</span></td><td><bdi>SAR 8,000</bdi></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-hr">
+
+    <div class="section-heading" style="font-size:20px; margin-bottom:9px;">جدول الدفعات</div>
+
+    <table class="psched-table">
+      <thead><tr><th style="width:32%;">الدفعة</th><th>عند تحقق</th><th style="text-align:left; width:130px;">المبلغ (ريال سعودي)</th></tr></thead>
+      <tbody>
+        <tr><td>الدفعة المقدمة (50%)</td><td style="color:#475569;">عند اعتماد العرض وبدء المشروع</td><td><bdi>4,000</bdi></td></tr>
+        <tr><td>الدفعة النهائية (50%)</td><td style="color:#475569;">عند اكتمال الاختبار وإطلاق الموقع</td><td><bdi>4,000</bdi></td></tr>
+        <tr class="sched-total"><td>إجمالي المشروع</td><td></td><td><bdi>8,000</bdi></td></tr>
+      </tbody>
+    </table>
+
+    <div style="font-size:14px; color:#94A3B8; font-style:italic;">
+      * جميع المبالغ غير شاملة ضريبة القيمة المضافة. ستُضاف ضريبة القيمة المضافة (15%) على كل فاتورة وفق الأنظمة السعودية.
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text"><bdi>Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+    <div class="inner-footer-page">صفحة 7</div>
+  </div>
+</div>
+
+
+<!-- الصفحة 8 — الجدول الزمني -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">فندق بلاتين — عرض إعادة تصميم الموقع</div>
+    <div class="inner-header-ref"><bdi>CX-PH-2026-001</bdi> &nbsp;·&nbsp; أغسطس 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">الجدول الزمني للمشروع</div>
+    <div class="section-heading" style="margin-bottom:9px;">خطة التسليم — أسبوعان</div>
+
+    <div class="note-box amber">
+      <div class="note-label">جدول زمني سريع</div>
+      <p>يمكن تحقيق التسليم خلال أسبوعين لأن النطاق يستثني بوابة الدفع والمزامنة الحية لتوفر الغرف — وهما العنصران اللذان يطيلان عادة مدة بناء مواقع الفنادق. يتطلب ذلك من فندق بلاتين تسليم كل المحتوى والأسعار والصور في اليوم الأول، والرد على ملاحظات التصميم والمحتوى خلال 24 ساعة في كل مرحلة.</p>
+    </div>
+
+    <div class="tl-phase-header">الموقع الأنيق وتدفق الحجز</div>
+
+    <div class="tl-items">
+      <div class="tl-item">
+        <div class="tl-badge">1</div>
+        <div class="tl-content">
+          <div class="tl-week-label">اليوم 1–2</div>
+          <div class="tl-week-title">الانطلاق والمحتوى ونظام التصميم</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>اجتماع الانطلاق — تأكيد الأهداف وتوجه الهوية والمحتوى؛ جمع تفاصيل الأجنحة والأسعار والصور وأصول الهوية</li>
+            <li><span class="tl-bullet-dot"></span>بناء نظام تصميم أنيق — الخطوط، اللوحة الذهبية/الفحمية، معالجة الصورة الرئيسية، تخطيط أداة الحجز</li>
+            <li><span class="tl-bullet-dot"></span>تصميم الصفحة الرئيسية وصفحة داخلية واحدة وإرسالهما للاعتماد في اليوم نفسه</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">2</div>
+        <div class="tl-content">
+          <div class="tl-week-label">اليوم 3–4</div>
+          <div class="tl-week-title">اعتماد التصميم وبدء البناء الأساسي</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>اعتماد كامل التصميم عبر 9 صفحات، متضمنًا بنية التخطيط المعكوس <bdi>RTL</bdi> ثنائي اللغة</li>
+            <li><span class="tl-bullet-dot"></span>بدء التطوير على الصفحة الرئيسية والأجنحة والمرافق والمطعم بالتوازي</li>
+            <li><span class="tl-bullet-dot"></span>تأكيد الإعداد التقني — الاستضافة، النطاق، وتوجيه طلبات الحجز (البريد/<bdi>WhatsApp</bdi>)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">3</div>
+        <div class="tl-content">
+          <div class="tl-week-label">اليوم 5–7</div>
+          <div class="tl-week-title">الصفحات المتبقية وتدفق الحجز</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>بناء صفحات الاجتماعات والفعاليات، الوجهات القريبة، المعرض، والتواصل</li>
+            <li><span class="tl-bullet-dot"></span>بناء تدفق طلب الحجز وربطه ببريد الفندق و<bdi>WhatsApp</bdi></li>
+            <li><span class="tl-bullet-dot"></span>دمج زر التواصل عبر <bdi>WhatsApp</bdi> في جميع الصفحات</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">4</div>
+        <div class="tl-content">
+          <div class="tl-week-label">اليوم 8–10</div>
+          <div class="tl-week-title">التنفيذ ثنائي اللغة وتحسين محركات البحث</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>تنفيذ كامل للتبديل بين <bdi>RTL/LTR</bdi> — العربية والإنجليزية مباشرة عبر جميع الصفحات</li>
+            <li><span class="tl-bullet-dot"></span>تطبيق بيانات <bdi>Schema</bdi> الخاصة بالفنادق وبنية <bdi>SEO</bdi> ثنائية اللغة؛ ربط <bdi>Google Analytics</bdi> و<bdi>Search Console</bdi></li>
+            <li><span class="tl-bullet-dot"></span>جولة تحسين أداء — ضغط الصور، التحميل الكسول، وضبط <bdi>Core Web Vitals</bdi></li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">5</div>
+        <div class="tl-content">
+          <div class="tl-week-label">اليوم 11–14</div>
+          <div class="tl-week-title">ضمان الجودة والإطلاق والتسليم</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>اختبار شامل عبر الأجهزة والمتصفحات وكلا اللغتين، متضمنًا تدفق الحجز من البداية للنهاية</li>
+            <li><span class="tl-bullet-dot"></span>النشر على بيئة الإنتاج، وإعداد شهادة <bdi>SSL</bdi> و<bdi>DNS</bdi></li>
+            <li><span class="tl-bullet-dot"></span>جولة تدريب لفريق الفندق على إدارة طلبات الحجز والمحتوى</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text"><bdi>Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+    <div class="inner-footer-page">صفحة 8</div>
+  </div>
+</div>
+
+
+<!-- الصفحة 9 — الشروط والافتراضات -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">فندق بلاتين — عرض إعادة تصميم الموقع</div>
+    <div class="inner-header-ref"><bdi>CX-PH-2026-001</bdi> &nbsp;·&nbsp; أغسطس 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">الشروط والأحكام</div>
+    <div class="section-heading" style="margin-bottom:9px;">الشروط العامة</div>
+
+    <ul class="terms-list">
+      <li><span class="terms-dot"></span><div><strong>نطاق العمل:</strong> يغطي هذا العرض جميع أعمال التصميم والتطوير والتكامل الموصوفة. أي ميزات خارج هذا النطاق تتطلب اتفاقًا كتابيًا منفصلًا وقد تترتب عليها رسوم إضافية.</div></li>
+      <li><span class="terms-dot"></span><div><strong>مسؤوليات العميل:</strong> يوافق فندق بلاتين على تسليم المحتوى (النصوص، الصور، الأسعار، أصول الهوية) وتقديم الملاحظات في الوقت المتفق عليه. أي تأخير قد يؤثر على الجدول الزمني للمشروع.</div></li>
+      <li><span class="terms-dot"></span><div><strong>تكاليف الأطراف الثالثة:</strong> الاستضافة وتسجيل النطاق غير مشمولين ويبقيان على مسؤولية العميل.</div></li>
+      <li><span class="terms-dot"></span><div><strong>الملكية الفكرية:</strong> عند استلام كامل المبلغ، تصبح جميع الأكواد والتصاميم المخصصة ملكًا حصريًا لفندق بلاتين. تبقى المكتبات الخارجية خاضعة لتراخيصها الخاصة.</div></li>
+      <li><span class="terms-dot"></span><div><strong>التعديلات:</strong> تشمل مرحلة التصميم جولتين (2) من التعديلات. أي جولات إضافية تُحتسب بشكل منفصل وفق معدل متفق عليه.</div></li>
+      <li><span class="terms-dot"></span><div><strong>الضمان:</strong> تقدم <bdi>Code-ox Technologies</bdi> ضمان إصلاح أعطال مجاني لمدة 30 يومًا بعد الإطلاق. باقات الدعم الممتد متاحة عند الطلب.</div></li>
+      <li><span class="terms-dot"></span><div><strong>السرية:</strong> يتفق الطرفان على الحفاظ على سرية محتوى هذا العرض دون موافقة كتابية مسبقة.</div></li>
+      <li><span class="terms-dot"></span><div><strong>القانون الحاكم:</strong> يخضع هذا الاتفاق لأنظمة المملكة العربية السعودية.</div></li>
+    </ul>
+
+    <hr class="section-hr">
+
+    <div class="part-banner">
+      <div class="part-badge">A</div>
+      <div>
+        <div class="part-banner-sub">الافتراضات والاستثناءات</div>
+        <div class="part-banner-title">افتراضات المشروع الرئيسية</div>
+      </div>
+    </div>
+
+    <ul class="assumptions-list">
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>يسلّم العميل المحتوى المكتوب (عربي وإنجليزي) وصور الأجنحة والأسعار وأصول الهوية خلال <strong>5 أيام عمل</strong> من الانطلاق.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>النطاق والاستضافة <strong>من مسؤولية العميل</strong>. تقدم <bdi>Code-ox</bdi> دعم النشر فقط؛ تكاليف الاستضافة غير مشمولة.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>لا توجد بوابة دفع إلكتروني — تُؤكَّد الحجوزات يدويًا ويدفع الضيوف مباشرة في الفندق، وفق النموذج المتفق عليه.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>مزامنة التوفر الحي مع نظام إدارة الممتلكات (<bdi>PMS</bdi>) أو مدير القنوات <strong>خارج النطاق</strong> ومتاحة كمرحلة مستقبلية.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>التصوير الاحترافي، إن تم تكليفه، تكلفة منفصلة وغير مشمولة في هذا العرض.</span></li>
+    </ul>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text"><bdi>Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+    <div class="inner-footer-page">صفحة 9</div>
+  </div>
+</div>
+
+
+<!-- الصفحة 10 — القبول والتفويض -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">فندق بلاتين — عرض إعادة تصميم الموقع</div>
+    <div class="inner-header-ref"><bdi>CX-PH-2026-001</bdi> &nbsp;·&nbsp; أغسطس 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">التفويض</div>
+    <div class="section-heading" style="margin-bottom:9px;">القبول والتفويض</div>
+
+    <div style="font-size:15.5px; color:#374151; font-style:italic; line-height:1.58; margin-bottom:11px;">
+      بالتوقيع أدناه، يقر الطرفان بقبول هذا العرض ويفوّضان بدء المشروع وفق الشروط والنطاق وجدول الدفعات المذكورة أعلاه. سيُصدر بيان عمل رسمي بعد استلام العرض الموقّع والدفعة المقدمة (50%).
+    </div>
+
+    <div class="signoff-block">
+      <div class="signoff-header">توقيعات التفويض &nbsp;·&nbsp; يُرجى إعادة النسخة الموقعة إلى <bdi>shabeeb.k@code-ox.com</bdi></div>
+      <div class="signoff-body">
+        <div class="signoff-cols">
+          <div>
+            <div class="signoff-col-header">نيابة عن <bdi>Code-ox Technologies</bdi></div>
+            <div class="signoff-field"><div class="signoff-field-label">التوقيع المعتمد</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">الاسم والمنصب</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">التاريخ</div><div class="signoff-field-line"></div></div>
+          </div>
+          <div>
+            <div class="signoff-col-header">نيابة عن فندق بلاتين</div>
+            <div class="signoff-field"><div class="signoff-field-label">التوقيع المعتمد</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">الاسم والمنصب</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">التاريخ</div><div class="signoff-field-line"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px; background:#14110E; border-radius:10px; padding:22px 26px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:13.5px; color:rgba(255,255,255,0.35); letter-spacing:0.04em; margin-bottom:9px;">أسئلة؟ تواصل معنا</div>
+        <div style="font-size:19px; font-weight:700; color:#fff; margin-bottom:8px;">شبيب ك. — <bdi>Code-ox Technologies</bdi></div>
+        <div style="font-size:15px; margin-bottom:5px;">
+          <span style="color:#C9A24B;"><bdi>shabeeb.k@code-ox.com</bdi></span>
+          <span style="color:rgba(255,255,255,0.4);"> &nbsp;·&nbsp; <bdi>+966 535 716 437 · code-ox.com</bdi></span>
+        </div>
+        <div style="font-size:15px;">
+          <span style="color:rgba(255,255,255,0.35);">شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0; margin-right:20px;">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CODE OX" style="height:26px; filter:brightness(0) invert(1); opacity:0.45;">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text"><bdi>Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437</bdi> &nbsp;|&nbsp; شارع الزبير بن العوام، حي الروابي، الرياض 14215، المملكة العربية السعودية</div>
+    <div class="inner-footer-page">صفحة 10</div>
+  </div>
+</div>
+
+</body>
+</html>

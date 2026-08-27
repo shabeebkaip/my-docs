@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platin Hotel — Website Redesign Proposal · CX-PH-2026-001</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body, table, td, th, div, p, span, ul, li { direction: ltr; text-align: left; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #DAD3C3;
+      color: #1A202C;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 24px;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 10px 40px -8px rgba(20,17,14,0.28);
+    }
+
+    @media print {
+      body { background: none; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+    }
+
+    @page { size: A4; margin: 0; }
+
+    .serif { font-family: 'Playfair Display', 'Inter', serif; }
+
+    /* ══════ COVER ══════ */
+    .cover {
+      color: #fff; min-height: 297mm; display: flex; flex-direction: column; position: relative;
+      background:
+        linear-gradient(180deg, rgba(14,17,14,.38) 0%, rgba(14,17,14,.5) 22%, rgba(12,15,12,.86) 48%, rgba(10,13,10,.97) 68%, #0B0E0B 88%),
+        url('https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1600,fit=crop,q=88/AQEVME6agvsg9nx2/edited-entrance-dOqbyleJ1Vf2E88B.jpeg') center 8%/cover no-repeat,
+        #14110E;
+    }
+
+    .cover-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 36px 36px; pointer-events: none; z-index: 1;
+    }
+    .cover-accent-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, #C9A24B 0%, rgba(201,162,75,0.2) 100%); z-index: 3; }
+
+    .cover-topbar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 16px 26px 16px 32px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .cover-topbar-left { display: flex; align-items: center; gap: 14px; }
+    .cover-client-name { font-size: 17px; font-weight: 700; color: #fff; }
+    .cover-client-sub  { font-size: 14px; color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
+    .cover-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.13); }
+    .cover-prepby-label { font-size: 13.5px; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2px; }
+    .cover-prepby-name  { font-size: 17px; font-weight: 600; color: #fff; }
+    .doc-type-pill { border: 1.5px solid #C9A24B; color: #C9A24B; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 7px 14px; border-radius: 4px; white-space: nowrap; }
+
+    .cover-hero { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 32px 26px 0 32px; }
+    .cover-overline { font-size: 14px; font-weight: 600; color: #C9A24B; letter-spacing: 0.26em; text-transform: uppercase; margin-bottom: 9px; display: flex; align-items: center; gap: 10px; }
+    .cover-overline::before { content: ''; width: 26px; height: 1px; background: #C9A24B; }
+    .cover-title { font-family: 'Playfair Display', serif; font-size: 46px; font-weight: 600; line-height: 1.08; color: #fff; margin-bottom: 10px; text-shadow: 0 2px 24px rgba(0,0,0,.35); }
+    .cover-title-accent { color: #C9A24B; font-style: italic; font-weight: 500; }
+    .cover-subtitle { font-size: 17px; color: rgba(255,255,255,0.68); line-height: 1.5; max-width: 420px; margin-bottom: 15px; }
+    .cover-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+    .cover-tag { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); border-radius: 4px; padding: 5px 11px; font-size: 15px; color: rgba(255,255,255,0.65); }
+    .cover-tag strong { color: #fff; font-weight: 600; }
+
+    .cover-ref-box { position: relative; z-index: 2; margin: 0 26px 14px 32px; background: rgba(201,162,75,0.08); border: 1px solid rgba(201,162,75,0.25); border-radius: 6px; display: grid; grid-template-columns: repeat(4,1fr); overflow: hidden; }
+    .cover-ref-item { padding: 15px 14px; border-right: 1px solid rgba(201,162,75,0.15); }
+    .cover-ref-item:last-child { border-right: none; }
+    .cover-ref-label { font-size: 13px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 5px; }
+    .cover-ref-value { font-size: 16.5px; font-weight: 600; color: #fff; }
+    .cover-ref-value.gold { color: #C9A24B; }
+
+    .cover-total-banner { position: relative; z-index: 2; margin: 0 26px 14px 32px; background: #C9A24B; border-radius: 6px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .cover-total-label { font-size: 14px; font-weight: 700; color: #4A3A12; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 3px; }
+    .cover-total-amount { font-size: 31px; font-weight: 800; color: #14110E; line-height: 1; }
+    .cover-total-sub { font-size: 15px; color: rgba(20,17,14,0.65); margin-top: 3px; }
+    .cover-total-right { text-align: right; }
+    .cover-total-vat-label { font-size: 14px; color: rgba(20,17,14,0.6); margin-bottom: 3px; }
+    .cover-total-vat-amount { font-size: 18px; font-weight: 700; color: #14110E; }
+
+    .cover-note { position: relative; z-index: 2; margin: 0 26px 20px 32px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 5px; padding: 14px 18px; display: flex; flex-direction: column; gap: 5px; }
+    .cover-note-label { font-size: 12px; font-weight: 700; color: #C9A24B; letter-spacing: 0.13em; text-transform: uppercase; }
+    .cover-note-text  { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.48; }
+
+    .cover-footer { position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.07); padding: 13px 26px 13px 32px; display: flex; align-items: center; gap: 14px; }
+    .cover-footer img { height: 17px; filter: brightness(0) invert(1); opacity: 0.75; }
+    .cover-footer-sep { width: 1px; height: 14px; background: rgba(255,255,255,0.14); }
+    .cover-footer-text { font-size: 14px; color: rgba(255,255,255,0.38); }
+
+    /* ══════ INNER PAGES ══════ */
+    .inner-page { display: flex; flex-direction: column; min-height: 297mm; }
+    .inner-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 26px; border-bottom: 1px solid #E2E8F0; background: #FAFBFC; }
+    .inner-header img { height: 15px; }
+    .inner-header-title { font-size: 14.5px; color: #64748B; }
+    .inner-header-ref   { font-size: 14.5px; color: #94A3B8; }
+    .inner-content { flex: 1; padding: 13px 26px; }
+    .inner-footer { border-top: 1px solid #E2E8F0; padding: 8px 26px; display: flex; align-items: center; gap: 10px; background: #FAFBFC; }
+    .inner-footer img { height: 13px; opacity: 0.45; }
+    .inner-footer-sep { width: 1px; height: 11px; background: #CBD5E1; }
+    .inner-footer-text { font-size: 13px; color: #94A3B8; flex: 1; }
+    .inner-footer-page { font-size: 13.5px; color: #94A3B8; font-weight: 500; }
+
+    .section-label { font-size: 13.5px; font-weight: 700; color: #C9A24B; text-transform: uppercase; letter-spacing: 0.22em; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .section-label::before { content: ''; width: 16px; height: 1px; background: #C9A24B; }
+    .section-heading { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; color: #14110E; margin-bottom: 9px; line-height: 1.16; letter-spacing: -0.01em; }
+    .section-intro { font-size: 15.5px; color: #475569; line-height: 1.42; margin-bottom: 7px; }
+    .pull-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 24px; font-weight: 500; color: #14110E; line-height: 1.28; border-left: 2px solid #C9A24B; padding: 3px 0 3px 20px; margin: 12px 0; }
+    .photo-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 12px 0; }
+    .photo-strip figure { border-radius: 5px; overflow: hidden; }
+    .photo-strip img { width: 100%; height: 78px; object-fit: cover; display: block; }
+    .photo-strip figcaption { font-size: 13px; color: #94A3B8; padding: 5px 2px 0; text-align: center; letter-spacing: 0.04em; }
+
+    .part-banner { background: #14110E; color: #fff; border-radius: 6px; padding: 13px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+    .part-badge { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #C9A24B; display: flex; align-items: center; justify-content: center; font-size: 16.5px; font-weight: 800; color: #14110E; }
+    .part-banner-sub   { font-size: 13px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2px; }
+    .part-banner-title { font-size: 17px; font-weight: 700; }
+
+    .note-box { border-radius: 5px; padding: 7px 13px; font-size: 15px; line-height: 1.48; margin-bottom: 9px; }
+    .note-box.gold  { background: #FBF6EB; border: 1px solid #EBD9AC; border-left: 3px solid #C9A24B; }
+    .note-box.amber { background: #FFFBEB; border: 1px solid #FDE68A; border-left: 3px solid #F59E0B; }
+    .note-box.navy  { background: #F0F4F8; border: 1px solid #CBD5E1; border-left: 3px solid #14110E; }
+    .note-box .note-label { font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 5px; }
+    .note-box.gold  .note-label { color: #97742B; }
+    .note-box.amber .note-label { color: #B45309; }
+    .note-box.navy  .note-label { color: #334155; }
+    .note-box p     { color: #374151; }
+    .note-box strong { font-weight: 600; }
+
+    .section-hr { border: none; border-top: 1px solid #E2E8F0; margin: 18px 0; }
+
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 9px; }
+    .info-card { border: 1px solid #E2E8F0; border-radius: 6px; padding: 9px 12px; }
+    .info-card-label { font-size: 14.5px; font-weight: 700; color: #14110E; margin-bottom: 3px; }
+    .info-card-value { font-size: 15px; color: #64748B; line-height: 1.32; }
+
+    /* ── Problem / Fix compare table ── */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 14.5px; margin-bottom: 9px; }
+    .compare-table thead th { background: #14110E; color: #fff; padding: 9px 12px; text-align: left; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+    .compare-table tbody tr { border-bottom: 1px solid #EEF2F7; }
+    .compare-table tbody tr:nth-child(even) { background: #F8FAFC; }
+    .compare-table tbody td { padding: 8px 12px; vertical-align: top; line-height: 1.32; }
+    .compare-table .area-name { font-weight: 700; color: #14110E; width: 18%; }
+    .compare-table .before-cell { color: #B91C1C; width: 41%; }
+    .compare-table .after-cell { color: #166534; width: 41%; }
+    .compare-table .before-cell::before, .compare-table .after-cell::before { content: '— '; opacity: 0.5; }
+
+    /* ── Pricing Table ── */
+    .pricing-table { width: 100%; border-collapse: collapse; font-size: 14.5px; margin-bottom: 9px; direction: ltr; }
+    .pricing-table thead th { background: #14110E; color: #fff; padding: 9px 10px; text-align: left; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; direction: ltr; }
+    .pricing-table tbody tr:nth-child(even) { background: #F8FAFC; }
+    .pricing-table tbody td { padding: 8px 10px; border-bottom: 1px solid #EEF2F7; color: #334155; vertical-align: top; line-height: 1.35; text-align: left; direction: ltr; }
+    .pricing-table .row-num { font-size: 13.5px; color: #94A3B8; font-weight: 600; min-width: 18px; text-align: left; }
+    .pricing-table .module-name { font-weight: 600; color: #14110E; display: block; margin-bottom: 2px; text-align: left; }
+    .pricing-table .module-desc { font-size: 13.5px; color: #64748B; line-height: 1.3; text-align: left; }
+
+    /* ── Investment Summary Table ── */
+    .invest-table { width:100%; border-collapse:collapse; font-size:15px; margin-bottom:9px; direction:ltr; }
+    .invest-table thead th { background:#14110E; color:#fff; padding:10px 14px; text-align:left; font-size:13px; font-weight:700; letter-spacing:0.13em; text-transform:uppercase; direction:ltr; }
+    .invest-table thead th:last-child { text-align:right; }
+    .invest-table .phase-group-row td { background:#FBF6EB; color:#97742B; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:8px 14px; border-bottom:1px solid #EBD9AC; text-align:left; direction:ltr; }
+    .invest-table tbody tr { border-bottom:1px solid #EEF2F7; }
+    .invest-table tbody td { text-align:left; direction:ltr; }
+    .invest-table .item-name { font-weight:600; color:#14110E; padding:9px 14px; text-align:left; }
+    .invest-table .item-cat  { padding:9px 8px; text-align:left; }
+    .invest-table .item-amt  { text-align:right; color:#64748B; padding:9px 14px; font-size:14.5px; }
+    .cat-pill { display:inline-block; padding:3px 9px; border-radius:20px; font-size:13px; font-weight:600; border:1px solid; }
+    .cat-design { border-color:#C7D2FE; color:#4F46E5; background:#EEF2FF; }
+    .cat-dev    { border-color:#BBF7D0; color:#16A34A; background:#F0FDF4; }
+    .cat-int    { border-color:#FDE68A; color:#B45309; background:#FFFBEB; }
+    .cat-seo    { border-color:#DDD6FE; color:#7C3AED; background:#F5F3FF; }
+    .cat-qa     { border-color:#FBCFE8; color:#BE185D; background:#FDF2F8; }
+    .invest-table .phase-total-row td { background:#F8FAFC; border-top:1.5px solid #E2E8F0; padding:10px 14px; font-weight:700; }
+    .invest-table .phase-total-label { color:#C9A24B; font-size:15.5px; }
+    .invest-table .phase-total-amount { text-align:right; color:#C9A24B; font-size:17px; font-weight:800; }
+    .invest-table .grand-total-row td { background:#14110E; color:#fff; padding:13px 14px; font-weight:700; font-size:16px; }
+    .invest-table .grand-total-row td:last-child { color:#C9A24B; font-size:18px; text-align:right; }
+    .grand-total-sub { font-size:14px; color:rgba(255,255,255,0.45); font-weight:400; }
+
+    /* ── Payment Schedule Table ── */
+    .psched-table { width:100%; border-collapse:collapse; font-size:15px; margin-bottom:10px; direction:ltr; }
+    .psched-table thead th { background:#14110E; color:#fff; padding:10px 14px; text-align:left; font-size:13px; font-weight:700; letter-spacing:0.13em; text-transform:uppercase; direction:ltr; }
+    .psched-table thead th:last-child { text-align:right; }
+    .psched-table tbody tr { border-bottom:1px solid #EEF2F7; }
+    .psched-table tbody td { padding:12px 14px; color:#334155; text-align:left; direction:ltr; }
+    .psched-table tbody td:first-child { font-weight:700; color:#14110E; text-align:left; }
+    .psched-table tbody td:last-child { text-align:right; font-weight:600; color:#14110E; }
+    .psched-table .sched-total td { background:#14110E; color:#fff; padding:12px 14px; font-weight:700; font-size:16px; text-align:left; }
+    .psched-table .sched-total td:last-child { color:#C9A24B; font-size:18px; text-align:right; }
+
+    /* ── Timeline ── */
+    .tl-phase-header { font-size: 13.5px; font-weight: 700; color: #C9A24B; text-transform: uppercase; letter-spacing: 0.2em; border-bottom: 1.5px solid #C9A24B; padding-bottom: 7px; margin-bottom: 11px; display: flex; align-items: center; gap: 10px; }
+    .tl-items { position: relative; padding-left: 4px; }
+    .tl-item { display: flex; gap: 14px; margin-bottom: 9px; position: relative; }
+    .tl-badge { width: 26px; height: 26px; min-width: 26px; border-radius: 50%; background: #C9A24B; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: #14110E; flex-shrink: 0; }
+    .tl-content { flex: 1; padding-top: 2px; }
+    .tl-week-label { font-size: 13px; font-weight: 700; color: #C9A24B; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 2px; }
+    .tl-week-title { font-size: 16px; font-weight: 700; color: #14110E; margin-bottom: 6px; }
+    .tl-bullets { list-style: none; }
+    .tl-bullets li { display: flex; gap: 7px; align-items: flex-start; font-size: 14px; color: #475569; line-height: 1.38; margin-bottom: 3px; }
+    .tl-bullet-dot { width: 5px; height: 5px; min-width: 5px; border-radius: 50%; background: #94A3B8; margin-top: 5px; flex-shrink: 0; }
+
+    /* ── Terms / assumptions ── */
+    .terms-list { list-style:none; margin-bottom:0; }
+    .terms-list li { display:flex; gap:10px; align-items:flex-start; font-size:15px; color:#374151; line-height:1.48; padding:8px 0; border-bottom:1px solid #F1F5F9; }
+    .terms-list li:last-child { border-bottom:none; }
+    .terms-dot { width:7px; height:7px; min-width:7px; border-radius:50%; background:#C9A24B; margin-top:6px; flex-shrink:0; }
+
+    .assumptions-list { list-style: none; margin-bottom: 9px; }
+    .assumptions-list li { display: flex; align-items: flex-start; gap: 9px; padding: 8px 10px; border-bottom: 1px solid #F1F5F9; font-size: 15px; color: #334155; line-height: 1.42; }
+    .assumptions-list li:first-child { border-top: 1px solid #F1F5F9; }
+    .assumptions-list li:nth-child(even) { background: #FAFBFD; }
+    .assumption-icon { width: 16px; height: 16px; min-width: 16px; border-radius: 3px; background: #F1F5F9; border: 1px solid #CBD5E1; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px; }
+
+    /* ── Sign-off ── */
+    .signoff-block { border: 1.5px solid #E2E8F0; border-radius: 6px; overflow: hidden; margin-top: 16px; }
+    .signoff-header { background: #14110E; color: #fff; padding: 10px 16px; font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .signoff-body { padding: 14px 16px; background: #FAFBFC; }
+    .signoff-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .signoff-col-header { font-size: 13.5px; font-weight: 700; color: #14110E; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 9px; padding-bottom: 5px; border-bottom: 2px solid #C9A24B; }
+    .signoff-field { margin-bottom: 9px; }
+    .signoff-field-label { font-size: 13px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; }
+    .signoff-field-line { border-bottom: 1.5px solid #CBD5E1; height: 24px; }
+
+    /* ── Mood swatches ── */
+    .swatch-row { display: flex; gap: 8px; margin-bottom: 9px; }
+    .swatch { flex: 1; border-radius: 6px; padding: 26px 10px 8px; position: relative; }
+    .swatch-label { font-size: 13.5px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.08em; }
+    .swatch-hex { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="cover-grid"></div>
+  <div class="cover-accent-bar"></div>
+
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <div>
+        <div class="cover-client-name">Platin Hotel</div>
+        <div class="cover-client-sub">4-Star Hospitality · Yanbu, KSA</div>
+      </div>
+      <div class="cover-divider"></div>
+      <div>
+        <div class="cover-prepby-label">Prepared by</div>
+        <div class="cover-prepby-name">Code-ox Technologies</div>
+      </div>
+    </div>
+    <div class="doc-type-pill">Website Redesign Proposal</div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">Website Redesign Proposal &nbsp;·&nbsp; August 2026</div>
+    <div class="cover-title">
+      An Elegant, Bookable<br>
+      Website<br>
+      <span class="cover-title-accent">Worthy of Platin Hotel</span>
+    </div>
+    <div class="cover-subtitle">
+      A complete audit of the current site plus a full redesign proposal — bringing Ritz-Carlton and Mövenpick-level visual polish, true bilingual Arabic/English, and an effortless reservation experience, without adding online payment complexity.
+    </div>
+
+    <div class="cover-tags">
+      <div class="cover-tag"><strong>Elegant</strong> Design System</div>
+      <div class="cover-tag"><strong>Bilingual</strong> AR / EN · RTL</div>
+      <div class="cover-tag"><strong>Reservation</strong> Inquiry Flow</div>
+      <div class="cover-tag"><strong>No</strong> Payment Gateway</div>
+      <div class="cover-tag"><strong>WhatsApp</strong> Handoff</div>
+      <div class="cover-tag"><strong>SEO</strong> Optimized</div>
+    </div>
+  </div>
+
+  <div class="cover-ref-box">
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Proposal No.</div>
+      <div class="cover-ref-value gold">CX-PH-2026-001</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Date</div>
+      <div class="cover-ref-value">12 August 2026</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Currency</div>
+      <div class="cover-ref-value">SAR (Saudi Riyal)</div>
+    </div>
+    <div class="cover-ref-item">
+      <div class="cover-ref-label">Prepared By</div>
+      <div class="cover-ref-value">Code-ox Technologies</div>
+    </div>
+  </div>
+
+  <div class="cover-total-banner">
+    <div class="cover-total-left">
+      <div class="cover-total-label">Timeline</div>
+      <div class="cover-total-amount">2 Weeks</div>
+      <div class="cover-total-sub">From kickoff to go-live &nbsp;·&nbsp; full pricing on the Investment Summary page</div>
+    </div>
+    <div class="cover-total-right">
+      <div class="cover-total-vat-label">Scope</div>
+      <div class="cover-total-vat-amount">9 Pages · AR/EN</div>
+    </div>
+  </div>
+
+  <div class="cover-note">
+    <div class="cover-note-label">Prepared For</div>
+    <div class="cover-note-text">
+      Platin Hotel &nbsp;·&nbsp; Al-Majd Dist., King Abdul-Aziz Road, Yanbu, Madinah Province, KSA. Based on our discovery call and a live audit of platinhotel.com, this proposal is valid for 30 days from the date of issuance.
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox Technologies">
+    <div class="cover-footer-sep"></div>
+    <div class="cover-footer-text">shabeeb.k@code-ox.com &nbsp;|&nbsp; +966 535 716 437 &nbsp;|&nbsp; code-ox.com &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+  </div>
+</div>
+
+
+<!-- PAGE 2 — EXECUTIVE SUMMARY -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Platin Hotel — Website Redesign Proposal</div>
+    <div class="inner-header-ref">CX-PH-2026-001 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Overview</div>
+    <div class="section-heading">Executive Summary</div>
+    <div class="section-intro">
+      Following our discovery call, Platin Hotel is looking to elevate its online presence to match the calibre of its 4-star, 65-suite property — with Ritz-Carlton and Mövenpick named as the visual benchmark. We reviewed platinhotel.com directly and identified the specific gaps holding the current site back from that positioning: a broken, off-brand booking handoff, no working bilingual experience, and a generic template look that undersells the property.
+      <br><br>
+      This proposal covers a full redesign — an elegant, photography-led design system, true Arabic/English bilingual support with mirrored RTL layout, and a simple on-brand reservation inquiry flow. No payment gateway is included: guests settle payment directly at the hotel, exactly as requested.
+    </div>
+
+    <div class="pull-quote">"The destination you'll adore to reside in" — Platin's own words, finally given a website that looks like it.</div>
+
+    <div class="info-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 9px; margin-bottom: 10px;">
+      <div class="info-card" style="border-top: 3px solid #C9A24B;">
+        <div class="info-card-label">Prepared For</div>
+        <div class="info-card-value">Platin Hotel<br>Yanbu, Kingdom of Saudi Arabia</div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #C9A24B;">
+        <div class="info-card-label">Prepared By</div>
+        <div class="info-card-value">Code-ox Technologies<br>shabeeb.k@code-ox.com<br>+966 535 716 437</div>
+      </div>
+      <div class="info-card" style="border-top: 3px solid #C9A24B;">
+        <div class="info-card-label">Proposal Details</div>
+        <div class="info-card-value">No: CX-PH-2026-001<br>Date: 12 August 2026<br>Currency: SAR (Saudi Riyal)</div>
+      </div>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="section-label" style="margin-bottom: 9px;">What We Will Deliver</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 7px;">
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:6px 10px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.25;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">Elegant Design System</strong><br>Full-bleed photography, refined typography and a gold/charcoal palette carried from Platin's existing identity — in the register of Ritz-Carlton and Mövenpick.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:6px 10px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.25;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">Full Website Rebuild</strong><br>9 pages, from homepage to contact, replacing the current single-template layout with a structured, premium experience.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:6px 10px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.25;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">On-Brand Reservation Flow</strong><br>Dates, room type and guest details submitted in one flow — routed to hotel email/WhatsApp for manual confirmation. Replaces today's off-site redirect entirely.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:6px 10px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.25;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">True Bilingual AR/EN</strong><br>Fully mirrored RTL Arabic layout — not a string-swap — with a visible language switcher, matching the standard set by every reference brand named.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:6px 10px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.25;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">WhatsApp Integration</strong><br>Click-to-chat and reservation handoff, so guests and staff can confirm bookings instantly without a payment step.</div>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:9px; padding:6px 10px; background:#F8FAFC; border:1px solid #EEF2F7; border-radius:5px; font-size:15px; color:#334155; line-height:1.25;">
+        <span style="width:16px;height:16px;min-width:16px;border-radius:50%;background:#C9A24B;display:inline-flex;align-items:center;justify-content:center;margin-top:1px;"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><strong style="color:#14110E;font-weight:600;">SEO, QA &amp; Go-Live</strong><br>Hotel schema markup, bilingual SEO structure, cross-device testing and a smooth handover to Platin's team.</div>
+      </div>
+    </div>
+
+    <div class="note-box gold">
+      <div class="note-label">Our Commitment</div>
+      <p>Code-ox Technologies will deliver a website that finally matches the standard of a 4-star property — elegant, fast, bilingual, and simple for hotel staff to run, with no unnecessary complexity added around payment.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 2</div>
+  </div>
+</div>
+
+
+<!-- PAGE 3 — CURRENT SITE ASSESSMENT -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Platin Hotel — Website Redesign Proposal</div>
+    <div class="inner-header-ref">CX-PH-2026-001 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Live Audit — platinhotel.com</div>
+    <div class="section-heading">Where the Current Site Falls Short</div>
+    <div class="section-intro">
+      We reviewed the live site directly rather than assuming. The current build has good bones — real photography, a clear amenities list, a defined suite range — but several gaps are actively working against the premium positioning Platin Hotel wants. These are normal maturing steps for a site built on an earlier template, and every one of them is directly addressed in the redesign.
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">Most Urgent Finding</div>
+      <p>The "BOOK NOW" button does not lead to a Platin Hotel experience at all — it redirects to an unbranded third-party engine (<strong>booking.staygrid.com</strong>, "Powered by Hotelogix"): a generic blue template with no logo, no photography, and no visual connection to the hotel. For the single most important action on the site, guests land somewhere that looks nothing like a 4-star property.</p>
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th style="width:18%;">Area</th><th style="width:41%;">Current Experience</th><th style="width:41%;">Redesigned Experience</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="area-name">Booking</td>
+          <td class="before-cell">"Book Now" exits the site to an unbranded, unstyled third-party booking engine — no trust continuity.</td>
+          <td class="after-cell">On-page reservation inquiry widget in Platin's own design; guest never leaves the site.</td>
+        </tr>
+        <tr>
+          <td class="area-name">Bilingual</td>
+          <td class="before-cell">Nav items are hardcoded "Home (EN)", "Contact (EN)" — a language switcher that was never finished. No Arabic version exists.</td>
+          <td class="after-cell">Full Arabic/English site with true mirrored RTL layout and a working language switcher.</td>
+        </tr>
+        <tr>
+          <td class="area-name">Visual Identity</td>
+          <td class="before-cell">Boxy sections, flat mauve/tan color blocks, generic system fonts — reads as a stock template.</td>
+          <td class="after-cell">Full-bleed cinematic photography, refined typography, restrained gold/charcoal palette in the register of Ritz-Carlton and Mövenpick.</td>
+        </tr>
+        <tr>
+          <td class="area-name">Photography</td>
+          <td class="before-cell">One recycled room photo reused across multiple sections; no gallery.</td>
+          <td class="after-cell">Curated photography plan per suite category, facility and dining space — with a shoot brief if new photos are needed.</td>
+        </tr>
+        <tr>
+          <td class="area-name">Call to Action</td>
+          <td class="before-cell">A single small "Book Now" button buried mid-page; no persistent reservation prompt.</td>
+          <td class="after-cell">A floating, always-visible reservation widget on the hero, matching how every reference brand surfaces booking.</td>
+        </tr>
+        <tr>
+          <td class="area-name">Suite Presentation</td>
+          <td class="before-cell">Suite categories listed as plain paragraphs with no visual comparison.</td>
+          <td class="after-cell">Structured suite cards with imagery, amenities and rate, side by side for easy comparison.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box navy" style="margin-bottom:0;">
+      <div class="note-label">Why this matters</div>
+      <p>None of this reflects badly on the hotel itself — it reflects a site that was never finished to the standard the property now wants to compete at. Closing these six gaps is what turns platinhotel.com into a site guests trust enough to book directly, instead of bouncing to an OTA.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 3</div>
+  </div>
+</div>
+
+
+<!-- PAGE 4 — DESIGN DIRECTION -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Platin Hotel — Website Redesign Proposal</div>
+    <div class="inner-header-ref">CX-PH-2026-001 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Direction</div>
+    <div class="section-heading">Design Direction — Referencing Ritz-Carlton &amp; Mövenpick</div>
+    <div class="section-intro">
+      We reviewed both reference brands live to extract the specific patterns that read as "premium" rather than describe them in the abstract. Both share one structural idea worth borrowing directly: a full-bleed photographic hero with the reservation widget floating on top of it — never a separate, disconnected booking page.
+    </div>
+
+    <div class="info-grid" style="margin-bottom:9px;">
+      <div class="info-card">
+        <div class="info-card-label">Ritz-Carlton pattern</div>
+        <div class="info-card-value">Full-bleed dark hero imagery, a refined serif wordmark, a destination/date search bar floating directly on the hero, minimal top navigation, generous whitespace throughout.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Mövenpick pattern</div>
+        <div class="info-card-value">Warm lifestyle photography as the hero, gold/cream accents on white, a "Find a hotel" search card overlapping the image, clean sans-serif navigation, visible language switcher.</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px;">Proposed Palette — Built on Platin's Existing Gold Identity</div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#14110E;"><div class="swatch-label">Charcoal</div><div class="swatch-hex">#14110E</div></div>
+      <div class="swatch" style="background:#C9A24B;"><div class="swatch-label">Platin Gold</div><div class="swatch-hex">#C9A24B</div></div>
+      <div class="swatch" style="background:#F4EFE6; color:#14110E;"><div class="swatch-label" style="color:#14110E;">Warm Ivory</div><div class="swatch-hex" style="color:#5b5648;">#F4EFE6</div></div>
+      <div class="swatch" style="background:#3A3227;"><div class="swatch-label">Deep Bronze</div><div class="swatch-hex">#3A3227</div></div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px;">Your Own Photography, Elevated</div>
+    <div class="photo-strip">
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/edited-entrance-dOqbyleJ1Vf2E88B.jpeg" alt="Platin Hotel entrance">
+        <figcaption>Entrance — hero photography</figcaption>
+      </figure>
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/king-bed-mjE5a3Ba7RHpKvG6.jpeg" alt="Suite king bed">
+        <figcaption>Suite — gallery photography</figcaption>
+      </figure>
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/corridor-ALpbka6K33cb6Pjb.jpeg" alt="Hotel corridor">
+        <figcaption>Corridor — editorial crop</figcaption>
+      </figure>
+    </div>
+    <div class="note-box gold" style="margin-bottom:0;">
+      <div class="note-label">No reshoot required</div>
+      <p>These are Platin's existing photographs — the redesign doesn't need new imagery to look like a different hotel. Full-bleed crops, consistent color grading and generous whitespace do the work.</p>
+    </div>
+
+    <hr class="section-hr">
+
+    <div class="section-label" style="margin-bottom:9px;">Direction Applied to Platin Hotel</div>
+    <ul class="assumptions-list">
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>Homepage hero: full-bleed photo or slow-motion video loop of the property, reservation widget floating on top — not a separate page.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>Typography pairs a refined display serif for headings with a clean sans-serif for body text, mirroring the restraint both reference brands use.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>Platin's existing gold logo mark is carried through as the accent color rather than replaced — the redesign elevates the brand, it doesn't reinvent it.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>Language switcher placed top-right in the nav, exactly where both Ritz-Carlton and Mövenpick surface it.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>Suite categories presented as an editorial gallery grid rather than plain text blocks, with a comparison-friendly layout.</span></li>
+    </ul>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 4</div>
+  </div>
+</div>
+
+
+<!-- PAGE 5 — SCOPE OF WORK (Part 1) -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Platin Hotel — Website Redesign Proposal</div>
+    <div class="inner-header-ref">CX-PH-2026-001 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">1</div>
+      <div>
+        <div class="part-banner-sub">Section 1</div>
+        <div class="part-banner-title">Scope of Work — Design &amp; Core Pages</div>
+      </div>
+    </div>
+
+    <table class="pricing-table">
+      <thead><tr><th style="width:24px;">#</th><th>Module / Deliverable &amp; Scope Description</th></tr></thead>
+      <tbody>
+        <tr><td class="row-num">01</td><td><span class="module-name">UI/UX Design System</span><span class="module-desc">Elegant premium design system — typography, gold/charcoal palette, hero treatment, component library. Bilingual (AR/EN) layouts, mobile-first.</span></td></tr>
+        <tr><td class="row-num">02</td><td><span class="module-name">Home Page</span><span class="module-desc">Full-bleed hero photography/video, floating on-brand reservation widget, amenities highlight strip, suite teaser gallery, guest reviews, location teaser.</span></td></tr>
+        <tr><td class="row-num">03</td><td><span class="module-name">Suites &amp; Accommodation</span><span class="module-desc">Full room category gallery with comparison cards — Junior Suite, Deluxe Suite Twin, Deluxe King — amenities per suite, rate display, "Enquire to Book" CTA.</span></td></tr>
+        <tr><td class="row-num">04</td><td><span class="module-name">Facilities &amp; Services</span><span class="module-desc">Fitness centre, pool, spa, 24-hour concierge — presented as an elegant icon-and-photo grid, not a text list.</span></td></tr>
+        <tr><td class="row-num">05</td><td><span class="module-name">Cafe &amp; Restaurant</span><span class="module-desc">Imagery-led dining page showcasing the café/restaurant experience.</span></td></tr>
+        <tr><td class="row-num">06</td><td><span class="module-name">Meetings &amp; Events</span><span class="module-desc">Wedding hall and meeting room presentation, capacity details, dedicated enquiry CTA.</span></td></tr>
+        <tr><td class="row-num">07</td><td><span class="module-name">Nearby Attractions</span><span class="module-desc">Yanbu Waterfront, airport distance, transport links — presented as lifestyle content with map context.</span></td></tr>
+        <tr><td class="row-num">08</td><td><span class="module-name">Gallery</span><span class="module-desc">Curated photography grid across rooms, facilities and dining — replacing the single recycled photo.</span></td></tr>
+        <tr><td class="row-num">09</td><td><span class="module-name">Contact</span><span class="module-desc">Location with embedded map, contact form, phone/email, WhatsApp click-to-chat.</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="photo-strip" style="margin-top:2px;">
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/king-bed-mjE5a3Ba7RHpKvG6.jpeg" alt="Junior Suite">
+        <figcaption>Junior Suite · 410 SR/night</figcaption>
+      </figure>
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/corridor-ALpbka6K33cb6Pjb.jpeg" alt="Deluxe Suite Twin">
+        <figcaption>Deluxe Suite Twin · 490 SR/night</figcaption>
+      </figure>
+      <figure>
+        <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=500,h=280,fit=crop,q=85/AQEVME6agvsg9nx2/whatsapp-image-2024-03-17-at-6.53.49-pm-mjE5arZPkrHlQzDq.jpeg" alt="Deluxe King Suite">
+        <figcaption>Deluxe King Suite · rate on request</figcaption>
+      </figure>
+    </div>
+
+    <div class="note-box navy" style="margin-bottom:0;">
+      <div class="note-label">Continued on next page</div>
+      <p>Reservation flow, bilingual implementation, WhatsApp integration, SEO and QA — plus the complete pricing summary — are on the following pages.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 5</div>
+  </div>
+</div>
+
+
+<!-- PAGE 6 — SCOPE OF WORK (Part 2) -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Platin Hotel — Website Redesign Proposal</div>
+    <div class="inner-header-ref">CX-PH-2026-001 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="part-banner">
+      <div class="part-badge">1</div>
+      <div>
+        <div class="part-banner-sub">Section 1 — Continued</div>
+        <div class="part-banner-title">Scope of Work — Booking, Bilingual &amp; Integrations</div>
+      </div>
+    </div>
+
+    <table class="pricing-table">
+      <thead><tr><th style="width:24px;">#</th><th>Module / Deliverable &amp; Scope Description</th></tr></thead>
+      <tbody>
+        <tr><td class="row-num">10</td><td><span class="module-name">Reservation Inquiry Flow</span><span class="module-desc">Guest selects dates, room type, and submits name/phone/email. Submission routes to hotel email and WhatsApp for manual confirmation by staff. No payment gateway — guest pays at the hotel.</span></td></tr>
+        <tr><td class="row-num">11</td><td><span class="module-name">Bilingual (AR/EN) Implementation</span><span class="module-desc">Full Arabic/English site with true mirrored RTL layout (not string-swap), language switcher in navigation.</span></td></tr>
+        <tr><td class="row-num">12</td><td><span class="module-name">WhatsApp Integration</span><span class="module-desc">Click-to-chat widget across all pages plus direct reservation handoff for instant back-and-forth confirmation.</span></td></tr>
+        <tr><td class="row-num">13</td><td><span class="module-name">SEO Optimization</span><span class="module-desc">On-page SEO, Hotel schema markup, sitemap, robots.txt, bilingual SEO structure, image alt tags.</span></td></tr>
+        <tr><td class="row-num">14</td><td><span class="module-name">Performance Optimization</span><span class="module-desc">Image compression, lazy loading, caching, Core Web Vitals tuning for fast load on mobile.</span></td></tr>
+        <tr><td class="row-num">15</td><td><span class="module-name">QA, Testing &amp; Launch</span><span class="module-desc">Cross-browser and cross-device QA, staging-to-production deployment, staff walkthrough.</span></td></tr>
+      </tbody>
+    </table>
+
+    <div style="background:#14110E; border-radius:6px; padding:18px 22px; margin-bottom:9px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.15em; margin-bottom:5px;">Complete Scope</div>
+        <div style="font-size:20px; font-weight:700; color:#C9A24B; line-height:1;">15 Modules</div>
+        <div style="font-size:14.5px; color:rgba(255,255,255,0.45); margin-top:5px;">Full pricing and payment schedule on the Investment Summary page</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:13px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.13em; margin-bottom:5px;">Timeline</div>
+        <div style="font-size:20px; font-weight:700; color:#fff;">2 Weeks</div>
+        <div style="font-size:14px; color:rgba(255,255,255,0.4); margin-top:3px;">from project kickoff</div>
+      </div>
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">Important Note</div>
+      <p>Domain and hosting costs are not included and are borne directly by Platin Hotel. No payment gateway subscription applies, as reservations are confirmed manually and payment is settled at the hotel. The 2-week timeline requires all content and photography to be provided by Platin Hotel on Day 1 of kickoff.</p>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 6</div>
+  </div>
+</div>
+
+
+<!-- PAGE 7 — INVESTMENT SUMMARY & PAYMENT SCHEDULE -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Platin Hotel — Website Redesign Proposal</div>
+    <div class="inner-header-ref">CX-PH-2026-001 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Financials</div>
+    <div class="section-heading" style="margin-bottom:9px;">Investment Summary</div>
+
+    <table class="invest-table">
+      <thead><tr><th style="width:46%;">Deliverable</th><th style="width:22%;">Category</th><th style="text-align:right;">Amount (SAR)</th></tr></thead>
+      <tbody>
+        <tr class="phase-group-row"><td colspan="3">ELEGANT WEBSITE &amp; RESERVATION INQUIRY FLOW</td></tr>
+        <tr><td class="item-name">UI/UX Design System &amp; Brand Alignment</td><td class="item-cat"><span class="cat-pill cat-design">Design</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">9-Page Corporate Website — All Sections</td><td class="item-cat"><span class="cat-pill cat-dev">Development</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">Bilingual (AR/EN) RTL/LTR Implementation</td><td class="item-cat"><span class="cat-pill cat-dev">Development</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">Reservation Inquiry Flow (No Payment Gateway)</td><td class="item-cat"><span class="cat-pill cat-dev">Development</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">WhatsApp Click-to-Chat &amp; Reservation Handoff</td><td class="item-cat"><span class="cat-pill cat-int">Integration</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">SEO Optimization, Hotel Schema &amp; Analytics Setup</td><td class="item-cat"><span class="cat-pill cat-seo">SEO</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">Performance Optimization</td><td class="item-cat"><span class="cat-pill cat-dev">Development</span></td><td class="item-amt">Included</td></tr>
+        <tr><td class="item-name">QA, Cross-Device Testing &amp; Go-Live</td><td class="item-cat"><span class="cat-pill cat-qa">QA &amp; Launch</span></td><td class="item-amt">Included</td></tr>
+        <tr class="phase-total-row"><td class="phase-total-label" colspan="2">Project Total</td><td class="phase-total-amount">8,000</td></tr>
+        <tr class="grand-total-row"><td>Total Project Investment</td><td><span class="grand-total-sub">Exclusive of VAT</span></td><td>SAR 8,000</td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-hr">
+
+    <div class="section-heading" style="font-size:20px; margin-bottom:9px;">Payment Schedule</div>
+
+    <table class="psched-table">
+      <thead><tr><th style="width:32%;">Milestone</th><th>Trigger</th><th style="text-align:right; width:130px;">Amount (SAR)</th></tr></thead>
+      <tbody>
+        <tr><td>Advance Payment (50%)</td><td style="color:#475569;">Upon proposal sign-off and project commencement</td><td>4,000</td></tr>
+        <tr><td>Final Payment (50%)</td><td style="color:#475569;">Upon UAT completion and website go-live</td><td>4,000</td></tr>
+        <tr class="sched-total"><td>Project Total</td><td></td><td>8,000</td></tr>
+      </tbody>
+    </table>
+
+    <div style="font-size:14px; color:#94A3B8; font-style:italic;">
+      * All amounts are exclusive of VAT. VAT (15%) will be added to each invoice as per KSA regulations.
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 7</div>
+  </div>
+</div>
+
+
+<!-- PAGE 8 — TIMELINE -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Platin Hotel — Website Redesign Proposal</div>
+    <div class="inner-header-ref">CX-PH-2026-001 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Project Timeline</div>
+    <div class="section-heading" style="margin-bottom:9px;">Delivery Plan — 2 Weeks</div>
+
+    <div class="note-box amber">
+      <div class="note-label">Fast-Track Timeline</div>
+      <p>A 2-week delivery is achievable because the scope excludes a payment gateway and live PMS availability sync — the two items that typically extend a hotel website build. It requires Platin Hotel to hand over all content, rates and photography on Day 1, and to turn around design and content feedback within 24 hours at each checkpoint.</p>
+    </div>
+
+    <div class="tl-phase-header">ELEGANT WEBSITE &amp; RESERVATION FLOW</div>
+
+    <div class="tl-items">
+      <div class="tl-item">
+        <div class="tl-badge">1</div>
+        <div class="tl-content">
+          <div class="tl-week-label">Days 1–2</div>
+          <div class="tl-week-title">Kickoff, Content &amp; Design System</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>Kickoff meeting — goals, brand direction and content confirmed; suite details, rates, photography and brand assets collected</li>
+            <li><span class="tl-bullet-dot"></span>Elegant design system created — typography, gold/charcoal palette, hero treatment, reservation widget layout</li>
+            <li><span class="tl-bullet-dot"></span>Homepage and one interior page designed and sent for approval same day</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">2</div>
+        <div class="tl-content">
+          <div class="tl-week-label">Days 3–4</div>
+          <div class="tl-week-title">Design Sign-Off &amp; Core Build Starts</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>Full design set approved across all 9 pages, including the bilingual RTL layout structure</li>
+            <li><span class="tl-bullet-dot"></span>Development begins on homepage, suites, facilities and dining pages in parallel</li>
+            <li><span class="tl-bullet-dot"></span>Technical setup — hosting, domain, and reservation routing (email/WhatsApp) confirmed</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">3</div>
+        <div class="tl-content">
+          <div class="tl-week-label">Days 5–7</div>
+          <div class="tl-week-title">Remaining Pages &amp; Reservation Flow</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>Meetings &amp; Events, Nearby Attractions, Gallery and Contact pages built</li>
+            <li><span class="tl-bullet-dot"></span>Reservation inquiry flow built and wired to hotel email/WhatsApp</li>
+            <li><span class="tl-bullet-dot"></span>WhatsApp click-to-chat integrated across all pages</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">4</div>
+        <div class="tl-content">
+          <div class="tl-week-label">Days 8–10</div>
+          <div class="tl-week-title">Bilingual Implementation &amp; SEO</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>Full RTL/LTR switching implemented — Arabic and English live across all pages</li>
+            <li><span class="tl-bullet-dot"></span>Hotel schema markup and bilingual SEO structure applied; Google Analytics and Search Console connected</li>
+            <li><span class="tl-bullet-dot"></span>Performance pass — image compression, lazy loading, Core Web Vitals tuning</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-badge">5</div>
+        <div class="tl-content">
+          <div class="tl-week-label">Days 11–14</div>
+          <div class="tl-week-title">QA, Go-Live &amp; Handover</div>
+          <ul class="tl-bullets">
+            <li><span class="tl-bullet-dot"></span>Full QA across devices, browsers and both languages, including the reservation flow end to end</li>
+            <li><span class="tl-bullet-dot"></span>Production deployment, SSL and DNS configuration</li>
+            <li><span class="tl-bullet-dot"></span>Staff walkthrough on managing reservation inquiries and content</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 8</div>
+  </div>
+</div>
+
+
+<!-- PAGE 9 — TERMS & ASSUMPTIONS -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Platin Hotel — Website Redesign Proposal</div>
+    <div class="inner-header-ref">CX-PH-2026-001 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Terms &amp; Conditions</div>
+    <div class="section-heading" style="margin-bottom:9px;">General Terms</div>
+
+    <ul class="terms-list">
+      <li><span class="terms-dot"></span><div><strong>Scope of Work:</strong> This proposal covers all design, development, and integration work described. Features outside this scope require a separate written agreement and may incur additional charges.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Client Responsibilities:</strong> Platin Hotel agrees to provide content (text, images, rates, brand assets) and timely feedback within agreed deadlines. Delays may impact the project timeline.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Third-Party Costs:</strong> Hosting and domain registration are not included and remain the client's responsibility.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Intellectual Property:</strong> Upon receipt of full payment, all custom code and design deliverables become the exclusive property of Platin Hotel. Third-party libraries remain subject to their respective licences.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Revisions:</strong> The design phase includes up to two (2) rounds of revisions. Additional rounds are charged separately at an agreed rate.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Warranty:</strong> Code-ox Technologies provides 30 days of complimentary bug-fix warranty post go-live. Extended support retainers are available on request.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Confidentiality:</strong> Both parties agree to keep the contents of this proposal confidential without prior written consent.</div></li>
+      <li><span class="terms-dot"></span><div><strong>Governing Law:</strong> This agreement is governed by the laws of the Kingdom of Saudi Arabia.</div></li>
+    </ul>
+
+    <hr class="section-hr">
+
+    <div class="part-banner">
+      <div class="part-badge">A</div>
+      <div>
+        <div class="part-banner-sub">Assumptions &amp; Exclusions</div>
+        <div class="part-banner-title">Key Project Assumptions</div>
+      </div>
+    </div>
+
+    <ul class="assumptions-list">
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>Client will provide written content (Arabic &amp; English), suite photography, rates, and brand assets within <strong>5 business days</strong> of kickoff.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>Domain and hosting are <strong>client-provided</strong>. Code-ox provides deployment support only; hosting costs are not included.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>No online payment gateway is included — reservations are confirmed manually and guests pay directly at the hotel, per the agreed model.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>Live availability/inventory syncing with a PMS or channel manager is <strong>out of scope</strong> and available as a future phase.</span></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><span>Professional photography, if commissioned, is a separate cost and not included in this quotation.</span></li>
+    </ul>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 9</div>
+  </div>
+</div>
+
+
+<!-- PAGE 10 — ACCEPTANCE & AUTHORIZATION -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-header-title">Platin Hotel — Website Redesign Proposal</div>
+    <div class="inner-header-ref">CX-PH-2026-001 &nbsp;·&nbsp; August 2026</div>
+  </div>
+
+  <div class="inner-content">
+
+    <div class="section-label">Authorization</div>
+    <div class="section-heading" style="margin-bottom:9px;">Acceptance &amp; Authorization</div>
+
+    <div style="font-size:15.5px; color:#374151; font-style:italic; line-height:1.5; margin-bottom:11px;">
+      By signing below, both parties confirm acceptance of this proposal and authorize the commencement of the project under the terms, scope, and payment schedule set out above. A formal Statement of Work will be issued following receipt of the signed proposal and the 50% advance payment.
+    </div>
+
+    <div class="signoff-block">
+      <div class="signoff-header">Authorization Signatures &nbsp;·&nbsp; Return signed copy to shabeeb.k@code-ox.com</div>
+      <div class="signoff-body">
+        <div class="signoff-cols">
+          <div>
+            <div class="signoff-col-header">For &amp; On Behalf of Code-ox Technologies</div>
+            <div class="signoff-field"><div class="signoff-field-label">Authorized Signatory</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Name &amp; Title</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date</div><div class="signoff-field-line"></div></div>
+          </div>
+          <div>
+            <div class="signoff-col-header">For &amp; On Behalf of Platin Hotel</div>
+            <div class="signoff-field"><div class="signoff-field-label">Authorized Signatory</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Name &amp; Title</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date</div><div class="signoff-field-line"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px; background:#14110E; border-radius:10px; padding:22px 26px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:13.5px; color:rgba(255,255,255,0.35); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:9px;">Questions? Get in Touch</div>
+        <div style="font-size:19px; font-weight:700; color:#fff; margin-bottom:8px;">Shabeeb K — Code-ox Technologies</div>
+        <div style="font-size:15px; margin-bottom:5px;">
+          <span style="color:#C9A24B;">shabeeb.k@code-ox.com</span>
+          <span style="color:rgba(255,255,255,0.4);"> &nbsp;·&nbsp; +966 535 716 437 &nbsp;·&nbsp; code-ox.com</span>
+        </div>
+        <div style="font-size:15px;">
+          <span style="color:rgba(255,255,255,0.35);">3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0; margin-left:20px;">
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CODE OX" style="height:26px; filter:brightness(0) invert(1); opacity:0.45;">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="inner-footer">
+    <img src="https://code-ox.com/codeoxlogo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 535 716 437 &nbsp;|&nbsp; 3239 Al Zubair Bin Al Awwam St, Al Rawabi Dist., Riyadh 14215, KSA</div>
+    <div class="inner-footer-page">Page 10</div>
+  </div>
+</div>
+
+</body>
+</html>
