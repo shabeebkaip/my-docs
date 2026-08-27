@@ -368,6 +368,36 @@
         <p>Every core booking/discovery flow exists, but empty states, onboarding, and visual hierarchy read as an MVP scaffold rather than a finished product — no personalization, no motion, no reason to open the app twice.</p>
       </div>
       <div class="find">
+        <div class="sev">Production bug</div>
+        <h4>Dev placeholder strings shipped live</h4>
+        <p>Reviewed on real device screens, not store marketing shots: a location field literally reads "Location Should Here," another reads the literal word "string," and one label reads "...en is the required default locale y //" — raw i18n/dev copy shipped to production. This is the single most trust-breaking thing a user can see in a booking app.</p>
+      </div>
+      <div class="find">
+        <div class="sev">Conversion</div>
+        <h4>No visible booking CTA on the activity detail screen</h4>
+        <p>The one job of a detail screen is to convert, and on the reviewed screen no enroll/book button is visible in the viewport. If it exists below the fold, that's still a failure — the primary action must never require scrolling to discover.</p>
+      </div>
+      <div class="find">
+        <div class="sev">Consistency</div>
+        <h4>Bottom navigation differs between screens</h4>
+        <p>The home screen's bottom nav reads حسابي / فعالياتي / الأحصائيات / الرئيسية; the activity-detail screen shows Map / فعالياتي / جميع الفعاليات / الرئيسية — different items, different order, and "Map" left in English inside an otherwise fully Arabic RTL app. Primary navigation should be identical everywhere; this reads as two screens built by two people without a shared spec.</p>
+      </div>
+      <div class="find minor">
+        <div class="sev">Comprehension</div>
+        <h4>Calendar highlights have no legend</h4>
+        <p>Three dates are marked with a yellow-green dot and nothing explains what it means — available slots, booked sessions, today? Decoration standing in for information.</p>
+      </div>
+      <div class="find minor">
+        <div class="sev">Accessibility</div>
+        <h4>Placeholder text fails contrast</h4>
+        <p>Gray placeholder text inside the white login-field pills measures roughly 2.9:1 against white — WCAG AA requires 4.5:1 for body text. The rest of the login screen (white/yellow-green on indigo) actually passes comfortably; this one element doesn't.</p>
+      </div>
+      <div class="find minor">
+        <div class="sev">Auth</div>
+        <h4>No phone/OTP or national-ID login</h4>
+        <p>Social login covers Apple, X, and Google but skips phone/OTP — the dominant consumer auth pattern in KSA — and any Nafath-style national ID option, which matters for a product selling into government and education accounts.</p>
+      </div>
+      <div class="find">
         <div class="sev">Credibility</div>
         <h4>Site reads as template-built, not custom</h4>
         <p>Montserrat set at heavy weights on everything, uniform fully-rounded pill buttons, a rainbow of identical pastel-gradient cards, unmodified default icon set, and generic stock photography (a person facing away from camera in the hero) — this is the exact visual signature of an AI-scaffolded Tailwind build. For a company pitching Vision 2030 institutional clients, that undercuts credibility before anyone reads a word of copy.</p>
@@ -384,6 +414,7 @@
       <div class="tag">Motivation</div>
       <h3>SkillVera already built the hard part.</h3>
       <p>Auth, discovery, booking, maps, favorites, notifications, and payment-linked data are all live. That's the plumbing every great booking/fitness/learning app needs — it's the same skeleton behind the category's best experiences. What's missing is the layer that turns "functional" into "can't put it down": personalization, motion, real-time feedback, and a design system that feels premium in every screen, not just the marketing site.</p>
+      <p style="margin-top:14px">Where the process broke, concretely: this went from idea straight to code with no research, IA, or shared component system in between. The evidence is on-screen — two different card/rating/nav components for the same data, no i18n QA pass before shipping (dev placeholder strings live in production), no defined empty or loading states, and no usability test session (one would have caught the missing booking CTA and the undecipherable calendar dots in an hour). Someone picked a brand color and applied it as a flat background everywhere — that's a color choice, not a visual design system.</p>
     </div>
     <div class="concept-grid">
       <div class="concept-card c-blue"><div class="ico">1</div><h4>Guided onboarding, not an empty inbox</h4><p>Swipeable interest picker (sports, age group, location) on first launch so day-one home screen is already personalized instead of showing "no activities created."</p></div>
@@ -395,8 +426,17 @@
       <div class="concept-card c-cyan"><div class="ico">7</div><h4>Map-first discovery</h4><p>Clustered pins, filters by activity type/distance/price, "happening near you right now" — the maps integration already exists, it just needs a real UI on top of it.</p></div>
       <div class="concept-card c-rose"><div class="ico">8</div><h4>Social proof &amp; community</h4><p>Photos and reviews from past participants, friend invites, and family/group accounts so parents can manage multiple children's bookings from one login.</p></div>
       <div class="concept-card c-pink"><div class="ico">9</div><h4>Accessible &amp; inclusive by default</h4><p>VoiceOver/TalkBack labels, dynamic type support, high-contrast mode, and a genuinely polished RTL layout — not just mirrored LTR.</p></div>
-      <div class="concept-card c-yellow"><div class="ico">10</div><h4>One design system, every screen</h4><p>A shared component library — buttons, cards, empty states, loading states — so the app feels like one considered product instead of screens built at different times.</p></div>
+      <div class="concept-card c-yellow"><div class="ico">10</div><h4>One design system, every screen</h4><p>A shared component library — cards, rating rows, bottom nav, empty states, loading states — so the same activity doesn't render as two different components depending which screen it's on.</p></div>
     </div>
+
+    <h3 style="margin-top:32px">If we only fix 5 things first</h3>
+    <ol class="flow-list">
+      <li><b>Pull dev placeholder strings out of production</b> — "Location Should Here," literal "string," raw i18n keys. Near-zero effort, maximum trust damage if left in.</li>
+      <li><b>Add a visible, persistent booking CTA</b> on the activity detail screen — this is the one screen whose job is to convert.</li>
+      <li><b>Unify the bottom navigation</b> across every screen — currently different items in a different order depending where you are.</li>
+      <li><b>One shared card + rating component</b> for activities, used everywhere instead of two competing versions.</li>
+      <li><b>Fix placeholder-text contrast and add a calendar legend</b> — cheap, concrete accessibility and comprehension wins.</li>
+    </ol>
   </div>
 </section>
 
@@ -522,6 +562,7 @@
       <div class="opp p1"><div class="pri">P1 · Trust</div><h4>Data encryption &amp; security hardening</h4><p>Encrypt data at rest/in transit, review the payment flow, produce a basic PDPL compliance pass.</p></div>
       <div class="opp p1"><div class="pri">P1 · Trust</div><h4>Fix broken demo &amp; stale site content</h4><p>Repair the Rent demo link, footer typo, missing CEO photo, publish a linked Privacy Policy.</p></div>
       <div class="opp p1"><div class="pri">P1 · SEO</div><h4>Fix EN title tag, add sitemap/robots, extend schema</h4><p>Same-day fixes with outsized impact — the English site is currently non-functional for English search intent and uncrawlable by design.</p></div>
+      <div class="opp p1"><div class="pri">P1 · UX QA</div><h4>Ship-blocking app QA pass</h4><p>Pull dev placeholder strings from production, add the missing booking CTA, unify bottom navigation — the "if we only fix 5 things" list, before anything else touches the app.</p></div>
       <div class="opp p2"><div class="pri">P2 · Experience</div><h4>Mobile onboarding &amp; personalized home feed</h4><p>Highest-leverage UX fix — kills the empty-state problem seen in every reviewed screenshot and gives new users a reason to stay.</p></div>
       <div class="opp p2"><div class="pri">P2 · Experience</div><h4>Real-time booking, payments &amp; calendar sync</h4><p>Turns "browse and hope" into an actual transactional product — directly supports the financial data the app already declares collecting.</p></div>
       <div class="opp p2"><div class="pri">P2 · Brand</div><h4>Shared design system, web + app</h4><p>One token/component set so every surface — site, app, store listings — reads as the same premium brand.</p></div>
