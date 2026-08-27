@@ -127,6 +127,37 @@
   .find p{font-size:12.8px;color:var(--muted)}
   .find code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--primary-50);color:var(--primary-900);padding:1px 6px;border-radius:5px;font-size:12px}
 
+  /* issue tiles — icon-led, scan not read */
+  .legend{display:flex;gap:22px;margin-bottom:20px;flex-wrap:wrap}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted)}
+  .legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .legend .lg-red{background:var(--red)} .legend .lg-amber{background:var(--amber)}
+  .issue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .issue{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 16px -14px rgba(11,18,32,.3);position:relative}
+  .issue::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;background:var(--red)}
+  .issue.minor::before{background:var(--amber)}
+  .issue .icn{width:36px;height:36px;border-radius:10px;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+  .issue.minor .icn{background:var(--amber-soft);color:var(--amber)}
+  .issue .icn svg{width:19px;height:19px}
+  .issue h4{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:5px}
+  .issue p{font-size:11.8px;color:var(--muted);line-height:1.45}
+
+  /* gauges */
+  .gauge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:14px}
+  .gauge{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center;box-shadow:0 8px 20px -16px rgba(11,18,32,.2)}
+  .gauge svg{width:76px;height:76px;margin-bottom:8px}
+  .gauge .gnum{font-size:20px;font-weight:800;fill:var(--ink)}
+  .gauge span{display:block;font-size:11.5px;color:var(--muted);font-weight:600}
+
+  /* kanban roadmap */
+  .kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start}
+  .kcol{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:0 8px 20px -16px rgba(11,18,32,.18)}
+  .kcol h4{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 4px 12px;border-bottom:2px solid var(--line);margin-bottom:12px}
+  .kcol.p1 h4{color:var(--red)} .kcol.p2 h4{color:var(--amber)} .kcol.p3 h4{color:var(--green)}
+  .kcard{background:var(--bg-alt);border-radius:10px;padding:11px 13px;margin-bottom:9px;font-size:12.5px;color:var(--ink);font-weight:600;line-height:1.4}
+  .kcard:last-child{margin-bottom:0}
+  .kcard span{display:block;font-weight:400;color:var(--muted);font-size:11.3px;margin-top:3px}
+
   /* vision banner */
   .vision-banner{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius);padding:30px 34px;margin-bottom:30px;box-shadow:0 18px 36px -20px rgba(29,77,179,.5)}
   .vision-banner .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#BFD1F7;background:rgba(255,255,255,.12);border-radius:999px;padding:6px 13px;margin-bottom:14px}
@@ -172,10 +203,10 @@
   footer b{color:#fff}
 
   @media(max-width:820px){
-    .info-grid,.svc-grid,.prod-grid,.findings,.opp-grid,.tldr,.team-grid,.bench,.hero-meta,.stat-grid,.concept-grid{grid-template-columns:1fr 1fr}
+    .info-grid,.svc-grid,.prod-grid,.findings,.opp-grid,.tldr,.team-grid,.bench,.hero-meta,.stat-grid,.concept-grid,.issue-grid,.gauge-grid,.kanban{grid-template-columns:1fr 1fr}
   }
   @media(max-width:560px){
-    .info-grid,.svc-grid,.prod-grid,.findings,.opp-grid,.tldr,.team-grid,.bench,.hero-meta,.stat-grid,.concept-grid{grid-template-columns:1fr}
+    .info-grid,.svc-grid,.prod-grid,.findings,.opp-grid,.tldr,.team-grid,.bench,.hero-meta,.stat-grid,.concept-grid,.issue-grid,.gauge-grid,.kanban{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -285,7 +316,7 @@
     <div class="app-hero">
       <div class="app-icon">SKV</div>
       <div>
-        <p style="color:var(--muted);font-size:14px;max-width:60ch">Activity discovery &amp; booking app — browse sports/educational/recreational activities, enroll, find nearby locations via maps, track enrollments, save favorites. Arabic-first UI (RTL) with a navy theme, despite the App Store listing declaring English as the only supported language.</p>
+        <p style="color:var(--muted);font-size:14px;max-width:60ch">Discover, enroll, and track sports/educational activities via maps and favorites. Arabic RTL UI — despite the App Store listing English-only.</p>
         <div class="app-meta-row">
           <span class="chip">iOS 15.0+ · 75.9 MB · Free</span>
           <span class="chip">Android · 10+ installs</span>
@@ -322,7 +353,7 @@
     </div>
 
     <h3 style="margin-top:26px">Declared data collection (App Privacy / Play Data Safety)</h3>
-    <p style="font-size:14px;color:var(--muted);max-width:70ch">Linked to identity: <b style="color:var(--ink)">Health &amp; Fitness, Financial Info, Location, Contact Info, Search History.</b> Not linked: User Content, Diagnostics. Google Play additionally states "no data shared with third parties" but <b style="color:var(--ink)">"Data isn't encrypted."</b> Financial-info collection implies in-app payment for activity/facility bookings — confirm actual payment flow and PSP with the client.</p>
+    <p style="font-size:13.5px;color:var(--muted);max-width:70ch">Linked to identity: <b style="color:var(--ink)">Health, Financial Info, Location, Contact Info, Search History</b> — and per Google Play, <b style="color:var(--ink)">unencrypted</b>. Confirm actual PSP/payment flow with the client.</p>
   </div>
 </section>
 
@@ -331,76 +362,80 @@
     <div class="kicker">Where It Stands Today</div>
     <h2>The honest gap</h2>
     <p class="lead">Not a formal QA audit — surface-level findings from public site/store review only. The good news: none of this is architecturally hard to fix. It's a design-and-craft gap, not a technology gap.</p>
-    <div class="findings">
-      <div class="find">
-        <div class="sev">Security / Compliance</div>
-        <h4>Collected user data is unencrypted</h4>
-        <p>Google Play's Data Safety section explicitly states data isn't encrypted, while the app collects financial and health data linked to identity. Worth a real security review given PDPL obligations in KSA.</p>
+    <div class="legend">
+      <span><i class="lg-red"></i> Major — fix before anything else</span>
+      <span><i class="lg-amber"></i> Minor — polish pass</span>
+    </div>
+    <div class="issue-grid">
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+        <h4>User data isn't encrypted</h4>
+        <p>Financial + health data collected, unencrypted per Google Play. PDPL risk in KSA.</p>
       </div>
-      <div class="find">
-        <div class="sev">Broken flow</div>
-        <h4>Both product "Demo" links are dead</h4>
-        <p>Not just Rent — every "Demo" CTA on the Products page is broken. SkillVera Rent and Event App each link to their own Hostinger-hosted subdomain (lightpink-goose-814046 / lightgray-pony-732195.hostingersite.com), and both return error pages. Two live, linked-to broken experiences on the public marketing site, not one.</p>
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7a5 5 0 1 1 0-10h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12" stroke-dasharray="2.5 3.5"/></svg></div>
+        <h4>Both "Demo" links are dead</h4>
+        <p>Rent + Event App demos each 404 on their own Hostinger subdomain.</p>
       </div>
-      <div class="find">
-        <div class="sev">Layout bug</div>
-        <h4>English site renders header right-to-left</h4>
-        <p>On skillvera.sa/en the logo sits on the right and the nav reads Contact → Products → Services → About → Home — mirrored as if still in Arabic. Root cause in the page source: the header nav has a hardcoded <code>flex-row-reverse</code> Tailwind class that isn't conditioned on locale, so it never flips back for English. One-line fix, but visible on every English page load.</p>
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M17 8l3 4-3 4"/><path d="M7 8l-3 4 3 4"/></svg></div>
+        <h4>English header renders mirrored</h4>
+        <p>Hardcoded <code>flex-row-reverse</code> never flips back for EN. One-line fix.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Store metadata</div>
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 20h20L12 2z"/><line x1="12" y1="9" x2="12" y2="13.5"/><circle cx="12" cy="17" r=".9" fill="currentColor" stroke="none"/></svg></div>
+        <h4>Dev placeholder strings live</h4>
+        <p>"Location Should Here", literal "string" — raw i18n keys shipped to production.</p>
+      </div>
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7.5 18 2.2-7.3L21 12.5z"/></svg></div>
+        <h4>No visible booking CTA</h4>
+        <p>The detail screen's one job is to convert — the button's missing or buried.</p>
+      </div>
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <h4>Bottom nav differs by screen</h4>
+        <p>Different items, different order — even a stray English "Map" label.</p>
+      </div>
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z" opacity="0"/><path d="M14 3v4a2 2 0 0 0 2 2h4"/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="9" y1="15" x2="15" y2="9"/></svg></div>
+        <h4>Site reads as template-built</h4>
+        <p>Heavy Montserrat, pastel-rainbow cards, stock photos — the AI-scaffold tell.</p>
+      </div>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg></div>
         <h4>App Store language mismatch</h4>
-        <p>App Store lists "English" as the only supported language, but the actual app UI is Arabic RTL throughout.</p>
+        <p>Listed English-only; app UI is Arabic RTL throughout.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Store metadata</div>
-        <h4>Category likely wrong</h4>
-        <p>Listed under "Entertainment" on both stores; content fits Health &amp; Fitness or Lifestyle better for discoverability.</p>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12 12 2h8v8L10 20 2 12z"/><circle cx="15" cy="7" r="1.4" fill="currentColor" stroke="none"/></svg></div>
+        <h4>Wrong app category</h4>
+        <p>Listed as Entertainment; Health &amp; Fitness fits better for discovery.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Content</div>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></div>
         <h4>Site polish gaps</h4>
-        <p>CEO headshot is a placeholder icon; footer copyright reads "© Skillbera 2025" (misspelled + stale year); social icons are all disabled/non-functional in the footer.</p>
+        <p>Placeholder CEO photo, footer typo + stale year, dead social icons.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Experience</div>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
         <h4>Functional, not delightful</h4>
-        <p>Every core booking/discovery flow exists, but empty states, onboarding, and visual hierarchy read as an MVP scaffold rather than a finished product — no personalization, no motion, no reason to open the app twice.</p>
+        <p>No personalization or motion — no reason to open the app twice.</p>
       </div>
-      <div class="find">
-        <div class="sev">Production bug</div>
-        <h4>Dev placeholder strings shipped live</h4>
-        <p>Reviewed on real device screens, not store marketing shots: a location field literally reads "Location Should Here," another reads the literal word "string," and one label reads "...en is the required default locale y //" — raw i18n/dev copy shipped to production. This is the single most trust-breaking thing a user can see in a booking app.</p>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><circle cx="8" cy="14" r="1.3" fill="currentColor" stroke="none"/><circle cx="14" cy="14" r="1.3" fill="currentColor" stroke="none"/></svg></div>
+        <h4>Calendar dots have no legend</h4>
+        <p>Three highlighted dates, zero explanation of what they mean.</p>
       </div>
-      <div class="find">
-        <div class="sev">Conversion</div>
-        <h4>No visible booking CTA on the activity detail screen</h4>
-        <p>The one job of a detail screen is to convert, and on the reviewed screen no enroll/book button is visible in the viewport. If it exists below the fold, that's still a failure — the primary action must never require scrolling to discover.</p>
-      </div>
-      <div class="find">
-        <div class="sev">Consistency</div>
-        <h4>Bottom navigation differs between screens</h4>
-        <p>The home screen's bottom nav reads حسابي / فعالياتي / الأحصائيات / الرئيسية; the activity-detail screen shows Map / فعالياتي / جميع الفعاليات / الرئيسية — different items, different order, and "Map" left in English inside an otherwise fully Arabic RTL app. Primary navigation should be identical everywhere; this reads as two screens built by two people without a shared spec.</p>
-      </div>
-      <div class="find minor">
-        <div class="sev">Comprehension</div>
-        <h4>Calendar highlights have no legend</h4>
-        <p>Three dates are marked with a yellow-green dot and nothing explains what it means — available slots, booked sessions, today? Decoration standing in for information.</p>
-      </div>
-      <div class="find minor">
-        <div class="sev">Accessibility</div>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg></div>
         <h4>Placeholder text fails contrast</h4>
-        <p>Gray placeholder text inside the white login-field pills measures roughly 2.9:1 against white — WCAG AA requires 4.5:1 for body text. The rest of the login screen (white/yellow-green on indigo) actually passes comfortably; this one element doesn't.</p>
+        <p>~2.9:1 measured vs. WCAG AA's 4.5:1 minimum.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Auth</div>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.5 12.5 20 3"/><path d="M16 7l3 3"/><path d="M13 10l2.5 2.5"/></svg></div>
         <h4>No phone/OTP or national-ID login</h4>
-        <p>Social login covers Apple, X, and Google but skips phone/OTP — the dominant consumer auth pattern in KSA — and any Nafath-style national ID option, which matters for a product selling into government and education accounts.</p>
-      </div>
-      <div class="find">
-        <div class="sev">Credibility</div>
-        <h4>Site reads as template-built, not custom</h4>
-        <p>Montserrat set at heavy weights on everything, uniform fully-rounded pill buttons, a rainbow of identical pastel-gradient cards, unmodified default icon set, and generic stock photography (a person facing away from camera in the hero) — this is the exact visual signature of an AI-scaffolded Tailwind build. For a company pitching Vision 2030 institutional clients, that undercuts credibility before anyone reads a word of copy.</p>
+        <p>Apple/X/Google only — misses KSA's dominant auth pattern.</p>
       </div>
     </div>
   </div>
@@ -413,20 +448,25 @@
     <div class="vision-banner">
       <div class="tag">Motivation</div>
       <h3>SkillVera already built the hard part.</h3>
-      <p>Auth, discovery, booking, maps, favorites, notifications, and payment-linked data are all live. That's the plumbing every great booking/fitness/learning app needs — it's the same skeleton behind the category's best experiences. What's missing is the layer that turns "functional" into "can't put it down": personalization, motion, real-time feedback, and a design system that feels premium in every screen, not just the marketing site.</p>
-      <p style="margin-top:14px">Where the process broke, concretely: this went from idea straight to code with no research, IA, or shared component system in between. The evidence is on-screen — two different card/rating/nav components for the same data, no i18n QA pass before shipping (dev placeholder strings live in production), no defined empty or loading states, and no usability test session (one would have caught the missing booking CTA and the undecipherable calendar dots in an hour). Someone picked a brand color and applied it as a flat background everywhere — that's a color choice, not a visual design system.</p>
+      <p>Auth, discovery, booking, maps, and notifications are all live — the hard plumbing is done. Missing: the layer that turns "functional" into "can't put it down."</p>
+      <div class="app-meta-row" style="margin-top:16px">
+        <span class="chip" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff">No research or IA phase</span>
+        <span class="chip" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff">No shared component system</span>
+        <span class="chip" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff">No usability test pass</span>
+        <span class="chip" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff">Color chosen, not a design system</span>
+      </div>
     </div>
     <div class="concept-grid">
-      <div class="concept-card c-blue"><div class="ico">1</div><h4>Guided onboarding, not an empty inbox</h4><p>Swipeable interest picker (sports, age group, location) on first launch so day-one home screen is already personalized instead of showing "no activities created."</p></div>
-      <div class="concept-card c-indigo"><div class="ico">2</div><h4>A home feed that knows the user</h4><p>Recommended activities by history, location, and interests — sectioned rows ("Near you," "Popular this week," "Because you joined Padel") instead of one flat list.</p></div>
-      <div class="concept-card c-emerald"><div class="ico">3</div><h4>Real-time booking &amp; live availability</h4><p>Live seat counts, waitlists with auto-promotion, instant confirmation, and one-tap add-to-calendar (Apple/Google) — booking should feel as fast as buying a movie ticket.</p></div>
-      <div class="concept-card c-teal"><div class="ico">4</div><h4>Seamless in-app payments</h4><p>Saved cards, mada/Apple Pay, split family bookings for parents booking multiple kids, automatic digital receipts — matches the financial data the app already declares it collects.</p></div>
-      <div class="concept-card c-purple"><div class="ico">5</div><h4>Progress &amp; gamification tied to Talent Development</h4><p>Skill-level progress bars, streaks, badges, and shareable achievement cards that connect the app directly to SkillVera's own Talent Development product line.</p></div>
-      <div class="concept-card c-orange"><div class="ico">6</div><h4>Notifications that earn their place</h4><p>Session reminders, waitlist-opened alerts, personalized re-engagement nudges — not generic blasts. Every push should feel useful enough to keep enabled.</p></div>
-      <div class="concept-card c-cyan"><div class="ico">7</div><h4>Map-first discovery</h4><p>Clustered pins, filters by activity type/distance/price, "happening near you right now" — the maps integration already exists, it just needs a real UI on top of it.</p></div>
-      <div class="concept-card c-rose"><div class="ico">8</div><h4>Social proof &amp; community</h4><p>Photos and reviews from past participants, friend invites, and family/group accounts so parents can manage multiple children's bookings from one login.</p></div>
-      <div class="concept-card c-pink"><div class="ico">9</div><h4>Accessible &amp; inclusive by default</h4><p>VoiceOver/TalkBack labels, dynamic type support, high-contrast mode, and a genuinely polished RTL layout — not just mirrored LTR.</p></div>
-      <div class="concept-card c-yellow"><div class="ico">10</div><h4>One design system, every screen</h4><p>A shared component library — cards, rating rows, bottom nav, empty states, loading states — so the same activity doesn't render as two different components depending which screen it's on.</p></div>
+      <div class="concept-card c-blue"><div class="ico">1</div><h4>Guided onboarding, not an empty inbox</h4><p>Pick interests on first launch — day one is personalized, not blank.</p></div>
+      <div class="concept-card c-indigo"><div class="ico">2</div><h4>A home feed that knows the user</h4><p>Sectioned rows by history and location, not one flat list.</p></div>
+      <div class="concept-card c-emerald"><div class="ico">3</div><h4>Real-time booking &amp; live availability</h4><p>Live seat counts, waitlists, one-tap calendar sync — fast as a movie ticket.</p></div>
+      <div class="concept-card c-teal"><div class="ico">4</div><h4>Seamless in-app payments</h4><p>Saved cards, mada/Apple Pay, split family bookings, instant receipts.</p></div>
+      <div class="concept-card c-purple"><div class="ico">5</div><h4>Progress &amp; gamification</h4><p>Streaks, badges, skill bars — tied to Talent Development.</p></div>
+      <div class="concept-card c-orange"><div class="ico">6</div><h4>Notifications that earn their place</h4><p>Reminders and re-engagement nudges — never a generic blast.</p></div>
+      <div class="concept-card c-cyan"><div class="ico">7</div><h4>Map-first discovery</h4><p>Clustered pins, filters, "happening near you right now."</p></div>
+      <div class="concept-card c-rose"><div class="ico">8</div><h4>Social proof &amp; community</h4><p>Reviews, friend invites, and multi-child family accounts.</p></div>
+      <div class="concept-card c-pink"><div class="ico">9</div><h4>Accessible &amp; inclusive by default</h4><p>Screen-reader labels, dynamic type, a genuinely polished RTL layout.</p></div>
+      <div class="concept-card c-yellow"><div class="ico">10</div><h4>One design system, every screen</h4><p>Same card, same nav, everywhere — not two versions of each.</p></div>
     </div>
 
     <h3 style="margin-top:32px">If we only fix 5 things first</h3>
@@ -447,12 +487,24 @@
     <p class="lead">This brief is deliberately built in SkillVera's own colors and type — a working preview of the polish level a refreshed site could hit. The information architecture and content are already sound; execution discipline is the gap.</p>
 
     <h3>Performance is genuinely good — credit where due</h3>
-    <p style="font-size:14px;color:var(--muted);max-width:74ch;margin-bottom:20px">PageSpeed Insights (skillvera.sa/en, 27 Aug 2026): <b style="color:var(--ink)">94/100 Performance, 98 Accessibility, 96 Best Practices, 92 SEO on Desktop.</b> Mobile is solid but softer at <b style="color:var(--ink)">83 Performance</b> — the one real weak point is mobile Largest Contentful Paint at 4.1s (target &lt;2.5s), with PageSpeed's own top insight flagging ~1.4 MB of recoverable savings from unoptimized image delivery. This is a genuinely strong technical foundation to build the visual refresh on top of, not a rebuild-from-scratch situation.</p>
-    <div class="stat-grid">
-      <div class="stat"><strong>94</strong><span>Desktop Performance score</span></div>
-      <div class="stat"><strong>83</strong><span>Mobile Performance score</span></div>
-      <div class="stat"><strong>4.1s</strong><span>Mobile Largest Contentful Paint (target &lt;2.5s)</span></div>
-      <div class="stat"><strong>~1.4 MB</strong><span>Recoverable savings from image delivery (PageSpeed)</span></div>
+    <p style="font-size:13px;color:var(--muted);max-width:74ch;margin-bottom:18px">PageSpeed Insights, skillvera.sa/en, 27 Aug 2026. Strong foundation to refresh on top of, not a rebuild.</p>
+    <div class="gauge-grid">
+      <div class="gauge">
+        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" stroke="var(--line)" stroke-width="8" fill="none"/><circle cx="40" cy="40" r="32" stroke="var(--green)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="189 201" transform="rotate(-90 40 40)"/><text x="40" y="46" text-anchor="middle" class="gnum">94</text></svg>
+        <span>Desktop Performance</span>
+      </div>
+      <div class="gauge">
+        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" stroke="var(--line)" stroke-width="8" fill="none"/><circle cx="40" cy="40" r="32" stroke="var(--amber)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="167 201" transform="rotate(-90 40 40)"/><text x="40" y="46" text-anchor="middle" class="gnum">83</text></svg>
+        <span>Mobile Performance</span>
+      </div>
+      <div class="gauge">
+        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" stroke="var(--line)" stroke-width="8" fill="none"/><circle cx="40" cy="40" r="32" stroke="var(--red)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="82 201" transform="rotate(-90 40 40)"/><text x="40" y="46" text-anchor="middle" class="gnum">4.1s</text></svg>
+        <span>Mobile LCP (target &lt;2.5s)</span>
+      </div>
+      <div class="gauge">
+        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" stroke="var(--line)" stroke-width="8" fill="none"/><circle cx="40" cy="40" r="32" stroke="var(--amber)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="90 201" transform="rotate(-90 40 40)"/><text x="40" y="46" text-anchor="middle" class="gnum" style="font-size:15px">1.4MB</text></svg>
+        <span>Recoverable via image delivery</span>
+      </div>
     </div>
 
     <div class="bench">
@@ -481,17 +533,17 @@
       </div>
     </div>
     <div class="concept-grid">
-      <div class="concept-card c-rose"><div class="ico">1</div><h4>Distinctive typography, not template defaults</h4><p>Montserrat at heavy weight is the single most-reused "AI-built SaaS site" font on the web right now — it's the tell. Pair a characterful display face for headlines (something like <b>Fraunces</b> or <b>Recia</b> for institutional warmth, or a refined grotesk like <b>General Sans</b>/<b>Aeonik</b> for a sharper tech feel) with a quieter, well-hinted body face (<b>Inter</b> or <b>Satoshi</b>). Keep Cairo for Arabic but choose it deliberately, not by default. Type alone will make the site feel designed rather than generated.</p></div>
-      <div class="concept-card c-blue"><div class="ico">2</div><h4>Story-driven hero</h4><p>Replace the static gradient-blob hero and stock photo of a person facing away from camera with a short product-explainer loop, real photography, or scroll-triggered motion that shows, not tells, what SkillVera builds.</p></div>
-      <div class="concept-card c-indigo"><div class="ico">3</div><h4>Interactive product explorer</h4><p>Each product gets its own page with a live-feeling preview (app screenshots in a device frame, a working demo widget) instead of five cards linking to the same "Read more."</p></div>
-      <div class="concept-card c-emerald"><div class="ico">4</div><h4>A living impact dashboard</h4><p>Animated counters — facilities managed, activities hosted, learners reached — turning the Vision 2030 narrative into something visitors can see move.</p></div>
-      <div class="concept-card c-teal"><div class="ico">5</div><h4>Case studies &amp; social proof</h4><p>Client logos, sector testimonials, before/after stories per vertical (Gov, Education, Sports, Health, Corporate) — currently the site asserts credibility, doesn't demonstrate it.</p></div>
-      <div class="concept-card c-purple"><div class="ico">6</div><h4>A restrained, opinionated design system</h4><p>Retire the one-pastel-gradient-per-card rainbow and the fully-rounded pill button used for every single action — pick two or three intentional accent treatments and a consistent corner-radius scale instead of Tailwind defaults left untouched.</p></div>
-      <div class="concept-card c-orange"><div class="ico">7</div><h4>Close the mobile performance gap</h4><p>Desktop already scores a strong 94 on PageSpeed — the engineering foundation is solid. Mobile sits at 83 with LCP at 4.1s; PageSpeed's own top insight is ~1.4 MB of recoverable image savings. A targeted image-optimization and lazy-load pass, not a rebuild, closes this.</p></div>
-      <div class="concept-card c-cyan"><div class="ico">8</div><h4>Smooth AR/EN switching</h4><p>Persist language preference, animate the transition, and eliminate layout reflow between RTL and LTR instead of a hard reload — and fix the header direction bug flagged above.</p></div>
-      <div class="concept-card c-yellow"><div class="ico">9</div><h4>Conversion-focused CTAs</h4><p>A real "Book a discovery call" flow with a short qualifying form, not just phone/email/WhatsApp chips — capture and route leads instead of hoping they call.</p></div>
-      <div class="concept-card c-pink"><div class="ico">10</div><h4>Accessible by default</h4><p>Color contrast, keyboard navigation, and screen-reader labelling as a baseline — not an afterthought — especially given the government/education client base.</p></div>
-      <div class="concept-card c-blue"><div class="ico">11</div><h4>Light content control</h4><p>A minimal CMS or structured content layer so the SkillVera team can update team photos, copy, and case studies without opening a dev ticket every time.</p></div>
+      <div class="concept-card c-rose"><div class="ico">1</div><h4>Distinctive typography, not template defaults</h4><p>Heavy Montserrat is the #1 "AI-built site" tell. Pair a characterful display face (<b>Fraunces</b>/<b>Recia</b>) with a quiet body face (<b>Inter</b>/<b>Satoshi</b>).</p></div>
+      <div class="concept-card c-blue"><div class="ico">2</div><h4>Story-driven hero</h4><p>Real photography or a product loop, not the gradient-blob + stock photo.</p></div>
+      <div class="concept-card c-indigo"><div class="ico">3</div><h4>Interactive product explorer</h4><p>Each product gets its own live-feeling page, not a shared "Read more."</p></div>
+      <div class="concept-card c-emerald"><div class="ico">4</div><h4>A living impact dashboard</h4><p>Animated counters — facilities, activities, learners reached — Vision 2030 made visible.</p></div>
+      <div class="concept-card c-teal"><div class="ico">5</div><h4>Case studies &amp; social proof</h4><p>Client logos and sector testimonials — the site asserts credibility, doesn't show it.</p></div>
+      <div class="concept-card c-purple"><div class="ico">6</div><h4>A restrained design system</h4><p>Retire the pastel-rainbow cards and one pill-button-for-everything.</p></div>
+      <div class="concept-card c-orange"><div class="ico">7</div><h4>Close the mobile performance gap</h4><p>Desktop's 94. Mobile's 83 — an image-optimization pass, not a rebuild.</p></div>
+      <div class="concept-card c-cyan"><div class="ico">8</div><h4>Smooth AR/EN switching</h4><p>Persist language, animate the transition, fix the header-mirroring bug.</p></div>
+      <div class="concept-card c-yellow"><div class="ico">9</div><h4>Conversion-focused CTAs</h4><p>A real qualifying form, not just phone/email/WhatsApp chips.</p></div>
+      <div class="concept-card c-pink"><div class="ico">10</div><h4>Accessible by default</h4><p>Contrast, keyboard nav, screen-reader labels as baseline — gov/edu buyers expect it.</p></div>
+      <div class="concept-card c-blue"><div class="ico">11</div><h4>Light content control</h4><p>A minimal CMS so the team updates photos/copy without a dev ticket.</p></div>
     </div>
   </div>
 </section>
@@ -507,49 +559,49 @@
       <div class="stat"><strong>29</strong><span>LinkedIn followers — real page, dormant 7+ months</span></div>
       <div class="stat"><strong>3+</strong><span>Unrelated companies outrank them for "Skillvera"</span></div>
     </div>
-    <div class="findings">
-      <div class="find">
-        <div class="sev">On-page SEO</div>
-        <h4>English page's title tag is in Arabic</h4>
-        <p><code>&lt;title&gt;</code> on /en reads "الموقع الرسمي Skillvera" — identical to the /ar title, zero English keywords. The highest-weight on-page ranking signal is currently non-functional for English search intent.</p>
+    <div class="issue-grid">
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <h4>EN title tag is in Arabic</h4>
+        <p>Identical to the /ar title, zero English keywords — the top ranking signal is dead for English search.</p>
       </div>
-      <div class="find">
-        <div class="sev">Technical SEO</div>
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a2 2 0 0 0 2 2h4"/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="9" y1="15" x2="15" y2="9"/></svg></div>
         <h4>No sitemap.xml or robots.txt</h4>
-        <p>Both return 404. Google has no crawl map beyond incidental discovery. A same-day fix in Next.js (<code>app/sitemap.ts</code>, <code>app/robots.ts</code>), not a project.</p>
+        <p>Both 404. Google has no crawl map beyond incidental discovery. Same-day Next.js fix.</p>
       </div>
-      <div class="find">
-        <div class="sev">Brand risk</div>
+      <div class="issue">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.58 7-12a7 7 0 1 0-14 0c0 4.42 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
         <h4>Name collision drowns them in search</h4>
-        <p>Branded searches for "Skillvera" surface skillvera.org (manpower services), skill-vera.com (a skills-verification platform), and similarly-named competitors — with SkillVera's own site not indexed at all. A government evaluator googling the name before a meeting may land on someone else first.</p>
+        <p>skillvera.org, skill-vera.com rank above them for their own name — theirs isn't indexed at all.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Structured data</div>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3a2 2 0 0 0-2 2v3a2 2 0 0 1-2 2 2 2 0 0 1 2 2v3a2 2 0 0 0 2 2"/><path d="M16 3a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0-2 2v3a2 2 0 0 1-2 2"/></svg></div>
         <h4>Schema present but thin</h4>
-        <p>Only Organization + WebSite JSON-LD, and <code>"sameAs": []</code> is empty despite real LinkedIn/Facebook pages existing. No LocalBusiness or ContactPoint schema despite having a real Riyadh address relevant to local/B2G search.</p>
+        <p>Only Organization + WebSite JSON-LD; <code>sameAs</code> is empty despite real social pages existing.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Local presence</div>
-        <h4>No Google Business Profile found</h4>
-        <p>Unclaimed or nonexistent — a direct, low-effort win for local trust signals and brand-name search disambiguation.</p>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h4>No Google Business Profile</h4>
+        <p>Unclaimed — a direct, low-effort win for local trust and name disambiguation.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Content</div>
-        <h4>No case studies, blog, or Insights section</h4>
-        <p>Nav is Home/About/Services/Products/Contact only. For a B2G/B2B RFP-driven sales motion, generic keyword SEO matters less than sector case studies sales can cite in proposals and on LinkedIn.</p>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a1 1 0 0 0-1-1H6.5A2.5 2.5 0 0 0 4 5.5v14z"/></svg></div>
+        <h4>No case studies, blog, or Insights</h4>
+        <p>Nav is Home/About/Services/Products/Contact only — no sales-enablement content.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Social</div>
-        <h4>Social is real but dormant, not fake</h4>
-        <p>LinkedIn (29 followers, founded 2025), Facebook, and YouTube pages all exist — last LinkedIn post was 7+ months ago and was a job listing, not company content. The on-site social icons are disabled entirely. For a KSA B2G/B2B buyer, LinkedIn is the one channel worth reactivating (decision-makers check it before a meeting); X/Instagram activity isn't worth the investment for this buyer type.</p>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><circle cx="17" cy="7" r="3"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+        <h4>Social is real but dormant</h4>
+        <p>LinkedIn/Facebook/YouTube all exist — last LinkedIn post (7mo ago) was a job listing.</p>
       </div>
-      <div class="find minor">
-        <div class="sev">Conversion</div>
+      <div class="issue minor">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7.5 18 2.2-7.3L21 12.5z"/></svg></div>
         <h4>Contact path is fine, tracking it isn't</h4>
-        <p>Phone/WhatsApp/email chips actually match how KSA B2G/B2B relationship-driven sales works — not a real gap on their own. The real miss is that none of those chips fire a trackable conversion event, so there's no way to measure inbound interest without asking the client directly. A simple qualifying form or GA4 click-tracking on the existing chips fixes this cheaply.</p>
+        <p>Phone/WhatsApp/email chips suit this market — but fire zero trackable conversion events.</p>
       </div>
     </div>
-    <p style="font-size:13px;color:var(--muted);margin-top:22px;max-width:74ch"><b style="color:var(--ink)">What's already fine:</b> hreflang and canonical tags are correctly reciprocal per locale, OG tags are complete, meta descriptions are properly localized (unlike the title tag), robots meta is <code>index, follow</code>, and the direct-contact-chip approach itself suits this market. <b style="color:var(--ink)">Not independently verifiable from outside:</b> Search Console data, backlink profile/domain authority, internal GA4/analytics — request client access before finalizing SEO scope.</p>
+    <p style="font-size:12px;color:var(--muted);margin-top:20px;max-width:74ch">Already fine: hreflang, canonical, OG tags, localized meta descriptions, <code>index, follow</code>. Not verifiable from outside: Search Console, backlink profile, internal GA4 — request client access.</p>
   </div>
 </section>
 
@@ -558,22 +610,31 @@
     <div class="kicker">Opportunity Roadmap</div>
     <h2>How we'd sequence this</h2>
     <p class="lead">Not commitments — a starting point to react to during the discovery call, prioritized by urgency and by how visible the win is. Confirm all of it against their actual roadmap.</p>
-    <div class="opp-grid">
-      <div class="opp p1"><div class="pri">P1 · Trust</div><h4>Data encryption &amp; security hardening</h4><p>Encrypt data at rest/in transit, review the payment flow, produce a basic PDPL compliance pass.</p></div>
-      <div class="opp p1"><div class="pri">P1 · Trust</div><h4>Fix broken demo &amp; stale site content</h4><p>Repair the Rent demo link, footer typo, missing CEO photo, publish a linked Privacy Policy.</p></div>
-      <div class="opp p1"><div class="pri">P1 · SEO</div><h4>Fix EN title tag, add sitemap/robots, extend schema</h4><p>Same-day fixes with outsized impact — the English site is currently non-functional for English search intent and uncrawlable by design.</p></div>
-      <div class="opp p1"><div class="pri">P1 · UX QA</div><h4>Ship-blocking app QA pass</h4><p>Pull dev placeholder strings from production, add the missing booking CTA, unify bottom navigation — the "if we only fix 5 things" list, before anything else touches the app.</p></div>
-      <div class="opp p2"><div class="pri">P2 · Experience</div><h4>Mobile onboarding &amp; personalized home feed</h4><p>Highest-leverage UX fix — kills the empty-state problem seen in every reviewed screenshot and gives new users a reason to stay.</p></div>
-      <div class="opp p2"><div class="pri">P2 · Experience</div><h4>Real-time booking, payments &amp; calendar sync</h4><p>Turns "browse and hope" into an actual transactional product — directly supports the financial data the app already declares collecting.</p></div>
-      <div class="opp p2"><div class="pri">P2 · Brand</div><h4>Shared design system, web + app</h4><p>One token/component set so every surface — site, app, store listings — reads as the same premium brand.</p></div>
-      <div class="opp p2"><div class="pri">P2 · Growth</div><h4>App Store listing cleanup</h4><p>Correct declared language to Arabic (+English if bilingual), re-categorize, real screenshots/preview video, seed reviews post-QA.</p></div>
-      <div class="opp p2"><div class="pri">P2 · Growth</div><h4>Claim Google Business Profile, reactivate LinkedIn</h4><p>Low-effort, high-relevance for a KSA B2G buyer who checks a vendor on LinkedIn before a meeting — the page already exists, it's just dormant.</p></div>
-      <div class="opp p2"><div class="pri">P2 · SEO</div><h4>GA4 + conversion tracking on contact chips</h4><p>Phone/WhatsApp/email chips suit this market fine — but none of them currently fire a trackable event, so inbound interest is invisible without asking the client directly.</p></div>
-      <div class="opp p3"><div class="pri">P3 · Delight</div><h4>Gamification &amp; progress tracking</h4><p>Streaks, badges, skill progress tied to Talent Development — a differentiator competitors in this space mostly skip.</p></div>
-      <div class="opp p3"><div class="pri">P3 · Growth</div><h4>Website redesign / impact dashboard</h4><p>Story-driven hero, animated impact stats, real case studies — evolution of the current Next.js site rather than a rebuild, unless they want bigger scope.</p></div>
-      <div class="opp p3"><div class="pri">P3 · Ops</div><h4>Admin/ops backoffice</h4><p>Facility owners need an admin panel for activities, occupancy, revenue reporting (matches "SkillVera Rent" promises) — confirm whether this already exists or is app-only.</p></div>
-      <div class="opp p3"><div class="pri">P3 · SEO</div><h4>2–3 bilingual sector case studies</h4><p>Built for sales enablement and RFP attachments as much as for SEO — one government facility, one school, one sports federation, cited from proposals and LinkedIn.</p></div>
-      <div class="opp p3"><div class="pri">P3 · SEO</div><h4>Monitor the brand-name collision</h4><p>Ongoing watch on skillvera.org / skill-vera.com ranking above them for their own name — decide if disambiguation content or backlinks are worth the investment once the basics above are fixed.</p></div>
+    <div class="kanban">
+      <div class="kcol p1">
+        <h4>P1 · Do first</h4>
+        <div class="kcard">Data encryption &amp; security hardening<span>Payment flow + PDPL pass</span></div>
+        <div class="kcard">Fix broken demo &amp; stale content<span>Rent link, footer typo, CEO photo, Privacy Policy</span></div>
+        <div class="kcard">EN title tag + sitemap/robots + schema<span>English site is uncrawlable and unsearchable today</span></div>
+        <div class="kcard">Ship-blocking app QA pass<span>Dev strings, missing CTA, mismatched nav — the top-5 list</span></div>
+      </div>
+      <div class="kcol p2">
+        <h4>P2 · Next</h4>
+        <div class="kcard">Mobile onboarding &amp; personalized feed<span>Kills the empty-state problem</span></div>
+        <div class="kcard">Real-time booking, payments &amp; calendar sync<span>Turns browsing into a transaction</span></div>
+        <div class="kcard">Shared design system, web + app<span>One token/component set everywhere</span></div>
+        <div class="kcard">App Store listing cleanup<span>Language, category, screenshots, reviews</span></div>
+        <div class="kcard">Claim Google Business Profile + LinkedIn<span>Dormant, not dead — cheap to revive</span></div>
+        <div class="kcard">GA4 + conversion tracking on contact chips<span>Inbound interest is currently invisible</span></div>
+      </div>
+      <div class="kcol p3">
+        <h4>P3 · Later</h4>
+        <div class="kcard">Gamification &amp; progress tracking<span>Ties into Talent Development</span></div>
+        <div class="kcard">Website redesign / impact dashboard<span>Evolution of current Next.js site</span></div>
+        <div class="kcard">Admin/ops backoffice<span>Confirm if this exists or is app-only</span></div>
+        <div class="kcard">2–3 bilingual sector case studies<span>Sales enablement + RFP attachments</span></div>
+        <div class="kcard">Monitor the brand-name collision<span>skillvera.org / skill-vera.com outrank them</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -581,7 +642,7 @@
 <section>
   <div class="wrap">
     <div class="kicker">Next Step</div>
-    <h2>Discovery questionnaire (draft, for client)</h2>
+    <h2>Discovery questionnaire</h2>
     <p class="lead">Send ahead of or use live in the discovery call. Goal: turn our outside-in guesses — and the vision above — into their actual product truth and appetite before we scope anything.</p>
 
     <div class="qs-group">
@@ -693,7 +754,7 @@
 
 <footer>
   <div class="wrap fwrap">
-    Prepared by <b>CodeOx</b> · shabeeb.k@code-ox.com · +966 53 571 6437 · Internal use — discovery brief, not a client-facing document.
+    Prepared by <b>CodeOx</b> · Internal use — discovery brief, not a client-facing document.
   </div>
 </footer>
 
