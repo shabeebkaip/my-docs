@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillVera — تدقيق تصميم المنتج وتجربة المستخدم</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap');
+  :root{
+    --primary:#1D4DB3;
+    --primary-dark:#0F3460;
+    --primary-600:#153A89;
+    --primary-900:#081736;
+    --primary-50:#EEF2FC;
+    --primary-100:#E3E9F9;
+    --ink:#0B1220;
+    --muted:#5B6472;
+    --line:#E6E9F0;
+    --panel:#FFFFFF;
+    --bg-alt:#F7F9FD;
+    --red:#D64545;
+    --red-soft:#FBEAEA;
+    --amber:#C98A1F;
+    --amber-soft:#FBF1E1;
+    --green:#1E9E6B;
+    --green-soft:#E8F7F1;
+    --radius:20px;
+    --sans:'Tajawal','Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--panel);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased}
+  section{padding:60px 0}
+  .alt{background:var(--bg-alt)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 36px}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--primary);margin-bottom:14px}
+  .kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary)}
+  h2{font-size:clamp(24px,3.1vw,34px);font-weight:800;line-height:1.35;margin-bottom:12px;color:var(--primary-900)}
+  h3{font-size:19px;font-weight:700;margin-bottom:10px;color:var(--primary-900)}
+  p.lead{font-size:16px;color:var(--muted);max-width:76ch;margin-bottom:34px}
+  p.lead b{color:var(--ink);font-weight:700}
+  .rule{width:56px;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary-dark));border-radius:99px;margin-bottom:22px}
+
+  /* hero */
+  .hero{padding:0 0 20px;background:linear-gradient(180deg,#fff 0%,var(--primary-50) 100%);border-bottom:1px solid var(--line)}
+  .brandline{display:flex;justify-content:space-between;align-items:center;padding:28px 0;flex-wrap:wrap;gap:14px}
+  .brandline img{height:34px}
+  .doc-tag{font-size:12.5px;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 16px}
+  .hero-inner{display:grid;grid-template-columns:1fr 360px;gap:36px;padding:36px 0 56px;align-items:stretch}
+  .hero-left{padding-left:36px;border-left:1px solid var(--line)}
+  .hero h1{font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.35;margin-bottom:18px;color:var(--primary-900)}
+  .hero h1 span{color:var(--primary)}
+  .hero p.lede{font-size:clamp(15px,1.5vw,17px);color:var(--muted);margin-bottom:22px}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+  .hero-tag{font-size:12.5px;font-weight:700;padding:6px 15px;background:#fff;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+  .hero-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 10px 30px -18px rgba(11,18,32,.18)}
+  .hero-meta div span{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px;font-weight:700}
+  .hero-meta div strong{font-size:15px;font-weight:700;color:var(--ink)}
+
+  .hero-right{background:var(--primary-50);border:1px solid var(--primary-100);border-radius:var(--radius);padding:26px 22px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+  .hero-score-main{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;align-items:center;gap:16px;box-shadow:0 8px 20px -16px rgba(11,18,32,.2)}
+  .hsm-label{font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:4px}
+  .hsm-score{font-size:26px;font-weight:800;line-height:1;direction:ltr}
+  .hsm-unit{font-size:13px;color:var(--muted);font-weight:600}
+  .hsm-now{color:var(--red)}
+  .hsm-arrow{font-size:18px;color:var(--muted)}
+  .hsm-target{color:var(--green)}
+  .hero-stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -14px rgba(11,18,32,.2)}
+  .hs-num{font-size:14px;font-weight:800;color:var(--ink)}
+  .hs-label{font-size:11.5px;color:var(--muted);margin-top:1px}
+
+  /* summary */
+  .tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .tldr-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 8px 22px -18px rgba(11,18,32,.25)}
+  .tldr-card .num{display:inline-block;font-size:12px;font-weight:800;color:var(--primary);background:var(--primary-50);border-radius:999px;padding:5px 14px;margin-bottom:14px}
+  .tldr-card p{font-size:14.5px;color:var(--muted)}
+  .tldr-card p b{color:var(--ink);font-weight:700}
+
+  /* method strip */
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center;box-shadow:0 8px 20px -16px rgba(11,18,32,.2)}
+  .stat strong{display:block;font-size:clamp(22px,2.6vw,28px);font-weight:800;color:var(--primary);line-height:1.05;margin-bottom:6px}
+  .stat span{font-size:12.5px;color:var(--muted);font-weight:600}
+
+  /* headline callout */
+  .callout{background:linear-gradient(135deg,#7A1F1F,#3E0F0F);border-radius:var(--radius);padding:34px 36px;box-shadow:0 18px 40px -22px rgba(122,31,31,.6);margin-bottom:30px}
+  .callout .tag{display:inline-block;font-size:12px;font-weight:800;color:#FFD9D9;background:rgba(255,255,255,.12);border-radius:999px;padding:6px 15px;margin-bottom:14px}
+  .callout h3{color:#fff;font-size:22px;margin-bottom:10px}
+  .callout p{color:#F4DADA;font-size:15px;max-width:82ch}
+  .callout p b{color:#fff}
+
+  /* evidence chips of leaked strings */
+  .leak-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .leak{background:#fff;border:1px solid var(--line);border-right:4px solid var(--red);border-radius:12px;padding:16px 18px;box-shadow:0 8px 20px -18px rgba(11,18,32,.2)}
+  .leak code{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0B1220;color:#7FE0C0;padding:9px 12px;border-radius:8px;font-size:12px;margin-bottom:9px;overflow-x:auto;white-space:nowrap;direction:ltr;text-align:left}
+  .leak p{font-size:13.5px;color:var(--muted)}
+  .leak p b{color:var(--ink)}
+
+  /* screen teardown */
+  .teardown{display:grid;grid-template-columns:300px 1fr;gap:30px;align-items:start;margin-bottom:44px}
+  .teardown.flip{grid-template-columns:1fr 300px}
+  .teardown.flip .phone{order:2}
+  .phone{background:#0B1220;border-radius:30px;padding:8px;box-shadow:0 24px 50px -24px rgba(11,18,32,.5);border:1px solid var(--line)}
+  .phone img{width:100%;display:block;border-radius:24px}
+  .phone .cap{color:#9AA6BC;font-size:11.5px;font-weight:700;text-align:center;padding:10px 0 6px}
+  .td-body h3{font-size:20px;margin-bottom:4px}
+  .td-body .scr-sub{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:16px}
+  .annot{list-style:none}
+  .annot li{position:relative;padding:12px 40px 12px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--muted)}
+  .annot li:last-child{border-bottom:none}
+  .annot li b{color:var(--ink);font-weight:700}
+  .annot li::before{position:absolute;right:0;top:11px;width:26px;height:26px;border-radius:8px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .annot li.crit::before{content:"!";background:var(--red-soft);color:var(--red)}
+  .annot li.mod::before{content:"~";background:var(--amber-soft);color:var(--amber)}
+  .annot li.ok::before{content:"✓";background:var(--green-soft);color:var(--green)}
+
+  /* issue inventory */
+  .legend{display:flex;gap:22px;margin-bottom:22px;flex-wrap:wrap}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--muted)}
+  .legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .legend .lg-red{background:var(--red)} .legend .lg-amber{background:var(--amber)}
+  .cat{margin-bottom:34px}
+  .cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:2px solid var(--line);padding-bottom:10px;margin-bottom:18px}
+  .cat-head h3{margin:0;font-size:17px}
+  .cat-head .cnt{font-size:12px;font-weight:800;color:var(--muted)}
+  .issue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .issue{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 16px -14px rgba(11,18,32,.3);position:relative}
+  .issue::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;background:var(--red)}
+  .issue.minor::before{background:var(--amber)}
+  .issue .sev{font-size:11px;font-weight:800;color:var(--red);margin-bottom:8px}
+  .issue.minor .sev{color:var(--amber)}
+  .issue h4{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.5;margin-bottom:5px}
+  .issue p{font-size:12.8px;color:var(--muted);line-height:1.6}
+  .issue code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--primary-50);color:var(--primary-900);padding:1px 5px;border-radius:5px;font-size:11px;direction:ltr;display:inline-block}
+
+  /* vision / redesign banner */
+  .vision-banner{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius);padding:30px 34px;margin-bottom:30px;box-shadow:0 18px 36px -20px rgba(29,77,179,.5)}
+  .vision-banner .tag{display:inline-block;font-size:12px;font-weight:800;color:#BFD1F7;background:rgba(255,255,255,.12);border-radius:999px;padding:6px 15px;margin-bottom:14px}
+  .vision-banner h3{color:#fff;font-size:21px;margin-bottom:10px}
+  .vision-banner p{color:#DCE6FB;font-size:15px;max-width:80ch}
+
+  /* redesign board */
+  .board{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:0 18px 40px -26px rgba(11,18,32,.4);margin-bottom:14px;overflow-x:auto}
+  .board img{display:block;width:100%;min-width:1100px;border-radius:12px}
+  .board-cap{font-size:13px;color:var(--muted);text-align:center;margin-bottom:34px}
+  .board-cap b{color:var(--ink)}
+
+  /* fix map: problem -> solution */
+  .fix{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px;box-shadow:0 8px 22px -18px rgba(11,18,32,.2)}
+  .fix .from{background:var(--red-soft);padding:18px 20px}
+  .fix .to{background:var(--green-soft);padding:18px 20px}
+  .fix .lbl{font-size:11px;font-weight:800;margin-bottom:7px}
+  .fix .from .lbl{color:var(--red)} .fix .to .lbl{color:var(--green)}
+  .fix h4{font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:5px;line-height:1.5}
+  .fix p{font-size:13px;color:var(--muted);line-height:1.65}
+  .fix p b{color:var(--ink)}
+  .fix .screen{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;color:var(--primary);background:#fff;border:1px solid var(--primary-100);border-radius:999px;padding:3px 12px;direction:ltr}
+
+  /* figma embed */
+  .figma-embed{max-width:460px;margin:0 auto;background:#0B1220;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 24px 50px -26px rgba(11,18,32,.55)}
+  .fe-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#101a2e;border-bottom:1px solid rgba(255,255,255,.08)}
+  .fe-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+  .fe-title{color:#C5D0E6;font-size:11px;font-weight:700;margin-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fe-live{margin-right:auto;font-size:10px;font-weight:800;color:#28C840;white-space:nowrap;direction:ltr}
+  .fe-stage{position:relative;width:100%;aspect-ratio:440/956}
+  .fe-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .figma-cta{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:22px}
+  .figma-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-size:15.5px;font-weight:800;text-decoration:none;padding:15px 30px;border-radius:999px;box-shadow:0 14px 30px -12px rgba(29,77,179,.6);transition:transform .15s,box-shadow .15s}
+  .figma-btn:hover{transform:translateY(-2px);box-shadow:0 18px 38px -12px rgba(29,77,179,.7)}
+  .figma-btn svg{width:18px;height:18px}
+  .figma-cta small{font-size:13px;color:var(--muted)}
+
+  /* before / after benchmark */
+  .bench{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .bench-panel{border-radius:var(--radius);padding:26px}
+  .bench-panel.current{background:#fff;border:1px dashed var(--line)}
+  .bench-panel.proposed{background:linear-gradient(160deg,var(--primary-50),#fff);border:1px solid var(--primary-100)}
+  .bench-panel h4{font-size:15px;font-weight:800;margin-bottom:14px;color:var(--muted)}
+  .bench-panel.proposed h4{color:var(--primary)}
+  .bench-panel ul{list-style:none}
+  .bench-panel li{font-size:14px;color:var(--muted);padding:8px 24px 8px 0;position:relative;border-bottom:1px solid var(--line)}
+  .bench-panel li:last-child{border-bottom:none}
+  .bench-panel.current li::before{content:"−";position:absolute;right:0;color:var(--red);font-weight:800}
+  .bench-panel.proposed li::before{content:"✓";position:absolute;right:0;color:var(--green);font-weight:800}
+
+  .verdict{margin-top:8px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius);padding:28px 32px;font-size:15.5px;color:#EAF0FF;box-shadow:0 16px 34px -18px rgba(29,77,179,.5);line-height:1.9}
+  .verdict b{color:#fff}
+
+  /* contact */
+  .contact{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 30px;box-shadow:0 10px 30px -20px rgba(11,18,32,.25)}
+  .contact img{height:30px;margin-bottom:12px}
+  .contact h3{font-size:17px;margin-bottom:4px}
+  .contact p{font-size:13.5px;color:var(--muted)}
+  .contact .cinfo{text-align:left;font-size:13.5px}
+  .contact .cinfo b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:3px}
+  .contact .cinfo a{color:var(--primary);text-decoration:none;font-weight:600;direction:ltr;display:inline-block}
+
+  footer{padding:36px 0;text-align:center;font-size:13px;color:var(--muted);background:var(--primary-900)}
+  footer .fwrap{color:#B9C6E8}
+  footer b{color:#fff}
+
+  @media(max-width:820px){
+    .hero-inner,.teardown,.teardown.flip{grid-template-columns:1fr}
+    .teardown.flip .phone{order:0}
+    .phone{max-width:300px;margin:0 auto}
+    .hero-left{padding-left:0;border-left:none}
+    .hero-right{display:none}
+    .tldr,.stat-grid,.issue-grid,.leak-grid,.bench,.hero-meta,.contact{grid-template-columns:1fr 1fr}
+    .contact{grid-template-columns:1fr}.contact .cinfo{text-align:right}
+  }
+  @media(max-width:560px){
+    .tldr,.stat-grid,.issue-grid,.leak-grid,.bench,.hero-meta,.fix{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap">
+    <div class="brandline">
+      <img src="https://skillvera.sa/images/logo.png" alt="SkillVera" onerror="this.style.display='none'">
+      <div class="doc-tag">تدقيق تصميم المنتج وتجربة المستخدم</div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="rule"></div>
+        <h1>المنصة تعمل بالفعل. <span>والآن لنجعل شكلها وإحساسها بمستوى وطني.</span></h1>
+        <p class="lede">مراجعة شاشة بشاشة لتطبيق SkillVera للأنشطة كما يعمل اليوم — ما يراه المستخدم لأول مرة، والأكاديمية، ومُقيّم وزارة الرياضة. كل نقطة أدناه مأخوذة من النسخة الحيّة، وكل واحدة منها خطوة إنهاء طبيعية ومتوقّعة على الطريق من نموذج أوّلي يعمل إلى منصة جاهزة للعرض أمام وزارة الرياضة.</p>
+        <div class="hero-tags">
+          <div class="hero-tag">التصميم البصري</div>
+          <div class="hero-tag">تجربة المستخدم والتدفّق</div>
+          <div class="hero-tag">سلامة المحتوى</div>
+          <div class="hero-tag">ثنائية اللغة / RTL</div>
+          <div class="hero-tag">النماذج والحقول</div>
+          <div class="hero-tag">الثقة والهوية</div>
+        </div>
+        <div class="hero-meta">
+          <div><span>مُعدّ لـ</span><strong>د. سلمى وقيادة SkillVera</strong></div>
+          <div><span>مُعدّ بواسطة</span><strong>CodeOx</strong></div>
+          <div><span>النطاق</span><strong>تطبيق Flutter الحيّ — مراجعة ٩ شاشات</strong></div>
+          <div><span>الهدف الزمني</span><strong>جاهزية الوزارة بحلول يونيو ٢٠٢٧</strong></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat"><div><div class="hs-num">٣١ ملاحظة موثّقة</div><div class="hs-label">عبر ٨ فئات لتجربة المستخدم</div></div></div>
+        <div class="hero-stat"><div><div class="hs-num">٧ حرجة</div><div class="hs-label">بيانات اختبار حيّة في الإنتاج</div></div></div>
+        <div class="hero-stat"><div><div class="hs-num">الأساس سليم</div><div class="hs-label">الإصلاحات إنهاء، لا إعادة بناء</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY IT MATTERS ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">لماذا التصميم هو الحَكَم</div>
+    <h2>الوزارة تحكم على المنتج في أول عشر ثوانٍ — قبل أن تقرأ قائمة الميزات أصلاً.</h2>
+    <p class="lead">لدى SkillVera طموح حقيقي: دعم مباشر من وزارة الرياضة بحلول <b>يونيو ٢٠٢٧</b>. حين يحدث ذلك التقييم، لن يفتح أحد الكود. سيفتحون التطبيق ويسجّلون الدخول ويتصفّحون — ويكوّنون حكماً على المصداقية قبل أن تنطق بكلمة. التطبيق اليوم <b>يعمل</b>، لكن سطحه يقول لمن يراه أول مرة «نموذج أوّلي مبكّر»، لا «منصة وطنية». هذه الفجوة قابلة للإغلاق بالكامل، وإغلاقها هو تحديداً نوع الصقل السريع والاستباقي الذي أخبرتنا أنك تريده من شريك.</p>
+    <div class="tldr">
+      <div class="tldr-card">
+        <span class="num">٠١ · الانطباع الأول</span>
+        <p><b>محتوى نائب واختباري ظاهر للجمهور.</b> يرى المستخدمون الحقيقيون اليوم نصوصاً برمجية مثل <code>string</code> وإحداثيات داخلية داخل التطبيق العامل. هذا أسرع مكسب وأعلاها أثراً.</p>
+      </div>
+      <div class="tldr-card">
+        <span class="num">٠٢ · أولويتك الأولى</span>
+        <p><b>لوحة التحليلات فارغة.</b> قلتِ إن البيانات والتقارير والأرقام هي الأهم. اليوم تعرض لوحة الإحصائيات «لا توجد بيانات» في مساحة بيضاء فارغة — وهي بالضبط المنطقة التي يجب أن نجعلها تتألّق.</p>
+      </div>
+      <div class="tldr-card">
+        <span class="num">٠٣ · الخبر السار</span>
+        <p><b>البنية سليمة.</b> التدفّقات موجودة، والخريطة تعمل، ومسار التسجيل قائم. تقريباً كل ملاحظة هي جولة إنهاء لا إعادة بناء — ولهذا يستطيع فريق كفء التحرّك بسرعة هنا.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= METHOD ================= -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">كيف راجعناه</div>
+    <h2>استخدمنا التطبيق كما يفعل عضو جديد وأكاديمية ومُقيّم.</h2>
+    <p class="lead">دون افتراضات — تنقّلنا في الشاشات الحقيقية التي شاركتها: الإعداد الأوّلي، وصفحة الرئيسية، وقائمة الأنشطة الكاملة، وتفاصيل نشاط، والخريطة، والتقويم، بالعربية والإنجليزية معاً. أدناه الحصيلة. كل ملاحظة في هذا المستند تشير إلى شيء مرئي في تلك الشاشات.</p>
+    <div class="stat-grid">
+      <div class="stat"><strong>٩</strong><span>شاشات حيّة تمّت مراجعتها</span></div>
+      <div class="stat"><strong>٢</strong><span>لغتان تم فحصهما (AR / EN)</span></div>
+      <div class="stat"><strong>٣١</strong><span>ملاحظة متمايزة</span></div>
+      <div class="stat"><strong>٨</strong><span>فئات لتجربة المستخدم</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HEADLINE FINDING ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">الملاحظة الأولى للإصلاح</div>
+    <h2>بيانات اختبار المطوّرين تصل إلى مستخدمين حقيقيين في التطبيق الحيّ.</h2>
+    <p class="lead">هذا أهم بند في التقرير — وأسهله شرحاً لأي شخص. عدّة شاشات تعرض قيماً نائبة خام كانت مخصّصة للاختبار فقط. للعضو تبدو معطوبة؛ ولمُقيّم الوزارة تُقرأ «غير مكتملة». لا شيء منها مشكلة عميقة — إنه تنظيف محتوى وقيم افتراضية — لكن يجب أن يختفي قبل أن تقع عليه أي عين خارجية.</p>
+    <div class="callout">
+      <span class="tag">حرج · سلامة المحتوى</span>
+      <h3>ما يراه المستخدم الحقيقي اليوم</h3>
+      <p>عناوين أنشطة نصّها <b>«‎// en is the required default locale you have to fill»</b>، ومواقع اسمها <b>«string»</b>، ومدرّب اسمه <b>«string»</b>، ودبّوس خريطة تعرض نافذته <b>إحداثيات GPS خام</b>، وصورة <b>ذراع تحكّم ألعاب فيديو</b> بديلاً عن حصّة رياضية. كل منها صغير على حِدة. مجتمعةً، تصنع الانطباع الأول.</p>
+    </div>
+    <div class="leak-grid">
+      <div class="leak">
+        <code>// en is the required default locale you...</code>
+        <p><b>تعليمات داخلية للمطوّرين</b> تُعرض للمستخدمين النهائيين كعنوان ووصف للنشاط. ظهرت في الرئيسية وقائمة الأنشطة وشاشة التفاصيل.</p>
+      </div>
+      <div class="leak">
+        <code>Location: "string"   ·   Coach: "string"</code>
+        <p><b>قيم API الافتراضية لم تُستبدل قط.</b> «string» تظهر كموقع وكاسم مدرّب — علامة كلاسيكية على أن السجل أُنشئ للاختبار لا للأعضاء.</p>
+      </div>
+      <div class="leak">
+        <code>power — 24.702786229…, 46.680975258…</code>
+        <p><b>خطوط طول وعرض خام في نافذة الخريطة.</b> يجب أن يرى المستخدم اسم النشاط والرياضة والوقت — لا إحداثيات داخلية أو عناوين تصحيح مثل «power».</p>
+      </div>
+      <div class="leak">
+        <code>"en sport 1 //"   ·   "فعالية تجريبية"</code>
+        <p><b>فعاليات اختبارية حيّة في القائمة العامة.</b> أسماء نائبة وسجلات تجريبية بجانب أي محتوى حقيقي، دون أي فصل مرئي.</p>
+      </div>
+      <div class="leak">
+        <code>[ game-controller.jpg ] → football / karate</code>
+        <p><b>صور غير ذات صلة دون بديل.</b> صورة ذراع تحكّم تُستخدم كصورة رئيسية لأنشطة رياضية. لا صورة رياضية افتراضية ولا فحص للصورة حين لا يرفع المدرّب صورة مناسبة.</p>
+      </div>
+      <div class="leak">
+        <code>"Location Should Here"</code>
+        <p><b>نص نائب شُحن كواجهة حقيقية.</b> الرئيسية العربية تعرض نصاً إنجليزياً نائباً حيث يُفترض ظهور الموقع — غير مترجم وغير مكتمل.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SCREEN TEARDOWN ================= -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">شاشة بشاشة</div>
+    <h2>أين تعيش كل ملاحظة فعلياً.</h2>
+    <p class="lead">نفس الشاشات التي شاركتها، مع تعليقات. <b style="color:var(--red)">! = حرج</b>، <b style="color:var(--amber)">~ = متوسط</b>، <b style="color:var(--green)">✓ = يعمل جيداً</b>. نبدأ بالتصميم والتجربة، ثم النماذج والمحتوى.</p>
+
+    <!-- Login -->
+    <div class="teardown">
+      <div class="phone">
+        <img src="audit-assets/s-login-en.jpeg" alt="شاشة تسجيل الدخول">
+        <div class="cap">الإعداد الأوّلي · تسجيل الدخول</div>
+      </div>
+      <div class="td-body">
+        <h3>الإعداد الأوّلي وتسجيل الدخول</h3>
+        <div class="scr-sub">أول شاشة · أول انطباع</div>
+        <ul class="annot">
+          <li class="crit"><b>الزر الأساسي يبدو معطّلاً.</b> «Log In» بلون رمادي-بنفسجي باهت يُقرأ كغير فعّال، بينما الروابط الثانوية («Sign Up»، «Continue as a Guest») تستخدم اللون المميّز الساطع. يجب أن يكون الإجراء الرئيسي أكثر عنصر واثق على الشاشة.</li>
+          <li class="mod"><b>خطأ إملائي — «Forget Password?»</b> الصواب «Forgot your password?». صغير، لكنه أول نص إنجليزي يقرأه مُقيّم الوزارة.</li>
+          <li class="mod"><b>تسجيل الدخول الاجتماعي يشمل X (تويتر).</b> لمنصة رياضية سعودية، Apple و Google والهاتف/نفاذ لها قيمة حقيقية؛ أما X فيضيف القليل ويشتّت الصف.</li>
+          <li class="mod"><b>لا هوية لـ SkillVera.</b> لا شعار ولا علامة على شاشة الدخول — يفتح التطبيق عاماً بلا هوية. حضور الهوية هنا إشارة ثقة، خصوصاً للشركاء المؤسّسيين.</li>
+          <li class="ok"><b>البنية صحيحة.</b> التسميات، وإظهار/إخفاء كلمة المرور، ومسار الضيف كلها موجودة ومرتّبة منطقياً — أساس جيد لإعادة التنسيق عليه.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Home -->
+    <div class="teardown flip">
+      <div class="td-body">
+        <h3>الصفحة الرئيسية</h3>
+        <div class="scr-sub">الشاشة التي يعيش فيها الأعضاء</div>
+        <ul class="annot">
+          <li class="crit"><b>لوحة تحليلات فارغة.</b> «النشاط الأكثر شعبية» يعرض صندوقاً أبيض مكتوباً فيه «لا توجد بيانات» — مساحة ميتة في الرئيسية، وهي بالضبط المنطقة الأهم لك. يجب ألّا تُشحن فارغة أبداً؛ تحتاج حالة فراغ مصمّمة وأرقاماً حقيقية.</li>
+          <li class="crit"><b>محتوى نائب في البطاقة الرئيسية.</b> «en sport 1 //»، و«Location Should Here»، وصورة غير متطابقة، في أبرز بطاقة بالتطبيق.</li>
+          <li class="mod"><b>مساحة رأسية ميتة كبيرة.</b> «لا توجد أنشطة مسجّلة» يترك نصف الشاشة فارغاً دون إرشاد أو خطوة تالية — يُقرأ كمعطوب لا كهادئ.</li>
+          <li class="mod"><b>إفراط في اللون المميّز.</b> الأصفر-الأخضر يُطبّق على العناوين والروابط والتبويب النشط والتواريخ المميّزة دفعة واحدة، فلا يبرز شيء. يجب أن يعني اللون المميّز شيئاً واحداً.</li>
+          <li class="mod"><b>تباين منخفض في كل مكان.</b> نص بنفسجي على خلفية بنفسجية دون حدّ الوضوح المريح — مسألة إتاحة وقراءة ستهتمّ بها الوزارة.</li>
+        </ul>
+      </div>
+      <div class="phone">
+        <img src="audit-assets/s-home-en.jpeg" alt="الصفحة الرئيسية">
+        <div class="cap">الرئيسية · صفحة العضو</div>
+      </div>
+    </div>
+
+    <!-- Activities list -->
+    <div class="teardown">
+      <div class="phone">
+        <img src="audit-assets/s-activities.jpeg" alt="قائمة كل الأنشطة">
+        <div class="cap">التصفّح · كل الأنشطة</div>
+      </div>
+      <div class="td-body">
+        <h3>كل الأنشطة</h3>
+        <div class="scr-sub">الكتالوج الذي يبيع المنصة</div>
+        <ul class="annot">
+          <li class="crit"><b>بنية بطاقات غير متّسقة.</b> بطاقة كتلة لون مسطّحة، والتالية صورة كاملة، والتالية رسمة — يتنقّل الموقع والوقت والسعر بين البطاقات. الكتالوج يحتاج قالب بطاقة واحد قابل للتكرار.</li>
+          <li class="crit"><b>سجلات اختبار مختلطة بالمحتوى.</b> مواقع «string» وعناوين تعليمات لغة تظهر مباشرة في قائمة التصفّح، دون طريقة لتمييز النشاط الحقيقي من النائب.</li>
+          <li class="mod"><b>تقييم النجوم العائم غامض.</b> النجوم تطفو فوق الصورة في مواضع مختلفة — غير واضح إن كانت تعرض تقييماً أم تتيح إدخاله، وتتصادم مع الصورة.</li>
+          <li class="mod"><b>جودة الصور وصلتها تتفاوتان بشدّة.</b> من ملعب كرة قدم واضح إلى ذراع تحكّم — دون معيار تنسيق أو انضباط في نسب الأبعاد.</li>
+          <li class="mod"><b>تنسيق العملة والأرقام.</b> محاذاة السعر مع رمز الريال غير متّسقة بين البطاقات وتُقرأ بشكل غريب في تخطيط RTL.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Activity details -->
+    <div class="teardown flip">
+      <div class="td-body">
+        <h3>تفاصيل النشاط</h3>
+        <div class="scr-sub">الشاشة التي تحوّل إلى تسجيل</div>
+        <ul class="annot">
+          <li class="crit"><b>الوصف ملاحظة مطوّر.</b> النص الأساسي هو «‎// en is the required default locale you have to fill…» — يُعرض لنفس المستخدم الذي تطلب منه الدفع والتسجيل.</li>
+          <li class="crit"><b>«Coach: string».</b> الثقة في شاشة حجز تعتمد على مدرّب مُسمّى وموثوق. النائب هنا يقوّض قرار التسجيل مباشرة.</li>
+          <li class="mod"><b>الصورة الرئيسية غير متصلة بالرياضة.</b> صورة ذراع تحكّم تتصدّر حصّة رياضية — دون بديل افتراضي حين تغيب الصورة الحقيقية.</li>
+          <li class="mod"><b>تسلسل التفاصيل مسطّح.</b> السعر والجنس والوقت والمدرّب والموقع كلها أقراص بوزن متساوٍ؛ لا شيء يوجّه العين لما يهمّ في القرار.</li>
+          <li class="ok"><b>زر «Enroll» صحيح.</b> ساطع، بعرض كامل، إجراء رئيسي لا لبس فيه — هذا المعيار الذي يجب أن يطابقه التطبيق كله.</li>
+        </ul>
+      </div>
+      <div class="phone">
+        <img src="audit-assets/s-activity-details.jpeg" alt="تفاصيل النشاط">
+        <div class="cap">التفاصيل · التسجيل</div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="teardown">
+      <div class="phone">
+        <img src="audit-assets/s-map.jpeg" alt="عرض الخريطة">
+        <div class="cap">الاكتشاف · الخريطة</div>
+      </div>
+      <div class="td-body">
+        <h3>الخريطة</h3>
+        <div class="scr-sub">ميزة قوية فعلاً، لكن مُقلَّل من شأنها</div>
+        <ul class="annot">
+          <li class="crit"><b>النافذة تكشف بيانات تصحيح.</b> النقر على الدبّوس يعرض عنوان «power» وإحداثيات خام بدل اسم النشاط والرياضة والوقت والسعر التي يحتاجها العضو.</li>
+          <li class="mod"><b>خريطة افتراضية بلا تنسيق.</b> نقاط اهتمام Google الافتراضية (بنوك، مطاعم) تزحم العرض؛ الخريطة غير مُنسّقة بهوية SkillVera، فتتنافس دبابيس الأنشطة مع الضجيج.</li>
+          <li class="mod"><b>رمز الدبّوس بلا هوية.</b> العلامات تعرض رمز «kv» خشناً بدل دبّوس نظيف واعٍ بالرياضة.</li>
+          <li class="ok"><b>القدرة عامل تمييز.</b> اكتشاف الأكاديميات القريبة جغرافياً هو تحديداً نوع الميزة التي تُبهر — تحتاج فقط عرضاً مصقولاً.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bilingual / Calendar -->
+    <div class="teardown flip">
+      <div class="td-body">
+        <h3>ثنائية اللغة والتقويم</h3>
+        <div class="scr-sub">تجربة نصف مترجمة</div>
+        <ul class="annot">
+          <li class="crit"><b>اللغتان تختلطان في شاشة واحدة.</b> بطاقة عربية RTL تعرض «From Sun To Thu» بالإنجليزية ونصاً نائباً لاتينياً بداخلها. التطبيق عالق حالياً في نصف ترجمة.</li>
+          <li class="mod"><b>أيام الأسبوع مثبّتة بالإنجليزية.</b> «SUN SAT FRI…» فوق شاشة عربية؛ يجب أن تُعرّب الأيام وتتبع ترتيب أسبوع RTL.</li>
+          <li class="mod"><b>التواريخ المميّزة بلا معنى.</b> الأيام ١٣/٢٦/٣١ مميّزة دون مفتاح — لا يعرف المستخدم لماذا. التمييز يحتاج دليلاً (مثل «حصصك»).</li>
+          <li class="mod"><b>ترقيم لاتيني يتسرّب إلى العربية.</b> «//» وعلامات لغة شاردة تكسر انسياب قراءة نص RTL.</li>
+        </ul>
+      </div>
+      <div class="phone">
+        <img src="audit-assets/s-home-calendar.webp" alt="التقويم والتخطيط ثنائي اللغة">
+        <div class="cap">التقويم · مزيج AR / EN</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FULL INVENTORY ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">الصورة الكاملة</div>
+    <h2>كل ملاحظة، مجمّعة حسب فئة التجربة.</h2>
+    <div class="legend">
+      <span><i class="lg-red"></i>حرج — مرئي لأي مستخدم لأول مرة أو مُقيّم</span>
+      <span><i class="lg-amber"></i>متوسط — صقل يفصل «الجيد» عن «المستوى الوطني»</span>
+    </div>
+
+    <!-- Content integrity -->
+    <div class="cat">
+      <div class="cat-head"><h3>١ · سلامة المحتوى</h3><span class="cnt">٦ ملاحظات · ٥ حرجة</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">حرج</div><h4>تعليمات اللغة تُعرض كمحتوى</h4><p><code>// en is the required default locale…</code> تظهر كعنوان ووصف نشاط حيّ.</p></div>
+        <div class="issue"><div class="sev">حرج</div><h4>«string» كموقع ومدرّب</h4><p>قيم API الافتراضية لم تُستبدل ببيانات حقيقية في عدّة سجلات.</p></div>
+        <div class="issue"><div class="sev">حرج</div><h4>إحداثيات خام في نافذة الخريطة</h4><p>عنوان تصحيح «power» وخطوط طول/عرض بدل ملخّص موجّه للعضو.</p></div>
+        <div class="issue"><div class="sev">حرج</div><h4>فعاليات اختبار في القائمة العامة</h4><p>«en sport 1»، «فعالية تجريبية» وسجلات تجريبية مماثلة ظاهرة للعموم.</p></div>
+        <div class="issue"><div class="sev">حرج</div><h4>نص إنجليزي نائب في واجهة عربية</h4><p>«Location Should Here» يُشحن كنص حقيقي في الرئيسية العربية.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>لا بوّابة لجودة المحتوى</h4><p>لا شيء يمنع نشر السجلات الفارغة أو النائبة للأعضاء.</p></div>
+      </div>
+    </div>
+
+    <!-- Visual design -->
+    <div class="cat">
+      <div class="cat-head"><h3>٢ · التصميم البصري والتسلسل</h3><span class="cnt">٥ ملاحظات</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">حرج</div><h4>الزر الأساسي يبدو معطّلاً</h4><p>لون زر الدخول الباهت يجعل الإجراء الرئيسي يبدو غير فعّال.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>تباين منخفض في كل مكان</h4><p>نص وواجهة بنفسجي على بنفسجي دون حدّ الوضوح والإتاحة المريح.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>إفراط في اللون المميّز</h4><p>لون مميّز واحد على العناوين والروابط والتبويبات والتواريخ — فلا شيء يُبرَز.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>لا نظام ارتفاع/تباعد</h4><p>حدود وأقراص في كل مكان، دون عمق أو إيقاع متّسق — الواجهة مسطّحة ومزدحمة.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>لا مقياس خطوط</h4><p>أحجام العناوين والنص والتسميات غير منهجية؛ الخط العربي واللاتيني غير متناسقين.</p></div>
+      </div>
+    </div>
+
+    <!-- UX & flow -->
+    <div class="cat">
+      <div class="cat-head"><h3>٣ · التجربة والتدفّق وحالات الفراغ</h3><span class="cnt">٥ ملاحظات</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">حرج</div><h4>لوحة التحليلات تُشحن فارغة</h4><p>صندوق أبيض «لا توجد بيانات» في الرئيسية — سطحك ذو الأولوية العليا، فارغ حالياً.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>مساحة ميتة في القائمة الفارغة</h4><p>«لا أنشطة مسجّلة» يترك نصف الشاشة فارغاً دون إرشاد أو زر.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>بنية بطاقات غير متّسقة</h4><p>بطاقات الأنشطة تتباين في التخطيط، فتقع المعلومة في مكان مختلف كل مرة.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>تقييم نجوم غامض</h4><p>نجوم عائمة — غير واضح إن كانت عرضاً أم إدخالاً، وتتداخل مع الصور.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>تمييز تواريخ بلا شرح</h4><p>التواريخ المميّزة بلا مفتاح يوضّح معناها.</p></div>
+      </div>
+    </div>
+
+    <!-- Bilingual -->
+    <div class="cat">
+      <div class="cat-head"><h3>٤ · ثنائية اللغة و RTL</h3><span class="cnt">٤ ملاحظات · ١ حرجة</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">حرج</div><h4>اللغتان تختلطان في شاشة واحدة</h4><p>بطاقات عربية تحتوي نصوصاً إنجليزية؛ التطبيق نصف مترجم في مواضع.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>أيام أسبوع إنجليزية مثبّتة</h4><p>أيام التقويم لا تُعرّب ولا تتبع ترتيب أسبوع RTL.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>ترقيم LTR في نص RTL</h4><p>«//» وعلامات لغة شاردة تكسر انسياب القراءة العربية.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>لا مبدّل لغة نظيف</h4><p>لا يستطيع المستخدمون التبديل بثقة إلى تجربة مترجمة بالكامل.</p></div>
+      </div>
+    </div>
+
+    <!-- Imagery -->
+    <div class="cat">
+      <div class="cat-head"><h3>٥ · الصور والوسائط</h3><span class="cnt">٣ ملاحظات</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">حرج</div><h4>صور رئيسية غير ذات صلة</h4><p>صور أذرع تحكّم تمثّل حصصاً رياضية؛ لا صورة رياضية افتراضية بديلة.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>لا انضباط في نسب الأبعاد</h4><p>الصور تُقصّ وتُمطّ بشكل مختلف عبر البطاقات.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>صور رمزية غير متطابقة</h4><p>صورة عضو كرتونية مقابل صورة مدرّب عشوائية — دون نظام صور رمزية متّسق.</p></div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="cat">
+      <div class="cat-head"><h3>٦ · التنقّل والاتّساق</h3><span class="cnt">٣ ملاحظات</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">حرج</div><h4>شريط التنقّل السفلي يتغيّر بين النسخ</h4><p>مجموعات التبويب تختلف — <code>Home·Activities·My Activity·Map</code> مقابل <code>حسابي·فعالياتي·الأحصائيات·الرئيسية</code>. لا بنية معلومات ثابتة.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>الشريط العلوي غير متّسق</h4><p>البحث والأيقونات تظهر في بعض الشاشات وتختفي في أخرى.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>تنسيق الحالة النشطة يتفاوت</h4><p>مؤشّر «التبويب الحالي» غير متّسق عبر الشاشات.</p></div>
+      </div>
+    </div>
+
+    <!-- Forms -->
+    <div class="cat">
+      <div class="cat-head"><h3>٧ · النماذج والحقول</h3><span class="cnt">٣ ملاحظات</span></div>
+      <div class="issue-grid">
+        <div class="issue minor"><div class="sev">متوسط</div><h4>خطأ إملائي في الدخول</h4><p>«Forget Password?» صوابها «Forgot your password?».</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>لا تحقّق فوري مرئي</h4><p>لا أثر لتغذية راجعة على مستوى الحقل للبريد وكلمة المرور.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>مزوّد اجتماعي قليل القيمة</h4><p>دخول X (تويتر) يضيف القليل للجمهور الرياضي السعودي مقابل Apple/Google/الهاتف.</p></div>
+      </div>
+    </div>
+
+    <!-- Trust -->
+    <div class="cat">
+      <div class="cat-head"><h3>٨ · الثقة والهوية</h3><span class="cnt">٢ ملاحظتان</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">حرج</div><h4>لا هوية للعلامة داخل التطبيق</h4><p>لا شعار SkillVera على الدخول أو التنقّل — يفتح التطبيق عاماً، ما يُضعف المصداقية المؤسّسية.</p></div>
+        <div class="issue minor"><div class="sev">متوسط</div><h4>عدم اتّساق الاسم</h4><p>اسم التطبيق («Skv Activities») يختلف عن هوية SkillVera التي يجب أن يعرفها الأعضاء.</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= REDESIGN ================= -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">إلى أين نأخذه</div>
+    <h2>إعادة تصميم تبقي ما يعمل وتُنهي ما لا يعمل.</h2>
+    <div class="vision-banner">
+      <span class="tag">قيد الإنجاز · Figma</span>
+      <h3>صمّمنا النسخة المحسّنة بالفعل.</h3>
+      <p>بدل سرد المشكلات فقط، صمّمنا النسخة المحسّنة في Figma — نظام تصميم فاتح نظيف (لون، خط، تباعد، مكوّنات)، وبطاقة نشاط واحدة متّسقة، وتدفّق حجز حقيقي، وثنائية لغة/RTL منضبطة، وخريطة بهوية. خريطة الشاشات الكاملة أدناه، يليها النموذج التفاعلي ونظرة نقطة بنقطة على حلّ كل مشكلة تجربة.</p>
+    </div>
+
+    <div class="board">
+      <img src="audit-assets/redesign-board.png" alt="إعادة تصميم SkillVera — خريطة الشاشات الكاملة">
+    </div>
+    <p class="board-cap"><b>الرحلة المعاد تصميمها بالكامل</b> — شاشة البداية والإعداد الأوّلي، والتسجيل مع اختيار الاهتمامات، والرئيسية، والفئات، وتفاصيل الفعالية، وتدفّق حجز من ٣ خطوات مع تأكيد، وحجوزاتي، والإيصالات، ومبدّل اللغة، والقائمة الجانبية. ٢٢ شاشة، بنظام واحد متماسك.</p>
+    <div class="figma-embed">
+      <div class="fe-bar">
+        <span class="fe-dot" style="background:#FF5F57"></span>
+        <span class="fe-dot" style="background:#FEBC2E"></span>
+        <span class="fe-dot" style="background:#28C840"></span>
+        <span class="fe-title">SkillVera Redesign — Interactive Prototype (Figma)</span>
+        <span class="fe-live">● Live POC</span>
+      </div>
+      <div class="fe-stage">
+        <iframe
+          src="https://embed.figma.com/proto/Xwb5164zLfLW1V5VD7Ode3/CODE-OX?node-id=500-192&scaling=scale-down-width&content-scaling=responsive&starting-point-node-id=500%3A192&page-id=498%3A807&embed-host=share"
+          allowfullscreen
+          loading="lazy"
+          title="SkillVera Redesign Prototype"></iframe>
+      </div>
+    </div>
+    <div class="figma-cta">
+      <a class="figma-btn" href="https://www.figma.com/proto/Xwb5164zLfLW1V5VD7Ode3/CODE-OX?node-id=500-192&starting-point-node-id=500%3A192" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 17L7 7M7 7v9M7 7h9"/></svg>
+        الأفضل مشاهدته في نموذج Figma — افتحه بملء الشاشة
+      </a>
+      <small>إثبات مفهوم عامل قابل للنقر. انقر خلال التدفّق المعاد تصميمه بالكامل.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW THE REDESIGN FIXES UX ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">المشكلة ← الحل</div>
+    <h2>كيف تحسّن إعادة التصميم التجربة، نقطة بنقطة.</h2>
+    <p class="lead">كل إصلاح أدناه يرتبط بملاحظة من التدقيق وبشاشة حقيقية في النموذج أعلاه. هذا هو الفرق بين نموذج أوّلي يعمل ومنتج يثق به العضو وتُصادق عليه الوزارة.</p>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>واجهة بنفسجية معكّرة بتباين منخفض</h4><p>نص بنفسجي على خلفية بنفسجية، ولون مميّز يؤدّي كل وظيفة — لا شيء يبرز، والوضوح يفشل.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>سمة فاتحة نظيفة، تسلسل واضح</h4><p>لوحة بيضاء، أزرق أساسي واثق واحد، تباعد سخي ومقياس خطوط حقيقي. كل شاشة <b>مقروءة وهادئة</b>.<span class="screen">All screens</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>بيانات اختبار ظاهرة للمستخدمين</h4><p>مواقع «string»، عناوين تعليمات لغة، فعاليات «فعالية تجريبية» في القائمة العامة.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>محتوى حقيقي منسّق</h4><p>فعاليات مُسمّاة («Football Pro League»)، أماكن وأسعار ومدرّبون حقيقيون — البنية تفترض <b>محتوى مكتملاً لا نائباً</b>.<span class="screen">skv-home · event detail</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>بداية باردة — دون سياق</h4><p>يُلقي التطبيق المستخدم مباشرة في شاشة عامة دون إحساس بما يفعله.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>شاشة بداية + إعداد أوّلي من ٣ خطوات</h4><p>«اكتشف الأنشطة القريبة»، «احجز وانضمّ فوراً»، «تواصل مع المدرّبين» — القيمة <b>واضحة في أول ١٠ ثوانٍ</b>.<span class="screen">Intro 1–3</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>قائمة عامة للجميع</h4><p>لا تخصيص؛ كل عضو يرى نفس القائمة غير المميّزة.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>منتقي اهتمامات «ما الذي يهمّك؟»</h4><p>يختار الأعضاء الرياضات عند التسجيل (كرة قدم، سباحة، كاراتيه…)، فتُخصَّص الرئيسية <b>من اليوم الأول</b>.<span class="screen">signup-interests</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>بطاقات غير متّسقة وغامضة</h4><p>كل بطاقة نشاط بشكل مختلف؛ نجوم عائمة قد تكون تقييماً أو إدخالاً؛ صور غير متطابقة.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>نظام بطاقة نشاط واحد</h4><p>بطاقة واحدة قابلة للتكرار — صورة رياضة، عنوان، مكان، سعر، تقييم — عبر التصفّح والفئات والخريطة. <b>متوقّعة في كل مكان</b>.<span class="screen">all-categories · popular</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>التسجيل = شاشة مسطّحة واحدة</h4><p>وصف نائب، «Coach: string»، كل تفصيل بوزن متساوٍ؛ لا اختيار حصّة، لا تأكيد.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>تدفّق حجز موجّه</h4><p>تفاصيل الفعالية ← اختيار حصّة (تقويم، صباحي/مسائي) ← ملخّص الحجز ← <b>تأكيد الحجز</b>. مسار شراء حقيقي ومطمئن.<span class="screen">event · booking 1–3</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>صندوق تحليلات فارغ في الرئيسية</h4><p>أولويتك الأولى تُعرض «لا توجد بيانات» في مساحة بيضاء فارغة.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>تقييمات ومراجعات وسجلّ حجوزات</h4><p>تقييمات الفعاليات (4.8)، ومراجعات الأعضاء، و«حجوزاتي» + عرض الإيصال تعطي الأعضاء <b>أرقاماً حقيقية</b> — نفس عمود البيانات الذي ستعرضه تقاريرك الإدارية.<span class="screen">my-bookings · booking details</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>شاشات نصف مترجمة</h4><p>بطاقات عربية بنصوص إنجليزية؛ أيام أسبوع إنجليزية مثبّتة؛ لا مبدّل نظيف.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>نظام ثنائي لغة سليم</h4><p>شاشة مخصّصة «اختر لغتك» (English / العربية) وتخطيط مبني لـ <b>RTL كامل</b> — لغة واحدة من البداية للنهاية.<span class="screen">skv-language</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>الخريطة تسرّب إحداثيات خام</h4><p>نافذة الدبّوس تعرض عنوان تصحيح وخطوط طول/عرض بدل أي شيء مفيد.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>خريطة بهوية وموجّهة للعضو</h4><p>خريطة منسّقة نظيفة ببطاقات أنشطة على الدبابيس — اسم، رياضة، سعر — تحوّل ميزة قوية إلى <b>نقطة بيع</b>.<span class="screen">skv-map-view</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">قبل</div><h4>لا هوية ولا توجيه</h4><p>يفتح التطبيق عاماً؛ التنقّل والشريط العلوي يتنقّلان بين الشاشات.</p></div>
+      <div class="to"><div class="lbl">بعد</div><h4>هوية متّسقة وقائمة جانبية</h4><p>هوية SkillVera في كل مكان، شريط تنقّل سفلي ثابت، وقائمة جانبية للملف (الحجوزات، المفضّلة، الإعدادات) — <b>تطبيق واحد متماسك</b>.<span class="screen">skv-sidebar</span></p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= BEFORE / AFTER ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">النقلة</div>
+    <h2>من «نموذج أوّلي يعمل» إلى «جاهز للوزارة».</h2>
+    <div class="bench">
+      <div class="bench-panel current">
+        <h4>اليوم</h4>
+        <ul>
+          <li>بيانات اختبار ونصوص مطوّرين مرئية للمستخدمين الحقيقيين</li>
+          <li>لوحة تحليلات فارغة في الرئيسية</li>
+          <li>إجراءات رئيسية تبدو غير فعّالة</li>
+          <li>شاشات نصف مترجمة، مزيج AR/EN</li>
+          <li>بطاقات تتغيّر شكلاً من واحدة لأخرى</li>
+          <li>صور مخزون/ألعاب غير ذات صلة، بلا بدائل</li>
+          <li>نوافذ خريطة تكشف إحداثيات خام</li>
+          <li>لا حضور لهوية SkillVera في التطبيق</li>
+        </ul>
+      </div>
+      <div class="bench-panel proposed">
+        <h4>بعد جولة الإنهاء</h4>
+        <ul>
+          <li>محتوى حقيقي منسّق ١٠٠٪ — بوّابة نشر تمنع النائب</li>
+          <li>رئيسية تقارير مبنية حول أولوية بياناتك</li>
+          <li>إجراء رئيسي واحد واضح وواثق لكل شاشة</li>
+          <li>تعريب كامل و RTL منضبط في كل مكان</li>
+          <li>نظام بطاقة نشاط واحد قابل للتكرار</li>
+          <li>صور واعية بالرياضة مع بدائل افتراضية آمنة</li>
+          <li>بطاقات خريطة موجّهة للعضو، دبابيس بهوية</li>
+          <li>هوية SkillVera متّسقة من البداية للنهاية</li>
+        </ul>
+      </div>
+    </div>
+    <div class="verdict">
+      <b>الخلاصة:</b> لا شيء هنا يستلزم هدم التطبيق. المنصة تؤدّي الجزء الصعب بالفعل — تعمل، وتسجّل، وترسم الخريطة. ما تحتاجه هو جولة إنهاء منضبطة للتصميم والمحتوى، بقيادة فريق يرصد هذه التفاصيل ويُصلحها استباقياً. هذا تحديداً العمل الذي يحوّل منتجاً يعمل إلى منتج ترتاح الوزارة للوقوف خلفه بحلول يونيو ٢٠٢٧ — وهذا هو نوع الشريك الذي نعتزم أن نكونه.
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="alt">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" onerror="this.style.display='none'">
+        <h3>لنُنهِ هذا كما يجب.</h3>
+        <p>مُعدّ بواسطة CodeOx لـ SkillVera — تدقيق تصميم منتج وتجربة مستخدم، مع إعادة تصميم قيد التنفيذ.</p>
+      </div>
+      <div class="cinfo">
+        <b>شبيب ك</b>
+        رئيس العمليات، CodeOx<br>
+        <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a><br>
+        <a href="tel:+966535716437">+966 53 571 6437</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fwrap">
+    مُعدّ بواسطة <b>CodeOx</b> لـ <b>SkillVera</b> · تدقيق تصميم المنتج وتجربة المستخدم · ٣١ أغسطس ٢٠٢٦.
+  </div>
+</footer>
+
+</body>
+</html>

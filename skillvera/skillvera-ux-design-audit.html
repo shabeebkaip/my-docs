@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillVera — Product Design &amp; User-Experience Audit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+  :root{
+    --primary:#1D4DB3;
+    --primary-dark:#0F3460;
+    --primary-600:#153A89;
+    --primary-900:#081736;
+    --primary-50:#EEF2FC;
+    --primary-100:#E3E9F9;
+    --ink:#0B1220;
+    --muted:#5B6472;
+    --line:#E6E9F0;
+    --panel:#FFFFFF;
+    --bg-alt:#F7F9FD;
+    --red:#D64545;
+    --red-soft:#FBEAEA;
+    --amber:#C98A1F;
+    --amber-soft:#FBF1E1;
+    --green:#1E9E6B;
+    --green-soft:#E8F7F1;
+    --radius:20px;
+    --sans:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--panel);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  section{padding:60px 0}
+  .alt{background:var(--bg-alt)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 36px}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);margin-bottom:14px}
+  .kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary)}
+  h2{font-size:clamp(24px,3.1vw,34px);font-weight:800;line-height:1.18;margin-bottom:12px;color:var(--primary-900);letter-spacing:-.01em}
+  h3{font-size:18px;font-weight:700;margin-bottom:10px;color:var(--primary-900)}
+  p.lead{font-size:15.5px;color:var(--muted);max-width:76ch;margin-bottom:34px}
+  p.lead b{color:var(--ink);font-weight:700}
+  .rule{width:56px;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary-dark));border-radius:99px;margin-bottom:22px}
+
+  /* hero */
+  .hero{padding:0 0 20px;background:linear-gradient(180deg,#fff 0%,var(--primary-50) 100%);border-bottom:1px solid var(--line)}
+  .brandline{display:flex;justify-content:space-between;align-items:center;padding:28px 0;flex-wrap:wrap;gap:14px}
+  .brandline img{height:34px}
+  .doc-tag{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+  .hero-inner{display:grid;grid-template-columns:1fr 360px;gap:36px;padding:36px 0 56px;align-items:stretch}
+  .hero-left{padding-right:36px;border-right:1px solid var(--line)}
+  .hero h1{font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.14;margin-bottom:18px;color:var(--primary-900);letter-spacing:-.01em}
+  .hero h1 span{color:var(--primary)}
+  .hero p.lede{font-size:clamp(15px,1.5vw,17px);color:var(--muted);margin-bottom:22px}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+  .hero-tag{font-size:11.5px;font-weight:700;padding:6px 13px;background:#fff;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+  .hero-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 10px 30px -18px rgba(11,18,32,.18)}
+  .hero-meta div span{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px;font-weight:700}
+  .hero-meta div strong{font-size:14.5px;font-weight:700;color:var(--ink)}
+
+  .hero-right{background:var(--primary-50);border:1px solid var(--primary-100);border-radius:var(--radius);padding:26px 22px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+  .hero-score-main{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;align-items:center;gap:16px;box-shadow:0 8px 20px -16px rgba(11,18,32,.2)}
+  .hsm-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .hsm-score{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .hsm-unit{font-size:13px;color:var(--muted);font-weight:600}
+  .hsm-now{color:var(--red)}
+  .hsm-arrow{font-size:18px;color:var(--muted)}
+  .hsm-target{color:var(--green)}
+  .hero-stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -14px rgba(11,18,32,.2)}
+  .hs-num{font-size:13px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+  .hs-label{font-size:11px;color:var(--muted);margin-top:1px}
+
+  /* summary */
+  .tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .tldr-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 8px 22px -18px rgba(11,18,32,.25)}
+  .tldr-card .num{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);background:var(--primary-50);border-radius:999px;padding:5px 12px;margin-bottom:14px}
+  .tldr-card p{font-size:14px;color:var(--muted)}
+  .tldr-card p b{color:var(--ink);font-weight:700}
+
+  /* method strip */
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center;box-shadow:0 8px 20px -16px rgba(11,18,32,.2)}
+  .stat strong{display:block;font-size:clamp(22px,2.6vw,28px);font-weight:800;color:var(--primary);line-height:1.05;margin-bottom:6px}
+  .stat span{font-size:11.5px;color:var(--muted);font-weight:600}
+
+  /* headline callout */
+  .callout{background:linear-gradient(135deg,#7A1F1F,#3E0F0F);border-radius:var(--radius);padding:34px 36px;box-shadow:0 18px 40px -22px rgba(122,31,31,.6);margin-bottom:30px}
+  .callout .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#FFD9D9;background:rgba(255,255,255,.12);border-radius:999px;padding:6px 13px;margin-bottom:14px}
+  .callout h3{color:#fff;font-size:21px;margin-bottom:10px}
+  .callout p{color:#F4DADA;font-size:14.5px;max-width:82ch}
+  .callout p b{color:#fff}
+
+  /* evidence chips of leaked strings */
+  .leak-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .leak{background:#fff;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:12px;padding:16px 18px;box-shadow:0 8px 20px -18px rgba(11,18,32,.2)}
+  .leak code{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0B1220;color:#7FE0C0;padding:9px 12px;border-radius:8px;font-size:12px;margin-bottom:9px;overflow-x:auto;white-space:nowrap}
+  .leak p{font-size:12.6px;color:var(--muted)}
+  .leak p b{color:var(--ink)}
+
+  /* screen teardown */
+  .teardown{display:grid;grid-template-columns:300px 1fr;gap:30px;align-items:start;margin-bottom:44px}
+  .teardown.flip{grid-template-columns:1fr 300px}
+  .teardown.flip .phone{order:2}
+  .phone{background:#0B1220;border-radius:30px;padding:8px;box-shadow:0 24px 50px -24px rgba(11,18,32,.5);border:1px solid var(--line)}
+  .phone img{width:100%;display:block;border-radius:24px}
+  .phone .cap{color:#9AA6BC;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-align:center;padding:10px 0 6px}
+  .td-body h3{font-size:19px;margin-bottom:4px}
+  .td-body .scr-sub{font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--primary);margin-bottom:16px}
+  .annot{list-style:none}
+  .annot li{position:relative;padding:12px 0 12px 40px;border-bottom:1px solid var(--line);font-size:13.6px;color:var(--muted)}
+  .annot li:last-child{border-bottom:none}
+  .annot li b{color:var(--ink);font-weight:700}
+  .annot li::before{position:absolute;left:0;top:11px;width:26px;height:26px;border-radius:8px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .annot li.crit::before{content:"!";background:var(--red-soft);color:var(--red)}
+  .annot li.mod::before{content:"~";background:var(--amber-soft);color:var(--amber)}
+  .annot li.ok::before{content:"✓";background:var(--green-soft);color:var(--green)}
+
+  /* issue inventory */
+  .legend{display:flex;gap:22px;margin-bottom:22px;flex-wrap:wrap}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted)}
+  .legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .legend .lg-red{background:var(--red)} .legend .lg-amber{background:var(--amber)}
+  .cat{margin-bottom:34px}
+  .cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:2px solid var(--line);padding-bottom:10px;margin-bottom:18px}
+  .cat-head h3{margin:0;font-size:16px}
+  .cat-head .cnt{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .issue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .issue{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 16px -14px rgba(11,18,32,.3);position:relative}
+  .issue::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;background:var(--red)}
+  .issue.minor::before{background:var(--amber)}
+  .issue .sev{font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+  .issue.minor .sev{color:var(--amber)}
+  .issue h4{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:5px}
+  .issue p{font-size:11.8px;color:var(--muted);line-height:1.45}
+  .issue code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--primary-50);color:var(--primary-900);padding:1px 5px;border-radius:5px;font-size:11px}
+
+  /* vision / redesign banner */
+  .vision-banner{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius);padding:30px 34px;margin-bottom:30px;box-shadow:0 18px 36px -20px rgba(29,77,179,.5)}
+  .vision-banner .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#BFD1F7;background:rgba(255,255,255,.12);border-radius:999px;padding:6px 13px;margin-bottom:14px}
+  .vision-banner h3{color:#fff;font-size:20px;margin-bottom:10px}
+  .vision-banner p{color:#DCE6FB;font-size:14.5px;max-width:80ch}
+
+  /* redesign board */
+  .board{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:0 18px 40px -26px rgba(11,18,32,.4);margin-bottom:14px;overflow-x:auto}
+  .board img{display:block;width:100%;min-width:1100px;border-radius:12px}
+  .board-cap{font-size:12px;color:var(--muted);text-align:center;margin-bottom:34px}
+  .board-cap b{color:var(--ink)}
+
+  /* fix map: problem -> solution */
+  .fix{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px;box-shadow:0 8px 22px -18px rgba(11,18,32,.2)}
+  .fix .from{background:var(--red-soft);padding:18px 20px}
+  .fix .to{background:var(--green-soft);padding:18px 20px}
+  .fix .lbl{font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}
+  .fix .from .lbl{color:var(--red)} .fix .to .lbl{color:var(--green)}
+  .fix h4{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:5px;line-height:1.35}
+  .fix p{font-size:12.4px;color:var(--muted);line-height:1.5}
+  .fix p b{color:var(--ink)}
+  .fix .screen{display:inline-block;margin-top:8px;font-size:10.5px;font-weight:700;color:var(--primary);background:#fff;border:1px solid var(--primary-100);border-radius:999px;padding:3px 10px}
+
+  /* figma embed */
+  .figma-embed{max-width:460px;margin:0 auto;background:#0B1220;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 24px 50px -26px rgba(11,18,32,.55)}
+  .fe-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#101a2e;border-bottom:1px solid rgba(255,255,255,.08)}
+  .fe-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+  .fe-title{color:#C5D0E6;font-size:11px;font-weight:700;margin-left:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fe-live{margin-left:auto;font-size:10px;font-weight:800;letter-spacing:.06em;color:#28C840;white-space:nowrap}
+  .fe-stage{position:relative;width:100%;aspect-ratio:440/956;overflow:hidden}
+  /* iframe extends 48px below the stage so Figma's "CODE OX / Edited" footer bar is clipped out of view */
+  .fe-stage iframe{position:absolute;top:0;left:0;width:100%;height:calc(100% + 48px);border:0}
+  .figma-cta{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:22px}
+  .figma-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-size:15px;font-weight:800;text-decoration:none;padding:15px 30px;border-radius:999px;box-shadow:0 14px 30px -12px rgba(29,77,179,.6);transition:transform .15s,box-shadow .15s}
+  .figma-btn:hover{transform:translateY(-2px);box-shadow:0 18px 38px -12px rgba(29,77,179,.7)}
+  .figma-btn svg{width:18px;height:18px}
+  .figma-cta small{font-size:12.5px;color:var(--muted)}
+
+  /* before / after benchmark */
+  .bench{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .bench-panel{border-radius:var(--radius);padding:26px}
+  .bench-panel.current{background:#fff;border:1px dashed var(--line)}
+  .bench-panel.proposed{background:linear-gradient(160deg,var(--primary-50),#fff);border:1px solid var(--primary-100)}
+  .bench-panel h4{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;color:var(--muted)}
+  .bench-panel.proposed h4{color:var(--primary)}
+  .bench-panel ul{list-style:none}
+  .bench-panel li{font-size:13.5px;color:var(--muted);padding:8px 0 8px 24px;position:relative;border-bottom:1px solid var(--line)}
+  .bench-panel li:last-child{border-bottom:none}
+  .bench-panel.current li::before{content:"−";position:absolute;left:0;color:var(--red);font-weight:800}
+  .bench-panel.proposed li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
+
+  .verdict{margin-top:8px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius);padding:28px 32px;font-size:15px;color:#EAF0FF;box-shadow:0 16px 34px -18px rgba(29,77,179,.5)}
+  .verdict b{color:#fff}
+
+  /* contact */
+  .contact{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 30px;box-shadow:0 10px 30px -20px rgba(11,18,32,.25)}
+  .contact img{height:30px;margin-bottom:12px}
+  .contact h3{font-size:16px;margin-bottom:4px}
+  .contact p{font-size:13px;color:var(--muted)}
+  .contact .cinfo{text-align:right;font-size:13px}
+  .contact .cinfo b{display:block;color:var(--ink);font-size:14px;margin-bottom:3px}
+  .contact .cinfo a{color:var(--primary);text-decoration:none;font-weight:600}
+
+  footer{padding:36px 0;text-align:center;font-size:12.5px;color:var(--muted);background:var(--primary-900)}
+  footer .fwrap{color:#B9C6E8}
+  footer b{color:#fff}
+
+  @media(max-width:820px){
+    .hero-inner,.teardown,.teardown.flip{grid-template-columns:1fr}
+    .teardown.flip .phone{order:0}
+    .phone{max-width:300px;margin:0 auto}
+    .hero-left{padding-right:0;border-right:none}
+    .hero-right{display:none}
+    .tldr,.stat-grid,.issue-grid,.leak-grid,.bench,.hero-meta,.contact{grid-template-columns:1fr 1fr}
+    .contact{grid-template-columns:1fr}.contact .cinfo{text-align:left}
+  }
+  @media(max-width:560px){
+    .tldr,.stat-grid,.issue-grid,.leak-grid,.bench,.hero-meta,.fix{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap">
+    <div class="brandline">
+      <img src="https://skillvera.sa/images/logo.png" alt="SkillVera" onerror="this.style.display='none'">
+      <div class="doc-tag">Product Design &amp; User-Experience Audit</div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="rule"></div>
+        <h1>The platform already works. <span>Now let's make it look and feel national-grade.</span></h1>
+        <p class="lede">A screen-by-screen review of the SkillVera activities app as it runs today — what a first-time user, an academy, and a Ministry evaluator each see. Every point below is drawn from the live build, and every one is a normal, expected finishing step on the road from a working prototype to a platform ready to sit in front of the Ministry of Sports.</p>
+        <div class="hero-tags">
+          <div class="hero-tag">Visual Design</div>
+          <div class="hero-tag">UX &amp; Flow</div>
+          <div class="hero-tag">Content Integrity</div>
+          <div class="hero-tag">Bilingual / RTL</div>
+          <div class="hero-tag">Forms &amp; Inputs</div>
+          <div class="hero-tag">Trust &amp; Brand</div>
+        </div>
+        <div class="hero-meta">
+          <div><span>Prepared for</span><strong>Dr. Salma &amp; SkillVera Leadership</strong></div>
+          <div><span>Prepared by</span><strong>CodeOx</strong></div>
+          <div><span>Scope</span><strong>Live Flutter App — 9 Screens Reviewed</strong></div>
+          <div><span>Target Milestone</span><strong>Ministry-Ready by June 2027</strong></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat"><div><div class="hs-num">31 issues catalogued</div><div class="hs-label">Across 8 experience categories</div></div></div>
+        <div class="hero-stat"><div><div class="hs-num">7 critical</div><div class="hs-label">Test data live in production</div></div></div>
+        <div class="hero-stat"><div><div class="hs-num">Foundations are sound</div><div class="hs-label">The fixes are finishing, not rebuilding</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY IT MATTERS ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Why design decides this</div>
+    <h2>A Ministry judges the product in the first ten seconds — before it ever reads a feature list.</h2>
+    <p class="lead">SkillVera has real ambition: direct Ministry of Sports support by <b>June 2027</b>. When that evaluation happens, no one opens the code. They open the app, log in, and browse — and they form a verdict on credibility before you say a word. Right now the app <b>functions</b>, but the surface tells a first-time viewer "early prototype," not "national platform." That gap is entirely fixable, and closing it is exactly the kind of fast, proactive polish you told us you want from a partner.</p>
+    <div class="tldr">
+      <div class="tldr-card">
+        <span class="num">01 · First impression</span>
+        <p><b>Placeholder and test content is live.</b> Real users currently see developer strings like <code>string</code> and internal coordinates in the running app. This is the fastest, highest-impact win available.</p>
+      </div>
+      <div class="tldr-card">
+        <span class="num">02 · Your #1 priority</span>
+        <p><b>The analytics surface is empty.</b> You said data, reporting and numbers matter most. Today the statistics panel renders "no data available" in blank white space — the exact area we should make shine.</p>
+      </div>
+      <div class="tldr-card">
+        <span class="num">03 · The good news</span>
+        <p><b>The bones are healthy.</b> The flows exist, the map works, the enrolment path is there. Almost every finding is a finishing pass, not a rebuild — which is why a capable team can move fast here.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= METHOD ================= -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">How we reviewed it</div>
+    <h2>We used the app the way a new member, an academy, and an evaluator would.</h2>
+    <p class="lead">No assumptions — we walked the real screens you shared: onboarding, the home feed, the full activities list, an activity detail, the map, and the calendar, in both Arabic and English. Below is the resulting count. Every issue in this document points to something visible in those screens.</p>
+    <div class="stat-grid">
+      <div class="stat"><strong>9</strong><span>Live screens reviewed</span></div>
+      <div class="stat"><strong>2</strong><span>Languages checked (AR / EN)</span></div>
+      <div class="stat"><strong>31</strong><span>Distinct findings</span></div>
+      <div class="stat"><strong>8</strong><span>Experience categories</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HEADLINE FINDING ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The finding to fix first</div>
+    <h2>Developer test data is reaching real users in the live app.</h2>
+    <p class="lead">This is the single most important item in the report — and the easiest to explain to anyone. Several screens display raw placeholder values that were meant only for testing. To a member it looks broken; to a Ministry evaluator it reads as "not finished." None of it is a deep problem — it's content and default-value cleanup — but it must be gone before any external eyes land on the product.</p>
+    <div class="callout">
+      <span class="tag">Critical · Content Integrity</span>
+      <h3>What a real user sees today</h3>
+      <p>Activity titles that read <b>"// en is the required default locale you have to fill"</b>, locations named <b>"string"</b>, a coach called <b>"string"</b>, a map pin whose popup shows <b>raw GPS coordinates</b>, and a <b>video-game controller photo</b> standing in for a sports session. Individually small. Together, they define the first impression.</p>
+    </div>
+    <div class="leak-grid">
+      <div class="leak">
+        <code>// en is the required default locale you...</code>
+        <p><b>An internal instruction to developers</b> is being shown to end users as an activity title and description. Seen on the home feed, activities list, and detail screen.</p>
+      </div>
+      <div class="leak">
+        <code>Location: "string"   ·   Coach: "string"</code>
+        <p><b>Default API values were never replaced.</b> "string" appears as a location and a coach name — a classic sign the record was created for testing, not curated for members.</p>
+      </div>
+      <div class="leak">
+        <code>power — 24.702786229…, 46.680975258…</code>
+        <p><b>Raw latitude/longitude in a map popup.</b> Users should see the activity name, sport, and time — never internal coordinates or debug titles like "power".</p>
+      </div>
+      <div class="leak">
+        <code>"en sport 1 //"   ·   "فعالية تجريبية" (test event)</code>
+        <p><b>Test events are live in the public feed.</b> Placeholder names and trial records sit alongside anything real, with no visible separation.</p>
+      </div>
+      <div class="leak">
+        <code>[ game-controller.jpg ] → football / karate</code>
+        <p><b>Unrelated imagery with no fallback.</b> A gamepad photo is used as the hero image for sports activities. There is no default sport image or image check when a coach uploads nothing suitable.</p>
+      </div>
+      <div class="leak">
+        <code>"Location Should Here"</code>
+        <p><b>Placeholder microcopy shipped as real UI.</b> The Arabic home shows an English placeholder where a location should render — untranslated and unfinished.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SCREEN TEARDOWN ================= -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">Screen by screen</div>
+    <h2>Where each issue actually lives.</h2>
+    <p class="lead">The same screens you shared, annotated. <b style="color:var(--red)">! = critical</b>, <b style="color:var(--amber)">~ = moderate</b>, <b style="color:var(--green)">✓ = working well</b>. We lead with design and experience, then forms and content.</p>
+
+    <!-- Login -->
+    <div class="teardown">
+      <div class="phone">
+        <img src="audit-assets/s-login-en.jpeg" alt="Login screen">
+        <div class="cap">Onboarding · Log In</div>
+      </div>
+      <div class="td-body">
+        <h3>Onboarding &amp; Log In</h3>
+        <div class="scr-sub">First screen · first impression</div>
+        <ul class="annot">
+          <li class="crit"><b>The primary button looks disabled.</b> "Log In" is rendered in a dull grey-purple that reads as inactive, while secondary links ("Sign Up", "Continue as a Guest") use the bright accent. The main action should be the most confident thing on screen.</li>
+          <li class="mod"><b>Copy typo — "Forget Password?"</b> Should read "Forgot your password?". Small, but it is the first piece of English a Ministry reviewer reads.</li>
+          <li class="mod"><b>Social logins include X (Twitter).</b> For a Saudi sports platform, Apple + Google + Nafath/phone carry real value; X adds little and dilutes the row.</li>
+          <li class="mod"><b>No SkillVera identity.</b> There is no logo or brand mark on the entry screen — the app opens generic. Brand presence here is a trust signal, especially for institutional partners.</li>
+          <li class="ok"><b>Structure is right.</b> Labels, show/hide password, and a guest path are all present and sensibly ordered — good foundations to restyle on.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Home -->
+    <div class="teardown flip">
+      <div class="td-body">
+        <h3>Home Feed</h3>
+        <div class="scr-sub">The screen members live in</div>
+        <ul class="annot">
+          <li class="crit"><b>Empty analytics block.</b> "Most popular activity" renders a white box saying "no data available" — dead space on the home screen, and precisely the area you care most about. It should never ship empty; it needs a designed empty state and real numbers.</li>
+          <li class="crit"><b>Placeholder content in the hero card.</b> "en sport 1 //", "Location Should Here", and a mismatched image sit in the most prominent card on the app.</li>
+          <li class="mod"><b>Large dead vertical space.</b> "No enrolled activities" leaves half the screen blank with no guidance or next step — it reads as broken rather than calm.</li>
+          <li class="mod"><b>Accent colour overused.</b> The yellow-green is applied to headings, links, the active tab, and highlighted dates all at once, so nothing stands out. An accent should mean one thing.</li>
+          <li class="mod"><b>Low contrast throughout.</b> Mid-purple text on a mid-purple background sits below comfortable legibility — an accessibility and readability concern the Ministry will care about.</li>
+        </ul>
+      </div>
+      <div class="phone">
+        <img src="audit-assets/s-home-en.jpeg" alt="Home feed">
+        <div class="cap">Home · Member Feed</div>
+      </div>
+    </div>
+
+    <!-- Activities list -->
+    <div class="teardown">
+      <div class="phone">
+        <img src="audit-assets/s-activities.jpeg" alt="All activities list">
+        <div class="cap">Browse · All Activities</div>
+      </div>
+      <div class="td-body">
+        <h3>All Activities</h3>
+        <div class="scr-sub">The catalogue that sells the platform</div>
+        <ul class="annot">
+          <li class="crit"><b>Inconsistent card anatomy.</b> One card is a flat colour block, the next a full-bleed photo, the next an illustration — location, time, and price shift position between them. A catalogue needs one repeatable card template.</li>
+          <li class="crit"><b>Test records mixed with content.</b> "string" locations and locale-instruction titles appear right in the browse list, with no way to tell a real activity from a placeholder.</li>
+          <li class="mod"><b>Floating star rating is ambiguous.</b> Stars hover over the image at different spots — unclear whether they show a rating or let you set one, and they collide with the photo.</li>
+          <li class="mod"><b>Image quality and relevance vary wildly.</b> From a crisp football pitch to a gamepad — no curation standard or aspect-ratio discipline.</li>
+          <li class="mod"><b>Currency and number formatting.</b> The price + SAR glyph alignment is inconsistent between cards and reads awkwardly in the RTL layout.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Activity details -->
+    <div class="teardown flip">
+      <div class="td-body">
+        <h3>Activity Details</h3>
+        <div class="scr-sub">The screen that converts to an enrolment</div>
+        <ul class="annot">
+          <li class="crit"><b>Description is a developer note.</b> The main body text is "// en is the required default locale you have to fill…" — shown to the exact user you're asking to pay and enrol.</li>
+          <li class="crit"><b>"Coach: string".</b> Trust on a booking screen depends on a named, credible coach. A placeholder here directly undermines the enrol decision.</li>
+          <li class="mod"><b>Hero image unrelated to the sport.</b> A gamepad photo heads a sports session — no default fallback when a real image is missing.</li>
+          <li class="mod"><b>Detail hierarchy is flat.</b> Price, gender, time, coach, and location are all equal-weight pills; nothing guides the eye to what matters for the decision.</li>
+          <li class="ok"><b>The "Enroll" CTA is done right.</b> Bright, full-width, unmistakably the primary action — this is the standard the whole app should match.</li>
+        </ul>
+      </div>
+      <div class="phone">
+        <img src="audit-assets/s-activity-details.jpeg" alt="Activity details">
+        <div class="cap">Detail · Enrol</div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="teardown">
+      <div class="phone">
+        <img src="audit-assets/s-map.jpeg" alt="Map view">
+        <div class="cap">Discover · Map</div>
+      </div>
+      <div class="td-body">
+        <h3>Map</h3>
+        <div class="scr-sub">A genuinely strong feature, undersold</div>
+        <ul class="annot">
+          <li class="crit"><b>Popup exposes debug data.</b> Tapping a pin shows a title "power" and raw coordinates instead of the activity name, sport, time, and price a member needs.</li>
+          <li class="mod"><b>Unstyled default map.</b> Google's default POIs (banks, restaurants) clutter the view; the map isn't themed to SkillVera, so activity pins compete with noise.</li>
+          <li class="mod"><b>Pin glyph is unbranded.</b> Markers show a rough "kv" mark rather than a clean, sport-aware pin.</li>
+          <li class="ok"><b>The capability is a differentiator.</b> Geo-discovery of nearby academies is exactly the kind of feature that impresses — it just needs a polished presentation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bilingual / Calendar -->
+    <div class="teardown flip">
+      <div class="td-body">
+        <h3>Bilingual &amp; Calendar</h3>
+        <div class="scr-sub">A half-translated experience</div>
+        <ul class="annot">
+          <li class="crit"><b>Languages mix on one screen.</b> An Arabic RTL card shows "From Sun To Thu" in English and Latin placeholder text inside it. The app is currently stuck half-translated.</li>
+          <li class="mod"><b>Calendar weekdays are hardcoded English.</b> "SUN SAT FRI…" sit above an Arabic screen; days should localise and follow the RTL week order.</li>
+          <li class="mod"><b>Highlighted dates have no meaning.</b> Days 13/26/31 are marked with no legend — a user can't tell why. Highlights need a key (e.g. "your sessions").</li>
+          <li class="mod"><b>Latin punctuation bleeds into Arabic.</b> Stray "//" and locale tags break the reading flow of RTL text.</li>
+        </ul>
+      </div>
+      <div class="phone">
+        <img src="audit-assets/s-home-calendar.webp" alt="Calendar and bilingual layout">
+        <div class="cap">Calendar · AR / EN mix</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FULL INVENTORY ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The full picture</div>
+    <h2>Every finding, grouped by experience category.</h2>
+    <div class="legend">
+      <span><i class="lg-red"></i>Critical — visible to any first-time user or evaluator</span>
+      <span><i class="lg-amber"></i>Moderate — polish that separates good from national-grade</span>
+    </div>
+
+    <!-- Content integrity -->
+    <div class="cat">
+      <div class="cat-head"><h3>1 · Content Integrity</h3><span class="cnt">6 findings · 5 critical</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">Critical</div><h4>Locale instruction shown as content</h4><p><code>// en is the required default locale…</code> appears as a live activity title and description.</p></div>
+        <div class="issue"><div class="sev">Critical</div><h4>"string" as location &amp; coach</h4><p>Default API values were never replaced with real data on multiple records.</p></div>
+        <div class="issue"><div class="sev">Critical</div><h4>Raw coordinates in map popup</h4><p>Debug title "power" and lat/long shown instead of a member-facing summary.</p></div>
+        <div class="issue"><div class="sev">Critical</div><h4>Test events in the public feed</h4><p>"en sport 1", "فعالية تجريبية" and similar trial records are publicly visible.</p></div>
+        <div class="issue"><div class="sev">Critical</div><h4>English placeholder in Arabic UI</h4><p>"Location Should Here" ships as real microcopy on the Arabic home.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>No content-quality gate</h4><p>Nothing prevents empty or placeholder records from publishing to members.</p></div>
+      </div>
+    </div>
+
+    <!-- Visual design -->
+    <div class="cat">
+      <div class="cat-head"><h3>2 · Visual Design &amp; Hierarchy</h3><span class="cnt">5 findings</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">Critical</div><h4>Primary CTA reads as disabled</h4><p>The login button's muted colour makes the main action look inactive.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Low contrast throughout</h4><p>Purple-on-purple text and UI sit below comfortable legibility and accessibility thresholds.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Accent colour overused</h4><p>One accent applied to headings, links, tabs and dates — so nothing is emphasised.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>No elevation / spacing system</h4><p>Borders and pills everywhere, no consistent depth or rhythm — the UI feels flat and busy.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>No type scale</h4><p>Heading, body and label sizes aren't systematised; Arabic and Latin type aren't paired.</p></div>
+      </div>
+    </div>
+
+    <!-- UX & flow -->
+    <div class="cat">
+      <div class="cat-head"><h3>3 · UX, Flow &amp; Empty States</h3><span class="cnt">5 findings</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">Critical</div><h4>Analytics panel ships empty</h4><p>"No data available" white box on home — your top-priority surface, currently blank.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Dead space on empty feed</h4><p>"No enrolled activities" leaves half the screen blank with no guidance or CTA.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Inconsistent card anatomy</h4><p>Activity cards vary in layout, so info lands in different places each time.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Ambiguous star rating</h4><p>Floating stars — unclear if display or input, and they overlap imagery.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Unexplained calendar highlights</h4><p>Marked dates have no legend to say what they mean.</p></div>
+      </div>
+    </div>
+
+    <!-- Bilingual -->
+    <div class="cat">
+      <div class="cat-head"><h3>4 · Bilingual &amp; RTL</h3><span class="cnt">4 findings · 1 critical</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">Critical</div><h4>Languages mix on one screen</h4><p>Arabic cards contain English strings; the app is half-translated in places.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Hardcoded English weekdays</h4><p>Calendar days don't localise or follow RTL week order.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>LTR punctuation in RTL text</h4><p>Stray "//" and locale tags break Arabic reading flow.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>No clean language toggle</h4><p>Users can't reliably switch to a fully-translated experience.</p></div>
+      </div>
+    </div>
+
+    <!-- Imagery -->
+    <div class="cat">
+      <div class="cat-head"><h3>5 · Imagery &amp; Media</h3><span class="cnt">3 findings</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">Critical</div><h4>Unrelated hero images</h4><p>Gamepad photos represent sports sessions; no default sport image fallback.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>No aspect-ratio discipline</h4><p>Images crop and stretch differently across cards.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Mismatched avatars</h4><p>Cartoon member avatar vs. random stock coach photo — no consistent avatar system.</p></div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="cat">
+      <div class="cat-head"><h3>6 · Navigation &amp; Consistency</h3><span class="cnt">3 findings</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">Critical</div><h4>Bottom nav changes between builds</h4><p>Tab sets differ — <code>Home·Activities·My Activity·Map</code> vs. <code>حسابي·فعالياتي·الأحصائيات·الرئيسية</code>. No stable information architecture.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Top bar inconsistent</h4><p>Search and icons appear on some screens and vanish on others.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Active-state styling varies</h4><p>The "current tab" indicator isn't consistent across screens.</p></div>
+      </div>
+    </div>
+
+    <!-- Forms -->
+    <div class="cat">
+      <div class="cat-head"><h3>7 · Forms &amp; Inputs</h3><span class="cnt">3 findings</span></div>
+      <div class="issue-grid">
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Copy typo on login</h4><p>"Forget Password?" should read "Forgot your password?".</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>No visible inline validation</h4><p>No sign of field-level error/success feedback for email and password.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Low-value social provider</h4><p>X (Twitter) sign-in adds little for the Saudi sports audience vs. Apple/Google/phone.</p></div>
+      </div>
+    </div>
+
+    <!-- Trust -->
+    <div class="cat">
+      <div class="cat-head"><h3>8 · Trust &amp; Brand</h3><span class="cnt">2 findings</span></div>
+      <div class="issue-grid">
+        <div class="issue"><div class="sev">Critical</div><h4>No brand identity in-app</h4><p>No SkillVera logo/mark on entry or nav — the app opens generic, weakening institutional credibility.</p></div>
+        <div class="issue minor"><div class="sev">Moderate</div><h4>Name inconsistency</h4><p>App-level naming ("Skv Activities") differs from the SkillVera brand members should recognise.</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= REDESIGN ================= -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">Where we take it</div>
+    <h2>A redesign that keeps what works and finishes what doesn't.</h2>
+    <div class="vision-banner">
+      <span class="tag">In progress · Figma</span>
+      <h3>We're already designing the improved version.</h3>
+      <p>Rather than only list problems, we've designed the improved version in Figma — a clean light-theme design system (colour, type, spacing, components), a single consistent activity card, a real booking flow, disciplined bilingual/RTL, and a branded map. The full screen map is below, followed by the interactive prototype and a point-by-point look at how each experience problem is solved.</p>
+    </div>
+
+    <div class="board">
+      <img src="audit-assets/redesign-board.png" alt="SkillVera redesign — full screen map">
+    </div>
+    <p class="board-cap"><b>The complete redesigned journey</b> — splash &amp; onboarding, sign-up with interest selection, home, categories, event detail, a 3-step booking flow with confirmation, my bookings, receipts, language toggle and side menu. 22 screens, one coherent system.</p>
+    <div class="figma-embed">
+      <div class="fe-bar">
+        <span class="fe-dot" style="background:#FF5F57"></span>
+        <span class="fe-dot" style="background:#FEBC2E"></span>
+        <span class="fe-dot" style="background:#28C840"></span>
+        <span class="fe-title">SkillVera Redesign — Interactive Prototype (Figma)</span>
+        <span class="fe-live">● Live POC</span>
+      </div>
+      <div class="fe-stage">
+        <iframe
+          src="https://embed.figma.com/proto/Xwb5164zLfLW1V5VD7Ode3/CODE-OX?node-id=500-192&scaling=scale-down-width&content-scaling=responsive&starting-point-node-id=500%3A192&page-id=498%3A807&embed-host=share"
+          allowfullscreen
+          loading="lazy"
+          title="SkillVera Redesign Prototype"></iframe>
+      </div>
+    </div>
+    <div class="figma-cta">
+      <a class="figma-btn" href="https://www.figma.com/proto/Xwb5164zLfLW1V5VD7Ode3/CODE-OX?node-id=500-192&starting-point-node-id=500%3A192" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+        Best viewed in the Figma prototype — open it full-screen
+      </a>
+      <small>Working, clickable proof of concept. Tap through the full redesigned flow.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW THE REDESIGN FIXES UX ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Problem → solution</div>
+    <h2>How the redesign improves the experience, point by point.</h2>
+    <p class="lead">Every fix below maps to a finding from the audit and to a real screen in the prototype above. This is the difference between a working prototype and a product a member trusts and a Ministry endorses.</p>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>Muddy purple, low-contrast UI</h4><p>Purple text on purple background, one accent doing every job — nothing stands out, and legibility fails.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>Clean light theme, clear hierarchy</h4><p>White canvas, a single confident blue primary, generous spacing and a real type scale. Every screen is <b>readable and calm</b>.<span class="screen">All screens</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>Test data live to users</h4><p>"string" locations, locale-instruction titles, "فعالية تجريبية" test events in the public feed.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>Real, curated content</h4><p>Named events ("Football Pro League"), real venues, prices and coaches — the structure assumes <b>finished content, not placeholders</b>.<span class="screen">skv-home · event detail</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>Cold start — no context</h4><p>App drops the user straight into a generic screen with no sense of what it does.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>Splash + 3-step onboarding</h4><p>"Discover activities near you", "Book &amp; join instantly", "Connect with trainers" — the value is <b>clear in the first 10 seconds</b>.<span class="screen">Intro 1–3</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>Generic feed for everyone</h4><p>No personalisation; every member sees the same undifferentiated list.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>"What are you into?" interest picker</h4><p>Members choose sports at sign-up (football, swimming, karate…), so the home feed can be <b>personalised from day one</b>.<span class="screen">signup-interests</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>Inconsistent, ambiguous cards</h4><p>Each activity card a different shape; floating stars that may be rating or input; mismatched imagery.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>One activity-card system</h4><p>A single repeatable card — sport photo, title, venue, price, rating — used across browse, categories and map. <b>Predictable everywhere</b>.<span class="screen">all-categories · popular</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>Enrol = one flat screen</h4><p>Placeholder description, "Coach: string", every detail equal-weight; no session choice, no confirmation.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>Guided booking flow</h4><p>Event detail → pick a session (calendar, morning/evening) → booking summary → <b>booking confirmed</b>. A real, reassuring path to purchase.<span class="screen">event · booking 1–3</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>Empty analytics box on home</h4><p>Your #1 priority rendered "no data available" in blank white space.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>Ratings, reviews &amp; a bookings history</h4><p>Event ratings (4.8), member reviews, and a "My Bookings" + receipt view give members <b>real numbers</b> — the same data spine your admin reporting will surface.<span class="screen">my-bookings · booking details</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>Half-translated screens</h4><p>Arabic cards with English strings; hardcoded English weekdays; no clean toggle.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>Proper bilingual system</h4><p>A dedicated "Choose your language" screen (English / العربية) and a layout built for <b>full RTL</b> — one language, end to end.<span class="screen">skv-language</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>Map leaks raw coordinates</h4><p>Pin popup shows a debug title and lat/long instead of anything useful.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>Branded, member-friendly map</h4><p>Clean styled map with activity cards on the pins — name, sport, price — turning a strong feature into a <b>selling point</b>.<span class="screen">skv-map-view</span></p></div>
+    </div>
+
+    <div class="fix">
+      <div class="from"><div class="lbl">Before</div><h4>No identity, no wayfinding</h4><p>App opens generic; navigation and top bar shift between screens.</p></div>
+      <div class="to"><div class="lbl">After</div><h4>Consistent brand &amp; side menu</h4><p>SkillVera identity throughout, a stable bottom nav, and a profile side menu (bookings, favourites, settings) — <b>one coherent app</b>.<span class="screen">skv-sidebar</span></p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= BEFORE / AFTER ================= -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The shift</div>
+    <h2>From "working prototype" to "ready for the Ministry."</h2>
+    <div class="bench">
+      <div class="bench-panel current">
+        <h4>Today</h4>
+        <ul>
+          <li>Test data and developer strings visible to real users</li>
+          <li>Empty analytics panel on the home screen</li>
+          <li>Primary actions that look inactive</li>
+          <li>Half-translated, mixed AR/EN screens</li>
+          <li>Cards that change shape from one to the next</li>
+          <li>Unrelated stock/game imagery, no fallbacks</li>
+          <li>Map popups exposing raw coordinates</li>
+          <li>No SkillVera brand presence in the app</li>
+        </ul>
+      </div>
+      <div class="bench-panel proposed">
+        <h4>After the finishing pass</h4>
+        <ul>
+          <li>100% curated, real content — a publish gate blocks placeholders</li>
+          <li>A reporting home built around your data priority</li>
+          <li>One clear, confident primary action per screen</li>
+          <li>Fully localised, disciplined RTL throughout</li>
+          <li>A single, repeatable activity-card system</li>
+          <li>Sport-aware imagery with safe default fallbacks</li>
+          <li>Member-friendly map cards, branded pins</li>
+          <li>Consistent SkillVera identity end to end</li>
+        </ul>
+      </div>
+    </div>
+    <div class="verdict">
+      <b>Bottom line:</b> nothing here requires tearing the app down. The platform already does the hard part — it runs, it enrols, it maps. What it needs is a disciplined design-and-content finishing pass, led by a team that spots these details and fixes them proactively. That is exactly the work that turns a working product into one a Ministry is comfortable standing behind by June 2027 — and it's the kind of partner we intend to be.
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="alt">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" onerror="this.style.display='none'">
+        <h3>Let's finish this properly.</h3>
+        <p>Prepared by CodeOx for SkillVera — a product design &amp; UX audit, with a redesign already underway.</p>
+      </div>
+      <div class="cinfo">
+        <b>Shabeeb K</b>
+        Head of Operations, CodeOx<br>
+        <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a><br>
+        <a href="tel:+966535716437">+966 53 571 6437</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fwrap">
+    Prepared by <b>CodeOx</b> for <b>SkillVera</b> · Product Design &amp; User-Experience Audit · 31 August 2026.
+  </div>
+</footer>
+
+</body>
+</html>
