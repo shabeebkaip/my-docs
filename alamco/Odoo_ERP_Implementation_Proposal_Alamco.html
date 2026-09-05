@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alamco Spaceworks — Odoo ERP Implementation · CX-ALM-2026-02</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body, table, td, th, div, p, span, ul, li { direction: ltr; text-align: left; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #D0D5DF; color: #1A202C; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto 24px; position: relative; overflow: hidden; background: #fff; }
+    @media print { body { background: none; } .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; } }
+    @page { size: A4; margin: 0; }
+
+    /* COVER */
+    .cover { background:#FFFFFF; color:#0F172A; min-height:297mm; display:flex; flex-direction:column; position:relative; }
+    .cover-accent-bar { position:absolute; left:0; top:0; bottom:0; width:5px; background:#2563EB; z-index:3; }
+    .cover-topbar { position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; padding:16px 26px 16px 32px; border-bottom:1px solid #E2E8F0; }
+    .cover-topbar-left { display:flex; align-items:center; gap:14px; }
+    .cover-logo-chip { background:#0D1B2A; border-radius:8px; padding:7px 14px; display:flex; align-items:center; }
+    .cover-logo-chip img { height:22px; width:auto; display:block; }
+    .cover-divider { width:1px; height:30px; background:#E2E8F0; }
+    .cover-hero { position:relative; z-index:2; flex:1; display:flex; flex-direction:column; padding:32px 26px 0 32px; }
+    .cover-overline { font-size:11px; font-weight:600; color:#94A3B8; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:14px; }
+    .cover-title { font-size:40px; font-weight:800; line-height:1.1; color:#0F172A; margin-bottom:6px; }
+    .cover-title-accent { color:#1D4ED8; }
+    .cover-subtitle { font-size:15.5px; color:#475569; line-height:1.65; max-width:480px; margin-bottom:22px; }
+    .cover-tags { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:22px; }
+    .cover-tag { background:#F1F5F9; border:1px solid #E2E8F0; border-radius:4px; padding:5px 11px; font-size:12.5px; color:#475569; }
+    .cover-tag strong { color:#0F172A; font-weight:600; }
+    .cover-tag.hot { background:#EFF6FF; border-color:#BFDBFE; color:#1D4ED8; }
+    .cover-tag.hot strong { color:#1D4ED8; }
+    .partner-strip { position:relative; z-index:2; display:flex; align-items:center; gap:20px; background:#ECEEF1; border:1px solid #D5D8DD; border-radius:14px; padding:16px 22px; margin-bottom:22px; }
+    .partner-strip-logo-chip { background:#fff; border:1px solid #E7E9ED; border-radius:10px; padding:8px 14px; display:flex; align-items:center; flex-shrink:0; }
+    .partner-strip img { height:54px; width:auto; display:block; }
+    .partner-strip-divider { width:1px; align-self:stretch; background:rgba(15,23,42,0.14); }
+    .partner-strip-eyebrow { font-size:13px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#1D4ED8; margin-bottom:5px; }
+    .partner-strip-title { font-size:19.5px; font-weight:800; color:#0F172A; margin-bottom:4px; line-height:1.25; }
+    .partner-strip-text { font-size:14.5px; color:#475569; line-height:1.6; max-width:380px; }
+    .partner-strip-badges { margin-left:auto; display:flex; flex-direction:column; gap:6px; flex-shrink:0; }
+    .partner-strip-badge { font-size:12.5px; font-weight:700; color:#fff; background:#091827; border-radius:20px; padding:5px 12px; white-space:nowrap; text-align:center; }
+    .cover-ref-box { position:relative; z-index:2; margin:0 26px 14px 32px; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:6px; display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden; }
+    .cover-ref-item { padding:14px 16px; border-right:1px solid #BFDBFE; }
+    .cover-ref-item:last-child { border-right:none; }
+    .cover-ref-label { font-size:10.5px; color:#64748B; text-transform:uppercase; letter-spacing:0.13em; margin-bottom:5px; }
+    .cover-ref-value { font-size:15px; font-weight:600; color:#0F172A; }
+    .cover-ref-value.teal { color:#1D4ED8; }
+    .cover-footer { position:relative; z-index:2; border-top:1px solid #E2E8F0; padding:13px 26px 13px 32px; display:flex; align-items:center; gap:14px; }
+    .cover-footer img { height:17px; opacity:0.85; }
+    .cover-footer-sep { width:1px; height:14px; background:#E2E8F0; }
+    .cover-footer-text { font-size:8.5px; color:#94A3B8; }
+
+    /* INNER */
+    .inner-page { display:flex; flex-direction:column; min-height:297mm; }
+    .inner-header { display:flex; align-items:center; justify-content:space-between; padding:13px 26px; border-bottom:1px solid #E2E8F0; background:#FAFBFC; }
+    .inner-header img { height:15px; }
+    .inner-header-title { font-size:12.5px; color:#64748B; }
+    .inner-header-ref { font-size:12.5px; color:#94A3B8; }
+    .inner-content { flex:1; padding:26px 26px; }
+    .inner-footer { border-top:1px solid #E2E8F0; padding:11px 26px; display:flex; align-items:center; gap:10px; background:#FAFBFC; }
+    .inner-footer img { height:13px; opacity:0.45; }
+    .inner-footer-sep { width:1px; height:11px; background:#CBD5E1; }
+    .inner-footer-text { font-size:8px; color:#94A3B8; flex:1; }
+    .inner-footer-page { font-size:8.5px; color:#94A3B8; font-weight:500; }
+    .section-label { font-size:11px; font-weight:700; color:#2563EB; text-transform:uppercase; letter-spacing:0.16em; margin-bottom:7px; }
+    .section-heading { font-size:28.5px; font-weight:800; color:#0F172A; margin-bottom:10px; line-height:1.15; }
+    .section-intro { font-size:13.5px; color:#475569; line-height:1.72; margin-bottom:16px; }
+    .part-banner { background:#091827; color:#fff; border-radius:6px; padding:13px 16px; display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+    .part-badge { width:28px; height:28px; min-width:28px; border-radius:50%; background:#2563EB; display:flex; align-items:center; justify-content:center; font-size:15.5px; font-weight:800; color:#091827; }
+    .part-banner-sub { font-size:10.5px; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:2px; }
+    .part-banner-title { font-size:17px; font-weight:700; }
+    .note-box { border-radius:5px; padding:10px 14px; font-size:13px; line-height:1.55; margin-bottom:12px; }
+    .note-box.teal { background:#EFF6FF; border:1px solid #BFDBFE; border-left:3px solid #2563EB; }
+    .note-box.amber { background:#FFFBEB; border:1px solid #FDE68A; border-left:3px solid #F59E0B; }
+    .note-box.navy { background:#F0F4F8; border:1px solid #CBD5E1; border-left:3px solid #091827; }
+    .note-box .note-label { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px; }
+    .note-box.teal .note-label { color:#1D4ED8; }
+    .note-box.amber .note-label { color:#B45309; }
+    .note-box.navy .note-label { color:#334155; }
+    .note-box p { color:#374151; }
+    .note-box strong { font-weight:600; }
+    .section-hr { border:none; border-top:1px solid #E2E8F0; margin:14px 0; }
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:16px; }
+    .info-card { border:1px solid #E2E8F0; border-radius:6px; padding:12px 13px; }
+    .info-card-label { font-size:12.5px; font-weight:700; color:#0F172A; margin-bottom:3px; }
+    .info-card-value { font-size:13px; color:#64748B; line-height:1.55; }
+
+    /* module suite grid */
+    .suite-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+    .suite-card { border:1px solid #E2E8F0; border-top:3px solid #2563EB; border-radius:8px; padding:12px 14px; }
+    .suite-card .sc-cat { font-size:9.5px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#1D4ED8; margin-bottom:7px; }
+    .suite-card ul { list-style:none; }
+    .suite-card li { display:flex; align-items:flex-start; gap:7px; font-size:11.5px; color:#334155; line-height:1.5; padding:2px 0; }
+    .suite-card li b { color:#0F172A; font-weight:600; }
+    .suite-card li span.ck { width:13px; height:13px; min-width:13px; border-radius:50%; background:#2563EB; display:inline-flex; align-items:center; justify-content:center; margin-top:2px; }
+    .suite-card li span.ck svg { width:7px; height:7px; }
+
+    /* generic money table */
+    .mtable { width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:12px; direction:ltr; }
+    .mtable thead th { background:#091827; color:#fff; padding:9px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+    .mtable thead th.num { text-align:right; }
+    .mtable tbody td { padding:8px 12px; border-bottom:1px solid #EEF2F7; color:#334155; vertical-align:top; line-height:1.45; }
+    .mtable tbody td.num { text-align:right; white-space:nowrap; }
+    .mtable tbody tr:nth-child(even) td { background:#F8FAFC; }
+    .mtable td .t-name { font-weight:700; color:#0F172A; display:block; }
+    .mtable td .t-sub { font-size:10.5px; color:#64748B; line-height:1.4; }
+    .mtable tr.hi td { background:#EFF6FF !important; }
+    .mtable tr.total td { background:#091827; color:#fff; font-weight:700; font-size:13.5px; padding:11px 12px; }
+    .mtable tr.total td.num { color:#4DA3FF; font-size:16px; text-align:right; }
+    .mtable tr.subtotal td { border-top:1.5px solid #CBD5E1; font-weight:700; color:#0F172A; }
+    .mtable tr.subtotal td.num { color:#1D4ED8; }
+    .rec-badge { display:inline-block; font-size:9px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; color:#15803D; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:20px; padding:2px 8px; margin-left:6px; }
+    /* grouped scope table */
+    .sow-table { width:100%; border-collapse:collapse; font-size:11.5px; margin-bottom:10px; direction:ltr; }
+    .sow-table thead th { background:#091827; color:#fff; padding:7px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+    .sow-table tbody td { padding:5px 12px; border-bottom:1px solid #EEF2F7; color:#475569; vertical-align:top; line-height:1.4; }
+    .sow-table .sow-grp td { background:#EFF6FF; color:#1D4ED8; font-size:10px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; padding:6px 12px; border-bottom:1px solid #BFDBFE; }
+    .sow-table .s-item { font-weight:700; color:#0F172A; white-space:nowrap; padding-right:14px; width:34%; }
+    .sow-table tbody tr:nth-child(even):not(.sow-grp) td { background:#FAFBFC; }
+    .sow-num { width:22px; color:#94A3B8; font-weight:700; }
+    .cell-note { font-size:10.5px; color:#94A3B8; margin-top:6px; line-height:1.5; }
+
+    .terms-list { list-style:none; }
+    .terms-list li { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#374151; line-height:1.5; padding:5px 0; border-bottom:1px solid #F1F5F9; }
+    .terms-list li:last-child { border-bottom:none; }
+    .terms-dot { width:7px; height:7px; min-width:7px; border-radius:50%; background:#2563EB; margin-top:6px; flex-shrink:0; }
+
+    .assumptions-list { list-style:none; margin-bottom:10px; }
+    .assumptions-list li { display:flex; align-items:flex-start; gap:9px; padding:5px 10px; border-bottom:1px solid #F1F5F9; font-size:13px; color:#334155; line-height:1.5; }
+    .assumptions-list li:first-child { border-top:1px solid #F1F5F9; }
+    .assumptions-list li:nth-child(even) { background:#FAFBFD; }
+    .assumption-icon { width:16px; height:16px; min-width:16px; border-radius:3px; background:#F1F5F9; border:1px solid #CBD5E1; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
+    .assumption-icon svg { width:8px; height:8px; }
+
+    .signoff-block { border:1.5px solid #E2E8F0; border-radius:6px; overflow:hidden; margin-top:16px; }
+    .signoff-header { background:#091827; color:#fff; padding:10px 16px; font-size:11.5px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; }
+    .signoff-body { padding:14px 16px; background:#FAFBFC; }
+    .signoff-cols { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .signoff-col-header { font-size:11px; font-weight:700; color:#0F172A; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:12px; padding-bottom:5px; border-bottom:2px solid #2563EB; }
+    .signoff-field { margin-bottom:14px; }
+    .signoff-field-label { font-size:10.5px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:4px; }
+    .signoff-field-line { border-bottom:1.5px solid #CBD5E1; height:46px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ PAGE 1 — COVER ═══════════ -->
+<div class="page cover">
+  <div class="cover-accent-bar"></div>
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <div class="cover-logo-chip">
+        <img src="https://alamcosa.com/AlamcoSpaceworks_White_LOGO.svg" alt="Alamco Spaceworks">
+      </div>
+      <div class="cover-divider"></div>
+      <img src="code-ox-logo.svg" alt="Code-ox" style="height:24px; width:auto; display:block;">
+    </div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">Commercial Quotation &nbsp;·&nbsp; September 2026</div>
+    <div class="cover-title">
+      Odoo Enterprise<br>
+      <span class="cover-title-accent">ERP Implementation</span>
+    </div>
+    <div class="cover-subtitle">
+      A fresh Odoo Enterprise ERP for Alamco Spaceworks — one connected system for sales, procurement, inventory, projects, HR and finance. This quotation covers the full implementation and a clear, itemised breakdown of every recurring cost, so you know exactly what you're spending on.
+    </div>
+
+    <div class="cover-tags">
+      <div class="cover-tag hot"><strong>Odoo 19</strong> Enterprise</div>
+      <div class="cover-tag"><strong>CRM &amp; Sales</strong></div>
+      <div class="cover-tag"><strong>Purchase</strong></div>
+      <div class="cover-tag"><strong>Inventory</strong></div>
+      <div class="cover-tag"><strong>Project</strong></div>
+      <div class="cover-tag"><strong>Accounting</strong></div>
+      <div class="cover-tag"><strong>HR</strong></div>
+      <div class="cover-tag"><strong>5</strong> Users</div>
+      <div class="cover-tag"><strong>6 Months</strong> Support</div>
+    </div>
+
+    <div class="partner-strip">
+      <div class="partner-strip-logo-chip">
+        <img src="odoo_silver_partner.avif" alt="Odoo Silver Partner">
+      </div>
+      <div class="partner-strip-divider"></div>
+      <div>
+        <div class="partner-strip-eyebrow">Official Odoo Partnership</div>
+        <div class="partner-strip-title">Delivered by a Certified Odoo Silver Partner</div>
+        <div class="partner-strip-text">Code-ox Technologies holds official Odoo Silver Partner status — authorised to sell, implement, configure and support Odoo ERP deployments, with direct access to Odoo's partner support channels.</div>
+      </div>
+      <div class="partner-strip-badges">
+        <div class="partner-strip-badge">Official Partner</div>
+        <div class="partner-strip-badge">Certified Team</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-ref-box">
+    <div class="cover-ref-item"><div class="cover-ref-label">Quotation No.</div><div class="cover-ref-value teal">CX-ALM-2026-02</div></div>
+    <div class="cover-ref-item"><div class="cover-ref-label">Date</div><div class="cover-ref-value">5 September 2026</div></div>
+    <div class="cover-ref-item"><div class="cover-ref-label">Currency</div><div class="cover-ref-value">SAR (Saudi Riyal)</div></div>
+    <div class="cover-ref-item"><div class="cover-ref-label">Prepared By</div><div class="cover-ref-value">Code-ox Technologies</div></div>
+  </div>
+
+  <div class="cover-footer">
+    <img src="code-ox-logo.svg" alt="Code-ox Technologies">
+    <div class="cover-footer-sep"></div>
+    <div class="cover-footer-text">raghib@code-ox.com &nbsp;|&nbsp; +966 56 176 5707 &nbsp;|&nbsp; code-ox.com &nbsp;|&nbsp; Odoo Silver Partner</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 2 — EXECUTIVE SUMMARY ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-header-title">Alamco Spaceworks — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-ALM-2026-02 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Overview</div>
+    <div class="section-heading">Executive Summary</div>
+    <div class="section-intro">
+      Code-ox Technologies is pleased to submit this commercial quotation for a fresh <strong>Odoo Enterprise ERP implementation</strong> for Alamco Spaceworks — bringing sales, procurement, inventory, projects, HR and finance into one connected system.
+      <br><br>
+      Per our last meeting, the agreed direction is to <strong>implement the ERP first</strong> and build a solid operational foundation, then revisit the AI procurement agent as a natural next phase once the ERP is live and your data lives in one place. This proposal is therefore focused purely on standing up Odoo end-to-end for a <strong>5-user rollout</strong>, with the full module set configured around how Alamco actually runs projects.
+    </div>
+
+    <div class="note-box teal">
+      <div class="note-label">Phased approach</div>
+      <p><strong>Phase 1 (this proposal):</strong> Full Odoo Enterprise ERP implementation. &nbsp;<strong>Phase 2 (future):</strong> The AI Procurement Agent that reads BOQs and raises requisitions — quoted separately once the ERP is live and the catalogue and vendor data are in Odoo.</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="info-card-label">Prepared For</div><div class="info-card-value">Alamco Spaceworks<br>Fit-out &amp; bespoke joinery contractor<br>Kingdom of Saudi Arabia</div></div>
+      <div class="info-card"><div class="info-card-label">Prepared By</div><div class="info-card-value">Code-ox Technologies<br>Odoo Silver Partner<br>raghib@code-ox.com · +966 56 176 5707</div></div>
+      <div class="info-card"><div class="info-card-label">Scope</div><div class="info-card-value">Fresh Odoo 19 Enterprise install · full module set · 5 users · training · 6 months complimentary support</div></div>
+      <div class="info-card"><div class="info-card-label">Quotation</div><div class="info-card-value">No: CX-ALM-2026-02<br>Date: 5 September 2026<br>Currency: SAR (Saudi Riyal)</div></div>
+    </div>
+
+    <div class="note-box navy">
+      <div class="note-label">What this document makes clear</div>
+      <p>Three cost lines make up your total: a one-time <strong>implementation charge</strong>, the recurring <strong>Odoo user licences</strong>, and the recurring <strong>server / hosting</strong>. Each is itemised on the following pages — including a side-by-side of hosting options (Odoo.sh, DigitalOcean, AWS, LightNode) — so there are no surprises.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="inner-footer-page">Page 2</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 3 — MODULE SUITE ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-header-title">Alamco Spaceworks — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-ALM-2026-02 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Scope of Work</div>
+    <div class="section-heading">The full Odoo module suite</div>
+    <div class="section-intro">
+      Your Odoo Enterprise subscription unlocks <strong>every Odoo application</strong> — not a limited bundle. This implementation configures the core operational modules below around Alamco's workflows; any additional app can be switched on at any time at no extra licence cost.
+    </div>
+
+    <div class="suite-grid">
+      <div class="suite-card">
+        <div class="sc-cat">Sales &amp; Customers</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>CRM</b> — leads, tenders &amp; client/consultant pipeline</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Sales</b> — BOQ-style quotations, revisions, price lists</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Sign</b> — digital sign-off on quotes &amp; contracts</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">Procurement &amp; Inventory</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Purchase</b> — RFQs, vendor price lists, PO-to-bill, approvals</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Inventory</b> — multi-location stock, per-project reservation</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Manufacturing</b> — optional, for in-house joinery/BOM</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">Projects &amp; Delivery</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Project</b> — every fit-out job as a project, cost vs BOQ</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Timesheets</b> — labour hours booked to projects</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Field Service / Planning</b> — site scheduling (optional)</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">Finance</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Accounting</b> — full AR/AP, bank reconciliation, reporting</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Invoicing</b> — <b>ZATCA e-invoicing</b> compliance</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Expenses</b> — staff expense capture &amp; approval</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">Human Resources</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Employees</b> — directory &amp; records</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Time Off &amp; Attendance</b> — leave and presence</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Recruitment</b> — hiring pipeline (optional)</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">Productivity &amp; Platform</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Documents</b> — central file store, linked to records</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Discuss &amp; Approvals</b> — internal chat, approval flows</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Dashboards</b> — live KPIs across every module</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">Note on module access</div>
+      <p>Modules marked <em>optional</em> are available on the same licence and can be activated whenever Alamco needs them — the implementation prioritises the operational core (Sales, Purchase, Inventory, Project, Accounting, HR) so you go live quickly, then expands from there.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="inner-footer-page">Page 3</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 4 — SCOPE OF WORK (DETAILED) ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-header-title">Alamco Spaceworks — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-ALM-2026-02 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Scope of Work</div>
+    <div class="section-heading">Exactly what Code-ox delivers</div>
+    <div class="section-intro">A fixed-scope implementation: every activity below is included in the one-time implementation charge. Each module is configured around how Alamco actually runs — not a default install.</div>
+
+    <table class="sow-table">
+      <thead><tr><th>Area</th><th>Configuration &amp; deliverables included</th></tr></thead>
+      <tbody>
+        <tr class="sow-grp"><td colspan="2">1 · Discovery &amp; Foundation</td></tr>
+        <tr><td class="s-item">Requirement workshop</td><td>Map Alamco's project, procurement and finance workflows; define the 5 users and their roles.</td></tr>
+        <tr><td class="s-item">Instance &amp; localization</td><td>Provision Odoo 19, company profile, Saudi Arabia fiscal localization, currency and number sequences.</td></tr>
+        <tr><td class="s-item">Master data setup</td><td>Import chart of accounts, product/material catalogue, approved vendor list, clients &amp; consultants.</td></tr>
+        <tr><td class="s-item">Users &amp; access control</td><td>Role-based access rights, record rules and approval rights configured per user.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">2 · Sales &amp; CRM</td></tr>
+        <tr><td class="s-item">CRM pipeline</td><td>Lead/tender stages, activities and per-opportunity document attachments.</td></tr>
+        <tr><td class="s-item">Quotations</td><td>BOQ-style quotation templates, revision control, price lists and standard terms.</td></tr>
+        <tr><td class="s-item">Approvals &amp; e-sign</td><td>Quotation approval flow and digital Sign for client sign-off.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">3 · Procurement &amp; Inventory</td></tr>
+        <tr><td class="s-item">Purchase flow</td><td>RFQ → PO → vendor bill, vendor price lists and multi-level approval matrix.</td></tr>
+        <tr><td class="s-item">Warehouses &amp; sites</td><td>Warehouse and job-site locations with per-project material reservation.</td></tr>
+        <tr><td class="s-item">Stock control</td><td>Reordering rules, stock valuation, delivery and receipt routes.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">4 · Projects &amp; Costing</td></tr>
+        <tr><td class="s-item">Project setup</td><td>Project templates, task stages and per-job analytic tracking.</td></tr>
+        <tr><td class="s-item">Timesheets &amp; cost vs BOQ</td><td>Labour booked to projects; material + labour cost tracked against quoted BOQ value, with margin dashboards.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">5 · Finance &amp; ZATCA</td></tr>
+        <tr><td class="s-item">Accounting</td><td>AR/AP, journals, bank setup &amp; reconciliation, VAT (15%) tax configuration.</td></tr>
+        <tr><td class="s-item">ZATCA e-invoicing</td><td>Configure ZATCA (Fatoora) Phase-2 compliant e-invoicing on Alamco's registration.</td></tr>
+        <tr><td class="s-item">Financial reporting</td><td>P&amp;L, balance sheet, aged receivables/payables and cash-flow reports.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">6 · HR &amp; Expenses</td></tr>
+        <tr><td class="s-item">Employees &amp; attendance</td><td>Employee directory, departments, contracts, Time Off and Attendance.</td></tr>
+        <tr><td class="s-item">Expenses</td><td>Staff expense capture and approval, linked to projects.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">7 · Training, Go-Live &amp; Support</td></tr>
+        <tr><td class="s-item">Training &amp; UAT</td><td>Hands-on role-based training and user acceptance testing against real workflows before sign-off.</td></tr>
+        <tr><td class="s-item">Go-live &amp; support</td><td>Cutover with launch hypercare, then 6 months complimentary bug fixes and config adjustments on all modules.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="inner-footer-page">Page 4</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 5 — INVESTMENT: IMPLEMENTATION + LICENCE ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-header-title">Alamco Spaceworks — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-ALM-2026-02 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Investment · Part 1</div>
+    <div class="section-heading">Implementation &amp; licences</div>
+    <div class="section-intro">Your spend has three parts — a one-time implementation charge, recurring Odoo licences, and recurring hosting. This page covers the first two; hosting options are on the next page.</div>
+
+    <div class="part-banner">
+      <div class="part-badge">1</div>
+      <div><div class="part-banner-sub">One-time</div><div class="part-banner-title">Implementation charge</div></div>
+    </div>
+    <table class="mtable">
+      <thead><tr><th>Included in the implementation</th><th class="num">Amount</th></tr></thead>
+      <tbody>
+        <tr><td><span class="t-name">Full Odoo Enterprise implementation</span><span class="t-sub">Discovery &amp; workflow mapping · fresh Odoo 19 install &amp; configuration · all core modules set up around Alamco's processes · roles &amp; access per user · master-data setup (chart of accounts, products, vendors, clients) · ZATCA e-invoicing configuration · hands-on team training · go-live support</span></td><td class="num">SAR 23,000</td></tr>
+        <tr><td><span class="t-name">6 months complimentary support</span><span class="t-sub">Bug fixes and configuration adjustments on every module, at no extra cost, for 6 months after go-live.</span></td><td class="num">Included</td></tr>
+        <tr class="total"><td>One-time implementation total</td><td class="num">SAR 23,000</td></tr>
+      </tbody>
+    </table>
+
+    <div class="part-banner" style="margin-top:18px;">
+      <div class="part-badge">2</div>
+      <div><div class="part-banner-sub">Recurring</div><div class="part-banner-title">Odoo Enterprise user licences</div></div>
+    </div>
+    <table class="mtable">
+      <thead><tr><th>Odoo Custom plan — 5 users</th><th class="num">Rate / user / mo</th><th class="num">Monthly (5 users)</th><th class="num">Annual (5 users)</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><span class="t-name">Year 1 — with first-year discount</span><span class="t-sub">Odoo's standard first-year initial discount on the Custom plan.</span></td><td class="num">$20.40<br><span class="t-sub">≈ SAR 77</span></td><td class="num">$102<br><span class="t-sub">≈ SAR 383</span></td><td class="num">$1,224<br><span class="t-sub">≈ SAR 4,590</span></td></tr>
+        <tr><td><span class="t-name">Year 2 onward — standard rate</span><span class="t-sub">List price after the first-year discount ends.</span></td><td class="num">$25.50<br><span class="t-sub">≈ SAR 96</span></td><td class="num">$127.50<br><span class="t-sub">≈ SAR 478</span></td><td class="num">$1,530<br><span class="t-sub">≈ SAR 5,738</span></td></tr>
+      </tbody>
+    </table>
+    <table class="mtable">
+      <thead><tr><th>For reference — cost per single user (Odoo Custom)</th><th class="num">Monthly</th><th class="num">Annual</th></tr></thead>
+      <tbody>
+        <tr><td><span class="t-name">1 user — Year 1 (discounted)</span></td><td class="num">$20.40 <span class="t-sub">≈ SAR 77</span></td><td class="num">$244.80 <span class="t-sub">≈ SAR 918</span></td></tr>
+        <tr><td><span class="t-name">1 user — Year 2 onward</span></td><td class="num">$25.50 <span class="t-sub">≈ SAR 96</span></td><td class="num">$306 <span class="t-sub">≈ SAR 1,148</span></td></tr>
+      </tbody>
+    </table>
+    <div class="cell-note" style="margin-top:-4px;">Each additional user adds ≈ SAR 918 in Year 1 and ≈ SAR 1,148 per year thereafter, so the licence line scales cleanly with headcount.</div>
+
+    <div class="note-box teal">
+      <div class="note-label">Why the Custom plan</div>
+      <p>Alamco requires <strong>Odoo Custom</strong> — it unlocks all apps plus <strong>Odoo Studio, external API and multi-company</strong>, and is exactly what the Phase-2 AI agent will need, so choosing it now avoids rework later. Billed annually; first-year discount applies to Year 1 only, renewing at the standard rate. Prices per Odoo's pricing page (US$); SAR indicative at 3.75, confirmed at subscription.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="inner-footer-page">Page 5</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 6 — HOSTING OPTIONS ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-header-title">Alamco Spaceworks — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-ALM-2026-02 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Investment · Part 2</div>
+    <div class="section-heading">Server &amp; hosting options</div>
+    <div class="section-intro">Odoo needs a server to run on. You choose the hosting that fits your priorities — fully managed by Odoo, or a lower-cost cloud server we set up and maintain for you. All options comfortably run a 5-user Odoo instance.</div>
+
+    <table class="mtable">
+      <thead><tr><th>Option</th><th>Managed by</th><th>Custom code / AI-ready</th><th class="num">≈ Monthly</th><th class="num">≈ Annual</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="t-name">Odoo.sh</span><span class="t-sub">Odoo's cloud platform</span></td>
+          <td>Odoo — fully managed</td>
+          <td>Yes</td>
+          <td class="num">≈ SAR 330<br><span class="t-sub">($88.00)</span></td>
+          <td class="num">≈ SAR 3,960<br><span class="t-sub">($1,056)</span></td>
+        </tr>
+        <tr class="hi">
+          <td><span class="t-name">LightNode</span><span class="t-sub">Self-host VPS · 8 GB · ME region</span></td>
+          <td>Code-ox</td>
+          <td>Yes</td>
+          <td class="num">≈ SAR 115<br><span class="t-sub">($30)</span></td>
+          <td class="num">≈ SAR 1,350<br><span class="t-sub">($360)</span></td>
+        </tr>
+        <tr>
+          <td><span class="t-name">DigitalOcean</span><span class="t-sub">Self-host VPS · 8 GB · 4 vCPU · 160 GB</span></td>
+          <td>Code-ox</td>
+          <td>Yes</td>
+          <td class="num">≈ SAR 180<br><span class="t-sub">($48)</span></td>
+          <td class="num">≈ SAR 2,160<br><span class="t-sub">($576)</span></td>
+        </tr>
+        <tr>
+          <td><span class="t-name">AWS</span><span class="t-sub">Self-host · t3.large · 8 GB</span></td>
+          <td>Code-ox</td>
+          <td>Yes</td>
+          <td class="num">≈ SAR 205<br><span class="t-sub">($55)</span></td>
+          <td class="num">≈ SAR 2,460<br><span class="t-sub">($655)</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box navy">
+      <div class="note-label">Odoo.sh price breakdown (Odoo · Saudi Arabia)</div>
+      <p>1 worker <strong>$57.60/mo</strong> ($691.20/yr) + 80 GB storage <strong>$16.00/mo</strong> ($192/yr, at $2.40/GB/yr) + 1 staging branch <strong>$14.40/mo</strong> ($172.80/yr) = <strong>$88.00 / month</strong> ($1,056 / year). Storage is sized at 80 GB for this project. Hosting is charged per instance, not per user — the same for 5 users.</p>
+    </div>
+
+    <div class="note-box teal">
+      <div class="note-label">Our recommendation</div>
+      <p>Two solid choices: <strong>LightNode</strong> — the lowest-cost, low-latency option with Middle-East server locations, set up and maintained by Code-ox; or <strong>Odoo.sh</strong> — fully managed by Odoo (backups, staging, upgrades) for a hands-off setup. Both run Odoo Enterprise and support the custom code needed for the Phase-2 AI agent.</p>
+    </div>
+    <div class="cell-note">Hosting fees are paid to Odoo (Odoo.sh) or the VPS provider, billed in USD; SAR indicative at 3.75, confirmed at provisioning. All options run Odoo Enterprise, already covered on the previous page.</div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="inner-footer-page">Page 6</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 6 — TOTAL COST OF OWNERSHIP ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-header-title">Alamco Spaceworks — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-ALM-2026-02 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Investment · Summary</div>
+    <div class="section-heading">What you'll actually spend</div>
+    <div class="section-intro">Putting it together for <strong>5 users on the Odoo Custom licence</strong>. The only variable is your hosting choice — two options shown. Year 1 includes the one-time implementation and the discounted first-year licence; from Year 2 you pay licence (standard rate) and hosting only.</div>
+
+    <table class="mtable">
+      <thead><tr><th>Fixed cost lines (5 users, Odoo Custom)</th><th class="num">Year 1</th><th class="num">Year 2+ / year</th></tr></thead>
+      <tbody>
+        <tr><td><span class="t-name">Implementation (Code-ox)</span><span class="t-sub">Full ERP setup, training, 6-months support — one-time</span></td><td class="num">SAR 23,000</td><td class="num">—</td></tr>
+        <tr><td><span class="t-name">Odoo Custom licences × 5</span><span class="t-sub">Paid to Odoo · Yr1 discounted, renews at standard</span></td><td class="num">≈ SAR 4,590</td><td class="num">≈ SAR 5,738</td></tr>
+        <tr class="subtotal"><td>Subtotal before hosting</td><td class="num">≈ SAR 27,590</td><td class="num">≈ SAR 5,738</td></tr>
+      </tbody>
+    </table>
+
+    <table class="mtable">
+      <thead><tr><th>+ Hosting choice → your total</th><th class="num">Hosting / yr</th><th class="num">Year 1 total</th><th class="num">Year 2+ / yr</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><span class="t-name">Self-host — LightNode <span class="rec-badge">Value</span></span><span class="t-sub">8 GB VPS, ME region · custom-code ready</span></td><td class="num">≈ SAR 1,350</td><td class="num">≈ SAR 28,940</td><td class="num">≈ SAR 7,088</td></tr>
+        <tr><td><span class="t-name">Odoo.sh — fully managed</span><span class="t-sub">$88/mo · 80 GB · custom-code ready</span></td><td class="num">≈ SAR 3,960</td><td class="num">≈ SAR 31,550</td><td class="num">≈ SAR 9,698</td></tr>
+      </tbody>
+    </table>
+    <div class="cell-note">Year 1 = one-time implementation (SAR 23,000) + first-year licences (discounted) + one year of hosting. Odoo Custom renews from Year 2 at the standard rate (≈ SAR 5,738/year for 5 users). Licence and hosting are paid by Alamco directly to Odoo / the hosting provider. Figures are indicative at SAR 3.75 to the US dollar and confirmed at subscription/provisioning. <strong>Recommended:</strong> LightNode for the best value with low KSA latency, or Odoo.sh for a fully-managed setup. Each added/removed user changes only the licence line (Custom ≈ SAR 918/user in Year 1, ≈ SAR 1,148/user/year thereafter). Licence, worker and staging rates are per Odoo's current Saudi Arabia pricing; storage is sized up to 80 GB for this project. On that basis, Custom (5 users) + Odoo.sh (80 GB), Year 1 = <strong>US$ 2,280 ≈ SAR 8,550</strong>.</div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="inner-footer-page">Page 7</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 7 — DELIVERY & TERMS ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-header-title">Alamco Spaceworks — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-ALM-2026-02 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Delivery</div>
+    <div class="section-heading">How we deliver &amp; payment terms</div>
+
+    <table class="mtable">
+      <thead><tr><th>Stage</th><th>What happens</th><th class="num">Timeline</th></tr></thead>
+      <tbody>
+        <tr><td><span class="t-name">1 · Discovery</span></td><td>Workflow mapping, master-data collection, user roles</td><td class="num">Week 1</td></tr>
+        <tr><td><span class="t-name">2 · Configuration</span></td><td>Install, core module setup, ZATCA, access control</td><td class="num">Weeks 2–4</td></tr>
+        <tr><td><span class="t-name">3 · Training &amp; UAT</span></td><td>Hands-on team training, test against real workflows</td><td class="num">Week 5</td></tr>
+        <tr><td><span class="t-name">4 · Go-live</span></td><td>Cutover, go-live support, then 6 months support</td><td class="num">Week 6</td></tr>
+      </tbody>
+    </table>
+
+    <div class="part-banner" style="margin-top:6px;">
+      <div class="part-badge">P</div>
+      <div><div class="part-banner-sub">Payment</div><div class="part-banner-title">Payment schedule — implementation</div></div>
+    </div>
+    <table class="mtable">
+      <thead><tr><th>Milestone</th><th class="num">%</th><th class="num">Amount</th></tr></thead>
+      <tbody>
+        <tr><td>On acceptance / project kickoff</td><td class="num">50%</td><td class="num">SAR 11,500</td></tr>
+        <tr><td>On go-live</td><td class="num">50%</td><td class="num">SAR 11,500</td></tr>
+        <tr class="total"><td>Implementation total</td><td class="num">100%</td><td class="num">SAR 23,000</td></tr>
+      </tbody>
+    </table>
+    <div class="cell-note">Odoo licence and hosting are paid by Alamco directly to Odoo / the hosting provider and are not invoiced by Code-ox. For the VPS hosting options, Code-ox handles provisioning and ongoing server maintenance.</div>
+
+    <div class="part-banner" style="margin-top:14px;">
+      <div class="part-badge">A</div>
+      <div><div class="part-banner-sub">Assumptions &amp; Exclusions</div><div class="part-banner-title">Key project assumptions</div></div>
+    </div>
+    <ul class="assumptions-list">
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>Alamco provides master data — chart of accounts, product catalogue, approved vendor list, client/consultant contacts — within <strong>5 business days</strong> of kickoff.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>Odoo Enterprise licences (5 users) are purchased by Alamco directly from Odoo before implementation begins.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>Hosting/server cost is paid by Alamco to the chosen provider; the option is confirmed at kickoff.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>ZATCA e-invoicing configuration assumes Alamco's existing ZATCA registration is in order; registration itself is out of scope.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>The AI Procurement Agent is a separate future phase, quoted separately, and is not part of this implementation.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>This quotation is valid for <strong>30 days</strong> from the date of issuance.</div></li>
+    </ul>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="inner-footer-page">Page 8</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 8 — ACCEPTANCE ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-header-title">Alamco Spaceworks — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-ALM-2026-02 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Authorization</div>
+    <div class="section-heading" style="margin-bottom:14px;">Acceptance &amp; Authorization</div>
+    <div style="font-size:11px; color:#374151; font-style:italic; line-height:1.7; margin-bottom:20px;">
+      By signing below, both parties confirm acceptance of this commercial quotation for the Odoo Enterprise ERP implementation and authorize commencement under the scope, terms, and payment schedule set out above.
+    </div>
+
+    <div class="signoff-block">
+      <div class="signoff-header">Authorization Signatures &nbsp;·&nbsp; Return signed copy to raghib@code-ox.com</div>
+      <div class="signoff-body">
+        <div class="signoff-cols">
+          <div>
+            <div class="signoff-col-header">For &amp; On Behalf of Code-ox Technologies</div>
+            <div class="signoff-field"><div class="signoff-field-label">Authorized Signatory</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Name &amp; Title</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date</div><div class="signoff-field-line"></div></div>
+          </div>
+          <div>
+            <div class="signoff-col-header">For &amp; On Behalf of Alamco Spaceworks</div>
+            <div class="signoff-field"><div class="signoff-field-label">Authorized Signatory</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Name &amp; Title</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date</div><div class="signoff-field-line"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px; background:#0D1B2A; border-radius:10px; padding:22px 26px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:8.5px; color:rgba(255,255,255,0.35); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:9px;">Questions? Get in Touch</div>
+        <div style="font-size:15px; font-weight:700; color:#fff; margin-bottom:8px;">Raghib Ali Rafeeque — Code-ox Technologies</div>
+        <div style="font-size:10px;">
+          <span style="color:#2563EB;">raghib@code-ox.com</span>
+          <span style="color:rgba(255,255,255,0.4);"> &nbsp;·&nbsp; +966 56 176 5707 &nbsp;·&nbsp; code-ox.com</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0; margin-left:20px;">
+        <img src="code-ox-logo.svg" alt="CODE OX" style="height:26px; filter:brightness(0) invert(1); opacity:0.45;">
+      </div>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="inner-footer-page">Page 9</div>
+  </div>
+</div>
+
+</body>
+</html>
