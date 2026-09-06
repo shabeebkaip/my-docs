@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Address Builders Co. — E-commerce Analysis &amp; Implementation Approach</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+  :root{
+    --primary:#7A4A22;--primary-dark:#4A2C13;--primary-600:#5E3A1B;--primary-900:#2C1908;
+    --primary-50:#FAF4EC;--primary-100:#F0E4D5;
+    --ink:#1A140D;--muted:#6B5D4F;--line:#EAE2D6;--panel:#FFFFFF;--bg-alt:#FAF6F0;
+    --green:#1E9E6B;--green-soft:#E8F7F1;--amber:#C98A1F;--amber-soft:#FBF1E1;--red:#C0492F;--red-soft:#FBEAE6;
+    --radius:18px;--sans:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--panel);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  section{padding:56px 0}
+  .alt{background:var(--bg-alt)}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 34px}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);margin-bottom:13px}
+  .kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary)}
+  h2{font-size:clamp(23px,3vw,32px);font-weight:800;line-height:1.2;margin-bottom:11px;color:var(--primary-900);letter-spacing:-.01em}
+  h3{font-size:17px;font-weight:700;margin-bottom:9px;color:var(--primary-900)}
+  p.lead{font-size:15.5px;color:var(--muted);max-width:78ch;margin-bottom:30px}
+  p.lead b{color:var(--ink);font-weight:700}
+  .rule{width:54px;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary-dark));border-radius:99px;margin-bottom:20px}
+
+  /* hero */
+  .hero{padding:0 0 18px;background:linear-gradient(180deg,#fff 0%,var(--primary-50) 100%);border-bottom:1px solid var(--line)}
+  .brandline{display:flex;justify-content:space-between;align-items:center;padding:26px 0;flex-wrap:wrap;gap:14px}
+  .brandline img{height:30px}
+  .doc-tag{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+  .hero-inner{display:grid;grid-template-columns:1fr 320px;gap:34px;padding:32px 0 50px;align-items:stretch}
+  .hero-left{padding-right:34px;border-right:1px solid var(--line)}
+  .hero h1{font-size:clamp(27px,3.8vw,40px);font-weight:800;line-height:1.15;margin-bottom:16px;color:var(--primary-900);letter-spacing:-.01em}
+  .hero h1 span{color:var(--primary)}
+  .hero p.lede{font-size:clamp(14.5px,1.5vw,16.5px);color:var(--muted);margin-bottom:22px}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:24px}
+  .hero-tag{font-size:11.5px;font-weight:700;padding:6px 12px;background:#fff;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+  .hero-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 10px 30px -18px rgba(26,20,13,.18)}
+  .hero-meta div span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px;font-weight:700}
+  .hero-meta div strong{font-size:13.5px;font-weight:700;color:var(--ink)}
+  .hero-right{background:var(--primary-50);border:1px solid var(--primary-100);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:11px;justify-content:center}
+  .hr-title{font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--primary);margin-bottom:2px}
+  .hero-stat{background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 14px;box-shadow:0 6px 16px -14px rgba(26,20,13,.2)}
+  .hs-num{font-size:13.5px;font-weight:800;color:var(--ink)}
+  .hs-label{font-size:11px;color:var(--muted);margin-top:1px}
+
+  .tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .tldr-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:0 8px 22px -18px rgba(26,20,13,.22)}
+  .tldr-card .num{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--primary);background:var(--primary-50);border-radius:999px;padding:5px 12px;margin-bottom:12px}
+  .tldr-card p{font-size:13.5px;color:var(--muted)}
+  .tldr-card p b{color:var(--ink);font-weight:700}
+
+  .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:0 8px 22px -18px rgba(26,20,13,.18)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .panel h3{font-size:15px}
+  .panel ul{list-style:none}
+  .panel li{font-size:13.5px;color:var(--muted);padding:8px 0 8px 22px;position:relative;border-bottom:1px solid var(--line)}
+  .panel li:last-child{border-bottom:none}
+  .panel li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--primary)}
+  .panel li b{color:var(--ink)}
+
+  /* requirement chips */
+  .req-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .req{border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:12px;padding:16px 18px;background:#fff;box-shadow:0 6px 16px -14px rgba(26,20,13,.2)}
+  .req h4{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .req p{font-size:12.8px;color:var(--muted)}
+
+  /* comparison table */
+  .cmp-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 8px 22px -18px rgba(26,20,13,.2)}
+  .cmp{width:100%;border-collapse:collapse;font-size:13px;min-width:680px}
+  .cmp th{background:var(--primary-900);color:#fff;text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+  .cmp td{padding:10px 14px;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top;line-height:1.45}
+  .cmp tr:last-child td{border-bottom:none}
+  .cmp tbody tr:nth-child(even) td{background:var(--bg-alt)}
+  .cmp td b{color:var(--ink)}
+  .cmp tr.hi td{background:var(--primary-50)!important}
+  .cmp .pn{font-weight:800;color:var(--primary-900);white-space:nowrap}
+  .pill{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:2px 8px}
+  .pill.g{color:var(--green);background:var(--green-soft)} .pill.a{color:var(--amber);background:var(--amber-soft)} .pill.r{color:var(--red);background:var(--red-soft)}
+
+  /* two-track */
+  .track-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .track{border:1px solid var(--line);border-radius:var(--radius);padding:24px;background:#fff;box-shadow:0 8px 22px -18px rgba(26,20,13,.2)}
+  .track.buy{border-top:4px solid var(--green)} .track.enq{border-top:4px solid var(--primary)}
+  .track .tk-k{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+  .track.buy .tk-k{color:var(--green)} .track.enq .tk-k{color:var(--primary)}
+  .track h3{font-size:16px;margin-bottom:6px}
+  .track p{font-size:13px;color:var(--muted);margin-bottom:10px}
+  .track ul{list-style:none}
+  .track li{font-size:12.8px;color:var(--muted);padding:5px 0 5px 18px;position:relative}
+  .track li::before{content:"→";position:absolute;left:0;color:var(--primary);font-weight:800}
+  .track li b{color:var(--ink)}
+
+  /* integration cards */
+  .int-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .int{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff;box-shadow:0 6px 16px -14px rgba(26,20,13,.22)}
+  .int .ic{font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--primary);margin-bottom:6px}
+  .int h4{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .int p{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* phases */
+  .flow{list-style:none;counter-reset:s}
+  .flow li{counter-increment:s;position:relative;padding:13px 0 13px 46px;border-bottom:1px solid var(--line);font-size:13.8px;color:var(--muted)}
+  .flow li:last-child{border-bottom:none}
+  .flow li b{color:var(--ink)}
+  .flow li::before{content:counter(s);position:absolute;left:0;top:11px;width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+  /* decisions */
+  .dec{border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:12px;padding:15px 18px;background:#fff;margin-bottom:12px;box-shadow:0 6px 16px -14px rgba(26,20,13,.18)}
+  .dec h4{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+  .dec p{font-size:12.8px;color:var(--muted)}
+
+  .verdict{margin-top:8px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius);padding:26px 30px;font-size:14.5px;color:#FBF3EA;box-shadow:0 16px 34px -18px rgba(122,74,34,.5)}
+  .verdict b{color:#fff}
+
+  .contact{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 28px;box-shadow:0 10px 30px -20px rgba(26,20,13,.25)}
+  .contact img{height:26px;margin-bottom:11px}
+  .contact h3{font-size:15px;margin-bottom:4px}
+  .contact p{font-size:12.5px;color:var(--muted)}
+  .contact .cinfo{text-align:right;font-size:12.5px}
+  .contact .cinfo b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:3px}
+  .contact .cinfo a{color:var(--primary);text-decoration:none;font-weight:600}
+
+  footer{padding:32px 0;text-align:center;font-size:12px;color:var(--muted);background:var(--primary-900)}
+  footer .fwrap{color:#E6D6C4}
+  footer b{color:#fff}
+
+  @media(max-width:860px){
+    .hero-inner,.tldr,.two,.req-grid,.track-grid,.int-grid,.hero-meta,.contact{grid-template-columns:1fr}
+    .hero-left{padding-right:0;border-right:none}.hero-right{display:none}
+    .req-grid,.int-grid{grid-template-columns:1fr 1fr}
+    .contact .cinfo{text-align:left}
+  }
+  @media(max-width:560px){ .req-grid,.int-grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="brandline">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" onerror="this.style.display='none'">
+      <div class="doc-tag">E-commerce · Analysis &amp; Implementation Approach</div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="rule"></div>
+        <h1>Taking Address Builders' wood craft <span>from gallery to storefront.</span></h1>
+        <p class="lede">An analysis of ABC's e-commerce requirement — a bilingual online store for ready-to-sell wooden products, with a direct enquiry path for custom kitchens, event work and bespoke furniture — and a clear, practical plan for how CodeOx would build and launch it in Saudi Arabia.</p>
+        <div class="hero-tags">
+          <div class="hero-tag">Bilingual (AR / EN)</div>
+          <div class="hero-tag">Online Payments</div>
+          <div class="hero-tag">RedBox / Careem Delivery</div>
+          <div class="hero-tag">ZATCA Compliant</div>
+          <div class="hero-tag">Custom-Works Enquiry</div>
+          <div class="hero-tag">KSA</div>
+        </div>
+        <div class="hero-meta">
+          <div><span>Prepared for</span><strong>Address Builders Company (ABC)</strong></div>
+          <div><span>Prepared by</span><strong>CodeOx Technologies</strong></div>
+          <div><span>Document</span><strong>Discovery &amp; Implementation Analysis</strong></div>
+          <div><span>Date</span><strong>6 September 2026</strong></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hr-title">At a glance</div>
+        <div class="hero-stat"><div class="hs-num">2 storefront tracks</div><div class="hs-label">Buy-now catalogue + custom-works enquiry</div></div>
+        <div class="hero-stat"><div class="hs-num">Salla — recommended base</div><div class="hs-label">Fastest local fit; Zid &amp; custom compared</div></div>
+        <div class="hero-stat"><div class="hs-num">Local by default</div><div class="hs-label">Mada · STC Pay · Tabby · RedBox · ZATCA</div></div>
+        <div class="hero-stat"><div class="hs-num">Analysis first</div><div class="hs-label">Scoped quote follows platform decision</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO / CONTEXT -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The opportunity</div>
+    <h2>A new sales channel for an established brand</h2>
+    <p class="lead">Address Builders Company is a Riyadh-based events and experiential-marketing group operating since 1999, with a dedicated <b>Wood Art &amp; Furniture</b> division producing handcrafted, live-edge pieces. Today that craft lives only in a portfolio gallery on <b>addressbuildersco.com</b> — there is no way to actually buy online. This project turns that division into a <b>direct-to-consumer store</b>: ready-made pieces sold online, and bespoke commissions routed straight to the team.</p>
+    <div class="tldr">
+      <div class="tldr-card"><span class="num">Today</span><p><b>Showcase only.</b> A gallery of wood art and furniture with contact forms — no catalogue, cart, pricing, payments or delivery.</p></div>
+      <div class="tldr-card"><span class="num">The goal</span><p><b>A bilingual store.</b> Browse and buy ready-to-sell pieces online; enquire directly for custom kitchens, event builds and bespoke furniture.</p></div>
+      <div class="tldr-card"><span class="num">The market</span><p><b>Built for KSA.</b> Local payments, ZATCA e-invoicing and local last-mile delivery (RedBox/Careem) are table stakes, not extras.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUIREMENTS -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">What ABC asked for</div>
+    <h2>Requirements, captured</h2>
+    <p class="lead">From our discussion, the store has two clear halves — a <b>shop</b> for stocked products and a <b>consultation path</b> for custom work — plus the local commerce essentials to operate in Saudi Arabia.</p>
+    <div class="req-grid">
+      <div class="req"><h4>Bilingual store</h4><p>Full Arabic + English, with proper RTL for Arabic — content, catalogue and checkout.</p></div>
+      <div class="req"><h4>Ready-to-sell catalogue</h4><p>Tables, small woodworks, artifacts, décor, souvenirs and mementos — each with images, description and parameters (size, wood, finish, price).</p></div>
+      <div class="req"><h4>Custom works — enquiry only</h4><p>Custom kitchens, event works, and bespoke tables/furniture handled by direct contact, not add-to-cart.</p></div>
+      <div class="req"><h4>Online payments</h4><p>A payment gateway supporting local methods (Mada, STC Pay, Apple Pay, cards) and ideally BNPL (Tabby/Tamara).</p></div>
+      <div class="req"><h4>Delivery integration</h4><p>Last-mile via local partners — RedBox lockers, Careem home delivery — plus standard courier options.</p></div>
+      <div class="req"><h4>Logo &amp; brand assets</h4><p>Provided by ABC. CodeOx applies the brand consistently across the store's design.</p></div>
+      <div class="req"><h4>Licensing</h4><p>E-commerce licensing/compliance — to be coordinated with <b>Adlan</b>.</p></div>
+      <div class="req"><h4>Social media</h4><p>An individual to be assigned to run social; CodeOx can support content and setup.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM OPTIONS -->
+<section>
+  <div class="wrap">
+    <div class="kicker">How we'd build it</div>
+    <h2>Platform options — and our recommendation</h2>
+    <p class="lead">The single biggest decision is the platform. For a Saudi SME launching a focused catalogue with local payments and delivery, a <b>local commerce platform (Salla)</b> gets ABC live fastest, cheapest and most compliant — with CodeOx doing the store design, theme build, catalogue, integrations and content on top. A fully custom build is available when a bespoke experience justifies the cost.</p>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th>Option</th><th>Bilingual / RTL</th><th>Local pay + ZATCA</th><th>RedBox / delivery</th><th>Effort &amp; cost</th><th>Best when</th></tr></thead>
+        <tbody>
+          <tr class="hi">
+            <td class="pn">Salla<br><span class="pill g">Recommended</span></td>
+            <td>Arabic-first, native</td>
+            <td>Mada, STC Pay, Tabby &amp; ZATCA built-in</td>
+            <td>Native RedBox integration</td>
+            <td>Lowest · fast launch</td>
+            <td>Launch quickly, local-fit, low maintenance</td>
+          </tr>
+          <tr>
+            <td class="pn">Zid</td>
+            <td>Arabic-first, native</td>
+            <td>Built-in</td>
+            <td>Native integrations</td>
+            <td>Low–medium</td>
+            <td>Heavier inventory/ops &amp; GCC expansion</td>
+          </tr>
+          <tr>
+            <td class="pn">Shopify</td>
+            <td>Good (English-first admin)</td>
+            <td>Via apps/gateways</td>
+            <td>Via apps</td>
+            <td>Medium · app fees</td>
+            <td>International brand, polished ecosystem</td>
+          </tr>
+          <tr>
+            <td class="pn">Custom build<br><span style="font-weight:400;color:var(--muted)">(Next.js + Medusa / Woo)</span></td>
+            <td>Fully controlled</td>
+            <td>Built to spec</td>
+            <td>Built to spec</td>
+            <td>Highest · own the code</td>
+            <td>A unique, bespoke experience &amp; full ownership</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict" style="margin-top:22px">
+      <b>Our recommendation:</b> launch Phase 1 on <b>Salla</b> — it ships bilingual Arabic/English, Mada · STC Pay · Tabby, ZATCA e-invoicing and native RedBox delivery out of the box, so ABC is selling in weeks, not months, at a low running cost. CodeOx delivers the store's UX/UI design, a custom bilingual theme, the full catalogue, the custom-works enquiry flow, all integrations and training on top (ABC provides the logo and brand assets). If ABC later wants a fully bespoke experience, we migrate to a custom build — the catalogue and content carry over.
+    </div>
+  </div>
+</section>
+
+<!-- TWO TRACKS -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">The core idea</div>
+    <h2>One store, two journeys</h2>
+    <p class="lead">Ready-made and bespoke are different buying decisions, so the store handles them as two clear paths — a self-serve <b>Shop</b> and a guided <b>Custom Works</b> enquiry. Both feed the same brand and the same team.</p>
+    <div class="track-grid">
+      <div class="track buy">
+        <div class="tk-k">Track 1 · Shop</div>
+        <h3>Ready-to-sell products</h3>
+        <p>Stocked pieces bought online end to end.</p>
+        <ul>
+          <li>Browse by category — <b>tables, woodworks, artifacts, décor, souvenirs, mementos</b></li>
+          <li>Product page with images, description, <b>parameters</b> (size, wood, finish)</li>
+          <li>Add to cart → checkout → <b>pay</b> (Mada/STC Pay/Apple Pay/cards/BNPL)</li>
+          <li>Choose delivery — <b>RedBox locker or Careem home</b> — with tracking</li>
+          <li>Automatic <b>ZATCA e-invoice</b></li>
+        </ul>
+      </div>
+      <div class="track enq">
+        <div class="tk-k">Track 2 · Custom Works</div>
+        <h3>Bespoke commissions</h3>
+        <p>Kitchens, event builds and custom furniture — a lead, not a checkout.</p>
+        <ul>
+          <li>Showcase galleries for <b>custom kitchens, event works, bespoke tables/furniture</b></li>
+          <li>Enquiry form — requirement, dimensions, budget, photo upload</li>
+          <li>One-tap <b>WhatsApp</b> to the team + lead captured for follow-up</li>
+          <li>Optional consultation booking</li>
+          <li>No cart, no online price — the conversation starts the project</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The local plumbing</div>
+    <h2>Integrations that make it work in KSA</h2>
+    <p class="lead">These are what separate a real Saudi store from a generic template. On Salla most are native; on a custom build we integrate each directly.</p>
+    <div class="int-grid">
+      <div class="int"><div class="ic">Payments</div><h4>Local-first checkout</h4><p>Mada, STC Pay, Apple Pay, Visa/Mastercard, and BNPL (Tabby/Tamara). Via Salla-native or a gateway (Moyasar / Tap / HyperPay).</p></div>
+      <div class="int"><div class="ic">Delivery</div><h4>RedBox + Careem</h4><p>RedBox smart-locker network (50+ cities) with Careem locker-to-home; standard couriers (SMSA/Aramex) as fallback. Live tracking to the customer.</p></div>
+      <div class="int"><div class="ic">Compliance</div><h4>ZATCA e-invoicing</h4><p>Fatoora Phase-2 compliant tax invoices on every order, plus VAT (15%) handling.</p></div>
+      <div class="int"><div class="ic">Messaging</div><h4>WhatsApp</h4><p>Custom-works enquiries and order updates through WhatsApp — the channel KSA buyers actually use.</p></div>
+      <div class="int"><div class="ic">Growth</div><h4>SEO / AEO + analytics</h4><p>Bilingual SEO, structured data, GA4, Meta Pixel and Search Console — so the store is findable and measurable from day one.</p></div>
+      <div class="int"><div class="ic">Trust</div><h4>Maroof &amp; policies</h4><p>Maroof registration, bilingual return/refund/shipping policies and secure checkout — the trust signals Saudi shoppers look for.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT CODEOX DELIVERS -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">Our part</div>
+    <h2>What CodeOx delivers</h2>
+    <p class="lead">Whichever platform is chosen, the value is in the setup, design and content — not the software licence.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Build &amp; launch</h3>
+        <ul>
+          <li><b>Store UX/UI design</b> — layouts, navigation and product pages for both tracks</li>
+          <li><b>Custom bilingual theme</b> — AR/EN, RTL-correct, mobile-first (ABC's logo/brand applied)</li>
+          <li><b>Catalogue build</b> — products, images, descriptions, parameters</li>
+          <li><b>Custom-works enquiry module</b> — forms, WhatsApp, lead capture</li>
+          <li><b>Integrations</b> — payments, RedBox/Careem, ZATCA, analytics</li>
+          <li><b>Training &amp; handover</b> — the team runs it confidently</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Grow &amp; support</h3>
+        <ul>
+          <li><b>Catalogue setup</b> — bulk product import &amp; data structuring from ABC's assets</li>
+          <li><b>Bilingual content</b> — product copy and translations (optional)</li>
+          <li><b>SEO/AEO setup</b> — findable in Arabic and English</li>
+          <li><b>Social media support</b> — setup + content alongside ABC's assigned person</li>
+          <li><b>Maintenance / AMC</b> — updates, fixes, small enhancements</li>
+          <li><b>Roadmap</b> — loyalty, campaigns, catalogue growth over time</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section>
+  <div class="wrap">
+    <div class="kicker">How we'd sequence it</div>
+    <h2>Implementation phases</h2>
+    <p class="lead">A practical path from decision to launch. Timeline firms up once the platform and product data are confirmed.</p>
+    <ol class="flow">
+      <li><b>Discovery &amp; setup</b> — confirm platform, collect ABC's logo/brand assets and product data, agree information architecture, and check licensing (Adlan) status.</li>
+      <li><b>Accounts &amp; compliance</b> — set up merchant/payment account, RedBox/Careem &amp; courier accounts, Maroof and ZATCA readiness.</li>
+      <li><b>Design</b> — bilingual UI/UX and a custom theme for both the Shop and Custom-Works tracks.</li>
+      <li><b>Build &amp; configure</b> — store setup, categories, custom-works enquiry flow, policies.</li>
+      <li><b>Catalogue &amp; content</b> — product upload with ABC's images, descriptions and parameters; Arabic/English copy.</li>
+      <li><b>Integrations</b> — payments, RedBox/Careem delivery, ZATCA e-invoicing, WhatsApp, analytics.</li>
+      <li><b>Test &amp; train</b> — full UAT (a real test order end to end), then hands-on team training.</li>
+      <li><b>Launch &amp; support</b> — go-live with hypercare, then ongoing maintenance and growth.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- DECISIONS -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">Before we quote</div>
+    <h2>Decisions &amp; inputs we need</h2>
+    <p class="lead">A few confirmations let us lock scope and send a precise, fair quotation.</p>
+    <div class="two">
+      <div>
+        <div class="dec"><h4>Platform choice</h4><p>Salla (recommended), Zid, or a custom build — this drives everything downstream.</p></div>
+        <div class="dec"><h4>Logo &amp; brand assets</h4><p>ABC to provide the logo and brand assets (colours, fonts) so CodeOx can apply them to the store design.</p></div>
+        <div class="dec"><h4>Product data readiness</h4><p>How many SKUs at launch, and are ABC's images, prices and parameters ready to import — or still being prepared?</p></div>
+        <div class="dec"><h4>Licensing (Adlan)</h4><p>E-commerce CR/VAT/ZATCA status and Maroof — under ABC's existing entity or a new one?</p></div>
+      </div>
+      <div>
+        <div class="dec"><h4>Payment merchant account</h4><p>Preferred bank/gateway; who opens the merchant account (needed for Mada/Apple Pay).</p></div>
+        <div class="dec"><h4>Delivery accounts</h4><p>Who contracts RedBox/Careem/couriers, and are there weight/size limits for large furniture?</p></div>
+        <div class="dec"><h4>Domain &amp; languages</h4><p>Sub-domain of addressbuildersco.com or a new domain; and is Arabic or English the primary language?</p></div>
+        <div class="dec"><h4>Social media scope</h4><p>Who is ABC's assigned individual, and how far should CodeOx support setup and content?</p></div>
+      </div>
+    </div>
+    <div class="verdict" style="margin-top:20px">
+      <b>Next step:</b> a short alignment call to confirm the platform and the points above. On that basis, CodeOx will issue a <b>scoped proposal with a fixed quotation</b> and a firm timeline — covering the build, the integrations, and an ongoing support/growth plan.
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section>
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" onerror="this.style.display='none'">
+        <h3>Let's scope it together.</h3>
+        <p>Prepared by CodeOx Technologies for Address Builders Company — e-commerce analysis &amp; implementation approach.</p>
+      </div>
+      <div class="cinfo">
+        <b>Shabeeb K</b>
+        Head of Operations, CodeOx<br>
+        <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a><br>
+        <a href="tel:+966535716437">+966 53 571 6437</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fwrap">
+    Prepared by <b>CodeOx</b> for <b>Address Builders Company</b> · E-commerce Analysis &amp; Implementation Approach · 6 September 2026.<br>
+    <span style="font-size:11px;">Platform, payment and delivery capabilities described reflect current Saudi market offerings and are confirmed at setup. This document is an analysis; commercials follow scope confirmation.</span>
+  </div>
+</footer>
+
+</body>
+</html>

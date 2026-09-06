@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Address Builders Co. — Shopify Store Plan · Payments &amp; Delivery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --tan:#BB976D; --tan-d:#A47E55; --tan-soft:#F0E6D8; --tan-tint:#F7F1E8;
+    --title:#172430; --title-2:#22303C;
+    --body:#5C6670; --line:#E9E2D7; --cream:#F5F1EA; --cream-2:#FAF7F1; --white:#fff;
+    --green:#5E7A54; --green-soft:#EEF3E9; --red:#B4472F; --red-soft:#FBEBE6; --amber:#C08A34; --amber-soft:#FBF2E0;
+    --serif:'Cormorant Garamond',Georgia,serif; --sans:'Jost',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--white);color:var(--body);line-height:1.7;font-weight:400;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+  section{padding:76px 0}
+  .cream{background:var(--cream-2)}
+  h1,h2,h3,h4{color:var(--title);font-weight:600;line-height:1.2}
+  a{color:inherit}
+
+  /* header */
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+  .hdr-l{display:flex;align-items:center;gap:16px}
+  .hdr img{height:26px}
+  .hdr .vdiv{width:1px;height:24px;background:var(--line)}
+  .hdr .who{font-size:13px;font-weight:600;color:var(--title);letter-spacing:.02em}
+  .hdr .tag{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--tan-d);border:1px solid var(--tan);padding:7px 15px;border-radius:100px}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:.02em;padding:14px 28px;border:1.5px solid var(--title);color:var(--title);background:transparent;transition:.3s;cursor:pointer}
+  .btn:hover{background:var(--title);color:#fff}
+  .btn.solid{background:var(--tan);border-color:var(--tan);color:#fff}
+  .btn.solid:hover{background:var(--title);border-color:var(--title)}
+
+  /* eyebrow section head */
+  .sec-head{max-width:660px;margin:0 auto 46px;text-align:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--tan-d);margin-bottom:14px}
+  .eyebrow svg{width:22px;height:22px}
+  .sec-head h2{font-size:clamp(28px,3.6vw,42px);letter-spacing:-.01em}
+  .sec-head p{margin-top:16px;font-size:16px;color:var(--body)}
+  .sec-head.left{margin-left:0;text-align:left}
+
+  /* hero */
+  .hero{background:linear-gradient(180deg,var(--cream) 0%,#fff 100%);position:relative;overflow:hidden;padding:70px 0 84px}
+  .hero-blob{position:absolute;top:-80px;right:-120px;width:620px;height:560px;background:radial-gradient(circle at 60% 40%,rgba(187,151,109,.20),rgba(187,151,109,0) 70%);z-index:0}
+  .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+  .hero h1{font-size:clamp(36px,5.2vw,62px);font-weight:700;letter-spacing:-.02em;line-height:1.08}
+  .hero h1 em{font-style:normal;color:var(--tan-d);font-family:var(--serif);font-weight:600}
+  .hero .sub{margin-top:20px;font-size:17px;max-width:52ch;color:var(--body)}
+  .hero .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+  .chip{font-size:12.5px;font-weight:500;color:var(--title-2);background:#fff;border:1px solid var(--line);border-radius:100px;padding:8px 15px}
+  .chip.hot{background:var(--tan);border-color:var(--tan);color:#fff;font-weight:600}
+  .hero .cta{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}
+  .hero-meta{margin-top:36px;display:grid;grid-template-columns:repeat(2,auto);gap:10px 40px}
+  .hero-meta div span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--tan-d);font-weight:600}
+  .hero-meta div b{font-size:14px;color:var(--title);font-weight:600}
+
+  /* hero storefront mock */
+  .mock{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 40px 80px -50px rgba(23,36,48,.5);overflow:hidden}
+  .mock-bar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid var(--line);background:var(--cream-2)}
+  .mock-bar i{width:10px;height:10px;border-radius:50%;background:#DcD3C6}
+  .mock-bar .u{margin-left:12px;font-size:11px;color:var(--body);background:#fff;border:1px solid var(--line);border-radius:100px;padding:4px 12px}
+  .mock-body{padding:18px}
+  .mock-hero{border-radius:12px;background:linear-gradient(120deg,#6E5638,#B7966C);color:#fff;padding:22px;display:flex;flex-direction:column;justify-content:flex-end;min-height:132px;position:relative;overflow:hidden}
+  .mock-hero .k{font-family:var(--serif);font-size:13px;opacity:.85}
+  .mock-hero h5{color:#fff;font-size:20px;font-weight:600;margin-top:2px}
+  .mock-hero .b{margin-top:10px;align-self:flex-start;font-size:11px;font-weight:600;background:rgba(255,255,255,.9);color:var(--title);padding:7px 13px;border-radius:100px}
+  .mock-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+  .mock-card{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .mock-card img.img{display:block;width:100%;height:76px;object-fit:cover;object-position:center}
+  .mock-card .m{padding:9px 10px}
+  .mock-card .m .p{font-size:12px;font-weight:600;color:var(--title)}
+  .mock-card .m .n{font-size:10px;color:var(--body)}
+  .mock-foot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+  .mock-foot .pay{display:flex;gap:6px}
+  .mock-foot .pay span{font-size:9.5px;font-weight:600;color:var(--tan-d);background:var(--tan-tint);border:1px solid var(--tan-soft);border-radius:6px;padding:4px 8px}
+  .mock-foot .ck{font-size:11px;font-weight:600;color:#fff;background:var(--title);padding:8px 14px;border-radius:6px}
+
+  /* design-reference visual */
+  .ref-frame{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 40px 80px -50px rgba(23,36,48,.5);overflow:hidden}
+  .ref-frame .ref-bar{display:flex;align-items:center;gap:7px;padding:12px 15px;border-bottom:1px solid var(--line);background:var(--cream-2)}
+  .ref-frame .ref-bar i{width:10px;height:10px;border-radius:50%;background:#DcD3C6}
+  .ref-frame .ref-bar .u{margin-left:10px;font-size:11px;color:var(--body);background:#fff;border:1px solid var(--line);border-radius:100px;padding:4px 12px}
+  .ref-frame .ref-img{display:block;width:100%;height:auto;max-height:360px;object-fit:cover;object-position:center}
+  .ref-tagpill{position:absolute;top:56px;left:16px;z-index:3;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--tan);padding:6px 12px;border-radius:100px;box-shadow:0 8px 20px -8px rgba(187,151,109,.7)}
+  .ref-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .ref-strip figure{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+  .ref-strip img{display:block;width:100%;height:78px;object-fit:cover;object-position:top}
+  .ref-strip figcaption{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--tan-d);text-align:center;padding:6px 4px}
+  .ref-note{font-size:12px;color:var(--body);margin-top:10px;text-align:center}
+  .ref-note b{color:var(--title)}
+  .ref-showcase{max-width:940px;margin:0 auto}
+  .ref-showcase .ref-tagpill{top:60px;left:22px}
+  .ref-showcase .ref-img{max-height:none}
+  .ref-showcase .ref-strip{grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+  .ref-showcase .ref-strip img{height:150px}
+  .ref-showcase .ref-strip figcaption{font-size:11.5px;padding:9px 4px}
+
+  /* stat strip */
+  .strip{background:var(--title);color:#fff}
+  .strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:34px 28px}
+  .strip .s h4{color:#fff;font-size:15px;font-weight:600}
+  .strip .s p{color:rgba(255,255,255,.6);font-size:12.5px;margin-top:3px}
+  .strip .s{border-left:2px solid var(--tan);padding-left:16px}
+
+  /* cards grid generic */
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px;transition:.3s}
+  .card:hover{box-shadow:0 30px 60px -40px rgba(23,36,48,.4);transform:translateY(-3px)}
+  .card .cnum{font-family:var(--serif);font-size:34px;color:var(--tan);line-height:1;font-weight:600}
+  .card .ck{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tan-d);margin-bottom:12px}
+  .card h3{font-size:19px;margin-bottom:8px}
+  .card p{font-size:14px;color:var(--body)}
+  .card p b{color:var(--title);font-weight:600}
+  .card .ico{width:52px;height:52px;border-radius:12px;background:var(--tan-tint);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .card .ico svg{width:26px;height:26px;stroke:var(--tan-d)}
+  .card .ico.logo{background:#fff;border:1px solid var(--line);padding:9px}
+  .card .ico.logo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+  .brand-badge{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:26px}
+  .brand-badge img{height:66px;width:auto}
+  .brand-badge .bt{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--tan-d)}
+  .pay-logos{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;margin-top:26px}
+  .pay-logos img{height:30px;width:auto;object-fit:contain;opacity:.9}
+
+  /* warn / note banners */
+  .banner{border-radius:16px;padding:30px 34px;margin-bottom:8px}
+  .banner .bk{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;margin-bottom:12px}
+  .banner p{font-size:15px;line-height:1.7}
+  .banner p+p{margin-top:12px}
+  .banner.red{background:var(--red-soft);border:1px solid #E7C3B8}
+  .banner.red .bk{color:var(--red)} .banner.red p{color:#5a2418} .banner.red b{color:var(--red)}
+  .banner.amber{background:var(--amber-soft);border:1px solid #ECD8A9}
+  .banner.amber .bk{color:var(--amber)} .banner.amber p{color:#5c4415} .banner.amber b{color:#7a5a12}
+
+  /* comparison table */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 50px -40px rgba(23,36,48,.35);margin-top:26px}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:720px}
+  thead th{background:var(--title);color:#fff;text-align:left;padding:15px 18px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  tbody td{padding:15px 18px;border-bottom:1px solid var(--line);color:var(--body);vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:nth-child(even) td{background:var(--cream-2)}
+  tbody tr.hi td{background:var(--tan-tint)!important}
+  tbody tr.warn td{background:var(--red-soft)!important}
+  td b{color:var(--title);font-weight:600}
+  .pn{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--title);white-space:nowrap}
+  .pill{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:100px;padding:4px 11px;white-space:nowrap}
+  .pill.g{color:#fff;background:var(--green)} .pill.a{color:#fff;background:var(--amber)} .pill.r{color:#fff;background:var(--red)}
+
+  /* verdict */
+  .verdict{background:linear-gradient(120deg,var(--title),var(--title-2));border-radius:16px;padding:34px 40px;color:#EAE3D8;font-size:16px;line-height:1.75;margin-top:26px;position:relative;overflow:hidden}
+  .verdict::before{content:"";position:absolute;top:0;left:0;width:5px;height:100%;background:var(--tan)}
+  .verdict b{color:#fff}
+  .verdict .vk{display:block;font-family:var(--serif);font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--tan);margin-bottom:10px;font-weight:600}
+
+  /* two track */
+  .track{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .track .top{padding:26px 30px;color:#fff}
+  .track.buy .top{background:linear-gradient(120deg,#5E7051,#7C9068)}
+  .track.enq .top{background:linear-gradient(120deg,#8A6B44,#B7966C)}
+  .track .top .k{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+  .track .top h3{color:#fff;font-size:23px;margin-top:5px}
+  .track .top p{color:rgba(255,255,255,.85);font-size:14px;margin-top:6px}
+  .track .body{padding:24px 30px}
+  .track ul{list-style:none}
+  .track li{font-size:14px;color:var(--body);padding:9px 0 9px 26px;position:relative;border-bottom:1px solid var(--line)}
+  .track li:last-child{border-bottom:none}
+  .track li::before{content:"";position:absolute;left:0;top:15px;width:8px;height:8px;border-radius:50%;background:var(--tan)}
+  .track li b{color:var(--title);font-weight:600}
+
+  /* user journeys */
+  .journey{border:1px solid var(--line);border-radius:16px;background:#fff;padding:28px 30px;margin-bottom:22px;box-shadow:0 20px 50px -44px rgba(23,36,48,.4)}
+  .jhead{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+  .jbadge{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;padding:7px 15px;border-radius:100px;white-space:nowrap}
+  .journey.shop .jbadge{background:var(--green)} .journey.custom .jbadge{background:var(--tan)}
+  .jhead h3{font-size:20px}
+  .jhead p{font-size:13.5px;color:var(--body);flex:1;min-width:220px}
+  .jsteps{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+  .jsteps::before{content:"";position:absolute;top:22px;left:8%;right:8%;height:2px;background:repeating-linear-gradient(90deg,var(--line) 0 8px,transparent 8px 14px);z-index:0}
+  .jstep{position:relative;z-index:1;text-align:center;padding:0 4px}
+  .jnode{width:44px;height:44px;border-radius:50%;background:#fff;border:2px solid;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;position:relative}
+  .journey.shop .jnode{border-color:var(--green);color:var(--green)} .journey.custom .jnode{border-color:var(--tan);color:var(--tan-d)}
+  .jnode svg{width:20px;height:20px;stroke-width:1.7}
+  .jnum{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .journey.shop .jnum{background:var(--green)} .journey.custom .jnum{background:var(--tan)}
+  .jstep h4{font-size:13px;font-weight:600;color:var(--title);margin-bottom:3px;line-height:1.25}
+  .jstep p{font-size:11px;color:var(--body);line-height:1.4}
+  .jbridge{background:linear-gradient(120deg,var(--title),var(--title-2));color:#EAE3D8;border-radius:16px;padding:24px 30px;text-align:center;font-size:15.5px;line-height:1.7;position:relative;overflow:hidden}
+  .jbridge b{color:#fff}
+  .jbridge .arrow{display:inline-block;color:var(--tan);font-weight:700}
+  @media(max-width:820px){ .jsteps{grid-template-columns:repeat(3,1fr);gap:20px 10px} .jsteps::before{display:none} }
+  @media(max-width:480px){ .jsteps{grid-template-columns:repeat(2,1fr)} }
+
+  /* phases */
+  .flow{max-width:900px;margin:0 auto;list-style:none;counter-reset:s}
+  .flow li{counter-increment:s;position:relative;padding:20px 0 20px 68px;border-bottom:1px solid var(--line);font-size:15px;color:var(--body)}
+  .flow li:last-child{border-bottom:none}
+  .flow li b{color:var(--title);font-weight:600}
+  .flow li::before{content:counter(s);position:absolute;left:0;top:16px;width:44px;height:44px;border-radius:50%;background:var(--tan-tint);color:var(--tan-d);font-family:var(--serif);font-size:20px;font-weight:600;display:flex;align-items:center;justify-content:center;border:1px solid var(--tan-soft)}
+
+  /* decisions */
+  .dec{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;transition:.3s}
+  .dec:hover{border-color:var(--tan)}
+  .dec h4{font-size:15px;margin-bottom:5px}
+  .dec p{font-size:13.5px;color:var(--body)}
+
+  /* contact + footer */
+  .contact-band{background:var(--tan-tint)}
+  .contact{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center}
+  .contact h2{font-family:var(--serif);font-size:34px;font-weight:600}
+  .contact p{margin-top:8px;font-size:15px;color:var(--body)}
+  .cinfo{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px 28px;min-width:280px}
+  .cinfo img{height:24px;margin-bottom:14px}
+  .cinfo b{display:block;font-size:16px;color:var(--title)}
+  .cinfo span{font-size:13px;color:var(--body)}
+  .cinfo a{display:block;font-size:13.5px;color:var(--tan-d);text-decoration:none;font-weight:600;margin-top:8px}
+
+  footer{background:var(--title);color:rgba(255,255,255,.55);padding:40px 0;text-align:center;font-size:13px}
+  footer b{color:#fff}
+  footer .disc{font-size:11.5px;color:rgba(255,255,255,.4);margin-top:8px;max-width:80ch;margin-left:auto;margin-right:auto}
+
+  @media(max-width:880px){
+    .hero-grid,.strip .wrap,.grid-3,.grid-2,.contact{grid-template-columns:1fr}
+    .hero-meta{grid-template-columns:repeat(2,1fr)}
+    .strip .wrap{gap:18px}
+    .hdr .who{display:none}
+  }
+  @media(max-width:560px){ .grid-3,.grid-2{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hdr">
+    <div class="hdr-l">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" onerror="this.style.display='none'">
+      <span class="vdiv"></span>
+      <span class="who">CodeOx × Address Builders Co.</span>
+    </div>
+    <span class="tag">Shopify Store Plan</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blob"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9h18M5 9V7a2 2 0 012-2h10a2 2 0 012 2v2M4 9h16v9a1 1 0 01-1 1H5a1 1 0 01-1-1V9zM8 13h8"/></svg>
+        E-commerce · Payments &amp; Delivery
+      </div>
+      <h1>Your wood craft, <em>online</em> — built on Shopify.</h1>
+      <p class="sub">A clear plan for taking Address Builders' furniture &amp; wood-art collection to a bilingual online store — with the two pieces that make or break a Saudi Shopify build handled properly: <b style="color:var(--title)">local payments</b> and <b style="color:var(--title)">last-mile delivery</b>.</p>
+      <div class="chips">
+        <span class="chip hot">Shopify</span>
+        <span class="chip">Mada · Apple Pay · Cards</span>
+        <span class="chip">RedBox Delivery</span>
+        <span class="chip">Bilingual AR / EN</span>
+        <span class="chip">ZATCA e-invoicing</span>
+      </div>
+      <div class="hero-meta" style="margin-top:30px">
+        <div><span>Prepared for</span><b>Address Builders Co.</b></div>
+        <div><span>Prepared by</span><b>CodeOx Technologies</b></div>
+        <div><span>Focus</span><b>Payments &amp; Delivery</b></div>
+        <div><span>Date</span><b>6 September 2026</b></div>
+      </div>
+    </div>
+    <div>
+      <div class="mock">
+        <div class="mock-bar"><i></i><i></i><i></i><span class="u">addressbuilders.store</span></div>
+        <div class="mock-body">
+          <div class="mock-hero">
+            <span class="k">New Collection</span>
+            <h5>Handcrafted Wood, Delivered</h5>
+            <span class="b">Shop Now →</span>
+          </div>
+          <div class="mock-grid">
+            <div class="mock-card"><img class="img" src="prod-table.jpg" alt=""><div class="m"><div class="p">SAR 480</div><div class="n">Live-Edge Table</div></div></div>
+            <div class="mock-card"><img class="img" src="prod-vase.jpg" alt=""><div class="m"><div class="p">SAR 120</div><div class="n">Ceramic Vase</div></div></div>
+            <div class="mock-card"><img class="img" src="prod-chair.jpg" alt=""><div class="m"><div class="p">SAR 260</div><div class="n">Accent Chair</div></div></div>
+          </div>
+          <div class="mock-foot">
+            <div class="pay"><span>Mada</span><span>Apple Pay</span><span>Cards</span></div>
+            <span class="ck">Checkout</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT STRIP -->
+<div class="strip">
+  <div class="wrap">
+    <div class="s"><h4>Shopify — confirmed base</h4><p>Polished, easy to run day to day</p></div>
+    <div class="s"><h4>Local payments</h4><p>Mada, Apple Pay, cards</p></div>
+    <div class="s"><h4>RedBox — delivery</h4><p>2,000+ lockers, live at checkout</p></div>
+    <div class="s"><h4>Bilingual &amp; ZATCA</h4><p>Arabic/English + Fatoora invoicing</p></div>
+  </div>
+</div>
+
+<!-- DESIGN DIRECTION -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.6-3.6a2 2 0 0 0-2.8 0L5 21"/></svg>Design direction</div>
+      <h2>The look &amp; feel we're targeting</h2>
+      <p>A clean, warm, gallery-style aesthetic — generous whitespace, natural wood tones and a calm editorial layout that lets each piece stand out. We'd tailor this to ABC's own brand, colours and photography.</p>
+    </div>
+    <div class="ref-showcase">
+      <div class="ref-frame">
+        <div class="ref-bar"><i></i><i></i><i></i><span class="u">addressbuilders.store</span></div>
+        <span class="ref-tagpill">Reference</span>
+        <img class="ref-img" src="ref-hero-full.png" alt="Reference storefront hero — clean warm furniture aesthetic">
+      </div>
+      <div class="ref-strip">
+        <figure><img src="ref-hero.png" alt="Homepage hero reference"><figcaption>Homepage hero</figcaption></figure>
+        <figure><img src="ref-category.png" alt="Category layout reference"><figcaption>Category layout</figcaption></figure>
+        <figure><img src="ref-new.png" alt="Product grid reference"><figcaption>Product grid</figcaption></figure>
+        <figure><img src="ref-featured.png" alt="Featured products reference"><figcaption>Featured products</figcaption></figure>
+        <figure><img src="ref-promo.png" alt="Promo blocks reference"><figcaption>Promo blocks</figcaption></figure>
+        <figure><img src="ref-bestsellers.png" alt="Best-sellers editorial reference"><figcaption>Editorial gallery</figcaption></figure>
+        <figure><img src="ref-product.png" alt="Product page reference"><figcaption>Product page</figcaption></figure>
+        <figure><img src="ref-bestseller.png" alt="Best-seller carousel reference"><figcaption>Best-seller row</figcaption></figure>
+        <figure><img src="ref-lists.png" alt="Product lists reference"><figcaption>Product lists</figcaption></figure>
+      </div>
+      <p class="ref-note"><b>Reference aesthetic only</b> — the visual direction, not the final design. Fonts, colours and imagery are set to ABC's brand during the build.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY SHOPIFY -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l9 4-9 4-9-4 9-4zM3 12l9 4 9-4M3 17l9 4 9-4"/></svg>Where this picks up</div>
+      <h2>Why Shopify — and what it means</h2>
+      <p>Shopify is confirmed as the platform for its polish, ecosystem and long-term brand ceiling. The trade: what a local platform gives for free, Shopify reaches through a small, well-chosen stack of apps and theme work — all scoped and delivered by CodeOx.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="ck">Confirmed</div><h3>Shopify is the platform</h3><p>Store, catalogue, cart and checkout run on Shopify's core. The two tracks — <b>Shop</b> and <b>Custom Works</b> — carry over unchanged.</p></div>
+      <div class="card"><div class="ck">Solved</div><h3>Delivery via RedBox</h3><p>An official, free Shopify app puts RedBox's <b>2,000+ lockers</b> at checkout with automatic shipment sync and tracking.</p></div>
+      <div class="card"><div class="ck">Handled for you</div><h3>Payments</h3><p>Your store accepts <b>Mada, Apple Pay and cards</b> — set up and secured by CodeOx, with buy-now-pay-later optional.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENTS -->
+<section class="cream" id="payments">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payments</div>
+      <h2>Every way your customers want to pay</h2>
+      <p>Your store accepts all the payment methods Saudi shoppers expect — set up, secured and fully integrated into checkout by CodeOx. Nothing for you to configure.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="ico logo"><img src="mada-logo.webp" alt="Mada"></div><h3>Mada</h3><p>Saudi Arabia's national debit network — the way most local shoppers pay.</p></div>
+      <div class="card"><div class="ico logo"><img src="apple-pay.jpg" alt="Apple Pay"></div><h3>Apple Pay</h3><p>One-tap payment for iPhone users, enabled natively at checkout.</p></div>
+      <div class="card"><div class="ico logo"><img src="mastercard-logo.webp" alt="Visa &amp; Mastercard"></div><h3>Visa &amp; Mastercard</h3><p>All major credit and debit cards, for local and international buyers.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 6h18v12H3zM3 10h18M7 15h5"/></svg></div><h3>Tabby &amp; Tamara <span style="font-weight:400;color:var(--tan-d);font-size:12px">· optional</span></h3><p>Buy-now-pay-later in instalments — proven to lift furniture sales.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Secure &amp; compliant</h3><p>Processed through a trusted, PCI-compliant Saudi payment gateway with ZATCA-compliant invoicing.</p></div>
+    </div>
+    <div class="pay-logos">
+      <img src="mada-logo.webp" alt="Mada">
+      <img src="apple-pay.jpg" alt="Apple Pay">
+      <img src="mastercard-logo.webp" alt="Mastercard">
+    </div>
+    <div class="verdict">
+      <span class="vk">In short</span>
+      CodeOx sets up and integrates the payment gateway end to end, so from day one your customers can pay by <b>Mada, Apple Pay and cards</b> — with buy-now-pay-later available if you want it. Secure, compliant, and effortless for your team.
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERY -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM18.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg>Delivery — the clean part</div>
+      <h2>RedBox on Shopify, end to end</h2>
+      <p>Unlike payments, RedBox is a straightforward fit — its own free, official Shopify app does the two things that matter for ABC's Shop track.</p>
+    </div>
+    <div class="brand-badge">
+      <img src="redbox-logo.png" alt="RedBox">
+      <span class="bt">Integrated delivery partner</span>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="ck">At checkout</div><h3>Locker picker</h3><p>Customers pick from <b>2,000+ RedBox lockers</b> across Saudi Arabia inside Shopify checkout — no redirect, no separate portal.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M21 12a9 9 0 11-3-6.7L21 8M21 3v5h-5"/></svg></div><div class="ck">In the backend</div><h3>Shipment sync</h3><p>Shipments are created, edited and cancelled straight from Shopify as orders arrive — <b>no manual re-entry</b> into a RedBox dashboard.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div class="ck">For the customer</div><h3>Speed &amp; tracking</h3><p>Same/next-day within-city, 2–3 days elsewhere, <b>24/7 self-service pickup</b> and live tracking.</p></div>
+    </div>
+    <div class="banner amber" style="margin-top:24px">
+      <div class="bk"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Worth flagging for a furniture catalogue</div>
+      <p>Lockers are sized for parcels — an olive-wood bowl fits, a dining table does not. So the realistic setup is <b>two tiers</b>, mirroring the Shop / Custom Works split: RedBox for small, parcel-sized items, plus a separate <b>freight / white-glove</b> arrangement for large furniture (own fleet or a logistics partner), priced outside the automated checkout. Not a build gap — a real constraint of parcel-locker delivery on any platform.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TWO TRACKS -->
+<section class="cream">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>Carried over, mapped to Shopify</div>
+      <h2>One store, two journeys</h2>
+      <p>The Shop / Custom Works split doesn't change — only how it's built, now on Shopify's own objects and apps.</p>
+    </div>
+    <div class="grid-2">
+      <div class="track buy">
+        <div class="top"><div class="k">Track 1 · Shop</div><h3>Ready-to-sell products</h3><p>Built on Shopify's standard commerce objects.</p></div>
+        <div class="body"><ul>
+          <li><b>Collections</b> — tables, woodworks, artifacts, décor, souvenirs, mementos</li>
+          <li><b>Product pages</b> with images + metafields for parameters (size, wood, finish)</li>
+          <li>Cart → Shopify Checkout → <b>secure payment</b> (Mada/cards/Apple Pay)</li>
+          <li>Delivery → <b>RedBox locker</b>, or freight quote for oversized pieces</li>
+          <li>Invoice → <b>ZATCA e-invoicing</b> add-on</li>
+        </ul></div>
+      </div>
+      <div class="track enq">
+        <div class="top"><div class="k">Track 2 · Custom Works</div><h3>Bespoke commissions</h3><p>A dedicated page, not a product — no cart.</p></div>
+        <div class="body"><ul>
+          <li>Galleries for <b>custom kitchens, event works, bespoke furniture</b></li>
+          <li>Enquiry form — requirement, dimensions, budget, photo upload</li>
+          <li>One-tap <b>WhatsApp</b> + lead captured for follow-up</li>
+          <li>Optional consultation booking</li>
+          <li>No online price, no checkout — the conversation starts the project</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USER JOURNEYS -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>User journeys</div>
+      <h2>Two paths, one store</h2>
+      <p>Every visitor becomes one of two things — a <b style="color:var(--title)">sale</b> or a <b style="color:var(--title)">lead</b>. The store sells your ready-made pieces on autopilot, and turns interest in bespoke work into qualified enquiries straight to you.</p>
+    </div>
+
+    <div class="journey shop">
+      <div class="jhead">
+        <span class="jbadge">Journey 1 · Shop</span>
+        <h3>Buying a ready-made piece</h3>
+        <p>A complete self-serve purchase — browse to doorstep, no staff needed.</p>
+      </div>
+      <div class="jsteps">
+        <div class="jstep"><div class="jnode"><span class="jnum">1</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><h4>Discover</h4><p>Browse collections in Arabic or English</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.6 13.4 12 22l-8-8V4h10z"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/></svg></div><h4>Explore</h4><p>Product page — photos, size, wood, price</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M2 3h3l2.4 12.4A2 2 0 0 0 9.4 17h8.6a2 2 0 0 0 2-1.6L21.6 7H6"/></svg></div><h4>Add to cart</h4><p>Simple, familiar checkout</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">4</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><h4>Pay securely</h4><p>Mada · Apple Pay · cards</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">5</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></svg></div><h4>Delivery</h4><p>RedBox locker or freight, tracked</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">6</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m12 2 3 7h7l-5.5 4.3L18.5 22 12 17.7 5.5 22 7.5 13.3 2 9h7z"/></svg></div><h4>Enjoy</h4><p>ZATCA invoice + reorder later</p></div>
+      </div>
+    </div>
+
+    <div class="journey custom">
+      <div class="jhead">
+        <span class="jbadge">Journey 2 · Custom Works</span>
+        <h3>Commissioning a bespoke build — lead generation</h3>
+        <p>No cart, no online price. The store captures the enquiry and connects the client to you.</p>
+      </div>
+      <div class="jsteps">
+        <div class="jstep"><div class="jnode"><span class="jnum">1</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div><h4>Discover</h4><p>Custom kitchens, events, bespoke furniture</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3V1.5h6V3M8 9h8M8 13h8M8 17h5"/></svg></div><h4>Enquire</h4><p>Needs, dimensions, budget, photos</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.4L3 21l2.1-5.7A8.4 8.4 0 1 1 21 11.5z"/></svg></div><h4>Connect</h4><p>One-tap WhatsApp to the owner</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">4</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/></svg></div><h4>Consult</h4><p>Call or visit, scope the project</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">5</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h4>Quote</h4><p>Tailored proposal &amp; timeline</p></div>
+        <div class="jstep"><div class="jnode"><span class="jnum">6</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 7l6 6-8 8H6v-6z"/><path d="M14 7l3-3 6 6-3 3"/></svg></div><h4>Build &amp; deliver</h4><p>Bespoke project handed over</p></div>
+      </div>
+    </div>
+
+    <div class="jbridge">
+      Your store never sleeps — it <b>sells stock 24/7</b> <span class="arrow">and</span> <b>feeds your custom-work pipeline</b>. Every piece of content, every product page and the whole Custom Works track is built to <b>generate leads for your bespoke builds and services</b>.
+    </div>
+  </div>
+</section>
+
+<!-- GAPS / APPS -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1L12 16.6 5.7 21l2.3-7.1-6-4.5h7.6z"/></svg>Filling Shopify's KSA gaps</div>
+      <h2>The add-ons that complete the store</h2>
+      <p>The real cost of the Shopify decision: three areas a local platform handles natively need a deliberate add-on here — each scoped by CodeOx.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card"><div class="ck">Localisation</div><h3>Bilingual / RTL (AR + EN)</h3><p>Shopify Markets + the free <b>Translate &amp; Adapt</b> app handle regions and copy. Full right-to-left mirroring for Arabic needs custom theme CSS (themes are LTR-first) — front-end work CodeOx builds into the theme.</p></div>
+      <div class="card"><div class="ck">Compliance</div><h3>ZATCA e-invoicing (Phase 2)</h3><p>Not native to Shopify. Needs a compliance app or custom build issuing a UBL 2.1 XML invoice with QR + cryptographic stamp per order, cleared via ZATCA's API. Set aside a distinct budget line (~2–4 weeks).</p></div>
+      <div class="card"><div class="ck">Optional</div><h3>BNPL — Tabby / Tamara</h3><p>Buy-now-pay-later added if ABC wants it — a proven sales lift for higher-value furniture.</p></div>
+      <div class="card"><div class="ck">Logistics</div><h3>Large-furniture delivery</h3><p>RedBox covers parcels; big furniture needs a manually-coordinated freight / white-glove process layered alongside the automated RedBox flow.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section class="cream">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>How we'd sequence it</div>
+      <h2>Implementation phases</h2>
+    </div>
+    <ol class="flow">
+      <li><b>Discovery &amp; accounts</b> — confirm Shopify plan tier, set up the payment merchant account (Mada needs bank-level KYC, with its own lead time), open a RedBox business account.</li>
+      <li><b>Store &amp; theme setup</b> — Online Store 2.0 theme or custom build, with the bilingual/RTL work scoped as its own task.</li>
+      <li><b>Catalogue build</b> — Shop collections &amp; products with images, descriptions and parameter metafields; Custom Works gallery pages.</li>
+      <li><b>App integrations</b> — payment gateway, RedBox Parcel Locker, Translate &amp; Adapt, and the ZATCA e-invoicing solution.</li>
+      <li><b>Custom Works flow</b> — enquiry form, WhatsApp button, lead routing to ABC's team.</li>
+      <li><b>Compliance &amp; testing</b> — test payment transactions, a real RedBox test shipment, a sample ZATCA invoice end to end.</li>
+      <li><b>Training &amp; handover</b> — ABC's team walked through orders, shipments and invoice records.</li>
+      <li><b>Launch &amp; hypercare</b> — go-live, then close support before standard maintenance.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- DECISIONS -->
+<section id="next">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0012 2z"/></svg>Before we quote</div>
+      <h2>Decisions &amp; inputs we need</h2>
+      <p>A few confirmations let us lock scope and send a precise, fixed quotation.</p>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="dec"><h4>Payment setup</h4><p>Confirm the payment methods (Mada, Apple Pay, cards) and who at ABC opens the merchant account.</p></div>
+        <div class="dec" style="margin-top:14px"><h4>Shopify plan tier</h4><p>Basic vs Shopify vs Advanced — affects checkout customisation, staff accounts and reporting.</p></div>
+        <div class="dec" style="margin-top:14px"><h4>ZATCA invoicing budget</h4><p>An added line item on Shopify (native on Salla/Zid) — its own budget and 2–4 week lead time.</p></div>
+        <div class="dec" style="margin-top:14px"><h4>Theme approach</h4><p>Customised off-the-shelf theme (faster) vs bespoke bilingual RTL build (more control).</p></div>
+      </div>
+      <div>
+        <div class="dec"><h4>RedBox business account</h4><p>Who at ABC signs up for RedBox's merchant portal so the app can connect.</p></div>
+        <div class="dec" style="margin-top:14px"><h4>Large-furniture delivery</h4><p>Own fleet, or a freight partner for oversized pieces beyond locker size.</p></div>
+        <div class="dec" style="margin-top:14px"><h4>Product data readiness</h4><p>SKU count at launch, and whether images/prices/parameters are ready to import.</p></div>
+        <div class="dec" style="margin-top:14px"><h4>Licensing &amp; Maroof</h4><p>CR/VAT/ZATCA status and Maroof registration, coordinated with Adlan.</p></div>
+      </div>
+    </div>
+    <div class="verdict">
+      <span class="vk">Next step</span>
+      A short call to confirm the payment setup and the Shopify plan tier. On that basis, CodeOx issues a <b>scoped proposal with a fixed quotation</b> — the Shopify build, payment &amp; RedBox delivery integration, the bilingual/RTL theme work, and the ZATCA e-invoicing add-on as a clearly itemised line.
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-band">
+  <div class="wrap contact">
+    <div>
+      <div class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.6A2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.7a2 2 0 01-.5 2.1L8 11a16 16 0 006 6l1.5-1.2a2 2 0 012.1-.5c.9.3 1.8.5 2.7.6a2 2 0 011.7 2z"/></svg>Let's build it</div>
+      <h2>Ready to bring ABC's craft online.</h2>
+      <p>Prepared by CodeOx Technologies for Address Builders Company — Shopify payments &amp; delivery analysis. Confirm the plan and we move to a fixed quote.</p>
+    </div>
+    <div class="cinfo">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx" onerror="this.style.display='none'">
+      <b>Shabeeb K</b>
+      <span>Head of Operations, CodeOx</span>
+      <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a>
+      <a href="tel:+966535716437">+966 53 571 6437</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Prepared by <b>CodeOx</b> for <b>Address Builders Company</b> · Shopify Payments &amp; Delivery Analysis · 6 September 2026.
+    <div class="disc">Platform, payment and delivery capabilities reflect current Shopify, payment-gateway and RedBox offerings as of this date and are re-confirmed at contract stage. This document is an analysis; commercials follow scope confirmation.</div>
+  </div>
+</footer>
+
+</body>
+</html>
