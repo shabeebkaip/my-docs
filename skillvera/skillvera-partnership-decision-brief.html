@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillVera — Partnership vs Hours: Internal Decision Brief</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+  :root{
+    --primary:#1D4DB3;--primary-dark:#0F3460;--primary-900:#081736;--primary-50:#EEF2FC;--primary-100:#E3E9F9;
+    --ink:#0B1220;--muted:#5B6472;--line:#E6E9F0;--panel:#FFFFFF;--bg-alt:#F7F9FD;
+    --green:#1E9E6B;--green-soft:#E8F7F1;--amber:#C98A1F;--amber-soft:#FBF1E1;--red:#D64545;--red-soft:#FBEAEA;
+    --radius:18px;--sans:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--panel);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  section{padding:52px 0}
+  .alt{background:var(--bg-alt)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 32px}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);margin-bottom:12px}
+  .kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary)}
+  h2{font-size:clamp(22px,3vw,30px);font-weight:800;line-height:1.2;margin-bottom:11px;color:var(--primary-900);letter-spacing:-.01em}
+  h3{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--primary-900)}
+  p.lead{font-size:15px;color:var(--muted);max-width:80ch;margin-bottom:26px}
+  p.lead b{color:var(--ink)}
+  .rule{width:52px;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary-dark));border-radius:99px;margin-bottom:18px}
+
+  .hero{padding:0 0 16px;background:linear-gradient(180deg,#fff,var(--primary-50));border-bottom:1px solid var(--line)}
+  .brandline{display:flex;justify-content:space-between;align-items:center;padding:24px 0;flex-wrap:wrap;gap:12px}
+  .brandline .co{font-weight:800;color:var(--primary-900);font-size:15px}
+  .tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#fff;background:var(--red);border-radius:999px;padding:6px 13px}
+  .hero-body{padding:26px 0 44px}
+  .hero h1{font-size:clamp(26px,3.6vw,38px);font-weight:800;line-height:1.15;margin-bottom:14px;color:var(--primary-900)}
+  .hero h1 span{color:var(--primary)}
+  .hero p{font-size:15.5px;color:var(--muted);max-width:76ch}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .meta span{font-size:11.5px;font-weight:600;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px}
+
+  .tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .tc{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 8px 22px -18px rgba(11,18,32,.22)}
+  .tc .n{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--primary);background:var(--primary-50);border-radius:999px;padding:5px 11px;margin-bottom:11px}
+  .tc p{font-size:13.5px;color:var(--muted)}.tc p b{color:var(--ink)}
+
+  .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;box-shadow:0 8px 22px -18px rgba(11,18,32,.18)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .ul{list-style:none} .ul li{font-size:13.5px;color:var(--muted);padding:7px 0 7px 22px;position:relative;border-bottom:1px solid var(--line)} .ul li:last-child{border-bottom:none}
+  .ul li b{color:var(--ink)}
+  .ul.dot li::before{content:"";position:absolute;left:0;top:14px;width:7px;height:7px;border-radius:50%;background:var(--primary)}
+  .ul.pro li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
+  .ul.con li::before{content:"!";position:absolute;left:0;color:var(--red);font-weight:800}
+  .ul.q li::before{content:"?";position:absolute;left:0;color:var(--amber);font-weight:800}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  th{background:var(--primary-900);color:#fff;text-align:left;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+  th.num,td.num{text-align:right;white-space:nowrap}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top}
+  tbody tr:nth-child(even) td{background:var(--bg-alt)}
+  td b{color:var(--ink)}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 8px 22px -18px rgba(11,18,32,.2)}
+  table.clean{min-width:560px}
+
+  .flag{border:1px solid var(--line);border-left:4px solid var(--amber);background:var(--amber-soft);border-radius:0 12px 12px 0;padding:14px 18px;margin-bottom:12px}
+  .flag.red{border-left-color:var(--red);background:var(--red-soft)}
+  .flag h4{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
+  .flag p{font-size:13px;color:#5a4a2a}
+  .flag.red p{color:#6a2222}
+
+  .reco{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius);padding:28px 32px;color:#EAF0FF;box-shadow:0 16px 34px -18px rgba(29,77,179,.5)}
+  .reco .rk{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#BFD1F7;margin-bottom:10px}
+  .reco h3{color:#fff;font-size:20px;margin-bottom:10px}
+  .reco p{font-size:14.5px;color:#DCE6FB;margin-bottom:10px}.reco p:last-child{margin-bottom:0}
+  .reco b{color:#fff}
+
+  .steps{list-style:none;counter-reset:s;margin-top:4px}
+  .steps li{counter-increment:s;position:relative;padding:12px 0 12px 44px;border-bottom:1px solid var(--line);font-size:14px;color:var(--muted)}
+  .steps li:last-child{border-bottom:none}.steps li b{color:var(--ink)}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:11px;width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+  footer{padding:28px 0;text-align:center;font-size:12px;color:var(--muted);background:var(--primary-900)}
+  footer b{color:#fff}
+  @media(max-width:800px){ .tldr,.two{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="brandline"><span class="co">CodeOx · Internal</span><span class="tag">Confidential — Internal Decision Brief</span></div>
+    <div class="hero-body">
+      <div class="rule"></div>
+      <h1>SkillVera wants equity instead of cash. <span>Should we take it?</span></h1>
+      <p>They selected the 30-hrs/month plan, then proposed swapping our development fee for a <b>share in the company</b> so they can put the cash into marketing. This brief reads their feasibility study, weighs the offer honestly, and lands on a recommendation.</p>
+      <div class="meta"><span>For: Shabeeb</span><span>Re: SkillVera partnership offer</span><span>Source: SkillVera Feasibility Study (Sep 2026)</span><span>Prepared by: CodeOx</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM LINE FIRST -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The recommendation, up front</div>
+    <h2>Do the 3-month trial first. Don't price equity on paper promises.</h2>
+    <p class="lead">The study is well-built and the upside is real <b>if it executes</b> — but the product is still pre-traction (our own audit found nothing runs through the app yet), and every headline number rests on assumptions that haven't been proven in the market. Taking equity today means buying into projections, not results, in a company and team we don't know yet.</p>
+    <div class="tldr">
+      <div class="tc"><span class="n">Agree</span><p><b>Start the 30-hrs/month engagement for 3 months.</b> It's small, it gets them building, and it pays us while we both evaluate fit.</p></div>
+      <div class="tc"><span class="n">Then decide</span><p><b>After 3 months, review real signals.</b> If both teams are good and traction is real → negotiate partnership on informed terms. If not → continue on the hours plan.</p></div>
+      <div class="tc"><span class="n">Protect us</span><p><b>Keep the two things separate.</b> The trial is a normal paid contract. Equity is a future, separate negotiation — never blur them.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- THE OFFER -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">What's on the table</div>
+    <h2>The offer, in plain terms</h2>
+    <div class="two">
+      <div class="panel">
+        <h3>What they proposed</h3>
+        <ul class="ul dot">
+          <li>They picked the <b>30 hrs/month</b> plan from our pricing.</li>
+          <li>Instead of paying our dev fee in cash, they'd give CodeOx <b>a share of the company</b>.</li>
+          <li>Rationale: free up that cash for <b>marketing / academy acquisition</b>.</li>
+          <li>They shared a <b>feasibility study</b> to back the upside.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>What it really signals</h3>
+        <ul class="ul dot">
+          <li>They're <b>cash-conscious</b> — they'd rather part with equity than cash. Could mean tight runway, or high conviction. Worth clarifying.</li>
+          <li>They need a <b>tech team</b> — we'd be on the critical path. That's leverage for us, but also responsibility.</li>
+          <li>The ask is <b>vague</b> — "a share" with no %, valuation, vesting or terms. Nothing to accept yet even if we wanted to.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE STUDY DIGEST -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Their numbers, digested</div>
+    <h2>What the feasibility study claims</h2>
+    <p class="lead">A platform connecting academies, coaches, parents and decision-makers. Revenue = <b>15% commission</b> on the registrant value the platform brings each academy. Riyadh field data: ~30 academies join/month; Riyadh TAM ≈ 479 (saturates ~16 months).</p>
+    <div class="tbl-wrap">
+      <table class="clean">
+        <thead><tr><th>3-year projection</th><th class="num">Year 1</th><th class="num">Year 2</th><th class="num">Year 3</th></tr></thead>
+        <tbody>
+          <tr><td>Academies (year-end)</td><td class="num">360</td><td class="num">479 (Riyadh cap)</td><td class="num">479</td></tr>
+          <tr><td>Total revenue (SAR)</td><td class="num">4.72 M</td><td class="num">13.67 M</td><td class="num">14.68 M</td></tr>
+          <tr><td>Operating costs (SAR)</td><td class="num">4.10 M</td><td class="num">7.25 M</td><td class="num">8.80 M</td></tr>
+          <tr><td><b>Net profit (SAR)</b></td><td class="num"><b>0.62 M</b></td><td class="num"><b>6.42 M</b></td><td class="num"><b>5.88 M</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:10px">Break-even claimed within Year 1. Funding gap of <b>SAR 1.5–2M</b> flagged for the first 7–8 months. Their own Year-1 dev/tech line is <b>SAR 1M</b> — context for what "a share instead of our fee" is really worth to them.</p>
+  </div>
+</section>
+
+<!-- REALITY CHECK -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">Read it with a cold eye</div>
+    <h2>The assumptions the whole model rests on</h2>
+    <p class="lead">Every big number is <b>revenue = academies × registrants × price × 15%</b>. Change any input and it moves fast. These are the levers to pressure-test before believing the projections — most are unproven today.</p>
+    <div class="flag red"><h4>The product is pre-traction</h4><p>Our audit found <b>none of their academy activity runs through the app yet</b>. The study projects adoption that hasn't happened — it's a plan, not a track record.</p></div>
+    <div class="flag red"><h4>"60 active registrants per academy / month" is an assumption</h4><p>The entire per-academy commission (SAR 2,362.5) hangs on this. At 30 registrants it halves; the whole model scales linearly with a number nobody has yet observed.</p></div>
+    <div class="flag red"><h4>Zero churn is explicitly assumed</h4><p>The study itself says "Churn = 0%". Real academy drop-off cuts cumulative revenue directly — the headline figures are a best case, not a base case.</p></div>
+    <div class="flag"><h4>Academies must accept a 15% commission</h4><p>They already have their customers. Paying 15% for bookings is a real behaviour change — the study lists "academy resistance to commission" as a Medium/High risk itself.</p></div>
+    <div class="flag"><h4>30 academies/month, sustained, by field sales</h4><p>The hard part isn't the app — it's the field ops + marketing engine that signs and activates academies every month. That's exactly where they want to spend the cash, and it's unproven.</p></div>
+    <div class="flag"><h4>Riyadh saturates in ~16 months</h4><p>Growth then needs Jeddah/Dammam expansion (more cost, more risk). Year 3 plateaus without it.</p></div>
+    <div class="flag"><h4>Single revenue source + funding gap + PDPL</h4><p>V1 is commission-only; extra revenue is V2 (post-month 8). They need SAR 1.5–2M runway. And children's-data (PDPL) compliance is a real liability.</p></div>
+  </div>
+</section>
+
+<!-- EQUITY WEIGHED -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The equity offer, weighed</div>
+    <h2>Upside vs exposure</h2>
+    <div class="two">
+      <div class="panel">
+        <h3 style="color:var(--green)">Why it could be worth it</h3>
+        <ul class="ul pro">
+          <li>If it hits Y2/Y3 (net SAR 6M+/yr), a real share dwarfs any dev fee.</li>
+          <li>Aligned incentives — we build a product we own part of, not just bill hours.</li>
+          <li>Vision-2030-aligned sector with genuine, documented demand.</li>
+          <li>We'd be their tech backbone — strong position to negotiate a fair stake.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3 style="color:var(--red)">Why not now</h3>
+        <ul class="ul con">
+          <li>Zero traction — we'd be valuing equity on projections, not results.</li>
+          <li>We swap <b>guaranteed cash</b> for <b>illiquid, high-risk</b> shares in a startup we barely know.</li>
+          <li>The real risk (field sales + marketing execution) is theirs — and unproven.</li>
+          <li>Terms undefined: %, valuation, vesting, board, liquidation — "a share" is not an offer.</li>
+          <li>If the relationship sours, we've under-charged for real work delivered.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECOMMENDATION -->
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">What we do</div>
+    <h2>The plan: earn the right to partner</h2>
+    <div class="reco">
+      <div class="rk">Recommendation</div>
+      <h3>Run the 3-month, 30-hrs/month engagement — then decide on partnership with real data.</h3>
+      <p>It's the lowest-risk way to test both directions. They get building and keep their cash for marketing; we get paid while we watch whether the traction and the team are real. Neither side commits to a partnership blind.</p>
+      <p><b>If, after 3 months,</b> the signals below are green and both teams click → open a proper partnership negotiation. <b>If not</b> → simply continue on the hours plan (scale up as needed). No downside either way.</p>
+    </div>
+
+    <div class="two" style="margin-top:22px">
+      <div class="panel">
+        <h3>Partnership-readiness signals to watch (3 months)</h3>
+        <ul class="ul dot">
+          <li><b>Real traction</b> — academies not just signed but <b>transacting</b> through the app; actual commission collected.</li>
+          <li><b>The 60-registrants &amp; churn assumptions</b> holding up against real usage.</li>
+          <li><b>Field execution</b> — are they actually hitting ~30 academies/month?</li>
+          <li><b>Funding</b> — is the SAR 1.5–2M runway secured?</li>
+          <li><b>Working relationship</b> — communication, decisions, and paying us on time.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>If we do partner — structure smartly</h3>
+        <ul class="ul dot">
+          <li><b>Hybrid, not pure equity</b> — reduced cash rate + a smaller equity slice, so we're not fully exposed.</li>
+          <li><b>Vested &amp; milestone-based</b> — equity earned against delivery/traction milestones, not granted upfront.</li>
+          <li><b>Real valuation</b> — priced on the actual numbers we'll have seen, with clear %, vesting and exit terms.</li>
+          <li><b>IP &amp; code ownership</b> clarified (currently the Egyptian team's build).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUESTIONS -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Before any equity conversation</div>
+    <h2>Questions they must answer</h2>
+    <div class="panel">
+      <ul class="ul q">
+        <li>Exactly what <b>% equity</b>, at what <b>valuation</b>, with what <b>vesting</b> — and any cash component?</li>
+        <li>Current <b>traction</b>: how many academies are live and actually transacting? How much commission collected to date?</li>
+        <li>Is the <b>SAR 1.5–2M runway</b> secured, and from where? Self-funded, or investors?</li>
+        <li><b>Cap table</b> — other shareholders, obligations, existing investors?</li>
+        <li>Who <b>owns the code/IP</b> today, and does a partnership transfer it?</li>
+        <li>Is the <b>15% commission validated</b> with signed academies, or still a proposal?</li>
+        <li><b>Decision rights</b> — board seat, information rights, what say do we get?</li>
+      </ul>
+    </div>
+    <div class="reco" style="margin-top:22px">
+      <div class="rk">One-line answer to Dr. Salma</div>
+      <p style="margin-bottom:0">"We love the ambition and we're in — let's <b>start now on the 30-hrs plan for three months</b>, deliver real work together, and revisit the partnership once we've both seen the traction and how we work as teams. That way the partnership, if we do it, is built on evidence, not just projections."</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Internal decision brief · Prepared by <b>CodeOx</b> for <b>Shabeeb</b> · SkillVera partnership offer · September 2026 · Confidential.</div>
+</footer>
+
+</body>
+</html>
