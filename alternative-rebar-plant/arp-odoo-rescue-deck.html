@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alternative Rebar Plant × CodeOx — Odoo Rescue Proposal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+:root{
+  --purple:#714B67; --purple-d:#5B3B52; --purple-l:#8F6A83; --purple-soft:#F3ECF1;
+  --orange:#E8722A;
+  --ink:#242021; --muted:#6E6A6C; --line:#ECE7E3;
+  --bg:#FFFFFF; --bg-200:#F6F5F3;
+  --y:#FBD35B; --b:#8FD3F2; --r:#F49A9A; --g:#8FDBAE;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --disp:'Poppins',var(--sans);
+  --shadow:0 14px 40px -20px rgba(36,32,33,.28);
+  --radius:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:#e9e7e3;scroll-snap-type:y mandatory;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.disp{font-family:var(--disp);letter-spacing:-.02em}
+
+/* slide frame */
+.slide{scroll-snap-align:start;width:100vw;height:100vh;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:3.6vh 3.4vw;position:relative;overflow:hidden}
+.inner{width:100%;max-width:1500px;height:100%;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.slide.white{background:var(--bg)}
+.slide.gray{background:var(--bg-200)}
+.slide.plum{background:var(--purple);color:#fff}
+
+/* decorative background gradients (behind content) */
+.slide::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none}
+.white::before,.gray::before{
+  background:
+    radial-gradient(620px 620px at 94% 4%, rgba(113,75,103,.10), transparent 62%),
+    radial-gradient(540px 540px at 3% 99%, rgba(251,211,91,.13), transparent 60%);
+}
+.plum::before{
+  background:
+    radial-gradient(680px 680px at 90% 6%, rgba(255,255,255,.13), transparent 60%),
+    radial-gradient(560px 560px at 3% 97%, rgba(251,211,91,.15), transparent 60%);
+}
+
+/* highlighter marker */
+.hl{background-repeat:no-repeat;background-position:0 82%;background-size:100% .46em;border-radius:3px;padding:0 .05em}
+.hl-y{background-image:linear-gradient(var(--y),var(--y))}
+.hl-b{background-image:linear-gradient(var(--b),var(--b))}
+.hl-r{background-image:linear-gradient(var(--r),var(--r))}
+.hl-g{background-image:linear-gradient(var(--g),var(--g))}
+.plum .hl-y{background-size:100% .42em}
+.cx{color:var(--orange)}
+/* circled word */
+.circ{position:relative;white-space:nowrap}
+.circ svg{position:absolute;left:-9%;top:-16%;width:118%;height:132%;overflow:visible;pointer-events:none}
+.circ svg path{fill:none;stroke:var(--orange);stroke-width:3;stroke-linecap:round}
+.plum .circ svg path{stroke:var(--y)}
+/* squiggle-underlined word */
+.udl{position:relative;white-space:nowrap}
+.udl svg{position:absolute;left:-2%;right:0;bottom:-.34em;width:104%;height:.5em;overflow:visible;pointer-events:none}
+.udl svg path{fill:none;stroke:var(--purple);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.plum .udl svg path{stroke:var(--y)}
+
+/* headings */
+.kick{display:inline-flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:600;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--purple);margin-bottom:1rem}
+.kick::before{content:"";width:26px;height:3px;border-radius:2px;background:var(--purple)}
+.plum .kick{color:#F0D9E8}.plum .kick::before{background:#F0D9E8}
+h2{font-size:clamp(1.95rem,4.4vw,3.15rem);font-weight:800;line-height:1.08;color:var(--ink)}
+.plum h2{color:#fff}
+.lead{font-size:clamp(1rem,1.6vw,1.2rem);color:var(--muted);font-weight:500;margin-top:.8rem;max-width:74ch;line-height:1.55}
+.plum .lead{color:#E6D8E2}
+.foot{position:absolute;left:5vw;bottom:2.6vh;font-size:.76rem;color:var(--muted);z-index:3;font-weight:600}
+.plum .foot{color:#D3B9CB}
+.pageno{position:absolute;right:5vw;bottom:2.6vh;font-size:.76rem;color:var(--muted);z-index:3;font-weight:700}
+.plum .pageno{color:#D3B9CB}
+
+/* cards */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.6rem;box-shadow:var(--shadow)}
+.card h3{font-family:var(--disp);font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:.5rem}
+.card p{font-size:.93rem;color:var(--muted);line-height:1.5}
+.appic{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.15rem;font-weight:700;font-family:var(--disp);margin-bottom:.9rem;box-shadow:0 8px 18px -8px rgba(36,32,33,.35)}
+.a-p{background:linear-gradient(140deg,#8A5E7C,#714B67)} .a-b{background:linear-gradient(140deg,#5FBEEC,#2E9BD6)}
+.a-o{background:linear-gradient(140deg,#F49048,#E8722A)} .a-g{background:linear-gradient(140deg,#5FC98D,#39A96A)}
+.a-r{background:linear-gradient(140deg,#F07C7C,#DB5757)} .a-y{background:linear-gradient(140deg,#F7CB54,#EBAE2C);color:#4a3a12}
+
+/* TITLE */
+.brand{display:flex;align-items:center;gap:.6rem;margin-bottom:1.8rem;font-family:var(--disp)}
+.brand .cxt{font-weight:800;color:var(--orange);font-size:1.15rem}
+.brand .x{color:#C7BFC4;font-weight:500;font-size:1.2rem}
+.brand .arp{font-weight:700;color:var(--ink);font-size:1.05rem}
+.t-eye{font-family:var(--disp);font-weight:600;letter-spacing:.14em;font-size:clamp(.72rem,1.4vw,.9rem);color:var(--purple);text-transform:uppercase;margin-bottom:1.2rem}
+.t-h{font-family:var(--disp);font-weight:800;font-size:clamp(2.5rem,6.6vw,5rem);line-height:1.02;color:var(--ink);letter-spacing:-.03em}
+.t-sub{font-size:clamp(1.05rem,2vw,1.4rem);color:var(--muted);margin-top:1.6rem;max-width:40ch;font-weight:400;position:relative}
+.t-foot{position:absolute;left:5vw;bottom:5vh;font-size:.9rem;color:var(--muted);z-index:3;font-weight:500}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin:1.5rem 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.6rem;box-shadow:var(--shadow)}
+.stat .num{font-family:var(--disp);font-weight:800;font-size:clamp(2.1rem,4.4vw,3.1rem);line-height:1;color:var(--purple);letter-spacing:-.03em}
+.stat .lbl{font-weight:700;color:var(--ink);margin-top:.55rem;font-size:1rem}
+.stat .det{font-size:.83rem;color:var(--muted);margin-top:.35rem;line-height:1.45}
+.factrow{font-size:.96rem;color:var(--muted);line-height:1.65;margin-top:.5rem}
+.factrow b{color:var(--ink);font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:.7rem;background:var(--purple);color:#fff;border-radius:999px;padding:.85rem 1.6rem;margin-top:1.2rem;font-weight:600;font-size:1.02rem;box-shadow:0 14px 30px -14px rgba(113,75,103,.7)}
+.pill b{color:var(--y)}
+
+/* COMPARE */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:1.6rem}
+.col{border-radius:var(--radius);padding:1.7rem 1.85rem;box-shadow:var(--shadow)}
+.col.good{background:#F0FAF4;border:1px solid #CBEBD8}
+.col.bad{background:#FDF1F1;border:1px solid #F4D6D6}
+.col h4{font-family:var(--disp);font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:1.1rem}
+.col.good h4{color:#2E9E68}.col.bad h4{color:#D15757}
+.li{display:flex;gap:.7rem;align-items:flex-start;margin-bottom:.8rem;font-size:.99rem;line-height:1.4;color:var(--ink)}
+.li .mk{flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:#fff;margin-top:1px}
+.col.good .mk{background:#39A96A}.col.bad .mk{background:#DB5757}
+
+/* GRID 6 / 4 / 3x3 */
+.g6{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.6rem}
+.g6 .card{padding:1.4rem}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+.four .card{padding:1.3rem 1.35rem}
+.four h3{font-size:1rem}.four p{font-size:.86rem}
+.bp{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;margin-top:1.6rem}
+.bp .card{padding:1.5rem 1.6rem;display:flex;align-items:flex-start;gap:1.15rem}
+.bp .bi{width:52px;height:52px;border-radius:15px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;box-shadow:0 10px 20px -8px rgba(36,32,33,.35)}
+.bp .top{font-size:.8rem;color:var(--muted);font-weight:600;margin-bottom:.12rem}
+.bp .mod{font-family:var(--disp);font-weight:700;color:var(--ink);font-size:1.14rem;line-height:1.15;margin-bottom:.4rem}
+.bp .det{font-size:.86rem;color:var(--muted);line-height:1.42}
+.note{color:var(--muted);font-size:.94rem;margin-top:1.1rem;line-height:1.5}
+.note b{color:var(--ink)}
+
+/* AUDIT panels (plum) */
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:1.6rem}
+.panel{background:#fff;border-radius:var(--radius);padding:1.6rem 1.75rem;box-shadow:0 18px 40px -22px rgba(0,0,0,.5)}
+.panel .ph{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.panel .pi{width:48px;height:48px;border-radius:14px;background:linear-gradient(140deg,#8A5E7C,#714B67);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 10px 20px -8px rgba(113,75,103,.5)}
+.panel.get .pi{background:linear-gradient(140deg,#F49048,#E8722A);box-shadow:0 10px 20px -8px rgba(232,114,42,.5)}
+.panel h3{font-family:var(--disp);font-weight:700;font-size:1.24rem;color:var(--ink)}
+.panel ul{list-style:none}
+.panel li{position:relative;padding-left:2rem;margin-bottom:.7rem;font-size:.96rem;color:var(--ink);line-height:1.4}
+.panel li::before{content:"✓";position:absolute;left:0;top:.05rem;width:20px;height:20px;border-radius:50%;background:var(--purple-soft);color:var(--purple);font-size:.72rem;font-weight:800;display:flex;align-items:center;justify-content:center}
+.panel.get li::before{background:#FBEEE3;color:var(--orange)}
+/* scope chips */
+.chips{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.chip{border:1.5px solid rgba(255,255,255,.32);background:rgba(255,255,255,.09);color:#fff;font-weight:600;font-size:.92rem;padding:.44rem 1.05rem;border-radius:999px}
+/* outcome strip */
+.result{display:flex;align-items:center;gap:1.1rem;margin-top:1.5rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:18px;padding:1.05rem 1.5rem}
+.result .ic{width:48px;height:48px;border-radius:14px;background:linear-gradient(140deg,#F7CB54,#EBAE2C);display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex:0 0 auto}
+.result p{color:#fff;font-size:1.04rem;font-weight:500;line-height:1.4}
+.result b{color:var(--y);font-weight:700}
+
+/* HERO BAND */
+.band{background:var(--purple);border-radius:var(--radius);padding:1.55rem 1.9rem;display:flex;gap:1.3rem;align-items:center;margin:1.3rem 0;box-shadow:0 18px 40px -20px rgba(113,75,103,.6)}
+.band .star{width:56px;height:56px;border-radius:15px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex:0 0 auto}
+.band h3{font-family:var(--disp);color:#fff;font-weight:700;font-size:1.24rem;margin-bottom:.35rem}
+.band p{color:#EBDCE5;font-size:.93rem;line-height:1.45}
+
+/* TIMELINE */
+.tl{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin-top:1.8rem;position:relative}
+.tl::before{content:"";position:absolute;top:28px;left:9%;right:9%;height:3px;background:repeating-linear-gradient(90deg,var(--purple) 0 10px,transparent 10px 18px);opacity:.35}
+.step{text-align:center;position:relative;z-index:2}
+.step .dot{width:56px;height:56px;border-radius:50%;background:#fff;border:3px solid var(--purple);color:var(--purple);font-family:var(--disp);font-weight:800;font-size:1.3rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:var(--shadow)}
+.step:first-child .dot{background:var(--purple);color:#fff}
+.step .ph{font-size:.76rem;color:var(--muted);font-weight:700;margin-bottom:.4rem;letter-spacing:.04em}
+.step h3{font-family:var(--disp);font-weight:700;font-size:1.06rem;color:var(--ink);margin-bottom:.45rem}
+.step p{font-size:.82rem;color:var(--muted);line-height:1.4;padding:0 .2rem}
+.wins{background:#F0FAF4;border:1px solid #CBEBD8;border-radius:var(--radius);padding:1.3rem 1.7rem;margin-top:1.8rem}
+.wins h3{font-family:var(--disp);color:var(--ink);display:flex;align-items:center;gap:.55rem;font-size:1.14rem;margin-bottom:.55rem;font-weight:700}
+.wins p{color:#2E7A55;font-size:.95rem;line-height:1.6;font-weight:500}
+
+/* SERVICE */
+.sla{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;margin-top:1.6rem}
+.sla-t{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.6rem;box-shadow:var(--shadow);display:flex;align-items:center;gap:1.15rem;position:relative;overflow:hidden}
+.sla-t::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+.sla-t.p1::before{background:#DB5757}.sla-t.p2::before{background:var(--orange)}.sla-t.p3::before{background:#39A96A}
+.sla-t .pr{font-family:var(--disp);font-weight:800;font-size:.95rem;color:#fff;width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.sla-t.p1 .pr{background:linear-gradient(140deg,#F07C7C,#DB5757)}
+.sla-t.p2 .pr{background:linear-gradient(140deg,#F49048,#E8722A)}
+.sla-t.p3 .pr{background:linear-gradient(140deg,#5FC98D,#39A96A)}
+.sla-t .big{font-family:var(--disp);font-weight:800;font-size:1.55rem;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.sla-t .sm{font-size:.82rem;color:var(--muted);margin-top:.32rem;line-height:1.35}
+.svc3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;margin-top:1.3rem}
+.svc3 .card{padding:1.45rem 1.55rem}
+.svc3 .ic{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;margin-bottom:.85rem;box-shadow:0 10px 20px -8px rgba(36,32,33,.3)}
+.svc3 h3{font-family:var(--disp);font-weight:700;font-size:1.12rem;color:var(--ink);margin-bottom:.4rem}
+.svc3 p{color:var(--muted);font-size:.9rem;line-height:1.45}
+
+/* TRACK RECORD */
+.proof{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:1.3rem}
+.proof .pt{background:linear-gradient(140deg,#fff,#FBF6FA);border:1px solid var(--line);border-radius:16px;padding:.9rem 1.4rem;box-shadow:var(--shadow);display:flex;align-items:center;gap:1rem}
+.proof .pn{font-family:var(--disp);font-weight:800;font-size:2.1rem;color:var(--purple);line-height:1;letter-spacing:-.02em}
+.proof .pl{font-size:.86rem;color:var(--muted);font-weight:500;line-height:1.3}
+.proof .pl b{color:var(--ink);font-weight:700}
+.tr{display:grid;grid-template-columns:repeat(3,1fr);gap:1.05rem;margin-top:1.05rem}
+.tr .card{padding:1.15rem 1.3rem;display:flex;flex-direction:column}
+.tr .head{display:flex;align-items:center;gap:.75rem;margin-bottom:.55rem}
+.tr .bi{width:42px;height:42px;border-radius:12px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;box-shadow:0 8px 16px -8px rgba(36,32,33,.35)}
+.tr .cn{font-family:var(--disp);font-weight:700;color:var(--ink);font-size:1rem;line-height:1.12}
+.tr .geo{display:block;font-weight:600;color:var(--purple);font-size:.73rem;margin-top:.12rem}
+.tr .card p{font-size:.82rem;color:var(--muted);line-height:1.4;margin:0 0 .65rem}
+.tr a.card{text-decoration:none;transition:transform .15s ease,box-shadow .15s}
+.tr a.card:hover{transform:translateY(-3px);box-shadow:0 22px 44px -20px rgba(36,32,33,.42)}
+.tr a.card .cn::after{content:" ↗";color:var(--purple);font-weight:700;font-size:.82em}
+.tr .tags{display:flex;flex-wrap:wrap;gap:.38rem;margin-top:auto}
+.tag{font-size:.7rem;font-weight:600;color:var(--purple);background:var(--purple-soft);border-radius:999px;padding:.22rem .62rem}
+.tr .card.hot{background:var(--purple);border-color:var(--purple)}
+.tr .card.hot .cn{color:#fff}.tr .card.hot .geo{color:var(--y)}.tr .card.hot p{color:#EBDCE5}
+.tr .card.hot .bi{background:rgba(255,255,255,.2)}
+.tr .card.hot .tag{background:rgba(255,255,255,.18);color:#fff}
+.thread{display:flex;align-items:center;gap:.75rem;margin-top:1.1rem;background:var(--purple-soft);border-radius:14px;padding:.85rem 1.4rem;color:var(--purple);font-family:var(--disp);font-weight:700;font-size:.98rem}
+.thread .ic{font-size:1.15rem}
+
+/* LEAVE ANYTIME */
+.la{display:grid;grid-template-columns:1.15fr .85fr;gap:2rem;align-items:center;margin-top:1rem}
+.la>ul{list-style:none}
+.la>ul>li{position:relative;padding-left:1.6rem;margin-bottom:1.2rem;font-size:1.02rem;line-height:1.5;color:var(--muted)}
+.la>ul>li::before{content:"";position:absolute;left:0;top:.5rem;width:10px;height:10px;border-radius:50%;background:var(--purple)}
+.la b{color:var(--ink);font-weight:700}
+.lock{background:var(--purple);border-radius:var(--radius);padding:2rem;box-shadow:0 20px 44px -22px rgba(113,75,103,.7)}
+.lock .pi{width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.1rem}
+.lock h3{font-family:var(--disp);color:#fff;font-weight:800;font-size:1.5rem;margin-bottom:1rem}
+.lock ul{list-style:none}
+.lock li{color:#EBDCE5;position:relative;padding-left:1.5rem;margin-bottom:.7rem;font-size:.99rem}
+.lock li::before{content:"✓";position:absolute;left:0;top:0;color:var(--y);font-weight:800}
+
+/* SWITCHING */
+.sw{display:grid;grid-template-columns:repeat(4,1fr);gap:1.7rem;margin-top:2.1rem;position:relative}
+.sw::before{content:"";position:absolute;top:52px;left:9%;right:9%;height:3px;background:repeating-linear-gradient(90deg,#C4A4B8 0 12px,transparent 12px 22px);z-index:0}
+.sw .card{padding:1.5rem 1.5rem;position:relative;z-index:1}
+.sw .num{width:56px;height:56px;border-radius:50%;background:linear-gradient(140deg,#8A5E7C,#714B67);color:#fff;font-family:var(--disp);font-weight:800;font-size:1.4rem;display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem;box-shadow:0 10px 20px -8px rgba(113,75,103,.55);border:4px solid #fff}
+.sw .card:not(:last-child)::after{content:"›";position:absolute;top:12px;right:-1.25rem;font-size:2.1rem;line-height:1;color:var(--purple);font-weight:800;z-index:2}
+.sw h3{font-family:var(--disp);font-weight:700;color:var(--ink);font-size:1.14rem;margin-bottom:.5rem}
+.sw h3 .lbl{display:block;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:.2rem}
+.sw p{font-size:.88rem;color:var(--muted);line-height:1.5}
+
+/* CLOSE (plum) */
+.close-h{font-family:var(--disp);font-weight:800;font-size:clamp(2rem,5.4vw,4rem);line-height:1.05;color:#fff;max-width:19ch;letter-spacing:-.02em}
+.checks{margin-top:1.9rem;max-width:660px}
+.chk{display:flex;gap:.9rem;align-items:center;padding:.55rem 0;font-size:clamp(1rem,1.5vw,1.16rem);color:#F1E4EC}
+.chk .c{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.16);color:var(--y);display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 auto}
+.sig{margin-top:2rem;color:#EBD6E2;font-size:1rem;font-weight:600}
+.contact{margin-top:.55rem;color:#D3B9CB;font-size:.9rem}
+.contact a{color:var(--y);text-decoration:none}
+
+.nav{position:fixed;right:18px;bottom:16px;z-index:50;display:flex;gap:6px}
+.nav button{width:34px;height:34px;border-radius:11px;border:none;background:var(--purple);color:#fff;font-size:1rem;cursor:pointer;box-shadow:var(--shadow)}
+.nav button:hover{background:var(--purple-d)}
+
+@media print{body{scroll-snap-type:none}.slide{page-break-after:always;height:100vh}.nav{display:none}@page{size:landscape}}
+@media(max-width:820px){
+  .stats,.g6,.four,.bp,.tr,.sw{grid-template-columns:1fr 1fr}
+  .compare,.panels,.la{grid-template-columns:1fr}
+  .tl{grid-template-columns:1fr 1fr 1fr}.tl::before{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- 1 · TITLE -->
+<section class="slide white" id="s1">
+  <div class="inner">
+    <div class="brand"><span class="cxt">CodeOx</span><span class="x">×</span><span class="arp">Alternative Rebar Plant</span></div>
+    <div class="t-eye">Odoo Rescue &amp; Re-Implementation Proposal</div>
+    <h1 class="t-h">Odoo was the <span class="hl hl-y">right call.</span><br><span class="cx">CodeOx</span> makes it <span class="udl">deliver.<svg viewBox="0 0 120 12" preserveAspectRatio="none"><path d="M2 7 C 22 2, 42 11, 62 6 S 100 2, 118 8"/></svg></span></h1>
+    <p class="t-sub">An Odoo rescue &amp; re-implementation proposal for GFRP rebar manufacturing.</p>
+  </div>
+  <div class="t-foot">CodeOx Technologies LLP &nbsp;·&nbsp; Saudi Arabia · UAE · Kuwait · India &nbsp;·&nbsp; September 2026</div>
+</section>
+
+<!-- 2 · HOMEWORK -->
+<section class="slide gray" id="s2">
+  <div class="inner">
+    <div class="kick">Discovery</div>
+    <h2>We did our <span class="hl hl-y">homework</span> on ARP</h2>
+    <div class="stats">
+      <div class="stat"><div class="num">18</div><div class="lbl">QC tests per product</div><div class="det">9 physical · 9 mechanical</div></div>
+      <div class="stat"><div class="num">7</div><div class="lbl">standards certified</div><div class="det">SASO · CSA S807 · ASTM D7957/D8505 · MTO · ACI 440 · Aramco</div></div>
+      <div class="stat"><div class="num">#2–#12</div><div class="lbl">bar sizes, 6–38 mm</div><div class="det">3 modulus grades · straight &amp; factory-bent</div></div>
+    </div>
+    <p class="factrow">Dammam 3rd Industrial City · est. 2019 · <b>FRT (Canada)</b> technology · Univ. of Sherbrooke research partner · ISO 9001 / 14001 / 45001</p>
+    <p class="factrow">Registered vendor: <b>Aramco, NEOM, Red Sea, Roshn, KSIA, SWA, SABIC</b> · Export HS codes on file · Pultrusion = continuous process</p>
+    <div class="pill">📄 Every shipment leaves with a <b>&nbsp;Mill Test Certificate&nbsp;</b> — where ERP either helps or hurts you.</div>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">2</div>
+</section>
+
+<!-- 3 · ODOO ISN'T THE PROBLEM -->
+<section class="slide white" id="s3">
+  <div class="inner">
+    <div class="kick">The diagnosis</div>
+    <h2>Odoo isn’t the problem. The <span class="hl hl-r">implementation</span> is.</h2>
+    <div class="compare">
+      <div class="col good">
+        <h4>What Odoo does well for ARP</h4>
+        <div class="li"><span class="mk">✓</span>Lot-level traceability, raw → finished bar</div>
+        <div class="li"><span class="mk">✓</span>Quality control points on every operation</div>
+        <div class="li"><span class="mk">✓</span>Landed costs on imported resin &amp; roving</div>
+        <div class="li"><span class="mk">✓</span>Native ZATCA Phase 2 e-invoicing</div>
+        <div class="li"><span class="mk">✓</span>Project &amp; tender sales, staged deliveries</div>
+        <div class="li"><span class="mk">✓</span>One system, one truth — Odoo 19</div>
+      </div>
+      <div class="col bad">
+        <h4>What a bad implementation leaves behind</h4>
+        <div class="li"><span class="mk">✕</span>MRP built for assembly, not pultrusion</div>
+        <div class="li"><span class="mk">✕</span>No dual unit: weight vs length</div>
+        <div class="li"><span class="mk">✕</span>Studio clicks &amp; DB edits — can’t upgrade</div>
+        <div class="li"><span class="mk">✕</span>Certificates typed by hand per lot</div>
+        <div class="li"><span class="mk">✕</span>PostgreSQL never tuned — slow</div>
+        <div class="li"><span class="mk">✕</span>Tickets that nobody answers</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">3</div>
+</section>
+
+<!-- 4 · SOUND FAMILIAR -->
+<section class="slide gray" id="s4">
+  <div class="inner">
+    <div class="kick">Pain points</div>
+    <h2>Sound <span class="hl hl-b">familiar?</span></h2>
+    <div class="g6">
+      <div class="card"><div class="appic a-g">XLS</div><h3>Production lives in Excel</h3><p>Line output, roving/resin use and yield tracked outside Odoo.</p></div>
+      <div class="card"><div class="appic a-b">✎</div><h3>MTCs typed by hand</h3><p>QC results re-keyed into Word per lot. Slow, risky, non-auditable.</p></div>
+      <div class="card"><div class="appic a-p">⌥</div><h3>No lot genealogy</h3><p>Which resin lot went into which bar? A quality query becomes an investigation.</p></div>
+      <div class="card"><div class="appic a-o">%</div><h3>Margins quietly wrong</h3><p>No landed costs, no dual UoM, manual valuation.</p></div>
+      <div class="card"><div class="appic a-r">🔒</div><h3>Afraid to upgrade</h3><p>Un-versioned customisations lock you on an old release.</p></div>
+      <div class="card"><div class="appic a-y">…</div><h3>Partner has gone quiet</h3><p>No docs, no source code, no response.</p></div>
+    </div>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">4</div>
+</section>
+
+<!-- 5 · HEALTH AUDIT (plum) -->
+<section class="slide plum" id="s5">
+  <div class="inner">
+    <div class="kick">Step one</div>
+    <h2>A free Odoo <span class="hl hl-y">Health Audit</span></h2>
+    <div class="chips">
+      <span class="chip">Fixed scope</span>
+      <span class="chip">Zero cost</span>
+      <span class="chip">Zero obligation</span>
+      <span class="chip">You keep the report</span>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <div class="ph"><div class="pi">🔍</div><h3>What we inspect</h3></div>
+        <ul>
+          <li>Version, edition &amp; upgrade-readiness</li>
+          <li>Custom code vs Studio vs DB edits — is any of it in Git?</li>
+          <li>MRP / lot / UoM fit for pultrusion</li>
+          <li>Valuation, landed costs, ZATCA Phase 2</li>
+          <li>PostgreSQL &amp; performance profiling</li>
+          <li>Security, backups, integrations, data quality</li>
+        </ul>
+      </div>
+      <div class="panel get">
+        <div class="ph"><div class="pi">📄</div><h3>What you get</h3></div>
+        <ul>
+          <li>Audit Report — RAG scorecard per area</li>
+          <li>Gap Register — every defect, severity, impact</li>
+          <li>Roadmap — fix-in-place vs clean rebuild</li>
+          <li>Firm effort &amp; cost estimate</li>
+          <li>Decide with facts, not guesswork</li>
+        </ul>
+      </div>
+    </div>
+    <div class="result">
+      <div class="ic">🎯</div>
+      <p>You walk away with a <b>costed fix-in-place vs clean-rebuild decision</b> — and the full report is yours to keep, no strings attached.</p>
+    </div>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">5</div>
+</section>
+
+<!-- 6 · BLUEPRINT -->
+<section class="slide white" id="s6">
+  <div class="inner">
+    <div class="kick">The target state</div>
+    <h2>Blueprint: your process on <span class="circ">Odoo 19<svg viewBox="0 0 200 90" preserveAspectRatio="none"><path d="M100 6 C 40 6, 8 24, 8 45 C 8 68, 55 84, 108 84 C 168 84, 194 62, 192 42 C 190 22, 150 8, 96 9"/></svg></span></h2>
+    <div class="bp">
+      <div class="card"><div class="bi a-p">🏭</div><div><div class="top">Pultrusion runs</div><div class="mod">Manufacturing + MPS</div><div class="det">Work orders, routings &amp; master schedule for continuous runs.</div></div></div>
+      <div class="card"><div class="bi a-b">🔬</div><div><div class="top">18 tests / lot</div><div class="mod">Quality</div><div class="det">QC control points — 9 physical + 9 mechanical, pass/fail gates.</div></div></div>
+      <div class="card"><div class="bi a-g">📦</div><div><div class="top">Lot genealogy</div><div class="mod">Inventory + Barcode</div><div class="det">Raw-resin → finished-bar traceability, scanned at every move.</div></div></div>
+      <div class="card"><div class="bi a-o">🛒</div><div><div class="top">Resin &amp; roving import</div><div class="mod">Purchase + Landed Costs</div><div class="det">Duties, freight &amp; insurance rolled into true unit cost.</div></div></div>
+      <div class="card"><div class="bi a-r">🤝</div><div><div class="top">Tender &amp; project sales</div><div class="mod">CRM · Sales · Project</div><div class="det">Take-off quoting, staged deliveries and live project margins.</div></div></div>
+      <div class="card"><div class="bi a-y">🛠</div><div><div class="top">Line upkeep</div><div class="mod">Maintenance · PLM</div><div class="det">Preventive maintenance &amp; version-tracked engineering changes.</div></div></div>
+      <div class="card"><div class="bi a-p">🧾</div><div><div class="top">Finance &amp; ZATCA</div><div class="mod">Accounting (l10n_sa_edi)</div><div class="det">Native ZATCA Phase 2 e-invoicing, Arabic-ready.</div></div></div>
+      <div class="card"><div class="bi a-b">✍️</div><div><div class="top">Certificates &amp; sign-off</div><div class="mod">Documents · Sign</div><div class="det">Auto-generated Mill Test Certificates, e-signed per shipment.</div></div></div>
+      <div class="card"><div class="bi a-g">🎧</div><div><div class="top">Support discipline</div><div class="mod">Helpdesk</div><div class="det">Ticketing, SLAs and a searchable knowledge base.</div></div></div>
+    </div>
+    <p class="note">All standard Odoo — <b>configured properly</b>, with Studio used sparingly and version-tracked. What standard Odoo can’t do is on the next slide.</p>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">6</div>
+</section>
+
+<!-- 7 · WHAT CODEOX BRINGS -->
+<section class="slide gray" id="s7">
+  <div class="inner">
+    <div class="kick">The partner</div>
+    <h2>What <span class="cx">CodeOx</span> brings to ARP</h2>
+    <div class="band">
+      <div class="star">★</div>
+      <div>
+        <h3>Deep Odoo expertise — versions 11 to 19, Enterprise &amp; Community</h3>
+        <p>Implementation, custom development, multi-company architecture, data migration and upgrades — led hands-on by a solution architect, delivered by an in-house team.</p>
+      </div>
+    </div>
+    <div class="four">
+      <div class="card"><div class="appic a-p">🏭</div><h3>Manufacturing sector expertise</h3><p>Continuous-process, make-to-order and engineered-to-order plants across GCC, India and Australia.</p></div>
+      <div class="card"><div class="appic a-b">⏱</div><h3>24×7 support</h3><p>India hub plus Saudi, UAE and Kuwait branches — someone is always on shift.</p></div>
+      <div class="card"><div class="appic a-g">🤝</div><h3>After-sales that lasts</h3><p>AMC retainers, monthly health reports, upgrades, training and continuous improvement.</p></div>
+      <div class="card"><div class="appic a-o">🌍</div><h3>GCC compliance &amp; presence</h3><p>ZATCA e-invoicing, Saudi branch on the ground, Arabic-ready deployments.</p></div>
+    </div>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">7</div>
+</section>
+
+<!-- 8 · PATH -->
+<section class="slide white" id="s8">
+  <div class="inner">
+    <div class="kick">Delivery plan</div>
+    <h2>The path from <span class="hl hl-y">audit</span> to <span class="hl hl-g">go-live</span></h2>
+    <div class="tl">
+      <div class="step"><div class="dot">1</div><div class="ph">Phase 1</div><h3>Audit</h3><p>Free health audit. Fix vs rebuild decision.</p></div>
+      <div class="step"><div class="dot">2</div><div class="ph">Phase 2</div><h3>Foundation</h3><p>CoA, ZATCA, UoM engine, master data, valuation.</p></div>
+      <div class="step"><div class="dot">3</div><div class="ph">Phase 3</div><h3>Manufacturing</h3><p>Pultrusion MRP, Quality, lot genealogy, MTC live.</p></div>
+      <div class="step"><div class="dot">4</div><div class="ph">Phase 4</div><h3>Commercial</h3><p>CRM, take-off quoting, tiers, export docs.</p></div>
+      <div class="step"><div class="dot">5</div><div class="ph">Phase 5</div><h3>Portal &amp; polish</h3><p>Dealer portal, spec packs, training, handover.</p></div>
+    </div>
+    <div class="wins">
+      <h3>⚡ Immediate wins — regardless of path</h3>
+      <p>Backups + monitoring + staging &nbsp;·&nbsp; PostgreSQL tuned, slowness gone &nbsp;·&nbsp; MTC PDF live for your top grades &nbsp;·&nbsp; Valuation &amp; landed costs corrected &nbsp;·&nbsp; Incumbent’s open tickets closed</p>
+    </div>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">8</div>
+</section>
+
+<!-- 9 · SERVICE -->
+<section class="slide gray" id="s9">
+  <div class="inner">
+    <div class="kick">Support model</div>
+    <h2>Service you can <span class="hl hl-b">actually reach</span></h2>
+    <p class="lead" style="margin-bottom:.2rem">An SLA that means something — with named people behind it, not a ticket queue.</p>
+    <div class="sla">
+      <div class="sla-t p1"><div class="pr">P1</div><div><div class="big">1 hr</div><div class="sm">response · same-day workaround</div></div></div>
+      <div class="sla-t p2"><div class="pr">P2</div><div><div class="big">4 hrs</div><div class="sm">response</div></div></div>
+      <div class="sla-t p3"><div class="pr">P3</div><div><div class="big">Next day</div><div class="sm">next business day</div></div></div>
+    </div>
+    <div class="svc3">
+      <div class="card"><div class="ic a-p">👥</div><h3>Named people, not a queue</h3><p>An account manager plus a hands-on solution architect — our CEO — on a dedicated Slack / Teams channel.</p></div>
+      <div class="card"><div class="ic a-b">🌍</div><h3>Near round-the-clock coverage</h3><p>India hub + Saudi, UAE &amp; Kuwait branches. We already support clients across GCC, Ireland and Texas.</p></div>
+      <div class="card"><div class="ic a-g">🔧</div><h3>DevOps as a standing service</h3><p>Automated backups, uptime monitoring, staging-before-prod, monthly health reports and quarterly roadmap reviews.</p></div>
+    </div>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">9</div>
+</section>
+
+<!-- 10 · TRACK RECORD -->
+<section class="slide white" id="s10">
+  <div class="inner">
+    <div class="kick">Track record</div>
+    <h2>Manufacturing is <span class="udl">where we’ve lived<svg viewBox="0 0 240 12" preserveAspectRatio="none"><path d="M2 7 C 40 2, 80 11, 120 6 S 200 2, 238 8"/></svg></span></h2>
+    <p class="lead" style="margin-top:1.1rem;margin-bottom:.2rem">Odoo manufacturing deliveries led by our solution architect before founding CodeOx</p>
+    <div class="proof">
+      <div class="pt"><span class="pn">6</span><span class="pl"><b>manufacturing plants</b><br>delivered on Odoo</span></div>
+      <div class="pt"><span class="pn">4</span><span class="pl"><b>countries</b><br>Australia · India · UAE · KSA/Qatar</span></div>
+      <div class="pt"><span class="pn">v11–19</span><span class="pl"><b>Enterprise &amp; Community</b><br>continuous-process &amp; ETO focus</span></div>
+    </div>
+    <div class="tr">
+      <a class="card" href="https://www.kokodacaravans.com.au/" target="_blank" rel="noopener"><div class="head"><div class="bi a-p">🚐</div><div><span class="cn">Kokoda Caravans</span><span class="geo">Australia</span></div></div><p>Caravan / RV manufacturer — build-to-order, BoM-heavy production on Odoo.</p><div class="tags"><span class="tag">Build-to-order</span><span class="tag">BoM-heavy</span></div></a>
+      <a class="card" href="https://www.shadesmart.com.au/" target="_blank" rel="noopener"><div class="head"><div class="bi a-b">⛱️</div><div><span class="cn">Shade Smart</span><span class="geo">Australia</span></div></div><p>Textile fabrication — CAD/CNC-cut shade sails &amp; architectural umbrellas.</p><div class="tags"><span class="tag">CAD/CNC</span><span class="tag">eCommerce + MRP</span></div></a>
+      <a class="card" href="https://comfortsleep.com.au/" target="_blank" rel="noopener"><div class="head"><div class="bi a-g">🛏️</div><div><span class="cn">Comfort Sleep Bedding</span><span class="geo">Australia</span></div></div><p>Mattress &amp; bedding manufacturer — make-to-order production and dealer sales.</p><div class="tags"><span class="tag">Make-to-order</span><span class="tag">Dealer sales</span></div></a>
+      <div class="card"><div class="head"><div class="bi a-o">🧵</div><div><span class="cn">Brocade India Polytex</span><span class="geo">India</span></div></div><p>ISO 9001/14001 PP woven-bag maker — continuous extrusion &amp; weaving.</p><div class="tags"><span class="tag">Continuous process</span><span class="tag">Lot traceability</span><span class="tag">Clean-room QC</span></div></div>
+      <a class="card" href="https://atomalloys.com/" target="_blank" rel="noopener"><div class="head"><div class="bi a-r">⚗️</div><div><span class="cn">ATOM Alloys</span><span class="geo">UAE</span></div></div><p>Explosion-prevention alloy systems — UL-certified for oil &amp; gas, defence, marine.</p><div class="tags"><span class="tag">Engineered-to-order</span><span class="tag">Certified</span></div></a>
+      <div class="card hot"><div class="head"><div class="bi">🏭</div><div><span class="cn">As CodeOx</span><span class="geo">KSA · Qatar</span></div></div><p>Multi-plant manufacturing holding · Riyadh fit-out with custom BOQ &amp; progress billing.</p><div class="tags"><span class="tag">Multi-plant</span><span class="tag">Progress billing</span><span class="tag">POS-to-factory</span></div></div>
+    </div>
+    <p class="thread"><span class="ic">🎯</span>Common thread: continuous processes, lot traceability, certificates, engineered-to-order quoting — <span style="color:var(--ink)">ARP’s exact world.</span></p>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">10</div>
+</section>
+
+<!-- 11 · LEAVE ANYTIME -->
+<section class="slide gray" id="s11">
+  <div class="inner">
+    <div class="kick">Trust &amp; independence</div>
+    <h2>Why CodeOx — and why you can <span class="hl hl-g">leave anytime</span></h2>
+    <div class="la">
+      <ul>
+        <li><b>Odoo 11 → 19, hands-on.</b> We stabilise you today and carry you to 19 safely.</li>
+        <li><b>Rescue specialists.</b> Auditing and taking over struggling instances is core work, not a side job.</li>
+        <li><b>Saudi-native compliance.</b> ZATCA Phase 2, plus UAE VAT, Qatar WPS/EOSB, Irish VAT, Indian GST.</li>
+        <li><b>In-house team.</b> We are the white-label backend for partners in Oman, Qatar and Ireland.</li>
+      </ul>
+      <div class="lock">
+        <div class="pi">🤝</div>
+        <h3>No lock-in. Ever.</h3>
+        <ul>
+          <li>You own the source code</li>
+          <li>Full Git repository handed over</li>
+          <li>Complete documentation</li>
+          <li>Clean exit whenever you choose</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">11</div>
+</section>
+
+<!-- 12 · SWITCHING -->
+<section class="slide white" id="s12">
+  <div class="inner">
+    <div class="kick">Migration</div>
+    <h2>Switching partners <span class="hl hl-y">without stopping the plant</span></h2>
+    <div class="sw">
+      <div class="card"><div class="num">1</div><h3><span class="lbl">Step 1</span>Reassign</h3><p>A written notice to Odoo changes your partner of record. Users and renewals carry over.</p></div>
+      <div class="card"><div class="num">2</div><h3><span class="lbl">Step 2</span>Collect</h3><p>DB dump + filestore, all custom code, Odoo.sh / GitHub ownership, hosting &amp; DNS credentials. We chase it for you.</p></div>
+      <div class="card"><div class="num">3</div><h3><span class="lbl">Step 3</span>Prove</h3><p>Staging clone rebuilt independently before we touch production. Nothing moves until it runs on our side.</p></div>
+      <div class="card"><div class="num">4</div><h3><span class="lbl">Step 4</span>Cut over</h3><p>Scheduled window, rollback plan, live system untouched until sign-off. Production never stops.</p></div>
+    </div>
+    <p class="note">Your data and your properly built code <b>already belong to you</b>. The only real risks are access and undocumented changes — the audit surfaces both.</p>
+  </div>
+  <div class="foot">CodeOx Technologies · Alternative Rebar Plant</div><div class="pageno">12</div>
+</section>
+
+<!-- 13 · CLOSE (plum) -->
+<section class="slide plum" id="s13">
+  <div class="inner">
+    <div class="kick">Next step</div>
+    <h1 class="close-h">Give us read access. We’ll show you exactly what’s <span class="hl hl-y">wrong</span> — for free.</h1>
+    <div class="checks">
+      <div class="chk"><span class="c">✓</span>30-min call to confirm current version, hosting and top 5 pains</div>
+      <div class="chk"><span class="c">✓</span>Free Health Audit — fixed scope, senior-led</div>
+      <div class="chk"><span class="c">✓</span>Written report, gap register, roadmap and fixed-price quote</div>
+      <div class="chk"><span class="c">✓</span>You decide. No obligation.</div>
+    </div>
+    <div class="sig" style="margin-top:2.2rem">Shabeeb K · Head of Operations · CodeOx Technologies LLP</div>
+    <div class="contact">shabeeb.k@code-ox.com · +966 53 571 6437 · <a href="https://code-ox.com">code-ox.com</a></div>
+  </div>
+  <div class="pageno">13</div>
+</section>
+
+<div class="nav">
+  <button onclick="go(-1)" aria-label="Previous">‹</button>
+  <button onclick="go(1)" aria-label="Next">›</button>
+</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];let i=0;
+function cur(){let c=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;c=k}});return c}
+function go(dir){i=Math.max(0,Math.min(slides.length-1,cur()+dir));slides[i].scrollIntoView({behavior:'smooth'})}
+addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(1)}
+  if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+});
+</script>
+</body>
+</html>
