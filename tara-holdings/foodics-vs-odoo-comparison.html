@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foodics vs Odoo 19/20 Enterprise POS — KSA · CodeOx</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+:root{
+  --primary:#1D4DB3; --primary-d:#0F3460; --primary-900:#081736; --primary-50:#EEF2FC; --primary-100:#E3E9F9;
+  --ink:#0B1220; --muted:#5B6472; --line:#E6E9F0; --bg:#F7F9FD; --panel:#fff;
+  --odoo:#714B67; --odoo-50:#F3ECF1; --foodics:#E8722A; --foodics-50:#FCEEE2;
+  --green:#1E9E6B; --green-50:#E8F7F1; --red:#D64545; --red-50:#FBEAEA; --amber:#C98A1F; --amber-50:#FBF1E1;
+  --radius:16px; --sans:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --shadow:0 10px 30px -20px rgba(11,18,32,.3);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--panel);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+
+/* hero */
+.hero{background:linear-gradient(180deg,#fff,var(--primary-50));border-bottom:1px solid var(--line)}
+.brandline{display:flex;justify-content:space-between;align-items:center;padding:22px 0;flex-wrap:wrap;gap:12px}
+.brandline img{height:30px}
+.doc-tag{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px}
+.hero-body{padding:26px 0 44px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);margin-bottom:12px}
+.kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary)}
+h1{font-size:clamp(26px,4vw,40px);font-weight:800;line-height:1.12;color:var(--primary-900);letter-spacing:-.01em;margin-bottom:10px}
+h1 .vs{color:var(--muted);font-weight:600}
+.hero-sub{font-size:16px;color:var(--muted);max-width:70ch;margin-bottom:20px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow)}
+.meta div span{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin-bottom:4px}
+.meta div strong{font-size:13.5px;color:var(--ink);font-weight:700}
+
+/* sections */
+section{padding:44px 0;border-bottom:1px solid var(--line)}
+h2{font-size:clamp(20px,2.6vw,28px);font-weight:800;color:var(--primary-900);margin-bottom:6px;letter-spacing:-.01em}
+.rule{width:52px;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary-d));border-radius:99px;margin:6px 0 22px}
+h3{font-size:16px;font-weight:700;color:var(--primary-900);margin:26px 0 12px}
+h4{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:10px}
+p{margin-bottom:12px;font-size:14.5px}
+.lead{font-size:15.5px;color:var(--muted);margin-bottom:20px}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:18px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+th{background:var(--primary-900);color:#fff;text-align:left;padding:12px 16px;font-weight:700;font-size:12px;letter-spacing:.02em;white-space:nowrap}
+td{padding:11px 16px;border-top:1px solid var(--line);vertical-align:top;color:var(--ink)}
+tbody tr:nth-child(even){background:var(--bg)}
+td:first-child{font-weight:600}
+table.compact td,table.compact th{padding:9px 14px}
+
+/* winner badges */
+.badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.02em;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.b-odoo{background:var(--odoo-50);color:var(--odoo)}
+.b-foodics{background:var(--foodics-50);color:var(--foodics)}
+.b-both{background:var(--primary-50);color:var(--primary)}
+.b-yes{background:var(--green-50);color:var(--green)}
+.b-no{background:var(--red-50);color:var(--red)}
+.b-part{background:var(--amber-50);color:var(--amber)}
+
+/* pros/cons + two-col */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.pcard{border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+.pcard.pro{background:var(--green-50);border-color:#CBEBD8}
+.pcard.con{background:var(--red-50);border-color:#F4D6D6}
+.pcard h4{margin-bottom:12px}
+.pcard.pro h4{color:var(--green)}.pcard.con h4{color:var(--red)}
+.pcard ul{list-style:none}
+.pcard li{position:relative;padding-left:22px;margin-bottom:8px;font-size:13.5px;line-height:1.45}
+.pcard.pro li::before{content:"+";position:absolute;left:0;color:var(--green);font-weight:800}
+.pcard.con li::before{content:"–";position:absolute;left:0;color:var(--red);font-weight:800}
+
+/* callout */
+.callout{background:linear-gradient(135deg,var(--primary),var(--primary-d));color:#fff;border-radius:var(--radius);padding:24px 28px;box-shadow:0 16px 34px -18px rgba(29,77,179,.5);margin:18px 0}
+.callout b{color:#FFD9A8}
+.callout p{color:#EAF0FF;margin:0}
+.note{background:var(--amber-50);border-left:4px solid var(--amber);border-radius:0 12px 12px 0;padding:12px 16px;font-size:13.5px;color:#8a5f18;margin:14px 0}
+.note b{color:#6b4a12}
+
+ul.plain{list-style:none;margin-bottom:14px}
+ul.plain li{position:relative;padding-left:20px;margin-bottom:7px;font-size:14px}
+ul.plain li::before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;border-radius:50%;background:var(--primary)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--primary-50);color:var(--primary-900);padding:1px 6px;border-radius:5px;font-size:12.5px}
+
+footer{padding:34px 0;text-align:center;color:var(--muted);font-size:13px}
+footer a{color:var(--primary);text-decoration:none;font-weight:600}
+footer .cx{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
+footer .cx img{height:26px}
+
+/* aggregator hub diagram */
+.hub{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:14px;margin:22px 0;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);background:var(--bg)}
+.hub .col-h{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;text-align:center}
+.hub .chips{display:flex;flex-direction:column;gap:8px}
+.hub .chip{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:600;text-align:center;color:var(--ink)}
+.hub .core{background:linear-gradient(150deg,var(--odoo),#5B3B52);border-radius:14px;padding:20px 16px;text-align:center;color:#fff;box-shadow:0 14px 30px -14px rgba(113,75,103,.6)}
+.hub .core strong{display:block;font-size:15px;font-weight:800;margin-bottom:4px}
+.hub .core span{font-size:11.5px;color:#EBDCE5;line-height:1.4;display:block}
+.hub .arrow{color:var(--odoo);font-size:22px;font-weight:800;text-align:center}
+.hub .out{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.hub .out:last-child{margin-bottom:0}
+@media(max-width:820px){.hub{grid-template-columns:1fr;text-align:center}.hub .arrow{transform:rotate(90deg)}}
+@media(max-width:720px){.two{grid-template-columns:1fr}}
+@media print{.tbl-wrap,.pcard,.meta,.callout{box-shadow:none}body{background:#fff}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="brandline">
+      <img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+      <span class="doc-tag">Internal · Pre-sales</span>
+    </div>
+    <div class="hero-body">
+      <div class="kicker">Competitive Analysis</div>
+      <h1>Foodics <span class="vs">vs</span> Odoo 19/20 Enterprise POS — KSA</h1>
+      <p class="hero-sub">Full comparison and CodeOx gap-closure plan. Restaurant / F&amp;B and retail POS in Saudi Arabia. Odoo Enterprise 19 (current stable) and Odoo 20 (unveiled 24–26 Sept 2026, GA expected Oct–Nov 2026).</p>
+      <div class="meta">
+        <div><span>Prepared for</span><strong>Tara Holdings — Urban Eats</strong></div>
+        <div><span>Prepared by</span><strong>CodeOx Technologies</strong></div>
+        <div><span>Date</span><strong>9 September 2026</strong></div>
+        <div><span>Status</span><strong>Internal / pre-sales</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- 1 -->
+<section>
+  <h2>1 · Bottom line</h2><div class="rule"></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Question</th><th>Answer</th></tr></thead>
+    <tbody>
+      <tr><td>Better restaurant POS out of the box in KSA</td><td><span class="badge b-foodics">Foodics</span></td></tr>
+      <tr><td>Better single-stack (POS + inventory + accounting + HR + eCommerce + B2B)</td><td><span class="badge b-odoo">Odoo Enterprise</span></td></tr>
+      <tr><td>Better for retail / mixed retail + F&amp;B</td><td><span class="badge b-odoo">Odoo Enterprise</span></td></tr>
+      <tr><td>One system or both for a scaled F&amp;B group</td><td><span class="badge b-both">Both</span> — Foodics front-of-house + Odoo back office, connected by third-party connector</td></tr>
+      <tr><td>Can Odoo be customised to match Foodics</td><td><b>Yes</b> for all functional gaps; <b>no</b> for SAMA-licensed embedded payments, aggregator API access, and Foodics' KSA channel/brand</td></tr>
+      <tr><td>Time to match</td><td>~3 months MVP / 5–7 months full parity, 1 senior dev + 1 QA; then 15–20 %/yr upkeep</td></tr>
+      <tr><td>Worth it</td><td>Not for one client. Yes as a <b>productised CodeOx F&amp;B vertical</b> amortised over 5+ clients</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2>2 · Foodics — profile</h2><div class="rule"></div>
+
+  <h3>2.1 Company (2026)</h3>
+  <ul class="plain">
+    <li>Riyadh, founded 2014. ~US$200M raised (Prosus, Sanabil, STV, Peak XV; Kamco Invest stake 2025). Record US$170M Series C — largest MENA SaaS round.</li>
+    <li>FY2025 GMV US$13B; 36,000–40,000+ branches; &gt;30 % share of KSA restaurant-management-system market; 35+ countries; &gt;6B lifetime orders.</li>
+    <li>H1 2025: ARR +29 %, international revenue +56 %, payment volume +38 %.</li>
+    <li><b>SAMA-licensed</b> payment institution (Foodics Pay: acquiring, lending, 24h settlement).</li>
+    <li>2026: launched <b>Foodics Black</b> (full-service dine-in) at LEAP; acquired Greek AI firm <b>Norma</b> (now BI/Analytics Agent); ~US$100M M&amp;A/AI budget.</li>
+  </ul>
+
+  <h3>2.2 Product / features</h3>
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>Area</th><th>Foodics</th></tr></thead>
+    <tbody>
+      <tr><td>Cashier</td><td><b>iPad-only</b> app; offline mode with sync</td></tr>
+      <tr><td>Dine-in</td><td>Floor plans, tables, waiter app, pay-at-table, QR digital menu, course/seat handling, split bill (item/amount), tips, void reasons</td></tr>
+      <tr><td>Kitchen</td><td>KDS (station routing, bump, timers), kitchen/bar printing, expo screen</td></tr>
+      <tr><td>Menu</td><td>Modifiers (min/max, forced), combos, timed events/menus, branch-level menus, allergens</td></tr>
+      <tr><td>Inventory</td><td>Recipe-level depletion, food-cost %, theoretical vs actual, waste tracking, low-stock alerts, auto-PO, inter-branch transfers with approvals, central kitchen/warehouse</td></tr>
+      <tr><td>Multi-site</td><td>Multi-branch, unified reporting, branch P&amp;L, franchise controls</td></tr>
+      <tr><td>HR</td><td>Shifts, clock-in, GOSI-aware payroll (Advanced tier)</td></tr>
+      <tr><td>CRM / Loyalty</td><td>Loyalty, coupons, promotions, customer profiles, online ordering, self-order kiosk</td></tr>
+      <tr><td>Analytics</td><td>Dashboards; Norma AI agent</td></tr>
+      <tr><td>Payments</td><td>Foodics Pay (Mada, STC Pay, cards, Apple Pay) native; SAMA-regulated</td></tr>
+      <tr><td>Compliance</td><td>ZATCA Phase 2 built in — <b>B2C simplified invoices only</b>; B2B standard needs add-on (e.g. InvoiceQ). Arabic/RTL, SAR, Hijri, VAT 15 %</td></tr>
+      <tr><td>Aggregators</td><td>Jahez native; HungerStation, Keeta, Marsool, ToYou, Careem, Noon Food via Marketplace/middleware (FeedUs, Deliverect, Urbanpiper, Grabtech, Blend) with auto stock depletion</td></tr>
+      <tr><td>Integrations</td><td>App Marketplace 100+ (accounting/ERP incl. Odoo via PlusTech, SAP; HR; marketing)</td></tr>
+      <tr><td>Hosting</td><td>Foodics cloud, in-Kingdom (PDPL-aligned)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>2.3 API</h3>
+  <ul class="plain">
+    <li>REST, OAuth 2.0 authorisation-code (scopes e.g. <code>general.read</code>), <code>/whoami</code> for business mapping.</li>
+    <li>Per-action rate limiting: <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code>, <code>Retry-After</code>, HTTP 429. Webhooks; sandbox; customers paginated 50/page.</li>
+    <li>API access gated to <b>Advanced tier or purchased API licence</b> (verify at scoping). Token validity ~14 days per community sources (unverified officially).</li>
+  </ul>
+
+  <h3>2.4 Pricing (SAR, published Sept 2026 · monthly; annual in brackets)</h3>
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>Bundle</th><th>Tier</th><th>SAR / mo</th></tr></thead>
+    <tbody>
+      <tr><td>QSR &amp; Cafés</td><td>Starter</td><td>423 (392)</td></tr>
+      <tr><td>QSR &amp; Cafés</td><td>Basic</td><td>801 (742)</td></tr>
+      <tr><td>QSR &amp; Cafés</td><td>Advanced</td><td>1,224 (1,133)</td></tr>
+      <tr><td>Cloud Kitchen</td><td>Basic</td><td>612 (567)</td></tr>
+      <tr><td>Cloud Kitchen</td><td>Advanced</td><td>936 (867)</td></tr>
+      <tr><td>Dine-In</td><td>Basic</td><td>1,183 (1,096)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="lead">API only in Advanced/Dine-In. Delivery integrations ~SAR 200–400/mo per platform. HR/payroll only on Advanced. 3-terminal Advanced setups ~SAR 3,399/mo. Enterprise deals ~15–20 % below list. Hardware separate: iPad from SAR 1,499; full station SAR 3,500+. (Older promo per-outlet figures still circulate — use the official page.)</p>
+
+  <div class="two">
+    <div class="pcard pro"><h4>Pros</h4><ul>
+      <li>Purpose-built restaurant OS; KSA market leader; deep F&amp;B UX</li>
+      <li>ZATCA B2C native, no plugins</li>
+      <li>Native aggregator ecosystem with stock depletion</li>
+      <li>SAMA-licensed embedded payments + lending</li>
+      <li>Recipe/food-cost/waste, central kitchen, franchise, GOSI payroll</li>
+      <li>Huge KSA hardware/support/reseller channel; Arabic-first</li>
+      <li>In-Kingdom hosting</li>
+    </ul></div>
+    <div class="pcard con"><h4>Cons</h4><ul>
+      <li>iPad-only (Apple hardware lock-in)</li>
+      <li>Not an ERP: no GL depth, weak procurement outside F&amp;B, no manufacturing beyond recipes</li>
+      <li>B2B standard e-invoice needs add-on</li>
+      <li>Cost scales fast with branches, connectors, payroll</li>
+      <li>API behind top tier / paid licence</li>
+      <li>Online ordering/delivery analytics bolted-on vs dine-in core</li>
+      <li>SaaS lock-in; migration = re-platform</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2>3 · Odoo Enterprise 19 / 20 — profile</h2><div class="rule"></div>
+
+  <h3>3.1 Version status</h3>
+  <ul class="plain">
+    <li><b>Odoo 19</b>: released Sept/Oct 2025. Point releases 19.1–19.4 through Jul 2026. PostgreSQL 16+. Current stable.</li>
+    <li><b>Odoo 20</b>: unveiled 24 Sept 2026 (Odoo Experience Brussels). GA typically 2–4 weeks later; first solid patch Oct–Nov 2026. Even-numbered = LTS.</li>
+    <li>Roadmap (unconfirmed until release notes): embedded/agentic AI across accounting/website/helpdesk/POS; browser-based POS hardware discovery with auto-combos; AI accounting audit; new payroll dashboard; read-replica DB; mobile UI. Odoo labels it "things we will maybe do". No KSA-specific changes announced.</li>
+    <li>Odoo revenue ~€619M in 2025.</li>
+  </ul>
+
+  <h3>3.2 KSA localisation (Community + Enterprise both ship it)</h3>
+  <ul class="plain">
+    <li><code>l10n_sa</code> (CoA, VAT 15 %), <code>l10n_sa_edi</code> (ZATCA Phase 2: UBL 2.1 XML, ECDSA stamp, CSID onboarding, UUID/ICV/PIH hash chain, TLV QR, B2B clearance + B2C reporting), <code>l10n_sa_edi_pos</code>, <code>l10n_sa_pos</code>, Arabic templates. In community since v16.</li>
+    <li>Enterprise adds: official Odoo SA support, GOSI/WPS payroll, Studio, one-click upgrades, Odoo.sh.</li>
+    <li>Current wave: <b>Wave 24</b> (revenue &gt; SAR 375k), deadline 30 Jun 2026 — integration near-universal for VAT-registered SMEs. ZATCA provider directory is indicative, not certification; liability stays with the taxpayer.</li>
+  </ul>
+
+  <h3>3.3 POS features (Odoo 19 Enterprise)</h3>
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>Area</th><th>Odoo 19</th></tr></thead>
+    <tbody>
+      <tr><td>Hardware</td><td>Browser-based: iPad/Safari, Android/Chrome, Windows, Mac. IoT Box for printers, scales, scanners, drawers, display. No vendor lock-in</td></tr>
+      <tr><td>Dine-in</td><td>Visual floor plans, table transfer/merge, course firing, split bill, tips, presets (eat-in/takeaway/delivery), table-booking waiting list</td></tr>
+      <tr><td>Kitchen</td><td><code>pos_preparation_display</code> KDS, kitchen/bar printing, self-order notes to KDS, snooze/unavailable items</td></tr>
+      <tr><td>Menu</td><td>Product combos, modifiers via attributes/variants, free QR digital menu, self-order kiosk, unified UoM/packaging, expired-product warning</td></tr>
+      <tr><td>Inventory</td><td>Multi-warehouse, MRP BOM per menu item, consume-on-sale, central kitchen via inter-warehouse routes, expiry tracking</td></tr>
+      <tr><td>Multi-site</td><td>Multi-company, multi-branch, franchise (central catalogue, analytic accounts per branch, consolidated reporting)</td></tr>
+      <tr><td>HR</td><td>Attendance/clock-in, planning/shifts, Payroll with GOSI/WPS (Enterprise)</td></tr>
+      <tr><td>Loyalty</td><td>Loyalty, gift cards, eWallet, promotions, coupons — shared with eCommerce</td></tr>
+      <tr><td>Offline</td><td>Offline mode with auto-sync (hardening still needed; see §6)</td></tr>
+      <tr><td>UI</td><td>Dark mode, redesigned shop floor, quick payment buttons, minimal-rights temp profiles, Arabic/RTL</td></tr>
+      <tr><td>Compliance</td><td>ZATCA Phase 2 <b>B2B and B2C</b>; SAR; Hijri via config</td></tr>
+      <tr><td>Payments</td><td>Native providers exclude Mada acquiring — KSA gateways via Apps Store (Moyasar, Tap, HyperPay, PayTabs, Geidea terminals via connector)</td></tr>
+      <tr><td>Aggregators</td><td>None native. Third-party <code>mn_food_aggregator_pos</code> (§5), middleware (FeedUs/Deliverect/Grabtech)</td></tr>
+      <tr><td>eCommerce</td><td>Same DB as Website/eCommerce; Odoo 19 added abandoned-cart, click &amp; collect, AI recommendations, wishlist, Google Merchant, social commerce</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.4 Pricing (Middle East pricelist, incl. KSA — cheapest global list)</h3>
+  <ul class="plain">
+    <li><b>Standard US$8.95/user/mo</b>, <b>Custom US$13.60/user/mo</b>, billed yearly. Custom = Studio, multi-company, external API, Odoo.sh/on-prem.</li>
+    <li>One-App-Free: $0, one app, unlimited users. Odoo.sh: ~$57.60/worker + $0.20/GB + $14.40/staging. Community: $0 licence, self-hosted.</li>
+    <li>No per-branch/terminal fee → cost favours Odoo as branch count rises, disfavours as user count rises. No Odoo 20 pricing change confirmed.</li>
+  </ul>
+  <div class="note"><b>Deployment constraint:</b> Odoo Online (SaaS) blocks third-party modules → any KSA gateway / aggregator / Foodics connector requires <b>Odoo.sh or on-premise</b>. PDPL/SDAIA cross-border rules also push regulated clients to in-Kingdom hosting.</div>
+
+  <div class="two">
+    <div class="pcard pro"><h4>Pros (vs Foodics)</h4><ul>
+      <li>POS inside the ERP: one data model for POS, eCommerce, inventory, accounting, purchase, MRP, HR, B2B</li>
+      <li>Hardware-agnostic; no iPad lock-in</li>
+      <li>ZATCA B2B + B2C; Arabic/RTL; GOSI/WPS payroll</li>
+      <li>Real BOM/MRP → true food cost; deep multi-warehouse; native multi-company consolidation</li>
+      <li>Loyalty/gift cards/promos shared across channels</li>
+      <li>Data ownership, full exportability, in-Kingdom hosting possible</li>
+      <li>Very low licence cost in KSA; Studio for low-code changes</li>
+    </ul></div>
+    <div class="pcard con"><h4>Cons (vs Foodics)</h4><ul>
+      <li>No native KSA aggregator connectors; API access obtained per platform</li>
+      <li>No native Mada acquiring / SAMA-licensed embedded payments</li>
+      <li>Restaurant UX and KDS depth behind Foodics; documented 18.x offline order-loss / KDS double-order bugs</li>
+      <li>Food-cost/waste analytics need configuration + custom reports</li>
+      <li>Thin KSA F&amp;B hardware/support channel; low brand recognition</li>
+      <li>Implementation-heavy; needs partner; Odoo.sh/on-prem required for connectors</li>
+      <li>Odoo 20 will break OWL-based POS customisations → re-port cost</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2>4 · Side-by-side</h2><div class="rule"></div>
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>Criterion</th><th>Foodics</th><th>Odoo 19 Ent.</th></tr></thead>
+    <tbody>
+      <tr><td>Hardware</td><td>iPad only</td><td><span class="badge b-odoo">Any device + IoT Box</span></td></tr>
+      <tr><td>KDS</td><td><span class="badge b-foodics">Mature, station routing</span></td><td>Basic, needs extension</td></tr>
+      <tr><td>Modifiers / combos</td><td><span class="badge b-foodics">Deep</span></td><td>Native, less polished</td></tr>
+      <tr><td>Recipe / food cost / waste</td><td><span class="badge b-foodics">Native, turnkey</span></td><td>Native via MRP, needs setup</td></tr>
+      <tr><td>Aggregators</td><td><span class="badge b-foodics">Native / marketplace</span></td><td>Third-party / middleware</td></tr>
+      <tr><td>Mada payments</td><td><span class="badge b-foodics">Native (SAMA)</span></td><td>Third-party terminal connector</td></tr>
+      <tr><td>ZATCA</td><td>B2C native; B2B add-on</td><td><span class="badge b-odoo">B2B + B2C native</span></td></tr>
+      <tr><td>Multi-branch</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Central kitchen</td><td>Yes</td><td>Yes (MRP + routes)</td></tr>
+      <tr><td>Franchise</td><td>Yes</td><td>Yes (multi-company)</td></tr>
+      <tr><td>HR / GOSI</td><td>Advanced tier</td><td>Enterprise payroll</td></tr>
+      <tr><td>Accounting / GL</td><td>No (export to ERP)</td><td><span class="badge b-odoo">Full</span></td></tr>
+      <tr><td>Procurement / MRP</td><td>Recipes only</td><td><span class="badge b-odoo">Full</span></td></tr>
+      <tr><td>eCommerce / B2B</td><td>Online ordering only</td><td><span class="badge b-odoo">Full</span></td></tr>
+      <tr><td>Offline</td><td><span class="badge b-foodics">Solid</span></td><td>Works; hardening advised</td></tr>
+      <tr><td>Data ownership</td><td>Foodics cloud</td><td><span class="badge b-odoo">Own it</span></td></tr>
+      <tr><td>Hosting / PDPL</td><td>In-Kingdom</td><td>Choose in-Kingdom</td></tr>
+      <tr><td>Licence (10 users, 3 branches)</td><td>~SAR 1,100–3,400/mo</td><td><span class="badge b-odoo">~SAR 500/mo + hosting</span></td></tr>
+      <tr><td>Implementation</td><td><span class="badge b-foodics">Days–weeks, turnkey</span></td><td>Weeks–months, partner</td></tr>
+      <tr><td>Local F&amp;B support</td><td><span class="badge b-foodics">Excellent</span></td><td>Thin</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2>5 · Connectors</h2><div class="rule"></div>
+
+  <h3>5.1 Foodics ↔ Odoo (no first-party connector exists)</h3>
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>Connector</th><th>Odoo versions</th><th>Price</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Warlock <code>wt_foodic</code></td><td>12.0–19.0</td><td>~$297–330 one-time</td><td>Branches, products/variants, customers, POS orders, invoices, sessions, categories, vendors, POs, payment methods. No ratings</td></tr>
+      <tr><td>Div Systems <code>div_foodics_with_webhook</code></td><td>16.0–18.0</td><td>~$318 one-time</td><td>Order webhook, ingredients-as-BOM, combos, analytic account per branch, inventory transfers, visual reports</td></tr>
+      <tr><td>PlusTech (Foodics Marketplace)</td><td>not published</td><td>Quote-based, managed</td><td>Imports branches, devices, users, payment methods, categories, products, modifiers, combos, taxes; item mapping before order sync</td></tr>
+      <tr><td><code>qs_foodics_odoo_integration</code></td><td>16.0</td><td>unconfirmed</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><b>None supports Odoo 20 yet.</b> Expect a 1–3 month lag after GA.</div>
+
+  <h3>5.2 Aggregators → Odoo POS: <code>mn_food_aggregator_pos</code> (Moaz Nabil)</h3>
+  <ul class="plain">
+    <li>v17/18/19, $1,000 one-time, OPL-1, 2,111 LOC, zero reviews, solo KSA developer.</li>
+    <li>Delivers: per-platform webhook endpoint, HMAC-SHA256 verification, idempotency, store→POS &amp; SKU (AR/EN) mapping, auto-accept rules, full order state machine with outbound status push, reject-with-reason, driver info, rush-hour pause, cashier floating panel (6 s polling + sound), CSV settlement reconciliation with balanced commission journal entries, GMV/commission/net dashboard, ZATCA e-invoice on close, two security groups, sandbox flag, 60-day log purge.</li>
+    <li>Auth: API key + secret (Jahez), OAuth 2.0 (HungerStation/Delivery Hero), partner creds (Keeta), signed webhook.</li>
+    <li><b>Limits:</b> generic framework (field names mapped at install, not validated adapters); status-push URLs unspecified; no outbound menu publishing; Marsool unconfirmed; "Odoo Online" claim is really Odoo.sh/on-prem; OPL-1 = one licence per client, <b>cannot be bundled into a CodeOx product</b>.</li>
+    <li>API access (from listing): Jahez — integration@jahez.net; HungerStation — Partner/POS API via account manager (developer.hungerstation.com); Keeta — merchant.mykeeta.com / developers.mykeeta.com; Marsool — merchant support, no public portal.</li>
+    <li><b>Verdict:</b> buy one licence for pilot (saves 4–6 weeks); within 2 weeks decide keep or re-implement as <code>cdx_pos_aggregator</code> under CodeOx licence.</li>
+  </ul>
+
+  <h3>5.3 KSA payment / terminal modules for Odoo</h3>
+  <ul class="plain">
+    <li>Gateways: Moyasar (SAR/Mada/Apple Pay), Tap, HyperPay, PayTabs — Apps Store, ~SAR 50–1,500/app/yr; verify 19.0 builds.</li>
+    <li>Terminals: Geidea / NearPay / Verifone ECR via IoT Box or TCP/HTTP — custom or third-party.</li>
+    <li>Mada = &gt;90 % of KSA cards, &gt;95 % of card transactions; Stripe unusable for KSA-resident merchants.</li>
+  </ul>
+</section>
+
+<!-- 6 -->
+<section>
+  <h2>6 · How much of Foodics we can match in Odoo</h2><div class="rule"></div>
+
+  <h3>6.1 Gap-by-gap</h3>
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>#</th><th>Foodics capability</th><th>Achievable</th><th>How</th><th>Effort</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Aggregator order intake (Jahez, HungerStation, Keeta, Marsool, ToYou)</td><td><span class="badge b-part">Yes, gated by API access</span></td><td>Buy <code>mn_food_aggregator_pos</code> or middleware; build per-platform adapters + status push + menu publish; sandbox certify each</td><td>0 (buy) / 4 wks build; adapters 1–2 wks each</td></tr>
+      <tr><td>2</td><td>Recipe food cost, theoretical vs actual, waste</td><td><span class="badge b-yes">Yes</span></td><td><code>cdx_pos_fnb_foodcost</code>: BOM per item, consume-on-close, waste codes, variance report, food-cost % per branch/day</td><td>3–4 wks</td></tr>
+      <tr><td>3</td><td>Restaurant UX (forced modifiers, seat ordering, void reasons, tips, hold/fire)</td><td><span class="badge b-yes">Yes</span></td><td><code>cdx_pos_fnb_ui</code>: OWL screens, modifier groups, seat numbers, void wizard, tip screen</td><td>4–6 wks</td></tr>
+      <tr><td>4</td><td>KDS maturity (routing, timers, colour ageing, recall, expo, bump bar)</td><td><span class="badge b-yes">Yes</span></td><td>Extend <code>pos_preparation_display</code>: routing rules, timer thresholds, expo view, keyboard bump</td><td>3–4 wks</td></tr>
+      <tr><td>5</td><td>Offline robustness</td><td><span class="badge b-part">Partial</span></td><td>Local queue hardening, idempotent keys, reconciliation cron, session-close guards</td><td>2 wks + ongoing</td></tr>
+      <tr><td>6</td><td>Mada terminal pairing</td><td><span class="badge b-yes">Yes</span></td><td>Geidea/NearPay ECR via IoT Box or direct; payment method per terminal</td><td>2–3 wks per vendor</td></tr>
+      <tr><td>7</td><td>Multi-branch dashboards, branch P&amp;L</td><td><span class="badge b-yes">Yes</span></td><td>Analytic accounts per branch, dashboard/spreadsheet templates</td><td>1–2 wks</td></tr>
+      <tr><td>8</td><td>Central kitchen, inter-branch transfers with approval</td><td><span class="badge b-yes">Yes</span></td><td>Multi-warehouse routes, MRP, approval on <code>stock.picking</code></td><td>1–2 wks</td></tr>
+      <tr><td>9</td><td>Franchise / central menu control / royalties</td><td><span class="badge b-yes">Yes</span></td><td>Multi-company, template governance, royalty computation, restricted menu editing</td><td>2–3 wks</td></tr>
+      <tr><td>10</td><td>Self-order kiosk, QR menu, waiter app</td><td><span class="badge b-yes">Yes</span></td><td>Config + branding</td><td>1 wk</td></tr>
+      <tr><td>11</td><td>Clock-in, shifts, GOSI payroll</td><td><span class="badge b-yes">Yes</span></td><td>Config</td><td>1 wk</td></tr>
+      <tr><td>12</td><td>Loyalty, gift cards, promos, timed menus</td><td><span class="badge b-yes">Yes</span></td><td>Config; timed promos small extension</td><td>1 wk</td></tr>
+      <tr><td>13</td><td>Embedded SAMA-licensed payments / lending</td><td><span class="badge b-no">No</span></td><td>Regulatory; partner with Geidea/Moyasar/Tap instead</td><td>—</td></tr>
+      <tr><td>14</td><td>Aggregator API access</td><td><span class="badge b-no">No (not ours to build)</span></td><td>Onboard CodeOx as approved POS partner with each aggregator; run in parallel from day 1</td><td>Weeks–months, external</td></tr>
+      <tr><td>15</td><td>KSA F&amp;B hardware/support channel, brand trust</td><td><span class="badge b-no">No (commercial)</span></td><td>Partner with KSA hardware reseller; reference clients</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>6.2 Timeline</h3>
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>Package</th><th>Includes</th><th>Duration</th><th>Team</th><th>Indicative cost</th></tr></thead>
+    <tbody>
+      <tr><td><b>MVP "Foodics-equivalent"</b></td><td>#1 via purchased module or middleware (3 platforms), #2, #3, #4, #6 (one terminal), #7–#12 config</td><td>~3 months</td><td>1 senior Odoo dev + 1 QA</td><td>SAR 150–250k</td></tr>
+      <tr><td><b>Full parity</b></td><td>+ direct adapters for 3 aggregators, 2+ terminal vendors, #5 hardening, #9 franchise</td><td>5–7 months</td><td>same</td><td>SAR 300–450k</td></tr>
+      <tr><td><b>Upkeep</b></td><td>Aggregator API changes, ZATCA updates, Odoo 20 re-port</td><td>ongoing</td><td>—</td><td>15–20 % of build/yr</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><p>Critical path is <b>#14 — aggregator onboarding</b>, not development. Start the partner requests before any purchase.</p></div>
+
+  <h3>6.3 Delivery plan</h3>
+  <ul class="plain">
+    <li><b>Week 0:</b> file aggregator POS-partner requests (Jahez, HungerStation/DH, Keeta); buy one <code>mn_food_aggregator_pos</code> licence for the pilot…</li>
+  </ul>
+  <div class="note"><b>⚠ Source truncated here.</b> The shared research ended mid-section 6.3. Get the remainder of the delivery plan from the developer before finalising the rollout.</div>
+</section>
+
+<!-- 7 -->
+<section>
+  <h2>7 · Unified Delivery-Aggregator Hub</h2><div class="rule"></div>
+  <p class="lead">Urban Eats' explicit ask: <b>one system to run every delivery platform</b> — HungerStation, Keeta, Noon Food, Jahez, Marsool, ToYou — instead of a counter full of tablets. This is the single strongest wedge for Odoo, and it is fully deliverable.</p>
+
+  <h3>7.1 The problem today</h3>
+  <ul class="plain">
+    <li><b>Tablet chaos:</b> one tablet/portal per aggregator → staff juggle 4–6 devices, miss orders at peak.</li>
+    <li><b>Manual re-keying:</b> delivery orders typed back into the POS → errors, slow tickets, no clean audit trail.</li>
+    <li><b>Menu &amp; price drift:</b> every platform maintained separately → mismatched items, wrong prices, stale availability.</li>
+    <li><b>Stock oversell:</b> no shared inventory → sold-out items still live on aggregators (no auto "86").</li>
+    <li><b>No true delivery margin:</b> commissions and settlements live in each platform's own reports, never consolidated.</li>
+  </ul>
+
+  <h3>7.2 The solution — one hub inside Odoo</h3>
+  <div class="hub">
+    <div>
+      <div class="col-h">Aggregators</div>
+      <div class="chips">
+        <div class="chip">HungerStation</div>
+        <div class="chip">Keeta</div>
+        <div class="chip">Noon Food</div>
+        <div class="chip">Jahez</div>
+        <div class="chip">Marsool · ToYou</div>
+      </div>
+    </div>
+    <div class="arrow">→</div>
+    <div>
+      <div class="col-h">One system</div>
+      <div class="core"><strong>Odoo Aggregator Hub</strong><span>Orders in · menu &amp; stock out · status back · settlement reconciled</span></div>
+    </div>
+    <div class="arrow">→</div>
+    <div>
+      <div class="col-h">Outcomes</div>
+      <div class="out">Straight into POS + KDS</div>
+      <div class="out">Live stock, auto 86</div>
+      <div class="out">One menu, all platforms</div>
+      <div class="out">ZATCA invoice on close</div>
+      <div class="out">Unified margin dashboard</div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>Capability</th><th>What Urban Eats gets</th></tr></thead>
+    <tbody>
+      <tr><td>Order intake</td><td>Every platform's orders land directly in Odoo POS &amp; kitchen display — no tablet, no re-keying</td></tr>
+      <tr><td>Menu-out publishing</td><td>Maintain one menu in Odoo; push items, prices &amp; availability to all platforms — drift gone</td></tr>
+      <tr><td>Live stock / auto-86</td><td>BOM-linked depletion marks items unavailable across all aggregators the moment stock runs out</td></tr>
+      <tr><td>Status sync</td><td>Accepted → preparing → ready → picked-up pushed back to each platform automatically</td></tr>
+      <tr><td>One screen</td><td>Single cashier panel with sound alerts + KDS routing for all platforms; rush-hour pause</td></tr>
+      <tr><td>Settlement &amp; margin</td><td>Commission &amp; payout reconciliation per platform → true net delivery margin, journal entries posted</td></tr>
+      <tr><td>Compliance</td><td>ZATCA e-invoice generated on order close</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>7.3 Two build routes</h3>
+  <div class="two">
+    <div class="pcard pro"><h4>Route A · Direct adapters (own it)</h4><ul>
+      <li>Build <code>cdx_pos_aggregator</code> under CodeOx licence — one adapter per platform</li>
+      <li>No recurring middleware fee; full control; productisable across future F&amp;B clients</li>
+      <li>Needs API / POS-partner access from each aggregator (external onboarding)</li>
+      <li>Start from the <code>mn_food_aggregator_pos</code> framework to save 4–6 weeks on the pilot</li>
+    </ul></div>
+    <div class="pcard con" style="background:var(--primary-50);border-color:var(--primary-100)"><h4 style="color:var(--primary)">Route B · Middleware (fastest to pilot)</h4><ul style="list-style:none">
+      <li style="padding-left:22px;position:relative"><span style="position:absolute;left:0;color:var(--primary);font-weight:800">›</span>Connect once to Deliverect / FeedUs / Urbanpiper — they already hold certified adapters to all KSA platforms</li>
+      <li style="padding-left:22px;position:relative"><span style="position:absolute;left:0;color:var(--primary);font-weight:800">›</span>Live in weeks, minimal per-platform onboarding</li>
+      <li style="padding-left:22px;position:relative"><span style="position:absolute;left:0;color:var(--primary);font-weight:800">›</span>Recurring per-platform SaaS fee; less control over data</li>
+      <li style="padding-left:22px;position:relative"><span style="position:absolute;left:0;color:var(--primary);font-weight:800">›</span>Good bridge: start on middleware, bring high-volume platforms in-house later</li>
+    </ul></div>
+  </div>
+  <p class="lead"><b>Recommendation:</b> middleware (Route B) for a fast pilot on the top 2 platforms, then migrate high-volume platforms to direct adapters (Route A) as the CodeOx F&amp;B product matures.</p>
+
+  <h3>7.4 Platform access — the real critical path</h3>
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>Platform</th><th>Auth</th><th>Access route</th></tr></thead>
+    <tbody>
+      <tr><td>Jahez</td><td>API key + secret</td><td>integration@jahez.net · integration-portal.jahez.net</td></tr>
+      <tr><td>HungerStation</td><td>OAuth 2.0 (Delivery Hero)</td><td>Partner/POS API via account manager · developer.hungerstation.com</td></tr>
+      <tr><td>Keeta</td><td>Partner creds (Meituan)</td><td>merchant.mykeeta.com · developers.mykeeta.com</td></tr>
+      <tr><td>Noon Food</td><td>Partner API <span class="badge b-part">verify availability</span></td><td>Via Noon partner onboarding — confirm POS-API access</td></tr>
+      <tr><td>Marsool · ToYou</td><td>Signed webhook / partner creds</td><td>Merchant support (no public portal) <span class="badge b-part">unconfirmed</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><p><b>Development is not the bottleneck — aggregator onboarding is.</b> API / POS-partner approval takes weeks to months and is external to us. File every request in Week 0, in parallel, before writing a line of adapter code.</p></div>
+
+  <h3>7.5 Phased rollout</h3>
+  <div class="tbl-wrap"><table class="compact">
+    <thead><tr><th>Phase</th><th>Scope</th><th>Duration</th></tr></thead>
+    <tbody>
+      <tr><td><b>Phase 1 · Pilot</b></td><td>Top 2 KSA platforms (Jahez + HungerStation) into the hub via middleware; orders → POS/KDS, live stock, one dashboard</td><td>~4–6 weeks incl. onboarding lag</td></tr>
+      <tr><td><b>Phase 2 · Full coverage</b></td><td>Add Keeta, Noon Food, Marsool, ToYou; menu-out publishing; settlement reconciliation</td><td>+4–6 weeks</td></tr>
+      <tr><td><b>Phase 3 · Own it</b></td><td>Migrate high-volume platforms to direct <code>cdx_pos_aggregator</code> adapters; drop middleware fees where it pays off</td><td>1–2 weeks per platform</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><b>Deployment:</b> the hub needs third-party modules → runs on <b>Odoo.sh or on-premise</b> (not Odoo Online SaaS), in-Kingdom for PDPL.</div>
+</section>
+
+<footer>
+  <div class="cx"><img src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx"></div>
+  <div>CodeOx Technologies · Internal pre-sales document · Tara Holdings / Urban Eats</div>
+  <div>shabeeb.k@code-ox.com · +966 53 571 6437 · <a href="https://code-ox.com">code-ox.com</a></div>
+</footer>
+
+</div>
+</body>
+</html>
