@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odoo vs Foodics — for Urban Eats · CodeOx</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+:root{
+  --primary:#1D4DB3; --primary-d:#0F3460; --primary-900:#081736; --primary-50:#EEF2FC; --primary-100:#E3E9F9;
+  --ink:#0B1220; --muted:#5B6472; --line:#E6E9F0; --bg:#F7F9FD; --panel:#fff;
+  --odoo:#714B67; --odoo-50:#F3ECF1; --foodics:#E8722A;
+  --green:#1E9E6B; --green-50:#E8F7F1;
+  --radius:18px; --sans:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --shadow:0 14px 40px -22px rgba(11,18,32,.4);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);scroll-snap-type:y mandatory;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+.slide{scroll-snap-align:start;width:100vw;height:100vh;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:5vh 6vw;position:relative;overflow:hidden}
+.slide.top{align-items:flex-start;padding-top:10vh}
+.inner{width:100%;max-width:1300px;position:relative;z-index:2}
+.slide.light{background:var(--bg)}
+.slide.white{background:var(--panel)}
+.slide.navy{background:linear-gradient(150deg,var(--primary-900),var(--primary-d));color:#fff}
+
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--primary);margin-bottom:1rem}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary)}
+.navy .eyebrow{color:#8FB4FF}.navy .eyebrow::before{background:#8FB4FF}
+.h{font-size:clamp(1.9rem,4.2vw,3rem);font-weight:800;line-height:1.08;letter-spacing:-.01em;color:var(--primary-900);max-width:20ch}
+.navy .h{color:#fff}
+.rule{width:54px;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary-d));border-radius:99px;margin:.5rem 0 0}
+.lead{font-size:clamp(1.05rem,1.5vw,1.28rem);line-height:1.55;margin-top:1rem;max-width:64ch;color:var(--muted)}
+.lead b{color:var(--ink)}
+.foot{position:absolute;left:6vw;bottom:3.4vh;font-size:.74rem;font-weight:600;color:var(--muted);z-index:3}
+.navy .foot{color:#9FB2D8}
+.pageno{position:absolute;right:6vw;bottom:3.4vh;font-size:.74rem;font-weight:700;color:var(--muted);z-index:3}
+.navy .pageno{color:#9FB2D8}
+
+/* cover */
+.wordmarks{display:flex;align-items:center;gap:.9rem;margin-bottom:2.4rem;font-weight:700;font-size:1.1rem}
+.wordmarks .g{color:#DFC489}
+.wordmarks .x{opacity:.5;font-weight:400}
+.wordmarks .c{color:#fff}
+.title{font-weight:800;font-size:clamp(2.6rem,6.4vw,5rem);line-height:1.02;letter-spacing:-.02em;color:#fff;max-width:18ch}
+.title .em{color:#8FB4FF}
+.cover-sub{font-size:clamp(1.05rem,1.7vw,1.4rem);color:#B9C8E8;margin-top:1.8rem;max-width:46ch}
+.cover-foot{position:absolute;left:6vw;bottom:6vh;font-size:.92rem;color:#8296C0;z-index:3}
+
+/* difference two-col */
+.diff{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:2.4rem}
+.dcard{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:2rem 2.1rem;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.dcard::before{content:"";position:absolute;top:0;left:0;right:0;height:4px}
+.dcard.foo::before{background:var(--foodics)}
+.dcard.win{border-color:var(--primary-100);background:linear-gradient(160deg,var(--primary-50),#fff)}
+.dcard.win::before{background:var(--primary)}
+.dcard .tag{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin-bottom:.7rem}
+.dcard.foo .tag{color:var(--foodics)}.dcard.win .tag{color:var(--primary)}
+.dcard .nm{font-size:1.7rem;font-weight:800;line-height:1.06;margin-bottom:.8rem;color:var(--primary-900)}
+.dcard p{font-size:1.02rem;line-height:1.55;color:var(--muted)}
+.dcard p b{color:var(--ink)}
+
+/* table */
+.tbl{margin-top:1.8rem;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.vsrow{display:grid;grid-template-columns:1.5fr 1fr 1.2fr;gap:1rem;padding:.62rem 1.4rem;align-items:center;border-top:1px solid var(--line)}
+.vsrow:nth-child(even){background:var(--bg)}
+.vsrow.head{background:var(--primary-900);color:#fff;border-top:none;padding:.85rem 1.4rem}
+.vsrow.head .c{font-weight:700;font-size:.9rem}
+.vsrow .k{font-weight:700;font-size:.95rem}
+.vsrow .c{font-size:.9rem;color:var(--muted)}
+.vsrow .win{color:var(--odoo);font-weight:700;display:flex;align-items:center;gap:.4rem}
+.vsrow .win::before{content:"✓";color:var(--green);font-weight:800}
+
+/* hub */
+.hub{display:flex;align-items:stretch;gap:1.3rem;margin-top:2.2rem}
+.hub .col{flex:1;display:flex;flex-direction:column;gap:.65rem}
+.hub .colh{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.hub .chip{background:#fff;border:1px solid var(--line);border-radius:10px;padding:.8rem 1.05rem;font-size:.98rem;font-weight:600;box-shadow:0 6px 16px -14px rgba(11,18,32,.3)}
+.hub .core{flex:0 0 auto;align-self:center;border-radius:16px;padding:2rem 1.7rem;text-align:center;min-width:230px;
+  background:linear-gradient(150deg,var(--odoo),#5B3B52);color:#fff;box-shadow:0 20px 44px -18px rgba(113,75,103,.6)}
+.hub .core strong{display:block;font-size:1.5rem;font-weight:800;margin-bottom:.35rem}
+.hub .core span{font-size:.85rem;color:#EBDCE5}
+.hub .arrow{align-self:center;color:var(--primary);font-size:1.9rem;font-weight:800;flex:0 0 auto}
+
+/* parity grid */
+.par{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2rem}
+.pitem{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1.15rem 1.3rem;box-shadow:0 8px 20px -18px rgba(11,18,32,.3);display:grid;grid-template-columns:1.4rem 1fr;gap:.7rem;align-items:start}
+.pitem .ck{color:var(--green);font-weight:800}
+.pitem .pn{font-weight:700;font-size:1rem;color:var(--ink)}
+.pitem .pd{font-size:.85rem;color:var(--muted);margin-top:.15rem}
+
+/* benefits */
+.benefits{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2rem}
+.bfit{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1.25rem 1.4rem;box-shadow:0 8px 20px -18px rgba(11,18,32,.3);display:grid;grid-template-columns:2.6rem 1fr;gap:1rem;align-items:start}
+.bfit .bn{font-size:1.5rem;font-weight:800;color:var(--primary);line-height:1}
+.bfit .bt{font-weight:700;font-size:1.08rem;color:var(--primary-900);margin-bottom:.2rem}
+.bfit .bd{font-size:.92rem;color:var(--muted);line-height:1.45}
+
+/* moves */
+.moves{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:2.2rem}
+.move{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.7rem 1.9rem;box-shadow:var(--shadow)}
+.move h3{font-size:1.3rem;font-weight:800;color:var(--primary-900);margin-bottom:.6rem}
+.move p{font-size:1rem;line-height:1.55;color:var(--muted)}
+.move p b{color:var(--ink)}
+.verdict{margin-top:1.8rem;background:linear-gradient(135deg,var(--primary),var(--primary-d));color:#EAF0FF;border-radius:var(--radius);padding:1.4rem 1.8rem;font-size:1.1rem;font-weight:600;box-shadow:0 16px 34px -18px rgba(29,77,179,.5)}
+.verdict b{color:#FFD9A8}
+
+/* close */
+.tagline{margin-top:1.8rem;font-size:1.5rem;font-weight:700;color:#8FB4FF}
+.sig{margin-top:2rem;font-size:1rem;color:#B9C8E8}
+.sig b{color:#fff;font-weight:700}
+.contact{margin-top:.5rem;font-size:.92rem;color:#8296C0}
+.contact a{color:#8FB4FF;text-decoration:none}
+
+.nav{position:fixed;right:18px;bottom:16px;z-index:50;display:flex;gap:8px}
+.nav button{width:34px;height:34px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-size:1rem;cursor:pointer;box-shadow:var(--shadow)}
+.nav button:hover{background:var(--primary-d)}
+
+@media print{body{scroll-snap-type:none}.slide{page-break-after:always;height:100vh}.nav{display:none}@page{size:landscape}}
+@media(max-width:860px){.diff,.benefits,.moves{grid-template-columns:1fr}.par{grid-template-columns:1fr 1fr}.slide{overflow-y:auto}.hub{flex-direction:column}.hub .arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+
+<!-- 1 COVER -->
+<section class="slide navy" id="s1">
+  <div class="inner">
+    <div class="wordmarks"><span class="g">TARA HOLDING</span><span class="x">×</span><span class="c">CodeOx</span></div>
+    <h1 class="title">Foodics, or <span class="em">one platform?</span></h1>
+    <p class="cover-sub">A side-by-side look at what changes when Urban Eats runs on the same Odoo the group already trusts.</p>
+  </div>
+  <div class="cover-foot">CodeOx Technologies · Odoo Silver Partner · September 2026</div>
+</section>
+
+<!-- 2 CORE DIFFERENCE -->
+<section class="slide light top" id="s2">
+  <div class="inner">
+    <div class="eyebrow">The core difference</div>
+    <h2 class="h">A restaurant tool, or a business platform.</h2><div class="rule"></div>
+    <div class="diff">
+      <div class="dcard foo">
+        <div class="tag">Foodics</div>
+        <div class="nm">A specialised POS</div>
+        <p>Excellent at the till and the dine-in floor — it's built for exactly that. But it stops at the front of house: <b>accounting, procurement, HR and eCommerce all live in separate tools</b> you buy and connect.</p>
+      </div>
+      <div class="dcard win">
+        <div class="tag">Odoo</div>
+        <div class="nm">One business platform</div>
+        <p>POS, inventory &amp; recipes, accounting &amp; ZATCA, HR, eCommerce and B2B in a <b>single system — the same Odoo Tara Holding already runs.</b> One data model, one login, one consolidated group.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Odoo vs Foodics · for Urban Eats</div><div class="pageno">02 / 08</div>
+</section>
+
+<!-- 3 FEATURE TABLE -->
+<section class="slide white top" id="s3">
+  <div class="inner">
+    <div class="eyebrow">Feature by feature</div>
+    <h2 class="h">The full picture, side by side.</h2><div class="rule"></div>
+    <div class="tbl">
+      <div class="vsrow head"><div class="c" style="color:#fff">Capability</div><div class="c" style="color:#9FB2D8">Foodics</div><div class="c" style="color:#fff">Odoo</div></div>
+      <div class="vsrow"><div class="k">Hardware</div><div class="c">iPad only</div><div class="c win">Any device + IoT Box</div></div>
+      <div class="vsrow"><div class="k">Accounting &amp; GL</div><div class="c">None — export to an ERP</div><div class="c win">Full, built in</div></div>
+      <div class="vsrow"><div class="k">Procurement &amp; purchasing</div><div class="c">Limited</div><div class="c win">Full</div></div>
+      <div class="vsrow"><div class="k">Recipes, food cost &amp; waste</div><div class="c">Native</div><div class="c win">Native — true cost per brand</div></div>
+      <div class="vsrow"><div class="k">ZATCA e-invoicing</div><div class="c">B2C native · B2B add-on</div><div class="c win">B2B + B2C native</div></div>
+      <div class="vsrow"><div class="k">Delivery aggregators</div><div class="c">One-by-one</div><div class="c win">One unified hub — every platform</div></div>
+      <div class="vsrow"><div class="k">Mada payments</div><div class="c">Native</div><div class="c win">Mada via certified terminals</div></div>
+      <div class="vsrow"><div class="k">Multi-branch &amp; franchise</div><div class="c">Yes</div><div class="c win">Yes — multi-company</div></div>
+      <div class="vsrow"><div class="k">HR &amp; payroll (GOSI/WPS)</div><div class="c">Advanced tier</div><div class="c win">Included</div></div>
+      <div class="vsrow"><div class="k">eCommerce &amp; online ordering</div><div class="c">Bolt-on</div><div class="c win">Same system · 0% commission</div></div>
+      <div class="vsrow"><div class="k">Data ownership</div><div class="c">Vendor cloud</div><div class="c win">You own it · in-Kingdom</div></div>
+      <div class="vsrow"><div class="k">Cost as branches grow</div><div class="c">Climbs per outlet</div><div class="c win">No per-branch fee</div></div>
+    </div>
+  </div>
+  <div class="foot">Odoo vs Foodics · for Urban Eats</div><div class="pageno">03 / 08</div>
+</section>
+
+<!-- 4 AGGREGATOR HUB -->
+<section class="slide light top" id="s4">
+  <div class="inner">
+    <div class="eyebrow">Your number-one ask</div>
+    <h2 class="h">One system for every delivery platform.</h2><div class="rule"></div>
+    <div class="hub">
+      <div class="col">
+        <div class="colh">Every aggregator</div>
+        <div class="chip">HungerStation</div>
+        <div class="chip">Keeta</div>
+        <div class="chip">Noon Food</div>
+        <div class="chip">Jahez</div>
+        <div class="chip">Marsool · ToYou</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="core"><strong>Odoo Aggregator Hub</strong><span>one place, every order</span></div>
+      <div class="arrow">→</div>
+      <div class="col">
+        <div class="colh">Into one backbone</div>
+        <div class="chip">Straight into POS &amp; kitchen</div>
+        <div class="chip">Live stock, auto-86</div>
+        <div class="chip">One menu, published everywhere</div>
+        <div class="chip">Status synced back to each app</div>
+        <div class="chip">Settlement &amp; true delivery margin</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Odoo vs Foodics · for Urban Eats</div><div class="pageno">04 / 08</div>
+</section>
+
+<!-- 5 NO TRADE-OFF -->
+<section class="slide white top" id="s5">
+  <div class="inner">
+    <div class="eyebrow">No trade-off</div>
+    <h2 class="h">Everything Foodics does — on Odoo.</h2><div class="rule"></div>
+    <div class="par">
+      <div class="pitem"><div class="ck">✓</div><div><div class="pn">Delivery aggregators</div><div class="pd">Unified hub, all platforms</div></div></div>
+      <div class="pitem"><div class="ck">✓</div><div><div class="pn">Recipe food cost &amp; waste</div><div class="pd">Theoretical vs actual, per brand</div></div></div>
+      <div class="pitem"><div class="ck">✓</div><div><div class="pn">Kitchen display (KDS)</div><div class="pd">Station routing, timers, expo</div></div></div>
+      <div class="pitem"><div class="ck">✓</div><div><div class="pn">Restaurant POS UX</div><div class="pd">Modifiers, seats, tips, void reasons</div></div></div>
+      <div class="pitem"><div class="ck">✓</div><div><div class="pn">Mada terminals</div><div class="pd">Geidea / NearPay certified</div></div></div>
+      <div class="pitem"><div class="ck">✓</div><div><div class="pn">Central kitchen</div><div class="pd">Inter-branch transfers &amp; routes</div></div></div>
+      <div class="pitem"><div class="ck">✓</div><div><div class="pn">Multi-branch &amp; franchise</div><div class="pd">Branch P&amp;L, central menu control</div></div></div>
+      <div class="pitem"><div class="ck">✓</div><div><div class="pn">Self-order kiosk &amp; QR menu</div><div class="pd">Native in Odoo 19</div></div></div>
+      <div class="pitem"><div class="ck">✓</div><div><div class="pn">Loyalty, gift cards, promos</div><div class="pd">Shared across every channel</div></div></div>
+    </div>
+    <p class="lead" style="margin-top:1.4rem"><b>Full restaurant parity in roughly three months</b> — you give up nothing, and gain the rest of the platform.</p>
+  </div>
+  <div class="foot">Odoo vs Foodics · for Urban Eats</div><div class="pageno">05 / 08</div>
+</section>
+
+<!-- 6 WHERE ODOO WINS -->
+<section class="slide light top" id="s6">
+  <div class="inner">
+    <div class="eyebrow">Where Odoo pulls ahead</div>
+    <h2 class="h">The advantages that matter to Urban Eats.</h2><div class="rule"></div>
+    <div class="benefits">
+      <div class="bfit"><div class="bn">01</div><div><div class="bt">One platform, not five</div><div class="bd">POS, inventory, accounting, HR &amp; eCommerce in one system.</div></div></div>
+      <div class="bfit"><div class="bn">02</div><div><div class="bt">You own your data</div><div class="bd">Open PostgreSQL, exportable, in-Kingdom. No cloud lock-in.</div></div></div>
+      <div class="bfit"><div class="bn">03</div><div><div class="bt">Cheaper as you scale</div><div class="bd">No per-branch or per-terminal fee; accounting &amp; HR included.</div></div></div>
+      <div class="bfit"><div class="bn">04</div><div><div class="bt">ZATCA, B2B + B2C</div><div class="bd">Full e-invoicing native — no add-on.</div></div></div>
+      <div class="bfit"><div class="bn">05</div><div><div class="bt">One brand backbone</div><div class="bd">Every Urban Eats concept on one multi-company system.</div></div></div>
+      <div class="bfit"><div class="bn">06</div><div><div class="bt">Own your channel</div><div class="bd">Website, ordering &amp; loyalty in-house = 0% aggregator commission.</div></div></div>
+    </div>
+  </div>
+  <div class="foot">Odoo vs Foodics · for Urban Eats</div><div class="pageno">06 / 08</div>
+</section>
+
+<!-- 7 STRAIGHT TALK -->
+<section class="slide white top" id="s7">
+  <div class="inner">
+    <div class="eyebrow">Straight talk</div>
+    <h2 class="h">What it takes to get there.</h2><div class="rule"></div>
+    <div class="moves">
+      <div class="move">
+        <h3>You already have the foundation</h3>
+        <p>Tara Holding runs Odoo today. Bringing Urban Eats onto it is an <b>extension of a system you trust</b> — not a leap to something new. We build the restaurant layer on top.</p>
+      </div>
+      <div class="move">
+        <h3>The one real dependency</h3>
+        <p>Foodics is turnkey POS out of the box — fair to say. Odoo reaches full restaurant parity in ~3 months, and the critical path isn't development, it's <b>aggregator partner onboarding.</b> We start those requests on day zero.</p>
+      </div>
+    </div>
+    <div class="verdict">The trade is clear: a short build now, for <b>one platform that runs the whole business — and the whole group — after.</b></div>
+  </div>
+  <div class="foot">Odoo vs Foodics · for Urban Eats</div><div class="pageno">07 / 08</div>
+</section>
+
+<!-- 8 CLOSE -->
+<section class="slide navy" id="s8">
+  <div class="inner">
+    <div class="eyebrow">Next step</div>
+    <h1 class="title" style="font-size:clamp(2.2rem,5vw,3.9rem)">Bring Urban Eats onto the platform you already trust.</h1>
+    <p class="tagline">One system. Every brand. Your data.</p>
+    <div class="sig"><b>Shabeeb K</b> · Head of Operations · CodeOx Technologies LLP</div>
+    <div class="contact">shabeeb.k@code-ox.com · +966 53 571 6437 · <a href="https://code-ox.com">code-ox.com</a></div>
+  </div>
+  <div class="pageno">08 / 08</div>
+</section>
+
+<div class="nav">
+  <button onclick="go(-1)" aria-label="Previous">‹</button>
+  <button onclick="go(1)" aria-label="Next">›</button>
+</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+function cur(){let c=0,b=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<b){b=d;c=k}});return c}
+function go(d){const i=Math.max(0,Math.min(slides.length-1,cur()+d));slides[i].scrollIntoView({behavior:'smooth'})}
+addEventListener('keydown',e=>{if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(1)}if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}});
+</script>
+</body>
+</html>
