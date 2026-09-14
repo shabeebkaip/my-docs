@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qaf Coffee × CodeOx — Getting More from the Odoo You Already Run</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --espresso:#241209; --espresso-d:#180B04; --panel:#3A2114;
+  --amber:#C87A3F; --amber-l:#E0A063; --amber-ink:#8A4E28;
+  --amber-line:rgba(200,122,63,.34); --amber-line-2:rgba(200,122,63,.55);
+  --crema:#F4ECDD; --ink:#2A1B10; --ink-70:rgba(42,27,16,.72);
+  --crema-70:rgba(244,236,221,.72); --crema-55:rgba(244,236,221,.55);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--espresso-d);color:var(--crema);scroll-snap-type:y mandatory;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.serif{font-family:var(--serif)}
+a{color:inherit}
+
+.slide{scroll-snap-align:start;width:100vw;min-height:100vh;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;padding:7vh 8vw}
+.slide.anchor-top{justify-content:flex-start;padding-top:12vh}
+.slide.dark{background:var(--espresso);color:var(--crema)}
+.slide.deep{background:var(--espresso-d);color:var(--crema)}
+.slide.cream{background:var(--crema);color:var(--ink)}
+.inner{width:100%;max-width:1360px;margin:0 auto;position:relative;z-index:2}
+
+/* corner glow + thin frame, dark slides */
+.dark::before,.deep::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(640px 640px at 96% -6%, rgba(200,122,63,.10), transparent 60%),
+             radial-gradient(520px 520px at 0% 104%, rgba(200,122,63,.06), transparent 60%);}
+.dark::after,.deep::after{content:"";position:absolute;inset:22px;z-index:0;pointer-events:none;border:1px solid rgba(200,122,63,.16)}
+#s1::after{display:none}
+
+/* signature arc */
+.arc{position:absolute;width:64vw;height:64vw;max-width:920px;max-height:920px;
+  border:1px solid var(--amber-line);border-radius:50%;top:-32vw;right:-26vw;z-index:0;pointer-events:none}
+.arc.small{width:30vw;height:30vw;max-width:420px;max-height:420px;bottom:-16vw;left:-12vw;top:auto;right:auto}
+
+/* cover backdrop */
+.cover-photo{position:absolute;inset:0;z-index:0;background-color:var(--espresso-d);
+  background-image:
+    radial-gradient(130% 95% at 84% 14%, rgba(200,122,63,.20), transparent 55%),
+    radial-gradient(95% 85% at 6% 106%, rgba(58,33,20,.6), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(200,122,63,.05) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(-45deg, rgba(200,122,63,.05) 0 1px, transparent 1px 26px);}
+.cover-photo::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 45%, transparent, rgba(24,11,4,.4));}
+/* giant Arabic Qaf watermark */
+.qaf-mark{position:absolute;z-index:1;font-family:var(--serif);font-weight:700;color:rgba(200,122,63,.09);
+  font-size:58vw;line-height:1;right:-4vw;bottom:-20vh;pointer-events:none;user-select:none}
+
+/* type */
+.eyebrow{display:inline-flex;align-items:center;gap:.7em;font-family:var(--sans);font-weight:600;
+  font-size:.8rem;letter-spacing:.28em;text-transform:uppercase;color:var(--amber-l);margin-bottom:1.7rem}
+.cream .eyebrow{color:var(--amber-ink)}
+.eyebrow::before{content:"";width:30px;height:1px;background:currentColor;opacity:.8}
+h2.h{font-weight:600;font-size:clamp(2.2rem,4.6vw,3.7rem);line-height:1.1;letter-spacing:-.005em;max-width:18ch}
+.lead{font-family:var(--sans);font-weight:400;font-size:clamp(1.15rem,1.5vw,1.38rem);line-height:1.6;color:var(--crema);max-width:60ch;margin-top:1.1rem}
+.cream .lead{color:var(--ink)}
+.rule{height:1px;background:var(--amber-line);width:100%;margin:2rem 0}
+.foot{position:absolute;left:8vw;bottom:3.4vh;font-size:.72rem;letter-spacing:.04em;color:var(--crema-55);z-index:3}
+.cream .foot{color:var(--ink-70)}
+.pageno{position:absolute;right:8vw;bottom:3.4vh;font-size:.72rem;letter-spacing:.06em;color:var(--amber-l);z-index:3;font-weight:600}
+.cream .pageno{color:var(--amber-ink)}
+
+/* cover */
+.cover-wordmarks{display:flex;align-items:center;gap:1.1rem;margin-bottom:3rem;font-family:var(--serif)}
+.wm-qaf{display:flex;align-items:baseline;gap:.5rem}
+.wm-qaf .ar{font-size:2.1rem;font-weight:700;color:var(--amber-l);line-height:1}
+.wm-qaf .en{font-size:1.2rem;font-weight:600;letter-spacing:.18em;color:var(--amber-l);text-transform:uppercase}
+.wm-x{color:var(--amber-ink);font-family:var(--sans);font-size:1.15rem}
+.codeox-mark{height:28px;width:auto;display:block}
+.t-h{font-weight:600;font-size:clamp(2.8rem,6.6vw,5.6rem);line-height:1.06;letter-spacing:-.01em;max-width:17ch}
+.t-h em{font-style:italic;color:var(--amber-l)}
+.t-sub{font-family:var(--sans);font-size:clamp(1.1rem,1.6vw,1.4rem);color:var(--crema-70);margin-top:2rem;max-width:56ch;line-height:1.6}
+
+/* folio grid (business map / questions) */
+.folio-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:4.5rem;row-gap:2.2rem;margin-top:2.6rem}
+.fcard{display:grid;grid-template-columns:2.4rem 1fr;column-gap:1.2rem;padding-top:1.4rem;border-top:1px solid var(--amber-line)}
+.fcard .idx{font-family:var(--serif);font-size:1.3rem;font-weight:600;color:var(--amber);opacity:.75;line-height:1;padding-top:.4rem}
+.fcard .nm{font-family:var(--serif);font-size:1.6rem;font-weight:600;color:var(--amber-l);line-height:1.12}
+.cream .fcard .nm{color:var(--amber-ink)}
+.fcard .cat{font-family:var(--sans);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;opacity:.6;font-weight:600;margin:.4rem 0 .6rem}
+.fcard .ds{font-size:1.02rem;line-height:1.5;opacity:.92}
+@media(max-width:820px){.folio-grid{grid-template-columns:1fr;row-gap:1.5rem}}
+
+/* gap cards */
+.frows{counter-reset:fr;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.4rem}
+.frow{counter-increment:fr;display:block;padding:1.5rem 1.6rem 1.6rem;border:1px solid var(--amber-line);border-top:2px solid var(--amber);border-radius:14px;background:linear-gradient(160deg,#fff,#FBF5EA);box-shadow:0 18px 36px -24px rgba(0,0,0,.32)}
+.frow::before{content:"0" counter(fr);font-family:var(--serif);font-size:2.1rem;font-weight:600;color:var(--amber);opacity:.55;display:block;margin-bottom:.5rem;line-height:1}
+.frow h3{font-weight:600;font-size:1.22rem;color:var(--amber-ink);line-height:1.2;margin-bottom:.45rem}
+.frow p{font-size:.9rem;line-height:1.5;color:var(--ink-70)}
+.frow.flag{background:linear-gradient(160deg,#FBEFE1,#F6E4CF);border-top-color:#A8541F}
+.frow.flag h3{color:#8A3E12}
+.frow .tagm{display:inline-block;margin-top:.6rem;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#A8541F;border:1px solid rgba(168,84,31,.4);border-radius:999px;padding:.2rem .6rem}
+@media(max-width:900px){.frows{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.frows{grid-template-columns:1fr}}
+
+/* hub diagram */
+.hub{display:flex;align-items:stretch;gap:1.5rem;margin-top:2.4rem;flex-wrap:wrap}
+.hub .col{flex:1;min-width:160px;display:flex;flex-direction:column;gap:.7rem}
+.hub .colh{font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--amber-l);margin-bottom:.4rem}
+.hub .chip{border:1px solid var(--amber-line);border-radius:6px;padding:.85rem 1.05rem;font-size:.98rem;color:var(--crema);background:rgba(24,11,4,.6)}
+.hub .core{flex:0 0 auto;align-self:center;border:1.5px solid var(--amber);border-radius:10px;padding:1.9rem 1.6rem;text-align:center;
+  background:linear-gradient(160deg,rgba(200,122,63,.2),rgba(200,122,63,.06));min-width:210px;
+  box-shadow:0 0 0 6px rgba(200,122,63,.06),0 22px 50px -22px rgba(0,0,0,.6)}
+.hub .core strong{display:block;font-family:var(--serif);font-weight:600;font-size:1.7rem;color:var(--amber-l);margin-bottom:.35rem;line-height:1.15}
+.hub .core span{font-size:.82rem;color:var(--crema-70)}
+.hub .arrow{align-self:center;color:var(--amber);font-size:1.9rem;flex:0 0 auto}
+.honest{margin-top:2.2rem;padding-top:1.3rem;border-top:1px solid var(--amber-line);font-size:.98rem;color:var(--crema-70);max-width:74ch;line-height:1.6}
+.honest b{color:var(--amber-l);font-weight:600}
+
+/* benefit cards */
+.benefits{display:grid;grid-template-columns:1fr 1fr;column-gap:3rem;row-gap:1.3rem;margin-top:2rem}
+.bfit{display:grid;grid-template-columns:2.2rem 1fr;column-gap:1rem;padding:1.2rem 1.35rem;background:linear-gradient(160deg,#fff,#FBF5EA);border:1px solid var(--amber-line);border-top:2px solid var(--amber);border-radius:13px;box-shadow:0 14px 30px -22px rgba(0,0,0,.35)}
+.bfit .bn{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--amber-ink);line-height:1;padding-top:.25rem}
+.bfit .bt{font-family:var(--serif);font-size:1.28rem;font-weight:600;color:var(--ink);line-height:1.14;margin-bottom:.15rem}
+.bfit .bd{font-size:.95rem;line-height:1.46;color:var(--ink-70)}
+@media(max-width:820px){.benefits{grid-template-columns:1fr}}
+
+/* health-check moves */
+.moves{display:grid;grid-template-columns:1fr 1fr;gap:2.6rem;margin-top:2.6rem}
+.move{border-top:1px solid var(--amber);padding-top:1.2rem}
+.move .tag{font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-ink);margin-bottom:.6rem}
+.cream .move .tag{color:var(--amber-ink)}
+.move h3{font-size:1.55rem;font-weight:600;margin-bottom:.7rem;line-height:1.25}
+.move p{font-size:1.02rem;line-height:1.58;color:var(--ink-70)}
+.move ul{list-style:none;margin-top:.4rem}
+.move li{position:relative;padding-left:1.3rem;margin-bottom:.55rem;font-size:.98rem;line-height:1.45;color:var(--ink-70)}
+.move li::before{content:"";position:absolute;left:0;top:.6em;width:7px;height:1px;background:var(--amber-ink)}
+@media(max-width:820px){.moves{grid-template-columns:1fr;gap:1.6rem}}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.8rem;margin-top:3rem}
+.stat{border-top:1px solid var(--amber);padding-top:1.1rem}
+.stat .n{font-family:var(--serif);font-weight:600;font-size:clamp(2.2rem,4vw,3.1rem);color:var(--amber-l);line-height:1;letter-spacing:-.01em}
+.stat .l{font-size:.92rem;color:var(--crema-70);margin-top:.55rem;line-height:1.4}
+.proof{margin-top:2.4rem;padding-top:1.5rem;border-top:1px solid var(--amber-line);font-size:1.02rem;color:var(--crema-70);line-height:1.6;max-width:74ch}
+.proof b{color:var(--amber-l);font-weight:600}
+@media(max-width:820px){.stats{grid-template-columns:1fr 1fr;gap:1.4rem}}
+
+/* close */
+.cta{display:inline-flex;align-items:center;gap:.5em;margin-top:2rem;font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--amber-l)}
+.cta::after{content:"→";font-family:var(--sans);color:var(--amber)}
+.tagline{margin-top:2.6rem;font-family:var(--serif);font-style:italic;font-size:1.6rem;color:var(--amber-l);max-width:30ch;line-height:1.3}
+.sig{margin-top:2.6rem;font-size:1.04rem;font-weight:600;color:var(--crema)}
+.contact{margin-top:.5rem;font-size:.95rem;color:var(--crema-70);line-height:1.7}
+.contact a{color:var(--amber-l);text-decoration:none}
+.contact a:hover{text-decoration:underline}
+.close-logo{height:26px;margin-top:2.4rem;opacity:.9}
+
+@media(max-width:820px){.slide{padding:9vh 7vw}}
+</style>
+</head>
+<body>
+
+<!-- 1 · COVER -->
+<section class="slide deep" id="s1">
+  <div class="cover-photo"></div>
+  <div class="qaf-mark">ق</div>
+  <div class="inner">
+    <div class="cover-wordmarks">
+      <span class="wm-qaf"><span class="ar">ق</span><span class="en">Qaf Coffee</span></span>
+      <span class="wm-x">×</span>
+      <img class="codeox-mark" src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+    </div>
+    <h1 class="t-h">Getting more out of the <em>Odoo</em> you already run.</h1>
+    <p class="t-sub">A working session on turning one roastery, ten cafés, an online store and a growing franchise into a single, connected system — where every roast, sale and cup lands in one set of books.</p>
+  </div>
+  <div class="foot">Prepared for Qaf Group for Beverages · مجموعة قاف · by CodeOx Technologies — Odoo Silver Partner</div>
+  <div class="pageno">01</div>
+</section>
+
+<!-- 2 · WE STUDIED YOUR BUSINESS -->
+<section class="slide cream anchor-top">
+  <div class="inner">
+    <div class="eyebrow">Before we talk software</div>
+    <h2 class="h">We looked at how Qaf actually runs.</h2>
+    <p class="lead">Six moving parts, one brand. Each one puts a different demand on Odoo — and it's where they meet that most value is won or lost.</p>
+    <div class="folio-grid">
+      <div class="fcard"><div class="idx">01</div><div><div class="nm">The Roastery</div><div class="cat">Manufacturing · Al Khobar</div><div class="ds">Green beans imported from farms worldwide, roasted and packed in-house by an SCA-certified team. Multiple crops, multiple roast profiles.</div></div></div>
+      <div class="fcard"><div class="idx">02</div><div><div class="nm">~10 Cafés</div><div class="cat">Point of Sale · two regions</div><div class="ds">Eastern Province and Riyadh — flagship in Khobar Olaya, plus a 24-hour Jubail site and a host location inside a hospital. Each one a sales point that consumes roasted stock.</div></div></div>
+      <div class="fcard"><div class="idx">03</div><div><div class="nm">Online Store</div><div class="cat">E-commerce · Salla · AR / EN</div><div class="ds">qafcoffee.com selling crops, drip sachets (أظرف), capsules (كبسولات), Saudi coffee and brewing tools to customers across the Kingdom.</div></div></div>
+      <div class="fcard"><div class="idx">04</div><div><div class="nm">B2B Wholesale</div><div class="cat">Supply · cafés &amp; retailers</div><div class="ds">Beans and equipment supplied to other cafés and stores — today taken by email and WhatsApp, without a self-serve pricelist or portal.</div></div></div>
+      <div class="fcard"><div class="idx">05</div><div><div class="nm">Franchise</div><div class="cat">Expansion · 5-year model</div><div class="ds">A registered franchise programme — a 9% ongoing royalty and multi-branch model that adds royalty billing and separate entities to the picture.</div></div></div>
+      <div class="fcard"><div class="idx">06</div><div><div class="nm">One Group, One P&amp;L</div><div class="cat">Finance · the whole</div><div class="ds">Roastery + cafés + store + wholesale need to close as one group, with a clear margin per branch and per channel — not six disconnected islands.</div></div></div>
+    </div>
+  </div>
+  <div class="pageno">02</div>
+</section>
+
+<!-- 3 · SECTION INTRO -->
+<section class="slide dark">
+  <div class="arc"></div>
+  <div class="inner">
+    <div class="eyebrow">The honest starting point</div>
+    <h2 class="h">A coffee business runs on flows Odoo doesn't model on day one.</h2>
+    <p class="lead">You're already an Odoo customer — that's the right foundation, and a real head start. But out of the box, Odoo doesn't know that a kilo of green coffee becomes 800 grams of roast, or that an 8-gram dose leaves the counter with every espresso. Those rules have to be built in. Until they are, the numbers drift.</p>
+    <p class="lead" style="margin-top:1.4rem;color:var(--crema-70)">None of what follows is a criticism of anyone's earlier work. It's the normal set of maturing steps every roastery-plus-café group goes through as it scales on Odoo. We'd rather name them openly than pretend they don't exist.</p>
+  </div>
+  <div class="foot">Qaf Coffee × CodeOx</div>
+  <div class="pageno">03</div>
+</section>
+
+<!-- 4 · WHERE VALUE LEAKS -->
+<section class="slide cream anchor-top">
+  <div class="inner">
+    <div class="eyebrow">Worth checking together</div>
+    <h2 class="h">Where value quietly leaks in a coffee Odoo.</h2>
+    <p class="lead">Nine places a roastery-and-café group typically outgrows a first Odoo setup. We'll confirm which apply to you in discovery — some may already be solved.</p>
+    <div class="frows">
+      <div class="frow flag"><h3>Roasting not modelled</h3><p>Green → roasted loses 15–20% to moisture. Without a bill of materials with yield and scrap, and a lot per roast batch, stock value and cost-of-goods are wrong at the root.</p><span class="tagm">Biggest technical gap</span></div>
+      <div class="frow"><h3>The unit-of-measure chain</h3><p>kg green → kg roasted → 250g / 500g / 1kg packs → an 8g dose at the counter. If units are kept flat, everything downstream miscounts.</p></div>
+      <div class="frow"><h3>POS ↔ back office</h3><p>Ten counters selling all day. Sales, stock and cost should flow into Odoo live — not as a manual daily journal entry with stock reconciled by hand.</p></div>
+      <div class="frow"><h3>Salla ↔ Odoo integration</h3><p>Your store runs on Salla — keep it. A proper two-way connector syncs products, prices, orders, stock and customers between Salla and Odoo, so online orders drop straight into the books and stock stays true. Without it, orders get re-keyed and the two never agree.</p></div>
+      <div class="frow"><h3>Multi-location discipline</h3><p>Roastery + central warehouse + ~10 branches. Without clean internal transfers you get negative stock; without a branch analytic you get no per-branch profit.</p></div>
+      <div class="frow"><h3>ZATCA Phase 2</h3><p>Simplified QR invoices from the counter, cleared B2B invoices for wholesale. A common place for a setup to stall or run outside Odoo.</p></div>
+      <div class="frow"><h3>Arabic receipts &amp; invoices</h3><p>Bilingual, right-to-left receipts and tax invoices that render correctly every time — usually needs custom report templates.</p></div>
+      <div class="frow"><h3>KSA payroll</h3><p>Shift-based baristas across branches, with GOSI, WPS / Mudad and end-of-service. Not something Odoo handles out of the box for Saudi.</p></div>
+      <div class="frow"><h3>Franchise &amp; intercompany</h3><p>Royalty billing, franchisee ordering and separate legal entities that still roll up into one group view.</p></div>
+    </div>
+  </div>
+  <div class="pageno">04</div>
+</section>
+
+<!-- 5 · WHAT GOOD LOOKS LIKE -->
+<section class="slide dark anchor-top">
+  <div class="inner">
+    <div class="eyebrow">The target picture</div>
+    <h2 class="h">One connected line — bean to books.</h2>
+    <div class="hub">
+      <div class="col">
+        <div class="colh">Source &amp; make</div>
+        <div class="chip">Green beans purchased</div>
+        <div class="chip">Roast batch (BOM · yield · lot)</div>
+        <div class="chip">Packed &amp; weighed stock</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="core"><strong>Odoo</strong><span>one valued inventory<br>one set of books</span></div>
+      <div class="arrow">→</div>
+      <div class="col">
+        <div class="colh">Sell everywhere</div>
+        <div class="chip">Café POS × ~10 branches</div>
+        <div class="chip">Online store (Salla) synced</div>
+        <div class="chip">B2B wholesale orders</div>
+      </div>
+    </div>
+    <div class="benefits" style="margin-top:2.4rem">
+      <div class="bfit"><div class="bn">✓</div><div><div class="bt">True cost per cup &amp; per pack</div><div class="bd">Roast yield and dose built in, so margin is real — not a month-end guess.</div></div></div>
+      <div class="bfit"><div class="bn">✓</div><div><div class="bt">Live stock, no re-keying</div><div class="bd">Counter, store and warehouse read from one number that moves in real time.</div></div></div>
+      <div class="bfit"><div class="bn">✓</div><div><div class="bt">Profit per branch &amp; per channel</div><div class="bd">Analytic tags turn ten cafés and three channels into a P&amp;L you can steer.</div></div></div>
+      <div class="bfit"><div class="bn">✓</div><div><div class="bt">ZATCA &amp; books close on time</div><div class="bd">Compliant invoices out of POS and wholesale, so month-end stops fighting you.</div></div></div>
+    </div>
+  </div>
+  <div class="foot">Qaf Coffee × CodeOx</div>
+  <div class="pageno">05</div>
+</section>
+
+<!-- 6 · START WITH A HEALTH CHECK -->
+<section class="slide cream anchor-top">
+  <div class="inner">
+    <div class="eyebrow">How we'd start — low risk</div>
+    <h2 class="h">A two-week Odoo Health Check, before anything is quoted.</h2>
+    <p class="lead">We don't believe in pricing a build we haven't looked inside. So we start small: a fixed, two-week diagnostic of your live Odoo. You get a clear picture and a plan — and full freedom to decide what happens next.</p>
+    <div class="moves">
+      <div class="move">
+        <div class="tag">What we do</div>
+        <h3>Look under the hood</h3>
+        <ul>
+          <li>Review the current Odoo config, apps in daily use, and any custom modules</li>
+          <li>Trace the roasting model — is it Manufacturing with yield, or just an inventory adjustment?</li>
+          <li>Check POS ↔ Odoo and Salla ↔ Odoo data flow, and stock accuracy across branches</li>
+          <li>Verify ZATCA Phase 2 status, Arabic invoicing, and the month-end close</li>
+        </ul>
+      </div>
+      <div class="move">
+        <div class="tag">What you get</div>
+        <h3>A prioritised gap report</h3>
+        <ul>
+          <li>Every gap found, ranked by impact on money and risk — plain language</li>
+          <li>A fix roadmap in phases, so you can sequence spend as it suits you</li>
+          <li>A firm, scoped quotation for the work you choose to take forward</li>
+          <li>No lock-in — the report is yours whether or not we build it</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">06</div>
+</section>
+
+<!-- 7 · WHAT WE'LL MAP TOGETHER -->
+<section class="slide cream anchor-top">
+  <div class="inner">
+    <div class="eyebrow">Today's conversation</div>
+    <h2 class="h">A few things we'd love to map together.</h2>
+    <p class="lead">The answers shape the Health Check — and often, the last one is the one that matters most.</p>
+    <div class="folio-grid">
+      <div class="fcard"><div class="idx">01</div><div><div class="nm">The setup</div><div class="cat">Version &amp; hosting</div><div class="ds">Which Odoo version, Enterprise or Community, and is it Odoo.sh, Online or self-hosted?</div></div></div>
+      <div class="fcard"><div class="idx">02</div><div><div class="nm">The history</div><div class="cat">Who built it</div><div class="ds">Who implemented it, is that contract still live, and how many custom modules exist — do you hold the source?</div></div></div>
+      <div class="fcard"><div class="idx">03</div><div><div class="nm">The counter</div><div class="cat">POS in the cafés</div><div class="ds">What runs on the till today — Odoo POS, or another system that doesn't talk to Odoo?</div></div></div>
+      <div class="fcard"><div class="idx">04</div><div><div class="nm">The roastery</div><div class="cat">How it's modelled</div><div class="ds">Is roasting handled in Manufacturing with a yield, or booked as a simple inventory adjustment?</div></div></div>
+      <div class="fcard"><div class="idx">05</div><div><div class="nm">Compliance</div><div class="cat">ZATCA Phase 2</div><div class="ds">Integrated and cleared through Odoo, or handled outside it today?</div></div></div>
+      <div class="fcard"><div class="idx">06</div><div><div class="nm">The real pain</div><div class="cat">& who owns it</div><div class="ds">Where does it hurt most — closing the books, stock accuracy, or branch reporting? And who owns the system inside Qaf?</div></div></div>
+    </div>
+  </div>
+  <div class="pageno">07</div>
+</section>
+
+<!-- 8 · CLOSE -->
+<section class="slide deep">
+  <div class="arc"></div>
+  <div class="qaf-mark" style="opacity:.6">ق</div>
+  <div class="inner">
+    <div class="eyebrow">Next step</div>
+    <h2 class="h">Let's start with the Health Check.</h2>
+    <p class="lead">Two weeks, a fixed scope, and a clear picture of your Odoo — with a roadmap you own either way. From there, we build only what earns its place.</p>
+    <div class="tagline">From bean to books — one system, one truth.</div>
+    <div class="sig">Raghib Ali Rafeeque — CodeOx Technologies</div>
+    <div class="contact">
+      <a href="mailto:raghib@code-ox.com">raghib@code-ox.com</a> &nbsp;·&nbsp; <a href="tel:+966561765707">+966 56 176 5707</a><br>
+      Odoo Silver Partner &nbsp;·&nbsp; code-ox.com
+    </div>
+    <img class="close-logo" src="https://code-ox.com/codeoxlogo.svg" alt="CodeOx">
+  </div>
+  <div class="pageno">08</div>
+</section>
+
+</body>
+</html>
