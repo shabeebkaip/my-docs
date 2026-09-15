@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alternative Rebar Plant × CodeOx — Meeting Follow-Up & Solution Brief</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+:root{
+  --purple:#714B67; --purple-d:#5B3B52; --purple-l:#8F6A83; --purple-soft:#F3ECF1;
+  --orange:#E8722A;
+  --ink:#242021; --muted:#6E6A6C; --line:#ECE7E3;
+  --bg:#FFFFFF; --bg-200:#F6F5F3;
+  --y:#FBD35B; --b:#8FD3F2; --r:#F49A9A; --g:#8FDBAE;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --disp:'Poppins',var(--sans);
+  --shadow:0 14px 40px -20px rgba(36,32,33,.28);
+  --radius:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:#e9e7e3;-webkit-font-smoothing:antialiased;line-height:1.55}
+h1,h2,h3,h4,.disp{font-family:var(--disp);letter-spacing:-.02em}
+
+.doc{max-width:1000px;margin:0 auto;padding:40px 20px 80px}
+.sheet{background:var(--bg);border-radius:26px;box-shadow:var(--shadow);padding:52px 56px;margin-bottom:26px;position:relative;overflow:hidden}
+.sheet::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(560px 560px at 98% -4%, rgba(113,75,103,.07), transparent 62%),
+             radial-gradient(480px 480px at -4% 104%, rgba(251,211,91,.10), transparent 60%);}
+.sheet > *{position:relative;z-index:1}
+
+/* highlighter + accents */
+.hl{background-repeat:no-repeat;background-position:0 78%;background-size:100% .46em;border-radius:3px;padding:0 .05em}
+.hl-y{background-image:linear-gradient(var(--y),var(--y))}
+.hl-b{background-image:linear-gradient(var(--b),var(--b))}
+.hl-g{background-image:linear-gradient(var(--g),var(--g))}
+.hl-r{background-image:linear-gradient(var(--r),var(--r))}
+.cx{color:var(--orange)}
+.kick{display:inline-flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:600;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--purple);margin-bottom:.9rem}
+.kick::before{content:"";width:24px;height:3px;border-radius:2px;background:var(--purple)}
+
+/* header */
+.brand{display:flex;align-items:center;gap:1rem;margin-bottom:2rem}
+.brand .logo-arp{height:46px;width:auto;display:block}
+.cxbadge{display:inline-flex;align-items:center;background:#242021;border-radius:9px;padding:8px 12px}
+.cxbadge img{height:22px;width:auto;display:block}
+.brand .x{color:#C7BFC4;font-weight:400;font-size:1.35rem}
+.doc-title{font-family:var(--disp);font-weight:800;font-size:clamp(2rem,4.6vw,2.9rem);line-height:1.05;color:var(--ink);letter-spacing:-.03em}
+.doc-sub{font-size:1.06rem;color:var(--muted);margin-top:1rem;max-width:64ch;line-height:1.6}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:1.7rem;padding-top:1.4rem;border-top:1px solid var(--line);font-size:.86rem;color:var(--muted)}
+.meta-row b{color:var(--ink);font-weight:700;font-family:var(--disp)}
+
+/* section headings */
+h2.sec{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;line-height:1.1;color:var(--ink);margin-bottom:.5rem}
+.lead{font-size:1.02rem;color:var(--muted);line-height:1.6;max-width:76ch}
+.lead b{color:var(--ink);font-weight:700}
+.rule{height:1px;background:var(--line);margin:2rem 0}
+
+/* numbered flag */
+.secnum{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--purple);color:#fff;font-family:var(--disp);font-weight:800;font-size:1rem;margin-right:.7rem;vertical-align:middle;box-shadow:0 8px 18px -8px rgba(113,75,103,.6)}
+
+/* compare (true vs caveat) */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.5rem}
+.col{border-radius:var(--radius);padding:1.5rem 1.6rem}
+.col.good{background:#F0FAF4;border:1px solid #CBEBD8}
+.col.warn{background:#FEF7EC;border:1px solid #F4E2C0}
+.col h4{font-family:var(--disp);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:1rem}
+.col.good h4{color:#2E9E68}.col.warn h4{color:#C8842B}
+.li{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.75rem;font-size:.95rem;line-height:1.45;color:var(--ink)}
+.li:last-child{margin-bottom:0}
+.li .mk{flex:0 0 auto;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:800;color:#fff;margin-top:1px}
+.col.good .mk{background:#39A96A}.col.warn .mk{background:#E0A23C}
+
+/* recommendation callout */
+.reco{display:flex;gap:1rem;align-items:flex-start;margin-top:1.5rem;padding:1.4rem 1.6rem;border-radius:var(--radius);
+  background:var(--purple);color:#fff;box-shadow:0 16px 34px -18px rgba(113,75,103,.7)}
+.reco .ic{flex:0 0 auto;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.reco h4{font-family:var(--disp);font-weight:700;font-size:1.05rem;margin-bottom:.35rem;color:#fff}
+.reco p{font-size:.95rem;line-height:1.55;color:#F0E2EC}
+.reco p b{color:var(--y)}
+
+.note{font-size:.85rem;color:var(--muted);margin-top:1rem;padding-left:.9rem;border-left:3px solid var(--line);line-height:1.55}
+
+/* app-icon cards grid */
+.g{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.5rem}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.5rem;box-shadow:0 10px 26px -18px rgba(36,32,33,.25)}
+.card .appic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.05rem;font-weight:700;font-family:var(--disp);margin-bottom:.85rem;box-shadow:0 8px 18px -8px rgba(36,32,33,.35)}
+.card h3{font-family:var(--disp);font-size:1.06rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+.card p{font-size:.9rem;color:var(--muted);line-height:1.5}
+.card .tag{display:inline-block;margin-top:.7rem;font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);background:var(--purple-soft);border-radius:999px;padding:.28rem .7rem}
+.a-p{background:linear-gradient(140deg,#8A5E7C,#714B67)} .a-b{background:linear-gradient(140deg,#5FBEEC,#2E9BD6)}
+.a-o{background:linear-gradient(140deg,#F49048,#E8722A)} .a-g{background:linear-gradient(140deg,#5FC98D,#39A96A)}
+.a-r{background:linear-gradient(140deg,#F07C7C,#DB5757)} .a-y{background:linear-gradient(140deg,#F7CB54,#EBAE2C);color:#4a3a12}
+.a-t{background:linear-gradient(140deg,#54C7C7,#2AA5A5)} .a-v{background:linear-gradient(140deg,#9E82E0,#7A5BD0)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:1.5rem}
+.step{border:1px solid var(--line);border-radius:var(--radius);padding:1.3rem 1.4rem;background:#fff}
+.step .n{font-family:var(--disp);font-weight:800;font-size:1.5rem;color:var(--purple);line-height:1;margin-bottom:.5rem}
+.step h4{font-family:var(--disp);font-size:1rem;font-weight:700;margin-bottom:.35rem}
+.step p{font-size:.88rem;color:var(--muted);line-height:1.5}
+
+/* contact footer */
+.contact{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;margin-top:1.6rem;padding-top:1.5rem;border-top:1px solid var(--line)}
+.contact .who{font-family:var(--disp);font-weight:700;color:var(--ink);font-size:1rem}
+.contact .who span{display:block;font-family:var(--sans);font-weight:500;color:var(--muted);font-size:.85rem;margin-top:2px}
+.contact a{color:var(--purple);text-decoration:none;font-weight:600;font-size:.92rem}
+.contact a:hover{text-decoration:underline}
+.contact .cxbadge{margin-left:auto}
+
+@media(max-width:720px){.sheet{padding:34px 26px}.compare,.g,.steps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <!-- HEADER -->
+  <div class="sheet">
+    <div class="brand">
+      <img class="logo-arp" src="arp-logo.png" alt="Alternative Rebar Plant">
+      <span class="x">×</span>
+      <span class="cxbadge"><img src="codeox-logo.svg" alt="CodeOx"></span>
+    </div>
+    <div class="kick">Meeting Follow-Up</div>
+    <div class="doc-title">Where we go next — your Odoo, done right.</div>
+    <div class="doc-sub">A short recap of what we agreed in last week's session, with our recommendation on each point. The headline is licensing: there's a real, <span class="hl hl-y">legitimate</span> way to cut your per-user cost — and we want you fully protected on the compliance side while we do it.</div>
+    <div class="meta-row">
+      <div>Prepared for <b>Alternative Rebar Plant</b></div>
+      <div>By <b>CodeOx Technologies</b> · Odoo Silver Partner</div>
+      <div>Ref <b>CX-ARP-FU-2026-01</b></div>
+      <div><b>September 2026</b></div>
+    </div>
+  </div>
+
+  <!-- 1 · LICENSING -->
+  <div class="sheet">
+    <h2 class="sec"><span class="secnum">1</span>Cutting licence cost — and yes, it's legal</h2>
+    <p class="lead" style="margin-top:.8rem">You raised the big one: today you pay a <b>user licence per person</b>, which gets expensive fast. And you asked the right question — <b>is the employee / portal approach actually legal?</b> The clear answer: <span class="hl hl-y"><b>yes, it is perfectly legal.</b></span> Not licensing every head is Odoo's <b>own</b> licensing model — portal and external users are free by design, and an employee record isn't a user at all. This is exactly how Odoo intends it to work.</p>
+
+    <div class="reco" style="margin-top:1.3rem;background:#F0FAF4;box-shadow:none;border:1px solid #CBEBD8">
+      <div class="ic" style="background:#39A96A">✓</div>
+      <div>
+        <h4 style="color:#248652">Straight answer for your team</h4>
+        <p style="color:#2f5a45">The employee-and-portal concept is a <b style="color:#248652">standard, fully-licensed Odoo model</b> — not a loophole. Odoo bills only for people who log into the backend to create and edit documents. Everyone else can be an employee record or a free portal user. Nothing to worry about on the legal side.</p>
+      </div>
+    </div>
+
+    <div class="compare">
+      <div class="col good">
+        <h4>✓ Where you save — all 100% legitimate</h4>
+        <div class="li"><span class="mk">✓</span><div><b>Employees ≠ Users.</b> An employee record has no login and costs <b>nothing</b>. Your entire workforce can sit as employee records with zero licences.</div></div>
+        <div class="li"><span class="mk">✓</span><div><b>Shop-floor kiosk mode.</b> Attendance and production steps run through a shared kiosk — no per-worker login, no licence.</div></div>
+        <div class="li"><span class="mk">✓</span><div><b>Free portal</b> for customers, suppliers and staff self-service views — unlimited, no cost.</div></div>
+        <div class="li"><span class="mk">✓</span><div><b>Licence only real operators</b> — the few who actually create and edit documents in the backend (planning, purchasing, inventory, accounts, HR).</div></div>
+      </div>
+      <div class="col good" style="background:#F5F0F4;border-color:#E4D4E0">
+        <h4 style="color:var(--purple)">◑ One practical thing to know</h4>
+        <div class="li"><span class="mk" style="background:var(--purple)">i</span><div>A <b>portal user is free but limited</b> — it's for viewing your own documents, not for running backend apps. That's a functional point, not a legal one.</div></div>
+        <div class="li"><span class="mk" style="background:var(--purple)">i</span><div>So anyone who needs to <b>actively work inside</b> Inventory, Manufacturing, Payroll or Appraisals gets a normal licensed user. We simply count those people accurately.</div></div>
+        <div class="li"><span class="mk" style="background:var(--purple)">i</span><div>Result: you pay for a <b>handful</b> of real operators instead of everyone — legal, clean, and a big drop from where you are today.</div></div>
+      </div>
+    </div>
+
+    <div class="reco">
+      <div class="ic">◎</div>
+      <div>
+        <h4>Our recommendation — the licence split</h4>
+        <p>We map your headcount into three buckets: <b>employee records (free)</b> for most of the shop floor, <b>kiosk</b> for attendance/production, and <b>paid licences only for the handful who truly transact</b>. You get the cost drop you're after, fully within Odoo's terms.</p>
+      </div>
+    </div>
+    <div class="note">Final per-user pricing is confirmed against the live Odoo KSA price list at quotation time — list prices move and carry promo/annual discounts, so we won't quote a hard SAR figure here. As your Silver Partner, we secure partner pricing on your behalf.</div>
+  </div>
+
+  <!-- 2 · LEGAL / DOMAIN -->
+  <div class="sheet">
+    <h2 class="sec"><span class="secnum">2</span>Legal, compliance &amp; your domain</h2>
+    <p class="lead" style="margin-top:.8rem">Two things you asked us to lock down — both straightforward.</p>
+    <div class="g">
+      <div class="card">
+        <div class="appic a-p">⚖</div>
+        <h3>Licensing done by the book</h3>
+        <p>Your user count set up exactly as Odoo intends — the right people licensed, everyone else as free employee records or kiosk. Legitimate, documented, and easy to explain to any stakeholder.</p>
+        <span class="tag">Fully compliant</span>
+      </div>
+      <div class="card">
+        <div class="appic a-b">🌐</div>
+        <h3>System linked to your domain</h3>
+        <p>Odoo bound to your own company domain — branded URL, company email on outgoing documents, and optional single sign-on so staff log in with their existing work accounts.</p>
+        <span class="tag">Branded &amp; secure</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · THE AGREED WORK -->
+  <div class="sheet">
+    <h2 class="sec"><span class="secnum">3</span>The rest of what we agreed</h2>
+    <p class="lead" style="margin-top:.8rem">Each item you raised, and how we'll approach it. Everything is built and tested on a staging copy first, then handed over with your team trained.</p>
+    <div class="g">
+      <div class="card">
+        <div class="appic a-o">📦</div>
+        <h3>Inventory — set up properly</h3>
+        <p>Make Inventory real: warehouses, locations, reordering, lot/serial tracking and correct stock valuation — so on-hand figures and cost of goods can finally be trusted.</p>
+        <span class="tag">Core priority</span>
+      </div>
+      <div class="card">
+        <div class="appic a-v">🎓</div>
+        <h3>Employee training</h3>
+        <p>Role-based training sessions — operators, storekeepers, HR, accounts — with short written guides, so the team owns the system after go-live, not just watches it.</p>
+        <span class="tag">Adoption</span>
+      </div>
+      <div class="card">
+        <div class="appic a-y">🧪</div>
+        <h3>Use-case-specific demos</h3>
+        <p>Before you commit to a full build, we prepare demos on <b>your</b> real flows — a rebar production order, a stock issue, a payroll run — so you see it working on your case, not a generic sample.</p>
+        <span class="tag">Proof first</span>
+      </div>
+      <div class="card">
+        <div class="appic a-g">💵</div>
+        <h3>Payroll implementation</h3>
+        <p>KSA payroll configured end to end — salary structures, GOSI, WPS / Mudad bank file, and end-of-service — so pay runs come out of Odoo, compliant, each cycle.</p>
+        <span class="tag">KSA compliant</span>
+      </div>
+      <div class="card">
+        <div class="appic a-r">⭐</div>
+        <h3>Appraisals</h3>
+        <p>Structured evaluation cycles for staff performance. Note: self-assessment by an employee needs a licensed login — so we'll either license reviewers only, or run appraisals HR-led. We'll size this with you.</p>
+        <span class="tag">We'll scope licences</span>
+      </div>
+      <div class="card">
+        <div class="appic a-t">📍</div>
+        <h3>Geolocation</h3>
+        <p>Location capture where it earns its place — geo-tagged attendance / field check-ins and delivery/customer mapping. Confirmed against your exact use in the audit.</p>
+        <span class="tag">Scoped in audit</span>
+      </div>
+      <div class="card">
+        <div class="appic a-g">💬</div>
+        <h3>WhatsApp</h3>
+        <p>WhatsApp connected to Odoo for order confirmations, dispatch notifications and internal alerts — one channel, sent straight from the system.</p>
+        <span class="tag">Integration</span>
+      </div>
+      <div class="card">
+        <div class="appic a-p">🔧</div>
+        <h3>Fix-in-place vs rebuild</h3>
+        <p>The free Health Audit tells us, module by module, what to repair on your current Odoo and what's cheaper to rebuild clean — with a costed roadmap either way.</p>
+        <span class="tag">From the audit</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · NEXT STEPS -->
+  <div class="sheet">
+    <h2 class="sec"><span class="secnum">4</span>Immediate next steps</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <h4>Licensing plan</h4>
+        <p>We map your headcount into the compliant split and give you the exact licensed-user count — your real, defensible cost.</p>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <h4>Use-case demos</h4>
+        <p>We build the demos on your own flows — inventory, payroll, a production order — for you to see before committing.</p>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <h4>Audit &amp; roadmap</h4>
+        <p>The free fixed-scope Odoo Health Audit: RAG scorecard, gap register, and a phased fix-vs-rebuild roadmap covering every item above.</p>
+      </div>
+    </div>
+    <div class="contact">
+      <div class="who">Shabeeb K<span>Head of Operations · CodeOx Technologies</span></div>
+      <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a>
+      <a href="tel:+966535716437">+966 53 571 6437</a>
+      <span class="cxbadge"><img src="codeox-logo.svg" alt="CodeOx"></span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
