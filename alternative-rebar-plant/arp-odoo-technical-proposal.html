@@ -1,384 +1,528 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alternative Rebar Plant × CodeOx — Odoo ERP Technical Proposal</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
-:root{
-  --purple:#714B67; --purple-d:#5B3B52; --purple-l:#8F6A83; --purple-soft:#F3ECF1;
-  --orange:#E8722A;
-  --ink:#242021; --muted:#6E6A6C; --line:#ECE7E3;
-  --bg:#FFFFFF; --bg-200:#F6F5F3;
-  --y:#FBD35B; --b:#8FD3F2; --r:#F49A9A; --g:#8FDBAE;
-  --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
-  --disp:'Poppins',var(--sans);
-  --shadow:0 14px 40px -20px rgba(36,32,33,.28);
-  --radius:20px;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);color:var(--ink);background:#e9e7e3;-webkit-font-smoothing:antialiased;line-height:1.55}
-h1,h2,h3,h4,.disp{font-family:var(--disp);letter-spacing:-.02em}
-.doc{max-width:1000px;margin:0 auto;padding:40px 20px 80px}
-.sheet{background:var(--bg);border-radius:26px;box-shadow:var(--shadow);padding:52px 56px;margin-bottom:26px;position:relative;overflow:hidden}
-.sheet::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(560px 560px at 98% -4%, rgba(113,75,103,.07), transparent 62%),
-             radial-gradient(480px 480px at -4% 104%, rgba(251,211,91,.10), transparent 60%);}
-.sheet > *{position:relative;z-index:1}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alternative Rebar Plant — Odoo ERP Technical Proposal · CX-ARP-TP-2026-01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body, table, td, th, div, p, span, ul, li { direction: ltr; text-align: left; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #EDE7EC; color: #242021; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto 24px; position: relative; overflow: hidden; background: #fff; box-shadow: 0 4px 28px rgba(0,0,0,0.12); }
+    @media print { body { background: none; } .page { margin: 0; box-shadow: none; height: 297mm; overflow: hidden; page-break-after: always; break-after: page; } .page:last-child { page-break-after: avoid; break-after: avoid; } }
+    @page { size: A4; margin: 0; }
 
-/* accents */
-.hl{background-repeat:no-repeat;background-position:0 78%;background-size:100% .46em;border-radius:3px;padding:0 .05em}
-.hl-y{background-image:linear-gradient(var(--y),var(--y))}
-.hl-g{background-image:linear-gradient(var(--g),var(--g))}
-.cx{color:var(--orange)}
-.kick{display:inline-flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:600;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--purple);margin-bottom:.9rem}
-.kick::before{content:"";width:24px;height:3px;border-radius:2px;background:var(--purple)}
+    /* COVER */
+    .cover { background:#FFFFFF; color:#242021; min-height:297mm; display:flex; flex-direction:column; position:relative; }
+    .cover-accent-bar { position:absolute; left:0; top:0; bottom:0; width:5px; background:#E8722A; z-index:3; }
+    .cover-topbar { position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; padding:16px 26px 16px 32px; border-bottom:1px solid #ECE7E3; }
+    .cover-topbar-left { display:flex; align-items:center; gap:14px; }
+    .cover-client-logo { height:44px; width:auto; display:block; }
+    .cover-client-name { font-size:17px; font-weight:700; color:#242021; }
+    .cover-client-sub { font-size:11.5px; color:#9A8F96; letter-spacing:0.06em; text-transform:uppercase; margin-top:2px; }
+    .cover-topbar-right { display:flex; align-items:center; gap:16px; }
+    .cover-prepby-label { font-size:11px; color:#9A8F96; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:2px; }
+    .cover-prepby-name { font-size:16px; font-weight:600; color:#242021; }
+    .cxbadge { display:inline-flex; align-items:center; background:#241f21; border-radius:8px; padding:7px 11px; }
+    .cxbadge img { height:20px; width:auto; display:block; }
+    .doc-type-pill { border:1.5px solid #714B67; color:#714B67; font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; padding:6px 13px; border-radius:4px; }
+    .cover-hero { position:relative; z-index:2; flex:1; display:flex; flex-direction:column; justify-content:center; padding:32px 26px 0 32px; }
+    .cover-overline { font-size:11px; font-weight:600; color:#9A8F96; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:14px; }
+    .cover-title { font-size:46px; font-weight:800; line-height:1.06; color:#714B67; margin-bottom:14px; max-width:15ch; }
+    .cover-title-accent { color:#E8722A; }
+    .cover-subtitle { font-size:15.5px; color:#5f585c; line-height:1.65; max-width:480px; margin-bottom:24px; }
+    .cover-tags { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:28px; }
+    .cover-tag { background:#F6F3F5; border:1px solid #ECE7E3; border-radius:4px; padding:5px 11px; font-size:13px; color:#5f585c; }
+    .cover-tag strong { color:#242021; font-weight:600; }
+    .partner-strip { position:relative; z-index:2; display:flex; align-items:center; gap:20px; background:#F3ECF1; border:1px solid #E4D4E0; border-radius:14px; padding:16px 22px; margin:0 26px 22px 32px; }
+    .partner-strip-eyebrow { font-size:13px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#714B67; margin-bottom:5px; }
+    .partner-strip-title { font-size:19px; font-weight:800; color:#242021; margin-bottom:4px; line-height:1.25; }
+    .partner-strip-text { font-size:13.5px; color:#5f585c; line-height:1.55; max-width:420px; }
+    .partner-strip-badges { margin-left:auto; display:flex; flex-direction:column; gap:6px; flex-shrink:0; }
+    .partner-strip-badge { font-size:12px; font-weight:700; color:#fff; background:#714B67; border-radius:20px; padding:5px 12px; white-space:nowrap; text-align:center; }
+    .cover-ref-box { position:relative; z-index:2; margin:0 26px 14px 32px; background:#F3ECF1; border:1px solid #E4D4E0; border-radius:6px; display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden; }
+    .cover-ref-item { padding:14px 16px; border-right:1px solid #E4D4E0; }
+    .cover-ref-item:last-child { border-right:none; }
+    .cover-ref-label { font-size:10.5px; color:#9A8F96; text-transform:uppercase; letter-spacing:0.13em; margin-bottom:5px; }
+    .cover-ref-value { font-size:14px; font-weight:600; color:#242021; }
+    .cover-ref-value.accent { color:#714B67; }
+    .cover-footer { position:relative; z-index:2; border-top:1px solid #ECE7E3; padding:12px 26px 12px 32px; display:flex; align-items:center; gap:12px; }
+    .cover-footer-text { font-size:8.5px; color:#9A8F96; }
 
-/* cover */
-.cover{background:linear-gradient(150deg,#5B3B52,#714B67 55%,#815877);color:#fff;min-height:640px;display:flex;flex-direction:column;justify-content:space-between}
-.cover::before{background:radial-gradient(700px 700px at 92% 4%, rgba(255,255,255,.12), transparent 60%),radial-gradient(560px 560px at 2% 100%, rgba(251,211,91,.16), transparent 60%);}
-.cover .brand{display:flex;align-items:center;gap:1rem}
-.cover .brand .logo-arp{height:52px;width:auto;display:block;background:#fff;border-radius:12px;padding:7px 10px}
-.cover .x{color:rgba(255,255,255,.5);font-size:1.4rem}
-.cxbadge{display:inline-flex;align-items:center;background:#241f21;border-radius:9px;padding:8px 12px}
-.cxbadge img{height:22px;width:auto;display:block}
-.cover .c-eye{font-family:var(--disp);font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:.82rem;color:#F0D9E8;margin-bottom:1.1rem}
-.cover h1{font-family:var(--disp);font-weight:800;font-size:clamp(2.4rem,5.4vw,3.9rem);line-height:1.05;letter-spacing:-.03em;color:#fff;max-width:20ch}
-.cover .c-sub{font-size:1.1rem;color:#E8D9E4;margin-top:1.2rem;max-width:56ch;line-height:1.6}
-.cover .c-meta{display:flex;flex-wrap:wrap;gap:14px 30px;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.18);font-size:.88rem;color:#E4D2DE}
-.cover .c-meta b{color:#fff;font-family:var(--disp);font-weight:600}
+    /* INNER PAGES */
+    .inner-page { display:flex; flex-direction:column; min-height:297mm; }
+    .inner-header { display:flex; align-items:center; justify-content:space-between; padding:12px 26px; border-bottom:1px solid #ECE7E3; background:#FBFAFB; }
+    .inner-header-title { font-size:12.5px; color:#6E6A6C; }
+    .inner-header-ref { font-size:12.5px; color:#9A8F96; }
+    .inner-content { flex:1; padding:26px 30px; }
+    .inner-footer { border-top:1px solid #ECE7E3; padding:10px 26px; display:flex; align-items:center; gap:10px; background:#FBFAFB; }
+    .inner-footer-text { font-size:8px; color:#9A8F96; flex:1; }
+    .inner-footer-page { font-size:8.5px; color:#9A8F96; font-weight:500; }
 
-/* section headings */
-h2.sec{font-size:clamp(1.5rem,3vw,2.05rem);font-weight:800;line-height:1.1;color:var(--ink);margin-bottom:.5rem}
-.secnum{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--purple);color:#fff;font-family:var(--disp);font-weight:800;font-size:1rem;margin-right:.7rem;vertical-align:middle;box-shadow:0 8px 18px -8px rgba(113,75,103,.6)}
-.lead{font-size:1.02rem;color:var(--muted);line-height:1.62;max-width:80ch}
-.lead b{color:var(--ink);font-weight:700}
-.rule{height:1px;background:var(--line);margin:1.8rem 0}
-p.body{font-size:.98rem;color:var(--muted);line-height:1.65;max-width:82ch;margin-top:.9rem}
-p.body b{color:var(--ink);font-weight:700}
+    .section-label { font-size:11px; font-weight:700; color:#E8722A; text-transform:uppercase; letter-spacing:0.16em; margin-bottom:7px; }
+    .section-heading { font-size:27px; font-weight:800; color:#714B67; margin-bottom:10px; line-height:1.15; font-family:'Poppins',sans-serif; letter-spacing:-0.02em; }
+    .section-intro { font-size:13.5px; color:#5f585c; line-height:1.7; margin-bottom:16px; }
+    p.body { font-size:13px; color:#5f585c; line-height:1.7; margin-bottom:12px; }
+    p.body b { color:#242021; font-weight:600; }
+    .part-banner { background:#714B67; color:#fff; border-radius:6px; padding:13px 16px; display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+    .part-badge { width:28px; height:28px; min-width:28px; border-radius:50%; background:#E8722A; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:#fff; }
+    .part-banner-sub { font-size:10.5px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:2px; }
+    .part-banner-title { font-size:17px; font-weight:700; font-family:'Poppins',sans-serif; }
+    .note-box { border-radius:5px; padding:11px 14px; font-size:12.5px; line-height:1.55; margin-bottom:14px; }
+    .note-box.purple { background:#F3ECF1; border:1px solid #E4D4E0; border-left:3px solid #714B67; }
+    .note-box.orange { background:#FEF4EC; border:1px solid #F7D9BF; border-left:3px solid #E8722A; }
+    .note-box.green { background:#EFFAF3; border:1px solid #CBEBD8; border-left:3px solid #39A96A; }
+    .note-box .note-label { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px; }
+    .note-box.purple .note-label { color:#714B67; }
+    .note-box.orange .note-label { color:#B4571C; }
+    .note-box.green .note-label { color:#248652; }
+    .note-box p { color:#3d3639; }
+    .note-box strong { font-weight:600; color:#242021; }
+    .section-hr { border:none; border-top:1px solid #ECE7E3; margin:18px 0; }
 
-/* TOC */
-.toc{display:grid;grid-template-columns:1fr 1fr;gap:.5rem 2.4rem;margin-top:1.2rem}
-.toc a{display:flex;gap:.8rem;align-items:baseline;padding:.55rem 0;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none;font-size:.96rem}
-.toc a:hover{color:var(--purple)}
-.toc .tn{font-family:var(--disp);font-weight:700;color:var(--purple);font-size:.85rem;min-width:1.4rem}
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:16px; }
+    .info-card { border:1px solid #ECE7E3; border-radius:6px; padding:13px 14px; }
+    .info-card.tinted { background:#FBFAFB; }
+    .info-card-label { font-size:13px; font-weight:700; color:#242021; margin-bottom:4px; }
+    .info-card-label .ic { color:#E8722A; margin-right:6px; }
+    .info-card-value { font-size:12.5px; color:#6E6A6C; line-height:1.55; }
+    .info-card-value b { color:#242021; font-weight:600; }
 
-/* cards */
-.g{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.4rem}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:1.4rem}
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.5rem;box-shadow:0 10px 26px -18px rgba(36,32,33,.25)}
-.card .appic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.05rem;font-weight:700;font-family:var(--disp);margin-bottom:.85rem;box-shadow:0 8px 18px -8px rgba(36,32,33,.35)}
-.card h3{font-family:var(--disp);font-size:1.06rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
-.card p{font-size:.9rem;color:var(--muted);line-height:1.5}
-.card .tag{display:inline-block;margin-top:.7rem;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);background:var(--purple-soft);border-radius:999px;padding:.28rem .7rem}
-.a-p{background:linear-gradient(140deg,#8A5E7C,#714B67)} .a-b{background:linear-gradient(140deg,#5FBEEC,#2E9BD6)}
-.a-o{background:linear-gradient(140deg,#F49048,#E8722A)} .a-g{background:linear-gradient(140deg,#5FC98D,#39A96A)}
-.a-r{background:linear-gradient(140deg,#F07C7C,#DB5757)} .a-y{background:linear-gradient(140deg,#F7CB54,#EBAE2C);color:#4a3a12}
-.a-t{background:linear-gradient(140deg,#54C7C7,#2AA5A5)} .a-v{background:linear-gradient(140deg,#9E82E0,#7A5BD0)}
+    /* deliverables grid */
+    .deliver-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+    .deliver-item { display:flex; align-items:flex-start; gap:9px; padding:10px 12px; background:#FBFAFB; border:1px solid #F0EAEE; border-radius:5px; font-size:11px; color:#3d3639; line-height:1.5; }
+    .deliver-check { width:16px; height:16px; min-width:16px; border-radius:50%; background:#E8722A; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
+    .deliver-item strong { color:#242021; font-weight:600; display:block; }
 
-/* tables */
-table.tbl{width:100%;border-collapse:collapse;margin-top:1.3rem;font-size:.9rem}
-table.tbl thead th{padding:.7rem .85rem;background:var(--purple);color:#fff;text-align:left;font-family:var(--disp);font-weight:600;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase}
-table.tbl thead th:first-child{border-radius:8px 0 0 0}table.tbl thead th:last-child{border-radius:0 8px 0 0}
-table.tbl tbody td{padding:.7rem .85rem;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top;line-height:1.5}
-table.tbl tbody tr:nth-child(even){background:#F9F6F8}
-table.tbl tbody td b{color:var(--ink);font-weight:700}
-.modname{font-family:var(--disp);font-weight:700;color:var(--ink)!important}
+    /* pricing/scope table */
+    .pricing-table { width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:14px; }
+    .pricing-table thead th { background:#714B67; color:#fff; padding:9px 11px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+    .pricing-table thead th:last-child { text-align:right; }
+    .pricing-table tbody tr:nth-child(even) { background:#FAF7F9; }
+    .pricing-table tbody td { padding:8px 11px; border-bottom:1px solid #F0EAEE; color:#3d3639; vertical-align:top; line-height:1.45; }
+    .pricing-table .row-num { font-size:11px; color:#9A8F96; font-weight:600; min-width:18px; }
+    .pricing-table .module-name { font-weight:700; color:#242021; display:block; margin-bottom:2px; }
+    .pricing-table .module-desc { font-size:11px; color:#6E6A6C; line-height:1.45; }
+    .pricing-table .prio { text-align:right; font-weight:700; color:#714B67; white-space:nowrap; font-size:11px; }
+    .pricing-table .prio.core { color:#B4571C; }
 
-/* numbered list / requirements */
-.reqs{margin-top:1.2rem;counter-reset:rq}
-.req{display:flex;gap:.9rem;align-items:flex-start;padding:1rem 0;border-bottom:1px solid var(--line)}
-.req .rn{counter-increment:rq;flex:0 0 auto;width:28px;height:28px;border-radius:9px;background:var(--purple-soft);color:var(--purple);font-family:var(--disp);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center}
-.req .rn::before{content:counter(rq)}
-.req h4{font-family:var(--disp);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:.2rem}
-.req p{font-size:.92rem;color:var(--muted);line-height:1.55}
+    /* work package cards */
+    .wp-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:6px; }
+    .wp { border:1px solid #ECE7E3; border-top:3px solid #714B67; border-radius:7px; padding:12px 14px; }
+    .wp.accent { border-top-color:#E8722A; }
+    .wp h3 { font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#242021; margin-bottom:4px; }
+    .wp p { font-size:11px; color:#6E6A6C; line-height:1.5; }
+    .wp p b { color:#242021; font-weight:600; }
 
-/* phase timeline */
-.phase{display:flex;gap:1.1rem;align-items:flex-start;padding:1.1rem 0;border-bottom:1px solid var(--line)}
-.phase:last-child{border-bottom:none}
-.phase .pnum{flex:0 0 auto;width:46px;height:46px;border-radius:13px;background:var(--purple);color:#fff;font-family:var(--disp);font-weight:800;font-size:1.05rem;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -8px rgba(113,75,103,.6)}
-.phase .pbody{flex:1}
-.phase h4{font-family:var(--disp);font-size:1.08rem;font-weight:700;color:var(--ink);margin-bottom:.25rem}
-.phase h4 span{font-family:var(--sans);font-weight:600;font-size:.78rem;color:var(--purple);background:var(--purple-soft);border-radius:999px;padding:.2rem .6rem;margin-left:.5rem;vertical-align:middle}
-.phase p{font-size:.92rem;color:var(--muted);line-height:1.55}
+    /* architecture bands */
+    .arch-band { border-radius:8px; padding:9px 12px; margin-bottom:4px; }
+    .arch-band-label { font-size:9px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px; }
+    .arch-nodes { display:flex; flex-wrap:wrap; gap:6px; }
+    .arch-node { border:1px solid #E4D4E0; background:#fff; border-radius:5px; padding:7px 9px; font-size:10.5px; color:#242021; flex:1; min-width:96px; line-height:1.3; }
+    .arch-node b { display:block; font-size:8.5px; color:#B4571C; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-top:2px; }
+    .arch-band.channels { background:#F3ECF1; border:1px solid #E4D4E0; }
+    .arch-band.channels .arch-band-label { color:#714B67; }
+    .arch-band.hub { background:#714B67; }
+    .arch-band.hub .arch-band-label { color:#F4C89A; }
+    .arch-band.hub .arch-node { background:rgba(255,255,255,0.08); border-color:rgba(244,144,72,0.4); color:#fff; }
+    .arch-band.hub .arch-node b { color:#F4C89A; }
+    .arch-band.platform { background:#FBFAFB; border:1px solid #ECE7E3; }
+    .arch-band.platform .arch-band-label { color:#6E6A6C; }
+    .arch-sep { text-align:center; color:#E8722A; font-size:13px; line-height:1; margin:2px 0; }
 
-/* callouts */
-.reco{display:flex;gap:1rem;align-items:flex-start;margin-top:1.5rem;padding:1.4rem 1.6rem;border-radius:var(--radius);background:var(--purple);color:#fff;box-shadow:0 16px 34px -18px rgba(113,75,103,.7)}
-.reco .ic{flex:0 0 auto;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
-.reco h4{font-family:var(--disp);font-weight:700;font-size:1.05rem;margin-bottom:.35rem;color:#fff}
-.reco p{font-size:.95rem;line-height:1.55;color:#F0E2EC}
-.reco p b{color:var(--y)}
-.green{margin-top:1.4rem;padding:1.4rem 1.6rem;border-radius:var(--radius);background:linear-gradient(135deg,#F0FAF4,#EAF6EF);border:1px solid #CBEBD8}
-.green h4{font-family:var(--disp);font-weight:700;color:#248652;font-size:1.02rem;margin-bottom:.4rem}
-.green p{font-size:.94rem;color:#2f5a45;line-height:1.55}
-.green p b{color:#248652}
-.note{font-size:.85rem;color:var(--muted);margin-top:1.1rem;padding-left:.9rem;border-left:3px solid var(--line);line-height:1.55}
+    /* phases */
+    .phase-row { display:flex; gap:12px; align-items:flex-start; padding:9px 0; border-bottom:1px solid #F0EAEE; }
+    .phase-row:last-child { border-bottom:none; }
+    .phase-n { flex:0 0 auto; width:30px; height:30px; border-radius:8px; background:#714B67; color:#fff; font-family:'Poppins',sans-serif; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; }
+    .phase-b h4 { font-family:'Poppins',sans-serif; font-size:13px; font-weight:700; color:#242021; margin-bottom:2px; }
+    .phase-b h4 span { font-family:'Inter',sans-serif; font-weight:700; font-size:9.5px; color:#248652; background:#EFFAF3; border:1px solid #CBEBD8; border-radius:20px; padding:1px 8px; margin-left:6px; vertical-align:middle; }
+    .phase-b p { font-size:11.5px; color:#6E6A6C; line-height:1.5; }
 
-/* terms */
-.terms{margin-top:1rem}
-.terms li{list-style:none;display:flex;gap:.7rem;align-items:flex-start;margin-bottom:.8rem;font-size:.93rem;color:var(--muted);line-height:1.55}
-.terms li::before{content:"";flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--purple);margin-top:.5em}
-.terms li b{color:var(--ink);font-weight:700}
+    /* funding highlight */
+    .fund-band { display:flex; align-items:center; gap:16px; background:#EFFAF3; border:1px solid #CBEBD8; border-radius:8px; padding:15px 18px; margin-bottom:14px; }
+    .fund-band .big { font-family:'Poppins',sans-serif; font-weight:800; font-size:30px; color:#248652; line-height:1; letter-spacing:-0.02em; white-space:nowrap; }
+    .fund-band .txt { font-size:12.5px; color:#2f5a45; line-height:1.5; }
+    .fund-band .txt b { color:#248652; font-weight:700; }
 
-/* contact */
-.contact{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;margin-top:1.6rem;padding-top:1.5rem;border-top:1px solid var(--line)}
-.contact .who{font-family:var(--disp);font-weight:700;color:var(--ink);font-size:1rem}
-.contact .who span{display:block;font-family:var(--sans);font-weight:500;color:var(--muted);font-size:.85rem;margin-top:2px}
-.contact a{color:var(--purple);text-decoration:none;font-weight:600;font-size:.92rem}
-.contact a:hover{text-decoration:underline}
-.contact .cxbadge{margin-left:auto}
+    /* terms */
+    .terms-list { list-style:none; }
+    .terms-list li { display:flex; gap:10px; align-items:flex-start; font-size:12.5px; color:#3d3639; line-height:1.55; padding:7px 0; border-bottom:1px solid #F3EFF1; }
+    .terms-list li:last-child { border-bottom:none; }
+    .terms-dot { width:7px; height:7px; min-width:7px; border-radius:50%; background:#E8722A; margin-top:6px; flex-shrink:0; }
+    .terms-list li b { color:#242021; font-weight:700; }
 
-@media(max-width:720px){.sheet{padding:34px 26px}.g,.g3,.toc{grid-template-columns:1fr}}
-</style>
+    /* signoff */
+    .signoff-statement { font-size:11px; color:#3d3639; font-style:italic; line-height:1.7; margin-bottom:20px; }
+    .signoff-block { border:1.5px solid #ECE7E3; border-radius:6px; overflow:hidden; margin-top:6px; }
+    .signoff-header { background:#714B67; color:#fff; padding:10px 16px; font-size:11.5px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; }
+    .signoff-body { padding:16px; background:#FBFAFB; }
+    .signoff-cols { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .signoff-col-header { font-size:11px; font-weight:700; color:#242021; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:14px; padding-bottom:5px; border-bottom:2px solid #E8722A; }
+    .signoff-field { margin-bottom:16px; }
+    .signoff-field-label { font-size:10.5px; font-weight:700; color:#9A8F96; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:5px; }
+    .signoff-field-line { border-bottom:1.5px solid #D8CDD4; height:44px; }
+  </style>
 </head>
 <body>
-<div class="doc">
 
-  <!-- COVER -->
-  <div class="sheet cover">
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div class="brand"><img class="logo-arp" src="arp-logo.png" alt="Alternative Rebar Plant"><span class="x">×</span><span class="cxbadge"><img src="codeox-logo.svg" alt="CodeOx"></span></div>
+<!-- PAGE 1 — COVER -->
+<div class="page cover">
+  <div class="cover-accent-bar"></div>
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <img class="cover-client-logo" src="arp-logo.png" alt="Alternative Rebar Plant">
+      <div>
+        <div class="cover-client-name">Alternative Rebar Plant</div>
+        <div class="cover-client-sub">GFRP Rebar Manufacturer · Dammam</div>
+      </div>
     </div>
+    <div class="cover-topbar-right">
+      <div style="text-align:right">
+        <div class="cover-prepby-label">Prepared by</div>
+        <div class="cover-prepby-name">CodeOx Technologies</div>
+      </div>
+      <span class="doc-type-pill">Technical Proposal</span>
+    </div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">Odoo ERP · Re-Implementation &amp; Digital Transformation</div>
+    <div class="cover-title">One connected system, <span class="cover-title-accent">floor to finance.</span></div>
+    <div class="cover-subtitle">A single Odoo platform for Alternative Rebar Plant — manufacturing, inventory, quality, finance, HR and compliance — re-implemented on solid foundations, built to reach SIRI Band&nbsp;2 and unlock Future Factories grant support.</div>
+    <div class="cover-tags">
+      <span class="cover-tag"><strong>Manufacturing</strong> &amp; MRP</span>
+      <span class="cover-tag"><strong>Inventory</strong> &amp; traceability</span>
+      <span class="cover-tag"><strong>Quality</strong> to batch</span>
+      <span class="cover-tag"><strong>ZATCA</strong> Phase 2</span>
+      <span class="cover-tag"><strong>KSA Payroll</strong></span>
+      <span class="cover-tag"><strong>SIRI</strong> Band 2 ready</span>
+    </div>
+  </div>
+
+  <div class="partner-strip">
     <div>
-      <div class="c-eye">Technical Proposal</div>
-      <h1>Odoo ERP — Re-Implementation &amp; Digital Transformation</h1>
-      <div class="c-sub">A single, connected Odoo platform for Alternative Rebar Plant — manufacturing, inventory, quality, finance, HR and compliance — built to reach SIRI Band&nbsp;2 and unlock Future Factories grant support.</div>
+      <div class="partner-strip-eyebrow">Delivered by an Odoo Silver Partner</div>
+      <div class="partner-strip-title">CodeOx Technologies</div>
+      <div class="partner-strip-text">Official Odoo Silver Partner with certified experts — authorised to sell, implement, configure and support Odoo, with direct access to Odoo's partner channels and pricing.</div>
     </div>
-    <div class="c-meta">
-      <div>Prepared for <b>Alternative Rebar Plant (ARP)</b></div>
-      <div>By <b>CodeOx Technologies</b> · Odoo Silver Partner</div>
-      <div>Ref <b>CX-ARP-TP-2026-01</b></div>
-      <div><b>September 2026</b></div>
+    <div class="partner-strip-badges">
+      <span class="partner-strip-badge">Odoo Silver Partner</span>
+      <span class="partner-strip-badge">Certified Experts</span>
     </div>
   </div>
 
-  <!-- CONTENTS -->
-  <div class="sheet">
-    <div class="kick">Contents</div>
-    <h2 class="sec">What's inside</h2>
-    <div class="toc">
-      <a href="#s1"><span class="tn">01</span> Executive Summary</a>
-      <a href="#s2"><span class="tn">02</span> Understanding of ARP</a>
-      <a href="#s3"><span class="tn">03</span> Objectives &amp; Scope</a>
-      <a href="#s4"><span class="tn">04</span> Licensing Model &amp; Cost</a>
-      <a href="#s5"><span class="tn">05</span> Proposed Odoo Modules</a>
-      <a href="#s6"><span class="tn">06</span> Technical Work Packages</a>
-      <a href="#s7"><span class="tn">07</span> Solution Architecture</a>
-      <a href="#s8"><span class="tn">08</span> SIRI &amp; Future Factories Funding</a>
-      <a href="#s9"><span class="tn">09</span> Delivery Methodology</a>
-      <a href="#s10"><span class="tn">10</span> Indicative Timeline</a>
-      <a href="#s11"><span class="tn">11</span> Why CodeOx</a>
-      <a href="#s12"><span class="tn">12</span> Commercial Approach</a>
-      <a href="#s13"><span class="tn">13</span> Assumptions &amp; Next Steps</a>
-    </div>
+  <div class="cover-ref-box">
+    <div class="cover-ref-item"><div class="cover-ref-label">Proposal Ref</div><div class="cover-ref-value accent">CX-ARP-TP-2026-01</div></div>
+    <div class="cover-ref-item"><div class="cover-ref-label">Date</div><div class="cover-ref-value">September 2026</div></div>
+    <div class="cover-ref-item"><div class="cover-ref-label">Prepared For</div><div class="cover-ref-value">Alternative Rebar Plant</div></div>
+    <div class="cover-ref-item"><div class="cover-ref-label">Validity</div><div class="cover-ref-value">30 days</div></div>
   </div>
 
-  <!-- 1 EXEC SUMMARY -->
-  <div class="sheet" id="s1">
-    <div class="kick">Overview</div>
-    <h2 class="sec"><span class="secnum">1</span>Executive summary</h2>
-    <p class="body">Alternative Rebar Plant runs on Odoo today, but the platform is not yet delivering the connected, trustworthy operation a growing GFRP manufacturer needs. This proposal sets out how CodeOx — an <b>Odoo Silver Partner</b> — will re-implement and extend your Odoo into one system that runs the plant end to end: <b>manufacturing, inventory, quality, procurement, finance, HR/payroll and compliance</b>, with the shop floor and the books finally reading from the same data.</p>
-    <p class="body">Two threads run through everything below. First, a <b>compliant licensing model</b> that stops you paying for a user licence per head — the saving you asked about, done exactly the way Odoo intends. Second, alignment to <b>SIRI Band 2</b>, the maturity level that opens the government's <b>Future Factories</b> grant of up to 80% (cap SAR 300,000) toward this exact kind of ERP work. We begin with a fixed-scope audit at no cost, so nothing is priced before it is understood.</p>
-    <div class="green">
-      <h4>The headline outcomes</h4>
-      <p><b>One connected system</b> (no re-keying, real stock, true cost) · <b>a legal licence split</b> that cuts your per-user bill · <b>batch traceability &amp; ZATCA compliance</b> your mega-project clients expect · and a path to <b>SIRI Band 2</b> with <b>up to 80% grant funding</b> on the transformation.</p>
-    </div>
+  <div class="cover-footer">
+    <span class="cxbadge" style="padding:5px 9px"><img src="codeox-logo.svg" alt="CodeOx" style="height:15px"></span>
+    <span class="cover-footer-text">Code-Ox Technologies · shabeeb.k@code-ox.com · +966 53 571 6437 · Odoo Silver Partner</span>
   </div>
-
-  <!-- 2 UNDERSTANDING -->
-  <div class="sheet" id="s2">
-    <div class="kick">Context</div>
-    <h2 class="sec"><span class="secnum">2</span>Understanding of ARP</h2>
-    <p class="body">Alternative Rebar Plant, founded 2019 in Dammam 3rd Industrial City, manufactures <b>GFRP (glass-fibre reinforced polymer) rebar</b> using FRT Canada technology. ARP is a registered/approved vendor to <b>Aramco, NEOM, Red Sea Global, ROSHN, King Salman International Airport, Saudi Water Authority and SABIC</b>, with SASO, ARAMCO, CE, ASTM and CSA compliance — a supplier operating at mega-project standard.</p>
-    <p class="body">An Odoo subscription is already in place, but from our discussions the system is under-used and not fully integrated — a normal, maturing stage for a plant that scaled quickly. The opportunity now is not to start over from zero, but to <b>re-implement on solid foundations</b>: model manufacturing properly, make inventory trustworthy, connect the modules, and layer on the HR, compliance and integration pieces the business has grown into.</p>
-    <div class="g">
-      <div class="card"><div class="appic a-o">🏭</div><h3>What ARP makes</h3><p>GFRP rebar from resin and glass fibre — a real manufacturing flow (raw material → work orders → finished goods) that Odoo must model with BOMs, routings, yield and batch traceability.</p></div>
-      <div class="card"><div class="appic a-b">🎯</div><h3>What ARP needs from Odoo</h3><p>Trusted stock and cost, quality tied to batches, KSA-compliant invoicing and payroll, branch/department visibility, and a licence model that fits a large workforce without a licence per person.</p></div>
-    </div>
-  </div>
-
-  <!-- 3 OBJECTIVES & SCOPE -->
-  <div class="sheet" id="s3">
-    <div class="kick">Goals</div>
-    <h2 class="sec"><span class="secnum">3</span>Objectives &amp; scope</h2>
-    <p class="body">This engagement is scoped around the outcomes agreed in our meeting. In scope:</p>
-    <div class="reqs">
-      <div class="req"><span class="rn"></span><div><h4>A compliant, cost-optimised licensing model</h4><p>Move from a licence-per-user setup to the employee / portal / kiosk split — legal, and a large reduction in seats paid for.</p></div></div>
-      <div class="req"><span class="rn"></span><div><h4>Inventory set up properly</h4><p>Real warehouses, locations, lot/serial traceability, reordering and correct valuation.</p></div></div>
-      <div class="req"><span class="rn"></span><div><h4>Manufacturing &amp; quality</h4><p>BOMs and routings for GFRP rebar, work orders, and quality checks linked to production batches.</p></div></div>
-      <div class="req"><span class="rn"></span><div><h4>Finance &amp; ZATCA Phase 2</h4><p>Accounting integrated with operations and compliant e-invoicing.</p></div></div>
-      <div class="req"><span class="rn"></span><div><h4>HR: Payroll &amp; Appraisals</h4><p>KSA payroll (GOSI, WPS/Mudad, EOSB) and structured employee appraisals.</p></div></div>
-      <div class="req"><span class="rn"></span><div><h4>Integrations</h4><p>WhatsApp messaging, geolocation, and the system linked to your company domain (branded URL, email, optional SSO).</p></div></div>
-      <div class="req"><span class="rn"></span><div><h4>Enablement</h4><p>Use-case-specific demos before commitment, and role-based employee training at handover.</p></div></div>
-      <div class="req"><span class="rn"></span><div><h4>SIRI alignment</h4><p>Configure the build toward SIRI Band 2 and support the Future Factories grant application.</p></div></div>
-    </div>
-    <div class="note">Out of scope unless separately agreed: shop-floor IoT/PLC hardware supply, third-party licence fees, and any process re-engineering beyond ERP configuration. These are identified in the audit and quoted separately if wanted.</div>
-  </div>
-
-  <!-- 4 LICENSING -->
-  <div class="sheet" id="s4">
-    <div class="kick">Cost Model</div>
-    <h2 class="sec"><span class="secnum">4</span>Licensing model &amp; cost — and yes, it's legal</h2>
-    <p class="body">You pay a user licence per person today, which scales badly. The saving is real, and it is <span class="hl hl-y"><b>fully legal</b></span> — it is Odoo's own model: Odoo bills only for people who log into the backend to create and edit documents. Everyone else is free.</p>
-    <div class="g">
-      <div class="card"><div class="appic a-g">✓</div><h3>Where you save — 100% legitimate</h3><p><b>Employees ≠ Users:</b> an employee record has no login and costs nothing. <b>Kiosk mode</b> for attendance/production needs no per-worker login. <b>Free portal</b> for customers &amp; suppliers. Licence only the handful who truly transact.</p></div>
-      <div class="card"><div class="appic a-p">◑</div><h3>One practical point</h3><p>A portal user is free but <b>limited</b> — for viewing, not running backend apps. So anyone actively working inside Inventory, Manufacturing, Payroll or Appraisals gets a normal licensed user. We simply count those people accurately — legal and clean.</p></div>
-    </div>
-    <div class="reco"><div class="ic">◎</div><div><h4>Our recommendation — the licence split</h4><p>We map your headcount into three buckets: <b>employee records (free)</b> for most of the shop floor, <b>kiosk</b> for attendance/production, and <b>paid licences only for real operators</b>. You get the cost drop, fully within Odoo's terms — the exact licensed-user count is delivered in the audit.</p></div></div>
-    <div class="note">Final per-user pricing is confirmed against the live Odoo KSA price list at quotation time. As your Silver Partner, we secure partner pricing on your behalf.</div>
-  </div>
-
-  <!-- 5 MODULES -->
-  <div class="sheet" id="s5">
-    <div class="kick">Application Map</div>
-    <h2 class="sec"><span class="secnum">5</span>Proposed Odoo modules</h2>
-    <p class="body">The applications that make up the ARP build. Final module list is confirmed in the audit against what's already live.</p>
-    <table class="tbl">
-      <thead><tr><th style="width:22%">Module</th><th style="width:44%">What it does for ARP</th><th>Priority</th></tr></thead>
-      <tbody>
-        <tr><td class="modname">Manufacturing (MRP)</td><td>BOMs, routings, work orders and yield for GFRP rebar production.</td><td>Core</td></tr>
-        <tr><td class="modname">Inventory</td><td>Warehouses, locations, lot/serial traceability, reordering, valuation.</td><td>Core</td></tr>
-        <tr><td class="modname">Quality</td><td>QC control points and checks linked to production batches (ASTM/CSA evidence).</td><td>Core</td></tr>
-        <tr><td class="modname">Purchase</td><td>RFQs, vendor management, procurement tied to production demand.</td><td>Core</td></tr>
-        <tr><td class="modname">Accounting</td><td>Financials integrated with operations; <b>ZATCA Phase 2</b> e-invoicing.</td><td>Core</td></tr>
-        <tr><td class="modname">Sales / CRM</td><td>Quotations and orders for mega-project clients; pipeline visibility.</td><td>High</td></tr>
-        <tr><td class="modname">Employees</td><td>Workforce records (free, no licence) — the base of the licence split.</td><td>High</td></tr>
-        <tr><td class="modname">Payroll</td><td>KSA salary structures, GOSI, WPS/Mudad, end-of-service.</td><td>High</td></tr>
-        <tr><td class="modname">Appraisals</td><td>Structured performance evaluation cycles.</td><td>Medium</td></tr>
-        <tr><td class="modname">Attendance</td><td>Kiosk clock-in (no per-worker licence) with optional geolocation.</td><td>Medium</td></tr>
-        <tr><td class="modname">Maintenance</td><td>Preventive/curative maintenance on production equipment.</td><td>Optional</td></tr>
-        <tr><td class="modname">Studio</td><td>Custom fields, reports and Arabic/RTL documents where needed.</td><td>As needed</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 6 WORK PACKAGES -->
-  <div class="sheet" id="s6">
-    <div class="kick">Technical Detail</div>
-    <h2 class="sec"><span class="secnum">6</span>Technical work packages</h2>
-    <p class="body">How each agreed item is delivered. Everything is built and tested on a staging copy first, then handed over with your team trained.</p>
-    <div class="g">
-      <div class="card"><div class="appic a-o">📦</div><h3>Inventory done properly</h3><p>Warehouse &amp; location structure, min/max reordering rules, lot/serial tracking for full batch traceability, and correct cost valuation method — so on-hand and COGS can be trusted.</p><span class="tag">Core priority</span></div>
-      <div class="card"><div class="appic a-p">⚙</div><h3>Manufacturing &amp; quality</h3><p>Multi-level BOMs and routings for GFRP rebar, work centres and work orders, with quality control points that link every check to its production batch — the evidence trail ASTM/CSA/SASO buyers expect.</p><span class="tag">Core priority</span></div>
-      <div class="card"><div class="appic a-b">🧾</div><h3>Finance &amp; ZATCA Phase 2</h3><p>Chart of accounts, analytics per cost centre, and ZATCA Phase 2-compliant e-invoicing (clearance for B2B, QR where applicable) integrated with sales and inventory.</p><span class="tag">Compliance</span></div>
-      <div class="card"><div class="appic a-g">💵</div><h3>Payroll (KSA)</h3><p>Salary structures, allowances and deductions, GOSI, WPS / Mudad bank file generation and end-of-service — pay runs produced from Odoo each cycle, compliant.</p><span class="tag">KSA compliant</span></div>
-      <div class="card"><div class="appic a-r">⭐</div><h3>Appraisals</h3><p>Evaluation cycles, templates and scoring. Self-assessment needs a licensed login, so we scope reviewers-only licences or an HR-led model with you.</p><span class="tag">Licence-scoped</span></div>
-      <div class="card"><div class="appic a-t">📍</div><h3>Geolocation</h3><p>Geo-tagged attendance / field check-ins and delivery/customer mapping — configured where it earns its place, confirmed in the audit.</p><span class="tag">Scoped in audit</span></div>
-      <div class="card"><div class="appic a-g">💬</div><h3>WhatsApp integration</h3><p>WhatsApp connected to Odoo for order confirmations, dispatch notifications and internal alerts — one channel, sent straight from the system.</p><span class="tag">Integration</span></div>
-      <div class="card"><div class="appic a-v">🌐</div><h3>Domain &amp; access</h3><p>Odoo bound to your company domain — branded URL, company email on documents, and optional single sign-on so staff log in with existing work accounts.</p><span class="tag">Branded &amp; secure</span></div>
-      <div class="card"><div class="appic a-y">🧪</div><h3>Use-case demos</h3><p>Before full commitment, demos built on <b>your</b> real flows — a rebar production order, a stock issue, a payroll run — so you see it working on your case.</p><span class="tag">Proof first</span></div>
-    </div>
-  </div>
-
-  <!-- 7 ARCHITECTURE -->
-  <div class="sheet" id="s7">
-    <div class="kick">Platform</div>
-    <h2 class="sec"><span class="secnum">7</span>Solution architecture</h2>
-    <p class="body">A clean, supportable platform your team can own after go-live.</p>
-    <div class="g3">
-      <div class="card"><div class="appic a-p">☁</div><h3>Hosting</h3><p>Odoo.sh or your preferred hosting, with staging + production environments, automated backups and a documented restore path. Confirmed with your IT in the audit.</p></div>
-      <div class="card"><div class="appic a-b">🔐</div><h3>Security &amp; access</h3><p>Role-based access rights and record rules, domain/SSO login, and basic cybersecurity controls — also a SIRI Band 2 requirement.</p></div>
-      <div class="card"><div class="appic a-g">🔗</div><h3>Integrations</h3><p>WhatsApp, geolocation, ZATCA and bank (WPS/Mudad) connected through supported channels; custom modules kept in a namespaced repo you own.</p></div>
-    </div>
-    <div class="reco"><div class="ic">◎</div><div><h4>Data &amp; handover</h4><p>We migrate existing master data (items, BOMs, partners, opening balances) onto the rebuilt structure, and hand over <b>source, configuration docs and training material</b> — no black boxes. Your team owns and can extend the system.</p></div></div>
-  </div>
-
-  <!-- 8 SIRI -->
-  <div class="sheet" id="s8">
-    <div class="kick">Government Support · Vision 2030</div>
-    <h2 class="sec"><span class="secnum">8</span>SIRI &amp; Future Factories funding</h2>
-    <p class="body"><b>SIRI (Smart Industry Readiness Index)</b> is the framework the Ministry of Industry &amp; Mineral Resources uses to rate factory digital maturity — the only such index endorsed by the World Economic Forum. It gates the <b>Future Factories Program</b>, whose grants co-fund exactly the kind of ERP transformation in this proposal. As a 2019 plant, ARP is in the existing-factory track; the practical target is <b>Band 2</b>, which an integrated Odoo directly delivers.</p>
-    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:1.2rem;margin-top:1.4rem;padding:1.5rem 1.7rem;border-radius:var(--radius);background:linear-gradient(135deg,#F0FAF4,#EAF6EF);border:1px solid #CBEBD8">
-      <div style="font-family:var(--disp);font-weight:800;font-size:clamp(1.8rem,4vw,2.6rem);color:#248652;line-height:1;letter-spacing:-.03em">up to 80%</div>
-      <div style="font-size:.95rem;color:#2f5a45;line-height:1.5;max-width:44ch"><b>funded — capped at SAR 300,000.</b> Illustratively, a SAR 200,000 ERP scope would cost ARP roughly <b>SAR 40,000</b>; the Ministry grant covers the rest.</div>
-    </div>
-    <table class="tbl">
-      <thead><tr><th>Support track</th><th>Coverage</th><th>Cap</th><th>Purpose</th></tr></thead>
-      <tbody>
-        <tr><td class="modname">Basic Digitization Grant <span style="color:var(--purple)">← ARP</span></td><td>Up to 80%</td><td>SAR 300,000</td><td>ERP / digital systems to reach SIRI Band 2</td></tr>
-        <tr><td class="modname">Innovative Factories Grant</td><td>25%</td><td>SAR 10,000,000</td><td>R&amp;D and innovation, with research partners</td></tr>
-        <tr><td class="modname">Tanafusiya (SIDF)</td><td>Loans + grants</td><td>SAR 40,000,000</td><td>Automation, digitization, energy efficiency</td></tr>
-      </tbody>
-    </table>
-    <div class="reco"><div class="ic">◎</div><div><h4>Where CodeOx fits — straight talk</h4><p>Odoo delivered here directly raises SIRI Band 2 dimensions (enterprise integration, connectivity, quality-to-batch, cybersecurity). Funded work is submitted through an <b>approved provider</b> — a requirement for every vendor — which we deliver by partnering with an accredited provider or securing accreditation. The Odoo project stands on its own value; the grant is <b>upside</b>.</p></div></div>
-    <div class="note">Grant figures (80% / SAR 300k) and the Band 2 target are reported consistently by approved implementation providers but not yet cross-checked against a primary MIM document. Assessment-to-results typically runs 8–14 weeks. Exact terms and the approved-provider route are confirmed with MIM before hard figures are committed — the grant is a target we pursue together, not a guarantee.</div>
-  </div>
-
-  <!-- 9 METHODOLOGY -->
-  <div class="sheet" id="s9">
-    <div class="kick">How We Deliver</div>
-    <h2 class="sec"><span class="secnum">9</span>Delivery methodology</h2>
-    <p class="body">A staged approach that de-risks every step. Nothing touches production until it's signed off on staging.</p>
-    <div class="phase"><div class="pnum">0</div><div class="pbody"><h4>Audit &amp; SIRI gap assessment <span>free</span></h4><p>Fixed-scope review of the current Odoo and operations against Band 2 — RAG scorecard, gap register, licence-count, and a phased fix-vs-rebuild roadmap.</p></div></div>
-    <div class="phase"><div class="pnum">1</div><div class="pbody"><h4>Blueprint &amp; demos</h4><p>Solution design signed off with your team, plus use-case demos on your real flows before committing to the full build.</p></div></div>
-    <div class="phase"><div class="pnum">2</div><div class="pbody"><h4>Configure &amp; build (staging)</h4><p>Modules configured, customisations built, integrations wired — all on a staging clone, code-reviewed with your developer.</p></div></div>
-    <div class="phase"><div class="pnum">3</div><div class="pbody"><h4>Data migration &amp; UAT</h4><p>Master data and opening balances migrated; you test core flows and sign off.</p></div></div>
-    <div class="phase"><div class="pnum">4</div><div class="pbody"><h4>Training &amp; go-live</h4><p>Role-based training and guides, then a scheduled cutover with a rollback plan.</p></div></div>
-    <div class="phase"><div class="pnum">5</div><div class="pbody"><h4>Hypercare &amp; SIRI follow-up</h4><p>Stabilisation support after go-live, and the follow-up SIRI assessment to confirm the new maturity level for the grant.</p></div></div>
-  </div>
-
-  <!-- 10 TIMELINE -->
-  <div class="sheet" id="s10">
-    <div class="kick">Schedule</div>
-    <h2 class="sec"><span class="secnum">10</span>Indicative timeline</h2>
-    <p class="body">Indicative only — the audit produces the confirmed schedule. Durations are working weeks and phases overlap where dependencies allow.</p>
-    <table class="tbl">
-      <thead><tr><th>Phase</th><th>Focus</th><th>Indicative duration</th></tr></thead>
-      <tbody>
-        <tr><td class="modname">0 · Audit</td><td>Health + SIRI gap assessment, roadmap, licence plan</td><td>1–2 weeks</td></tr>
-        <tr><td class="modname">1 · Blueprint &amp; demos</td><td>Design sign-off, use-case demos</td><td>1–2 weeks</td></tr>
-        <tr><td class="modname">2 · Build</td><td>Manufacturing, inventory, quality, finance, HR, integrations</td><td>6–10 weeks</td></tr>
-        <tr><td class="modname">3 · Migration &amp; UAT</td><td>Data load, testing, sign-off</td><td>2–3 weeks</td></tr>
-        <tr><td class="modname">4 · Training &amp; go-live</td><td>Training, cutover</td><td>1–2 weeks</td></tr>
-        <tr><td class="modname">5 · Hypercare</td><td>Stabilisation + SIRI follow-up</td><td>2–4 weeks</td></tr>
-      </tbody>
-    </table>
-    <div class="note">The SIRI assessment-to-results cycle (≈8–14 weeks) runs in parallel with the build where the program timeline allows.</div>
-  </div>
-
-  <!-- 11 WHY CODEOX -->
-  <div class="sheet" id="s11">
-    <div class="kick">Your Partner</div>
-    <h2 class="sec"><span class="secnum">11</span>Why CodeOx</h2>
-    <p class="body">An <b>Odoo Silver Partner</b> with certified experts and a manufacturing/ERP delivery track record. We work on staging first, hand over clean source and documentation, and leave your team owning the system — the practices a SIRI-grade, audit-ready build demands.</p>
-    <div class="g3">
-      <div class="card"><div class="appic a-p">🥈</div><h3>Odoo Silver Partner</h3><p>Official partner status with direct access to Odoo's partner channels and pricing.</p></div>
-      <div class="card"><div class="appic a-b">👥</div><h3>Certified experts</h3><p>Odoo-certified consultants delivering on the current version, across manufacturing and finance.</p></div>
-      <div class="card"><div class="appic a-g">🤝</div><h3>Ownership, not lock-in</h3><p>Namespaced custom code, documentation and training handed over — you own and extend the system.</p></div>
-    </div>
-  </div>
-
-  <!-- 12 COMMERCIAL -->
-  <div class="sheet" id="s12">
-    <div class="kick">Commercials</div>
-    <h2 class="sec"><span class="secnum">12</span>Commercial approach</h2>
-    <p class="body">We price only what we've looked inside. The engagement therefore starts with a <b>free, fixed-scope audit</b> that produces a scored gap report, the exact licensed-user count, and a phased roadmap. A detailed commercial quotation follows the audit, structured so you can commission phase by phase.</p>
-    <div class="green"><h4>How the numbers work out</h4><p>Two levers keep your net cost down: the <b>licence split</b> (you stop paying per head), and the <b>Future Factories grant</b> (up to 80% of the transformation, cap SAR 300,000). Between them, a large share of both the ongoing licence bill and the one-off implementation can be reduced or offset — the audit quantifies exactly how much for ARP.</p></div>
-    <div class="note">No hard SAR figures are quoted in this proposal by design — licensing is confirmed against the live KSA price list, and implementation is scoped from the audit findings. The illustrative SAR 200k → 40k example is for grant mechanics only, not a quotation.</div>
-  </div>
-
-  <!-- 13 ASSUMPTIONS & NEXT STEPS -->
-  <div class="sheet" id="s13">
-    <div class="kick">Close</div>
-    <h2 class="sec"><span class="secnum">13</span>Assumptions &amp; next steps</h2>
-    <ul class="terms">
-      <li><div><b>Access:</b> ARP provides timely access to the current Odoo instance, a database + filestore backup, and the relevant staff for discovery and UAT.</div></li>
-      <li><div><b>Licences &amp; hosting:</b> Odoo licences and hosting are billed on ARP's subscription; CodeOx secures partner pricing. Final licence count follows the audit.</div></li>
-      <li><div><b>SIRI / grant:</b> Grant eligibility, figures and the approved-provider route are confirmed with MIM before any funding is treated as firm.</div></li>
-      <li><div><b>Third-party costs:</b> Any third-party module licences, hardware/IoT, or payment/bank integration fees are billed to ARP by the respective provider.</div></li>
-      <li><div><b>Scope:</b> Work beyond the configured scope is handled through a change request and quoted separately.</div></li>
-    </ul>
-    <div class="reco"><div class="ic">◎</div><div><h4>Recommended next step</h4><p>Authorise the <b>free audit &amp; SIRI gap assessment</b>. It gives you the licence-count, the scored gap report and the phased roadmap — with zero cost and no commitment to the build.</p></div></div>
-    <div class="contact">
-      <div class="who">Shabeeb K<span>Head of Operations · CodeOx Technologies</span></div>
-      <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a>
-      <a href="tel:+966535716437">+966 53 571 6437</a>
-      <span class="cxbadge"><img src="codeox-logo.svg" alt="CodeOx"></span>
-    </div>
-  </div>
-
 </div>
+
+<!-- PAGE 2 — EXECUTIVE SUMMARY -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Overview</div>
+    <div class="section-heading">Executive Summary</div>
+    <p class="body">Alternative Rebar Plant runs on Odoo today, but the platform is not yet delivering the connected, trustworthy operation a growing GFRP manufacturer needs. This proposal sets out how CodeOx — an <b>Odoo Silver Partner</b> — will re-implement and extend your Odoo into one system that runs the plant end to end: <b>manufacturing, inventory, quality, procurement, finance, HR/payroll and compliance</b>, with the shop floor and the books finally reading from the same data.</p>
+    <p class="body">Two threads run through everything that follows. First, a <b>compliant licensing model</b> that stops you paying for a user licence per head — the saving you asked about, done exactly the way Odoo intends. Second, alignment to <b>SIRI Band 2</b>, the maturity level that opens the government's <b>Future Factories</b> grant of up to 80% (cap SAR 300,000) toward this exact kind of ERP work. We begin with a fixed-scope audit at no cost, so nothing is priced before it is understood.</p>
+
+    <div class="note-box green"><div class="note-label">Headline Outcomes</div><p><strong>One connected system</strong> (no re-keying, real stock, true cost) · <strong>a legal licence split</strong> that cuts your per-user bill · <strong>batch traceability &amp; ZATCA compliance</strong> your mega-project clients expect · and a path to <strong>SIRI Band 2</strong> with up to 80% grant funding on the transformation.</p></div>
+
+    <hr class="section-hr">
+    <div class="section-label" style="margin-bottom:12px;">What We Will Deliver</div>
+    <div class="deliver-grid">
+      <div class="deliver-item"><span class="deliver-check"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>Re-implemented Odoo core</strong>Manufacturing, inventory, quality, purchase and finance, integrated and tested on staging.</div></div>
+      <div class="deliver-item"><span class="deliver-check"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>Compliant licence model</strong>Employee / portal / kiosk split with an exact licensed-user count.</div></div>
+      <div class="deliver-item"><span class="deliver-check"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>KSA HR &amp; payroll</strong>GOSI, WPS/Mudad, end-of-service, and structured appraisals.</div></div>
+      <div class="deliver-item"><span class="deliver-check"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>Integrations</strong>WhatsApp, geolocation, ZATCA Phase 2, and domain / SSO link.</div></div>
+      <div class="deliver-item"><span class="deliver-check"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>SIRI alignment</strong>Build configured toward Band 2 with Future Factories grant support.</div></div>
+      <div class="deliver-item"><span class="deliver-check"><svg viewBox="0 0 10 10" fill="none" width="8" height="8"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><strong>Training &amp; handover</strong>Role-based training, source, docs — your team owns the system.</div></div>
+    </div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 2</span></div>
+</div>
+
+<!-- PAGE 3 — UNDERSTANDING & SCOPE -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Context</div>
+    <div class="section-heading">Understanding of ARP</div>
+    <p class="body">Alternative Rebar Plant, founded 2019 in Dammam 3rd Industrial City, manufactures <b>GFRP (glass-fibre reinforced polymer) rebar</b> using FRT Canada technology. ARP is a registered/approved vendor to <b>Aramco, NEOM, Red Sea Global, ROSHN, King Salman International Airport, Saudi Water Authority and SABIC</b>, with SASO, ARAMCO, CE, ASTM and CSA compliance — a supplier operating at mega-project standard.</p>
+    <p class="body">An Odoo subscription is already in place, but from our discussions the system is under-used and not fully integrated — a normal, maturing stage for a plant that scaled quickly. The opportunity now is not to start over, but to <b>re-implement on solid foundations</b>: model manufacturing properly, make inventory trustworthy, connect the modules, and layer on the HR, compliance and integration pieces the business has grown into.</p>
+    <div class="info-grid">
+      <div class="info-card tinted"><div class="info-card-label"><span class="ic">▸</span>What ARP makes</div><div class="info-card-value">GFRP rebar from resin and glass fibre — a real manufacturing flow (raw material → work orders → finished goods) Odoo must model with BOMs, routings, yield and <b>batch traceability</b>.</div></div>
+      <div class="info-card tinted"><div class="info-card-label"><span class="ic">▸</span>What ARP needs from Odoo</div><div class="info-card-value">Trusted stock and cost, quality tied to batches, KSA-compliant invoicing and payroll, department visibility, and a <b>licence model</b> that fits a large workforce without a seat per person.</div></div>
+    </div>
+
+    <hr class="section-hr">
+    <div class="section-label">Goals</div>
+    <div class="section-heading" style="font-size:22px;">Objectives &amp; Scope</div>
+    <table class="pricing-table">
+      <thead><tr><th style="width:24px;">#</th><th>In scope for this engagement</th></tr></thead>
+      <tbody>
+        <tr><td class="row-num">01</td><td><span class="module-name">Compliant, cost-optimised licensing model</span><span class="module-desc">Move from licence-per-user to the employee / portal / kiosk split — legal, and a large reduction in paid seats.</span></td></tr>
+        <tr><td class="row-num">02</td><td><span class="module-name">Inventory set up properly</span><span class="module-desc">Warehouses, locations, lot/serial traceability, reordering and correct valuation.</span></td></tr>
+        <tr><td class="row-num">03</td><td><span class="module-name">Manufacturing &amp; quality</span><span class="module-desc">BOMs and routings for GFRP rebar, work orders, and quality checks linked to production batches.</span></td></tr>
+        <tr><td class="row-num">04</td><td><span class="module-name">Finance &amp; ZATCA Phase 2</span><span class="module-desc">Accounting integrated with operations and compliant e-invoicing.</span></td></tr>
+        <tr><td class="row-num">05</td><td><span class="module-name">HR: Payroll &amp; Appraisals</span><span class="module-desc">KSA payroll (GOSI, WPS/Mudad, EOSB) and structured employee appraisals.</span></td></tr>
+        <tr><td class="row-num">06</td><td><span class="module-name">Integrations</span><span class="module-desc">WhatsApp, geolocation, and the system linked to your company domain (branded URL, email, optional SSO).</span></td></tr>
+        <tr><td class="row-num">07</td><td><span class="module-name">Enablement</span><span class="module-desc">Use-case-specific demos before commitment, and role-based training at handover.</span></td></tr>
+        <tr><td class="row-num">08</td><td><span class="module-name">SIRI alignment</span><span class="module-desc">Configure toward SIRI Band 2 and support the Future Factories grant application.</span></td></tr>
+      </tbody>
+    </table>
+    <div class="note-box purple"><div class="note-label">Out of Scope</div><p>Unless separately agreed: shop-floor IoT/PLC hardware supply, third-party module licence fees, and process re-engineering beyond ERP configuration. These are identified in the audit and quoted separately if wanted.</p></div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 3</span></div>
+</div>
+
+<!-- PAGE 4 — LICENSING -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Cost Model</div>
+    <div class="section-heading">Licensing Model &amp; Cost</div>
+    <p class="body">You pay a user licence per person today, which scales badly. The saving is real, and it is <b>fully legal</b> — it is Odoo's own model: Odoo bills only for people who log into the backend to create and edit documents. Everyone else is free.</p>
+    <div class="note-box green"><div class="note-label">Straight answer</div><p>The <strong>employee-and-portal concept is a standard, fully-licensed Odoo model</strong> — not a loophole. Nothing to worry about on the legal side.</p></div>
+    <div class="info-grid">
+      <div class="info-card"><div class="info-card-label"><span class="ic">✓</span>Where you save — 100% legitimate</div><div class="info-card-value"><b>Employees ≠ Users:</b> an employee record has no login and costs nothing. <b>Kiosk mode</b> for attendance/production needs no per-worker login. <b>Free portal</b> for customers &amp; suppliers. Licence only the handful who truly transact.</div></div>
+      <div class="info-card"><div class="info-card-label"><span class="ic">◑</span>One practical point</div><div class="info-card-value">A portal user is free but <b>limited</b> — for viewing, not running backend apps. So anyone actively working inside Inventory, Manufacturing, Payroll or Appraisals gets a normal licensed user. We simply count those people accurately.</div></div>
+    </div>
+    <div class="part-banner"><div class="part-badge">◎</div><div><div class="part-banner-sub">Our recommendation</div><div class="part-banner-title">The licence split</div></div></div>
+    <p class="body">We map your headcount into three buckets: <b>employee records (free)</b> for most of the shop floor, <b>kiosk</b> for attendance/production, and <b>paid licences only for real operators</b>. You get the cost drop, fully within Odoo's terms — the exact licensed-user count is delivered in the audit.</p>
+    <div class="note-box purple"><div class="note-label">Pricing</div><p>Final per-user pricing is confirmed against the live Odoo KSA price list at quotation time. As your Silver Partner, we secure partner pricing on your behalf.</p></div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 4</span></div>
+</div>
+
+<!-- PAGE 5 — MODULES -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Application Map</div>
+    <div class="section-heading">Proposed Odoo Modules</div>
+    <p class="section-intro">The applications that make up the ARP build. The final module list is confirmed in the audit against what is already live.</p>
+    <table class="pricing-table">
+      <thead><tr><th style="width:150px;">Module</th><th>What it does for ARP</th><th style="width:80px;">Priority</th></tr></thead>
+      <tbody>
+        <tr><td><span class="module-name">Manufacturing (MRP)</span></td><td class="module-desc">BOMs, routings, work orders and yield for GFRP rebar production.</td><td class="prio core">Core</td></tr>
+        <tr><td><span class="module-name">Inventory</span></td><td class="module-desc">Warehouses, locations, lot/serial traceability, reordering, valuation.</td><td class="prio core">Core</td></tr>
+        <tr><td><span class="module-name">Quality</span></td><td class="module-desc">QC control points and checks linked to production batches (ASTM/CSA evidence).</td><td class="prio core">Core</td></tr>
+        <tr><td><span class="module-name">Purchase</span></td><td class="module-desc">RFQs, vendor management, procurement tied to production demand.</td><td class="prio core">Core</td></tr>
+        <tr><td><span class="module-name">Accounting</span></td><td class="module-desc">Financials integrated with operations; ZATCA Phase 2 e-invoicing.</td><td class="prio core">Core</td></tr>
+        <tr><td><span class="module-name">Sales / CRM</span></td><td class="module-desc">Quotations and orders for mega-project clients; pipeline visibility.</td><td class="prio">High</td></tr>
+        <tr><td><span class="module-name">Employees</span></td><td class="module-desc">Workforce records (free, no licence) — the base of the licence split.</td><td class="prio">High</td></tr>
+        <tr><td><span class="module-name">Payroll</span></td><td class="module-desc">KSA salary structures, GOSI, WPS/Mudad, end-of-service.</td><td class="prio">High</td></tr>
+        <tr><td><span class="module-name">Appraisals</span></td><td class="module-desc">Structured performance evaluation cycles.</td><td class="prio">Medium</td></tr>
+        <tr><td><span class="module-name">Attendance</span></td><td class="module-desc">Kiosk clock-in (no per-worker licence) with optional geolocation.</td><td class="prio">Medium</td></tr>
+        <tr><td><span class="module-name">Maintenance</span></td><td class="module-desc">Preventive / curative maintenance on production equipment.</td><td class="prio">Optional</td></tr>
+        <tr><td><span class="module-name">Studio</span></td><td class="module-desc">Custom fields, reports and Arabic/RTL documents where needed.</td><td class="prio">As needed</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box orange"><div class="note-label">Note</div><p>Module priorities are indicative and refined in the audit. Some may already be partly configured on your current Odoo — where so, we build on the existing setup rather than replace it.</p></div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 5</span></div>
+</div>
+
+<!-- PAGE 6 — WORK PACKAGES -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Technical Detail</div>
+    <div class="section-heading">Technical Work Packages</div>
+    <p class="section-intro">How each agreed item is delivered. Everything is built and tested on a staging copy first, then handed over with your team trained.</p>
+    <div class="wp-grid">
+      <div class="wp accent"><h3>Inventory done properly</h3><p>Warehouse &amp; location structure, min/max reordering, <b>lot/serial tracking</b> for full batch traceability, and correct cost valuation — so on-hand and COGS can be trusted.</p></div>
+      <div class="wp accent"><h3>Manufacturing &amp; quality</h3><p>Multi-level BOMs and routings for GFRP rebar, work centres and work orders, with <b>quality control points linked to each production batch</b> — the evidence ASTM/CSA/SASO buyers expect.</p></div>
+      <div class="wp"><h3>Finance &amp; ZATCA Phase 2</h3><p>Chart of accounts, analytics per cost centre, and <b>ZATCA Phase 2-compliant e-invoicing</b> (clearance for B2B, QR where applicable) integrated with sales and inventory.</p></div>
+      <div class="wp"><h3>Payroll (KSA)</h3><p>Salary structures, allowances/deductions, <b>GOSI, WPS/Mudad</b> bank file and end-of-service — pay runs produced from Odoo each cycle, compliant.</p></div>
+      <div class="wp"><h3>Appraisals</h3><p>Evaluation cycles, templates and scoring. Self-assessment needs a licensed login, so we scope reviewers-only licences or an HR-led model with you.</p></div>
+      <div class="wp"><h3>Geolocation</h3><p>Geo-tagged attendance / field check-ins and delivery/customer mapping — configured where it earns its place, confirmed in the audit.</p></div>
+      <div class="wp"><h3>WhatsApp integration</h3><p>WhatsApp connected to Odoo for order confirmations, dispatch notifications and internal alerts — one channel, sent from the system.</p></div>
+      <div class="wp"><h3>Domain &amp; access</h3><p>Odoo bound to your company domain — branded URL, company email on documents, and optional single sign-on with existing work accounts.</p></div>
+      <div class="wp"><h3>Use-case demos</h3><p>Before full commitment, demos on <b>your</b> real flows — a rebar production order, a stock issue, a payroll run — so you see it working on your case.</p></div>
+      <div class="wp"><h3>Training &amp; adoption</h3><p>Role-based sessions for operators, storekeepers, HR and accounts, with short written guides so the team owns the system after go-live.</p></div>
+    </div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 6</span></div>
+</div>
+
+<!-- PAGE 7 — ARCHITECTURE -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Platform</div>
+    <div class="section-heading">Solution Architecture</div>
+    <p class="section-intro">A clean, supportable platform your team can own after go-live — one connected line from the shop floor to the books.</p>
+    <div class="arch-band channels"><div class="arch-band-label">Source &amp; Make</div><div class="arch-nodes">
+      <div class="arch-node">Purchase &amp; vendors<b>Procurement</b></div>
+      <div class="arch-node">BOM · routing · work orders<b>Manufacturing</b></div>
+      <div class="arch-node">QC linked to batch<b>Quality</b></div>
+      <div class="arch-node">Lots · locations · valuation<b>Inventory</b></div>
+    </div></div>
+    <div class="arch-sep">▼</div>
+    <div class="arch-band hub"><div class="arch-band-label">One Odoo Core</div><div class="arch-nodes">
+      <div class="arch-node">Single valued inventory<b>One source of truth</b></div>
+      <div class="arch-node">Analytics per cost centre<b>Finance</b></div>
+      <div class="arch-node">ZATCA Phase 2<b>Compliance</b></div>
+      <div class="arch-node">Role-based access<b>Security</b></div>
+    </div></div>
+    <div class="arch-sep">▼</div>
+    <div class="arch-band channels"><div class="arch-band-label">Sell, Serve &amp; Run</div><div class="arch-nodes">
+      <div class="arch-node">Quotes &amp; orders<b>Sales / CRM</b></div>
+      <div class="arch-node">Payroll · appraisals · kiosk<b>HR</b></div>
+      <div class="arch-node">WhatsApp · geolocation<b>Integrations</b></div>
+    </div></div>
+    <div class="arch-sep">▼</div>
+    <div class="arch-band platform"><div class="arch-band-label">Platform &amp; Ownership</div><div class="arch-nodes">
+      <div class="arch-node">Odoo.sh — staging + production<b>Hosting</b></div>
+      <div class="arch-node">Automated backups + restore<b>Continuity</b></div>
+      <div class="arch-node">Domain / SSO login<b>Access</b></div>
+      <div class="arch-node">Namespaced custom code<b>You own it</b></div>
+    </div></div>
+    <div class="note-box purple"><div class="note-label">Data &amp; Handover</div><p>We migrate existing master data (items, BOMs, partners, opening balances) onto the rebuilt structure, and hand over <strong>source, configuration docs and training material</strong> — no black boxes. Your team owns and can extend the system.</p></div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 7</span></div>
+</div>
+
+<!-- PAGE 8 — SIRI -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Government Support · Vision 2030</div>
+    <div class="section-heading">SIRI &amp; Future Factories Funding</div>
+    <p class="body"><b>SIRI (Smart Industry Readiness Index)</b> is the framework the Ministry of Industry &amp; Mineral Resources uses to rate factory digital maturity — the only such index endorsed by the World Economic Forum. It gates the <b>Future Factories Program</b>, whose grants co-fund exactly the kind of ERP transformation in this proposal. As a 2019 plant, ARP is in the existing-factory track; the practical target is <b>Band 2</b>, which an integrated Odoo directly delivers.</p>
+    <div class="fund-band"><div class="big">up to 80%</div><div class="txt"><b>funded — capped at SAR 300,000.</b> Illustratively, a SAR 200,000 ERP scope would cost ARP roughly <b>SAR 40,000</b>; the Ministry grant covers the rest.</div></div>
+    <table class="pricing-table">
+      <thead><tr><th>Support track</th><th style="width:110px;">Coverage</th><th style="width:120px;">Cap</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><span class="module-name">Basic Digitization Grant <span style="color:#714B67">← ARP</span></span></td><td class="module-desc">Up to 80%</td><td class="module-desc">SAR 300,000</td><td class="module-desc">ERP / digital systems to reach SIRI Band 2</td></tr>
+        <tr><td><span class="module-name">Innovative Factories Grant</span></td><td class="module-desc">25%</td><td class="module-desc">SAR 10,000,000</td><td class="module-desc">R&amp;D and innovation, with research partners</td></tr>
+        <tr><td><span class="module-name">Tanafusiya (SIDF)</span></td><td class="module-desc">Loans + grants</td><td class="module-desc">SAR 40,000,000</td><td class="module-desc">Automation, digitization, energy efficiency</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box purple"><div class="note-label">Where CodeOx fits — straight talk</div><p>Odoo delivered here directly raises SIRI Band 2 dimensions (enterprise integration, connectivity, quality-to-batch, cybersecurity). Funded work is submitted through an <strong>approved provider</strong> — a requirement for every vendor — which we deliver by partnering with an accredited provider or securing accreditation. The Odoo project stands on its own value; the grant is <strong>upside</strong>.</p></div>
+    <div class="note-box orange"><div class="note-label">Important note on figures</div><p>Grant figures (80% / SAR 300k) and the Band 2 target are reported consistently by approved implementation providers but not yet cross-checked against a primary MIM document. Assessment-to-results typically runs 8–14 weeks. Exact terms and the approved-provider route are confirmed with MIM before hard figures are committed — the grant is a target we pursue together, not a guarantee.</p></div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 8</span></div>
+</div>
+
+<!-- PAGE 9 — METHODOLOGY & TIMELINE -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">How We Deliver</div>
+    <div class="section-heading">Delivery Methodology</div>
+    <p class="section-intro">A staged approach that de-risks every step. Nothing touches production until it is signed off on staging.</p>
+    <div style="margin-bottom:18px;">
+      <div class="phase-row"><div class="phase-n">0</div><div class="phase-b"><h4>Audit &amp; SIRI gap assessment <span>free</span></h4><p>Fixed-scope review of the current Odoo and operations against Band 2 — RAG scorecard, gap register, licence-count, and a phased fix-vs-rebuild roadmap.</p></div></div>
+      <div class="phase-row"><div class="phase-n">1</div><div class="phase-b"><h4>Blueprint &amp; demos</h4><p>Solution design signed off with your team, plus use-case demos on your real flows before committing to the full build.</p></div></div>
+      <div class="phase-row"><div class="phase-n">2</div><div class="phase-b"><h4>Configure &amp; build (staging)</h4><p>Modules configured, customisations built, integrations wired — all on a staging clone, code-reviewed with your developer.</p></div></div>
+      <div class="phase-row"><div class="phase-n">3</div><div class="phase-b"><h4>Data migration &amp; UAT</h4><p>Master data and opening balances migrated; you test core flows and sign off.</p></div></div>
+      <div class="phase-row"><div class="phase-n">4</div><div class="phase-b"><h4>Training &amp; go-live</h4><p>Role-based training and guides, then a scheduled cutover with a rollback plan.</p></div></div>
+      <div class="phase-row"><div class="phase-n">5</div><div class="phase-b"><h4>Hypercare &amp; SIRI follow-up</h4><p>Stabilisation support after go-live, and the follow-up SIRI assessment to confirm the new maturity level for the grant.</p></div></div>
+    </div>
+
+    <div class="section-label">Schedule</div>
+    <div class="section-heading" style="font-size:22px;">Indicative Timeline</div>
+    <table class="pricing-table">
+      <thead><tr><th style="width:150px;">Phase</th><th>Focus</th><th style="width:110px;">Duration</th></tr></thead>
+      <tbody>
+        <tr><td><span class="module-name">0 · Audit</span></td><td class="module-desc">Health + SIRI gap assessment, roadmap, licence plan</td><td class="prio">1–2 weeks</td></tr>
+        <tr><td><span class="module-name">1 · Blueprint &amp; demos</span></td><td class="module-desc">Design sign-off, use-case demos</td><td class="prio">1–2 weeks</td></tr>
+        <tr><td><span class="module-name">2 · Build</span></td><td class="module-desc">Manufacturing, inventory, quality, finance, HR, integrations</td><td class="prio">6–10 weeks</td></tr>
+        <tr><td><span class="module-name">3 · Migration &amp; UAT</span></td><td class="module-desc">Data load, testing, sign-off</td><td class="prio">2–3 weeks</td></tr>
+        <tr><td><span class="module-name">4 · Training &amp; go-live</span></td><td class="module-desc">Training, cutover</td><td class="prio">1–2 weeks</td></tr>
+        <tr><td><span class="module-name">5 · Hypercare</span></td><td class="module-desc">Stabilisation + SIRI follow-up</td><td class="prio">2–4 weeks</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box purple"><div class="note-label">Note</div><p>Indicative only — the audit produces the confirmed schedule. Phases overlap where dependencies allow; the SIRI assessment-to-results cycle (≈8–14 weeks) runs in parallel with the build where the program timeline permits.</p></div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 9</span></div>
+</div>
+
+<!-- PAGE 10 — WHY CODEOX & COMMERCIAL -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Your Partner</div>
+    <div class="section-heading">Why CodeOx</div>
+    <p class="body">An <b>Odoo Silver Partner</b> with certified experts and a manufacturing/ERP delivery track record. We work on staging first, hand over clean source and documentation, and leave your team owning the system — the practices a SIRI-grade, audit-ready build demands.</p>
+    <div class="info-grid" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="info-card tinted"><div class="info-card-label">Odoo Silver Partner</div><div class="info-card-value">Official partner status with direct access to Odoo's partner channels and pricing.</div></div>
+      <div class="info-card tinted"><div class="info-card-label">Certified Experts</div><div class="info-card-value">Odoo-certified consultants delivering on the current version, across manufacturing and finance.</div></div>
+      <div class="info-card tinted"><div class="info-card-label">Ownership, not lock-in</div><div class="info-card-value">Namespaced custom code, documentation and training handed over — you own and extend it.</div></div>
+    </div>
+
+    <hr class="section-hr">
+    <div class="section-label">Commercials</div>
+    <div class="section-heading" style="font-size:22px;">Commercial Approach</div>
+    <p class="body">We price only what we have looked inside. The engagement therefore starts with a <b>free, fixed-scope audit</b> that produces a scored gap report, the exact licensed-user count, and a phased roadmap. A detailed commercial quotation follows the audit, structured so you can commission phase by phase.</p>
+    <div class="note-box green"><div class="note-label">How the numbers work out</div><p>Two levers keep your net cost down: the <strong>licence split</strong> (you stop paying per head), and the <strong>Future Factories grant</strong> (up to 80% of the transformation, cap SAR 300,000). Between them, a large share of both the ongoing licence bill and the one-off implementation can be reduced or offset — the audit quantifies exactly how much for ARP.</p></div>
+    <div class="note-box orange"><div class="note-label">On pricing</div><p>No hard SAR figures are quoted in this proposal by design — licensing is confirmed against the live KSA price list, and implementation is scoped from the audit findings. The illustrative SAR 200k → 40k example is for grant mechanics only, not a quotation.</p></div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 10</span></div>
+</div>
+
+<!-- PAGE 11 — ASSUMPTIONS & TERMS -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Terms</div>
+    <div class="section-heading">Assumptions &amp; Terms</div>
+    <ul class="terms-list">
+      <li><span class="terms-dot"></span><div><b>Access:</b> ARP provides timely access to the current Odoo instance, a database + filestore backup, and the relevant staff for discovery and UAT. Delays caused by the client may impact the timeline.</div></li>
+      <li><span class="terms-dot"></span><div><b>Licences &amp; hosting:</b> Odoo licences and hosting are billed on ARP's subscription; CodeOx secures partner pricing. The final licence count follows the audit.</div></li>
+      <li><span class="terms-dot"></span><div><b>SIRI / grant:</b> Grant eligibility, figures and the approved-provider route are confirmed with MIM before any funding is treated as firm. The grant is a target pursued together, not a guarantee.</div></li>
+      <li><span class="terms-dot"></span><div><b>Third-party costs:</b> Any third-party module licences, hardware/IoT, or payment/bank integration fees are billed to ARP by the respective provider.</div></li>
+      <li><span class="terms-dot"></span><div><b>Scope &amp; changes:</b> Work beyond the configured scope is handled through a written change request and quoted separately.</div></li>
+      <li><span class="terms-dot"></span><div><b>Warranty &amp; support:</b> A stabilisation (hypercare) period is provided post go-live for the delivered scope. Extended support retainers are available on request.</div></li>
+      <li><span class="terms-dot"></span><div><b>Confidentiality:</b> Both parties keep the contents of this proposal confidential and do not disclose them to third parties without prior written consent.</div></li>
+      <li><span class="terms-dot"></span><div><b>Validity &amp; governing law:</b> This proposal is valid for 30 days from issuance and is governed by the laws of the Kingdom of Saudi Arabia.</div></li>
+    </ul>
+    <div class="note-box purple" style="margin-top:16px;"><div class="note-label">Recommended Next Step</div><p>Authorise the <strong>free audit &amp; SIRI gap assessment</strong>. It delivers the licence-count, the scored gap report and the phased roadmap — with zero cost and no commitment to the build.</p></div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 11</span></div>
+</div>
+
+<!-- PAGE 12 — ACCEPTANCE -->
+<div class="page inner-page">
+  <div class="inner-header"><div class="inner-header-title">Alternative Rebar Plant — Technical Proposal</div><div class="inner-header-ref">CX-ARP-TP-2026-01 · September 2026</div></div>
+  <div class="inner-content">
+    <div class="section-label">Authorization</div>
+    <div class="section-heading">Acceptance &amp; Authorization</div>
+    <div class="signoff-statement">By signing below, both parties confirm acceptance of this technical proposal and authorize commencement of the engagement — beginning with the complimentary audit &amp; SIRI gap assessment — under the scope, approach and terms set out above.</div>
+    <div class="signoff-block">
+      <div class="signoff-header">Acceptance &amp; Sign-off</div>
+      <div class="signoff-body">
+        <div class="signoff-cols">
+          <div>
+            <div class="signoff-col-header">For Alternative Rebar Plant</div>
+            <div class="signoff-field"><div class="signoff-field-label">Name</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Title</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Signature &amp; Date</div><div class="signoff-field-line"></div></div>
+          </div>
+          <div>
+            <div class="signoff-col-header">For Code-Ox Technologies</div>
+            <div class="signoff-field"><div class="signoff-field-label">Name</div><div class="signoff-field-line" style="height:auto;border:none;"><div style="font-weight:600;color:#242021;font-size:14px;">Shabeeb K</div><div style="font-size:11.5px;color:#6E6A6C;">Head of Operations</div></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Contact</div><div class="signoff-field-line" style="height:auto;border:none;"><div style="font-size:12px;color:#3d3639;">shabeeb.k@code-ox.com<br>+966 53 571 6437</div></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Signature &amp; Date</div><div class="signoff-field-line"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note-box purple" style="margin-top:20px;"><div class="note-label">Thank You</div><p>We look forward to helping Alternative Rebar Plant get more out of Odoo — one connected system, built to a SIRI-grade standard, with government support pursued on your behalf.</p></div>
+  </div>
+  <div class="inner-footer"><span class="cxbadge" style="padding:4px 7px"><img src="codeox-logo.svg" alt="CodeOx" style="height:11px"></span><span class="inner-footer-text">Code-Ox Technologies · Odoo Silver Partner · shabeeb.k@code-ox.com · +966 53 571 6437</span><span class="inner-footer-page">Page 12</span></div>
+</div>
+
 </body>
 </html>
