@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saudi Fiberglass Factory (SAUFICO) — Odoo ERP Implementation · CX-SFC-2026-01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body, table, td, th, div, p, span, ul, li { direction: ltr; text-align: left; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #D0D5DF; color: #1A202C; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto 24px; position: relative; overflow: hidden; background: #fff; }
+    @media print { body { background: none; } .page { margin: 0; box-shadow: none; page-break-after: always; break-after: page; } }
+    @page { size: A4; margin: 0; }
+
+    /* COVER */
+    .cover { background:#FFFFFF; color:#0F172A; min-height:297mm; display:flex; flex-direction:column; position:relative; }
+    .cover-accent-bar { position:absolute; left:0; top:0; bottom:0; width:5px; background:#2563EB; z-index:3; }
+    .cover-topbar { position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; padding:16px 26px 16px 32px; border-bottom:1px solid #E2E8F0; }
+    .cover-topbar-left { display:flex; align-items:center; gap:14px; }
+    .cover-logo-chip { background:#0D1B2A; border-radius:8px; padding:9px 16px; display:flex; align-items:center; }
+    .cover-logo-chip .brand { font-size:15px; font-weight:800; letter-spacing:0.16em; color:#fff; }
+    .cover-logo-chip .brand span { color:#4DA3FF; }
+    .cover-divider { width:1px; height:30px; background:#E2E8F0; }
+    .cover-hero { position:relative; z-index:2; flex:1; display:flex; flex-direction:column; padding:32px 26px 0 32px; }
+    .cover-overline { font-size:11px; font-weight:600; color:#94A3B8; letter-spacing:0.18em; text-transform:uppercase; margin-bottom:14px; }
+    .cover-title { font-size:40px; font-weight:800; line-height:1.1; color:#0F172A; margin-bottom:6px; }
+    .cover-title-accent { color:#1D4ED8; }
+    .cover-subtitle { font-size:15.5px; color:#475569; line-height:1.65; max-width:500px; margin-bottom:22px; }
+    .cover-tags { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:22px; }
+    .cover-tag { background:#F1F5F9; border:1px solid #E2E8F0; border-radius:4px; padding:5px 11px; font-size:12.5px; color:#475569; }
+    .cover-tag strong { color:#0F172A; font-weight:600; }
+    .cover-tag.hot { background:#EFF6FF; border-color:#BFDBFE; color:#1D4ED8; }
+    .cover-tag.hot strong { color:#1D4ED8; }
+    .partner-strip { position:relative; z-index:2; display:flex; align-items:center; gap:20px; background:#ECEEF1; border:1px solid #D5D8DD; border-radius:14px; padding:16px 22px; margin-bottom:22px; }
+    .partner-strip-logo-chip { background:#fff; border:1px solid #E7E9ED; border-radius:10px; padding:8px 14px; display:flex; align-items:center; flex-shrink:0; }
+    .partner-strip img { height:54px; width:auto; display:block; }
+    .partner-strip-divider { width:1px; align-self:stretch; background:rgba(15,23,42,0.14); }
+    .partner-strip-eyebrow { font-size:13px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:#1D4ED8; margin-bottom:5px; }
+    .partner-strip-title { font-size:19.5px; font-weight:800; color:#0F172A; margin-bottom:4px; line-height:1.25; }
+    .partner-strip-text { font-size:14px; color:#475569; line-height:1.6; max-width:400px; }
+    .partner-strip-badges { margin-left:auto; display:flex; flex-direction:column; gap:6px; flex-shrink:0; }
+    .partner-strip-badge { font-size:12.5px; font-weight:700; color:#fff; background:#091827; border-radius:20px; padding:5px 12px; white-space:nowrap; text-align:center; }
+    .cover-ref-box { position:relative; z-index:2; margin:0 26px 14px 32px; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:6px; display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden; }
+    .cover-ref-item { padding:14px 16px; border-right:1px solid #BFDBFE; }
+    .cover-ref-item:last-child { border-right:none; }
+    .cover-ref-label { font-size:10.5px; color:#64748B; text-transform:uppercase; letter-spacing:0.13em; margin-bottom:5px; }
+    .cover-ref-value { font-size:15px; font-weight:600; color:#0F172A; }
+    .cover-ref-value.teal { color:#1D4ED8; }
+    .cover-footer { position:relative; z-index:2; border-top:1px solid #E2E8F0; padding:13px 26px 13px 32px; display:flex; align-items:center; gap:14px; }
+    .cover-footer img { height:17px; opacity:0.85; }
+    .cover-footer-sep { width:1px; height:14px; background:#E2E8F0; }
+    .cover-footer-text { font-size:8.5px; color:#94A3B8; }
+
+    /* INNER */
+    .inner-page { display:flex; flex-direction:column; min-height:297mm; }
+    .inner-header { display:flex; align-items:center; justify-content:space-between; padding:13px 26px; border-bottom:1px solid #E2E8F0; background:#FAFBFC; }
+    .inner-header img { height:15px; }
+    .inner-header-title { font-size:12.5px; color:#64748B; }
+    .inner-header-ref { font-size:12.5px; color:#94A3B8; }
+    .inner-content { flex:1; padding:26px 26px; }
+    .inner-footer { border-top:1px solid #E2E8F0; padding:11px 26px; display:flex; align-items:center; gap:10px; background:#FAFBFC; }
+    .inner-footer img { height:13px; opacity:0.45; }
+    .inner-footer-sep { width:1px; height:11px; background:#CBD5E1; }
+    .inner-footer-text { font-size:8px; color:#94A3B8; flex:1; }
+    .inner-footer-page { font-size:8.5px; color:#94A3B8; font-weight:500; }
+    .section-label { font-size:11px; font-weight:700; color:#2563EB; text-transform:uppercase; letter-spacing:0.16em; margin-bottom:7px; }
+    .section-heading { font-size:28.5px; font-weight:800; color:#0F172A; margin-bottom:10px; line-height:1.15; }
+    .section-heading.sm { font-size:24px; }
+    .section-intro { font-size:13.5px; color:#475569; line-height:1.72; margin-bottom:16px; }
+    .part-banner { background:#091827; color:#fff; border-radius:6px; padding:13px 16px; display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+    .part-badge { width:28px; height:28px; min-width:28px; border-radius:50%; background:#2563EB; display:flex; align-items:center; justify-content:center; font-size:15.5px; font-weight:800; color:#fff; }
+    .part-banner-sub { font-size:10.5px; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:2px; }
+    .part-banner-title { font-size:17px; font-weight:700; }
+    .note-box { border-radius:5px; padding:11px 15px; font-size:13px; line-height:1.6; margin-bottom:12px; }
+    .note-box.teal { background:#EFF6FF; border:1px solid #BFDBFE; border-left:3px solid #2563EB; }
+    .note-box.amber { background:#FFFBEB; border:1px solid #FDE68A; border-left:3px solid #F59E0B; }
+    .note-box.navy { background:#F0F4F8; border:1px solid #CBD5E1; border-left:3px solid #091827; }
+    .note-box.green { background:#F0FDF4; border:1px solid #BBF7D0; border-left:3px solid #16A34A; }
+    .note-box .note-label { font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:5px; }
+    .note-box.teal .note-label { color:#1D4ED8; }
+    .note-box.amber .note-label { color:#B45309; }
+    .note-box.navy .note-label { color:#334155; }
+    .note-box.green .note-label { color:#15803D; }
+    .note-box p { color:#374151; }
+    .note-box p + p { margin-top:7px; }
+    .note-box strong { font-weight:600; }
+    .section-hr { border:none; border-top:1px solid #E2E8F0; margin:14px 0; }
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:16px; }
+    .info-card { border:1px solid #E2E8F0; border-radius:6px; padding:12px 13px; }
+    .info-card-label { font-size:12.5px; font-weight:700; color:#0F172A; margin-bottom:3px; }
+    .info-card-value { font-size:12.5px; color:#64748B; line-height:1.55; }
+
+    /* module suite grid */
+    .suite-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+    .suite-card { border:1px solid #E2E8F0; border-top:3px solid #2563EB; border-radius:8px; padding:12px 14px; }
+    .suite-card .sc-cat { font-size:9.5px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#1D4ED8; margin-bottom:7px; }
+    .suite-card ul { list-style:none; }
+    .suite-card li { display:flex; align-items:flex-start; gap:7px; font-size:11.5px; color:#334155; line-height:1.5; padding:2px 0; }
+    .suite-card li b { color:#0F172A; font-weight:600; }
+    .suite-card li span.ck { width:13px; height:13px; min-width:13px; border-radius:50%; background:#2563EB; display:inline-flex; align-items:center; justify-content:center; margin-top:2px; }
+    .suite-card li span.ck svg { width:7px; height:7px; }
+
+    /* proof / evidence chips */
+    .proof-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:14px; }
+    .proof-card { border:1px solid #E2E8F0; border-radius:7px; padding:11px 13px; background:#FAFBFC; }
+    .proof-card .pc-label { font-size:9.5px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#1D4ED8; margin-bottom:5px; }
+    .proof-card .pc-text { font-size:11.5px; color:#475569; line-height:1.55; }
+    .proof-card .pc-text b { color:#0F172A; font-weight:600; }
+
+    /* generic money table */
+    .mtable { width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:12px; direction:ltr; }
+    .mtable thead th { background:#091827; color:#fff; padding:7px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+    .mtable thead th.num { text-align:right; }
+    .mtable tbody td { padding:6px 12px; border-bottom:1px solid #EEF2F7; color:#334155; vertical-align:top; line-height:1.4; }
+    .mtable tbody td.num { text-align:right; white-space:nowrap; }
+    .mtable tbody tr:nth-child(even) td { background:#F8FAFC; }
+    .mtable td .t-name { font-weight:700; color:#0F172A; display:block; }
+    .mtable td .t-sub { font-size:10.5px; color:#64748B; line-height:1.4; }
+    .mtable tr.hi td { background:#EFF6FF !important; }
+    .mtable tr.total td { background:#091827; color:#fff; font-weight:700; font-size:13.5px; padding:11px 12px; }
+    .mtable tr.total td.num { color:#4DA3FF; font-size:16px; text-align:right; }
+    .price-tbd { display:inline-block; color:#B45309; background:#FFFBEB; border:1px dashed #F59E0B; border-radius:4px; padding:2px 10px; font-size:11px; font-weight:700; letter-spacing:0.04em; }
+    /* grouped scope table */
+    .sow-table { width:100%; border-collapse:collapse; font-size:11.5px; margin-bottom:10px; direction:ltr; }
+    .sow-table thead th { background:#091827; color:#fff; padding:7px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+    .sow-table tbody td { padding:4px 12px; border-bottom:1px solid #EEF2F7; color:#475569; vertical-align:top; line-height:1.4; }
+    .sow-table .sow-grp td { background:#EFF6FF; color:#1D4ED8; font-size:10px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; padding:5px 12px; border-bottom:1px solid #BFDBFE; }
+    .sow-table .s-item { font-weight:700; color:#0F172A; padding-right:14px; width:31%; }
+    .sow-table tbody tr:nth-child(even):not(.sow-grp) td { background:#FAFBFC; }
+    .cell-note { font-size:10.5px; color:#94A3B8; margin-top:6px; line-height:1.5; }
+
+    .phase-card { border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; margin-bottom:11px; }
+    .phase-head { display:flex; align-items:center; gap:12px; background:#F0F4F8; padding:10px 15px; border-bottom:1px solid #E2E8F0; }
+    .phase-num { width:26px; height:26px; min-width:26px; border-radius:6px; background:#2563EB; color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; }
+    .phase-title { font-size:14.5px; font-weight:800; color:#0F172A; }
+    .phase-dur { margin-left:auto; font-size:11px; font-weight:700; color:#1D4ED8; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:20px; padding:3px 11px; white-space:nowrap; }
+    .phase-body { padding:10px 15px; }
+    .phase-mods { font-size:12px; color:#0F172A; font-weight:600; margin-bottom:4px; }
+    .phase-why { font-size:11.5px; color:#64748B; line-height:1.55; }
+
+    .assumptions-list { list-style:none; margin-bottom:10px; }
+    .assumptions-list li { display:flex; align-items:flex-start; gap:9px; padding:5px 10px; border-bottom:1px solid #F1F5F9; font-size:12.5px; color:#334155; line-height:1.5; }
+    .assumptions-list li:first-child { border-top:1px solid #F1F5F9; }
+    .assumptions-list li:nth-child(even) { background:#FAFBFD; }
+    .assumption-icon { width:16px; height:16px; min-width:16px; border-radius:3px; background:#F1F5F9; border:1px solid #CBD5E1; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
+    .assumption-icon svg { width:8px; height:8px; }
+
+    .signoff-block { border:1.5px solid #E2E8F0; border-radius:6px; overflow:hidden; margin-top:16px; }
+    .signoff-header { background:#091827; color:#fff; padding:10px 16px; font-size:11.5px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; }
+    .signoff-body { padding:14px 16px; background:#FAFBFC; }
+    .signoff-cols { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .signoff-col-header { font-size:11px; font-weight:700; color:#0F172A; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:12px; padding-bottom:5px; border-bottom:2px solid #2563EB; }
+    .signoff-field { margin-bottom:14px; }
+    .signoff-field-label { font-size:10.5px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:4px; }
+    .signoff-field-line { border-bottom:1.5px solid #CBD5E1; height:42px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ PAGE 1 — COVER ═══════════ -->
+<div class="page cover">
+  <div class="cover-accent-bar"></div>
+  <div class="cover-topbar">
+    <div class="cover-topbar-left">
+      <div class="cover-logo-chip"><span class="brand">SAU<span>FICO</span></span></div>
+      <div class="cover-divider"></div>
+      <img src="code-ox-logo.svg" alt="Code-ox" style="height:24px; width:auto; display:block;">
+    </div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-overline">Commercial Proposal &nbsp;·&nbsp; September 2026</div>
+    <div class="cover-title">
+      Odoo Enterprise<br>
+      <span class="cover-title-accent">ERP Implementation</span>
+    </div>
+    <div class="cover-subtitle">
+      One connected system to run Saudi Fiberglass Factory — sales, purchasing, warehouse, the GRP production floor, quality, finance, payroll and Saudi tax compliance. Built and demonstrated around SAUFICO's own products, customers and materials, so you saw it working before committing a riyal.
+    </div>
+
+    <div class="cover-tags">
+      <div class="cover-tag hot"><strong>Odoo 19</strong> Enterprise</div>
+      <div class="cover-tag"><strong>CRM &amp; Sales</strong></div>
+      <div class="cover-tag"><strong>Purchasing</strong></div>
+      <div class="cover-tag"><strong>Inventory</strong></div>
+      <div class="cover-tag"><strong>Manufacturing</strong></div>
+      <div class="cover-tag"><strong>Quality</strong></div>
+      <div class="cover-tag"><strong>Finance &amp; Zakat</strong></div>
+      <div class="cover-tag"><strong>Payroll (WPS)</strong></div>
+      <div class="cover-tag hot"><strong>ZATCA</strong> e-Invoicing</div>
+    </div>
+
+    <div class="partner-strip">
+      <div class="partner-strip-logo-chip">
+        <img src="odoo_silver_partner.avif" alt="Odoo Silver Partner">
+      </div>
+      <div class="partner-strip-divider"></div>
+      <div>
+        <div class="partner-strip-eyebrow">Official Odoo Partnership</div>
+        <div class="partner-strip-title">Delivered by a Certified Odoo Silver Partner</div>
+        <div class="partner-strip-text">Code-Ox Technologies holds official Odoo Silver Partner status — authorised to sell, implement, configure and support Odoo, with certified consultants and direct access to Odoo's partner support channels.</div>
+      </div>
+      <div class="partner-strip-badges">
+        <div class="partner-strip-badge">Official Partner</div>
+        <div class="partner-strip-badge">Certified Team</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-ref-box">
+    <div class="cover-ref-item"><div class="cover-ref-label">Proposal No.</div><div class="cover-ref-value teal">CX-SFC-2026-01</div></div>
+    <div class="cover-ref-item"><div class="cover-ref-label">Date</div><div class="cover-ref-value">September 2026</div></div>
+    <div class="cover-ref-item"><div class="cover-ref-label">Currency</div><div class="cover-ref-value">SAR (Saudi Riyal)</div></div>
+    <div class="cover-ref-item"><div class="cover-ref-label">Prepared By</div><div class="cover-ref-value">Code-Ox Technologies</div></div>
+  </div>
+
+  <div class="cover-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox Technologies">
+    <div class="cover-footer-sep"></div>
+    <div class="cover-footer-text">shabeeb.k@code-ox.com &nbsp;|&nbsp; +966 53 571 6437 &nbsp;|&nbsp; code-ox.com &nbsp;|&nbsp; Odoo Silver Partner</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 2 — EXECUTIVE SUMMARY ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Overview</div>
+    <div class="section-heading">Executive Summary</div>
+    <div class="section-intro">
+      Code-Ox Technologies is pleased to submit this commercial proposal for a full <strong>Odoo Enterprise ERP implementation</strong> for Saudi Fiberglass Factory (SAUFICO) — one system covering your entire operation, from the first sales enquiry through purchasing, the warehouse, the GRP production floor, quality control, finance and payroll.
+      <br><br>
+      This is not a generic Odoo demo. Over the last two meetings we built a live trial system around <strong>SAUFICO's own products, customers, raw materials and production process</strong> — your GRP pipes, tanks, fittings and gratings; your resins, glass and catalysts; your oil &amp; gas, desalination and water-authority customers. You have already seen it running on your own business, so this proposal is simply the plan to turn that demonstration into the system your team uses every day.
+    </div>
+
+    <div class="note-box teal">
+      <div class="note-label">The most important point up front — Tally and Odoo do different jobs</div>
+      <p>We know SAUFICO recently invested around <strong>SAR 13,000 in Tally</strong>, and it is fair to be cautious about spending again so soon. So let us be clear: <strong>Tally and Odoo are not competing for the same job, and nothing you paid for is wasted.</strong></p>
+      <p><strong>Tally is bookkeeping software</strong> — it records what already happened: invoices, ledgers, VAT returns. It has no concept of a bill of materials, a work order, a production machine, a quality check or a sales pipeline. None of your factory floor — resin mixing, filament winding, curing time, machine output — can live in Tally at all.</p>
+      <p><strong>Odoo is the operations and manufacturing platform</strong> that runs the half of your business Tally cannot touch. And Odoo's accounting can <strong>import Tally's chart of accounts, opening balances and outstanding invoices directly</strong> — so your Tally setup carries forward instead of being thrown away. In short: Tally keeps doing the books; Odoo runs the factory, the stock, the sales pipeline and your Saudi compliance, with accounting as one connected piece of that.</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="info-card-label">Prepared For</div><div class="info-card-value">Saudi Fiberglass Factory (SAUFICO)<br>GRP / FRP fiberglass manufacturer<br>Third Industrial City, Dammam, KSA<br>VAT 310006455800003</div></div>
+      <div class="info-card"><div class="info-card-label">Prepared By</div><div class="info-card-value">Code-Ox Technologies<br>Odoo Silver Partner<br>Shabeeb — Head of Operations<br>shabeeb.k@code-ox.com · +966 53 571 6437</div></div>
+      <div class="info-card"><div class="info-card-label">Scope</div><div class="info-card-value">Odoo 19 Enterprise · CRM, Purchasing, Inventory, Manufacturing, Quality, PLM, Finance, HR/Payroll, ZATCA e-invoicing · training · go-live support</div></div>
+      <div class="info-card"><div class="info-card-label">Structure</div><div class="info-card-value">Delivered in four phases (Foundation → Production → Finance &amp; Compliance → People). SAUFICO can start with Phase 1 alone and expand from there.</div></div>
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">Why this matters now — a legal deadline, not just an upgrade</div>
+      <p>Saudi Arabia legally requires every VAT-registered business to issue electronic invoices through ZATCA's <strong>Fatoora</strong> system, and Phase 2 (system integration with ZATCA) is being rolled out to businesses in waves. This is a compliance obligation with a fixed deadline, not an optional feature — and it is the single most time-sensitive item in this proposal. Section 8 covers it in full.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 2</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 3 — BUILT AROUND SAUFICO ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">What You Already Saw</div>
+    <div class="section-heading">Built around your factory, not a template</div>
+    <div class="section-intro">
+      The system demonstrated to SAUFICO leadership was configured specifically for a fiberglass (GRP / FRP) manufacturer. Everything below was already sitting inside the live system during the demo — your products, your materials, your customers, your production methods. This is the head-start SAUFICO gets on day one.
+    </div>
+
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="pc-label">Your finished products</div>
+        <div class="pc-text">GRP pipe (sold by the metre), <b>GRP sectional water tanks</b>, GRP chemical &amp; sewerage tanks, fittings, FRP grating panels and a tank installation service — priced correctly by metre or by unit.</div>
+      </div>
+      <div class="proof-card">
+        <div class="pc-label">Your real raw materials</div>
+        <div class="pc-text">Isophthalic &amp; vinyl-ester resin, MEKP catalyst, cobalt accelerator, E-glass mat, woven &amp; continuous roving, gelcoat, fire-retardant filler, SS316 hardware and gaskets — the actual inputs to GRP production.</div>
+      </div>
+      <div class="proof-card">
+        <div class="pc-label">Your production process</div>
+        <div class="pc-text">A full routing — <b>filament winding → curing → trimming/finishing</b> — with nine work centres modelled, covering every GRP method SAUFICO uses (hand lay-up, hot press, pultrusion, spray-up, hydrostatic testing and more).</div>
+      </div>
+      <div class="proof-card">
+        <div class="pc-label">Your customers &amp; pipeline</div>
+        <div class="pc-text">Oil &amp; gas, desalination, water-authority and construction customers loaded as real sales opportunities worth around <b>SAR 1.6 million</b> combined — matching SAUFICO's actual market.</div>
+      </div>
+      <div class="proof-card">
+        <div class="pc-label">Your suppliers</div>
+        <div class="pc-text">Your resin &amp; chemicals, composite materials and hardware suppliers set up as vendors, with purchase orders and a live on-time-delivery scorecard already running.</div>
+      </div>
+      <div class="proof-card">
+        <div class="pc-label">Your Saudi compliance base</div>
+        <div class="pc-text">15% VAT, monthly tax returns, a <b>Zakat</b> journal and Saudi payroll (WPS) foundations already installed — the compliance layer a Saudi manufacturer needs, ready to complete.</div>
+      </div>
+    </div>
+
+    <div class="note-box navy">
+      <div class="note-label">The bottom line</div>
+      <p>Most ERP projects start from a blank system. SAUFICO does not — the shape of your business is already modelled. The work in this proposal is to <strong>load your real data, finish the Saudi-specific setup, and train your team</strong>, so the system you saw becomes the system you run.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 3</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 4 — MODULE SUITE ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Scope of Work</div>
+    <div class="section-heading">The full module suite for SAUFICO</div>
+    <div class="section-intro">
+      Your Odoo Enterprise subscription unlocks <strong>every Odoo application</strong> — not a limited bundle. This implementation configures the modules below around how SAUFICO actually runs. Each is detailed, module by module, on the pages that follow.
+    </div>
+
+    <div class="suite-grid">
+      <div class="suite-card">
+        <div class="sc-cat">Sell &amp; Win Work</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>CRM &amp; Sales</b> — pipeline, quotations, e-sign, price lists</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">Buy &amp; Store</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Purchasing</b> — RFQs, vendor scorecards, blanket orders</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Inventory</b> — stock, lot traceability, barcode</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">Make (the core difference)</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Manufacturing</b> — recipes, work centres, shop floor</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Quality</b> — inspection checks &amp; certificates</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Engineering changes</b> — controlled formula/spec updates</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">Finance &amp; Compliance</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Accounting</b> — VAT, Zakat, lease accounting, costing</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>ZATCA e-invoicing</b> — Fatoora Phase 2 (legal)</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">People</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>HR &amp; Payroll</b> — Saudi WPS &amp; GOSI, Iqama reminders</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Time Off &amp; Expenses</b> — leave and staff claims</div></li>
+        </ul>
+      </div>
+      <div class="suite-card">
+        <div class="sc-cat">Across everything</div>
+        <ul>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Dashboards</b> — live KPIs across every department</div></li>
+          <li><span class="ck"><svg viewBox="0 0 8 8"><path d="M1 4l2 2 4-5" stroke="#fff" stroke-width="1.5" fill="none"/></svg></span><div><b>Documents</b> — COAs, test certs &amp; files on the record</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">A note on jargon</div>
+      <p>This proposal uses a few unavoidable technical terms. In plain words: <strong>BoM</strong> = the recipe of materials for a product; <strong>work centre</strong> = a machine or station on the floor; <strong>lot traceability</strong> = being able to trace a finished tank back to the exact resin batch it was made from; <strong>WPS</strong> = the government system for paying salaries; <strong>Zakat</strong> = the Saudi statutory levy administered by ZATCA; <strong>ZATCA / Fatoora</strong> = the tax authority's electronic-invoicing system.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 4</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 5 — SOW: SELL & BUY ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Detailed Scope · 1 of 3</div>
+    <div class="section-heading sm">Sales, Purchasing &amp; Warehouse</div>
+    <div class="section-intro">For each area: what your demo already proved works, and the concrete steps to take it live on SAUFICO's real data.</div>
+
+    <table class="sow-table">
+      <thead><tr><th>Area</th><th>What we deliver to go live</th></tr></thead>
+      <tbody>
+        <tr class="sow-grp"><td colspan="2">1 · CRM &amp; Sales Pipeline — <span style="text-transform:none;font-weight:600;">Proven: pipeline with 7 real opportunities (~SAR 1.6M), quote-to-order with e-sign, pipe sold by metre &amp; tanks by unit</span></td></tr>
+        <tr><td class="s-item">Sales team &amp; rules</td><td>Set up SAUFICO's real salespeople, targets, approval limits and lead-assignment rules.</td></tr>
+        <tr><td class="s-item">Customer database</td><td>Load SAUFICO's real customers and contacts across oil &amp; gas, water and construction.</td></tr>
+        <tr><td class="s-item">Quotation templates</td><td>Branded quotation templates per product line (pipes, tanks, fittings, installation) with standard terms and scope wording.</td></tr>
+        <tr><td class="s-item">Pipeline reporting</td><td>Win-rate and pipeline value by sector, plus lost-reason tracking, so management can see the funnel at a glance.</td></tr>
+        <tr><td class="s-item">Optional — online deposit</td><td>Let customers pay a deposit online to confirm an order, removing the manual bank-transfer step.</td></tr>
+        <tr><td class="s-item">Training</td><td>Hands-on training for the sales team and sales manager on running the pipeline day to day.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">2 · Purchasing &amp; Vendor Management — <span style="text-transform:none;font-weight:600;">Proven: real purchase orders, blanket orders, and a live on-time-delivery vendor scorecard</span></td></tr>
+        <tr><td class="s-item">Approved vendor list</td><td>Load every resin, glass, catalyst and hardware supplier with pricing, lead times and minimum order quantities.</td></tr>
+        <tr><td class="s-item">Automatic reordering</td><td>Set minimum stock levels per material so purchasing is triggered automatically, not from memory.</td></tr>
+        <tr><td class="s-item">Three-way matching</td><td>Match purchase order ↔ goods received ↔ supplier bill, so SAUFICO never pays for goods it did not receive.</td></tr>
+        <tr><td class="s-item">Approval thresholds</td><td>Purchase sign-off rules above a chosen order value, if management wants them.</td></tr>
+        <tr><td class="s-item">Training</td><td>Purchasing officer trained on the full request-to-bill flow and vendor performance reports.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">3 · Inventory &amp; Warehouse — <span style="text-transform:none;font-weight:600;">Proven: multi-step receiving→QC→storage→delivery flow, lot/serial traceability, barcode, 36 real SKUs in correct units (kg, m, L)</span></td></tr>
+        <tr><td class="s-item">Opening stock</td><td>Verify and load accurate opening balances for every raw material and finished good, so stock is right from day one.</td></tr>
+        <tr><td class="s-item">Warehouse layout</td><td>Map and label the plant's storage locations (raw material store, work-in-progress, finished goods, quality hold) inside Odoo.</td></tr>
+        <tr><td class="s-item">Reorder &amp; safety stock</td><td>Set reorder points per material based on real consumption rates.</td></tr>
+        <tr><td class="s-item">Barcode roll-out</td><td>Deploy barcode scanning on the floor; train the warehouse supervisor and store staff.</td></tr>
+        <tr><td class="s-item">Landed costs</td><td>Decide how import duty and freight on resin/glass shipments are added to stock value.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 5</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 6 — SOW: MAKE ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Detailed Scope · 2 of 3</div>
+    <div class="section-heading sm">Manufacturing, Quality &amp; Engineering</div>
+    <div class="section-intro">This is the core of what SAUFICO cannot run today — turning raw materials into finished, quality-assured GRP products with a controlled, costed process. It is the clearest value the new system brings.</div>
+
+    <table class="sow-table">
+      <thead><tr><th>Area</th><th>What we deliver to go live</th></tr></thead>
+      <tbody>
+        <tr class="sow-grp"><td colspan="2">4 · Manufacturing &amp; Shop Floor — <span style="text-transform:none;font-weight:600;">Proven: recipes for pipe, tanks &amp; panels; 9 work centres with cost/hour; timed pipe routing (wind 6h → cure 3h → trim 1h); tablet shop-floor screen</span></td></tr>
+        <tr><td class="s-item">Complete product recipes</td><td>Build verified material recipes (BoMs) and routings for every product SAUFICO makes — the demo covers pipe, tanks and panels; gratings, fittings, manholes and other lines get their own.</td></tr>
+        <tr><td class="s-item">Real capacities &amp; costs</td><td>Confirm true work-centre capacities, shift patterns and cost per hour with production management.</td></tr>
+        <tr><td class="s-item">Stock &amp; production tied together</td><td>Link opening stock and reorder rules so production orders always have their materials ready — no stalls on the floor.</td></tr>
+        <tr><td class="s-item">Shop-floor tablets</td><td>Set up the tablet screens on the actual line; train production staff and the production manager.</td></tr>
+        <tr><td class="s-item">Subcontracting &amp; scrap</td><td>Decide whether to switch on outsourced steps (subcontracting) and offcut/scrap tracking — both available.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">5 · Quality Management — <span style="text-transform:none;font-weight:600;">Proven: a live pass/fail incoming-resin check requiring a Certificate of Analysis before stock is accepted, built into receiving</span></td></tr>
+        <tr><td class="s-item">Full set of checks</td><td>Define all the checks SAUFICO needs: incoming (resin, glass, hardware), in-process (cure time/temperature, wall thickness) and outgoing (hydrostatic pressure test, visual) before a tank or pipe ships.</td></tr>
+        <tr><td class="s-item">Checklists &amp; documents</td><td>Attach checklists, tolerances and required certificates (COA, test certs) to each check.</td></tr>
+        <tr><td class="s-item">Quality alerts</td><td>A failed check automatically flags the batch and notifies the Quality inspector.</td></tr>
+        <tr><td class="s-item">Training</td><td>Quality team trained on logging checks and raising non-conformance alerts.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">6 · Engineering Change Control (PLM) — <span style="text-transform:none;font-weight:600;">Proven: a real change already modelled — switching a tank's resin to vinyl-ester for better chemical resistance, linked to its recipe</span></td></tr>
+        <tr><td class="s-item">Approval flow</td><td>Define who proposes, reviews and signs off a formula or spec change before it reaches production.</td></tr>
+        <tr><td class="s-item">Change history</td><td>Load recent real formulation changes as a starting history.</td></tr>
+        <tr><td class="s-item">Training</td><td>Light training for the production manager on raising and approving changes.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note-box green">
+      <div class="note-label">Why this is the headline value</div>
+      <p>Every desalination or chemical-industry customer that asks SAUFICO for a spec change, a pressure certificate, or proof of which resin batch went into their tank is asking for something bookkeeping software simply cannot answer. This is where Odoo pays for itself.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 6</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 7 — SOW: FINANCE & PEOPLE ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Detailed Scope · 3 of 3</div>
+    <div class="section-heading sm">Finance, Payroll &amp; Expenses</div>
+    <div class="section-intro">The finance module is where SAUFICO sees a clear, like-for-like upgrade from Tally — with the Tally data carried forward, not lost.</div>
+
+    <table class="sow-table">
+      <thead><tr><th>Area</th><th>What we deliver to go live</th></tr></thead>
+      <tbody>
+        <tr class="sow-grp"><td colspan="2">7 · Accounting, Tax &amp; Compliance — <span style="text-transform:none;font-weight:600;">Proven: 15% VAT, monthly returns, Zakat journal, IFRS-16 lease accounting, automatic stock valuation (AVCO), margin analysis, AI bill scanning</span></td></tr>
+        <tr><td class="s-item">Migrate from Tally</td><td>Import SAUFICO's chart of accounts, opening balances and open invoices/bills from Tally into Odoo — the safe way to carry the Tally investment forward.</td></tr>
+        <tr><td class="s-item">Bank setup</td><td>Confirm bank accounts and reconcile balances.</td></tr>
+        <tr><td class="s-item">Costing explained</td><td>Stock value updates automatically as materials move (average-cost method, "AVCO"), so the balance sheet always reflects real inventory worth.</td></tr>
+        <tr><td class="s-item">Management reports</td><td>Recurring reports — profit by product line, cash flow, VAT return, Zakat computation — giving finance more visibility than Tally offers today.</td></tr>
+        <tr><td class="s-item">Training</td><td>Finance team trained on daily bookkeeping, VAT filing and month-end close.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">8 · HR, Payroll &amp; Time Off — <span style="text-transform:none;font-weight:600;">Proven: 7 employees across real departments, Saudi payroll with WPS fields &amp; Iqama-expiry reminders (60 days), skills/certifications</span></td></tr>
+        <tr><td class="s-item">Complete WPS setup</td><td>Finish the Saudi Wage Protection System setup (establishment bank details and codes) so compliant salary payments can run.</td></tr>
+        <tr><td class="s-item">Employee master data</td><td>Load contracts, salary structures, GOSI numbers and bank details for salary transfer.</td></tr>
+        <tr><td class="s-item">Leave policy</td><td>Configure leave types and approval chains matching SAUFICO's HR policy.</td></tr>
+        <tr><td class="s-item">Parallel payroll run</td><td>Run one payroll cycle alongside the current method before switching over, to confirm salary files are correct.</td></tr>
+        <tr><td class="s-item">Training</td><td>HR/payroll administrator trained end to end.</td></tr>
+
+        <tr class="sow-grp"><td colspan="2">9 · Expenses &amp; Barcode — <span style="text-transform:none;font-weight:600;">Proven: expense categories with a sample claim routed for approval; barcode active across inventory &amp; production</span></td></tr>
+        <tr><td class="s-item">Expense policy</td><td>Confirm approval limits and reimbursable categories, and adjust accordingly.</td></tr>
+        <tr><td class="s-item">Barcode hardware</td><td>Procure and configure scanners/printers for the warehouse and shop floor where needed.</td></tr>
+        <tr><td class="s-item">Training</td><td>Short sessions for staff submitting expenses and staff using barcode scanning.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 7</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 8 — ZATCA SPOTLIGHT ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Priority Deliverable</div>
+    <div class="section-heading sm">ZATCA e-Invoicing (Fatoora) — the deadline item</div>
+    <div class="section-intro">
+      Saudi law requires every VAT-registered business to issue invoices electronically through ZATCA's Fatoora system. <strong>Phase 1</strong> requires structured electronic invoices with a QR code. <strong>Phase 2</strong> requires the invoicing system itself to be connected to ZATCA — invoices are digitally stamped, given a unique ID, and either cleared by ZATCA in real time (business-to-business) or reported within 24 hours (cash/counter sales). ZATCA is bringing businesses into Phase 2 in waves.
+    </div>
+
+    <div class="note-box amber">
+      <div class="note-label">Why we flag this first</div>
+      <p>Unlike every other item in this proposal, ZATCA e-invoicing carries a <strong>legal deadline set by the tax authority — not by the project plan</strong>. SAUFICO should confirm which wave applies to it (from its ZATCA notification letter or directly with ZATCA), as that fixes the go-live date for this piece. We deliberately left this out of the demo because it is a distinct compliance integration, priced and tracked as its own deliverable.</p>
+    </div>
+
+    <table class="sow-table">
+      <thead><tr><th>Step</th><th>What we deliver</th></tr></thead>
+      <tbody>
+        <tr><td class="s-item">Confirm the deadline</td><td>Establish SAUFICO's ZATCA Phase 2 wave and integration date, so this go-live is fixed rather than open-ended.</td></tr>
+        <tr><td class="s-item">Activate the module</td><td>Configure Odoo's official ZATCA-compliant e-invoicing add-on — standard configuration, not a custom build.</td></tr>
+        <tr><td class="s-item">Onboard with ZATCA</td><td>Generate SAUFICO's security credentials with ZATCA (test, then production).</td></tr>
+        <tr><td class="s-item">Automatic compliant invoices</td><td>Set up invoice numbering, QR codes, invoice linking and the required electronic format so every invoice and credit note is compliant automatically — no manual step for staff.</td></tr>
+        <tr><td class="s-item">ZATCA testing</td><td>Run ZATCA's mandatory test batch (standard, simplified, credit and debit notes) before switching on live integration.</td></tr>
+        <tr><td class="s-item">Go-live &amp; training</td><td>Confirm real-time clearance for B2B and 24-hour reporting for any counter sales; train finance on the (minimal) day-to-day change and how to handle a rejection.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note-box teal">
+      <div class="note-label">In plain terms</div>
+      <p>Once configured, nothing changes for your team's daily routine — invoices are created exactly as before. The system quietly does the legal part in the background. The value is that SAUFICO stays fully compliant with no manual effort and no risk of penalties.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 8</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 9 — GO-LIVE ITEMS ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Also Included</div>
+    <div class="section-heading sm">Everything needed for a clean go-live</div>
+    <div class="section-intro">These items are not screens you saw in the demo, but they are essential for a real launch. We list them openly and up front, so there are no surprise change requests later.</div>
+
+    <table class="sow-table">
+      <thead><tr><th>Item</th><th>What it covers</th></tr></thead>
+      <tbody>
+        <tr><td class="s-item">Tally data migration</td><td>Chart of accounts, opening balances and outstanding customer/vendor invoices carried over from Tally.</td></tr>
+        <tr><td class="s-item">Opening stock take</td><td>A structured count and data entry for all raw materials and finished goods, so inventory is accurate on launch day.</td></tr>
+        <tr><td class="s-item">WPS banking details</td><td>The establishment bank details and codes required to run compliant Saudi payroll.</td></tr>
+        <tr><td class="s-item">User roles &amp; access</td><td>Access rights per department, so each team sees and does exactly what it should.</td></tr>
+        <tr><td class="s-item">Company branding</td><td>SAUFICO logo, layout and footer terms on quotations, invoices and delivery notes.</td></tr>
+        <tr><td class="s-item">Department training</td><td>Hands-on training sessions for Sales, Purchasing, Warehouse, Production, Quality, Finance and HR.</td></tr>
+        <tr><td class="s-item">Go-live support</td><td>A dedicated support window at launch, followed by an agreed post-launch support period.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note-box navy">
+      <div class="note-label">One combined effort</div>
+      <p>All of the above is planned and delivered as part of this implementation — sequenced across the four phases on the next page — not billed piecemeal as the project runs. SAUFICO sees the full picture before starting.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 9</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 10 — PHASING ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Delivery Structure</div>
+    <div class="section-heading sm">A phased rollout — start small, prove value, expand</div>
+    <div class="section-intro">
+      The programme is delivered in four phases. This lets SAUFICO see an early win, spread the investment, and prove the value before committing to the rest — useful given the recent Tally spend. <strong>SAUFICO can commission Phase 1 on its own</strong> and decide on later phases once it is live.
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-head">
+        <div class="phase-num">1</div>
+        <div class="phase-title">Foundation</div>
+        <div class="phase-dur">3–4 weeks</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-mods">Company setup · Contacts · CRM &amp; Sales · Inventory (raw materials &amp; finished goods)</div>
+        <div class="phase-why">The fastest visible win — the sales team and warehouse working in the new system with real data.</div>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-head">
+        <div class="phase-num">2</div>
+        <div class="phase-title">Production</div>
+        <div class="phase-dur">4–6 weeks</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-mods">Manufacturing (recipes, work centres, shop floor) · Quality · Engineering change control</div>
+        <div class="phase-why">The core capability Tally cannot provide. Builds on the materials and products set up in Phase 1.</div>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-head">
+        <div class="phase-num">3</div>
+        <div class="phase-title">Finance &amp; Compliance</div>
+        <div class="phase-dur">3–5 weeks</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-mods">Accounting migration from Tally · VAT / Zakat / lease accounting · ZATCA e-invoicing</div>
+        <div class="phase-why">Can run partly in parallel with Phase 2. Handled carefully because it touches statutory filings and the ZATCA deadline.</div>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-head">
+        <div class="phase-num">4</div>
+        <div class="phase-title">People &amp; Close-out</div>
+        <div class="phase-dur">2–3 weeks</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-mods">Employees · Payroll / WPS · Time Off · Expenses · training · go-live support</div>
+        <div class="phase-why">Lowest operational urgency, but WPS payroll must be signed off before the first live payroll run.</div>
+      </div>
+    </div>
+
+    <div class="note-box teal">
+      <div class="note-label">Entry point</div>
+      <p>If SAUFICO prefers a smaller first step, <strong>Phase 1 (Foundation) can be commissioned on its own as a fixed entry point</strong> — sales and inventory live on real data — with the remaining phases quoted and scheduled once the value is proven. Durations above are indicative and confirmed at planning.</p>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 10</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 11 — INVESTMENT ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Investment</div>
+    <div class="section-heading sm">Commercial summary</div>
+    <div class="section-intro">Your total spend has three parts: a one-time <strong>implementation charge</strong> (Code-Ox), the recurring <strong>Odoo licences</strong> (paid to Odoo), and the recurring <strong>server / hosting</strong>. Pricing for the implementation is broken out by phase below.</div>
+
+    <div class="note-box amber">
+      <div class="note-label">Pricing</div>
+      <p>Phase pricing is being finalised by Code-Ox based on internal effort estimation and will be inserted in the cells marked below before this proposal is issued to SAUFICO.</p>
+    </div>
+
+    <div class="part-banner">
+      <div class="part-badge">1</div>
+      <div><div class="part-banner-sub">One-time</div><div class="part-banner-title">Implementation charge — by phase</div></div>
+    </div>
+    <table class="mtable">
+      <thead><tr><th>Phase</th><th>Modules</th><th class="num">Duration</th><th class="num">Investment (SAR)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="t-name">1 · Foundation</span></td><td><span class="t-sub">Company, CRM &amp; Sales, Inventory</span></td><td class="num">3–4 weeks</td><td class="num"><span class="price-tbd">to be added</span></td></tr>
+        <tr><td><span class="t-name">2 · Production</span></td><td><span class="t-sub">Manufacturing, Quality, Engineering change</span></td><td class="num">4–6 weeks</td><td class="num"><span class="price-tbd">to be added</span></td></tr>
+        <tr><td><span class="t-name">3 · Finance &amp; Compliance</span></td><td><span class="t-sub">Accounting/Tally migration, VAT/Zakat, ZATCA</span></td><td class="num">3–5 weeks</td><td class="num"><span class="price-tbd">to be added</span></td></tr>
+        <tr><td><span class="t-name">4 · People &amp; Close-out</span></td><td><span class="t-sub">Payroll/WPS, Time Off, Expenses, training</span></td><td class="num">2–3 weeks</td><td class="num"><span class="price-tbd">to be added</span></td></tr>
+        <tr class="total"><td colspan="3">One-time implementation total</td><td class="num"><span style="color:#fff;font-size:13px;">to be added</span></td></tr>
+      </tbody>
+    </table>
+    <div class="cell-note">The implementation charge is a one-time fee, paid once — not annual and not recurring. SAUFICO may commission Phase 1 alone and add later phases when ready.</div>
+
+    <div class="part-banner" style="margin-top:16px;">
+      <div class="part-badge">2</div>
+      <div><div class="part-banner-sub">Recurring</div><div class="part-banner-title">Odoo licences &amp; hosting</div></div>
+    </div>
+    <table class="mtable">
+      <thead><tr><th>Recurring item</th><th>Paid to</th><th class="num">Amount (SAR)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="t-name">Odoo Enterprise user licences</span><span class="t-sub">Per user; number of users confirmed at planning</span></td><td>Odoo</td><td class="num"><span class="price-tbd">to be added</span></td></tr>
+        <tr><td><span class="t-name">Server / hosting</span><span class="t-sub">Odoo.sh (fully managed) or a Code-Ox-managed cloud server</span></td><td>Odoo / hosting provider</td><td class="num"><span class="price-tbd">to be added</span></td></tr>
+      </tbody>
+    </table>
+    <div class="cell-note">Licences and hosting are paid by SAUFICO directly to Odoo / the hosting provider and are not invoiced by Code-Ox. For a managed cloud server, Code-Ox handles setup and ongoing maintenance. Hosting is charged per instance, not per user.</div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 11</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 12 — TERMS & ASSUMPTIONS ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Delivery &amp; Terms</div>
+    <div class="section-heading sm">How we deliver &amp; payment terms</div>
+
+    <div class="part-banner" style="margin-top:2px;">
+      <div class="part-badge">P</div>
+      <div><div class="part-banner-sub">Payment</div><div class="part-banner-title">Payment schedule</div></div>
+    </div>
+    <table class="mtable">
+      <thead><tr><th>Milestone</th><th class="num">%</th><th class="num">Amount (SAR)</th></tr></thead>
+      <tbody>
+        <tr><td>On acceptance / project kickoff (per commissioned phase)</td><td class="num">50%</td><td class="num"><span class="price-tbd">to be added</span></td></tr>
+        <tr><td>On go-live of that phase</td><td class="num">50%</td><td class="num"><span class="price-tbd">to be added</span></td></tr>
+      </tbody>
+    </table>
+    <div class="cell-note">Payment is milestone-based per commissioned phase, so SAUFICO's outlay tracks delivery. Odoo licence and hosting are paid by SAUFICO directly to the respective providers.</div>
+
+    <div class="part-banner" style="margin-top:16px;">
+      <div class="part-badge">A</div>
+      <div><div class="part-banner-sub">Assumptions &amp; Exclusions</div><div class="part-banner-title">Key project assumptions</div></div>
+    </div>
+    <ul class="assumptions-list">
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>SAUFICO provides master data — chart of accounts, product recipes, approved vendor list, customer contacts, employee details — within an agreed window at the start of each phase.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>Odoo Enterprise licences are purchased by SAUFICO directly from Odoo before implementation begins.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>Server / hosting cost is paid by SAUFICO to the chosen provider; the option is confirmed at kickoff.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>ZATCA e-invoicing configuration assumes SAUFICO's ZATCA/VAT registration is in order; SAUFICO confirms its Phase 2 wave and deadline. The registration itself is out of scope.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>Barcode scanners/printers and shop-floor tablets are procured by SAUFICO where not already available; Code-Ox advises on specification.</div></li>
+      <li><span class="assumption-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="#94A3B8" stroke-width="1.2"/></svg></span><div>Phases can be commissioned individually. This proposal is valid for <strong>30 days</strong> from the date of issuance.</div></li>
+    </ul>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 12</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 13 — ACCEPTANCE ═══════════ -->
+<div class="page inner-page">
+  <div class="inner-header">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-header-title">SAUFICO — Odoo ERP Implementation</div>
+    <div class="inner-header-ref">CX-SFC-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="inner-content">
+    <div class="section-label">Authorization</div>
+    <div class="section-heading sm" style="margin-bottom:14px;">Acceptance &amp; Authorization</div>
+    <div style="font-size:11px; color:#374151; font-style:italic; line-height:1.7; margin-bottom:20px;">
+      By signing below, both parties confirm acceptance of this commercial proposal for the Odoo Enterprise ERP implementation for Saudi Fiberglass Factory (SAUFICO) and authorize commencement under the scope, phasing and payment terms set out above.
+    </div>
+
+    <div class="signoff-block">
+      <div class="signoff-header">Authorization Signatures &nbsp;·&nbsp; Return signed copy to shabeeb.k@code-ox.com</div>
+      <div class="signoff-body">
+        <div class="signoff-cols">
+          <div>
+            <div class="signoff-col-header">For &amp; On Behalf of Code-Ox Technologies</div>
+            <div class="signoff-field"><div class="signoff-field-label">Authorized Signatory</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Name &amp; Title</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date</div><div class="signoff-field-line"></div></div>
+          </div>
+          <div>
+            <div class="signoff-col-header">For &amp; On Behalf of SAUFICO</div>
+            <div class="signoff-field"><div class="signoff-field-label">Authorized Signatory</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Name &amp; Title</div><div class="signoff-field-line"></div></div>
+            <div class="signoff-field"><div class="signoff-field-label">Date</div><div class="signoff-field-line"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px; background:#0D1B2A; border-radius:10px; padding:22px 26px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:8.5px; color:rgba(255,255,255,0.35); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:9px;">Questions? Get in Touch</div>
+        <div style="font-size:15px; font-weight:700; color:#fff; margin-bottom:8px;">Shabeeb — Head of Operations, Code-Ox Technologies</div>
+        <div style="font-size:10px;">
+          <span style="color:#4DA3FF;">shabeeb.k@code-ox.com</span>
+          <span style="color:rgba(255,255,255,0.4);"> &nbsp;·&nbsp; +966 53 571 6437 &nbsp;·&nbsp; code-ox.com</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0; margin-left:20px;">
+        <img src="code-ox-logo.svg" alt="CODE OX" style="height:26px; filter:brightness(0) invert(1); opacity:0.45;">
+      </div>
+    </div>
+  </div>
+  <div class="inner-footer">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="inner-footer-sep"></div>
+    <div class="inner-footer-text">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="inner-footer-page">Page 13</div>
+  </div>
+</div>
+
+</body>
+</html>
