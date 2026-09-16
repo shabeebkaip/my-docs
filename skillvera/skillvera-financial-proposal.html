@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillVera — Software Support &amp; Development Retainer · CX-SKV-2026-01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root{
+      --primary:#1D4DB3; --primary-dark:#0F3460; --primary-900:#081736; --primary-50:#EEF2FC; --primary-100:#E3E9F9;
+      --ink:#0B1220; --muted:#5B6472; --line:#E6E9F0; --bg-alt:#F7F9FD;
+      --green:#1E9E6B; --green-soft:#E8F7F1; --amber:#C98A1F; --amber-soft:#FBF1E1;
+    }
+    body, table, td, th, div, p, span, ul, li { direction:ltr; text-align:left; }
+    body { font-family:'Montserrat',-apple-system,BlinkMacSystemFont,sans-serif; background:#D0D5DF; color:var(--ink); -webkit-print-color-adjust:exact; print-color-adjust:exact; line-height:1.6; }
+    .page { width:210mm; min-height:297mm; margin:0 auto 24px; position:relative; overflow:hidden; background:#fff; }
+    @media print { body { background:none; } .page { margin:0; box-shadow:none; page-break-after:always; break-after:page; } }
+    @page { size:A4; margin:0; }
+
+    /* COVER */
+    .cover { min-height:297mm; display:flex; flex-direction:column; position:relative; background:#fff; }
+    .cover-accent { position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--primary); z-index:3; }
+    .cover-top { display:flex; align-items:center; justify-content:space-between; padding:18px 30px 18px 36px; border-bottom:1px solid var(--line); }
+    .cover-top-left { display:flex; align-items:center; gap:14px; }
+    .cover-logo-chip { background:var(--primary-900); border-radius:8px; padding:9px 16px; }
+    .cover-logo-chip img { height:22px; display:block; }
+    .cover-divider { width:1px; height:30px; background:var(--line); }
+    .cover-client { font-size:16px; font-weight:800; letter-spacing:0.02em; color:var(--primary-900); }
+    .cover-client span { color:var(--primary); }
+    .cover-hero { flex:1; display:flex; flex-direction:column; padding:40px 30px 0 36px; }
+    .overline { font-size:11px; font-weight:700; color:#9AA6BC; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:16px; }
+    .cover-title { font-size:42px; font-weight:800; line-height:1.1; color:var(--primary-900); margin-bottom:8px; letter-spacing:-0.01em; }
+    .cover-title span { color:var(--primary); }
+    .cover-sub { font-size:15.5px; color:var(--muted); line-height:1.65; max-width:520px; margin-bottom:24px; }
+    .cover-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
+    .cover-tag { background:var(--bg-alt); border:1px solid var(--line); border-radius:6px; padding:6px 12px; font-size:12.5px; color:var(--muted); }
+    .cover-tag strong { color:var(--primary-900); font-weight:700; }
+    .cover-tag.hot { background:var(--primary-50); border-color:var(--primary-100); color:var(--primary); }
+    .cover-tag.hot strong { color:var(--primary); }
+    .plan-strip { display:flex; align-items:center; gap:22px; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); border-radius:16px; padding:22px 26px; color:#EAF0FF; box-shadow:0 16px 34px -18px rgba(29,77,179,.5); }
+    .plan-strip .ps-hours { font-size:40px; font-weight:900; color:#fff; line-height:1; }
+    .plan-strip .ps-hours small { font-size:13px; font-weight:700; display:block; color:#BFD1F7; margin-top:3px; letter-spacing:0.04em; }
+    .plan-strip .ps-div { width:1px; align-self:stretch; background:rgba(255,255,255,0.25); }
+    .plan-strip .ps-eyebrow { font-size:11px; font-weight:800; letter-spacing:0.16em; text-transform:uppercase; color:#BFD1F7; margin-bottom:5px; }
+    .plan-strip .ps-title { font-size:19px; font-weight:800; color:#fff; margin-bottom:3px; }
+    .plan-strip .ps-text { font-size:13.5px; color:#DCE6FB; line-height:1.5; }
+    .plan-strip .ps-price { margin-left:auto; text-align:right; flex-shrink:0; }
+    .plan-strip .ps-price .amt { font-size:26px; font-weight:900; color:#fff; }
+    .plan-strip .ps-price .amt small { font-size:13px; font-weight:600; color:#BFD1F7; }
+    .plan-strip .ps-price .sar { font-size:13px; color:#BFD1F7; margin-top:2px; }
+    .cover-ref { margin:26px 30px 16px 36px; background:var(--primary-50); border:1px solid var(--primary-100); border-radius:8px; display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden; }
+    .cover-ref-item { padding:14px 16px; border-right:1px solid var(--primary-100); }
+    .cover-ref-item:last-child { border-right:none; }
+    .cref-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:5px; }
+    .cref-val { font-size:14.5px; font-weight:700; color:var(--primary-900); }
+    .cref-val.blue { color:var(--primary); }
+    .cover-foot { border-top:1px solid var(--line); padding:14px 30px 14px 36px; display:flex; align-items:center; gap:14px; }
+    .cover-foot img { height:16px; opacity:0.85; }
+    .cover-foot .sep { width:1px; height:14px; background:var(--line); }
+    .cover-foot span { font-size:9px; color:#9AA6BC; }
+
+    /* INNER */
+    .inner { display:flex; flex-direction:column; min-height:297mm; }
+    .ihead { display:flex; align-items:center; justify-content:space-between; padding:14px 28px; border-bottom:1px solid var(--line); background:var(--bg-alt); }
+    .ihead img { height:15px; }
+    .ihead-t { font-size:12.5px; color:var(--muted); }
+    .ihead-r { font-size:12.5px; color:#9AA6BC; }
+    .icontent { flex:1; padding:28px 28px; }
+    .ifoot { border-top:1px solid var(--line); padding:12px 28px; display:flex; align-items:center; gap:10px; background:var(--bg-alt); }
+    .ifoot img { height:12px; opacity:0.5; }
+    .ifoot .sep { width:1px; height:11px; background:#CBD5E1; }
+    .ifoot .t { font-size:8px; color:#9AA6BC; flex:1; }
+    .ifoot .p { font-size:8.5px; color:#9AA6BC; font-weight:600; }
+    .kicker { font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:0.16em; margin-bottom:8px; }
+    .kicker::before { content:""; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--primary); margin-right:8px; vertical-align:middle; }
+    h2.sec { font-size:27px; font-weight:800; color:var(--primary-900); margin-bottom:11px; line-height:1.15; letter-spacing:-0.01em; }
+    h2.sec.sm { font-size:23px; }
+    .intro { font-size:13.5px; color:var(--muted); line-height:1.72; margin-bottom:18px; }
+    .intro b { color:var(--ink); }
+
+    .note { border-radius:8px; padding:13px 17px; font-size:13px; line-height:1.6; margin-bottom:14px; border:1px solid var(--line); }
+    .note.blue { background:var(--primary-50); border-color:var(--primary-100); border-left:4px solid var(--primary); }
+    .note.green { background:var(--green-soft); border-left:4px solid var(--green); }
+    .note.amber { background:var(--amber-soft); border-left:4px solid var(--amber); }
+    .note .nl { font-size:10px; font-weight:800; letter-spacing:0.13em; text-transform:uppercase; margin-bottom:5px; }
+    .note.blue .nl { color:var(--primary); }
+    .note.green .nl { color:var(--green); }
+    .note.amber .nl { color:var(--amber); }
+    .note p { color:#374151; }
+
+    .infogrid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .infocard { border:1px solid var(--line); border-radius:10px; padding:13px 15px; }
+    .infocard .l { font-size:12.5px; font-weight:800; color:var(--primary-900); margin-bottom:3px; }
+    .infocard .v { font-size:12.5px; color:var(--muted); line-height:1.55; }
+
+    .colgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+    .card { border:1px solid var(--line); border-top:3px solid var(--primary); border-radius:10px; padding:14px 16px; }
+    .card h3 { font-size:13.5px; font-weight:800; color:var(--primary-900); margin-bottom:9px; }
+    .card ul { list-style:none; }
+    .card li { position:relative; padding:4px 0 4px 20px; font-size:12px; color:#3a4658; line-height:1.5; border-bottom:1px solid var(--line); }
+    .card li:last-child { border-bottom:none; }
+    .card li::before { content:"✓"; position:absolute; left:0; color:var(--green); font-weight:800; font-size:11px; }
+    .card li b { color:var(--ink); font-weight:700; }
+
+    table.m { width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:12px; }
+    table.m thead th { background:var(--primary-900); color:#fff; padding:9px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; }
+    table.m thead th.num { text-align:right; }
+    table.m tbody td { padding:9px 12px; border-bottom:1px solid var(--line); color:var(--muted); vertical-align:top; }
+    table.m tbody td.num { text-align:right; white-space:nowrap; }
+    table.m tbody tr:nth-child(even) td { background:var(--bg-alt); }
+    table.m td b, table.m td .tn { color:var(--ink); font-weight:700; }
+    table.m tr.hi td { background:var(--primary-50) !important; }
+    table.m tr.total td { background:var(--primary-900); color:#fff; font-weight:800; font-size:14px; padding:12px; }
+    table.m tr.total td.num { color:#9EC1FF; font-size:17px; }
+    .sel-badge { display:inline-block; font-size:9px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; color:#fff; background:var(--green); border-radius:20px; padding:2px 9px; margin-left:7px; }
+    .cellnote { font-size:10.5px; color:#9AA6BC; margin-top:4px; line-height:1.55; }
+
+    ul.terms { list-style:none; margin-bottom:10px; }
+    ul.terms li { position:relative; padding:7px 0 7px 22px; font-size:12.5px; color:#374151; line-height:1.5; border-bottom:1px solid var(--line); }
+    ul.terms li:last-child { border-bottom:none; }
+    ul.terms li::before { content:""; position:absolute; left:2px; top:14px; width:7px; height:7px; border-radius:50%; background:var(--primary); }
+    ul.terms li b { color:var(--ink); }
+
+    .sign { border:1.5px solid var(--line); border-radius:10px; overflow:hidden; margin-top:16px; }
+    .sign-h { background:var(--primary-900); color:#fff; padding:11px 17px; font-size:11.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+    .sign-b { padding:16px 17px; background:var(--bg-alt); display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+    .sign-col h4 { font-size:11px; font-weight:800; color:var(--primary-900); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:14px; padding-bottom:5px; border-bottom:2px solid var(--primary); }
+    .sign-f { margin-bottom:16px; }
+    .sign-f .fl { font-size:10.5px; font-weight:700; color:#9AA6BC; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; }
+    .sign-f .fline { border-bottom:1.5px solid #CBD5E1; height:44px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ PAGE 1 — COVER ═══════════ -->
+<div class="page cover">
+  <div class="cover-accent"></div>
+  <div class="cover-top">
+    <div class="cover-top-left">
+      <div class="cover-logo-chip"><img src="code-ox-logo.svg" alt="Code-Ox" style="filter:brightness(0) invert(1);"></div>
+      <div class="cover-divider"></div>
+      <div class="cover-client">Skill<span>Vera</span></div>
+    </div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="overline">Commercial Proposal &nbsp;·&nbsp; September 2026</div>
+    <div class="cover-title">Software Support &amp;<br><span>Development Retainer</span></div>
+    <div class="cover-sub">
+      A dedicated Code-Ox team to take over, maintain and steadily improve SkillVera's mobile application — a single monthly retainer covering bug fixes, store updates, monitoring and a continuous trickle of improvements, so the product stays stable and keeps moving forward.
+    </div>
+
+    <div class="cover-tags">
+      <div class="cover-tag hot"><strong>Essential</strong> Plan</div>
+      <div class="cover-tag"><strong>30</strong> hours / month</div>
+      <div class="cover-tag"><strong>Maintenance</strong> + improvements</div>
+      <div class="cover-tag"><strong>Dedicated</strong> team</div>
+      <div class="cover-tag"><strong>3-month</strong> minimum</div>
+    </div>
+
+    <div class="plan-strip">
+      <div><div class="ps-hours">30<small>HRS / MONTH</small></div></div>
+      <div class="ps-div"></div>
+      <div>
+        <div class="ps-eyebrow">Selected Plan</div>
+        <div class="ps-title">Essential — "Keep it running"</div>
+        <div class="ps-text">Maintenance, monitoring, quick fixes and a steady trickle of small improvements, delivered by a dedicated team.</div>
+      </div>
+      <div class="ps-price">
+        <div class="amt">$750<small>/mo</small></div>
+        <div class="sar">≈ SAR 2,813 / month</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-ref">
+    <div class="cover-ref-item"><div class="cref-label">Proposal No.</div><div class="cref-val blue">CX-SKV-2026-01</div></div>
+    <div class="cover-ref-item"><div class="cref-label">Date</div><div class="cref-val">September 2026</div></div>
+    <div class="cover-ref-item"><div class="cref-label">Currency</div><div class="cref-val">USD · SAR @ 3.75</div></div>
+    <div class="cover-ref-item"><div class="cref-label">Prepared By</div><div class="cref-val">Code-Ox Technologies</div></div>
+  </div>
+
+  <div class="cover-foot">
+    <img src="code-ox-logo.svg" alt="Code-Ox Technologies">
+    <div class="sep"></div>
+    <span>shabeeb.k@code-ox.com &nbsp;|&nbsp; +966 53 571 6437 &nbsp;|&nbsp; code-ox.com</span>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 2 — OVERVIEW ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">SkillVera — Software Support &amp; Development Retainer</div>
+    <div class="ihead-r">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">Overview</div>
+    <h2 class="sec">The engagement, in plain terms</h2>
+    <div class="intro">
+      Code-Ox Technologies will act as SkillVera's <b>software support and development partner</b> for its mobile application. Following our discussion, SkillVera has selected the <b>Essential plan — 30 hours per month</b>: a fixed monthly retainer that keeps the app stable, current and steadily improving, handled by a dedicated team rather than ad-hoc freelancers.
+      <br><br>
+      This proposal confirms exactly what those 30 hours cover, the monthly commercials, and the terms — so SkillVera knows precisely what it is committing to before signing.
+    </div>
+
+    <div class="note blue">
+      <div class="nl">How the retainer works</div>
+      <p>The 30 hours are a <b>monthly capacity block</b> your team draws on for maintenance and small development work. You get a dedicated point of contact and a priority channel; we work through a shared list, ship in reviewable releases, and report at month-end on hours used and work delivered. It is a rolling arrangement — scale hours up or down as the product's needs change.</p>
+    </div>
+
+    <div class="infogrid">
+      <div class="infocard"><div class="l">Prepared For</div><div class="v">SkillVera<br>Sports &amp; activities technology platform<br>Kingdom of Saudi Arabia</div></div>
+      <div class="infocard"><div class="l">Prepared By</div><div class="v">Code-Ox Technologies<br>Software &amp; product engineering<br>shabeeb.k@code-ox.com · +966 53 571 6437</div></div>
+      <div class="infocard"><div class="l">Selected Plan</div><div class="v">Essential — 30 hours / month<br>$750 / month (≈ SAR 2,813)<br>3-month minimum, then month-to-month</div></div>
+      <div class="infocard"><div class="l">Starts With</div><div class="v">A short codebase handover sprint for a clean, documented takeover of the existing app code.</div></div>
+    </div>
+
+    <div class="note amber">
+      <div class="nl">Kick-off — codebase handover</div>
+      <p>The engagement opens with a short <b>handover sprint</b>: Code-Ox takes over the existing application code into version control, reviews it, sets up the build/release pipeline and documents it — so the team can maintain and extend it cleanly from day one. This runs within the first month's hours.</p>
+    </div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="p">Page 2</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 3 — WHAT'S INCLUDED ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">SkillVera — Software Support &amp; Development Retainer</div>
+    <div class="ihead-r">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">Scope</div>
+    <h2 class="sec sm">What the 30 hours cover</h2>
+    <div class="intro">The Essential plan keeps the app running well and delivers a steady stream of small improvements each month. Here is exactly what is in scope — and what sits outside it.</div>
+
+    <div class="colgrid">
+      <div class="card">
+        <h3>Maintenance &amp; stability</h3>
+        <ul>
+          <li><b>Bug fixes</b> — reported issues triaged and resolved</li>
+          <li><b>App-store updates</b> — iOS &amp; Android releases kept current</li>
+          <li><b>Monitoring</b> — the app watched for crashes and errors</li>
+          <li><b>Content &amp; data cleanup</b> as needed</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Improvements &amp; response</h3>
+        <ul>
+          <li>A few <b>small improvements</b> shipped each month</li>
+          <li>The quickest <b>priority (P1) fixes</b> handled first</li>
+          <li><b>Fast issue response</b> on a priority channel</li>
+          <li><b>Monthly report</b> — hours used, work shipped, what's queued</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="kicker" style="margin-top:6px;">Included in the retainer</div>
+    <div class="colgrid">
+      <div class="card">
+        <h3>Team &amp; ways of working</h3>
+        <ul>
+          <li>One team for both <b>maintenance and development</b></li>
+          <li>A <b>dedicated point of contact</b> + priority channel</li>
+          <li><b>Proactive suggestions</b> — we flag improvements, not just await tickets</li>
+          <li>Work in version control, <b>staged reviewable releases</b></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Quality &amp; flexibility</h3>
+        <ul>
+          <li><b>QA and documentation</b> included in delivered work</li>
+          <li>Up to <b>20% of unused hours roll over</b> one month</li>
+          <li><b>Extra hours</b> beyond the block billed at the tier rate ($25/hr)</li>
+          <li>Scale up to a higher plan any time as needs grow</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note amber">
+      <div class="nl">What's not included</div>
+      <p>Essential is light-upkeep capacity — it is <b>not</b> enough runway for large new features (e.g. a full analytics dashboard) at pace, and it is "keep-the-lights-on" rather than active roadmap delivery. <b>Third-party costs</b> (hosting/servers, app-store fees, SMS/email/API usage, paid plugins) are billed at cost or paid directly. <b>Large one-off builds</b> are scoped and quoted separately and can run alongside the retainer.</p>
+    </div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="p">Page 3</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 4 — COMMERCIALS ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">SkillVera — Software Support &amp; Development Retainer</div>
+    <div class="ihead-r">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">Commercials</div>
+    <h2 class="sec sm">Your plan &amp; pricing</h2>
+    <div class="intro">SkillVera has selected the <b>Essential — 30 hours/month</b> plan. The full ladder is shown for reference, so scaling up later is a simple, known step.</div>
+
+    <table class="m">
+      <thead><tr><th>Plan</th><th class="num">Hours / mo</th><th class="num">Rate / hr</th><th class="num">Monthly (USD)</th><th class="num">Monthly (SAR)</th><th class="num">Annual (USD)</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><span class="tn">Essential</span><span class="sel-badge">Selected</span></td><td class="num">30</td><td class="num">$25</td><td class="num"><b>$750</b></td><td class="num">≈ 2,813</td><td class="num">$9,000</td></tr>
+        <tr><td><span class="tn">Momentum</span></td><td class="num">60</td><td class="num">$23</td><td class="num">$1,380</td><td class="num">≈ 5,175</td><td class="num">$16,560</td></tr>
+        <tr><td><span class="tn">Scale</span></td><td class="num">120</td><td class="num">$20</td><td class="num">$2,400</td><td class="num">≈ 9,000</td><td class="num">$28,800</td></tr>
+      </tbody>
+    </table>
+    <div class="cellnote">The more hours committed, the lower the hourly rate. SkillVera can move up a plan at any time with 30 days' notice. SAR figures indicative at 3.75 to the US dollar.</div>
+
+    <div class="note blue" style="margin-top:14px;">
+      <div class="nl">Selected plan — Essential (30 hrs / month)</div>
+      <table class="m" style="margin:8px 0 0;">
+        <thead><tr><th>Item</th><th class="num">USD</th><th class="num">SAR</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tn">Hourly rate</span></td><td class="num">$25 / hr</td><td class="num">≈ 94 / hr</td></tr>
+          <tr><td><span class="tn">Monthly retainer — 30 hours</span></td><td class="num">$750 / mo</td><td class="num">≈ 2,813 / mo</td></tr>
+          <tr><td><span class="tn">3-month minimum commitment</span></td><td class="num">$2,250</td><td class="num">≈ 8,438</td></tr>
+          <tr class="total"><td>Annual (12 months) equivalent</td><td class="num">$9,000</td><td class="num">≈ 33,750</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cellnote">Billed <b>monthly in advance</b> in USD; SAR shown at an indicative 3.75. The 3-month figure is the minimum commitment; after that the retainer continues month-to-month. All prices are exclusive of applicable taxes.</div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="p">Page 4</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 5 — TERMS ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">SkillVera — Software Support &amp; Development Retainer</div>
+    <div class="ihead-r">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">Terms</div>
+    <h2 class="sec sm">Commitment, billing &amp; assumptions</h2>
+    <div class="intro">The simple ground rules that keep the engagement clear for both sides.</div>
+
+    <ul class="terms">
+      <li><b>Billing —</b> monthly in advance, in USD; SAR shown at an indicative 3.75. Invoices issued at the start of each month.</li>
+      <li><b>Commitment —</b> a minimum 3-month term, then continues month-to-month with 30 days' notice to change, pause or stop.</li>
+      <li><b>Capacity, not fixed scope —</b> the 30 hours are a monthly capacity retainer, not a guaranteed fixed deliverable. Work is prioritised jointly each month.</li>
+      <li><b>Roll-over —</b> up to 20% of unused hours carry into the following month; they do not accumulate indefinitely.</li>
+      <li><b>Extra hours —</b> work beyond the monthly block is billed at the tier's hourly rate ($25/hr on Essential), agreed in advance.</li>
+      <li><b>Handover sprint —</b> a short codebase takeover at the start ensures a clean, documented transfer of the existing app code.</li>
+      <li><b>Third-party costs —</b> hosting/servers, app-store fees, SMS/email/API usage and paid plugins are billed at cost or paid by SkillVera directly.</li>
+      <li><b>Large builds —</b> major one-off features or a full redesign to production are scoped and quoted separately, and can run alongside the retainer.</li>
+      <li><b>Taxes —</b> all prices are exclusive of applicable taxes.</li>
+      <li><b>Validity —</b> this proposal is valid for 30 days from the date of issuance.</li>
+    </ul>
+
+    <div class="note green">
+      <div class="nl">Scaling with you</div>
+      <p>Essential is the right entry point to keep the app healthy and moving. As the product grows toward its milestones, SkillVera can step up to <b>Momentum (60 hrs)</b> or <b>Scale (120 hrs)</b> at a lower hourly rate — same team, same standard, just more monthly capacity.</p>
+    </div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="p">Page 5</div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 6 — ACCEPTANCE ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">SkillVera — Software Support &amp; Development Retainer</div>
+    <div class="ihead-r">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">Authorization</div>
+    <h2 class="sec sm" style="margin-bottom:14px;">Acceptance &amp; Authorization</h2>
+    <div style="font-size:11.5px; color:#374151; font-style:italic; line-height:1.7; margin-bottom:20px;">
+      By signing below, both parties confirm acceptance of this proposal for the Essential (30 hours/month) software support and development retainer and authorize commencement under the scope, commercials and terms set out above.
+    </div>
+
+    <div class="sign">
+      <div class="sign-h">Authorization Signatures &nbsp;·&nbsp; Return signed copy to shabeeb.k@code-ox.com</div>
+      <div class="sign-b">
+        <div class="sign-col">
+          <h4>For &amp; On Behalf of Code-Ox Technologies</h4>
+          <div class="sign-f"><div class="fl">Authorized Signatory</div><div class="fline"></div></div>
+          <div class="sign-f"><div class="fl">Name &amp; Title</div><div class="fline"></div></div>
+          <div class="sign-f"><div class="fl">Date</div><div class="fline"></div></div>
+        </div>
+        <div class="sign-col">
+          <h4>For &amp; On Behalf of SkillVera</h4>
+          <div class="sign-f"><div class="fl">Authorized Signatory</div><div class="fline"></div></div>
+          <div class="sign-f"><div class="fl">Name &amp; Title</div><div class="fline"></div></div>
+          <div class="sign-f"><div class="fl">Date</div><div class="fline"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px; background:var(--primary-900); border-radius:12px; padding:24px 28px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:8.5px; color:rgba(255,255,255,0.4); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:9px;">Questions? Get in Touch</div>
+        <div style="font-size:15px; font-weight:800; color:#fff; margin-bottom:8px;">Shabeeb — Code-Ox Technologies</div>
+        <div style="font-size:10.5px;">
+          <span style="color:#9EC1FF;">shabeeb.k@code-ox.com</span>
+          <span style="color:rgba(255,255,255,0.45);"> &nbsp;·&nbsp; +966 53 571 6437 &nbsp;·&nbsp; code-ox.com</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0; margin-left:20px;">
+        <img src="code-ox-logo.svg" alt="CODE OX" style="height:26px; filter:brightness(0) invert(1); opacity:0.5;">
+      </div>
+    </div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t">Code-Ox Technologies &nbsp;·&nbsp; shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437</div>
+    <div class="p">Page 6</div>
+  </div>
+</div>
+
+</body>
+</html>
