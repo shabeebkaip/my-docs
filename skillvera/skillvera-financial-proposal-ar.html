@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سكيل فيرا — عقد دعم وتطوير البرمجيات · CX-SKV-2026-01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root{
+      --primary:#1D4DB3; --primary-dark:#0F3460; --primary-900:#081736; --primary-50:#EEF2FC; --primary-100:#E3E9F9;
+      --ink:#0B1220; --muted:#5B6472; --line:#E6E9F0; --bg-alt:#F7F9FD;
+      --green:#1E9E6B; --green-soft:#E8F7F1; --amber:#C98A1F; --amber-soft:#FBF1E1;
+    }
+    body, table, td, th, div, p, span, ul, li { direction:rtl; text-align:right; }
+    body { font-family:'Cairo',-apple-system,BlinkMacSystemFont,sans-serif; background:#FFFFFF; color:var(--ink); -webkit-print-color-adjust:exact; print-color-adjust:exact; line-height:1.7; }
+    .page { width:210mm; min-height:297mm; margin:0 auto 24px; position:relative; overflow:hidden; background:#fff; }
+    @media print { body { background:none; } .page { margin:0; box-shadow:none; page-break-after:always; break-after:page; } }
+    @page { size:A4; margin:0; }
+    .num, .ltr { direction:ltr; unicode-bidi:isolate; }
+
+    /* COVER */
+    .cover { min-height:297mm; display:flex; flex-direction:column; position:relative; background:#fff; }
+    .cover-accent { position:absolute; right:0; top:0; bottom:0; width:6px; background:var(--primary); z-index:3; }
+    .cover-top { display:flex; align-items:center; justify-content:space-between; padding:18px 36px 18px 30px; border-bottom:1px solid var(--line); }
+    .cover-top-left { display:flex; align-items:center; gap:14px; }
+    .cover-logo-chip { background:var(--primary-900); border-radius:8px; padding:9px 16px; }
+    .cover-logo-chip img { height:22px; display:block; }
+    .cover-divider { width:1px; height:30px; background:var(--line); }
+    .cover-hero { flex:1; display:flex; flex-direction:column; padding:40px 36px 0 30px; }
+    .overline { font-size:11px; font-weight:700; color:#9AA6BC; letter-spacing:0.08em; margin-bottom:16px; }
+    .cover-title { font-size:40px; font-weight:800; line-height:1.25; color:var(--primary-900); margin-bottom:8px; }
+    .cover-title span { color:var(--primary); }
+    .cover-sub { font-size:15.5px; color:var(--muted); line-height:1.85; max-width:560px; margin-bottom:24px; }
+    .cover-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
+    .cover-tag { background:var(--bg-alt); border:1px solid var(--line); border-radius:6px; padding:6px 12px; font-size:12.5px; color:var(--muted); }
+    .cover-tag strong { color:var(--primary-900); font-weight:700; }
+    .cover-tag.hot { background:var(--primary-50); border-color:var(--primary-100); color:var(--primary); }
+    .cover-tag.hot strong { color:var(--primary); }
+    .plan-strip { display:flex; align-items:center; gap:22px; background:var(--primary-dark); border-radius:16px; padding:22px 26px; color:#EAF0FF; }
+    .plan-strip .ps-hours { font-size:38px; font-weight:900; color:#fff; line-height:1; text-align:center; }
+    .plan-strip .ps-hours small { font-size:12px; font-weight:700; display:block; color:#BFD1F7; margin-top:4px; }
+    .plan-strip .ps-div { width:1px; align-self:stretch; background:rgba(255,255,255,0.25); }
+    .plan-strip .ps-eyebrow { font-size:11px; font-weight:800; letter-spacing:0.06em; color:#BFD1F7; margin-bottom:5px; }
+    .plan-strip .ps-title { font-size:18px; font-weight:800; color:#fff; margin-bottom:4px; }
+    .plan-strip .ps-text { font-size:13px; color:#DCE6FB; line-height:1.7; }
+    .plan-strip .ps-price { margin-right:auto; text-align:left; flex-shrink:0; }
+    .plan-strip .ps-price .amt { font-size:26px; font-weight:900; color:#fff; }
+    .plan-strip .ps-price .amt small { font-size:13px; font-weight:600; color:#BFD1F7; }
+    .plan-strip .ps-price .sar { font-size:12.5px; color:#BFD1F7; margin-top:3px; }
+    .cover-ref { margin:26px 36px 16px 30px; background:var(--primary-50); border:1px solid var(--primary-100); border-radius:8px; display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden; }
+    .cover-ref-item { padding:14px 16px; border-left:1px solid var(--primary-100); }
+    .cover-ref-item:last-child { border-left:none; }
+    .cref-label { font-size:10.5px; color:var(--muted); margin-bottom:5px; }
+    .cref-val { font-size:14px; font-weight:700; color:var(--primary-900); }
+    .cref-val.blue { color:var(--primary); }
+    .cover-foot { border-top:1px solid var(--line); padding:14px 36px 14px 30px; display:flex; align-items:center; gap:14px; }
+    .cover-foot img { height:16px; opacity:0.85; }
+    .cover-foot .sep { width:1px; height:14px; background:var(--line); }
+    .cover-foot span { font-size:9.5px; color:#9AA6BC; }
+
+    /* INNER */
+    .inner { display:flex; flex-direction:column; min-height:297mm; }
+    .ihead { display:flex; align-items:center; justify-content:space-between; padding:14px 28px; border-bottom:1px solid var(--line); background:var(--bg-alt); }
+    .ihead img { height:15px; }
+    .ihead-t { font-size:12.5px; color:var(--muted); }
+    .ihead-r { font-size:12.5px; color:#9AA6BC; }
+    .icontent { flex:1; padding:38px 34px; display:flex; flex-direction:column; }
+    .ifoot { border-top:1px solid var(--line); padding:12px 28px; display:flex; align-items:center; gap:10px; background:var(--bg-alt); }
+    .ifoot img { height:12px; opacity:0.5; }
+    .ifoot .sep { width:1px; height:11px; background:#CBD5E1; }
+    .ifoot .t { font-size:9px; color:#9AA6BC; flex:1; }
+    .ifoot .p { font-size:9px; color:#9AA6BC; font-weight:600; }
+    .kicker { font-size:12px; font-weight:800; color:var(--primary); letter-spacing:0.04em; margin-bottom:8px; }
+    .kicker::before { content:""; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--primary); margin-left:8px; vertical-align:middle; }
+    h2.sec { font-size:29px; font-weight:800; color:var(--primary-900); margin-bottom:13px; line-height:1.3; }
+    h2.sec.sm { font-size:25px; }
+    .intro { font-size:14px; color:var(--muted); line-height:1.8; margin-bottom:18px; }
+    .intro b { color:var(--ink); }
+
+    .note { border-radius:8px; padding:16px 20px; font-size:13.5px; line-height:1.85; margin-bottom:18px; border:1px solid var(--line); }
+    .note.blue { background:var(--primary-50); border-color:var(--primary-100); border-right:4px solid var(--primary); }
+    .note.green { background:var(--green-soft); border-right:4px solid var(--green); }
+    .note.amber { background:var(--amber-soft); border-right:4px solid var(--amber); }
+    .note .nl { font-size:10.5px; font-weight:800; letter-spacing:0.04em; margin-bottom:5px; }
+    .note.blue .nl { color:var(--primary); }
+    .note.green .nl { color:var(--green); }
+    .note.amber .nl { color:var(--amber); }
+    .note p { color:#374151; }
+
+    .infogrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+    .infocard { border:1px solid var(--line); border-radius:10px; padding:16px 18px; }
+    .infocard .l { font-size:13px; font-weight:800; color:var(--primary-900); margin-bottom:4px; }
+    .infocard .v { font-size:12.5px; color:var(--muted); line-height:1.85; }
+
+    .colgrid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+    .card { border:1px solid var(--line); border-top:3px solid var(--primary); border-radius:10px; padding:18px 20px; }
+    .card h3 { font-size:14.5px; font-weight:800; color:var(--primary-900); margin-bottom:11px; }
+    .card ul { list-style:none; }
+    .card li { position:relative; padding:5px 22px 5px 0; font-size:12.5px; color:#3a4658; line-height:1.6; border-bottom:1px solid var(--line); }
+    .card li:last-child { border-bottom:none; }
+    .card li::before { content:"✓"; position:absolute; right:0; color:var(--green); font-weight:800; font-size:11px; }
+    .card li b { color:var(--ink); font-weight:700; }
+
+    table.m { width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:10px; }
+    table.m thead th { background:var(--primary-900); color:#fff; padding:11px 13px; text-align:right; font-size:10.5px; font-weight:700; }
+    table.m thead th.num { text-align:left; direction:ltr; }
+    table.m tbody td { padding:9px 13px; border-bottom:1px solid var(--line); color:var(--muted); vertical-align:top; }
+    table.m tbody td.num { text-align:left; direction:ltr; white-space:nowrap; }
+    table.m tbody tr:nth-child(even) td { background:var(--bg-alt); }
+    table.m td .tn { font-weight:700; color:var(--ink); }
+    table.m td .ts { font-size:11px; color:var(--muted); }
+    table.m tr.hi td { background:var(--primary-50) !important; }
+    table.m tr.total td { background:var(--primary-900); color:#fff; font-weight:800; font-size:14px; padding:13px; }
+    table.m tr.total td.num { color:#9EC1FF; font-size:16px; }
+    .sel-badge { display:inline-block; font-size:9.5px; font-weight:800; color:#fff; background:var(--green); border-radius:20px; padding:2px 10px; margin-right:7px; }
+    .cellnote { font-size:11px; color:#9AA6BC; margin-top:4px; line-height:1.8; }
+
+    ul.terms { list-style:none; margin-bottom:10px; }
+    ul.terms li { position:relative; padding:11px 24px 11px 0; font-size:13px; color:#374151; line-height:1.8; border-bottom:1px solid var(--line); }
+    ul.terms li:last-child { border-bottom:none; }
+    ul.terms li::before { content:""; position:absolute; right:2px; top:18px; width:7px; height:7px; border-radius:50%; background:var(--primary); }
+    ul.terms li b { color:var(--ink); }
+
+    .sign { border:1.5px solid var(--line); border-radius:10px; overflow:hidden; margin-top:16px; }
+    .sign-h { background:var(--primary-900); color:#fff; padding:12px 18px; font-size:12px; font-weight:700; }
+    .sign-b { padding:16px 18px; background:var(--bg-alt); display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+    .sign-col h4 { font-size:12px; font-weight:800; color:var(--primary-900); margin-bottom:14px; padding-bottom:6px; border-bottom:2px solid var(--primary); }
+    .sign-f { margin-bottom:16px; }
+    .sign-f .fl { font-size:11px; font-weight:700; color:#9AA6BC; margin-bottom:5px; }
+    .sign-f .fline { border-bottom:1.5px solid #CBD5E1; height:52px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ صفحة 1 — الغلاف ═══════════ -->
+<div class="page cover">
+  <div class="cover-accent"></div>
+  <div class="cover-top">
+    <div class="cover-top-left">
+      <div class="cover-logo-chip"><img src="code-ox-logo.svg" alt="Code-Ox" style="filter:brightness(0) invert(1);"></div>
+      <div class="cover-divider"></div>
+      <img src="skillvera-logo.png" alt="SkillVera" style="height:38px; width:auto; display:block;">
+    </div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="overline">عرض تجاري &nbsp;·&nbsp; سبتمبر 2026</div>
+    <div class="cover-title">دعم وتطوير البرمجيات<br><span>اشتراك شهري (Retainer)</span></div>
+    <div class="cover-sub">
+      فريق مخصّص من كود-أوكس لاستلام تطبيق سكيل فيرا وصيانته وتحسينه باستمرار — اشتراك شهري واحد يغطي إصلاح الأخطاء وتحديثات المتجر والمراقبة وسلسلة مستمرة من التحسينات، ليبقى المنتج مستقرًا ويواصل التقدّم.
+    </div>
+
+    <div class="cover-tags">
+      <div class="cover-tag hot"><strong>خطة Essential</strong></div>
+      <div class="cover-tag"><strong>30</strong> ساعة / شهر</div>
+      <div class="cover-tag"><strong>صيانة</strong> + تحسينات</div>
+      <div class="cover-tag"><strong>فريق</strong> مخصّص</div>
+      <div class="cover-tag"><strong>التزام 3</strong> أشهر</div>
+    </div>
+
+    <div class="plan-strip">
+      <div><div class="ps-hours">30<small>ساعة / شهر</small></div></div>
+      <div class="ps-div"></div>
+      <div>
+        <div class="ps-eyebrow">الخطة المختارة</div>
+        <div class="ps-title">Essential — «إبقاء التطبيق يعمل»</div>
+        <div class="ps-text">صيانة ومراقبة وإصلاحات سريعة وسلسلة ثابتة من التحسينات الصغيرة، ينفّذها فريق مخصّص.</div>
+      </div>
+      <div class="ps-price">
+        <div class="amt ltr">$750<small>/mo</small></div>
+        <div class="sar">≈ 2,813 ريال / شهر · غير شامل الضريبة</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-ref">
+    <div class="cover-ref-item"><div class="cref-label">رقم العرض</div><div class="cref-val blue ltr">CX-SKV-2026-01</div></div>
+    <div class="cover-ref-item"><div class="cref-label">التاريخ</div><div class="cref-val">سبتمبر 2026</div></div>
+    <div class="cover-ref-item"><div class="cref-label">العملة</div><div class="cref-val ltr">USD · SAR @ 3.75</div></div>
+    <div class="cover-ref-item"><div class="cref-label">مُعدّ بواسطة</div><div class="cref-val">كود-أوكس للتقنية</div></div>
+  </div>
+
+  <div class="cover-foot">
+    <img src="code-ox-logo.svg" alt="Code-Ox Technologies">
+    <div class="sep"></div>
+    <span class="ltr">raghib@code-ox.com &nbsp;|&nbsp; +966 56 176 5707 &nbsp;|&nbsp; code-ox.com</span>
+  </div>
+</div>
+
+<!-- ═══════════ صفحة 2 — نظرة عامة ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">سكيل فيرا — عقد دعم وتطوير البرمجيات</div>
+    <div class="ihead-r ltr">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">نظرة عامة</div>
+    <h2 class="sec">الاتفاقية باختصار</h2>
+    <div class="intro">
+      ستعمل كود-أوكس للتقنية بصفتها <b>شريك دعم وتطوير البرمجيات</b> لتطبيق سكيل فيرا. وبناءً على نقاشنا، اختارت سكيل فيرا <b>خطة Essential — 30 ساعة شهريًا</b>: اشتراك شهري ثابت يبقي التطبيق مستقرًا ومحدّثًا ويتحسّن باستمرار، بإدارة فريق مخصّص بدلًا من الاعتماد على مستقلّين متفرّقين.
+      <br><br>
+      يؤكّد هذا العرض بالضبط ما تغطّيه الـ30 ساعة، والتفاصيل المالية الشهرية، والشروط — لتعرف سكيل فيرا تمامًا ما الذي تلتزم به قبل التوقيع.
+    </div>
+
+    <div class="note blue">
+      <div class="nl">كيف يعمل الاشتراك</div>
+      <p>الـ30 ساعة هي <b>كتلة سعة شهرية</b> يستفيد منها فريقكم للصيانة وأعمال التطوير الصغيرة. تحصلون على نقطة تواصل مخصّصة وقناة دعم ذات أولوية؛ نعمل وفق قائمة مشتركة، ونُصدر التحديثات على مراحل قابلة للمراجعة، ونقدّم تقريرًا في نهاية كل شهر بالساعات المستخدمة والأعمال المنجزة. إنها ترتيب مرن — يمكن زيادة الساعات أو خفضها حسب حاجة المنتج.</p>
+    </div>
+
+    <div class="infogrid">
+      <div class="infocard"><div class="l">مُقدّم إلى</div><div class="v">سكيل فيرا · منصة تقنية للرياضة والأنشطة · المملكة العربية السعودية</div></div>
+      <div class="infocard"><div class="l">مُعدّ بواسطة</div><div class="v">كود-أوكس للتقنية · هندسة البرمجيات والمنتجات · <span class="ltr">raghib@code-ox.com · +966 56 176 5707</span></div></div>
+      <div class="infocard"><div class="l">الخطة المختارة</div><div class="v">Essential — 30 ساعة / شهر · <span class="ltr">$750</span>/شهر (≈ 2,813 ريال) · التزام 3 أشهر ثم شهري</div></div>
+      <div class="infocard"><div class="l">تبدأ بـ</div><div class="v">جلسة تسليم قصيرة للكود لضمان استلام نظيف وموثّق للتطبيق القائم.</div></div>
+    </div>
+
+    <div class="note amber">
+      <div class="nl">الانطلاق — تسليم الكود</div>
+      <p>تبدأ الاتفاقية بجلسة <b>تسليم قصيرة</b>: تستلم كود-أوكس كود التطبيق الحالي ضمن نظام إدارة الإصدارات، وتراجعه، وتُهيّئ خط البناء والإصدار وتوثّقه — ليتمكّن الفريق من صيانته وتطويره بنظافة من اليوم الأول. تُنفّذ هذه الجلسة ضمن ساعات الشهر الأول.</p>
+    </div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t ltr">Code-Ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="p">صفحة 2</div>
+  </div>
+</div>
+
+<!-- ═══════════ صفحة 3 — النطاق ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">سكيل فيرا — عقد دعم وتطوير البرمجيات</div>
+    <div class="ihead-r ltr">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">نطاق العمل</div>
+    <h2 class="sec sm">ماذا تغطّي الـ30 ساعة</h2>
+    <div class="intro">تُبقي خطة Essential التطبيق يعمل بكفاءة وتقدّم سلسلة ثابتة من التحسينات الصغيرة كل شهر. هذا بالضبط ما هو داخل النطاق — وما هو خارجه.</div>
+
+    <div class="colgrid">
+      <div class="card">
+        <h3>الصيانة والاستقرار</h3>
+        <ul>
+          <li><b>إصلاح الأخطاء</b> — فرز المشكلات المُبلَّغ عنها وحلّها</li>
+          <li><b>تحديثات المتجر</b> — إبقاء إصدارات iOS و Android محدّثة</li>
+          <li><b>المراقبة</b> — متابعة التطبيق لرصد الأعطال والأخطاء</li>
+          <li><b>تنظيف المحتوى والبيانات</b> حسب الحاجة</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>التحسينات والاستجابة</h3>
+        <ul>
+          <li>عدد من <b>التحسينات الصغيرة</b> يُطرح كل شهر</li>
+          <li>معالجة <b>الإصلاحات ذات الأولوية (P1)</b> أولًا</li>
+          <li><b>استجابة سريعة</b> عبر قناة ذات أولوية</li>
+          <li><b>تقرير شهري</b> — الساعات المستخدمة والأعمال المنجزة والمُجدولة</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="kicker" style="margin-top:4px;">مشمول في الاشتراك</div>
+    <div class="colgrid">
+      <div class="card">
+        <h3>الفريق وأسلوب العمل</h3>
+        <ul>
+          <li>فريق واحد لـ<b>الصيانة والتطوير</b> معًا</li>
+          <li><b>نقطة تواصل مخصّصة</b> + قناة ذات أولوية</li>
+          <li><b>اقتراحات استباقية</b> — نرصد التحسينات ولا ننتظر الطلبات فقط</li>
+          <li>العمل ضمن إدارة الإصدارات، <b>إصدارات قابلة للمراجعة</b></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>الجودة والمرونة</h3>
+        <ul>
+          <li><b>الاختبار والتوثيق</b> مشمولان في الأعمال المُسلّمة</li>
+          <li>ترحيل <b>حتى 20% من الساعات غير المستخدمة</b> إلى الشهر التالي</li>
+          <li><b>الساعات الإضافية</b> خارج الكتلة تُحتسب بسعر الخطة (<span class="ltr">$25</span>/ساعة)</li>
+          <li>إمكانية الترقية إلى خطة أعلى في أي وقت مع نمو الاحتياجات</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note amber">
+      <div class="nl">ما هو غير مشمول</div>
+      <p>خطة Essential هي سعة صيانة خفيفة — فهي <b>ليست</b> كافية لبناء ميزات كبيرة جديدة (مثل لوحة تحليلات كاملة) بوتيرة سريعة، وهي «إبقاء الأمور تعمل» وليست تنفيذ خارطة طريق نشطة. <b>التكاليف الخارجية</b> (الاستضافة/الخوادم، رسوم المتاجر، رسائل SMS/البريد/واجهات API، الإضافات المدفوعة) تُحتسب بالتكلفة أو تُدفع مباشرة. <b>عمليات البناء الكبيرة</b> تُحدّد وتُسعّر بشكل منفصل ويمكن أن تسير بالتوازي مع الاشتراك.</p>
+    </div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t ltr">Code-Ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="p">صفحة 3</div>
+  </div>
+</div>
+
+<!-- ═══════════ صفحة 4 — التفاصيل المالية ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">سكيل فيرا — عقد دعم وتطوير البرمجيات</div>
+    <div class="ihead-r ltr">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">التفاصيل المالية</div>
+    <h2 class="sec sm">خطتك والسعر</h2>
+    <div class="intro">اختارت سكيل فيرا خطة <b>Essential — 30 ساعة/شهر</b>. تُعرض السلّم الكامل للخطط للمرجعية، بحيث تكون الترقية لاحقًا خطوة بسيطة ومعروفة.</div>
+
+    <table class="m">
+      <thead><tr><th>الخطة</th><th class="num">ساعات/شهر</th><th class="num">السعر/ساعة</th><th class="num">شهري (USD)</th><th class="num">شهري (SAR)</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><span class="tn">Essential</span><span class="sel-badge">مختارة</span></td><td class="num">30</td><td class="num">$25</td><td class="num"><b>$750</b></td><td class="num">≈ 2,813</td></tr>
+        <tr><td><span class="tn">Momentum</span></td><td class="num">60</td><td class="num">$23</td><td class="num">$1,380</td><td class="num">≈ 5,175</td></tr>
+        <tr><td><span class="tn">Scale</span></td><td class="num">120</td><td class="num">$20</td><td class="num">$2,400</td><td class="num">≈ 9,000</td></tr>
+      </tbody>
+    </table>
+    <div class="cellnote">كلما زاد الالتزام بالساعات، انخفض سعر الساعة. يمكن لسكيل فيرا الانتقال إلى خطة أعلى في أي وقت بإشعار مدّته 30 يومًا. جميع الأسعار <b>غير شاملة ضريبة القيمة المضافة 15%</b>. قيم الريال تقديرية بسعر 3.75.</div>
+
+    <div class="note blue" style="margin-top:10px;">
+      <div class="nl">الخطة المختارة — Essential (30 ساعة / شهر)</div>
+      <table class="m" style="margin:8px 0 0;">
+        <thead><tr><th>البند</th><th class="num">USD</th><th class="num">SAR</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tn">سعر الساعة</span></td><td class="num">$25 / hr</td><td class="num">≈ 94 / hr</td></tr>
+          <tr><td><span class="tn">التزام 3 أشهر (3 × $750)</span></td><td class="num">$2,250</td><td class="num">≈ 8,438</td></tr>
+          <tr class="total"><td>الاشتراك الشهري — 30 ساعة</td><td class="num">$750 / mo</td><td class="num">≈ 2,813 / mo <span style="font-size:11px;font-weight:600;color:#9EC1FF;">+ ضريبة</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cellnote">الفوترة <b>شهريًا ومقدّمًا</b> بالدولار؛ الريال تقديري بسعر 3.75. الأشهر الثلاثة الأولى <b>التزام ثابت</b> (2,250$)؛ بعدها يستمر الاشتراك شهريًا. <b>جميع الأسعار غير شاملة ضريبة القيمة المضافة 15%</b>، وتُضاف إلى كل فاتورة.</div>
+
+    <div class="kicker" style="margin-top:16px;">كيف تسير الاتفاقية</div>
+    <div class="colgrid" style="grid-template-columns:1fr 1fr 1fr; gap:11px; margin-bottom:0;">
+      <div class="card">
+        <h3>1 · الانطلاق</h3>
+        <ul>
+          <li><b>استلام الكود</b> ضمن نظام إدارة الإصدارات</li>
+          <li>تهيئة خط البناء والإصدار وتوثيقه</li>
+          <li>الاتفاق على قائمة الأعمال وقناة الأولوية</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>2 · كل شهر</h3>
+        <ul>
+          <li>إبقاء التطبيق <b>مستقرًا</b> — إصلاحات، تحديثات متجر، مراقبة</li>
+          <li>طرح تحسينات صغيرة وإصلاحات ذات أولوية</li>
+          <li>تسليم الأعمال في <b>إصدارات قابلة للمراجعة</b></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>3 · نهاية الشهر</h3>
+        <ul>
+          <li><b>تقرير شهري</b> — الساعات والأعمال المنجزة والمُجدولة</li>
+          <li>مراجعة الأولويات معًا للشهر التالي</li>
+          <li>زيادة الساعات أو خفضها حسب الحاجة</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t ltr">Code-Ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="p">صفحة 4</div>
+  </div>
+</div>
+
+<!-- ═══════════ صفحة 5 — الشروط ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">سكيل فيرا — عقد دعم وتطوير البرمجيات</div>
+    <div class="ihead-r ltr">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">الشروط</div>
+    <h2 class="sec sm">الالتزام والفوترة والافتراضات</h2>
+    <div class="intro">القواعد الأساسية البسيطة التي تُبقي الاتفاقية واضحة للطرفين.</div>
+
+    <ul class="terms">
+      <li><b>الفوترة —</b> شهريًا ومقدّمًا بالدولار؛ الريال تقديري بسعر 3.75. تُصدر الفواتير في بداية كل شهر.</li>
+      <li><b>الالتزام —</b> مدة <b>3 أشهر ثابتة ومُلتزَم بها</b> (تُفوتَر بالكامل، دون إلغاء أو إيقاف مبكّر خلالها). بعد الأشهر الثلاثة يستمر الاشتراك شهريًا بإشعار مدّته 30 يومًا للتعديل أو الإيقاف المؤقّت أو الإنهاء.</li>
+      <li><b>سعة لا نطاق ثابت —</b> الـ30 ساعة سعة شهرية وليست تسليمًا ثابتًا مضمونًا. تُرتَّب الأولويات بشكل مشترك كل شهر.</li>
+      <li><b>الترحيل —</b> تُرحَّل حتى 20% من الساعات غير المستخدمة إلى الشهر التالي؛ ولا تتراكم بلا حدود.</li>
+      <li><b>الساعات الإضافية —</b> الأعمال خارج الكتلة الشهرية تُحتسب بسعر الخطة (<span class="ltr">$25</span>/ساعة على خطة Essential)، بالاتفاق مسبقًا.</li>
+      <li><b>جلسة التسليم —</b> استلام قصير للكود في البداية يضمن نقلًا نظيفًا وموثّقًا للتطبيق القائم.</li>
+      <li><b>التكاليف الخارجية —</b> الاستضافة/الخوادم ورسوم المتاجر ورسائل SMS/البريد/واجهات API والإضافات المدفوعة تُحتسب بالتكلفة أو تدفعها سكيل فيرا مباشرة.</li>
+      <li><b>عمليات البناء الكبيرة —</b> الميزات الكبيرة أو إعادة التصميم الكاملة تُحدَّد وتُسعَّر بشكل منفصل، ويمكن أن تسير بالتوازي مع الاشتراك.</li>
+      <li><b>ضريبة القيمة المضافة —</b> جميع الأسعار غير شاملة ضريبة القيمة المضافة 15%، وتُضاف حيثما تنطبق.</li>
+      <li><b>الصلاحية —</b> هذا العرض صالح لمدة 30 يومًا من تاريخ الإصدار.</li>
+    </ul>
+
+    <div class="note green">
+      <div class="nl">نكبر معكم</div>
+      <p>خطة Essential هي نقطة البداية المناسبة لإبقاء التطبيق سليمًا ومتقدّمًا. ومع نمو المنتج نحو أهدافه، يمكن لسكيل فيرا الترقية إلى <b>Momentum (60 ساعة)</b> أو <b>Scale (120 ساعة)</b> بسعر ساعة أقل — الفريق نفسه والمعيار نفسه، مع سعة شهرية أكبر فقط.</p>
+    </div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t ltr">Code-Ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="p">صفحة 5</div>
+  </div>
+</div>
+
+<!-- ═══════════ صفحة 6 — القبول ═══════════ -->
+<div class="page inner">
+  <div class="ihead">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="ihead-t">سكيل فيرا — عقد دعم وتطوير البرمجيات</div>
+    <div class="ihead-r ltr">CX-SKV-2026-01 &nbsp;·&nbsp; September 2026</div>
+  </div>
+  <div class="icontent">
+    <div class="kicker">الاعتماد</div>
+    <h2 class="sec sm" style="margin-bottom:14px;">القبول والاعتماد</h2>
+    <div style="font-size:12px; color:#374151; font-style:italic; line-height:1.9; margin-bottom:20px;">
+      بالتوقيع أدناه، يؤكّد الطرفان قبول هذا العرض لخطة Essential (30 ساعة/شهر) لعقد دعم وتطوير البرمجيات، ويُصرّحان بالبدء وفق النطاق والتفاصيل المالية والشروط الواردة أعلاه.
+    </div>
+
+    <div class="sign">
+      <div class="sign-h">توقيعات الاعتماد &nbsp;·&nbsp; يُرجى إعادة النسخة الموقّعة إلى raghib@code-ox.com</div>
+      <div class="sign-b">
+        <div class="sign-col">
+          <h4>عن كود-أوكس للتقنية</h4>
+          <div class="sign-f"><div class="fl">المفوّض بالتوقيع</div><div class="fline"></div></div>
+          <div class="sign-f"><div class="fl">الاسم والمنصب</div><div class="fline"></div></div>
+          <div class="sign-f"><div class="fl">التاريخ</div><div class="fline"></div></div>
+        </div>
+        <div class="sign-col">
+          <h4>عن سكيل فيرا</h4>
+          <div class="sign-f"><div class="fl">المفوّض بالتوقيع</div><div class="fline"></div></div>
+          <div class="sign-f"><div class="fl">الاسم والمنصب</div><div class="fline"></div></div>
+          <div class="sign-f"><div class="fl">التاريخ</div><div class="fline"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px; background:var(--primary-900); border-radius:12px; padding:24px 28px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:0.06em; margin-bottom:9px;">لأي استفسار، تواصلوا معنا</div>
+        <div style="font-size:15px; font-weight:800; color:#fff; margin-bottom:8px;">راغب علي رفيق — كود-أوكس للتقنية</div>
+        <div style="font-size:10.5px;" class="ltr">
+          <span style="color:#9EC1FF;">raghib@code-ox.com</span>
+          <span style="color:rgba(255,255,255,0.45);"> &nbsp;·&nbsp; +966 56 176 5707 &nbsp;·&nbsp; code-ox.com</span>
+        </div>
+      </div>
+      <img src="code-ox-logo.svg" alt="CODE OX" style="height:26px; filter:brightness(0) invert(1); opacity:0.5; margin-left:20px;">
+    </div>
+  </div>
+  <div class="ifoot">
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+    <div class="sep"></div>
+    <div class="t ltr">Code-Ox Technologies &nbsp;·&nbsp; raghib@code-ox.com &nbsp;·&nbsp; +966 56 176 5707</div>
+    <div class="p">صفحة 6</div>
+  </div>
+</div>
+
+</body>
+</html>
