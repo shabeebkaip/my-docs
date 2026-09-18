@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benchy — Bespoke Website Redesign Proposal · CX-BEN-2026-01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root{
+      --ink:#1A1D24; --ink2:#3B4150; --muted:#5E6472; --line:#E4E7EC; --bg:#F7F8FB; --paper:#FFFFFF;
+      --accent:#1D4ED8; --accent-soft:#EFF4FF; --accent-line:#C9DAFA; --accent-900:#1E3A8A;
+      --ok:#2F7A57; --ok-soft:#EAF3ED;
+    }
+    html,body { background:#FFFFFF; }
+    body { font-family:'Montserrat',-apple-system,BlinkMacSystemFont,sans-serif; font-size:16px; color:var(--ink); line-height:1.65; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    @page { size:A4; margin:16mm 16mm 20mm 16mm; }
+
+    /* running header / footer — repeat on every printed page */
+    .run-head { position:fixed; top:9mm; left:16mm; right:16mm; display:flex; align-items:center; justify-content:space-between; padding-bottom:6px; border-bottom:1px solid var(--line); }
+    .run-head img { height:15px; opacity:0.9; }
+    .run-head .rh-c { font-size:11px; color:var(--muted); }
+    .run-head .rh-r { font-size:11px; color:#9AA1B0; }
+    .run-foot { position:fixed; bottom:9mm; left:16mm; right:16mm; display:flex; align-items:center; gap:10px; padding-top:6px; border-top:1px solid var(--line); }
+    .run-foot img { height:11px; opacity:0.45; }
+    .run-foot .sep { width:1px; height:11px; background:#CBCFD8; }
+    .run-foot .t { font-size:9px; color:#9AA1B0; flex:1; }
+
+    /* section = a logical block; most start on a fresh page */
+    section { padding-top:2mm; }
+    section.brk { break-before:page; }
+    .avoid { break-inside:avoid; }
+
+    .kicker { font-size:11.5px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.16em; margin-bottom:10px; }
+    h1.sec, h2.sec { font-weight:700; color:var(--ink); line-height:1.14; letter-spacing:-0.01em; }
+    h2.sec { font-size:30px; margin-bottom:14px; }
+    h2.sec.sm { font-size:25px; }
+    .lead { font-size:16px; color:var(--ink2); line-height:1.75; margin-bottom:18px; }
+    .lead b { color:var(--ink); font-weight:600; }
+    p.body { font-size:16px; color:var(--ink2); line-height:1.7; margin-bottom:14px; }
+    p.body b { color:var(--ink); font-weight:600; }
+    .subhead { font-size:11.5px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.14em; margin:6px 0 10px; }
+
+    .callout { break-inside:avoid; border-radius:12px; padding:17px 20px; font-size:15px; line-height:1.65; margin-bottom:18px; border:1px solid var(--line); }
+    .callout.accent { background:var(--accent-soft); border-color:var(--accent-line); border-left:4px solid var(--accent); }
+    .callout.ink { background:#F4F5F7; border-left:4px solid var(--ink); }
+    .callout.ok { background:var(--ok-soft); border-left:4px solid var(--ok); }
+    .callout .cl { font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:7px; }
+    .callout.accent .cl { color:var(--accent-900); }
+    .callout.ink .cl { color:var(--ink); }
+    .callout.ok .cl { color:var(--ok); }
+    .callout p { color:var(--ink2); }
+    .callout b { color:var(--ink); font-weight:600; }
+
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-bottom:16px; }
+    .box { break-inside:avoid; border:1px solid var(--line); border-radius:12px; padding:17px 19px; }
+    .box .bt { font-size:16px; font-weight:700; color:var(--ink); margin-bottom:6px; }
+    .box .bt .n { color:var(--accent); font-weight:800; margin-right:7px; }
+    .box .bd { font-size:15px; color:var(--muted); line-height:1.6; }
+
+    ul.ticks { list-style:none; }
+    ul.ticks li { break-inside:avoid; position:relative; padding:9px 0 9px 26px; font-size:16px; color:var(--ink2); line-height:1.55; border-bottom:1px solid #EEF0F4; }
+    ul.ticks li:last-child { border-bottom:none; }
+    ul.ticks li::before { content:""; position:absolute; left:2px; top:15px; width:9px; height:9px; border-radius:2px; background:var(--accent); }
+    ul.ticks li b { color:var(--ink); font-weight:600; }
+    ul.plain { list-style:none; }
+    ul.plain li { position:relative; padding:6px 0 6px 22px; font-size:15px; color:var(--ink2); line-height:1.55; }
+    ul.plain li::before { content:"—"; position:absolute; left:0; color:var(--accent); font-weight:700; }
+    ul.plain li b { color:var(--ink); }
+
+    table.t, table.m { width:100%; border-collapse:collapse; margin-bottom:12px; }
+    table.t thead th, table.m thead th { background:var(--ink); color:#fff; padding:11px 13px; text-align:left; font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; }
+    table.t thead th.num, table.m thead th.num { text-align:right; }
+    table.t tbody td, table.m tbody td { padding:11px 13px; border-bottom:1px solid #EEF0F4; color:var(--ink2); vertical-align:top; line-height:1.55; font-size:15.5px; }
+    table.t tbody td.num, table.m tbody td.num { text-align:right; white-space:nowrap; }
+    table.t tbody tr, table.m tbody tr { break-inside:avoid; }
+    table.t tbody tr:nth-child(even) td, table.m tbody tr:nth-child(even) td { background:#FAFBFD; }
+    table.t td .dn { font-weight:700; color:var(--ink); display:block; }
+    table.t td .du { font-size:12.5px; color:var(--accent-900); }
+    table.m td .tn { font-weight:700; color:var(--ink); }
+    table.m td .ts { font-size:13px; color:var(--muted); line-height:1.5; display:block; margin-top:4px; }
+    table.m tr.sub td { border-top:1.5px solid #D6DAE2; font-weight:700; color:var(--ink); background:#F4F5F7 !important; }
+    table.m tr.sub td.num { color:var(--accent-900); }
+    table.m tr.opt td { background:var(--accent-soft) !important; }
+    table.m tr.total td { background:var(--ink); color:#fff; font-weight:800; font-size:16px; padding:14px 13px; }
+    table.m tr.total td.num { color:#7FB0FF; font-size:19px; }
+    .cellnote { font-size:13px; color:#9AA1B0; margin-top:6px; line-height:1.55; margin-bottom:10px; }
+    .badge { display:inline-block; font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:var(--accent); }
+
+    ol.steps { list-style:none; counter-reset:s; }
+    ol.steps li { break-inside:avoid; counter-increment:s; position:relative; padding:13px 0 13px 46px; border-bottom:1px solid #EEF0F4; font-size:15.5px; color:var(--ink2); line-height:1.55; }
+    ol.steps li:last-child { border-bottom:none; }
+    ol.steps li b { color:var(--ink); font-weight:600; }
+    ol.steps li::before { content:counter(s); position:absolute; left:0; top:11px; width:30px; height:30px; border-radius:50%; background:var(--accent-soft); border:1px solid var(--accent-line); color:var(--accent-900); font-size:14px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+
+    .sign { break-inside:avoid; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; margin-top:16px; }
+    .sign-h { background:var(--ink); color:#fff; padding:12px 18px; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+    .sign-b { padding:18px; background:var(--bg); display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+    .sign-col h4 { font-size:12px; font-weight:700; color:var(--ink); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px; padding-bottom:6px; border-bottom:2px solid var(--accent); }
+    .sign-f { margin-bottom:16px; }
+    .sign-f .fl { font-size:11.5px; font-weight:700; color:#9AA1B0; text-transform:uppercase; letter-spacing:0.09em; margin-bottom:5px; }
+    .sign-f .fline { border-bottom:1.5px solid #CBCFD8; height:46px; }
+
+    /* COVER */
+    .cover { break-after:page; min-height:225mm; display:flex; flex-direction:column; }
+    .cover .c-over { font-size:12px; font-weight:700; color:var(--accent); letter-spacing:0.22em; text-transform:uppercase; margin-bottom:22px; }
+    .cover h1 { font-size:52px; font-weight:700; line-height:1.08; color:var(--ink); letter-spacing:-0.015em; margin-bottom:22px; }
+    .cover h1 em { font-style:normal; color:var(--accent); }
+    .cover .c-sub { font-size:17px; color:var(--ink2); line-height:1.7; max-width:560px; margin-bottom:30px; }
+    .cover .c-meta { display:flex; flex-wrap:wrap; gap:9px; margin-bottom:auto; }
+    .cover .c-meta .m { background:var(--bg); border:1px solid var(--line); border-radius:100px; padding:8px 16px; font-size:13.5px; color:var(--ink2); }
+    .cover .c-meta .m strong { color:var(--ink); font-weight:700; }
+    .cover .c-ref { margin-top:34px; background:var(--accent-soft); border:1px solid var(--accent-line); border-radius:12px; display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden; }
+    .cover .c-ref .i { padding:16px 18px; border-right:1px solid var(--accent-line); }
+    .cover .c-ref .i:last-child { border-right:none; }
+    .cover .c-ref .l { font-size:11px; color:var(--accent-900); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:7px; opacity:0.8; }
+    .cover .c-ref .v { font-size:15px; font-weight:700; color:var(--ink); }
+
+    /* internal band */
+    .internal-band { break-inside:avoid; background:#20232B; color:#F2F3F5; padding:11px 18px; border-radius:10px; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; display:flex; align-items:center; gap:11px; margin-bottom:18px; }
+    .internal-band .dot { width:9px; height:9px; border-radius:50%; background:var(--accent); }
+    .int-note { background:#F4F5F7; border:1px dashed #C6CAD3; border-radius:8px; padding:10px 14px; font-size:13.5px; color:#5E6472; margin-bottom:16px; }
+  </style>
+</head>
+<body>
+
+  <!-- running chrome (repeats each printed page) -->
+  <div class="run-foot">
+    <img src="code-ox-logo.svg" alt="Agency">
+    <div class="sep"></div>
+    <div class="t">Bespoke website design engagement · Prepared for Benchy / Benchy Ergonomic Solutions · benchy.in</div>
+  </div>
+
+  <!-- ══ COVER ══ -->
+  <section class="cover">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding-bottom:16px; border-bottom:1px solid var(--line); margin-bottom:34px;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="background:var(--ink); border-radius:8px; padding:9px 15px;"><img src="code-ox-logo.svg" alt="Agency" style="height:20px; display:block; filter:brightness(0) invert(1);"></div>
+        <div style="width:1px; height:26px; background:var(--line);"></div>
+        <div style="font-size:17px; font-weight:800; letter-spacing:0.04em; color:var(--ink);">Benchy</div>
+      </div>
+      <div style="font-size:11px; color:var(--muted); letter-spacing:0.04em;">Bespoke Website Redesign</div>
+    </div>
+    <div class="c-over">Design Proposal &nbsp;·&nbsp; [Proposal Date]</div>
+    <h1>A bespoke website,<br>designed around <em>how Benchy sells furniture.</em></h1>
+    <div class="c-sub">A complete, bespoke redesign of benchy.in — rebuilt around your product range, your customers, and the way people choose office and ergonomic furniture. The result: clearer product discovery, stronger presentation, easier navigation and simpler ways to enquire.</div>
+    <div class="c-meta">
+      <div class="m"><strong>Full</strong> bespoke redesign</div>
+      <div class="m"><strong>Custom</strong> to your brand</div>
+      <div class="m"><strong>Responsive</strong> desktop &amp; mobile</div>
+      <div class="m"><strong>Design</strong> engagement</div>
+    </div>
+    <div class="c-ref">
+      <div class="i"><div class="l">Proposal Ref.</div><div class="v">CX-BEN-2026-01</div></div>
+      <div class="i"><div class="l">Date</div><div class="v">[Proposal Date]</div></div>
+      <div class="i"><div class="l">Currency</div><div class="v">INR (₹)</div></div>
+      <div class="i"><div class="l">Prepared By</div><div class="v">[Agency Name]</div></div>
+    </div>
+  </section>
+
+  <!-- ══ 01 OVERVIEW ══ -->
+  <section>
+    <div class="kicker">01 · The Brief</div>
+    <h2 class="sec">Project overview &amp; our understanding</h2>
+    <p class="lead">Benchy has asked us to <b>revamp its existing website, benchy.in, with a proper bespoke design</b>. Today the site presents a broad and capable furniture range — workstations, office tables, chairs, reception tables, height-adjustable desks, storage solutions, conference tables, pantry tables and workpods — but on a design that no longer does that range justice or makes it easy for a buyer to explore.</p>
+    <p class="body">This is a <b>full, custom website redesign</b>: we design a cohesive, brand-appropriate website tailored to Benchy's products and customers. The value is practical — a visitor can find the right furniture faster, see it presented well, move around the site with confidence on any device, and reach out to enquire without friction.</p>
+    <p class="body">Rather than reskinning the current site, we redesign the <b>key experiences it is built from</b> — the home page, the way products are browsed and viewed, the story and credentials of the business, the content, and the ways a customer gets in touch. Consistent, reusable designs then carry that quality across the whole site.</p>
+  </section>
+
+  <!-- ══ 02 OBJECTIVES ══ -->
+  <section>
+    <div class="kicker">02 · Objectives</div>
+    <h2 class="sec">What the redesign sets out to achieve</h2>
+    <p class="lead">The redesign is measured by how well it helps a visitor understand Benchy's range and act on it. Six practical outcomes guide every design decision.</p>
+    <div class="grid2">
+      <div class="box"><div class="bt">Clearer product discovery</div><div class="bd">Help visitors move from a broad range to the exact category and product they need, quickly.</div></div>
+      <div class="box"><div class="bt">Stronger presentation</div><div class="bd">Show Benchy's furniture with the photography, layout and detail it deserves.</div></div>
+      <div class="box"><div class="bt">Easier navigation</div><div class="bd">A consistent, predictable structure across categories, products and content.</div></div>
+      <div class="box"><div class="bt">Mobile usability</div><div class="bd">Layouts that read and work well on phones, where much browsing now happens.</div></div>
+      <div class="box"><div class="bt">Accessible enquiry paths</div><div class="bd">Make it obvious and simple to get in touch and request information.</div></div>
+      <div class="box"><div class="bt">A cohesive brand feel</div><div class="bd">One consistent visual language across every page, from home to contact.</div></div>
+    </div>
+    <div class="callout ink"><p>We are focused on design quality and usability. This proposal does <b>not</b> promise increased leads, search rankings or revenue — those depend on many factors beyond design alone.</p></div>
+  </section>
+
+  <!-- ══ 03 APPROACH ══ -->
+  <section>
+    <div class="kicker">03 · Approach</div>
+    <h2 class="sec">A cohesive, bespoke design approach</h2>
+    <p class="lead">Rather than fitting Benchy into a generic template, we design a considered system tailored to your brand and your range — so every page feels part of the same whole, and each product is easy to understand and act on.</p>
+    <ul class="ticks">
+      <li><b>Brand-appropriate visual direction</b> — a look and tone developed around Benchy's furniture, customers and market, agreed with you during discovery.</li>
+      <li><b>Clear information hierarchy and navigation</b> — a structure that guides a visitor from range, to category, to product, to enquiry.</li>
+      <li><b>Consistent typography, colours, spacing and components</b> — a single design language applied across every page.</li>
+      <li><b>Strong furniture photography and product presentation</b> — layouts built to show products, features and specifications clearly.</li>
+      <li><b>Responsive desktop and mobile layouts</b> — each design considered for large screens and phones.</li>
+      <li><b>Accessible contrast, readable text and usable form states</b> — designs that are comfortable to read and simple to use.</li>
+      <li><b>Clear enquiry calls to action</b> — obvious, well-placed ways to get in touch on every relevant page.</li>
+      <li><b>Shared header and footer design</b> — consistent global navigation and site framing.</li>
+      <li><b>Reusable components and templates</b> — so categories, products and articles stay consistent and are efficient to extend.</li>
+      <li><b>Design handoff</b> — final designs delivered with agreed assets and specifications, ready for build.</li>
+    </ul>
+    <div class="callout accent">
+      <div class="cl">Decided together, during discovery</div>
+      <p>We deliberately do <b>not</b> lock in a specific font, colour palette, CMS, framework or development platform before discovery. Those choices are made with you, informed by your brand assets and priorities — not assumed up front.</p>
+    </div>
+  </section>
+
+  <!-- ══ 04 SCOPE — 10 DESIGNS ══ -->
+  <section class="brk">
+    <div class="kicker">04 · Scope</div>
+    <h2 class="sec">What we'll design</h2>
+    <p class="lead">The redesign covers the core pages and reusable templates that make up Benchy's website. Several are <b>reusable templates</b> — one bespoke design that every category, product, portfolio item or article then shares — so the whole site stays consistent and easy to extend.</p>
+    <table class="t">
+      <thead><tr><th style="width:20%">Design</th><th style="width:32%">Reference / examples</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">1 · Home</span></td><td><span class="du">benchy.in</span></td><td>Introduce the brand, communicate its value, showcase key furniture categories, and guide visitors toward products and enquiries.</td></tr>
+        <tr><td><span class="dn">2 · About</span></td><td><span class="du">/about/</span></td><td>Present the brand story, values, design approach, craftsmanship and ergonomic focus.</td></tr>
+        <tr><td><span class="dn">3 · Company Profile</span></td><td><span class="du">/company-profile/</span></td><td>Present company capabilities and business credentials using client-approved information — a distinct purpose from About. No certifications, capacity, customer names or achievements are invented.</td></tr>
+        <tr><td><span class="dn">4 · Products Overview</span></td><td><span class="du">/products/</span></td><td>A clear gateway into the full product range.</td></tr>
+        <tr><td><span class="dn">5 · Product Category <span class="badge">template</span></span></td><td><span class="du">/office-tables/ · /chairs/ · /work-station/ · /reception-tables/ · /height-adjustable-table/</span></td><td>One reusable category design. Content and imagery vary per category; substantially different layouts would need a separate scope agreement.</td></tr>
+        <tr><td><span class="dn">6 · Product Detail <span class="badge">template</span></span></td><td><span class="du">/chairs/silla/ · /giro/ · /mode/ · /eco/</span></td><td>A reusable layout for imagery, descriptions, features, available specifications and product enquiries. Does not assume e-commerce, online payments, live stock or product configuration.</td></tr>
+        <tr><td><span class="dn">7 · Portfolio Detail <span class="badge">template</span></span></td><td><span class="du">/portfolio/item/workstations/ · /office-tables/ · /workpods/</span></td><td>A reusable visual showcase layout. Existing entries appear to represent furniture categories; they are not described as completed customer projects without confirmation.</td></tr>
+        <tr><td><span class="dn">8 · Blog Listing</span></td><td><span class="du">/blog/</span></td><td>A clear, readable article-discovery experience.</td></tr>
+        <tr><td><span class="dn">9 · Blog Article <span class="badge">template</span></span></td><td><span class="du">/blog/types-of-office-chairs/</span></td><td>A reusable article layout with strong reading hierarchy, imagery and relevant next steps.</td></tr>
+        <tr><td><span class="dn">10 · Contact</span></td><td><span class="du">/contact/</span></td><td>Make it easy to enquire, using client-approved contact details and an enquiry-form design.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout accent">
+      <div class="cl">Optional additional design — Portfolio Listing / Gallery</div>
+      <p>No dedicated main Portfolio page was confirmed; a portfolio gallery archive exists at <b>/portfolio/category/gallery/</b>. A dedicated portfolio listing that leads visitors to the portfolio detail pages can be added as an <b>optional 11th design</b>, priced separately so the core package stays clear.</p>
+    </div>
+  </section>
+
+  <!-- ══ 05 DELIVERABLES ══ -->
+  <section>
+    <div class="kicker">05 · Deliverables</div>
+    <h2 class="sec">What you receive</h2>
+    <p class="lead">The engagement delivers a complete, consistent set of bespoke designs ready to be built, along with the shared elements and specifications that keep the site coherent as it grows.</p>
+    <div class="grid2">
+      <div class="box"><div class="bt"><span class="n">A</span>Bespoke page designs</div><div class="bd">Full custom designs for the site's core pages, including the reusable templates (category, product detail, portfolio detail, blog article and the listing patterns) that carry the design across the whole site.</div></div>
+      <div class="box"><div class="bt"><span class="n">B</span>Shared header &amp; footer</div><div class="bd">A consistent global navigation, site framing and footer design applied across all pages.</div></div>
+      <div class="box"><div class="bt"><span class="n">C</span>Responsive layouts</div><div class="bd">Each design considered for desktop and mobile, with readable text and usable layouts at both sizes.</div></div>
+      <div class="box"><div class="bt"><span class="n">D</span>Reusable components &amp; templates</div><div class="bd">A component set — buttons, cards, product blocks, forms and more — so future pages stay on-brand and consistent.</div></div>
+      <div class="box"><div class="bt"><span class="n">E</span>Enquiry-focused design</div><div class="bd">Clear calls to action and an enquiry-form design that make it simple for visitors to get in touch.</div></div>
+      <div class="box"><div class="bt"><span class="n">F</span>Design handoff</div><div class="bd">Final designs delivered with agreed assets and specifications, ready for a development team to build.</div></div>
+    </div>
+    <div class="callout ink">
+      <div class="cl">Design, not build</div>
+      <p>This package is the <b>design</b> of the website. It produces the visual designs, templates, components and specifications. Whether Benchy also needs the site <b>built and deployed</b> has not yet been established — development is listed as a separately confirmable item later in this document.</p>
+    </div>
+  </section>
+
+  <!-- ══ 06 PRICING ══ -->
+  <section class="brk">
+    <div class="kicker">06 · Pricing</div>
+    <h2 class="sec">Design pricing</h2>
+    <p class="lead">The redesign is delivered as a bespoke design package, priced on our design rate of <b>₹7,500 per unique page design</b>.</p>
+    <table class="m">
+      <thead><tr><th>Item</th><th class="num">Amount (₹)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">Bespoke website redesign — core package</span><span class="ts">Custom design of the site's core pages and reusable templates: Home, About, Company Profile, Products Overview, Product Category, Product Detail, Portfolio Detail, Blog Listing, Blog Article and Contact — with a shared header, footer and component set.</span></td><td class="num">₹75,000</td></tr>
+        <tr class="opt"><td><span class="tn">Optional · Portfolio Listing / Gallery design</span></td><td class="num">₹7,500</td></tr>
+        <tr class="total"><td>Total if the optional design is added</td><td class="num">₹82,500</td></tr>
+      </tbody>
+    </table>
+    <div class="cellnote">Applicable taxes: <b>to be confirmed</b> (tax treatment has not been supplied). Figures are for <b>design</b> only.</div>
+    <div class="callout ink"><p>This package is the <b>design</b> of the redesigned site. Development, CMS work, content migration, redirects, integrations, hosting and related services are <b>not</b> included in this figure — they are listed as separately confirmable or separately quotable items in the scope-exclusions section.</p></div>
+  </section>
+
+  <!-- ══ 07 PROCESS + SCHEDULE ══ -->
+  <section class="brk">
+    <div class="kicker">07 · Process</div>
+    <h2 class="sec">How we deliver</h2>
+    <ol class="steps">
+      <li><b>Discovery</b> — understand Benchy's brand, products, customers and priorities; agree visual-direction inputs, and gather brand assets and product information.</li>
+      <li><b>Structure</b> — agree the site's information architecture and how the ten designs map across the range, so navigation and hierarchy are settled before visuals.</li>
+      <li><b>Visual direction</b> — establish the design language: typography, colour, spacing and components, agreed with you before full page design begins.</li>
+      <li><b>Page design</b> — design the ten pages (including the reusable templates) and the shared header and footer, desktop and mobile.</li>
+      <li><b>Review</b> — present designs, gather your consolidated feedback, and refine to an agreed point.</li>
+      <li><b>Handoff</b> — deliver final designs with agreed assets and specifications, ready for build.</li>
+    </ol>
+    <div class="subhead" style="margin-top:16px;">08 · Indicative Schedule</div>
+    <div class="callout accent"><p>The schedule below is <b>indicative and proposed</b>. Actual timing depends on content availability, scope confirmation and the speed of feedback and approvals. No delivery deadline has been agreed.</p></div>
+    <table class="m">
+      <thead><tr><th>Stage</th><th class="num">Indicative duration</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">Discovery &amp; structure</span></td><td class="num">≈ 1 week</td></tr>
+        <tr><td><span class="tn">Visual direction</span></td><td class="num">≈ 1 week</td></tr>
+        <tr><td><span class="tn">Page design (10 designs)</span></td><td class="num">≈ 2–3 weeks</td></tr>
+        <tr><td><span class="tn">Review &amp; refinement</span></td><td class="num">≈ 1 week</td></tr>
+        <tr><td><span class="tn">Handoff</span></td><td class="num">≈ a few days</td></tr>
+      </tbody>
+    </table>
+    <div class="cellnote">Durations are proposed for planning only and are confirmed once scope, content readiness and a revision approach are agreed. Stages may overlap.</div>
+  </section>
+
+  <!-- ══ 09 CLIENT RESPONSIBILITIES ══ -->
+  <section class="brk">
+    <div class="kicker">09 · Client Responsibilities</div>
+    <h2 class="sec">What we'll need from Benchy</h2>
+    <p class="lead">A bespoke design is only as strong as the material behind it. To keep the work moving and true to your brand, we'll need:</p>
+    <ul class="ticks">
+      <li><b>Brand assets</b> — logo, any existing brand guidelines, and preferred references.</li>
+      <li><b>Product imagery</b> — good-quality photography of the furniture to be featured.</li>
+      <li><b>Accurate specifications</b> — correct product details and specifications to present.</li>
+      <li><b>Approved copy</b> — text content signed off by Benchy for the pages being designed.</li>
+      <li><b>Contact details</b> — the client-approved contact information and enquiry routes to use.</li>
+      <li><b>Consolidated feedback</b> — a single, agreed set of feedback at each review point, to keep the work efficient.</li>
+    </ul>
+    <div class="callout ok"><p>The clearer and more complete this material is at the start, the faster and truer to your brand the designs will be. Gaps here are the most common cause of delay.</p></div>
+  </section>
+
+  <!-- ══ 10 EXCLUSIONS ══ -->
+  <section>
+    <div class="kicker">10 · Exclusions &amp; Assumptions</div>
+    <h2 class="sec">Separately confirmable or separately quotable</h2>
+    <p class="body">This engagement is the <b>design scope</b>. The following are <b>not</b> included in ₹75,000 and are confirmed or quoted separately:</p>
+    <div class="grid2">
+      <div class="box"><div class="bd"><ul class="plain">
+        <li>Frontend and backend <b>development</b></li>
+        <li><b>CMS</b> setup or changes</li>
+        <li>Population or <b>migration</b> of existing content</li>
+        <li>Mapping all existing URLs into the new structure</li>
+        <li><b>Redirects</b> and technical SEO work</li>
+        <li>Form integrations and enquiry delivery</li>
+      </ul></div></div>
+      <div class="box"><div class="bd"><ul class="plain">
+        <li>Analytics setup</li>
+        <li>Hosting, domain, maintenance, deployment</li>
+        <li>Copywriting, photography, paid stock, translations</li>
+        <li>E-commerce or advanced product configuration</li>
+        <li>Additional unique layouts or functionality</li>
+        <li>Anything not listed in the ten designs</li>
+      </ul></div></div>
+    </div>
+    <div class="callout accent">
+      <div class="cl">Open scope item — ancillary pages</div>
+      <p>The site also includes Privacy Policy, Grievance and brochure pages (e.g. <b>/privacy-policy/</b>, <b>/grievance/</b>, <b>/benchy-desk-brochure/</b>, <b>/benchy-executive-excellence/</b>). Their treatment is <b>open</b>: they may be <b>retained</b>, <b>adapted</b> to an agreed standard layout, or <b>quoted separately</b> if bespoke designs or extra functionality are needed. They are not silently included in the ten-design package, and nothing here suggests removing them.</p>
+    </div>
+    <div class="callout ink"><p><b>A finding to investigate, not a conclusion.</b> During our review, a number of pages returned an HTTP 404 status even though they served content. This is simply flagged to look into during implementation — it is not a design issue, and not evidence that those pages are visually unavailable.</p></div>
+  </section>
+
+  <!-- ══ 11 TERMS + NEXT STEPS ══ -->
+  <section class="brk">
+    <div class="kicker">11 · Commercial Terms Requiring Agreement</div>
+    <h2 class="sec">Proposed terms — to be confirmed together</h2>
+    <p class="lead">The confirmed commercial input for this proposal is the <b>bespoke design rate of ₹7,500 per unique page design</b>. The terms below are <b>proposed for discussion</b>; none is an established commitment until agreed in writing.</p>
+    <table class="m">
+      <thead><tr><th>Item</th><th>Proposed (subject to agreement)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">Engagement</span></td><td>Full bespoke website redesign — core design package (optional add-on: portfolio listing).</td></tr>
+        <tr><td><span class="tn">Design fee</span></td><td>₹75,000 core · ₹82,500 with the optional portfolio listing.</td></tr>
+        <tr><td><span class="tn">Taxes</span></td><td><b>To be confirmed</b> — tax treatment not yet supplied.</td></tr>
+        <tr><td><span class="tn">Revision allowance</span></td><td>A defined number of review rounds per design — <b>to be agreed</b>.</td></tr>
+        <tr><td><span class="tn">Payment schedule</span></td><td>A milestone-based schedule (e.g. on kickoff and on handoff) — <b>to be agreed</b>.</td></tr>
+        <tr><td><span class="tn">Delivery schedule</span></td><td>Indicative only; confirmed after scope and content readiness — <b>to be agreed</b>.</td></tr>
+        <tr><td><span class="tn">Support / after-handoff</span></td><td>Any post-handoff support period — <b>to be agreed</b>.</td></tr>
+        <tr><td><span class="tn">Proposal validity</span></td><td>A validity period for these figures — <b>to be agreed</b>.</td></tr>
+        <tr><td><span class="tn">Design vs development</span></td><td>Whether development is also required — <b>to be established</b>; quoted separately if so.</td></tr>
+      </tbody>
+    </table>
+    <div class="subhead" style="margin-top:14px;">12 · Next Steps</div>
+    <ol class="steps">
+      <li><b>A short discovery conversation</b> to confirm scope: design-only or design-and-development, the optional portfolio listing, and treatment of the ancillary pages.</li>
+      <li><b>Agree the open commercial terms</b> above — taxes, revisions, payment, schedule and validity.</li>
+      <li><b>Confirm and begin</b> — on written agreement, we start with discovery and gathering your brand assets and product content.</li>
+    </ol>
+    <div class="sign">
+      <div class="sign-h">Acceptance in principle · Return to [Agency Contact]</div>
+      <div class="sign-b">
+        <div class="sign-col"><h4>For &amp; On Behalf of [Agency Name]</h4><div class="sign-f"><div class="fl">Signatory</div><div class="fline"></div></div><div class="sign-f"><div class="fl">Name &amp; Date</div><div class="fline"></div></div></div>
+        <div class="sign-col"><h4>For &amp; On Behalf of Benchy</h4><div class="sign-f"><div class="fl">Signatory</div><div class="fline"></div></div><div class="sign-f"><div class="fl">Name &amp; Date</div><div class="fline"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ INTERNAL — BEFORE SENDING ══ -->
+  <section class="brk">
+    <div class="internal-band"><span class="dot"></span> Internal · Not part of the client-facing proposal — remove before sending</div>
+    <div class="kicker" style="color:#20232B;">Before Sending</div>
+    <h2 class="sec">Decisions we must confirm internally</h2>
+    <div class="int-note">This section is for our team only. It is not part of the proposal Benchy receives. Remove it (or export only the client-facing sections) before sharing.</div>
+    <table class="m">
+      <thead><tr><th>Decision</th><th>Why it matters / what to settle</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">Design-only vs design + development</span></td><td>The whole framing hinges on this. Confirm whether Benchy wants only the ₹75,000 design scope, or also the build. If build is wanted, prepare a separate development quote.</td></tr>
+        <tr><td><span class="tn">Optional portfolio listing</span></td><td>Include the 11th design (→ ₹82,500) or keep the core ₹75,000? Confirm before final pricing.</td></tr>
+        <tr><td><span class="tn">Ancillary pages</span></td><td>Privacy, Grievance, brochure pages — decide: retain / adapt to standard layout / quote bespoke separately. Don't let these creep into the 10 silently.</td></tr>
+        <tr><td><span class="tn">Content migration</span></td><td>Who moves the 58 content URLs' content into the new templates? Confirm it's out of design scope and price separately if we own it.</td></tr>
+        <tr><td><span class="tn">Revision allowance</span></td><td>Set the number of review rounds per design before extra rounds are chargeable. Protects margin.</td></tr>
+        <tr><td><span class="tn">Schedule</span></td><td>Confirm we can meet the indicative timeline given current capacity; adjust before committing dates.</td></tr>
+        <tr><td><span class="tn">Payment terms</span></td><td>Decide the split (e.g. 50% kickoff / 50% handoff) and invoicing for an India (INR) client.</td></tr>
+        <tr><td><span class="tn">Tax treatment</span></td><td>GST applicability for this INR engagement — confirm rate/registration before quoting tax; currently “to be confirmed”.</td></tr>
+        <tr><td><span class="tn">Placeholders &amp; branding</span></td><td>Fill [Agency Name], [Proposal Date], [Agency Contact], signatory. Confirm branding (Code-Ox) and which contact to use.</td></tr>
+        <tr><td><span class="tn">404 finding</span></td><td>7 of 58 URLs returned 404 while serving content — note for the dev/implementation phase, not a design blocker.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</body>
+</html>
