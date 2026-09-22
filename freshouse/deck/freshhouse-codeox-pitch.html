@@ -170,7 +170,7 @@ h3.sub{font-size:28px; line-height:1.08; letter-spacing:-.02em; font-weight:700}
 .slide.pshow>.row, .slide.pshow>.slidehead{flex:0 0 auto}
 .slide.pshow .phones{flex:1 1 auto; min-height:0; align-items:center; margin-top:18px}
 .slide.pshow .pcard{justify-content:flex-start; height:100%}
-.slide.pshow .pcard img{height:auto; max-height:calc(100% - 70px); width:auto}
+.slide.pshow .pcard>img{height:auto; max-height:calc(100% - 70px); width:auto}
 .slide.pshow .small{flex:0 0 auto}
 .slide.s-ops{display:flex; flex-direction:column}
 .pcard .cap{max-width:22ch; text-align:center; font-size:13px; color:var(--muted); line-height:1.32}
@@ -303,8 +303,28 @@ h3.sub{font-weight:600}
 .tag,.kicker{font-size:16px !important; line-height:1.42}
 .gapcol .h .pill{font-size:13px}
 /* larger media so screenshots are readable */
-.slide.pshow .pcard img{height:clamp(400px,44vh,520px)}
+.slide.pshow .pcard>img{height:clamp(400px,44vh,520px)}
 .browser{max-height:none !important}
+
+/* iPhone-style device frame for the frameless in-app screenshots */
+.device{position:relative; height:clamp(440px,55vh,580px); aspect-ratio:9 / 19.5;
+  background:#0d1117; border-radius:46px; padding:9px;
+  box-shadow:0 26px 55px rgba(15,23,41,.24), inset 0 0 0 2px #2a2f37; flex:0 0 auto}
+.device .scr{position:relative; width:100%; height:100%; border-radius:38px; overflow:hidden; background:#fff}
+.device .scr img{width:100% !important; height:100% !important; max-height:none !important; object-fit:cover; object-position:top center; display:block}
+.device .island{position:absolute; top:13px; left:50%; transform:translateX(-50%);
+  width:74px; height:20px; background:#0d1117; border-radius:20px; z-index:3}
+.slide.pshow .pcard .device{height:clamp(440px,55vh,580px)}
+
+/* app gallery grids (show every screen) */
+.galwrap{display:grid; grid-template-columns:repeat(6,1fr); gap:28px 22px; margin-top:10px; width:100%}
+.galwrap.drv6{grid-template-columns:repeat(8,1fr); gap:22px 16px}
+.galph{display:flex; flex-direction:column; align-items:center; gap:10px}
+.galph .gf{width:100%; aspect-ratio:9 / 19.5; border:5px solid #0d1117; border-radius:20px; overflow:hidden; background:#fff; box-shadow:0 12px 26px rgba(15,23,41,.14)}
+.galwrap.drv6 .galph .gf{border-width:4px; border-radius:16px}
+.galph .gf img{width:100%; height:100%; object-fit:cover; object-position:top center; display:block}
+.galph .gl{font-size:13px; color:var(--muted); text-align:center; line-height:1.25; letter-spacing:-.005em}
+.slide.gallery{justify-content:flex-start}
 .stat-num,.big-quote,.cred .n,.metricrow .m .n,.cover-strip .s .n,
 .statpanel .row1 .n{font-weight:600}
 .appcard .nm,.win-item .t,.gapcol .h,.modcol .h,.modcol li b,.feat .f .t,
@@ -323,7 +343,7 @@ h3.sub{font-weight:600}
 .slide.pshow>.row,.slide.pshow>.slidehead{flex:none}
 .slide.pshow .phones{height:auto !important; flex:none; margin-top:28px}
 .slide.pshow .pcard{height:auto}
-.slide.pshow .pcard img{height:352px; max-height:none}
+.slide.pshow .pcard>img{height:352px; max-height:none}
 .slide.s-ops{display:flex; flex-direction:column; justify-content:center}
 .slide.s-ops>.row{flex:none; min-height:0}
 
@@ -530,12 +550,12 @@ slides.push(`
       <div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Delivers ideas #1-3 · a warm guest welcome</div>
       <h2 class="title" style="font-size:44px">A first impression<br>that converts.</h2>
     </div>
-    <p class="lead" style="max-width:26ch;font-size:18px">Onboarding under 60 seconds - and "Explore Menu" lets a visitor look before committing.</p>
+    <p class="lead" style="max-width:30ch;font-size:18px">A warm welcome, a quick sign-up and instant verification, a smooth first impression that's unmistakably Freshhouse.</p>
   </div>
   <div class="phones mt20" style="height:400px">
-    <div class="pcard"><div class="caph">Welcome</div><img src="${IMG}ph-welcome.png"></div>
-    <div class="pcard"><div class="caph">Log in · or explore</div><img src="${IMG}ph-login.png"></div>
-    <div class="pcard"><div class="caph">Register</div><img src="${IMG}ph-register.png"></div>
+    <div class="pcard"><div class="caph">Welcome</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}ob-welcome.png"></div></div></div>
+    <div class="pcard"><div class="caph">Register in seconds</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}ob-register.png"></div></div></div>
+    <div class="pcard"><div class="caph">Verified instantly</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}ob-otp.png"></div></div></div>
   </div>
   ${F()}
 </div>`);
@@ -569,9 +589,9 @@ slides.push(`
     <h2 class="title" style="font-size:44px">Personalized from the first tap.</h2>
   </div>
   <div class="phones mt16" style="height:400px">
-    <div class="pcard"><div class="caph">Personal info</div><img src="${IMG}hmc-personal.png" style="border-radius:28px;border:1px solid var(--line);box-shadow:0 18px 44px rgba(16,40,31,.14)"></div>
-    <div class="pcard"><div class="caph">Body metrics</div><img src="${IMG}hmc-body.png" style="border-radius:28px;border:1px solid var(--line);box-shadow:0 18px 44px rgba(16,40,31,.14)"></div>
-    <div class="pcard"><div class="caph">Primary goal</div><img src="${IMG}hmc-goal.png" style="border-radius:28px;border:1px solid var(--line);box-shadow:0 18px 44px rgba(16,40,31,.14)"></div>
+    <div class="pcard"><div class="caph">Personal info</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}hmc-personal.png"></div></div></div>
+    <div class="pcard"><div class="caph">Body metrics</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}hmc-body.png"></div></div></div>
+    <div class="pcard"><div class="caph">Primary goal</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}hmc-goal.png"></div></div></div>
   </div>
   <p class="small mt16" style="font-size:15px">Every answer is saved to the Odoo customer record, so your team knows each customer's goals before the first conversation, and the plan is tailored from the very first tap.</p>
   ${F()}
@@ -588,9 +608,9 @@ slides.push(`
     <p class="lead" style="max-width:24ch;font-size:18px">Plans, live pricing, and gram-level protein/carb sliders - shown, not hidden.</p>
   </div>
   <div class="phones mt16" style="height:392px">
-    <div class="pcard"><div class="caph">Select a plan</div><img src="${IMG}ph-selectplan.png"></div>
-    <div class="pcard"><div class="caph">Customize the plate</div><img src="${IMG}ph-customize.png"></div>
-    <div class="pcard"><div class="caph">Duration & composition</div><img src="${IMG}ph-customize2.png"></div>
+    <div class="pcard"><div class="caph">Your suggested plan</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}scr-suggested-plan.png"></div></div></div>
+    <div class="pcard"><div class="caph">Customize the plate</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}scr-customize-your-plan.png"></div></div></div>
+    <div class="pcard"><div class="caph">Macros & days</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}scr-customize-your-plan-macros-updated.png"></div></div></div>
   </div>
   ${F()}
 </div>`);
@@ -603,9 +623,9 @@ slides.push(`
     <div class="col" style="align-items:flex-end"><div class="stat-num" style="color:var(--gold-deep)">+15-25%</div><div class="stat-lbl">average order value from add-ons</div></div>
   </div>
   <div class="phones mt16" style="height:392px">
-    <div class="pcard"><div class="caph">Enhance the meal</div><img src="${IMG}ph-addons.png"></div>
-    <div class="pcard"><div class="caph">Checkout summary</div><img src="${IMG}ph-checkout.png"></div>
-    <div class="pcard"><div class="caph">Payment</div><img src="${IMG}ph-payment.png"></div>
+    <div class="pcard"><div class="caph">Enhance the meal</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}scr-enhance-your-meal-add-on.png"></div></div></div>
+    <div class="pcard"><div class="caph">Checkout summary</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}scr-checkout.png"></div></div></div>
+    <div class="pcard"><div class="caph">Payment</div><div class="device"><div class="island"></div><div class="scr"><img src="${IMG}scr-payment.png"></div></div></div>
   </div>
   <p class="small mt16">Every add-on becomes a line item in the Odoo subscription automatically - no manual entry, VAT included.</p>
   ${F()}
@@ -661,8 +681,8 @@ slides.push(`
     </div>
     <div class="col gap16" style="width:44%">
       <div class="phones" style="height:300px;gap:16px;align-items:flex-end">
-        <div class="pcard sm"><div class="caph">Driver login</div><img src="${IMG}ph-driverlogin.png" style="height:290px"></div>
-        <div class="pcard sm"><div class="caph">Assigned orders</div><img src="${IMG}ph-assigned.png" style="height:290px"></div>
+        <div class="pcard sm"><div class="caph">Driver login</div><div class="device" style="height:clamp(320px,42vh,400px)"><div class="island"></div><div class="scr"><img src="${IMG}drv-login.png"></div></div></div>
+        <div class="pcard sm"><div class="caph">Today's orders</div><div class="device" style="height:clamp(320px,42vh,400px)"><div class="island"></div><div class="scr"><img src="${IMG}drv-my-orders-pending.png"></div></div></div>
       </div>
       <div class="small">Mark a delivery done - Odoo and the customer's app update together, in real time. Drivers see only their zone. Zero dispatch calls.</div>
     </div>
@@ -812,6 +832,26 @@ slides.push(`
     <div class="appcard"><div class="shot"><img src="${IMG}app-planetzero1.jpg"></div><div class="body"><div class="nm">Planet Zero</div><div class="mk">Saudi Arabia · iOS & Android</div><div class="vol">Live<span> · macro tracking</span></div></div></div>
   </div>
   <p class="small mt20">All four are bilingual Arabic / English, running on the same Odoo diet platform. Diet Steps scaled 10× in a single month - the system handles growth without a rebuild.</p>
+  ${F()}
+</div>`);
+
+/* 19c FULL APP GALLERIES — every screen */
+const titleize = fn => fn.replace(/\.png$/,'').replace(/^(scr|drv)-/,'').replace(/-/g,' ').replace(/\bcnofirm\b/,'confirm').replace(/\b\w/g,c=>c.toUpperCase());
+const galGrid = (files,cls='') => `<div class="galwrap ${cls}">`+files.map(fn=>`<div class="galph"><div class="gf"><img src="${IMG}${fn}" loading="lazy"></div><div class="gl">${titleize(fn)}</div></div>`).join('')+`</div>`;
+const CUST_SCREENS = ['scr-splash.png','scr-onboarding.png','scr-login.png','scr-register.png','scr-otp-verification-verified.png','scr-help-me-choose-personal-info.png','scr-help-me-choose-personal-info-add-dob.png','scr-help-me-choose-primary-goal.png','scr-help-me-choose-primary-goal-for-female-users.png','scr-help-me-choose-all-set.png','scr-help-me-choose-all-set-1.png','scr-help-me-choose-all-set-2.png','scr-help-me-choose-all-set-3.png','scr-suggested-plan.png','scr-customize-your-plan.png','scr-customize-your-plan-1.png','scr-customize-your-plan-macros-updated.png','scr-customize-your-plan-macros-days-added.png','scr-enhance-your-meal-add-on.png','scr-checkout.png','scr-payment.png','scr-payment-1.png','scr-subscription-activated.png','scr-delivery-preference.png','scr-delivery-preference-dress-added.png','scr-delivery-location.png','scr-delivery-location-national-address.png','scr-add-address.png','scr-add-delivery-address-locate.png'];
+const DRV_SCREENS = ['drv-splash.png','drv-login.png','drv-login-password.png','drv-forgot-password.png','drv-reset-password.png','drv-reset-password-filled.png','drv-reset-password-1.png','drv-code-verification.png','drv-code-verification-verify.png','drv-home.png','drv-home-calendar.png','drv-my-orders-pending.png','drv-my-orders-pending-1.png','drv-my-orders-details.png','drv-my-orders-details-1.png','drv-my-orders-more-actions.png','drv-my-orders-more-actions-1.png','drv-my-orders-more-actions-2.png','drv-my-orders-more-actions-3.png','drv-my-orders-more-actions-4.png','drv-my-orders-more-actions-5.png','drv-my-orders-more-actions-6.png','drv-my-orders-more-actions-delay.png','drv-my-orders-more-actions-delay-1.png','drv-my-orders-more-actions-delay-2.png','drv-my-orders-more-actions-transfer-order.png','drv-my-orders-more-actions-transfer-order-1.png','drv-my-orders-more-actions-transfer-order-2.png','drv-my-orders-more-actions-transfer-order-cnofirm.png','drv-my-orders-more-actions-not-delivered.png','drv-my-orders-contact-customer.png','drv-my-orders-message-templates.png','drv-my-orders-message-templates-1.png','drv-deliver-parcel-delivery-proof-upload.png','drv-deliver-parcel-delivery-proof-retake.png','drv-deliver-parcel-confirm-delivery.png','drv-my-orders-delivered.png','drv-my-orders-delivered-1.png','drv-my-orders-not-delivered.png','drv-my-ratings.png','drv-my-ratings-empty.png','drv-profile.png','drv-display-notifications.png','drv-cleaning-section.png','drv-rules-regulations.png','drv-privacy-policies.png','drv-logout.png','drv-delete-account.png'];
+slides.push(`
+<div class="slide gallery">
+  <div class="slidehead"><div class="kicker"><span class="dot"></span> The customer app · every screen</div><h2 class="title" style="font-size:40px">One app, the whole journey.</h2></div>
+  <p class="lead mt16" style="max-width:82ch">Welcome, guided plan-builder, gram-level customization, checkout, delivery preferences and national-address capture. Every screen is live and Odoo-connected.</p>
+  ${galGrid(CUST_SCREENS)}
+  ${F()}
+</div>`);
+slides.push(`
+<div class="slide gallery">
+  <div class="slidehead"><div class="kicker"><span class="dot"></span> The driver app · every screen</div><h2 class="title" style="font-size:40px">Delivery, fully in hand.</h2></div>
+  <p class="lead mt16" style="max-width:82ch">A complete driver app: secure login, daily orders and calendar, order actions (delay, transfer, contact), photo delivery proof, ratings and profile, all synced to the same Odoo back office.</p>
+  ${galGrid(DRV_SCREENS,'drv6')}
   ${F()}
 </div>`);
 
