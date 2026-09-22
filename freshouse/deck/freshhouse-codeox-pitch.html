@@ -3,16 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Freshhouse × Code-Ox — Odoo Diet Management System</title>
+<title>Freshhouse × Code-Ox · Odoo Diet Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#221C15; --ink-soft:#4a4234; --muted:#847a68;
-  --paper:#FBF8F3; --paper2:#F1EAD9; --paper3:#E9E0CD;
-  --gold:#B4863B; --gold-br:#D9A94E; --gold-deep:#8a6524;
-  --green:#2F6B4F; --green-soft:#e5efe7;
-  --coral:#D64541; --coral-soft:#f7e6e2;
-  --line:rgba(34,28,21,.12); --line2:rgba(34,28,21,.07);
-  --panel:#0f0d0a;
+  --ink:#16281f; --ink-soft:#3c4d44; --muted:#6e8078;
+  --paper:#ffffff; --paper2:#f1f8f3; --paper3:#e6f1ea;
+  --gold:#3f9367; --gold-br:#52ab7d; --gold-deep:#2c6b4a;
+  --green:#3f9367; --green-soft:#e8f4ee;
+  --coral:#cf5442; --coral-soft:#fbeae6;
+  --line:rgba(22,40,31,.13); --line2:rgba(22,40,31,.06);
+  --panel:#123024; --brand-dark:#102a1f;
   font-synthesis:none;
 }
 *{box-sizing:border-box; margin:0; padding:0}
@@ -20,8 +23,8 @@ html{scroll-behavior:smooth}
 html,body{height:auto}
 :root{--s:1}
 body{
-  background:#0c0b09; color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",system-ui,sans-serif;
+  background:#0b1811; color:var(--ink);
+  font-family:'Outfit',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
   overflow-x:hidden;
 }
@@ -29,8 +32,8 @@ body{
 .deck{display:flex; flex-direction:column; align-items:center; gap:18px; padding:70px 0 60px}
 .frame-wrap{
   width:calc(1280px * var(--s)); height:calc(720px * var(--s));
-  overflow:hidden; border-radius:12px; background:var(--paper);
-  box-shadow:0 18px 50px rgba(0,0,0,.40);
+  overflow:hidden; border-radius:16px; background:var(--paper);
+  box-shadow:0 18px 50px rgba(8,24,16,.42);
 }
 .slide{
   position:relative; width:1280px; height:720px; background:var(--paper);
@@ -40,15 +43,15 @@ body{
 #scrollfill{height:100%; width:0; background:linear-gradient(90deg,var(--gold),var(--gold-br))}
 #topbar{position:fixed; top:0; left:0; right:0; height:0; z-index:55}
 .brandtab{position:fixed; top:14px; left:18px; z-index:56; display:inline-flex; align-items:center; gap:8px;
-  background:rgba(18,15,11,.6); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.10);
-  color:#efe7d6; font-size:13px; font-weight:700; letter-spacing:-.01em; padding:7px 13px; border-radius:100px}
-.brandtab .g{width:20px;height:20px;border-radius:6px;background:var(--gold-br);color:#221C15;display:grid;place-items:center;font-size:11px;font-weight:900}
+  background:rgba(16,40,31,.7); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.12);
+  color:#eaf5ef; font-size:13px; font-weight:600; letter-spacing:-.01em; padding:7px 13px; border-radius:100px}
+.brandtab .g{width:20px;height:20px;border-radius:6px;background:var(--gold-br);color:#0f2419;display:grid;place-items:center;font-size:11px;font-weight:800}
 .totop{position:fixed; bottom:20px; right:20px; z-index:56; width:42px;height:42px;border-radius:50%;
-  background:rgba(18,15,11,.6); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.12);
-  color:#efe7d6; cursor:pointer; font-size:17px; display:grid; place-items:center; opacity:0; pointer-events:none; transition:opacity .25s}
+  background:rgba(16,40,31,.7); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.14);
+  color:#eaf5ef; cursor:pointer; font-size:17px; display:grid; place-items:center; opacity:0; pointer-events:none; transition:opacity .25s}
 .totop.show{opacity:1; pointer-events:auto}
-.slide.solid-dark{background:var(--ink); color:var(--paper)}
-.slide.paper2{background:linear-gradient(160deg,#FBF8F3 0%, #F3ECDD 100%)}
+.slide.solid-dark{background:var(--brand-dark); color:var(--paper)}
+.slide.paper2{background:linear-gradient(160deg,#ffffff 0%, #eaf5ee 100%)}
 
 @media (prefers-reduced-motion:reduce){
   .slide{transition:opacity .18s linear}
@@ -62,8 +65,8 @@ body{
   border-top:1px solid rgba(255,255,255,.08); color:#efe7d6}
 #bar{flex:1; height:3px; background:rgba(255,255,255,.14); border-radius:2px; overflow:hidden}
 #barfill{height:100%; width:0; background:linear-gradient(90deg,var(--gold),var(--gold-br)); transition:width .45s cubic-bezier(.4,0,.2,1)}
-#count{font-variant-numeric:tabular-nums; font-size:12.5px; letter-spacing:.02em; color:#c9bda6}
-#chrome .nm{font-size:12.5px; color:#9c917c}
+#count{font-variant-numeric:tabular-nums; font-size:12.5px; letter-spacing:.02em; color:#cfe6d8}
+#chrome .nm{font-size:12.5px; color:#8fa89b}
 .navbtn{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.16);
   background:rgba(255,255,255,.04); color:#efe7d6; cursor:pointer; font-size:14px; line-height:1;
   display:grid;place-items:center; transition:background .15s, transform .1s}
@@ -81,13 +84,13 @@ h3.sub{font-size:28px; line-height:1.08; letter-spacing:-.02em; font-weight:700}
 .lead{font-size:22px; line-height:1.35; letter-spacing:-.012em; color:var(--ink-soft); font-weight:450; max-width:62ch}
 .small{font-size:15px; line-height:1.45; color:var(--muted)}
 .tag{display:inline-flex; align-items:center; gap:7px; padding:5px 12px; border-radius:100px; font-size:13.5px; font-weight:600}
-.tag.gap{background:var(--coral-soft); color:#a8322e}
+.tag.gap{background:var(--coral-soft); color:#a83a2e}
 .tag.win{background:var(--green-soft); color:#245c42}
-.tag.gold{background:#f3e7cf; color:var(--gold-deep)}
+.tag.gold{background:#dcefe4; color:var(--gold-deep)}
 
 /* device + browser frames */
-.phone{border-radius:34px; box-shadow:0 26px 50px rgba(34,28,21,.22), 0 4px 12px rgba(34,28,21,.12); display:block}
-.browser{border-radius:12px; box-shadow:0 30px 60px rgba(34,28,21,.20), 0 6px 16px rgba(34,28,21,.10);
+.phone{border-radius:34px; box-shadow:0 26px 50px rgba(16,40,31,.20), 0 4px 12px rgba(16,40,31,.10); display:block}
+.browser{border-radius:12px; box-shadow:0 30px 60px rgba(16,40,31,.18), 0 6px 16px rgba(16,40,31,.09);
   border:1px solid var(--line); display:block; width:100%}
 .stat-num{font-size:56px; font-weight:800; letter-spacing:-.03em; line-height:1}
 .stat-lbl{font-size:15px; color:var(--muted); margin-top:4px}
@@ -156,7 +159,7 @@ h3.sub{font-size:28px; line-height:1.08; letter-spacing:-.02em; font-weight:700}
 .split.rev{grid-template-columns:1.15fr 1fr}
 .feat{display:flex; flex-direction:column; gap:15px}
 .feat .f{display:flex; gap:12px; align-items:flex-start}
-.feat .f .ic{flex:0 0 auto;width:24px;height:24px;border-radius:7px;background:#f3e7cf;color:var(--gold-deep);display:grid;place-items:center;font-size:13px;font-weight:800;margin-top:1px}
+.feat .f .ic{flex:0 0 auto;width:24px;height:24px;border-radius:7px;background:#dcefe4;color:var(--gold-deep);display:grid;place-items:center;font-size:13px;font-weight:800;margin-top:1px}
 .feat .f .t{font-size:16.5px;font-weight:650;letter-spacing:-.01em;line-height:1.18}
 .feat .f .d{font-size:13.7px;color:var(--muted);line-height:1.3;margin-top:2px}
 
@@ -167,7 +170,7 @@ h3.sub{font-size:28px; line-height:1.08; letter-spacing:-.02em; font-weight:700}
 /* stat panel (dark) */
 .statpanel{background:var(--panel); border-radius:20px; padding:34px 36px; color:var(--paper); display:flex;flex-direction:column;gap:26px}
 .statpanel .row1 .n{font-size:52px;font-weight:800;letter-spacing:-.03em;color:var(--gold-br);line-height:1}
-.statpanel .row1 .l{font-size:14.5px;color:#b9ad97;margin-top:5px}
+.statpanel .row1 .l{font-size:14.5px;color:#b0c8bc;margin-top:5px}
 .statpanel .hr{height:1px;background:rgba(255,255,255,.12)}
 
 /* mapping table */
@@ -192,26 +195,26 @@ h3.sub{font-size:28px; line-height:1.08; letter-spacing:-.02em; font-weight:700}
 .cta-step{border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:22px;background:rgba(255,255,255,.03)}
 .cta-step .num{font-size:14px;font-weight:800;color:var(--gold-br);font-variant-numeric:tabular-nums}
 .cta-step .t{font-size:19px;font-weight:700;letter-spacing:-.02em;margin-top:10px;color:var(--paper)}
-.cta-step .d{font-size:14px;color:#b3a892;margin-top:7px;line-height:1.35}
-.contactbar{display:flex;align-items:center;gap:24px;margin-top:34px;padding-top:22px;border-top:1px solid rgba(255,255,255,.14);font-size:15px;color:#d8cdb5}
+.cta-step .d{font-size:14px;color:#b0c8bc;margin-top:7px;line-height:1.35}
+.contactbar{display:flex;align-items:center;gap:24px;margin-top:34px;padding-top:22px;border-top:1px solid rgba(255,255,255,.14);font-size:15px;color:#cfe6d8}
 .contactbar b{color:#fff}
 .contactbar .who{font-weight:700;color:#fff}
 
 .footline{position:absolute; left:72px; bottom:26px; font-size:12.5px; color:var(--muted)}
-.slide.solid-dark .footline{color:#8a8069}
+.slide.solid-dark .footline{color:#6f8a7d}
 
 .section-num{font-size:15px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .big-quote{font-size:44px;line-height:1.06;letter-spacing:-.03em;font-weight:750;max-width:22ch}
 .accent{color:var(--gold-br)}
 .accent-green{color:#7ff0b0}
 .mono-fig{font-variant-numeric:tabular-nums}
-.underline-gold{box-shadow:inset 0 -12px 0 rgba(217,169,78,.28)}
+.underline-gold{box-shadow:inset 0 -12px 0 rgba(63,147,103,.28)}
 
 /* portfolio apps */
 .apps{display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:8px}
 .appcard{background:#fff; border:1px solid var(--line); border-radius:18px; overflow:hidden; display:flex; flex-direction:column}
 .appcard .shot{height:250px; background:var(--paper2); display:flex; align-items:flex-end; justify-content:center; overflow:hidden}
-.appcard .shot img{width:auto; height:238px; object-fit:cover; object-position:top; border-radius:14px 14px 0 0; box-shadow:0 -6px 24px rgba(34,28,21,.12)}
+.appcard .shot img{width:auto; height:238px; object-fit:cover; object-position:top; border-radius:14px 14px 0 0; box-shadow:0 -6px 24px rgba(16,40,31,.12)}
 .appcard .body{padding:15px 17px 17px; display:flex; flex-direction:column; gap:5px}
 .appcard .nm{font-size:18px; font-weight:750; letter-spacing:-.015em}
 .appcard .mk{font-size:12.5px; color:var(--muted)}
@@ -245,11 +248,56 @@ h3.sub{font-size:28px; line-height:1.08; letter-spacing:-.02em; font-weight:700}
 .metricrow{display:flex; gap:44px; margin-top:6px}
 .metricrow .m .n{font-size:44px;font-weight:800;letter-spacing:-.03em;color:var(--gold-deep);line-height:1}
 .metricrow .m .l{font-size:14px;color:var(--muted);margin-top:5px}
+
+/* ============================================================
+   FULL-WIDTH · MINIMAL · MATCH FRESHHOUSE.COM.SA
+   Overrides the fixed-1280 slide-card model with full-bleed,
+   flowing website sections and lighter, cleaner Outfit type.
+   ============================================================ */
+html,body{background:#fff}
+.deck{gap:0; padding:0; align-items:stretch; width:100%}
+.frame-wrap{width:100%; height:auto; border-radius:0; box-shadow:none; background:transparent; overflow:visible}
+.slide{
+  width:100%; height:auto; min-height:0; transform:none;
+  padding:clamp(78px,8.5vw,124px) max(28px, calc((100% - 1160px)/2));
+}
+.footline{display:none}
+
+/* type: lighter + cleaner, charcoal heads / grey body (their site) */
+h1.display{font-weight:600; letter-spacing:-.03em; line-height:1.03}
+h2.title{font-weight:600; letter-spacing:-.02em; line-height:1.06}
+h3.sub{font-weight:600}
+.lead{font-weight:400; color:#59685f}
+.small{font-weight:400}
+.stat-num,.big-quote,.cred .n,.metricrow .m .n,.cover-strip .s .n,
+.statpanel .row1 .n{font-weight:600}
+.appcard .nm,.win-item .t,.gapcol .h,.modcol .h,.modcol li b,.feat .f .t,
+.erpcard .t,.fstep .t,.cta-step .t,.maprow .sol,.maphead div,.cta-step .num,
+.section-num,.livebadge{font-weight:600}
+.farrow{font-weight:600}
+
+/* kicker -> their small uppercase tracked eyebrow */
+.kicker{text-transform:uppercase; font-size:12px; font-weight:700; letter-spacing:.15em; gap:8px; color:var(--gold-deep)}
+.kicker .dot{width:6px; height:6px}
+
+/* neutralize the fixed-720 / scaled-canvas assumptions */
+.split{height:auto}
+.phones{height:auto !important}
+.slide.pshow{display:block}
+.slide.pshow>.row,.slide.pshow>.slidehead{flex:none}
+.slide.pshow .phones{height:auto !important; flex:none; margin-top:28px}
+.slide.pshow .pcard{height:auto}
+.slide.pshow .pcard img{height:352px; max-height:none}
+.slide.s-ops{display:block}
+.slide.s-ops>.row{flex:none; min-height:0}
+
+/* soften cards to their light, low-shadow style */
+.gapcol,.modcol,.appcard,.erpcard,.cred,.fstep,.maptbl,.statpanel{box-shadow:none}
 </style>
 </head>
 <body>
 <div id="scrollbar"><div id="scrollfill"></div></div>
-<div class="brandtab"><span class="g">Cx</span> Freshhouse × Code-Ox</div>
+<div class="brandtab"><img src="img/fh-logo.png" alt="Freshhouse" style="height:15px;width:auto"><span style="opacity:.6;font-weight:500">× Code-Ox</span></div>
 <button class="totop" id="totop" aria-label="Back to top">↑</button>
 <div class="deck" id="deck"></div>
 
@@ -263,19 +311,19 @@ const slides = [];
 /* 01 COVER */
 slides.push(`
 <div class="slide solid-dark active" style="overflow:hidden">
-  <div style="position:absolute;top:-220px;right:-160px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle at center, rgba(217,169,78,.22), rgba(217,169,78,0) 62%);pointer-events:none"></div>
+  <div style="position:absolute;top:-220px;right:-160px;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle at center, rgba(63,147,103,.22), rgba(63,147,103,0) 62%);pointer-events:none"></div>
   <div style="position:absolute;bottom:-260px;left:-180px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle at center, rgba(47,107,79,.16), rgba(47,107,79,0) 62%);pointer-events:none"></div>
   <div class="col" style="height:100%;justify-content:center;position:relative;z-index:2;gap:26px">
     <div class="row between center">
-      <span class="brandmark" style="color:#fff"><span class="glyph">Cx</span> Code-Ox</span>
-      <span class="small" style="font-size:14px;color:#8f846d">Odoo · App Development · AI</span>
+      <img src="${IMG}fh-logo.png" alt="Freshhouse" style="height:34px;width:auto">
+      <span class="small" style="font-size:13.5px;color:#8fa89b">Prepared by Code-Ox · Odoo Partner</span>
     </div>
     <div class="col gap20" style="margin-top:8px">
-      <div class="kicker" style="color:var(--gold-br)"><span class="dot"></span> Proposal for Freshhouse</div>
-      <h1 class="display" style="color:#fff;font-size:92px">We audited your app.<br><span class="accent">Then we built<br>the fix — already.</span></h1>
-      <p class="lead" style="color:#c9bda6;max-width:58ch;font-size:23px">We walked the Freshhouse app end to end and found where its best features are hidden. Every gap already has a solution running in our live Odoo diet platform — and a plan to move it into your funnel.</p>
+      <div class="kicker" style="color:var(--gold-br)"><span class="dot"></span> A proposal for the Freshhouse team</div>
+      <h1 class="display" style="color:#fff;font-size:92px">We audited your app.<br><span class="accent">Then we built<br>the fix - already.</span></h1>
+      <p class="lead" style="color:#cfe6d8;max-width:58ch;font-size:23px">We walked the Freshhouse app end to end and found where its best features are hidden. Every gap already has a solution running in our live Odoo diet platform - and a plan to move it into your funnel.</p>
     </div>
-    <div class="cover-contact" style="color:#b3a892;margin-top:14px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12)">
+    <div class="cover-contact" style="color:#b0c8bc;margin-top:14px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12)">
       <span class="who" style="color:#fff;font-weight:700">Shabeeb K</span><span>Head of Operations</span><span>·</span><span>shabeeb.k@code-ox.com</span><span>·</span><span>+966 53 571 6437</span><span>·</span><span>22 Sept 2026</span>
     </div>
   </div>
@@ -290,7 +338,7 @@ slides.push(`
   </div>
   <div class="split rev mt40" style="height:auto;align-items:flex-start;gap:56px">
     <div class="col gap20">
-      <p class="lead">Before writing a word, we signed up with a real account and walked every screen — the guest flow first, then the full logged-in product. This deck is what we found, and what we'd do about it.</p>
+      <p class="lead">Before writing a word, we signed up with a real account and walked every screen - the guest flow first, then the full logged-in product. This deck is what we found, and what we'd do about it.</p>
       <div class="feat mt8">
         <div class="f"><span class="ic">1</span><div><div class="t">Walked the guest flow</div><div class="d">Menu browsing, subscribe, outlet order, "Talk to us", help desk.</div></div></div>
         <div class="f"><span class="ic">2</span><div><div class="t">Signed in with a live account</div><div class="d">Plans, gram-level customization, pricing, dietitian booking, chat.</div></div></div>
@@ -315,15 +363,15 @@ slides.push(`
   </div>
   <div class="wins mt40">
     <div class="win-item"><span class="ic">✓</span><div><div class="t">Four distinct plans</div><div class="d">Lifestyle, FreshFit (Best Value), High Protein, Flex points & cashback.</div></div></div>
-    <div class="win-item"><span class="ic">✓</span><div><div class="t">Gram-level customization</div><div class="d">Protein / carb portions tuned per meal — genuinely advanced.</div></div></div>
-    <div class="win-item"><span class="ic">✓</span><div><div class="t">Real allergy & dislike filter</div><div class="d">Chicken, red meat, salmon, egg, nuts and more — competitors lack it.</div></div></div>
+    <div class="win-item"><span class="ic">✓</span><div><div class="t">Gram-level customization</div><div class="d">Protein / carb portions tuned per meal - genuinely advanced.</div></div></div>
+    <div class="win-item"><span class="ic">✓</span><div><div class="t">Real allergy & dislike filter</div><div class="d">Chicken, red meat, salmon, egg, nuts and more - competitors lack it.</div></div></div>
     <div class="win-item"><span class="ic">✓</span><div><div class="t">Live pricing by duration</div><div class="d">Per-day breakdown that recalculates as the plan changes.</div></div></div>
-    <div class="win-item"><span class="ic">✓</span><div><div class="t">Dietitian booking</div><div class="d">In-house or online consultations — a premium retention feature.</div></div></div>
+    <div class="win-item"><span class="ic">✓</span><div><div class="t">Dietitian booking</div><div class="d">In-house or online consultations - a premium retention feature.</div></div></div>
     <div class="win-item"><span class="ic">✓</span><div><div class="t">Native support chat</div><div class="d">"Fresh Chat" with text, voice notes, attachments, one-tap call.</div></div></div>
     <div class="win-item"><span class="ic">✓</span><div><div class="t">Loyalty layer</div><div class="d">Fresh Me Points and Flex Points already in the product.</div></div></div>
     <div class="win-item"><span class="ic">✓</span><div><div class="t">Bilingual, food-forward design</div><div class="d">Clean Arabic / English UI with a rotating hero.</div></div></div>
   </div>
-  <p class="lead mt32" style="max-width:70ch;font-size:20px">The product depth is there. The problem isn't what you built — it's <b style="color:var(--ink)">where it lives.</b></p>
+  <p class="lead mt32" style="max-width:70ch;font-size:20px">The product depth is there. The problem isn't what you built - it's <b style="color:var(--ink)">where it lives.</b></p>
   ${F()}
 </div>`);
 
@@ -332,13 +380,13 @@ slides.push(`
 <div class="slide solid-dark">
   <div class="col" style="height:100%;justify-content:center;gap:30px">
     <div class="kicker" style="color:var(--gold-br)"><span class="dot"></span> The one finding that matters</div>
-    <div class="big-quote" style="color:#fff;font-size:52px;max-width:26ch">Everything strong about Freshhouse sits <span class="accent">behind a mandatory login</span> — a guest sees none of it.</div>
+    <div class="big-quote" style="color:#fff;font-size:52px;max-width:26ch">Everything strong about Freshhouse sits <span class="accent">behind a mandatory login</span> - a guest sees none of it.</div>
     <div class="row gap40 mt16" style="max-width:56ch">
-      <div class="col gap8"><div class="stat-num" style="color:var(--coral)">0</div><div class="stat-lbl" style="color:#b3a892">prices shown before sign-up</div></div>
-      <div class="col gap8"><div class="stat-num" style="color:var(--coral)">4</div><div class="stat-lbl" style="color:#b3a892">plans, all hidden pre-login</div></div>
-      <div class="col gap8"><div class="stat-num" style="color:var(--coral)">1</div><div class="stat-lbl" style="color:#b3a892">login screen with no way back</div></div>
+      <div class="col gap8"><div class="stat-num" style="color:var(--coral)">0</div><div class="stat-lbl" style="color:#b0c8bc">prices shown before sign-up</div></div>
+      <div class="col gap8"><div class="stat-num" style="color:var(--coral)">4</div><div class="stat-lbl" style="color:#b0c8bc">plans, all hidden pre-login</div></div>
+      <div class="col gap8"><div class="stat-num" style="color:var(--coral)">1</div><div class="stat-lbl" style="color:#b0c8bc">login screen with no way back</div></div>
     </div>
-    <p class="lead" style="color:#c9bda6;max-width:64ch;margin-top:8px">No price, no plan comparison, no pre-sales chat — nothing — until a full sign-up is complete. The features most likely to convert a visitor are the ones they can't see.</p>
+    <p class="lead" style="color:#cfe6d8;max-width:64ch;margin-top:8px">No price, no plan comparison, no pre-sales chat - nothing - until a full sign-up is complete. The features most likely to convert a visitor are the ones they can't see.</p>
   </div>
   ${F()}
 </div>`);
@@ -354,7 +402,7 @@ slides.push(`
     <div class="gapcol">
       <div class="h"><span class="pill">Revenue</span> Conversion</div>
       <ul>
-        <li><span class="n">1</span> Guest mode is browse-only — no preview of the real product.</li>
+        <li><span class="n">1</span> Guest mode is browse-only - no preview of the real product.</li>
         <li><span class="n">2</span> Zero price transparency before login.</li>
         <li><span class="n">3</span> Pre-sales help ("Talk to us") redirects straight to login.</li>
       </ul>
@@ -362,10 +410,10 @@ slides.push(`
     <div class="gapcol">
       <div class="h"><span class="pill">Trust</span> Polish</div>
       <ul>
-        <li><span class="n">4</span> Login screen is a dead end — back button doesn't return.</li>
+        <li><span class="n">4</span> Login screen is a dead end - back button doesn't return.</li>
         <li><span class="n">5</span> Promo popup fires 5+ times, even mid-checkout.</li>
         <li><span class="n">6</span> Two conflicting promo codes (23% vs 13%).</li>
-        <li><span class="n">7</span> "No branches available" — yet branches exist elsewhere.</li>
+        <li><span class="n">7</span> "No branches available" - yet branches exist elsewhere.</li>
       </ul>
     </div>
     <div class="gapcol">
@@ -378,7 +426,7 @@ slides.push(`
       </ul>
     </div>
   </div>
-  <p class="small mt24" style="font-size:15px">Gaps 1–3 have a direct line to revenue and are the easiest to demo live. The rest are small, contained fixes.</p>
+  <p class="small mt24" style="font-size:15px">Gaps 1-3 have a direct line to revenue and are the easiest to demo live. The rest are small, contained fixes.</p>
   ${F()}
 </div>`);
 
@@ -388,7 +436,7 @@ slides.push(`
   <div class="col" style="height:100%;justify-content:center;gap:26px">
     <div class="section-num">The proposal</div>
     <div class="big-quote" style="color:#fff;font-size:58px;max-width:24ch">You don't have to build this.<br><span class="accent">We already did.</span></div>
-    <p class="lead" style="color:#c9bda6;max-width:66ch">Code-Ox runs a complete diet & meal-subscription platform on Odoo — customer app, driver app, and a live back office. Almost everything Freshhouse hides post-login, our system surfaces early and syncs automatically. The next slides walk it, feature by feature.</p>
+    <p class="lead" style="color:#cfe6d8;max-width:66ch">Code-Ox runs a complete diet & meal-subscription platform on Odoo - customer app, driver app, and a live back office. Almost everything Freshhouse hides post-login, our system surfaces early and syncs automatically. The next slides walk it, feature by feature.</p>
     <div class="row gap16 mt16">
       <span class="tag gold">Customer App</span><span class="tag gold">Driver App</span><span class="tag gold">Odoo Command Centre</span><span class="tag gold">Zero manual entry</span>
     </div>
@@ -405,7 +453,7 @@ slides.push(`
         <div class="kicker"><span class="dot"></span> One connected system</div>
         <h2 class="title" style="font-size:46px">Every tap in the app<br>lands in Odoo, live.</h2>
       </div>
-      <p class="lead" style="font-size:20px">Subscriptions, deliveries, ratings, cancellations — recorded the moment they happen. One dashboard, full visibility, nothing typed in by hand.</p>
+      <p class="lead" style="font-size:20px">Subscriptions, deliveries, ratings, cancellations - recorded the moment they happen. One dashboard, full visibility, nothing typed in by hand.</p>
       <div class="row gap40 mt8">
         <div class="col gap8"><div class="stat-num" style="color:var(--gold-deep)">25,826</div><div class="stat-lbl">customers synced live</div></div>
         <div class="col gap8"><div class="stat-num" style="color:var(--gold-deep)">100%</div><div class="stat-lbl">app actions tracked</div></div>
@@ -429,7 +477,7 @@ slides.push(`
     <div class="feat" style="width:36%">
       <div class="f"><span class="ic">✦</span><div><div class="t">Total & active customers</div><div class="d">Every sign-up from the app, counted automatically.</div></div></div>
       <div class="f"><span class="ic">✦</span><div><div class="t">Orders & deliveries today</div><div class="d">See failures before customers complain.</div></div></div>
-      <div class="f"><span class="ic">✦</span><div><div class="t">Plan-choice analysis</div><div class="d">Which plans sell, which don't — adjust in minutes.</div></div></div>
+      <div class="f"><span class="ic">✦</span><div><div class="t">Plan-choice analysis</div><div class="d">Which plans sell, which don't - adjust in minutes.</div></div></div>
       <div class="f"><span class="ic">✦</span><div><div class="t">Meal ratings & birthdays</div><div class="d">Retention signals surfaced, not buried.</div></div></div>
     </div>
   </div>
@@ -442,10 +490,10 @@ slides.push(`
 <div class="slide paper2 pshow">
   <div class="row between center">
     <div class="slidehead">
-      <div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Answers gaps #1–3 · the guest wall</div>
+      <div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Answers gaps #1-3 · the guest wall</div>
       <h2 class="title" style="font-size:44px">A first impression<br>that converts.</h2>
     </div>
-    <p class="lead" style="max-width:26ch;font-size:18px">Onboarding under 60 seconds — and "Explore Menu" lets a visitor look before committing.</p>
+    <p class="lead" style="max-width:26ch;font-size:18px">Onboarding under 60 seconds - and "Explore Menu" lets a visitor look before committing.</p>
   </div>
   <div class="phones mt20" style="height:400px">
     <div class="pcard"><div class="caph">Welcome</div><img src="${IMG}ph-welcome.png"></div>
@@ -455,16 +503,16 @@ slides.push(`
   ${F()}
 </div>`);
 
-/* 9b E-SHOP / NO MEMBERSHIP — direct answer to guest wall */
+/* 9b E-SHOP / NO MEMBERSHIP - direct answer to guest wall */
 slides.push(`
 <div class="slide">
   <div class="slidehead">
-    <div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Answers gaps #1–2 · the guest wall, solved</div>
+    <div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Answers gaps #1-2 · the guest wall, solved</div>
     <h2 class="title" style="font-size:44px">Let them buy before they subscribe.</h2>
   </div>
-  <p class="lead mt16" style="max-width:80ch">Our system ships with an Odoo e-shop: guests browse real meals and prices and buy a single order with <b style="color:var(--ink)">no membership</b>. It's the exact wall Freshhouse puts up — removed. One-time buyers convert to subscribers once they trust the food.</p>
+  <p class="lead mt16" style="max-width:80ch">Our system ships with an Odoo e-shop: guests browse real meals and prices and buy a single order with <b style="color:var(--ink)">no membership</b>. It's the exact wall Freshhouse puts up - removed. One-time buyers convert to subscribers once they trust the food.</p>
   <div class="funnel mt24">
-    <div class="fstep"><div class="n">01</div><div class="t">Browse — no login</div><div class="d">Full menu, prices and macros visible to anyone.</div></div>
+    <div class="fstep"><div class="n">01</div><div class="t">Browse - no login</div><div class="d">Full menu, prices and macros visible to anyone.</div></div>
     <div class="farrow">→</div>
     <div class="fstep"><div class="n">02</div><div class="t">Buy one meal</div><div class="d">Checkout a single order without a subscription.</div></div>
     <div class="farrow">→</div>
@@ -472,7 +520,7 @@ slides.push(`
     <div class="farrow">→</div>
     <div class="fstep" style="border-color:var(--green);background:var(--green-soft)"><div class="n" style="color:var(--green)">04</div><div class="t" style="color:#245c42">Subscribe</div><div class="d" style="color:#3a7a5b">Promo + referral nudge the upgrade.</div></div>
   </div>
-  <p class="small mt24">Built into the Odoo e-commerce stack — the same catalogue that powers the subscription app, so nothing is maintained twice.</p>
+  <p class="small mt24">Built into the Odoo e-commerce stack - the same catalogue that powers the subscription app, so nothing is maintained twice.</p>
   ${F()}
 </div>`);
 
@@ -488,7 +536,7 @@ slides.push(`
     <div class="pcard"><div class="caph">Body metrics</div><img src="${IMG}ph-body.png"></div>
     <div class="pcard"><div class="caph">Primary goal</div><img src="${IMG}ph-goal.png"></div>
   </div>
-  <p class="small mt16" style="font-size:15px">Every answer is stored in the Odoo customer record — your team sees the customer's goals before they ever speak. And gender is never pre-selected (gap #10).</p>
+  <p class="small mt16" style="font-size:15px">Every answer is stored in the Odoo customer record - your team sees the customer's goals before they ever speak. And gender is never pre-selected (gap #10).</p>
   ${F()}
 </div>`);
 
@@ -497,10 +545,10 @@ slides.push(`
 <div class="slide paper2 pshow">
   <div class="row between center">
     <div class="slidehead">
-      <div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Answers gaps #1–2 · pricing & plan preview</div>
-      <h2 class="title" style="font-size:42px">Their meal. Their macros.<br>Their price — up front.</h2>
+      <div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Answers gaps #1-2 · pricing & plan preview</div>
+      <h2 class="title" style="font-size:42px">Their meal. Their macros.<br>Their price - up front.</h2>
     </div>
-    <p class="lead" style="max-width:24ch;font-size:18px">Plans, live pricing, and gram-level protein/carb sliders — shown, not hidden.</p>
+    <p class="lead" style="max-width:24ch;font-size:18px">Plans, live pricing, and gram-level protein/carb sliders - shown, not hidden.</p>
   </div>
   <div class="phones mt16" style="height:392px">
     <div class="pcard"><div class="caph">Select a plan</div><img src="${IMG}ph-selectplan.png"></div>
@@ -514,15 +562,15 @@ slides.push(`
 slides.push(`
 <div class="slide pshow">
   <div class="row between center">
-    <div class="slidehead"><div class="kicker"><span class="dot"></span> Turn one sale into a bigger one</div><h2 class="title" style="font-size:42px">Add-ons, checkout, paid — in three taps.</h2></div>
-    <div class="col" style="align-items:flex-end"><div class="stat-num" style="color:var(--gold-deep)">+15–25%</div><div class="stat-lbl">average order value from add-ons</div></div>
+    <div class="slidehead"><div class="kicker"><span class="dot"></span> Turn one sale into a bigger one</div><h2 class="title" style="font-size:42px">Add-ons, checkout, paid - in three taps.</h2></div>
+    <div class="col" style="align-items:flex-end"><div class="stat-num" style="color:var(--gold-deep)">+15-25%</div><div class="stat-lbl">average order value from add-ons</div></div>
   </div>
   <div class="phones mt16" style="height:392px">
     <div class="pcard"><div class="caph">Enhance the meal</div><img src="${IMG}ph-addons.png"></div>
     <div class="pcard"><div class="caph">Checkout summary</div><img src="${IMG}ph-checkout.png"></div>
     <div class="pcard"><div class="caph">Payment</div><img src="${IMG}ph-payment.png"></div>
   </div>
-  <p class="small mt16">Every add-on becomes a line item in the Odoo subscription automatically — no manual entry, VAT included.</p>
+  <p class="small mt16">Every add-on becomes a line item in the Odoo subscription automatically - no manual entry, VAT included.</p>
   ${F()}
 </div>`);
 
@@ -536,11 +584,11 @@ slides.push(`
   <div class="row gap32 mt16" style="align-items:flex-start">
     <div class="col gap12 center" style="width:50%">
       <img src="${IMG}odoo-subscription.png" class="browser" style="width:auto;max-height:360px;max-width:100%">
-      <div class="small"><b style="color:var(--ink)">Subscriptions</b> — auto-created on checkout. Plan, macros, promo, delivery days, VAT — all filled in. Your team touches nothing.</div>
+      <div class="small"><b style="color:var(--ink)">Subscriptions</b> - auto-created on checkout. Plan, macros, promo, delivery days, VAT - all filled in. Your team touches nothing.</div>
     </div>
     <div class="col gap12 center" style="width:50%">
       <img src="${IMG}odoo-plan.png" class="browser" style="width:auto;max-height:360px;max-width:100%">
-      <div class="small"><b style="color:var(--ink)">Plans</b> — change a price or run a sale in Odoo, the app shows it live with strike-through. Both languages, no app update.</div>
+      <div class="small"><b style="color:var(--ink)">Plans</b> - change a price or run a sale in Odoo, the app shows it live with strike-through. Both languages, no app update.</div>
     </div>
   </div>
   ${F()}
@@ -551,17 +599,17 @@ slides.push(`
 <div class="slide">
   <div class="slidehead">
     <div class="kicker"><span class="dot"></span> One ERP behind the app</div>
-    <h2 class="title" style="font-size:44px">Not just an app — a full ERP.</h2>
+    <h2 class="title" style="font-size:44px">Not just an app - a full ERP.</h2>
   </div>
-  <p class="lead mt16" style="max-width:78ch">The app is the front door. Behind it runs a complete Odoo back office, so finance, stock and delivery are one connected system — not spreadsheets bolted onto a mobile app.</p>
+  <p class="lead mt16" style="max-width:78ch">The app is the front door. Behind it runs a complete Odoo back office, so finance, stock and delivery are one connected system - not spreadsheets bolted onto a mobile app.</p>
   <div class="erp mt24">
-    <div class="erpcard"><div class="ic">💰</div><div class="t">Sales & Accounting</div><div class="d">Invoicing, payments and financial records, reconciled automatically.</div></div>
-    <div class="erpcard"><div class="ic">📦</div><div class="t">Inventory</div><div class="d">Real-time ingredient tracking to optimise prep and cut waste.</div></div>
-    <div class="erpcard"><div class="ic">🛒</div><div class="t">Purchase</div><div class="d">Integrated procurement for steady supply and cost control.</div></div>
-    <div class="erpcard"><div class="ic">👥</div><div class="t">HR Management</div><div class="d">Team roles and responsibilities that scale with the business.</div></div>
-    <div class="erpcard"><div class="ic">🚚</div><div class="t">Fleet Management</div><div class="d">Delivery logistics managed alongside everything else.</div></div>
+    <div class="erpcard"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3f9367" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><div class="t">Sales & Accounting</div><div class="d">Invoicing, payments and financial records, reconciled automatically.</div></div>
+    <div class="erpcard"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3f9367" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v8a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.73l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8Z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg></div><div class="t">Inventory</div><div class="d">Real-time ingredient tracking to optimise prep and cut waste.</div></div>
+    <div class="erpcard"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3f9367" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="19" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.2a1.6 1.6 0 0 0 1.6 1.3h9a1.6 1.6 0 0 0 1.6-1.3L22 7H6"/></svg></div><div class="t">Purchase</div><div class="d">Integrated procurement for steady supply and cost control.</div></div>
+    <div class="erpcard"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3f9367" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="t">HR Management</div><div class="d">Team roles and responsibilities that scale with the business.</div></div>
+    <div class="erpcard"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3f9367" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4h14v11H1z"/><path d="M15 8h4l3 3v4h-7z"/><circle cx="5.5" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></div><div class="t">Fleet Management</div><div class="d">Delivery logistics managed alongside everything else.</div></div>
   </div>
-  <p class="small mt24">Every module shares one database — the reason app actions need zero manual re-entry.</p>
+  <p class="small mt24">Every module shares one database - the reason app actions need zero manual re-entry.</p>
   ${F()}
 </div>`);
 
@@ -572,14 +620,14 @@ slides.push(`
   <div class="row gap32 mt20" style="align-items:center;flex:1;min-height:0">
     <div class="col gap12" style="width:56%;align-items:flex-start">
       <img src="${IMG}odoo-districts.png" class="browser" style="width:auto;max-height:376px;max-width:100%">
-      <div class="small"><b style="color:var(--ink)">Districts, zones & delivery windows</b> set once in Odoo — the same source that powers ordering. Directly fixes gap #7's branch-data mismatch.</div>
+      <div class="small"><b style="color:var(--ink)">Districts, zones & delivery windows</b> set once in Odoo - the same source that powers ordering. Directly fixes gap #7's branch-data mismatch.</div>
     </div>
     <div class="col gap16" style="width:44%">
       <div class="phones" style="height:300px;gap:16px;align-items:flex-end">
         <div class="pcard sm"><div class="caph">Driver login</div><img src="${IMG}ph-driverlogin.png" style="height:290px"></div>
         <div class="pcard sm"><div class="caph">Assigned orders</div><img src="${IMG}ph-assigned.png" style="height:290px"></div>
       </div>
-      <div class="small">Mark a delivery done — Odoo and the customer's app update together, in real time. Drivers see only their zone. Zero dispatch calls.</div>
+      <div class="small">Mark a delivery done - Odoo and the customer's app update together, in real time. Drivers see only their zone. Zero dispatch calls.</div>
     </div>
   </div>
   ${F()}
@@ -594,7 +642,7 @@ slides.push(`
   </div>
   <div class="modtax mt24">
     <div class="modcol">
-      <div class="h"><span class="ic">🍽️</span> Menu management</div>
+      <div class="h"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3f9367" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7a2 2 0 0 0 2 2 2 2 0 0 0 2-2V2"/><path d="M5 11v11"/><path d="M19 2c-1.7 0-3 1.8-3 4.5S17.3 11 19 11"/><path d="M19 2v20"/></svg></span> Menu management</div>
       <ul>
         <li><b>Plans & plan categories</b><span class="d">Meal count, day choices, plan choices, categorised for filtering.</span></li>
         <li><b>Meals & meal categories</b><span class="d">Price, rating, kitchen, tags, macros, ingredients, available days.</span></li>
@@ -602,7 +650,7 @@ slides.push(`
       </ul>
     </div>
     <div class="modcol">
-      <div class="h"><span class="ic">🚚</span> Delivery & logistics</div>
+      <div class="h"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3f9367" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4h14v11H1z"/><path d="M15 8h4l3 3v4h-7z"/><circle cx="5.5" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span> Delivery & logistics</div>
       <ul>
         <li><b>Drivers</b><span class="d">Name, phone, shifts, gender, service zones.</span></li>
         <li><b>Driver orders</b><span class="d">Assign, print delivery sheets, filter by date/driver, track status.</span></li>
@@ -611,7 +659,7 @@ slides.push(`
       </ul>
     </div>
     <div class="modcol">
-      <div class="h"><span class="ic">👥</span> Customers & dietitians</div>
+      <div class="h"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3f9367" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span> Customers & dietitians</div>
       <ul>
         <li><b>Customer tags</b><span class="d">Segmentation and filtering across the base.</span></li>
         <li><b>Dietitians</b><span class="d">Profiles, specialisation, appointment scheduling, assignment to customers, consultation history.</span></li>
@@ -627,18 +675,18 @@ slides.push(`
 <div class="slide paper2">
   <div class="row between center">
     <div class="slidehead">
-      <div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Answers gaps #5–6 · promo chaos</div>
+      <div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> Answers gaps #5-6 · promo chaos</div>
       <h2 class="title" style="font-size:42px">One source of truth for every offer.</h2>
     </div>
   </div>
   <div class="row gap28 mt20" style="align-items:center">
     <div class="col gap12" style="width:34%">
       <img src="${IMG}odoo-promo.png" class="browser">
-      <div class="small"><b style="color:var(--ink)">Promo codes</b> — fixed or %, usage limits, expiry, Draft→Active→Expired. No two conflicting offers live at once.</div>
+      <div class="small"><b style="color:var(--ink)">Promo codes</b> - fixed or %, usage limits, expiry, Draft→Active→Expired. No two conflicting offers live at once.</div>
     </div>
     <div class="col gap12" style="width:34%">
       <img src="${IMG}odoo-push.png" class="browser">
-      <div class="small"><b style="color:var(--ink)">Push composer</b> — target all, a segment, or by name. Bilingual first-name placeholders, delivery tracked.</div>
+      <div class="small"><b style="color:var(--ink)">Push composer</b> - target all, a segment, or by name. Bilingual first-name placeholders, delivery tracked.</div>
     </div>
     <div class="pcard sm" style="width:32%"><div class="caph">In-app, controlled</div><img src="${IMG}ph-notifications.png" style="height:330px"></div>
   </div>
@@ -654,7 +702,7 @@ slides.push(`
     <div class="pcard"><div class="caph">Loyalty wallet & points</div><img src="${IMG}ph-account.png"></div>
     <div class="pcard"><div class="caph">Support tickets</div><img src="${IMG}ph-tickets.png"></div>
   </div>
-  <p class="small mt16">Freshhouse already has dietitian booking and a chat — we match them, and add structured, order-linked support tickets plus a live loyalty wallet, every action logged in Odoo.</p>
+  <p class="small mt16">Freshhouse already has dietitian booking and a chat - we match them, and add structured, order-linked support tickets plus a live loyalty wallet, every action logged in Odoo.</p>
   ${F()}
 </div>`);
 
@@ -667,7 +715,7 @@ slides.push(`
     <div class="pcard"><div class="caph">Feed marketplace</div><img src="${IMG}ph-marketplace.png"></div>
     <div class="pcard"><div class="caph">Brand vouchers</div><img src="${IMG}ph-vouchers.png"></div>
   </div>
-  <p class="small mt16">Gift subscriptions are your lowest-cost acquisition channel — Odoo creates the recipient's subscription automatically. Marketplace and vouchers lift revenue per delivery with zero extra logistics.</p>
+  <p class="small mt16">Gift subscriptions are your lowest-cost acquisition channel - Odoo creates the recipient's subscription automatically. Marketplace and vouchers lift revenue per delivery with zero extra logistics.</p>
   ${F()}
 </div>`);
 
@@ -689,7 +737,7 @@ slides.push(`
   ${F()}
 </div>`);
 
-/* 19 MAPPING — money slide */
+/* 19 MAPPING - money slide */
 slides.push(`
 <div class="slide paper2">
   <div class="slidehead"><div class="kicker" style="color:var(--green)"><span class="dot" style="background:var(--green)"></span> The whole point</div><h2 class="title" style="font-size:40px">Your gap → already in our system.</h2></div>
@@ -698,9 +746,9 @@ slides.push(`
     <div class="maprow"><div class="gap">No plans or pricing before login</div><div class="arr">✓</div><div class="sol">4 plans + live pricing + gram-level macros, previewable</div></div>
     <div class="maprow"><div class="gap">Pre-sales help gated behind login</div><div class="arr">✓</div><div class="sol">In-app support & order-linked tickets, all logged in Odoo</div></div>
     <div class="maprow"><div class="gap">Login dead-end, no way back</div><div class="arr">✓</div><div class="sol">Guided 60-second onboarding, explore-first, no traps</div></div>
-    <div class="maprow"><div class="gap">Promo spam & conflicting codes</div><div class="arr">✓</div><div class="sol">Promo & push composed once in Odoo — one source of truth</div></div>
+    <div class="maprow"><div class="gap">Promo spam & conflicting codes</div><div class="arr">✓</div><div class="sol">Promo & push composed once in Odoo - one source of truth</div></div>
     <div class="maprow"><div class="gap">"No branches" / branch-data mismatch</div><div class="arr">✓</div><div class="sol">Districts, zones & delivery windows drive app + delivery</div></div>
-    <div class="maprow"><div class="gap">Truncated meal descriptions</div><div class="arr">✓</div><div class="sol">Full ingredients & macros from Odoo — edit once, all see it</div></div>
+    <div class="maprow"><div class="gap">Truncated meal descriptions</div><div class="arr">✓</div><div class="sol">Full ingredients & macros from Odoo - edit once, all see it</div></div>
     <div class="maprow"><div class="gap">No favourites, no visibility for ops</div><div class="arr">✓</div><div class="sol">Favourites in-app; live command centre + reports, 0 manual entry</div></div>
   </div>
   ${F()}
@@ -711,12 +759,12 @@ slides.push(`
 <div class="slide">
   <div class="row between center">
     <div class="slidehead">
-      <div class="kicker"><span class="dot"></span> Proof — live in production</div>
+      <div class="kicker"><span class="dot"></span> Proof - live in production</div>
       <h2 class="title" style="font-size:42px">~5,000 meals a day,<br>on this exact system.</h2>
     </div>
     <div class="metricrow">
       <div class="m"><div class="n">4</div><div class="l">apps shipped</div></div>
-      <div class="m"><div class="n">2</div><div class="l">markets — KSA & Kuwait</div></div>
+      <div class="m"><div class="n">2</div><div class="l">markets - KSA & Kuwait</div></div>
       <div class="m"><div class="n">~60K</div><div class="l">Feed meals / month</div></div>
     </div>
   </div>
@@ -726,7 +774,7 @@ slides.push(`
     <div class="appcard"><div class="shot"><img src="${IMG}app-dietsteps1.webp"></div><div class="body"><div class="nm">Diet Steps</div><div class="mk">Kuwait · iOS & Android</div><div class="vol">~1,500<span> meals / day</span></div></div></div>
     <div class="appcard"><div class="shot"><img src="${IMG}app-planetzero1.jpg"></div><div class="body"><div class="nm">Planet Zero</div><div class="mk">Saudi Arabia · iOS & Android</div><div class="vol">Live<span> · macro tracking</span></div></div></div>
   </div>
-  <p class="small mt20">All four are bilingual Arabic / English, running on the same Odoo diet platform. Diet Steps scaled 10× in a single month — the system handles growth without a rebuild.</p>
+  <p class="small mt20">All four are bilingual Arabic / English, running on the same Odoo diet platform. Diet Steps scaled 10× in a single month - the system handles growth without a rebuild.</p>
   ${F()}
 </div>`);
 
@@ -751,16 +799,16 @@ slides.push(`
 <div class="slide solid-dark">
   <div class="col" style="height:100%;justify-content:center;gap:22px">
     <div class="section-num">Next steps</div>
-    <h2 class="title" style="color:#fff;font-size:56px">Let's fix it — live.</h2>
-    <p class="lead" style="color:#c9bda6;max-width:64ch">A short discovery sprint scopes the guest-checkout and pricing-transparency work; the quick wins can start in parallel. We'll demo the whole thing on real data before you commit to a build.</p>
+    <h2 class="title" style="color:#fff;font-size:56px">Let's fix it - live.</h2>
+    <p class="lead" style="color:#cfe6d8;max-width:64ch">A short discovery sprint scopes the guest-checkout and pricing-transparency work; the quick wins can start in parallel. We'll demo the whole thing on real data before you commit to a build.</p>
     <div class="cta-steps mt16">
-      <div class="cta-step"><div class="num">01</div><div class="t">Live demo</div><div class="d">Walk our Odoo diet system beside your app — see the contrast on real data.</div></div>
-      <div class="cta-step"><div class="num">02</div><div class="t">Discovery sprint</div><div class="d">Scope guest-checkout + pricing transparency (gaps #1–2) against your Odoo.</div></div>
+      <div class="cta-step"><div class="num">01</div><div class="t">Live demo</div><div class="d">Walk our Odoo diet system beside your app - see the contrast on real data.</div></div>
+      <div class="cta-step"><div class="num">02</div><div class="t">Discovery sprint</div><div class="d">Scope guest-checkout + pricing transparency (gaps #1-2) against your Odoo.</div></div>
       <div class="cta-step"><div class="num">03</div><div class="t">Quick wins in parallel</div><div class="d">Login dead-end, promo cap, tab reset, gender default, language label.</div></div>
     </div>
     <div class="contactbar">
-      <span class="brandmark" style="color:#fff"><span class="glyph">Cx</span> Code-Ox</span>
-      <span class="who">Shabeeb K — Head of Operations</span>
+      <img src="${IMG}fh-logo.png" alt="Freshhouse" style="height:22px;width:auto;opacity:.95">
+      <span class="who">Shabeeb K, Code-Ox</span>
       <span>shabeeb.k@code-ox.com</span>
       <span>+966 53 571 6437</span>
     </div>
