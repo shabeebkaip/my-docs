@@ -16,28 +16,37 @@
   font-synthesis:none;
 }
 *{box-sizing:border-box; margin:0; padding:0}
-html,body{height:100%}
+html{scroll-behavior:smooth}
+html,body{height:auto}
+:root{--s:1}
 body{
   background:#0c0b09; color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-  overflow:hidden;
+  overflow-x:hidden;
 }
-/* ---------- stage scaling ---------- */
-#viewport{position:fixed; inset:0; display:grid; place-items:center; overflow:hidden}
-#stage{
-  width:1280px; height:720px; position:relative;
-  transform-origin:center center;
-  border-radius:6px; overflow:hidden;
-  box-shadow:0 40px 120px rgba(0,0,0,.6);
+/* ---------- scrolling stacked frames ---------- */
+.deck{display:flex; flex-direction:column; align-items:center; gap:18px; padding:70px 0 60px}
+.frame-wrap{
+  width:calc(1280px * var(--s)); height:calc(720px * var(--s));
+  overflow:hidden; border-radius:12px; background:var(--paper);
+  box-shadow:0 18px 50px rgba(0,0,0,.40);
 }
 .slide{
-  position:absolute; inset:0; background:var(--paper);
-  opacity:0; visibility:hidden;
-  transition:opacity .5s cubic-bezier(.4,0,.2,1);
-  padding:64px 72px;
+  position:relative; width:1280px; height:720px; background:var(--paper);
+  padding:64px 72px; transform:scale(var(--s)); transform-origin:top left;
 }
-.slide.active{opacity:1; visibility:visible}
+#scrollbar{position:fixed; top:0; left:0; right:0; height:3px; background:rgba(255,255,255,.09); z-index:60}
+#scrollfill{height:100%; width:0; background:linear-gradient(90deg,var(--gold),var(--gold-br))}
+#topbar{position:fixed; top:0; left:0; right:0; height:0; z-index:55}
+.brandtab{position:fixed; top:14px; left:18px; z-index:56; display:inline-flex; align-items:center; gap:8px;
+  background:rgba(18,15,11,.6); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.10);
+  color:#efe7d6; font-size:13px; font-weight:700; letter-spacing:-.01em; padding:7px 13px; border-radius:100px}
+.brandtab .g{width:20px;height:20px;border-radius:6px;background:var(--gold-br);color:#221C15;display:grid;place-items:center;font-size:11px;font-weight:900}
+.totop{position:fixed; bottom:20px; right:20px; z-index:56; width:42px;height:42px;border-radius:50%;
+  background:rgba(18,15,11,.6); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.12);
+  color:#efe7d6; cursor:pointer; font-size:17px; display:grid; place-items:center; opacity:0; pointer-events:none; transition:opacity .25s}
+.totop.show{opacity:1; pointer-events:auto}
 .slide.solid-dark{background:var(--ink); color:var(--paper)}
 .slide.paper2{background:linear-gradient(160deg,#FBF8F3 0%, #F3ECDD 100%)}
 
@@ -239,16 +248,10 @@ h3.sub{font-size:28px; line-height:1.08; letter-spacing:-.02em; font-weight:700}
 </style>
 </head>
 <body>
-<div id="viewport"><div id="stage"></div></div>
-
-<div class="hint" id="hint">← → to navigate · F fullscreen</div>
-<div id="chrome">
-  <button class="navbtn" id="prev" aria-label="Previous">‹</button>
-  <button class="navbtn" id="next" aria-label="Next">›</button>
-  <span class="nm">Freshhouse × Code-Ox</span>
-  <div id="bar"><div id="barfill"></div></div>
-  <span id="count">01 / 21</span>
-</div>
+<div id="scrollbar"><div id="scrollfill"></div></div>
+<div class="brandtab"><span class="g">Cx</span> Freshhouse × Code-Ox</div>
+<button class="totop" id="totop" aria-label="Back to top">↑</button>
+<div class="deck" id="deck"></div>
 
 <script>
 const IMG = 'img/';
@@ -764,54 +767,26 @@ slides.push(`
   </div>
 </div>`);
 
-/* ---------- render + nav ---------- */
-const stage = document.getElementById('stage');
-stage.innerHTML = slides.join('');
-const slideEls = [...stage.querySelectorAll('.slide')];
-const total = slideEls.length;
-let cur = 0;
-const barfill = document.getElementById('barfill');
-const count = document.getElementById('count');
-const pad = n => String(n).padStart(2,'0');
+/* ---------- render as scrolling stacked frames ---------- */
+const deck = document.getElementById('deck');
+deck.innerHTML = slides.map(s => `<div class="frame-wrap">${s}</div>`).join('');
 
-function show(i){
-  i = Math.max(0, Math.min(total-1, i));
-  slideEls[cur].classList.remove('active');
-  slideEls[i].classList.add('active');
-  cur = i;
-  barfill.style.width = ((i+1)/total*100)+'%';
-  count.textContent = pad(i+1)+' / '+pad(total);
-}
-function nextS(){ show(cur+1) }
-function prevS(){ show(cur-1) }
-
-document.getElementById('next').onclick = nextS;
-document.getElementById('prev').onclick = prevS;
-addEventListener('keydown', e=>{
-  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault(); nextS()}
-  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault(); prevS()}
-  else if(e.key==='Home'){show(0)} else if(e.key==='End'){show(total-1)}
-  else if(e.key.toLowerCase()==='f'){ document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen() }
-});
-// click right/left half to navigate
-stage.addEventListener('click', e=>{
-  const x = e.clientX - stage.getBoundingClientRect().left;
-  (x > stage.getBoundingClientRect().width*0.5) ? nextS() : prevS();
-});
-
-// hide hint after a bit
-setTimeout(()=>{const h=document.getElementById('hint'); if(h) h.style.opacity='0'; }, 4200);
-document.getElementById('hint').style.transition='opacity .8s';
-
-// scale stage to viewport (letterbox)
+// scale factor: fit slide width to viewport (cap slight upscale on wide screens)
 function fit(){
-  const vp = document.getElementById('viewport');
-  const s = Math.min(vp.clientWidth/1280, (vp.clientHeight-46)/720);
-  stage.style.transform = 'scale('+s+')';
-  document.getElementById('viewport').style.paddingBottom='46px';
+  const s = Math.min((innerWidth - 40) / 1280, 1.15);
+  document.documentElement.style.setProperty('--s', s);
 }
 addEventListener('resize', fit); fit();
-show(0);
+
+// scroll progress + back-to-top
+const sf = document.getElementById('scrollfill');
+const totop = document.getElementById('totop');
+addEventListener('scroll', ()=>{
+  const h = document.documentElement.scrollHeight - innerHeight;
+  sf.style.width = (h > 0 ? (scrollY / h * 100) : 0) + '%';
+  totop.classList.toggle('show', scrollY > innerHeight * 0.8);
+}, {passive:true});
+totop.onclick = ()=> scrollTo({top:0, behavior:'smooth'});
 </script>
 </body>
 </html>
