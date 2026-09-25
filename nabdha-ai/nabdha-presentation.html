@@ -267,6 +267,18 @@ table.cmp td.hi{color:#6d94ff;font-weight:800;}
 .crow .score{font-family:var(--font-mono);font-weight:800;color:#6d94ff;}
 .crow .status{font-family:var(--font-mono);font-size:9.5px;padding:3px 8px;border-radius:100px;justify-self:start;font-weight:700;}
 .console-foot{border-top:1px solid var(--line);padding-top:10px;font-family:var(--font-mono);font-size:10px;color:var(--txt-faint);}
+.console-tabs span{cursor:pointer;}
+.console-panel{display:none;}
+.console-panel.on{display:block;}
+.arow{display:flex;align-items:flex-start;gap:9px;padding:9px 6px;border-radius:9px;background:rgba(255,255,255,0.02);margin-bottom:5px;font-size:.75rem;}
+.arow .n{flex:0 0 18px;height:18px;border-radius:50%;background:rgba(26,86,255,0.16);color:#6d94ff;font-family:var(--font-mono);font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.arow .t{color:var(--txt);line-height:1.5;}
+.chat-bubble{border-radius:11px;padding:9px 12px;font-size:.76rem;line-height:1.5;margin-bottom:8px;max-width:88%;}
+.chat-bubble.q{background:rgba(26,86,255,0.14);color:var(--txt);margin-left:auto;}
+.chat-bubble.a{background:rgba(255,255,255,0.04);color:var(--txt-soft);}
+.chat-input{display:flex;align-items:center;gap:8px;border:1px dashed var(--line);border-radius:100px;padding:8px 8px 8px 14px;margin-top:6px;}
+.chat-input span{flex:1;font-size:.72rem;color:var(--txt-faint);}
+.chat-input .go{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;}
 
 /* ---------- terminal checklist card (roadmap / pricing / swot) ---------- */
 .term{background:var(--void-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;height:100%;display:flex;flex-direction:column;}
@@ -530,16 +542,38 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
         <span class="console-tag">BUSINESS INTELLIGENCE REPORT</span>
       </div>
       <div class="console-tabs">
-        <span class="on">Risks</span><span>Opportunities</span><span>Action Plan</span><span>Advisor</span>
+        <span class="on" data-tab="risks">Risks</span><span data-tab="opportunities">Opportunities</span><span data-tab="action">Action Plan</span><span data-tab="advisor">Advisor</span>
       </div>
       <div class="console-body">
-        <div class="console-row-head"><span class="l">Detected This Week</span><span class="r">2 risks · 2 opportunities</span></div>
-        <div class="chead"><span>Signal</span><span>Type</span><span>Confidence</span><span>Suggested Action</span></div>
-        <div class="crow"><span class="name">Product A — low stock</span><span>Risk</span><span class="score">High</span><span class="status" style="background:rgba(245,158,11,0.12);color:#ffc266;">Reorder now</span></div>
-        <div class="crow"><span class="name">Product B — rising demand</span><span>Opportunity</span><span class="score">High</span><span class="status" style="background:rgba(0,201,167,0.12);color:#4fe0c4;">Increase stock</span></div>
-        <div class="crow"><span class="name">12 customers gone quiet</span><span>Risk</span><span class="score">Medium</span><span class="status" style="background:rgba(245,158,11,0.12);color:#ffc266;">Re-engage</span></div>
-        <div class="crow"><span class="name">B + C bundle potential</span><span>Opportunity</span><span class="score">Medium</span><span class="status" style="background:rgba(0,201,167,0.12);color:#4fe0c4;">Test offer</span></div>
-        <div class="console-foot">Illustrative example, based on Nabdha's own simplified scenario — see §10</div>
+        <div class="console-panel on" data-panel="risks">
+          <div class="console-row-head"><span class="l">Detected This Week</span><span class="r">2 risks</span></div>
+          <div class="chead"><span>Signal</span><span>Type</span><span>Confidence</span><span>Suggested Action</span></div>
+          <div class="crow"><span class="name">Product A — low stock</span><span>Risk</span><span class="score">High</span><span class="status" style="background:rgba(245,158,11,0.12);color:#ffc266;">Reorder now</span></div>
+          <div class="crow"><span class="name">12 customers gone quiet</span><span>Risk</span><span class="score">Medium</span><span class="status" style="background:rgba(245,158,11,0.12);color:#ffc266;">Re-engage</span></div>
+          <div class="console-foot">Illustrative example, based on Nabdha's own simplified scenario — see §10</div>
+        </div>
+        <div class="console-panel" data-panel="opportunities">
+          <div class="console-row-head"><span class="l">Detected This Week</span><span class="r">2 opportunities</span></div>
+          <div class="chead"><span>Signal</span><span>Type</span><span>Confidence</span><span>Suggested Action</span></div>
+          <div class="crow"><span class="name">Product B — rising demand</span><span>Opportunity</span><span class="score">High</span><span class="status" style="background:rgba(0,201,167,0.12);color:#4fe0c4;">Increase stock</span></div>
+          <div class="crow"><span class="name">B + C bundle potential</span><span>Opportunity</span><span class="score">Medium</span><span class="status" style="background:rgba(0,201,167,0.12);color:#4fe0c4;">Test offer</span></div>
+          <div class="console-foot">Illustrative example, based on Nabdha's own simplified scenario — see §10</div>
+        </div>
+        <div class="console-panel" data-panel="action">
+          <div class="console-row-head"><span class="l">Suggested Actions</span><span class="r">4 steps</span></div>
+          <div class="arow"><span class="n">1</span><span class="t">Review Product A stock &amp; place an urgent supply order</span></div>
+          <div class="arow"><span class="n">2</span><span class="t">Set a safety stock level so this doesn't recur</span></div>
+          <div class="arow"><span class="n">3</span><span class="t">Increase Product B visibility in marketing campaigns</span></div>
+          <div class="arow"><span class="n">4</span><span class="t">Test a bundle offer combining Product B with Product C</span></div>
+          <div class="console-foot">From the full report — see §10 for the complete plan</div>
+        </div>
+        <div class="console-panel" data-panel="advisor">
+          <div class="console-row-head"><span class="l">Smart Business Advisor</span><span class="r">natural language</span></div>
+          <div class="chat-bubble q">Why did Product A almost run out?</div>
+          <div class="chat-bubble a">Demand grew 34% over the last 3 weeks while the reorder point stayed fixed — the trigger fired too late. Recommend raising the safety stock level.</div>
+          <div class="chat-input"><span>Ask a question about your business...</span><span class="go">→</span></div>
+          <div class="console-foot">MVP — simplified assistant, see §04</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1272,6 +1306,16 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
   }
   document.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
+
+  var consoleTabs = document.querySelectorAll('.console-tabs span');
+  var consolePanels = document.querySelectorAll('.console-panel');
+  consoleTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var key = tab.getAttribute('data-tab');
+      consoleTabs.forEach(function(t){ t.classList.toggle('on', t === tab); });
+      consolePanels.forEach(function(p){ p.classList.toggle('on', p.getAttribute('data-panel') === key); });
+    });
+  });
 
   var drawer = document.getElementById('drawer');
   var overlay = document.getElementById('drawer-overlay');
