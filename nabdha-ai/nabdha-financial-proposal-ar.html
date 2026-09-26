@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نبضة الذكاء الاصطناعي — عرض تطوير المنصة · CX-NBD-2026-01</title>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root{
+      --ink:#1A1D24; --ink2:#3B4150; --muted:#5E6472; --line:#E4E7EC; --bg:#F7F8FB; --paper:#FFFFFF;
+      --accent:#1D4ED8; --accent-soft:#EFF4FF; --accent-line:#C9DAFA; --accent-900:#1E3A8A;
+      --ok:#2F7A57; --ok-soft:#EAF3ED;
+    }
+    body, table, td, th, div, p, span, ul, li { direction:rtl; text-align:right; }
+    body { font-family:'Almarai',-apple-system,BlinkMacSystemFont,sans-serif; font-size:14px; background:#D3D0C7; color:var(--ink); line-height:1.7; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .page { width:210mm; min-height:297mm; margin:0 auto 24px; position:relative; overflow:hidden; background:var(--paper); }
+    @media print { body { background:none; } .page { margin:0; box-shadow:none; page-break-after:always; break-after:page; } .page, .cover, .inner { min-height:296mm; } }
+    @page { size:A4; margin:0; }
+
+    /* COVER */
+    .cover { min-height:297mm; display:flex; flex-direction:column; position:relative; background:#fff url('2f902f3e2723151ac8d54ea93ec597a1.jpg') center/cover no-repeat; overflow:hidden; }
+    .cover::before { content:""; position:absolute; inset:0; background:linear-gradient(252deg, rgba(255,255,255,0.90) 0%, rgba(255,255,255,0.70) 48%, rgba(255,255,255,0.30) 100%); z-index:1; }
+    .cover-top, .cover-hero, .c-ref, .cover-foot { position:relative; z-index:2; }
+    .cover-bar { position:absolute; right:0; top:0; bottom:0; width:6px; background:var(--accent); z-index:3; }
+    .cover-top { display:flex; align-items:center; justify-content:space-between; padding:22px 42px 22px 32px; border-bottom:1px solid var(--line); }
+    .cover-top-left { display:flex; align-items:center; gap:16px; }
+    .cover-chip { background:var(--ink); border-radius:8px; padding:9px 15px; }
+    .cover-chip img { height:20px; display:block; filter:brightness(0) invert(1); }
+    .cover-div { width:1px; height:28px; background:var(--line); }
+    .cover-client { font-size:17px; font-weight:800; letter-spacing:0.02em; color:var(--ink); }
+    .cover-tagr { font-size:12px; color:var(--muted); letter-spacing:0.02em; }
+    .cover-hero { flex:1; display:flex; flex-direction:column; justify-content:center; padding:56px 42px 0 32px; }
+    .c-over { font-size:12px; font-weight:700; color:var(--accent); letter-spacing:0.10em; text-transform:uppercase; margin-bottom:22px; }
+    .cover h1 { font-size:44px; font-weight:800; line-height:1.25; color:var(--ink); letter-spacing:-0.005em; margin-bottom:22px; }
+    .cover h1 em { font-style:normal; color:var(--accent); }
+    .c-sub { font-size:16px; color:var(--ink2); line-height:1.9; max-width:600px; margin-bottom:30px; }
+    .c-meta { display:flex; flex-wrap:wrap; gap:9px; }
+    .c-meta .m { background:var(--paper); border:1px solid var(--line); border-radius:100px; padding:8px 16px; font-size:13px; color:var(--ink2); }
+    .c-meta .m strong { color:var(--ink); font-weight:700; }
+    .c-ref { margin:auto 42px 18px 32px; background:var(--accent-soft); border:1px solid var(--accent-line); border-radius:12px; display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden; }
+    .c-ref .i { padding:16px 18px; border-left:1px solid var(--accent-line); }
+    .c-ref .i:last-child { border-left:none; }
+    .c-ref .l { font-size:11px; color:var(--accent-900); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:7px; opacity:0.8; }
+    .c-ref .v { font-size:14.5px; font-weight:700; color:var(--ink); }
+    .cover-foot { border-top:1px solid var(--line); padding:14px 42px 14px 32px; }
+    .cover-foot span { font-size:11px; color:var(--muted); }
+
+    /* INNER */
+    .inner { position:relative; display:flex; flex-direction:column; min-height:297mm; background:#fff url('8b16e98cc72b4cc4ac714132d0decb81.jpg') center/cover no-repeat; }
+    .inner::before { content:""; position:absolute; inset:0; background:rgba(255,255,255,0.88); z-index:0; }
+    .inner > * { position:relative; z-index:1; }
+    .icontent { position:relative; }
+    .ihead { display:flex; align-items:center; justify-content:space-between; padding:16px 34px; border-bottom:1px solid var(--line); background:var(--bg); }
+    .ihead .hl { display:flex; align-items:center; gap:12px; }
+    .ihead img { height:15px; }
+    .ihead .div { width:1px; height:18px; background:var(--line); }
+    .ihead .hc { font-size:12px; color:var(--muted); }
+    .ihead .hr { font-size:12px; color:#9AA1B0; }
+    .icontent { flex:1; padding:30px 40px; display:flex; flex-direction:column; }
+    .ifoot { border-top:1px solid var(--line); padding:14px 34px; display:flex; align-items:center; gap:12px; background:var(--bg); }
+    .ifoot img { height:12px; opacity:0.5; }
+    .ifoot .sep { width:1px; height:12px; background:#CBCFD8; }
+    .ifoot .t { font-size:10px; color:#9AA1B0; flex:1; }
+    .ifoot .p { font-size:10px; color:#9AA1B0; font-weight:700; }
+
+    .kicker { font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:9px; }
+    h2.sec { font-size:27px; font-weight:800; color:var(--ink); margin-bottom:13px; line-height:1.3; letter-spacing:-0.005em; }
+    h2.sec.sm { font-size:22px; }
+    .subhead { font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.07em; margin:13px 0 8px; }
+    .lead { font-size:14.5px; color:var(--ink2); line-height:1.7; margin-bottom:12px; }
+    .lead b { color:var(--ink); font-weight:700; }
+    p.body { font-size:14px; color:var(--ink2); line-height:1.75; margin-bottom:12px; }
+    p.body b { color:var(--ink); font-weight:700; }
+
+    .callout { border-radius:11px; padding:14px 18px; font-size:13.5px; line-height:1.75; margin-bottom:12px; border:1px solid var(--line); }
+    .callout.accent { background:var(--accent-soft); border-color:var(--accent-line); border-right:4px solid var(--accent); }
+    .callout.ink { background:#F4F5F7; border-right:4px solid var(--ink); }
+    .callout.ok { background:var(--ok-soft); border-right:4px solid var(--ok); }
+    .callout .cl { font-size:10px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:6px; }
+    .callout.accent .cl { color:var(--accent-900); }
+    .callout.ink .cl { color:var(--ink); }
+    .callout.ok .cl { color:var(--ok); }
+    .callout p { color:var(--ink2); }
+    .callout b { color:var(--ink); font-weight:700; }
+
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-bottom:14px; }
+    .box { border:1px solid var(--line); border-radius:11px; padding:16px 18px; }
+    .box .bt { font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:6px; }
+    .box .bt .n { color:var(--accent); font-weight:800; margin-left:7px; }
+    .box .bd { font-size:13px; color:var(--muted); line-height:1.75; }
+
+    ul.ticks { list-style:none; }
+    ul.ticks li { position:relative; padding:6px 26px 6px 0; font-size:14px; color:var(--ink2); line-height:1.6; border-bottom:1px solid #EEF0F4; }
+    ul.ticks li:last-child { border-bottom:none; }
+    ul.ticks li::before { content:""; position:absolute; right:2px; top:13px; width:9px; height:9px; border-radius:2px; background:var(--accent); }
+    ul.ticks li b { color:var(--ink); font-weight:700; }
+    ul.plain { list-style:none; }
+    ul.plain li { position:relative; padding:4px 20px 4px 0; font-size:13px; color:var(--ink2); line-height:1.55; }
+    ul.plain li::before { content:"—"; position:absolute; right:0; color:var(--accent); font-weight:700; }
+    ul.plain li b { color:var(--ink); }
+
+    table.t, table.m { width:100%; border-collapse:collapse; margin-bottom:11px; }
+    table.t thead th, table.m thead th { background:var(--ink); color:#fff; padding:8px 12px; text-align:right; font-size:10.5px; font-weight:700; letter-spacing:0.02em; text-transform:uppercase; }
+    table.t thead th.num, table.m thead th.num { text-align:left; }
+    table.t tbody td, table.m tbody td { padding:5px 12px; border-bottom:1px solid #EEF0F4; color:var(--ink2); vertical-align:top; line-height:1.7; font-size:12.5px; }
+    table.t tbody td { padding:6px 12px; line-height:1.6; font-size:12px; }
+    table.t tbody td.num, table.m tbody td.num { text-align:left; white-space:nowrap; }
+    table.t tbody tr:nth-child(even) td, table.m tbody tr:nth-child(even) td { background:#FAFBFD; }
+    table.t td .dn { font-weight:700; color:var(--ink); display:block; }
+    table.t td .du { font-size:11px; color:var(--accent-900); }
+    table.m td .tn { font-weight:700; color:var(--ink); }
+    table.m td .ts { font-size:12px; color:var(--muted); line-height:1.5; display:block; margin-top:3px; }
+    table.m tbody tr.total td { background:var(--ink); color:#fff; font-weight:800; font-size:14px; padding:13px 12px; }
+    table.m tbody tr.total td.num { color:#7FB0FF; font-size:17px; }
+    .cellnote { font-size:12px; color:#9AA1B0; margin-top:5px; line-height:1.7; }
+    .price-hero { display:flex; align-items:center; justify-content:space-between; gap:20px; background:var(--ink); color:#fff; border-radius:14px; padding:22px 26px; margin-bottom:16px; }
+    .price-hero .ph-lab { font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#9EC1FF; margin-bottom:7px; }
+    .price-hero .ph-desc { font-size:13.5px; color:rgba(255,255,255,0.82); line-height:1.7; max-width:380px; }
+    .price-hero .ph-r { text-align:left; flex-shrink:0; }
+    .price-hero .ph-amt { font-size:36px; font-weight:800; color:#fff; line-height:1; letter-spacing:-0.005em; }
+    .price-hero .ph-sub { font-size:12px; color:#9EC1FF; margin-top:7px; }
+    .badge { display:inline-block; font-size:10px; font-weight:800; letter-spacing:0.02em; text-transform:uppercase; color:var(--accent); }
+    .riyal { height:0.82em; width:auto; vertical-align:-0.04em; display:inline-block; margin:0 3px; }
+    .riyal.w { filter:brightness(0) invert(1); }
+
+    ol.steps { list-style:none; counter-reset:s; }
+    ol.steps li { counter-increment:s; position:relative; padding:8px 44px 8px 0; border-bottom:1px solid #EEF0F4; font-size:13.5px; color:var(--ink2); line-height:1.7; }
+    ol.steps li:last-child { border-bottom:none; }
+    ol.steps li b { color:var(--ink); font-weight:700; }
+    ol.steps li::before { content:counter(s); position:absolute; right:0; top:9px; width:28px; height:28px; border-radius:50%; background:var(--accent-soft); border:1px solid var(--accent-line); color:var(--accent-900); font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+
+    ol.tc { list-style:none; counter-reset:t; }
+    ol.tc li { counter-increment:t; position:relative; padding:5px 32px 5px 0; font-size:12.5px; line-height:1.55; color:var(--ink2); border-bottom:1px solid #EEF0F4; }
+    ol.tc li:last-child { border-bottom:none; }
+    ol.tc li b { color:var(--ink); font-weight:700; }
+    ol.tc li::before { content:counter(t); position:absolute; right:0; top:7px; width:21px; height:21px; border-radius:6px; background:var(--accent-soft); border:1px solid var(--accent-line); color:var(--accent-900); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+
+    .sign { border:1.5px solid var(--line); border-radius:11px; overflow:hidden; margin-top:14px; }
+    .sign-h { background:var(--ink); color:#fff; padding:12px 17px; font-size:11.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; }
+    .sign-b { padding:13px 17px; background:var(--bg); display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+    .sign-col h4 { font-size:11.5px; font-weight:700; color:var(--ink); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:13px; padding-bottom:6px; border-bottom:2px solid var(--accent); }
+    .sign-f { margin-bottom:10px; }
+    .sign-f .fl { font-size:11px; font-weight:700; color:#9AA1B0; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:5px; }
+    .sign-f .fline { border-bottom:1.5px solid #CBCFD8; height:38px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ PAGE 1 — COVER ═══ -->
+<div class="page cover">
+  <div class="cover-bar"></div>
+  <div class="cover-top">
+    <div class="cover-top-left">
+      <div class="cover-chip"><img src="code-ox-logo.svg" alt="Code-ox"></div>
+      <div class="cover-div"></div>
+      <div class="cover-client">نبضة الذكاء الاصطناعي</div>
+    </div>
+    <div class="cover-tagr">عرض تطوير المنصة</div>
+  </div>
+  <div class="cover-hero">
+    <div class="c-over">عرض تطوير &nbsp;·&nbsp; 25 سبتمبر 2026</div>
+    <h1>ابنِ المنصة التي تحوّل <em>البيانات إلى قرارات.</em></h1>
+    <div class="c-sub">عرض متكامل لتصميم وبناء الإصدار الأول من منصة نبضة الذكاء الاصطناعي — يرفع صاحب العمل بياناته، فتحلّلها نبضة عبر كل أقسام النشاط، وتُرجع تشخيصاً كاملاً لصحة الأعمال، وأبرز المخاطر، وأبرز الفرص، وتوقعاً لثلاثين يوماً، وخطة عمل مرتّبة حسب الأولوية.</div>
+    <div class="c-meta">
+      <div class="m"><strong>رفع البيانات</strong> Excel · CSV · PDF</div>
+      <div class="m"><strong>ذكاء اصطناعي</strong> محرّك المخاطر والفرص</div>
+      <div class="m"><strong>توقّع</strong> لثلاثين يوماً</div>
+      <div class="m"><strong>ثنائي اللغة</strong> عربي / إنجليزي</div>
+    </div>
+  </div>
+  <div class="c-ref">
+    <div class="i"><div class="l">رقم العرض</div><div class="v">CX-NBD-2026-01</div></div>
+    <div class="i"><div class="l">التاريخ</div><div class="v">25 سبتمبر 2026</div></div>
+    <div class="i"><div class="l">العملة</div><div class="v"><img src="riyal.png" class="riyal" alt="ريال"> ريال سعودي</div></div>
+    <div class="i"><div class="l">مُقدَّم من</div><div class="v">كود-أوكس للتقنية</div></div>
+  </div>
+  <div class="cover-foot"><span>مُعدّ لصالح نبضة الذكاء الاصطناعي &nbsp;·&nbsp; منصة ذكاء الأعمال بالذكاء الاصطناعي &nbsp;·&nbsp; ارتباط تطوير المنصة</span></div>
+</div>
+
+<!-- ═══ PAGE 2 — OVERVIEW & OBJECTIVES ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">نبضة الذكاء الاصطناعي — عرض تطوير المنصة</div></div><div class="hr">CX-NBD-2026-01 · 25 سبتمبر 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">01 · الموجز</div>
+    <h2 class="sec">نظرة عامة على المشروع وفهمنا له</h2>
+    <p class="lead">طلبت منّا نبضة الذكاء الاصطناعي بناء <b>الإصدار الأول من منصتها لذكاء الأعمال</b> — أداة تقرأ بيانات المنشأة الصغيرة والمتوسطة عبر المبيعات والمخزون والعملاء والطلبات والمدفوعات والتوصيل، وتخبر صاحب العمل بما ينبغي فعله لاحقاً، لا بما حدث فقط. يرفع صاحب العمل بياناته، فتحلّلها نبضة من البداية إلى النهاية، ويستلم صاحب العمل تقريراً كاملاً لذكاء الأعمال.</p>
+    <p class="body">هذا <b>ارتباط متكامل للتصميم والبناء</b>: رفع البيانات وتنظيفها، ومحرّك تحليل بالذكاء الاصطناعي، وتقرير يُنشئه الذكاء الاصطناعي، ولوحة تحكم عبر الويب بالعربية والإنجليزية، وتسجيل دخول آمن، ودعم عند الإطلاق. كل رقم في التقرير يُحسب بواسطة كود يعمل على بيانات صاحب العمل نفسها — أما طبقة الذكاء الاصطناعي فتقتصر على الشرح والترتيب وكتابة الإجراءات الموصى بها، بما يحافظ على دقّة المخرجات وموثوقيتها منذ اليوم الأول.</p>
+
+    <div class="subhead">02 · الأهداف</div>
+    <h2 class="sec sm">ما الذي يسعى الإصدار الأول لتحقيقه</h2>
+    <div class="grid2">
+      <div class="box"><div class="bt">أرقام موثوقة</div><div class="bd">كل رقم في التقرير يُحسب بواسطة الكود، لا يخمّنه الذكاء الاصطناعي — لبناء الثقة من التقرير الأول.</div></div>
+      <div class="box"><div class="bt">قرارات، لا لوحات فقط</div><div class="bd">أبرز المخاطر وأبرز الفرص وخطة عمل مرتّبة حسب الأولوية — لا جدار من الرسوم البيانية يحتاج تفسيراً.</div></div>
+      <div class="box"><div class="bt">إدخال بيانات سريع وبلا احتكاك</div><div class="bd">رفع عبر Excel أو CSV أو PDF — دون الحاجة لأي تكامل مع الأنظمة للحصول على أول تقرير.</div></div>
+      <div class="box"><div class="bt">استشراف للمستقبل</div><div class="bd">توقّع مبيعات لثلاثين يوماً إلى جانب التشخيص، ليرى أصحاب الأعمال ما هو قادم.</div></div>
+      <div class="box"><div class="bt">العربية أولاً، وثنائي اللغة</div><div class="bd">تقرير ولوحة تحكم كاملان بالعربية والإنجليزية لسوق المنشآت الصغيرة والمتوسطة السعودي.</div></div>
+      <div class="box"><div class="bt">بنية قابلة للتوسّع</div><div class="bd">مبنية بحيث يمكن إضافة التكاملات المباشرة والميزات المتقدّمة لاحقاً دون إعادة بناء.</div></div>
+    </div>
+    <div class="callout ink"><p>الإصدار الأول يعتمد على رفع البيانات فقط. أما التكاملات المباشرة مع أنظمة التجارة الإلكترونية ونقاط البيع والمحاسبة (سلة، زد، فودكس، أودو وما شابهها) فهي مرحلة مستقبلية — البنية جاهزة لها، لكنها ليست جزءاً من هذا البناء.</p></div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">تطوير المنصة · مُعدّ لصالح نبضة الذكاء الاصطناعي</div><div class="p">2</div></div>
+</div>
+
+<!-- ═══ PAGE 3 — SCOPE (1/2) — DATA, ANALYSIS & INTELLIGENCE ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">نبضة الذكاء الاصطناعي — عرض تطوير المنصة</div></div><div class="hr">CX-NBD-2026-01 · 25 سبتمبر 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">03 · النطاق</div>
+    <h2 class="sec">ما الذي سنصمّمه ونبنيه</h2>
+    <p class="lead">منصة متكاملة من البيانات إلى القرار، مبنية على ثلاث طبقات: كيف تدخل البيانات، وكيف يقرأها الذكاء الاصطناعي، وما الذي يعيده لصاحب العمل.</p>
+
+    <div class="subhead" style="margin-top:2px;">استقبال البيانات ومعالجتها</div>
+    <table class="t">
+      <thead><tr><th style="width:26%">المكوّن</th><th>وصف النطاق</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">رفع البيانات من مصادر متعددة</span></td><td>رفع ملفات Excel (‎.xlsx) وCSV وPDF مع قوالب قابلة للتنزيل تغطّي بيانات المبيعات والمخزون والعملاء والطلبات والمدفوعات/المالية والتوصيل/اللوجستيات.</td></tr>
+        <tr><td><span class="dn">تنظيف البيانات وتوحيدها</span></td><td>ربط بنموذج بيانات موحّد، وتوحيد التنسيقات (التواريخ والعملة والعربية/الإنجليزية)، وكشف السجلات الناقصة وغير المكتملة.</td></tr>
+        <tr><td><span class="dn">إزالة التكرار والتحقّق</span></td><td>كشف السجلات المكررة، وتنبيهات القيم الشاذّة، وفحوص الاتّساق عبر كل ملف مرفوع.</td></tr>
+        <tr><td><span class="dn">درجة جودة البيانات</span></td><td>درجة جودة ظاهرة تُعرض قبل إنشاء التقرير — فالتقرير الضعيف يُفسَّر ببيانات ضعيفة، لا بالمنصة.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">محرّك التحليل بالذكاء الاصطناعي</div>
+    <table class="t">
+      <thead><tr><th style="width:26%">المكوّن</th><th>وصف النطاق</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">كشف إشارات المبيعات</span></td><td>التراجع أسبوعياً وشهرياً، والقفزات/الهبوط المفاجئ، وتباطؤ النمو، وتركّز الإيراد في منتج واحد.</td></tr>
+        <tr><td><span class="dn">كشف إشارات المخزون</span></td><td>مخاطر نفاد المخزون (أيام التغطية مقابل مدّة توريد المورّد)، والمخزون بطيء الحركة، والتعرّض لفائض المخزون.</td></tr>
+        <tr><td><span class="dn">كشف إشارات العملاء</span></td><td>تركّز الإيراد في كبار العملاء، وكشف التسرّب، وانخفاض معدّل تكرار الشراء.</td></tr>
+        <tr><td><span class="dn">كشف إشارات الأرباح والنقد</span></td><td>اتّجاه الهامش لكل منتج، ونمو المصروفات أسرع من الإيراد، ومؤشّرات وضع النقد.</td></tr>
+        <tr><td><span class="dn">كشف إشارات الفرص</span></td><td>المنتجات ذات الطلب المتنامي، وأزواج البيع المتقاطع/الباقات، وأنماط الطلب الموسمية والإقليمية.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">ذكاء الأعمال والتوقّعات</div>
+    <table class="t">
+      <thead><tr><th style="width:26%">المكوّن</th><th>وصف النطاق</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">نظرة عامة على صحة الأعمال</span></td><td>تشخيص واحد رفيع المستوى عبر مؤشّرات المبيعات والمخزون والعملاء والنقد والتشغيل.</td></tr>
+        <tr><td><span class="dn">أبرز 3 مخاطر</span></td><td>العنوان والشرح والأدلة الداعمة والأثر المحتمل على الأعمال لكل خطر.</td></tr>
+        <tr><td><span class="dn">أبرز 3 فرص</span></td><td>الفرصة وسبب رصدها والبيانات الداعمة والإجراء الموصى به.</td></tr>
+        <tr><td><span class="dn">توقّع المبيعات لثلاثين يوماً</span></td><td>اتّجاه المبيعات المتوقّع ونطاق الإيراد للثلاثين يوماً القادمة استناداً إلى البيانات التاريخية المرفوعة.</td></tr>
+        <tr><td><span class="dn">خطة عمل مرتّبة بالأولوية</span></td><td>إجراءات بأولوية عالية/متوسطة/منخفضة مرتبطة مباشرةً بكل خطر وفرصة تم رصدها.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">تطوير المنصة · مُعدّ لصالح نبضة الذكاء الاصطناعي</div><div class="p">3</div></div>
+</div>
+
+<!-- ═══ PAGE 3b — SCOPE (2/2) — DASHBOARD, PLATFORM & LAUNCH ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">نبضة الذكاء الاصطناعي — عرض تطوير المنصة</div></div><div class="hr">CX-NBD-2026-01 · 25 سبتمبر 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">03 · النطاق — تابع</div>
+    <h2 class="sec sm">لوحة التحكم والمنصة والإطلاق</h2>
+
+    <div class="subhead" style="margin-top:2px;">لوحة التحكم عبر الويب <span class="badge">عربي / إنجليزي</span></div>
+    <table class="t">
+      <thead><tr><th style="width:26%">المكوّن</th><th>وصف النطاق</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">عرض تقرير يبدأ بالقرار</span></td><td>عرض واحد مترابط يقدّم المخاطر والفرص والتوقّع وخطة العمل — لا جدار من الرسوم البيانية.</td></tr>
+        <tr><td><span class="dn">تسعة أقسام في لوحة التحكم</span></td><td>صحة الأعمال، المبيعات، المخزون، العملاء، الطلبات والتشغيل، المخاطر، الفرص، التوقّع، والتوصيات.</td></tr>
+        <tr><td><span class="dn">واجهة ثنائية اللغة</span></td><td>واجهة كاملة بالعربية والإنجليزية مع تبديل تخطيط RTL/LTR.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">الحسابات والتنظيم والأمان</div>
+    <table class="t">
+      <thead><tr><th style="width:26%">المكوّن</th><th>وصف النطاق</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">تسجيل دخول آمن وإعداد للمنشأة</span></td><td>مصادقة الحساب ومساحة بيانات معزولة لكل منشأة — الأساس للتوسّع متعدّد المستأجرين.</td></tr>
+        <tr><td><span class="dn">التشفير</span></td><td>تشفير البيانات أثناء النقل وفي حالة السكون.</td></tr>
+        <tr><td><span class="dn">واجهة برمجية آمنة والتحقّق من المدخلات</span></td><td>بنية واجهة برمجية آمنة مع التحقّق من المدخلات في كل عملية رفع وطلب.</td></tr>
+        <tr><td><span class="dn">رفع الملفات بأمان</span></td><td>التحقّق من الملفات المرفوعة قبل معالجتها.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">الاختبار والإطلاق</div>
+    <table class="t">
+      <thead><tr><th style="width:26%">المكوّن</th><th>وصف النطاق</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">اختبار وظيفي</span></td><td>اختبار كل وحدة مقابل النطاق المحدّد في هذا العرض.</td></tr>
+        <tr><td><span class="dn">اختبار التحقّق من البيانات</span></td><td>فحص دقّة التقرير مقابل مجموعات بيانات حقيقية مرفوعة.</td></tr>
+        <tr><td><span class="dn">دعم اختبار قبول المستخدم (UAT)</span></td><td>اختبار قبول موجَّه بالتعاون مع فريق نبضة الذكاء الاصطناعي.</td></tr>
+        <tr><td><span class="dn">النشر الإنتاجي والتسليم</span></td><td>نشر مباشر مع تسليم بيانات الدخول والصلاحيات.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout accent">
+      <div class="cl">غير مشمول في هذه المرحلة</div>
+      <p>التكاملات المباشرة مع الأنظمة (سلة، زد، Shopify، WooCommerce، فودكس، أودو، رواء، قيود، دفترة، Zoho Books، Salesforce/Dynamics 365)، ومستشار الأعمال الحواري بالذكاء الاصطناعي، والتنبيهات الآلية — كلها بنود مرحلة مستقبلية جاهزة من ناحية البنية، وتُسعّر بشكل منفصل عند تحديد نطاقها.</p>
+    </div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">تطوير المنصة · مُعدّ لصالح نبضة الذكاء الاصطناعي</div><div class="p">4</div></div>
+</div>
+
+<!-- ═══ PAGE 4 — INVESTMENT ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">نبضة الذكاء الاصطناعي — عرض تطوير المنصة</div></div><div class="hr">CX-NBD-2026-01 · 25 سبتمبر 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">04 · الاستثمار</div>
+    <h2 class="sec">استثمارك</h2>
+    <div class="price-hero">
+      <div class="ph-l">
+        <div class="ph-lab">تصميم وتطوير المنصة بالكامل</div>
+        <div class="ph-desc">رفع البيانات، ومحرّك التحليل بالذكاء الاصطناعي، وتقرير ذكاء الأعمال، وتوقّع الثلاثين يوماً، ولوحة التحكم عبر الويب، وتسجيل الدخول الآمن، وضمان الجودة والإطلاق — مصمَّمة ومبنيّة ومختبَرة ومُطلَقة.</div>
+      </div>
+      <div class="ph-r">
+        <div class="ph-amt"><img src="riyal.png" class="riyal w" alt="ريال"> 55,000</div>
+        <div class="ph-sub">رسوم مشروع لمرة واحدة · غير شاملة ضريبة القيمة المضافة</div>
+      </div>
+    </div>
+
+    <div class="subhead" style="margin-top:6px;">جدول الدفعات</div>
+    <table class="m">
+      <thead><tr><th>المرحلة</th><th class="num">النسبة</th><th class="num">المبلغ (<img src="riyal.png" class="riyal w" alt="ريال">)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">دفعة مقدّمة — عند التوقيع والانطلاق</span></td><td class="num">50%</td><td class="num">27,500</td></tr>
+        <tr><td><span class="tn">دفعة نهائية — عند إتمام UAT والإطلاق</span></td><td class="num">50%</td><td class="num">27,500</td></tr>
+        <tr class="total"><td>الإجمالي</td><td class="num">100%</td><td class="num"><img src="riyal.png" class="riyal w" alt="ريال"> 55,000</td></tr>
+      </tbody>
+    </table>
+    <div class="cellnote">غير شاملة ضريبة القيمة المضافة. تُضاف الضريبة (15%) إلى كل فاتورة وفق أنظمة المملكة العربية السعودية.</div>
+
+    <div class="callout ink">
+      <div class="cl">تكاليف الطرف الثالث — مسؤولية العميل</div>
+      <p>تكاليف استخدام واجهات الذكاء الاصطناعي/نماذج اللغة الكبيرة (LLM API) ورسوم الخوادم/الاستضافة <b>غير مشمولة</b> في هذا العرض ويتحمّلها العميل مباشرةً نبضة الذكاء الاصطناعي.</p>
+    </div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">تطوير المنصة · مُعدّ لصالح نبضة الذكاء الاصطناعي</div><div class="p">5</div></div>
+</div>
+
+<!-- ═══ PAGE 5 — SUPPORT & MAINTENANCE ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">نبضة الذكاء الاصطناعي — عرض تطوير المنصة</div></div><div class="hr">CX-NBD-2026-01 · 25 سبتمبر 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">05 · الدعم والصيانة</div>
+    <h2 class="sec">أنت مغطّى منذ اليوم الأول</h2>
+    <p class="lead">كل إطلاق يشمل فترة سماح مجانية حقيقية قبل أن تبدأ أي رسوم مستمرة.</p>
+
+    <div class="callout ok" style="padding:14px 20px;">
+      <div class="cl" style="font-size:11px;">مشمول دون أي تكلفة إضافية</div>
+      <div style="font-size:23px; font-weight:800; color:var(--ink); margin:2px 0 6px;">4 أشهر دعم مجّاني</div>
+      <p>ابتداءً من يوم إطلاق المنصة، تحصل نبضة الذكاء الاصطناعي على <b>أربعة أشهر كاملة من الدعم مجّاناً</b> — ولا تبدأ رسوم الصيانة السنوية أدناه إلا بعد انتهاء هذه الفترة.</p>
+    </div>
+
+    <div class="subhead">ما المشمول في الأشهر الأربعة المجّانية</div>
+    <ul class="ticks">
+      <li><b>إصلاح الأخطاء</b> — أي خلل مقابل النطاق المتّفق عليه يُصلَح دون تكلفة.</li>
+      <li><b>دعم الإعداد</b> — تعديلات طفيفة على الإعدادات والقوالب ومعطيات التقارير.</li>
+      <li><b>دعم أولوية عبر البريد</b> — وصول مباشر لفريق التنفيذ لمعالجة المشكلات.</li>
+      <li><b>مساعدة تهيئة بعد الإطلاق</b> — مساعدة فريق نبضة الذكاء الاصطناعي على التعوّد على المنصة.</li>
+    </ul>
+
+    <div class="subhead">عقد الصيانة السنوي (AMC) — من الشهر الخامس</div>
+    <p class="body">بعد انتهاء الفترة المجّانية، يُغطّى الدعم المستمر بعقد صيانة سنوي — يُفوتَر سنوياً، وقابل للتجديد، ومنفصل عن أي أعمال مستقبلية للميزات أو التكاملات.</p>
+
+    <div class="grid2">
+      <div class="box">
+        <div class="bt" style="color:var(--ok);">مشمول في عقد الصيانة</div>
+        <div class="bd"><ul class="plain">
+          <li>إصلاح الأخطاء ومعالجة الأعطال</li>
+          <li>تغييرات إعداد طفيفة</li>
+          <li>تصحيحات وتحديثات أمنية</li>
+          <li>مراقبة أداء المنصة</li>
+          <li>قناة دعم بأولوية</li>
+        </ul></div>
+      </div>
+      <div class="box">
+        <div class="bt" style="color:#B14A3A;">غير مشمول في عقد الصيانة</div>
+        <div class="bd"><ul class="plain">
+          <li>ميزات أو وحدات جديدة</li>
+          <li>تكاملات مباشرة مع الأنظمة</li>
+          <li>إعادة تصميم كبيرة أو تغيير النطاق</li>
+          <li>تكاليف واجهات الذكاء الاصطناعي والخوادم/الاستضافة</li>
+        </ul></div>
+      </div>
+    </div>
+
+    <table class="m">
+      <thead><tr><th>البند</th><th class="num">الرسوم</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">عقد الصيانة السنوي</span><span class="ts">يُفوتَر سنوياً · غير شامل ضريبة القيمة المضافة · أول فاتورة في الشهر الخامس، قابل للتجديد كل عام</span></td><td class="num"><img src="riyal.png" class="riyal" alt="ريال"> 10,000 / سنة</td></tr>
+      </tbody>
+    </table>
+    <div class="cellnote">البنود خارج تغطية عقد الصيانة — الميزات الجديدة أو التكاملات أو التغييرات الكبيرة — تُحدَّد ويُسعَّر نطاقها بشكل منفصل، كأي ارتباط مستقبلي.</div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">تطوير المنصة · مُعدّ لصالح نبضة الذكاء الاصطناعي</div><div class="p">6</div></div>
+</div>
+
+<!-- ═══ PAGE 5 — TIMELINE + TERMS ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">نبضة الذكاء الاصطناعي — عرض تطوير المنصة</div></div><div class="hr">CX-NBD-2026-01 · 25 سبتمبر 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">06 · الجدول الزمني</div>
+    <h2 class="sec sm">جدول استرشادي — 30 إلى 40 يوماً</h2>
+    <div class="callout accent"><p>الجدول أدناه <b>استرشادي</b>. يعتمد التوقيت الفعلي على جاهزية البيانات وسرعة الردّ على الملاحظات وتأكيد النطاق عند الانطلاق. وقد تتداخل المراحل.</p></div>
+    <table class="m">
+      <thead><tr><th>المرحلة</th><th class="num">المدّة</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">1 · الاستكشاف والإعداد</span><span class="ts">تأكيد قوالب البيانات، وإعداد البيئة، واعتماد البنية</span></td><td class="num">أيام 1–5</td></tr>
+        <tr><td><span class="tn">2 · البناء الأساسي</span><span class="ts">رفع البيانات وتنظيفها، ومحرّك التحليل بالذكاء الاصطناعي، وكشف الإشارات</span></td><td class="num">أيام 6–20</td></tr>
+        <tr><td><span class="tn">3 · التقرير ولوحة التحكم</span><span class="ts">إنشاء تقرير ذكاء الأعمال، وتوقّع الثلاثين يوماً، ولوحة التحكم عبر الويب (عربي/إنجليزي)</span></td><td class="num">أيام 21–30</td></tr>
+        <tr><td><span class="tn">4 · ضمان الجودة والإطلاق</span><span class="ts">الاختبار، ودعم UAT، والنشر الإنتاجي والتسليم</span></td><td class="num">أيام 31–40</td></tr>
+        <tr class="total"><td>الإجمالي الاسترشادي</td><td class="num">30–40 يوماً</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">07 · الأحكام والشروط</div>
+    <h2 class="sec sm">الأحكام والشروط</h2>
+    <ol class="tc">
+      <li><b>النطاق.</b> يقتصر العمل على النطاق المحدّد في هذا العرض. التكاملات المباشرة مع الأنظمة والميزات خارج هذا النطاق تُسعّر ويُتّفق عليها بشكل منفصل.</li>
+      <li><b>الرسوم والدفع.</b> رسوم المشروع <b><img src="riyal.png" class="riyal" alt="ريال"> 55,000</b> غير شاملة ضريبة القيمة المضافة، وتُدفع وفق جدول المراحل (50% عند الانطلاق، 50% عند الإطلاق).</li>
+      <li><b>مسؤوليات العميل.</b> تقدّم نبضة الذكاء الاصطناعي بيانات أعمال نموذجية، وملاحظات في وقتها، وصلاحيات الاختبار ضمن المواعيد المتّفق عليها. أي تأخير من جانب العميل قد يؤثّر على الجدول الزمني.</li>
+      <li><b>تكاليف الطرف الثالث.</b> استخدام واجهات الذكاء الاصطناعي/نماذج اللغة الكبيرة ورسوم الخوادم/الاستضافة غير مشمولة وهي مسؤولية نبضة الذكاء الاصطناعي، وتُفوتَر مباشرةً من مزوّديها.</li>
+      <li><b>الملكية الفكرية.</b> عند استلام كامل المبلغ، تصبح جميع الأكواد المخصّصة والمخرجات ملكاً لنبضة الذكاء الاصطناعي. أما مكتبات الطرف الثالث فتبقى تحت تراخيصها الخاصة.</li>
+      <li><b>الدعم والصيانة.</b> يشمل 4 أشهر من دعم إصلاح الأخطاء المجّاني من تاريخ الإطلاق. الصيانة السنوية بعد ذلك <img src="riyal.png" class="riyal" alt="ريال"> 10,000/سنة، تُفوتَر بشكل منفصل.</li>
+      <li><b>السرّية.</b> يحافظ الطرفان على سرّية محتويات هذا العرض دون موافقة خطّية مسبقة.</li>
+      <li><b>القانون الحاكم والصلاحية.</b> يخضع هذا الارتباط لأنظمة المملكة العربية السعودية. هذا العرض صالح لمدّة 30 يوماً من تاريخ الإصدار.</li>
+    </ol>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">تطوير المنصة · مُعدّ لصالح نبضة الذكاء الاصطناعي</div><div class="p">7</div></div>
+</div>
+
+<!-- ═══ PAGE 8 — NEXT STEPS + ACCEPTANCE ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">نبضة الذكاء الاصطناعي — عرض تطوير المنصة</div></div><div class="hr">CX-NBD-2026-01 · 25 سبتمبر 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">08 · الخطوات التالية</div>
+    <h2 class="sec">لنبدأ</h2>
+    <p class="lead">ثلاث خطوات بسيطة للانتقال من العرض إلى منصة مباشرة.</p>
+    <ol class="steps">
+      <li><b>محادثة استكشافية قصيرة</b> لتأكيد النطاق وجاهزية البيانات النموذجية.</li>
+      <li><b>تأكيد الأحكام</b> وجدول الدفعات المحدّد في هذا العرض.</li>
+      <li><b>الانطلاق</b> — عند توقيع العرض ودفع الدفعة المقدّمة، نبدأ الاستكشاف وإعداد البيئة.</li>
+    </ol>
+
+    <div class="sign">
+      <div class="sign-h">القبول والتفويض · أعِد النسخة الموقّعة إلى raghib@code-ox.com</div>
+      <div class="sign-b">
+        <div class="sign-col"><h4>عن كود-أوكس للتقنية ونيابةً عنها</h4><div class="sign-f"><div class="fl">المفوّض بالتوقيع</div><div class="fline"></div></div><div class="sign-f"><div class="fl">الاسم والمسمّى</div><div class="fline"></div></div><div class="sign-f"><div class="fl">التاريخ</div><div class="fline"></div></div></div>
+        <div class="sign-col"><h4>عن نبضة الذكاء الاصطناعي ونيابةً عنها</h4><div class="sign-f"><div class="fl">المفوّض بالتوقيع</div><div class="fline"></div></div><div class="sign-f"><div class="fl">الاسم والمسمّى</div><div class="fline"></div></div><div class="sign-f"><div class="fl">التاريخ</div><div class="fline"></div></div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; background:var(--ink); border-radius:12px; padding:20px 24px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px;">لديك أسئلة؟ تواصل معنا</div>
+        <div style="font-size:15px; font-weight:700; color:#fff; margin-bottom:6px;">راغب علي رفيق — كود-أوكس للتقنية</div>
+        <div style="font-size:11px;"><span style="color:#9EC1FF;">raghib@code-ox.com</span><span style="color:rgba(255,255,255,0.45);"> &nbsp;·&nbsp; ‎+966 56 176 5707 &nbsp;·&nbsp; code-ox.com</span></div>
+      </div>
+      <img src="code-ox-logo.svg" alt="CODE OX" style="height:22px; filter:brightness(0) invert(1); opacity:0.5; margin-right:20px;">
+    </div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">تطوير المنصة · مُعدّ لصالح نبضة الذكاء الاصطناعي</div><div class="p">8</div></div>
+</div>
+
+</body>
+</html>
