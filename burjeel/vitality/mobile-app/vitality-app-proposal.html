@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vitality Mobile App — Design &amp; Build Proposal · CX-VIT-2026-02</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root{
+      --ink:#0A1524; --ink2:#33425A; --muted:#5E6B80; --line:#E4E7EC; --bg:#F7F8FB; --paper:#FFFFFF;
+      --navy:#001C3D; --navy-2:#00284F;
+      --accent:#9A7327; --accent-soft:#F7F1E4; --accent-line:#E7D8B6; --accent-900:#6E5019; --gold:#C5A059; --gold-2:#D4B67C;
+      --ok:#2F7A57; --ok-soft:#EAF3ED;
+    }
+    body, table, td, th, div, p, span, ul, li { direction:ltr; text-align:left; }
+    body { font-family:'Montserrat',-apple-system,BlinkMacSystemFont,sans-serif; font-size:14px; background:#C9CDD6; color:var(--ink); line-height:1.6; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .page { width:210mm; min-height:297mm; margin:0 auto 24px; position:relative; overflow:hidden; background:var(--paper); }
+    @media print { body { background:none; } .page { margin:0; box-shadow:none; page-break-after:always; break-after:page; } .inner { min-height:296mm !important; } .inner.tight { min-height:285mm !important; } .cover { height:297mm !important; min-height:0 !important; overflow:hidden !important; } .page:last-child { page-break-after:avoid !important; break-after:avoid !important; } .cover::before, .cover::after { display:none !important; } }
+    @page { size:A4; margin:0; }
+
+    /* COVER */
+    .cover { min-height:297mm; display:flex; flex-direction:column; position:relative; background:linear-gradient(135deg, rgba(0,28,61,0.93) 0%, rgba(0,28,61,0.80) 100%), url('2f902f3e2723151ac8d54ea93ec597a1.jpg') center/cover no-repeat; color:#fff; overflow:hidden; }
+    .cover::before { content:""; position:absolute; width:620px; height:620px; top:-240px; right:-200px; border-radius:50%; background:radial-gradient(circle, rgba(197,160,89,0.22), transparent 68%); z-index:0; }
+    .cover::after { content:""; position:absolute; width:480px; height:480px; bottom:-200px; left:-160px; border-radius:50%; background:radial-gradient(circle, rgba(0,40,79,0.9), transparent 70%); z-index:0; }
+    .cover-top, .cover-hero, .c-ref, .cover-foot { position:relative; z-index:2; }
+    .cover-bar { position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--gold); z-index:3; }
+    .cover-top { display:flex; align-items:center; justify-content:space-between; padding:22px 32px 22px 42px; border-bottom:1px solid rgba(255,255,255,0.12); }
+    .cover-top-left { display:flex; align-items:center; gap:16px; }
+    .cover-chip { background:#fff; border-radius:8px; padding:9px 15px; }
+    .cover-chip img { height:20px; display:block; }
+    .cover-div { width:1px; height:28px; background:rgba(255,255,255,0.18); }
+    .cover-client { font-size:17px; font-weight:800; letter-spacing:0.04em; color:#fff; }
+    .cover-tagr { font-size:11px; color:var(--gold-2); letter-spacing:0.04em; }
+    .cover-hero { flex:1; display:flex; flex-direction:column; justify-content:center; padding:56px 32px 0 42px; }
+    .c-over { font-size:12px; font-weight:700; color:var(--gold-2); letter-spacing:0.22em; text-transform:uppercase; margin-bottom:22px; }
+    .cover h1 { font-size:44px; font-weight:800; line-height:1.12; color:#fff; letter-spacing:-0.015em; margin-bottom:22px; }
+    .cover h1 em { font-style:normal; color:var(--gold-2); }
+    .c-sub { font-size:15.5px; color:rgba(255,255,255,0.82); line-height:1.75; max-width:580px; margin-bottom:30px; }
+    .c-meta { display:flex; flex-wrap:wrap; gap:9px; }
+    .c-meta .m { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); border-radius:100px; padding:8px 16px; font-size:13px; color:rgba(255,255,255,0.85); }
+    .c-meta .m strong { color:var(--gold-2); font-weight:700; }
+    .c-ref { margin:auto 32px 18px 42px; background:rgba(255,255,255,0.05); border:1px solid rgba(197,160,89,0.35); border-radius:12px; display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden; }
+    .c-ref .i { padding:16px 18px; border-right:1px solid rgba(197,160,89,0.22); }
+    .c-ref .i:last-child { border-right:none; }
+    .c-ref .l { font-size:10.5px; color:var(--gold-2); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:7px; opacity:0.9; }
+    .c-ref .v { font-size:14.5px; font-weight:700; color:#fff; }
+    .cover-foot { border-top:1px solid rgba(255,255,255,0.12); padding:14px 32px 14px 42px; }
+    .cover-foot span { font-size:10px; color:rgba(255,255,255,0.5); }
+
+    /* INNER */
+    .inner { position:relative; display:flex; flex-direction:column; min-height:297mm; background:#fff url('8b16e98cc72b4cc4ac714132d0decb81.jpg') center/cover no-repeat; }
+    .inner::before { content:""; position:absolute; inset:0; background:rgba(255,255,255,0.9); z-index:0; }
+    .inner > * { position:relative; z-index:1; }
+    .icontent { position:relative; }
+    .ihead { display:flex; align-items:center; justify-content:space-between; padding:16px 34px; border-bottom:1px solid var(--line); background:var(--bg); }
+    .ihead .hl { display:flex; align-items:center; gap:12px; }
+    .ihead img { height:15px; }
+    .ihead .div { width:1px; height:18px; background:var(--line); }
+    .ihead .hc { font-size:12px; color:var(--muted); }
+    .ihead .hr { font-size:12px; color:#9AA1B0; }
+    .icontent { flex:1; padding:30px 40px; display:flex; flex-direction:column; }
+    .ifoot { border-top:1px solid var(--line); padding:14px 34px; display:flex; align-items:center; gap:12px; background:var(--bg); }
+    .ifoot img { height:12px; opacity:0.5; }
+    .ifoot .sep { width:1px; height:12px; background:#CBCFD8; }
+    .ifoot .t { font-size:9px; color:#9AA1B0; flex:1; }
+    .ifoot .p { font-size:9.5px; color:#9AA1B0; font-weight:600; }
+
+    .kicker { font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.16em; margin-bottom:9px; }
+    h2.sec { font-size:28px; font-weight:800; color:var(--navy); margin-bottom:13px; line-height:1.15; letter-spacing:-0.01em; }
+    h2.sec.sm { font-size:23px; }
+    .subhead { font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.14em; margin:13px 0 8px; }
+    .lead { font-size:14.5px; color:var(--ink2); line-height:1.68; margin-bottom:13px; }
+    .lead b { color:var(--ink); font-weight:600; }
+    p.body { font-size:14px; color:var(--ink2); line-height:1.7; margin-bottom:13px; }
+    p.body b { color:var(--ink); font-weight:600; }
+
+    .callout { border-radius:11px; padding:14px 18px; font-size:13.5px; line-height:1.6; margin-bottom:12px; border:1px solid var(--line); }
+    .callout.accent { background:var(--accent-soft); border-color:var(--accent-line); border-left:4px solid var(--gold); }
+    .callout.ink { background:#F4F5F7; border-left:4px solid var(--navy); }
+    .callout.ok { background:var(--ok-soft); border-left:4px solid var(--ok); }
+    .callout.warn { background:#FCF3E7; border-left:4px solid #C77E29; }
+    .callout .cl { font-size:10px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; }
+    .callout.accent .cl { color:var(--accent-900); }
+    .callout.ink .cl { color:var(--navy); }
+    .callout.ok .cl { color:var(--ok); }
+    .callout.warn .cl { color:#A65E12; }
+    .callout p { color:var(--ink2); }
+    .callout b { color:var(--ink); font-weight:600; }
+
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-bottom:14px; }
+    .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:13px; margin-bottom:14px; }
+    .box { border:1px solid var(--line); border-radius:11px; padding:16px 18px; }
+    .box .bt { font-size:14.5px; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .box .bt .n { color:var(--accent); font-weight:800; margin-right:7px; }
+    .box .bd { font-size:13px; color:var(--muted); line-height:1.6; }
+    .box.tier { border-top:3px solid var(--gold); }
+    .box.tier .price { font-size:12px; color:var(--accent-900); font-weight:700; margin-top:6px; }
+
+    ul.ticks { list-style:none; }
+    ul.ticks li { position:relative; padding:8px 0 8px 26px; font-size:14px; color:var(--ink2); line-height:1.55; border-bottom:1px solid #EEF0F4; }
+    ul.ticks li:last-child { border-bottom:none; }
+    ul.ticks li::before { content:""; position:absolute; left:2px; top:14px; width:9px; height:9px; border-radius:2px; background:var(--gold); }
+    ul.ticks li b { color:var(--ink); font-weight:600; }
+    ul.plain { list-style:none; }
+    ul.plain li { position:relative; padding:5px 0 5px 20px; font-size:13px; color:var(--ink2); line-height:1.55; }
+    ul.plain li::before { content:"—"; position:absolute; left:0; color:var(--accent); font-weight:700; }
+    ul.plain li b { color:var(--ink); }
+
+    table.t, table.m { width:100%; border-collapse:collapse; margin-bottom:11px; }
+    table.t thead th, table.m thead th { background:var(--navy); color:#fff; padding:8px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; }
+    table.t thead th.num, table.m thead th.num { text-align:right; }
+    table.t tbody td, table.m tbody td { padding:5px 12px; border-bottom:1px solid #EEF0F4; color:var(--ink2); vertical-align:top; line-height:1.5; font-size:12.5px; }
+    table.t tbody td { padding:5px 12px; line-height:1.4; font-size:11.5px; }
+    table.t tbody td.num, table.m tbody td.num { text-align:right; white-space:nowrap; }
+    table.t tbody tr:nth-child(even) td, table.m tbody tr:nth-child(even) td { background:#FAFBFD; }
+    table.t td .dn { font-weight:700; color:var(--navy); display:block; }
+    table.m td .tn { font-weight:700; color:var(--navy); }
+    table.m td .ts { font-size:12px; color:var(--muted); line-height:1.5; display:block; margin-top:4px; }
+    table.m tbody tr.total td { background:var(--navy); color:#fff; font-weight:800; font-size:14px; padding:13px 12px; }
+    table.m tbody tr.total td.num { color:var(--gold-2); font-size:17px; }
+    .cellnote { font-size:12px; color:#9AA1B0; margin-top:5px; line-height:1.55; }
+    .price-hero { display:flex; align-items:center; justify-content:space-between; gap:20px; background:var(--navy); color:#fff; border-radius:14px; padding:16px 24px; margin-bottom:11px; }
+    .price-hero .ph-lab { font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-2); margin-bottom:7px; }
+    .price-hero .ph-desc { font-size:13.5px; color:rgba(255,255,255,0.82); line-height:1.55; max-width:380px; }
+    .price-hero .ph-r { text-align:right; flex-shrink:0; }
+    .price-hero .ph-amt { font-size:32px; font-weight:800; color:var(--gold-2); line-height:1; letter-spacing:-0.01em; }
+    .price-hero .ph-sub { font-size:12px; color:var(--gold-2); margin-top:7px; opacity:0.85; }
+    .badge { display:inline-block; font-size:10px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:var(--accent); }
+    .badge.v1 { color:#fff; background:var(--gold); border-radius:100px; padding:2px 9px; }
+    .riyal { height:0.82em; width:auto; vertical-align:-0.04em; display:inline-block; margin:0 3px; }
+    .riyal.w { filter:brightness(0) invert(1); }
+
+    ol.steps { list-style:none; counter-reset:s; }
+    ol.steps li { counter-increment:s; position:relative; padding:8px 0 8px 44px; border-bottom:1px solid #EEF0F4; font-size:13.5px; color:var(--ink2); line-height:1.55; }
+    ol.steps li:last-child { border-bottom:none; }
+    ol.steps li b { color:var(--ink); font-weight:600; }
+    ol.steps li::before { content:counter(s); position:absolute; left:0; top:9px; width:28px; height:28px; border-radius:50%; background:var(--accent-soft); border:1px solid var(--accent-line); color:var(--accent-900); font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+
+    ol.tc { list-style:none; counter-reset:t; }
+    ol.tc li { counter-increment:t; position:relative; padding:7px 0 7px 32px; font-size:12.5px; line-height:1.55; color:var(--ink2); border-bottom:1px solid #EEF0F4; }
+    ol.tc li:last-child { border-bottom:none; }
+    ol.tc li b { color:var(--ink); font-weight:600; }
+    ol.tc li::before { content:counter(t); position:absolute; left:0; top:7px; width:21px; height:21px; border-radius:6px; background:var(--accent-soft); border:1px solid var(--accent-line); color:var(--accent-900); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+
+    /* HUB DIAGRAM */
+    .hub-wrap { display:flex; gap:20px; align-items:center; margin-bottom:10px; }
+    .hub-col { width:280px; flex-shrink:0; }
+    .hub{position:relative;width:100%;max-width:340px;aspect-ratio:1;margin:4px auto 8px;}
+    .hub-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100px;height:100px;border-radius:50%;background:var(--navy);border:1px solid var(--gold);box-shadow:0 6px 20px rgba(0,28,61,0.18);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3;}
+    .hub-center b{font-size:12.5px;font-weight:800;color:#fff;white-space:nowrap;}
+    .hub-center span{font-size:8px;letter-spacing:.1em;color:var(--gold-2);margin-top:2px;text-transform:uppercase;}
+    .hub-node{position:absolute;width:90px;transform:translate(-50%,-50%);text-align:center;z-index:2;}
+    .hub-node .dot{width:44px;height:44px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);font-weight:800;font-size:15px;}
+    .hub-node .lbl{font-size:10px;font-weight:700;color:var(--ink);line-height:1.25;}
+    .hub-svg{position:absolute;inset:0;z-index:1;}
+    .hub-legend{list-style:none;flex:1;min-width:0;display:grid;gap:6px;align-self:center;}
+    .hub-legend li{font-size:10.8px;line-height:1.42;color:var(--ink2);padding-left:13px;position:relative;}
+    .hub-legend li::before{content:"–";position:absolute;left:0;color:var(--accent);font-weight:700;}
+    .hub-legend li b{color:var(--ink);font-weight:700;}
+
+    .sign { border:1.5px solid var(--line); border-radius:11px; overflow:hidden; margin-top:14px; }
+    .sign-h { background:var(--navy); color:#fff; padding:12px 17px; font-size:11.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+    .sign-b { padding:13px 17px; background:var(--bg); display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+    .sign-col h4 { font-size:11.5px; font-weight:700; color:var(--navy); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:13px; padding-bottom:6px; border-bottom:2px solid var(--gold); }
+    .sign-f { margin-bottom:10px; }
+    .sign-f .fl { font-size:11px; font-weight:700; color:#9AA1B0; text-transform:uppercase; letter-spacing:0.09em; margin-bottom:5px; }
+    .sign-f .fline { border-bottom:1.5px solid #CBCFD8; height:38px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ PAGE 1 — COVER ═══ -->
+<div class="page cover">
+  <div class="cover-bar"></div>
+  <div class="cover-top">
+    <div class="cover-top-left">
+      <div class="cover-chip"><img src="code-ox-logo.svg" alt="Code-ox"></div>
+      <div class="cover-div"></div>
+      <div class="cover-client"><img src="vitality-logo.png" alt="Vitality Home Care" style="height:26px;display:block;"></div>
+    </div>
+    <div class="cover-tagr">Mobile App — Design &amp; Build Proposal</div>
+  </div>
+  <div class="cover-hero">
+    <div class="c-over">Design &amp; Build Proposal &nbsp;·&nbsp; 27 September 2026</div>
+    <h1>The home-healthcare app that becomes a <em>recovery companion.</em></h1>
+    <div class="c-sub">A complete design-and-build proposal for the Vitality mobile app — patient-centric home and virtual healthcare, from discovery and booking to in-app payment, visit-day tracking, and a guided recovery journey. Native Nixpend integration, WhatsApp and voice/call support built in, bilingual Arabic / English.</div>
+    <div class="c-meta">
+      <div class="m"><strong>Home + Virtual</strong> Healthcare</div>
+      <div class="m"><strong>Native</strong> Nixpend Integration</div>
+      <div class="m"><strong>WhatsApp + Voice</strong> Built In</div>
+      <div class="m"><strong>Bilingual</strong> AR / EN</div>
+    </div>
+  </div>
+  <div class="c-ref">
+    <div class="i"><div class="l">Proposal Ref.</div><div class="v">CX-VIT-2026-02</div></div>
+    <div class="i"><div class="l">Date</div><div class="v">27 September 2026</div></div>
+    <div class="i"><div class="l">Currency</div><div class="v"><img src="riyal.png" class="riyal w" alt="SAR"> SAR</div></div>
+    <div class="i"><div class="l">Prepared By</div><div class="v">Code-Ox Technologies</div></div>
+  </div>
+  <div class="cover-foot"><span>Prepared for Vitality Home Care &nbsp;·&nbsp; a Burjeel Holdings brand &nbsp;·&nbsp; Mobile application development engagement</span></div>
+</div>
+
+<!-- ═══ PAGE 2 — OVERVIEW & OBJECTIVES ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">01 · The Brief</div>
+    <h2 class="sec">Project overview &amp; our understanding</h2>
+    <p class="lead">Vitality has asked us to design and build <b>its patient-centric mobile app</b> — a single digital journey for home and virtual healthcare that takes a patient from <b>Discover → Select → Book → Pay → Receive Care → Follow Up → Rebook</b>, across five service categories: Medical Care, Women &amp; Family, Wellness &amp; Recovery, Home Aesthetics, and Memberships &amp; Packages.</p>
+    <p class="body">Code-Ox brings established product strategy and prior delivery experience with Vitality to this engagement, enabling the project to move directly from the client's BRD into design and build. This proposal sets out the complete scope, platform integrations, commercial terms and delivery timeline for the Vitality mobile application.</p>
+
+    <div class="subhead">02 · Objectives</div>
+    <h2 class="sec sm">What this build sets out to achieve</h2>
+    <div class="grid2">
+      <div class="box"><div class="bt">A recovery companion, not a marketplace</div><div class="bd">A named, consistent caregiver and a visible recovery journey — the first in the region to pair booking convenience with genuine care continuity.</div></div>
+      <div class="box"><div class="bt">Everything in-app</div><div class="bd">Discovery, booking, in-app payment and visit-day tracking — no redirect out to a third-party portal.</div></div>
+      <div class="box"><div class="bt">Family-inclusive</div><div class="bd">One account manages care for multiple family members, with privacy controls that respect the patient.</div></div>
+      <div class="box"><div class="bt">Culturally native</div><div class="bd">Arabic-first, gender-guaranteed caregiver matching, notifications scheduled around prayer times.</div></div>
+      <div class="box"><div class="bt">Connected to what's live</div><div class="bd">Native Nixpend HIS, plus WhatsApp and voice/call channels reused rather than rebuilt — one conversation, one voice line.</div></div>
+      <div class="box"><div class="bt">Measurable</div><div class="bd">An admin dashboard reporting the client's own KPIs — bookings, conversion, retention, satisfaction.</div></div>
+    </div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">2</div></div>
+</div>
+
+<!-- ═══ PAGE 3 — SCOPE 1 — BOOKING & CLINICAL JOURNEY ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">03 · Scope</div>
+    <h2 class="sec">What we'll design &amp; build</h2>
+    <p class="lead">Organised around the client's own five service categories. The same booking and program engine powers every category — clinical, wellness or aesthetic — so there is one consistent patient experience, not five separate builds.</p>
+    <div style="display:flex;align-items:stretch;margin:4px 0 16px;border:1px solid var(--accent-line);border-radius:10px;overflow:hidden;">
+      <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--accent-900);background:var(--accent-soft);border-right:1px solid var(--accent-line);line-height:1.2;">Discover</div>
+      <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--accent-900);background:var(--accent-soft);border-right:1px solid var(--accent-line);line-height:1.2;">Select</div>
+      <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--accent-900);background:var(--accent-soft);border-right:1px solid var(--accent-line);line-height:1.2;">Book</div>
+      <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--accent-900);background:var(--accent-soft);border-right:1px solid var(--accent-line);line-height:1.2;">Pay</div>
+      <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--accent-900);background:var(--accent-soft);border-right:1px solid var(--accent-line);line-height:1.2;">Receive Care</div>
+      <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--accent-900);background:var(--accent-soft);border-right:1px solid var(--accent-line);line-height:1.2;">Follow Up</div>
+      <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:800;letter-spacing:0.02em;text-transform:uppercase;color:var(--gold-2);background:var(--navy);line-height:1.2;">Rebook</div>
+    </div>
+
+    <div class="subhead" style="margin-top:2px;">Medical Care &amp; Wellness / Recovery <span class="badge">Core Journey</span></div>
+    <table class="t">
+      <thead><tr><th style="width:27%">Feature</th><th>Scope description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">4-Step Booking Wizard</span></td><td>Service → date/time (live availability) → details → payment → confirmation, for one-off services (doctor home visit, home nursing, home lab, home physiotherapy, IV therapy).</td></tr>
+        <tr><td><span class="dn">Live Availability &amp; Fast Booking</span></td><td>Real-time slot availability with same-day and urgent options, built to support Vitality's 24/7 service and 2-hour response model.</td></tr>
+        <tr><td><span class="dn">Program / Package Booking</span></td><td>Multi-session care programs (Post-Surgery Recovery, Home Care Plus, Diabetes Care) booked as a full journey; confirmation instantiates a care plan with milestones.</td></tr>
+        <tr><td><span class="dn">Caregiver Matching</span></td><td>Gender preference as a hard guarantee, plus language, specialty and care-style; a named "match reveal" rather than a generic assignment.</td></tr>
+        <tr><td><span class="dn">Same-Caregiver Continuity</span></td><td>The same person returns across a care plan, with an easy, guilt-free way to request someone else.</td></tr>
+        <tr><td><span class="dn">Visit-Day Live Tracking</span></td><td>Status from confirmed → preparing → on the way (with ETA) → arrived → in progress → completed.</td></tr>
+        <tr><td><span class="dn">Daily Recovery Plan &amp; Guided Exercises</span></td><td>Today's exercises with video demo, Arabic voiceover, and adaptive follow-up based on how the patient felt.</td></tr>
+        <tr><td><span class="dn">Progress Tracking &amp; Outcome Charts</span></td><td>Daily wellness check-in, a visual recovery journey (sessions done vs. remaining), and before/after outcome charts.</td></tr>
+        <tr><td><span class="dn">2-Tap Rebooking</span></td><td>"Same caregiver, same time, next week" from a single tap, for repeat and maintenance patients.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">Women &amp; Family</div>
+    <table class="t">
+      <thead><tr><th style="width:27%">Feature</th><th>Scope description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">Family Care Circle</span></td><td>One account manages care for multiple family members, with clear roles (coordinator vs. viewer).</td></tr>
+        <tr><td><span class="dn">Per-Data-Type Privacy</span></td><td>Family can see visit confirmations and milestones, while a patient's mood check-ins and personal notes stay private.</td></tr>
+        <tr><td><span class="dn">Booking-on-Behalf</span></td><td>A coordinator books, pays for, and manages care for a dependent from their own phone.</td></tr>
+        <tr><td><span class="dn">Gender-Guaranteed Matching</span></td><td>Especially relevant for women's-health services — a validated pattern for this audience.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">3</div></div>
+</div>
+
+<!-- ═══ PAGE 4 — SCOPE 2 — AESTHETICS, MEMBERSHIPS, SUPPORTING ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">03 · Scope — continued</div>
+    <h2 class="sec sm">Aesthetics, memberships &amp; support</h2>
+
+    <div class="subhead" style="margin-top:2px;">Home Aesthetics &amp; Wellness Programs</div>
+    <table class="t">
+      <thead><tr><th style="width:27%">Feature</th><th>Scope description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">Shared Booking &amp; Program Engine</span></td><td>The full home aesthetics catalogue — IV vitamin drips, HydraCool therapy, Venus Legacy body contouring and beauty-at-home treatments — runs on the same booking and program engine, with no separate app experience.</td></tr>
+        <tr><td><span class="dn">Named Aesthetic Services</span></td><td>Each service carries its own description, duration, prep notes and per-service pricing in the in-app catalogue, single-session or as a package.</td></tr>
+        <tr><td><span class="dn">Multi-Session Wellness Courses</span></td><td>Tracked the same way as recovery programs — sessions, milestones and renewal nudges.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">Memberships &amp; Packages</div>
+    <table class="t">
+      <thead><tr><th style="width:27%">Feature</th><th>Scope description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">Package Purchase &amp; Session Credits</span></td><td>Buy packages in-app and track remaining session credits per patient.</td></tr>
+        <tr><td><span class="dn">Recurring Membership Tiers</span></td><td>Essential / Advanced / Elite recurring membership program with renewal and billing, built as requested.</td></tr>
+      </tbody>
+    </table>
+    <div class="subhead">Supporting Features — Across All Categories</div>
+    <ul class="ticks">
+      <li><b>Care Thread</b> — one persistent chat with the care team; the WhatsApp channel handles first-line questions with clear human escalation.</li>
+      <li><b>One-Tap Voice Support</b> — One-tap voice/call support for anything easier said than typed.</li>
+      <li><b>Care-Only Notifications</b> — reminders, exercise nudges and follow-ups, kept separate from marketing and scheduled around prayer times.</li>
+      <li><b>Payments</b> — Mada and Apple Pay baseline, Tabby/Tamara for higher-value bookings, insurance capture with major local insurers.</li>
+    </ul>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">4</div></div>
+</div>
+
+<!-- ═══ PAGE 5 — THE DIFFERENTIATOR: RECOVERY COMPANION ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">04 · The Differentiator</div>
+    <h2 class="sec sm">A recovery companion, not a booking marketplace</h2>
+    <p class="lead">Every home-healthcare app in the region — including the market leader Sehhaty and the closest competitor Sanar — is built as a transactional booking marketplace: pick a service, pick a slot, pay. None builds a relationship with the patient <b>during</b> recovery. That gap is Vitality's moat, and premium home care is what makes it possible.</p>
+    <table class="t">
+      <thead><tr><th style="width:28%">Pillar</th><th>What it means, delivered in the home</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">Named, consistent caregiver</span></td><td>A real person — matched on gender (hard guarantee), language and care-style — revealed by name, who returns across the whole care plan. A clinic cannot promise the same face at your door each visit; home care can.</td></tr>
+        <tr><td><span class="dn">A visible recovery journey</span></td><td>Sessions done vs. remaining, rehab goals in real-life terms ("walking without support"), and before/after outcome charts — motivation the patient sees, and the reason packages renew.</td></tr>
+        <tr><td><span class="dn">Care that reaches into the home</span></td><td>A daily recovery plan with guided exercises, Arabic voiceover and a "how did that feel" check-in — extending care into the days between visits that a clinic never sees.</td></tr>
+        <tr><td><span class="dn">Family that stays involved</span></td><td>A Family Care Circle lets a son or daughter book, pay and follow milestones for a parent from their own phone — while the patient's private notes stay private.</td></tr>
+        <tr><td><span class="dn">Culturally native by default</span></td><td>Arabic-first, gender-guaranteed matching, and care-only notifications scheduled around prayer times.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout accent"><div class="cl">Why this positioning wins</div><p>Vitality becomes the first in the region to pair booking convenience with a genuine <b>recovery-companion</b> experience — a named caregiver, a visible journey, and a family kept in the loop. A real, currently-unoccupied market position, not a nicer interface on the same transactional idea.</p></div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">5</div></div>
+</div>
+
+<!-- ═══ PAGE 6 — PLATFORM 1 — INTEGRATIONS ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">05 · Platform</div>
+    <h2 class="sec sm">How the app connects</h2>
+
+    <div class="subhead" style="margin-top:2px;">Integrations</div>
+    <div class="hub-wrap">
+      <div class="hub-col">
+        <div class="hub">
+          <svg class="hub-svg" viewBox="0 0 440 440">
+            <g stroke="rgba(197,160,89,0.4)" stroke-width="1.4" stroke-dasharray="3 4" fill="none">
+              <line x1="220" y1="220" x2="220" y2="55"/>
+              <line x1="220" y1="220" x2="366.96" y2="136.4"/>
+              <line x1="220" y1="220" x2="366.96" y2="303.6"/>
+              <line x1="220" y1="220" x2="220" y2="385"/>
+              <line x1="220" y1="220" x2="73.04" y2="303.6"/>
+              <line x1="220" y1="220" x2="73.04" y2="136.4"/>
+            </g>
+          </svg>
+          <div class="hub-center"><b>Vitality App</b><span>App Core</span></div>
+          <div class="hub-node" style="left:50%;top:12.5%;"><div class="dot">HIS</div><div class="lbl">Nixpend HIS</div></div>
+          <div class="hub-node" style="left:83.4%;top:31%;"><div class="dot">PAY</div><div class="lbl">Payments</div></div>
+          <div class="hub-node" style="left:83.4%;top:69%;"><div class="dot">WA</div><div class="lbl">WhatsApp</div></div>
+          <div class="hub-node" style="left:50%;top:87.5%;"><div class="dot">CALL</div><div class="lbl">Voice / Call</div></div>
+          <div class="hub-node" style="left:16.6%;top:69%;"><div class="dot">SMS</div><div class="lbl">SMS &amp; Push</div></div>
+          <div class="hub-node" style="left:16.6%;top:31%;"><div class="dot">GA4</div><div class="lbl">GA4 &amp; Maps</div></div>
+        </div>
+      </div>
+      <ul class="hub-legend">
+        <li><b>Nixpend HIS</b> — native, reads availability, writes bookings; no redirect</li>
+        <li><b>Payments</b> — Mada/Apple Pay, Tabby/Tamara &gt;<img src="riyal.png" class="riyal" alt="SAR"> 1,000, insurance verify</li>
+        <li><b>WhatsApp</b> — in-app chat with the care team</li>
+        <li><b>Voice / Call</b> — one-tap call support</li>
+        <li><b>SMS/Push</b> — care-only, no marketing</li>
+        <li><b>GA4 &amp; Maps</b> — analytics + caregiver ETA/coverage</li>
+      </ul>
+    </div>
+
+    <div class="callout warn"><div class="cl">Dependency &amp; risk — confirm before build</div><p>Every screen that touches Nixpend — real-time availability, booking-write and <b>in-app payment</b> — is built against Nixpend's API, never a redirect out to its own interface. Confirm up front that Nixpend exposes an <b>availability API</b>, a <b>booking-write API</b>, and a <b>payment API / gateway-token flow</b>. <b>Should Nixpend not expose a payment API, Code-Ox will deliver a baseline in-app gateway integration</b> so the launch holds on schedule — the payment contract is the one hard dependency to confirm before build.</p></div>
+
+    <div class="subhead">Technology stack</div>
+    <div class="grid3">
+      <div class="box"><div class="bt"><span style="color:var(--accent);">Mobile App</span></div><div class="bd"><b>Flutter</b> — single codebase, native iOS &amp; Android.</div></div>
+      <div class="box"><div class="bt"><span style="color:var(--accent);">Backend &amp; API</span></div><div class="bd"><b>NestJS</b> — Node.js API and Nixpend integration layer.</div></div>
+      <div class="box"><div class="bt"><span style="color:var(--accent);">Admin Dashboard</span></div><div class="bd"><b>Next.js</b> — React web console for ops &amp; reporting.</div></div>
+    </div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">6</div></div>
+</div>
+
+<!-- ═══ PAGE — PLATFORM 2 — ADMIN, UX, METRICS ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">05 · Platform — continued</div>
+    <h2 class="sec sm">Operations, admin &amp; measurement</h2>
+
+    <div class="subhead" style="margin-top:2px;">Admin &amp; Operations Console</div>
+    <table class="t">
+      <thead><tr><th style="width:30%">Function</th><th>Scope description</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dn">Appointment Management</span></td><td>Booking, rescheduling and cancellation across one-off services and multi-session programs, from one queue.</td></tr>
+        <tr><td><span class="dn">Caregiver Availability &amp; Zone Assignment</span></td><td>Caregiver rosters, home-service district assignment and visit-day routing across covered areas.</td></tr>
+        <tr><td><span class="dn">Service-Area Management</span></td><td>The covered Riyadh districts maintained centrally, driving the in-app coverage check at booking.</td></tr>
+        <tr><td><span class="dn">Cancellation / Refund Policy Engine</span></td><td>Clear policy shown at the point of action; payment and refund handling reconciled against Nixpend settlement.</td></tr>
+        <tr><td><span class="dn">Reporting Dashboard</span></td><td>Bookings, revenue, conversion, cancellation, repeat bookings, service utilisation and satisfaction — the client's own KPIs.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">UX Patterns We're Adopting</div>
+    <ul class="plain">
+      <li><b>Map-pin-first home booking</b> — pin location as step one; saved addresses are the shortcut for repeat patients, not the default.</li>
+      <li><b>Insurance eligibility with an honest cash fallback</b> — check the moment a payer is selected; never dead-end a patient without coverage.</li>
+      <li><b>One profile, two care modes</b> — a single caregiver/clinician profile serves both in-person home visits and virtual consultations from one booking flow.</li>
+      <li><b>Digital patient card</b> — a persistent record identifier without a full patient portal.</li>
+    </ul>
+
+    <div class="subhead">Success Metrics</div>
+    <div class="grid2">
+      <div class="box"><div class="bt" style="color:var(--accent);">Acquisition &amp; booking</div><div class="bd"><ul class="plain"><li>App downloads &amp; registrations</li><li>Digital booking rate</li><li>Booking conversion</li><li>Membership / package conversion</li></ul></div></div>
+      <div class="box"><div class="bt" style="color:var(--ok);">Retention &amp; value</div><div class="bd"><ul class="plain"><li>Repeat booking &amp; cancellation rate</li><li>Revenue per patient</li><li>Patient satisfaction</li><li>Care-plan completion rate</li></ul></div></div>
+    </div>
+    <div class="callout accent"><p><b>Recommended lead metric:</b> care-plan completion rate — the strongest signal that the recovery-journey features are working, not just the booking flow.</p></div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">7</div></div>
+</div>
+
+<!-- ═══ PAGE 6 — INVESTMENT ═══ -->
+<div class="page inner tight">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">06 · Investment</div>
+    <h2 class="sec">Your investment</h2>
+    <div class="price-hero">
+      <div class="ph-l">
+        <div class="ph-lab">Complete app design &amp; development</div>
+        <div class="ph-desc">iOS + Android apps, admin dashboard, native Nixpend integration, in-app payments, membership tiers, WhatsApp & voice wiring, QA &amp; go-live — designed, built, tested and launched.</div>
+      </div>
+      <div class="ph-r">
+        <div class="ph-amt"><img src="riyal.png" class="riyal w" alt="SAR"> 52,500</div>
+        <div class="ph-sub">one-time project fee · exclusive of VAT</div>
+      </div>
+    </div>
+
+    <div class="subhead" style="margin-top:6px;">Payment schedule</div>
+    <table class="m">
+      <thead><tr><th>Milestone</th><th class="num">%</th><th class="num">Amount (SAR)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">Advance — on sign-off &amp; kickoff</span></td><td class="num">50%</td><td class="num"><img src="riyal.png" class="riyal" alt="SAR"> 26,250</td></tr>
+        <tr><td><span class="tn">Final — on UAT completion &amp; go-live</span></td><td class="num">50%</td><td class="num"><img src="riyal.png" class="riyal" alt="SAR"> 26,250</td></tr>
+        <tr class="total"><td>Total</td><td class="num">100%</td><td class="num"><img src="riyal.png" class="riyal w" alt="SAR"> 52,500</td></tr>
+      </tbody>
+    </table>
+    <div class="cellnote">Exclusive of VAT. VAT (15%) will be added to each invoice as per KSA regulations.</div>
+
+    <div class="callout ink">
+      <div class="cl">Third-party costs — client responsibility</div>
+      <p>Nixpend HIS/API, app-store fees and SMS/notification gateways are <b>not included</b> and are borne directly by Vitality. <b>Server hosting and ongoing maintenance are provided by Code-Ox.</b></p>
+    </div>
+
+    <div class="subhead">Support &amp; Maintenance</div>
+    <table class="m">
+      <thead><tr><th>Item</th><th class="num">Fee</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">Complimentary Support</span><span class="ts">Bug-fix support from go-live, at no charge</span></td><td class="num">3 months included</td></tr>
+        <tr><td><span class="tn">Annual Maintenance Contract</span><span class="ts">15% of the project fee (SAR 7,875) · billed annually · excl. VAT · from end of complimentary period, renewable</span></td><td class="num">15% / year</td></tr>
+        <tr><td><span class="tn">Server Hosting &amp; Provisioning</span><span class="ts">Cloud server provisioned, hosted and maintained by Code-Ox on the client's behalf</span></td><td class="num">Included for first year</td></tr>
+      </tbody>
+    </table>
+    <div class="cellnote">New features, additional integrations or major changes are scoped and quoted separately.</div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">8</div></div>
+</div>
+
+<!-- ═══ PAGE 7 — TIMELINE + OPEN DECISIONS ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">07 · Timeline</div>
+    <h2 class="sec sm">Indicative schedule — 9 weeks</h2>
+    <div class="callout accent"><p>The schedule below is <b>indicative</b>. Actual timing depends on Nixpend API readiness, feedback turnaround and scope confirmation at kickoff. Stages may overlap.</p></div>
+    <table class="m">
+      <thead><tr><th>Phase</th><th class="num">Duration</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tn">1 · Discovery &amp; Scope Sign-Off</span><span class="ts">Confirm scope against existing strategy, Nixpend API contract, district list, environment setup</span></td><td class="num">Weeks 1–2</td></tr>
+        <tr><td><span class="tn">2 · Core Build</span><span class="ts">Booking &amp; program engine, Nixpend integration, in-app payments, membership tiers</span></td><td class="num">Weeks 2–6</td></tr>
+        <tr><td><span class="tn">3 · App UI — iOS &amp; Android</span><span class="ts">Full app build both platforms, admin dashboard, WhatsApp & voice wiring</span></td><td class="num">Weeks 5–8</td></tr>
+        <tr><td><span class="tn">4 · QA &amp; Go-Live</span><span class="ts">Testing, UAT support, store submission, production deployment and handover</span></td><td class="num">Weeks 8–9</td></tr>
+        <tr class="total"><td>Indicative total</td><td class="num">9 weeks</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">08 · Open Decisions &amp; Assumptions</div>
+    <ul class="ticks">
+      <li><b>Nixpend payment API contract</b> — the methods, refund process and settlement reporting Nixpend supports for in-app payment must be confirmed. <b>This blocks finalising the payment flow</b> and is a hard dependency for the build.</li>
+      <li><b>Nixpend API access</b> — client provides API/webhook access and credentials from kickoff (availability read, booking write, payment). If any is not exposed as an API, that is a scope and timeline risk to re-assess.</li>      <li><b>Service-area districts</b> — the covered Riyadh districts must be reconciled from earlier planning into one official list.</li>    </ul>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">9</div></div>
+</div>
+
+<!-- ═══ PAGE 8 — TERMS ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">09 · Terms</div>
+    <h2 class="sec sm">Terms &amp; conditions</h2>
+    <ol class="tc">
+      <li><b>Scope.</b> Work is limited to the scope set out in this proposal. Features outside this scope — including future phases — are quoted and agreed separately.</li>
+      <li><b>Fees &amp; payment.</b> The project fee is <img src="riyal.png" class="riyal" alt="SAR"> 52,500 exclusive of VAT, payable per the milestone schedule set out above.</li>
+      <li><b>Responsibilities.</b> Vitality provides Nixpend API access and credentials, and timely feedback and testing access within agreed deadlines. Code-Ox commits to regular progress updates, early flagging of dependencies, and delivery to the agreed scope. Timelines assume reasonable, timely input from both parties; delays on either side are handled by mutual agreement.</li>
+      <li><b>Third-party costs.</b> Nixpend HIS/API, app-store, SMS/notification and payment-gateway charges are not included and are Vitality's responsibility, billed directly by those providers. Server hosting and ongoing maintenance are provided by Code-Ox.</li>
+      <li><b>Intellectual property.</b> On receipt of full payment, all custom code and deliverables become Vitality / Burjeel Holdings' property. Third-party libraries remain under their own licences.</li>
+      <li><b>Data protection.</b> Personal and health data handling follows Saudi PDPL. Vitality is the data controller; Code-Ox acts as processor for the build and agreed support scope.</li>
+      <li><b>Support &amp; maintenance.</b> 3 months of complimentary support from go-live; an annual maintenance contract thereafter at <b>15% of the project fee (SAR 7,875) per year</b>, billed separately and renewable by agreement.</li>
+      <li><b>Confidentiality, law &amp; validity.</b> Both parties keep this proposal confidential. Governed by the laws of the Kingdom of Saudi Arabia. Valid for 30 days from the date of issue.</li>
+    </ol>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">10</div></div>
+</div>
+
+<!-- ═══ PAGE 9 — NEXT STEPS + ACCEPTANCE ═══ -->
+<div class="page inner">
+  <div class="ihead"><div class="hl"><img src="code-ox-logo.svg" alt="Code-ox"><div class="div"></div><div class="hc">Vitality Mobile App — Design &amp; Build Proposal</div></div><div class="hr">CX-VIT-2026-02 · 27 September 2026</div></div>
+  <div class="icontent">
+    <div class="kicker">10 · Next Steps</div>
+    <h2 class="sec">Getting started</h2>
+    <p class="lead">Four steps to move from proposal to a live app.</p>
+    <ol class="steps">
+      <li><b>Walk through this proposal</b> against the original BRD and confirm the feature scope.</li>
+      <li><b>Resolve the open decisions</b> — above all, the Nixpend payment API contract, since it blocks payment-flow design.</li>
+      <li><b>Confirm the terms</b> and the payment schedule, and finalise the investment figures.</li>
+      <li><b>Kick off</b> — on the signed proposal and advance payment, we begin discovery sign-off and environment setup.</li>
+    </ol>
+
+    <div class="sign">
+      <div class="sign-h">Acceptance &amp; authorization · Return signed to shabeeb.k@code-ox.com</div>
+      <div class="sign-b">
+        <div class="sign-col"><h4>For &amp; On Behalf of Code-Ox Technologies</h4><div class="sign-f"><div class="fl">Signatory</div><div class="fline"></div></div><div class="sign-f"><div class="fl">Name &amp; Title</div><div class="fline"></div></div><div class="sign-f"><div class="fl">Date</div><div class="fline"></div></div></div>
+        <div class="sign-col"><h4>For &amp; On Behalf of Vitality Home Care</h4><div class="sign-f"><div class="fl">Signatory</div><div class="fline"></div></div><div class="sign-f"><div class="fl">Name &amp; Title</div><div class="fline"></div></div><div class="sign-f"><div class="fl">Date</div><div class="fline"></div></div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; background:var(--navy); border-radius:12px; padding:20px 24px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:0.16em; text-transform:uppercase; margin-bottom:8px;">Questions? Get in touch</div>
+        <div style="font-size:15px; font-weight:700; color:#fff; margin-bottom:6px;">Shabeeb K — Head of Operations, Code-Ox Technologies</div>
+        <div style="font-size:11px;"><span style="color:var(--gold-2);">shabeeb.k@code-ox.com</span><span style="color:rgba(255,255,255,0.45);"> &nbsp;·&nbsp; +966 53 571 6437 &nbsp;·&nbsp; code-ox.com</span></div>
+      </div>
+      <img src="code-ox-logo.svg" alt="CODE OX" style="height:22px; filter:brightness(0) invert(1); opacity:0.6; margin-left:20px;">
+    </div>
+  </div>
+  <div class="ifoot"><img src="code-ox-logo.svg" alt="Code-ox"><div class="sep"></div><div class="t">Mobile app development · Prepared for Vitality Home Care</div><div class="p">11</div></div>
+</div>
+
+</body>
+</html>
