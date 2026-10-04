@@ -1,0 +1,381 @@
+<title>Al Athaib Business Requirements</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Figtree:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: single readable column, section cards only where grouping helps; green ledger accent for a Saudi F&B distributor */
+:root{
+  --bg:#F5F8F5;
+  --surface:#FFFFFF;
+  --ink:#1A251E;
+  --muted:#5D6D63;
+  --line:#DFE7DF;
+  --accent:#17714A;
+  --accent-ink:#0E5436;
+  --accent-soft:#E3F1E8;
+  --warn:#9A6A10;
+  --warn-soft:#F7ECD6;
+  --loss:#B23A2C;
+  --loss-soft:#F9E5E1;
+  --chip:#EEF3EE;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1512; --surface:#161E19; --ink:#E7EFE9; --muted:#9CAEA2; --line:#28342C;
+    --accent:#52C08C; --accent-ink:#7FD8AC; --accent-soft:#1C2E24;
+    --warn:#E3AC45; --warn-soft:#30291A; --loss:#E57A6B; --loss-soft:#33201D; --chip:#1E2822;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1512; --surface:#161E19; --ink:#E7EFE9; --muted:#9CAEA2; --line:#28342C;
+  --accent:#52C08C; --accent-ink:#7FD8AC; --accent-soft:#1C2E24;
+  --warn:#E3AC45; --warn-soft:#30291A; --loss:#E57A6B; --loss-soft:#33201D; --chip:#1E2822;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.6; margin:0;
+}
+.wrap{max-width:880px; margin:0 auto; padding-block:40px 72px; padding-inline:20px}
+h1,h2,h3{font-family:"Sora","Figtree",system-ui,sans-serif; line-height:1.2; text-wrap:balance; margin:0}
+h1{font-size:clamp(1.7rem,4.5vw,2.4rem); font-weight:700; letter-spacing:-0.02em}
+h2{font-size:1.3rem; font-weight:600; margin-top:0}
+h3{font-size:1.02rem; font-weight:600}
+p{margin:0}
+.eyebrow{font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--accent)}
+.lede{color:var(--muted); max-width:62ch}
+
+/* Header */
+header.doc{display:flex; flex-direction:column; gap:14px; padding-bottom:26px; border-bottom:2px solid var(--accent); margin-bottom:34px}
+.meta{display:flex; flex-wrap:wrap; gap:8px 10px; margin-top:4px}
+.meta span{background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:4px 12px; font-size:.8rem; color:var(--muted)}
+.meta b{color:var(--ink); font-weight:600}
+
+/* Sections */
+section{margin-top:44px; display:flex; flex-direction:column; gap:16px}
+.sec-head{display:flex; align-items:baseline; gap:12px}
+.sec-no{font-family:"Sora",sans-serif; font-weight:700; color:var(--accent); font-size:.95rem; font-variant-numeric:tabular-nums}
+
+/* Stat tiles */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px}
+.tile{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px 16px; display:flex; flex-direction:column; gap:2px}
+.tile .big{font-family:"Sora",sans-serif; font-weight:700; font-size:1.25rem; color:var(--accent-ink)}
+.tile .lbl{font-size:.8rem; color:var(--muted)}
+
+/* Two-column keep/add */
+.cols{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+@media (max-width:640px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px 20px; display:flex; flex-direction:column; gap:10px; min-width:0}
+.panel h3{display:flex; align-items:center; gap:8px}
+.dot{width:9px; height:9px; border-radius:50%; background:var(--accent); flex:none}
+.dot.add{background:var(--warn)}
+.plist{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px; font-size:.93rem}
+.plist li{display:flex; gap:9px; align-items:baseline}
+.plist li::before{content:""; width:5px; height:5px; border-radius:50%; background:var(--muted); flex:none; transform:translateY(-3px)}
+.tag{font-size:.68rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; border-radius:5px; padding:2px 7px; white-space:nowrap}
+.tag.custom{background:var(--warn-soft); color:var(--warn)}
+.tag.new{background:var(--accent-soft); color:var(--accent-ink)}
+
+/* Need blocks */
+.need{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px 22px; display:flex; flex-direction:column; gap:10px; min-width:0}
+.need p{color:var(--muted); font-size:.95rem; max-width:68ch}
+.need ul{margin:4px 0 0; padding-left:20px; display:flex; flex-direction:column; gap:6px; font-size:.95rem}
+.need ul li::marker{color:var(--accent)}
+
+/* Van day steps */
+.steps{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; counter-reset:step}
+.step{counter-increment:step; flex:1 1 140px; min-width:132px; background:var(--accent-soft); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:.86rem; line-height:1.45}
+.step::before{content:counter(step); display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:var(--accent); color:#fff; font-family:"Sora",sans-serif; font-weight:600; font-size:.72rem; margin-right:7px; transform:translateY(-1px)}
+.step b{display:inline}
+
+/* Price ladder */
+.ladder{display:flex; flex-direction:column; gap:6px; margin-top:6px}
+.rung{display:flex; align-items:center; gap:12px; border-radius:10px; padding:11px 14px; font-size:.92rem; border:1px solid var(--line)}
+.rung .zone{font-family:"Sora",sans-serif; font-weight:600; min-width:9.5em}
+.rung .why{color:var(--muted)}
+.rung.good{background:var(--accent-soft)} .rung.good .zone{color:var(--accent-ink)}
+.rung.warn{background:var(--warn-soft)} .rung.warn .zone{color:var(--warn)}
+.rung.loss{background:var(--loss-soft)} .rung.loss .zone{color:var(--loss)}
+@media (max-width:560px){.rung{flex-direction:column; align-items:flex-start; gap:2px}}
+
+/* POS mock */
+.pos{border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-top:6px; max-width:420px}
+.pos .bar{background:var(--accent); color:#fff; font-family:"Sora",sans-serif; font-size:.8rem; font-weight:600; padding:7px 14px; letter-spacing:.04em}
+.pos .row{display:flex; justify-content:space-between; gap:12px; padding:10px 14px; border-top:1px solid var(--line); background:var(--surface); font-size:.92rem}
+.pos .row .v{font-variant-numeric:tabular-nums; font-weight:600}
+.pos .row.hl{background:var(--accent-soft)}
+.pos .row.hl .v{color:var(--accent-ink)}
+.cap{font-size:.8rem; color:var(--muted); margin-top:6px}
+
+/* Commission flow */
+.flow{display:flex; flex-wrap:wrap; align-items:stretch; gap:8px; margin-top:6px}
+.fbox{flex:1 1 160px; min-width:150px; background:var(--chip); border:1px solid var(--line); border-radius:10px; padding:11px 13px; font-size:.88rem; line-height:1.45}
+.fbox b{font-family:"Sora",sans-serif; font-size:.84rem}
+.farrow{align-self:center; color:var(--accent); font-weight:700; flex:none}
+@media (max-width:560px){.farrow{transform:rotate(90deg); width:100%; text-align:center}}
+
+/* Table */
+.tscroll{overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:620px; font-size:.9rem}
+th{font-family:"Sora",sans-serif; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); text-align:left; padding:11px 14px; border-bottom:1px solid var(--line)}
+td{padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.id{font-family:"Sora",sans-serif; font-weight:600; color:var(--accent-ink); white-space:nowrap; font-variant-numeric:tabular-nums}
+tr.grp td{background:var(--chip); font-family:"Sora",sans-serif; font-weight:600; font-size:.82rem; letter-spacing:.04em}
+.pr{font-size:.72rem; font-weight:600; border-radius:5px; padding:2px 8px; white-space:nowrap}
+.pr.high{background:var(--accent-soft); color:var(--accent-ink)}
+.pr.med{background:var(--chip); color:var(--muted); border:1px solid var(--line)}
+
+/* Confirm list */
+.confirm{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px}
+.confirm li{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--warn); border-radius:10px; padding:11px 15px; font-size:.93rem}
+
+footer{margin-top:52px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:.82rem; display:flex; flex-wrap:wrap; gap:6px 18px}
+</style>
+
+<div class="wrap">
+
+<header class="doc">
+  <div class="eyebrow">Business Requirements · Version 2.0</div>
+  <h1>Al Athaib Business Requirements</h1>
+  <p class="lede">Everything Al Athaib asked for from the new Odoo system, gathered from our meetings on 29 September and 4 October 2026 and written in plain language. This is the shared checklist we will build and deliver against.</p>
+  <div class="meta">
+    <span>Client <b>Al Athaib</b></span>
+    <span>Prepared by <b>Code-Ox Technologies</b></span>
+    <span>Platform <b>Odoo 19.3 Enterprise</b></span>
+    <span>Date <b>4 October 2026</b></span>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head"><span class="sec-no">01</span><h2>Your business at a glance</h2></div>
+  <div class="tiles">
+    <div class="tile"><span class="big">~30</span><span class="lbl">Products, sold by the carton</span></div>
+    <div class="tile"><span class="big">1 van</span><span class="lbl">2 van salesmen, more vans expected</span></div>
+    <div class="tile"><span class="big">F&amp;B</span><span class="lbl">Food &amp; beverage — expiry dates matter</span></div>
+    <div class="tile"><span class="big">Imports</span><span class="lbl">Mixed containers, different import tax per item</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">02</span><h2>What stays and what is added</h2></div>
+  <div class="cols">
+    <div class="panel">
+      <h3><span class="dot"></span>In use today — at a basic level</h3>
+      <p class="cap" style="margin-top:-4px">You currently use Odoo Online with only basic use of these modules. In the new system, their full features will be available, set up for how you work.</p>
+      <ul class="plist">
+        <li>Accounting</li>
+        <li>Purchase</li>
+        <li>Inventory</li>
+        <li>Employees</li>
+        <li>Expenses</li>
+        <li>WhatsApp</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3><span class="dot add"></span>Being added for you</h3>
+      <ul class="plist">
+        <li>Sales &amp; CRM, and Contacts</li>
+        <li>Point of Sale — for van and cash sales</li>
+        <li>Warehouse management</li>
+        <li>E-invoicing (ZATCA Phase 1)</li>
+        <li>Salesman commission program</li>
+        <li>True import cost per item</li>
+        <li>Payroll and asset register</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">03</span><h2>Selling in cartons — returns in pieces</h2></div>
+  <div class="need">
+    <p>You sell by the carton, but customers sometimes return single pieces. The system keeps count in pieces behind the scenes, so every carton sold and every piece returned leaves the stock exactly right.</p>
+    <ul>
+      <li>Each product knows how many pieces its carton holds.</li>
+      <li>Returns are accepted as full cartons or single pieces.</li>
+      <li>Stock is always correct, down to the piece.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">04</span><h2>Van sales, from loading to day close</h2></div>
+  <div class="need">
+    <p>Your two salesmen sell from the van. Each van carries its own stock in the system, every movement between the warehouse and the van is recorded, and the day ends with a clear closing — what was loaded, sold, returned, and how much cash came in.</p>
+    <div class="steps">
+      <div class="step"><b>Load the van</b> — stock moves from warehouse to van, recorded by name and time</div>
+      <div class="step"><b>Sell on the route</b> — by carton or piece, cash or on account</div>
+      <div class="step"><b>Take returns</b> — even single pieces from a carton</div>
+      <div class="step"><b>Close the day</b> — sold, returned, remaining and cash, all on one report</div>
+      <div class="step"><b>Settle</b> — leftover stock goes back, cash is matched to sales</div>
+    </div>
+    <ul>
+      <li>Each salesman sees only his own van stock and customers.</li>
+      <li>Management sees all vans together on one screen.</li>
+      <li>Ready for more vans as you grow — the setup repeats, nothing changes.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">05</span><h2>Cash sales and the sales screen</h2></div>
+  <div class="need">
+    <p>Many of your customers pay cash with no invoice. Each cash sale still reduces stock immediately and is recorded, so the day's cash always matches the day's sales. On the sales screen, the salesman sees the day's total sales value at all times — right next to the stock count.</p>
+    <div class="pos">
+      <div class="bar">SALES SCREEN — VAN 1</div>
+      <div class="row"><span>Stock on van</span><span class="v">124 cartons</span></div>
+      <div class="row hl"><span>Sales today</span><span class="v">SAR 8,450</span></div>
+      <div class="row"><span>Cash collected</span><span class="v">SAR 7,900</span></div>
+    </div>
+    <p class="cap">Example figures, to show how the screen will look.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">06</span><h2>Knowing your true cost — mixed containers</h2></div>
+  <div class="need">
+    <p>Your containers arrive with mixed items, and each item carries a different import tax. The system will spread each item's own import tax into that item's cost, so the cost you see is the real cost — and every margin and price decision is built on it.</p>
+    <ul>
+      <li>Vendor prices can change between purchases — cost stays up to date automatically.</li>
+      <li>The monthly warehouse cost is also added into product cost, and can be raised each month as your rent rises.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">07</span><h2>Protecting your profit on every sale</h2></div>
+  <div class="need">
+    <p>No one should sell at a loss by accident. Every product has a minimum selling price, and the system reacts to the price the salesman enters:</p>
+    <div class="ladder">
+      <div class="rung good"><span class="zone">Above minimum</span><span class="why">Sale goes through normally — healthy margin.</span></div>
+      <div class="rung warn"><span class="zone">Below minimum</span><span class="why">Sale stops and needs a manager's approval.</span></div>
+      <div class="rung loss"><span class="zone">Below cost</span><span class="why">Clear loss warning — you are selling for less than it cost you.</span></div>
+    </div>
+    <ul>
+      <li>Margin is visible on every sale and in reports.</li>
+      <li>For stock close to its expiry date, the system suggests a reduced price based on the margin still available — so near-expiry stock moves without giving it away.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">08</span><h2>Discounts and offers</h2></div>
+  <div class="need">
+    <ul>
+      <li>Salesmen can give discounts, within a limit set per person — anything above the limit needs approval.</li>
+      <li>Offers apply automatically — for example, a better price when the customer buys more cartons.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">09</span><h2>Salesman commissions</h2></div>
+  <div class="need">
+    <p>Commission is calculated on money actually collected — not just on what was sold — and the rate depends on the product category.</p>
+    <div class="flow">
+      <div class="fbox"><b>Sale is made</b><br>Items sold from the van, by category</div>
+      <div class="farrow">→</div>
+      <div class="fbox"><b>Money is collected</b><br>Commission counts only collected amounts</div>
+      <div class="farrow">→</div>
+      <div class="fbox"><b>Commission is calculated</b><br>Each category has its own rate — breakfast items, rice items, and so on</div>
+    </div>
+    <ul>
+      <li>Products are grouped into categories, and each category carries its own commission rate.</li>
+      <li>Each salesman's commission is reported clearly, ready for payroll.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">10</span><h2>Warehouse and stock tracking</h2></div>
+  <div class="need">
+    <ul>
+      <li>Full warehouse flow: receiving, storing, picking and transfers between locations.</li>
+      <li>Each bag carries its own barcode — scanned when it arrives, moves and is sold.</li>
+      <li>Expiry dates are recorded on stock, feeding the near-expiry price suggestions.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">11</span><h2>E-invoicing, assets and people</h2></div>
+  <div class="need">
+    <ul>
+      <li><b>ZATCA e-invoicing:</b> Phase 1 is included now. Phase 2 is not required at this stage and can be added later when you need it.</li>
+      <li><b>Assets:</b> a register of your vans, computers and tablets, each with its owner, purchase cost and value over time.</li>
+      <li><b>Payroll:</b> staff salaries managed in the same system, with commissions feeding in.</li>
+      <li><b>Access by role:</b> salesmen, warehouse staff, accounts and management each see only what they need.</li>
+      <li><b>Training:</b> Code-Ox trains your van salesmen, warehouse staff and accounts team before go-live.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">12</span><h2>The complete list</h2></div>
+  <p class="lede">Every need in one table.</p>
+  <div class="tscroll">
+    <table>
+      <tr><th>Ref</th><th>What you need</th><th>Priority</th></tr>
+      <tr class="grp"><td colspan="3">Products &amp; selling</td></tr>
+      <tr><td class="id">BR-01</td><td>Sell by the carton, with a set number of pieces per carton for each product</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-02</td><td>Accept returns as cartons or single pieces, with stock adjusted exactly</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-03</td><td>Manage the full product list (about 30 products) with cost and selling price</td><td><span class="pr high">High</span></td></tr>
+      <tr class="grp"><td colspan="3">Van sales</td></tr>
+      <tr><td class="id">BR-04</td><td>Each van carries its own stock, separate from the warehouse</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-05</td><td>Two van salesmen sell from the van, by carton or piece, cash or on account</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-06</td><td>Every stock movement between company and van is recorded — who, what, when — including returns of unsold stock</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-07</td><td>Daily van closing report: loaded, sold, returned, remaining, cash collected and any difference</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-08</td><td>Ready for more vans; each salesman sees only his own van, management sees all</td><td><span class="pr med">Medium</span></td></tr>
+      <tr class="grp"><td colspan="3">Cash sales &amp; sales screen</td></tr>
+      <tr><td class="id">BR-09</td><td>Cash sales recorded without an invoice, with stock reduced on every sale</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-10</td><td>Sales screen shows the day's total sales value at all times, beside the stock count</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-11</td><td>A daily record of cash sales, so cash in hand can always be checked</td><td><span class="pr high">High</span></td></tr>
+      <tr class="grp"><td colspan="3">Costs, pricing &amp; profit</td></tr>
+      <tr><td class="id">BR-12</td><td>Vendor prices can change between purchases; product cost stays current</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-13</td><td>Mixed import containers: each item's own import tax is added into that item's cost</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-14</td><td>Minimum selling price per product; selling below it needs approval</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-15</td><td>Clear warning whenever a price is below cost — a sale at a loss</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-16</td><td>Margin visible on each sale and in reports</td><td><span class="pr med">Medium</span></td></tr>
+      <tr><td class="id">BR-17</td><td>Suggested reduced price for near-expiry stock, based on the margin still available</td><td><span class="pr med">Medium</span></td></tr>
+      <tr><td class="id">BR-18</td><td>Monthly warehouse cost included in product cost, and raised each month as it increases</td><td><span class="pr med">Medium</span></td></tr>
+      <tr class="grp"><td colspan="3">Discounts &amp; offers</td></tr>
+      <tr><td class="id">BR-19</td><td>Discounts allowed within a limit per salesman; above the limit needs approval</td><td><span class="pr med">Medium</span></td></tr>
+      <tr><td class="id">BR-20</td><td>Offers applied automatically — for example, better prices on bigger quantities</td><td><span class="pr med">Medium</span></td></tr>
+      <tr class="grp"><td colspan="3">Commissions</td></tr>
+      <tr><td class="id">BR-21</td><td>Salesman commission calculated on money collected, not only on sales made</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-22</td><td>Different commission rates by product category — breakfast items, rice items, and so on</td><td><span class="pr high">High</span></td></tr>
+      <tr class="grp"><td colspan="3">Warehouse &amp; tracking</td></tr>
+      <tr><td class="id">BR-23</td><td>Full warehouse management: receiving, storing, picking and transfers</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-24</td><td>Each bag carries its own barcode and is scanned as it arrives, moves and is sold</td><td><span class="pr med">Medium</span></td></tr>
+      <tr><td class="id">BR-25</td><td>Expiry dates recorded on stock</td><td><span class="pr med">Medium</span></td></tr>
+      <tr class="grp"><td colspan="3">Compliance, assets &amp; people</td></tr>
+      <tr><td class="id">BR-26</td><td>ZATCA e-invoicing Phase 1 now; Phase 2 excluded for this stage</td><td><span class="pr high">High</span></td></tr>
+      <tr><td class="id">BR-27</td><td>Asset register for vans, computers and tablets</td><td><span class="pr med">Medium</span></td></tr>
+      <tr><td class="id">BR-28</td><td>Payroll for staff, with commissions feeding in</td><td><span class="pr med">Medium</span></td></tr>
+      <tr><td class="id">BR-29</td><td>Access by role — everyone sees only what they need</td><td><span class="pr med">Medium</span></td></tr>
+      <tr><td class="id">BR-30</td><td>Training for van salesmen, warehouse staff and accounts before go-live</td><td><span class="pr med">Medium</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">13</span><h2>To confirm together</h2></div>
+  <p class="lede">A few details we will agree with you before building, so the system matches exactly how you work.</p>
+  <ul class="confirm">
+    <li>The product categories for commission, and the rate for each one.</li>
+    <li>When commission is paid out — for example, monthly, on amounts collected in that month.</li>
+    <li>How many days before expiry counts as "near expiry" for the price suggestion.</li>
+    <li>The discount limit for each salesman, and who approves above it.</li>
+    <li>The import tax rate for each item type in your containers.</li>
+  </ul>
+</section>
+
+<footer>
+  <span>Al Athaib — Business Requirements, v2.0</span>
+  <span>Code-Ox Technologies · Riyadh</span>
+  <span>4 October 2026</span>
+</footer>
+
+</div>
