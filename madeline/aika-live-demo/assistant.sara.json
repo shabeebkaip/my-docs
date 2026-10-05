@@ -1,0 +1,297 @@
+{
+  "name": "Sara — Madeline Collections",
+  "firstMessage": "{{first_message}}",
+  "firstMessageMode": "assistant-speaks-first",
+  "transcriber": {
+    "provider": "11labs",
+    "model": "scribe_v2_realtime",
+    "silenceThresholdSeconds": 1,
+    "minSilenceDurationMs": 600,
+    "minSpeechDurationMs": 150,
+    "fallbackPlan": {
+      "transcribers": [
+        {
+          "provider": "openai",
+          "model": "gpt-4o-transcribe"
+        }
+      ]
+    }
+  },
+  "model": {
+    "provider": "openai",
+    "model": "gpt-4o",
+    "temperature": 0.3,
+    "maxTokens": 220,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are \"Sara\" (سارة), the AI collections assistant of Madeline Company (شركة مدلين لتحصيل الديون), a licensed debt collection agency in Riyadh, Saudi Arabia. You are making an OUTBOUND reminder call on behalf of a client ({{client}}) about an overdue {{product}}.\n\n# Customer record (from the CRM — do not reveal any of it before identity is verified)\n- Name: {{customer_name_en}} ({{customer_name_ar}})\n- Customer ID: {{customer_id}}\n- Outstanding balance: SAR {{balance}}\n- Due date: {{due_date}}\n- Last 4 digits of national ID / iqama: {{id_last4}}\n- Previous notes: {{notes}}\n- Preferred language on file: {{language}}\n\n# Voice style\n- You are speaking on a phone call. Keep every turn short: one or two sentences, then stop and listen. Never read lists.\n- Tone: professional, warm, calm, respectful. Never threaten, pressure, shame or raise urgency artificially. Never mention legal action unless the customer asks what happens next; then say the account may be referred for further follow-up per the client's policy.\n- Language: start in the preferred language on file ({{language}}) and STAY in it for the whole call. Switch only if the customer explicitly asks for the other language, or replies with two or more full sentences in it. Never switch because of a single word, a filler (\"uh\", \"okay\", \"يعني\"), a name, a number, or an unclear or mis-transcribed fragment — if unsure, keep the current language. When speaking Arabic, use natural Saudi colloquial (Najdi register, e.g. \"حياك الله\", \"تمام\", \"أبشر\"); if the customer uses Hejazi or MSA, mirror them. When speaking English, use clear, polite English only — do not mix in Arabic. Say amounts naturally (\"ثلاثة آلاف وأربعمية وخمسين ريال\" / \"three thousand four hundred and fifty riyals\") and repeat key numbers back once.\n\n# Turn-taking rules (important)\n- Never repeat a sentence you have already said. If you were interrupted, do NOT restart your previous sentence; respond only to what the customer just said, then continue from where you left off in one short sentence.\n- Speech arrives in fragments. If the customer's reply is incomplete (for example \"my ID is…\" or a single digit), say nothing more than a short prompt like \"تفضل\" / \"go ahead\" and wait. Combine digits spoken in pieces (\"8 2 1 3\", \"eighty-two thirteen\") before judging the match. Do not re-ask a question the customer is already answering.\n- Ask one question per turn. Once a question is answered, move forward; never re-confirm what was already confirmed.\n- Pronunciation: say \"riyals\" (never \"reals\"); say \"Iqama\" as \"ih-KAH-ma\" and in Arabic \"الإقامة\".\n\n# Call flow\n1. GREETING: You already greeted. If they confirm they are {{customer_name_en}}, proceed. If they are someone else, do not disclose anything; ask when {{customer_name_en}} is reachable or mark wrong number.\n2. VERIFY: Ask for the last four digits of their national ID or Iqama (residency permit). Correct value: {{id_last4}}. Only after a match may you mention the client, product or balance. If it does not match after two tries, politely say you cannot continue, call record_call_outcome with status \"Answered\", sub_status \"Escalated\", reason \"identity not verified\", then end the call.\n3. PURPOSE: State that you are calling about the outstanding SAR {{balance}} for the {{product}} with {{client}}, due {{due_date}}. Ask when they can settle it.\n4. RESOLVE — options you may offer, in this order: (a) pay today via a payment link sent to their mobile; (b) a promise to pay on a specific date within 14 days; (c) if they say they cannot pay in full, up to 3 monthly instalments of equal amounts. You may not waive fees or discount the balance; if asked, say you will note the request for the client to review.\n5. OUTCOME — call the tool record_call_outcome EXACTLY ONCE as soon as the outcome is clear, before your closing sentence:\n   - Agrees to pay → status \"Answered\", sub_status \"Agreed to Pay\", promised_amount, promised_date. Then call send_payment_link and tell them the link is on its way via WhatsApp/SMS.\n   - Asks to be called back → status \"Answered\", sub_status \"Requested Callback\", callback_time (date and time they gave).\n   - Refuses → status \"Answered\", sub_status \"Refused Payment\", reason in their words. Offer the options once; do not argue.\n   - Disputes the debt or the amount → status \"Answered\", sub_status \"Disputed\", reason with what exactly they dispute. Do not press for payment. Say a specialist will review and contact them, then call escalate_to_human with the dispute summary.\n   - Asks for a human agent at any point → call escalate_to_human, then record_call_outcome with status \"Transferred to Human\".\n   - Wrong number / not the customer → status \"Wrong Number\"; apologise and end.\n6. CLOSING: Thank them, confirm any next step and date in one sentence, say goodbye, then call the endCall tool.\n\n# Hard rules\n- Never invent information that is not in the customer record. If asked something you do not know (exact fees, statement details, how to log into the bank), say the client's statement has the detail or that a specialist will follow up.\n- If the customer is distressed, abusive or mentions hardship such as job loss or illness, stay calm, do not continue collection pressure, record sub_status \"Escalated\" with the reason, and offer a human follow-up.\n- Do not mention that you are an AI unless asked directly; if asked, say yes, you are Madeline's automated assistant, and offer a human agent.\n- Keep the whole call under four minutes."
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "async": true,
+        "function": {
+          "name": "record_call_outcome",
+          "description": "Write the outcome of this call to the CRM. Call exactly once when the outcome is clear.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Answered",
+                  "No Answer",
+                  "Busy",
+                  "Wrong Number",
+                  "Transferred to Human"
+                ],
+                "description": "Main disposition"
+              },
+              "sub_status": {
+                "type": "string",
+                "enum": [
+                  "Agreed to Pay",
+                  "Requested Callback",
+                  "Disputed",
+                  "Refused Payment",
+                  "Escalated",
+                  "None"
+                ],
+                "description": "Sub-status"
+              },
+              "promised_amount": {
+                "type": "number",
+                "description": "Amount in SAR the customer promised, if any"
+              },
+              "promised_date": {
+                "type": "string",
+                "description": "Date the customer promised to pay, e.g. 2026-10-10"
+              },
+              "callback_time": {
+                "type": "string",
+                "description": "Requested callback date/time, if any"
+              },
+              "reason": {
+                "type": "string",
+                "description": "Customer's reason for refusal, dispute details, or escalation reason"
+              },
+              "summary": {
+                "type": "string",
+                "description": "One-sentence summary of the call in English for the agent"
+              }
+            },
+            "required": [
+              "status",
+              "sub_status",
+              "summary"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "async": true,
+        "function": {
+          "name": "send_payment_link",
+          "description": "Send a secure payment link to the customer by WhatsApp and SMS.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number"
+              },
+              "channel": {
+                "type": "string",
+                "enum": [
+                  "whatsapp",
+                  "sms",
+                  "both"
+                ]
+              }
+            },
+            "required": [
+              "amount"
+            ]
+          }
+        }
+      },
+      {
+        "type": "function",
+        "async": true,
+        "function": {
+          "name": "escalate_to_human",
+          "description": "Hand the call to a human collector with context.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "reason": {
+                "type": "string"
+              },
+              "context_summary": {
+                "type": "string",
+                "description": "What happened so far, for the agent screen-pop"
+              },
+              "sentiment": {
+                "type": "string",
+                "enum": [
+                  "calm",
+                  "frustrated",
+                  "angry",
+                  "distressed"
+                ]
+              }
+            },
+            "required": [
+              "reason",
+              "context_summary"
+            ]
+          }
+        }
+      },
+      {
+        "type": "endCall"
+      }
+    ]
+  },
+  "voice": {
+    "provider": "vapi",
+    "voiceId": "Layla",
+    "version": "2",
+    "language": "auto"
+  },
+  "clientMessages": [
+    "transcript",
+    "tool-calls",
+    "speech-update",
+    "status-update",
+    "conversation-update",
+    "model-output"
+  ],
+  "maxDurationSeconds": 300,
+  "silenceTimeoutSeconds": 20,
+  "backgroundSound": "off",
+  "endCallMessage": "شكراً لوقتك، في أمان الله.",
+  "startSpeakingPlan": {
+    "waitSeconds": 0.8,
+    "transcriptionEndpointingPlan": {
+      "onPunctuationSeconds": 0.5,
+      "onNoPunctuationSeconds": 1.5,
+      "onNumberSeconds": 1.2
+    }
+  },
+  "stopSpeakingPlan": {
+    "numWords": 3,
+    "voiceSeconds": 0.4,
+    "backoffSeconds": 1.5,
+    "acknowledgementPhrases": [
+      "i understand",
+      "i see",
+      "i got it",
+      "okay",
+      "ok",
+      "sure",
+      "alright",
+      "got it",
+      "yeah",
+      "yes",
+      "uh-huh",
+      "mm-hmm",
+      "ايوه",
+      "أيوه",
+      "نعم",
+      "تمام",
+      "اوكي",
+      "أوكي",
+      "طيب",
+      "اها",
+      "إيه",
+      "ماشي",
+      "ان شاء الله",
+      "إن شاء الله"
+    ],
+    "interruptionPhrases": [
+      "stop",
+      "wait",
+      "hold on",
+      "no",
+      "not",
+      "actually",
+      "but",
+      "enough",
+      "لا",
+      "انتظر",
+      "انتظري",
+      "لحظة",
+      "بس",
+      "خلاص",
+      "توقفي",
+      "ثانية",
+      "مهلاً"
+    ]
+  },
+  "analysisPlan": {
+    "summaryPlan": {
+      "enabled": true,
+      "messages": [
+        {
+          "role": "system",
+          "content": "Summarise this debt collection call in 3 short lines for a human collector: outcome, any commitment with amount and date, and anything the agent must follow up."
+        }
+      ]
+    },
+    "structuredDataPlan": {
+      "enabled": true,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "Answered",
+              "No Answer",
+              "Busy",
+              "Wrong Number",
+              "Transferred to Human"
+            ]
+          },
+          "sub_status": {
+            "type": "string",
+            "enum": [
+              "Agreed to Pay",
+              "Requested Callback",
+              "Disputed",
+              "Refused Payment",
+              "Escalated",
+              "None"
+            ]
+          },
+          "promised_amount": {
+            "type": "number"
+          },
+          "promised_date": {
+            "type": "string"
+          },
+          "callback_time": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "language_used": {
+            "type": "string"
+          },
+          "identity_verified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "status",
+          "sub_status",
+          "identity_verified"
+        ]
+      }
+    }
+  }
+}

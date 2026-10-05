@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sara · AIKA Live Demo for Madeline</title>
+<style>
+/* Layout: Vapi-style stage — ambient backdrop, call controls left, live transcript centre, agent & CRM facts right. */
+:root{
+  color-scheme:dark;
+  --bg:#07080D; --bg-2:#0D0F17; --panel:rgba(255,255,255,.05); --panel-2:rgba(255,255,255,.08); --line:rgba(255,255,255,.1);
+  --fg:#F3F4F8; --fg-70:rgba(243,244,248,.72); --fg-50:rgba(243,244,248,.5); --fg-30:rgba(243,244,248,.3);
+  --blue:#3B6CF6; --blue-l:#7DA0FF; --lilac:#B9A6CB; --lilac-l:#D9CDE6;
+  --mint:#3DD68C; --amber:#F2B544; --rose:#F26B6B;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --arabic:-apple-system,"SF Arabic","Segoe UI","Noto Naskh Arabic",Tahoma,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --spring:cubic-bezier(.22,1,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;overflow-x:hidden;font-size:15px;line-height:1.5}
+.ar{font-family:var(--arabic);direction:rtl;unicode-bidi:isolate}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--blue-l);outline-offset:2px}
+canvas#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.vignette{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(1200px 700px at 50% 40%,transparent 40%,rgba(7,8,13,.75) 100%)}
+
+/* top bar */
+.bar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;
+  background:rgba(7,8,13,.5);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border-bottom:1px solid rgba(255,255,255,.06)}
+.brand{display:flex;align-items:center;gap:14px;font-size:12.5px;color:var(--fg-70)}
+.brand img{height:18px;filter:brightness(0) invert(1);opacity:.9}
+.brand .x{opacity:.4}.brand b{color:var(--fg);font-weight:600}
+.bar .right{display:flex;gap:10px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;border-radius:999px;padding:7px 12px;border:1px solid var(--line);background:var(--panel);color:var(--fg-70)}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--fg-30)}
+.pill.ok .dot{background:var(--mint);box-shadow:0 0 0 4px rgba(61,214,140,.18)}
+.pill.warn .dot{background:var(--amber)}
+.pill.live .dot{background:var(--rose);animation:blink 1.1s infinite}
+@keyframes blink{50%{opacity:.3}}
+.iconbtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;font-size:15px;transition:transform .1s ease-out,background .2s}
+.iconbtn:hover{background:var(--panel-2)}.iconbtn:active{transform:scale(.95)}
+
+/* stage */
+.stage{position:relative;z-index:1;min-height:100%;padding:96px 28px 40px;max-width:1440px;margin:0 auto;display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr) minmax(280px,340px);gap:28px;align-items:start}
+h1{font-size:clamp(30px,3.4vw,46px);line-height:1.04;letter-spacing:-.03em;font-weight:700;text-wrap:balance}
+.lead{color:var(--fg-70);font-size:15px;max-width:44ch;margin-top:12px}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue-l);margin-bottom:12px}
+.k{font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--fg-50)}
+
+/* call controls */
+.call{margin-top:26px;display:flex;flex-direction:column;gap:14px}
+.startrow{display:flex;gap:10px;align-items:stretch}
+.sel{flex:1;position:relative;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:center;padding:0 14px;min-width:0}
+.sel select{appearance:none;-webkit-appearance:none;background:transparent;border:0;color:var(--fg);font:inherit;font-size:15px;font-weight:600;width:100%;padding:16px 26px 16px 0;cursor:pointer}
+.sel::after{content:"▾";position:absolute;right:14px;color:var(--fg-50);pointer-events:none}
+.sel select option{background:#12141F;color:#fff}
+.startbtn{border-radius:16px;background:var(--fg);color:#0B0D14;font-weight:650;font-size:15px;padding:0 20px;display:flex;align-items:center;gap:10px;letter-spacing:-.005em;transition:transform .1s ease-out,background .2s,color .2s;white-space:nowrap}
+.startbtn:active{transform:scale(.97)}
+.startbtn.busy{background:var(--rose);color:#fff}
+.startbtn[disabled]{opacity:.5;cursor:default}
+.live{display:flex;align-items:center;gap:12px}
+.mutebtn{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;font-size:18px;transition:transform .1s ease-out,background .2s}
+.mutebtn.on{background:var(--rose);border-color:transparent}
+.mutebtn:active{transform:scale(.95)}
+.meter{flex:1;height:52px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);display:flex;align-items:center;gap:3px;padding:0 20px;overflow:hidden}
+.meter i{flex:1;max-width:4px;height:12%;border-radius:99px;background:linear-gradient(180deg,var(--blue-l),var(--lilac));transition:height .12s ease-out;opacity:.9}
+.meter .t{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums;margin-left:14px;color:var(--fg)}
+.state{font-size:12.5px;color:var(--fg-50);display:flex;align-items:center;gap:8px;min-height:18px}
+.state b{color:var(--fg-70);font-weight:600}
+.mic{font-size:12.5px;color:var(--fg-50);display:flex;gap:8px;align-items:center}
+.mic.ok{color:#9FF0C6}
+
+/* customer card */
+.cust{margin-top:22px;border-radius:18px;border:1px solid var(--line);background:var(--panel);padding:16px 18px}
+.cust .row{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:7px 0;border-top:1px solid rgba(255,255,255,.06)}
+.cust .row:first-of-type{border-top:0}
+.cust .row span{color:var(--fg-50)}
+.cust .row b{font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.cust .hint{margin-top:12px;border-radius:12px;background:rgba(59,108,246,.1);border:1px solid rgba(125,160,255,.25);padding:10px 12px;font-size:12.5px;color:var(--fg-70)}
+.cust .hint .ar{display:block;font-size:14px;color:var(--fg);margin-top:4px}
+.cust .hint em{font-style:normal;color:var(--blue-l);font-weight:700;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px}
+
+/* transcript */
+.transcript{min-height:70vh;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;padding:10px 0 20px;max-width:640px;margin:0 auto;width:100%}
+.bub{max-width:88%;padding:12px 15px;border-radius:18px;font-size:14.5px;line-height:1.45;opacity:0;transform:translateY(10px);transition:opacity .4s var(--spring),transform .4s var(--spring);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.bub.show{opacity:1;transform:none}
+.bub.assistant{align-self:flex-start;background:rgba(236,232,244,.92);color:#15131A;border-bottom-left-radius:6px}
+.bub.user{align-self:flex-end;background:rgba(255,255,255,.1);border:1px solid var(--line);border-bottom-right-radius:6px}
+.bub.sys{align-self:center;background:transparent;border:1px dashed rgba(255,255,255,.2);font-family:var(--mono);font-size:11.5px;color:var(--fg-50);padding:6px 11px;border-radius:10px;max-width:100%}
+.bub .who{display:block;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;opacity:.6}
+.bub.assistant .who{color:#3B4CC0;opacity:1}
+.bub.partial{opacity:.75}
+.bub .txt{unicode-bidi:plaintext}
+.empty{align-self:center;text-align:center;color:var(--fg-50);font-size:14px;max-width:38ch;padding:40px 0}
+.empty .ar{display:block;font-size:22px;color:var(--fg);margin-bottom:8px}
+
+/* right column */
+.facts{display:flex;flex-direction:column;gap:12px;position:sticky;top:96px}
+.fact{border-radius:16px;border:1px solid var(--line);background:rgba(10,12,20,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:14px 16px}
+.fact .v{font-size:17px;font-weight:650;letter-spacing:-.01em;margin-top:4px}
+.fact .v small{font-size:12px;color:var(--fg-50);font-weight:500;margin-left:6px}
+.fact .s{font-size:12px;color:var(--fg-50);margin-top:2px}
+.crm{border-color:rgba(185,166,203,.35);background:rgba(185,166,203,.08)}
+.crm .k{color:var(--lilac-l);display:flex;justify-content:space-between}
+.crm .k em{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--fg-50);letter-spacing:0;text-transform:none}
+.crm .f{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-family:var(--mono);font-size:12px;margin-top:10px}
+.crm .f span{color:var(--fg-50)}
+.crm .f b{font-weight:500;color:var(--fg);transition:color .4s;word-break:break-word}
+.crm .f b.new{color:#9FF0C6}
+.log{margin-top:12px;border-top:1px solid rgba(255,255,255,.08);padding-top:10px;display:flex;flex-direction:column;gap:6px;max-height:160px;overflow:auto}
+.log div{font-family:var(--mono);font-size:11px;color:var(--fg-50)}
+.log div b{color:var(--fg-70);font-weight:500}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{font-size:11px;font-weight:600;border-radius:999px;padding:4px 9px;border:1px solid var(--line);background:var(--panel);color:var(--fg-70)}
+.chip.mint{border-color:rgba(61,214,140,.35);color:#9FF0C6}.chip.rose{border-color:rgba(242,107,107,.35);color:#FFB0B0}.chip.lilac{border-color:rgba(185,166,203,.4);color:var(--lilac-l)}
+.handoff{display:none;border-color:rgba(242,181,68,.4);background:rgba(242,181,68,.08)}
+.handoff.show{display:block}
+.handoff .k{color:#FFD98A}
+.handoff p{font-size:12.5px;color:var(--fg-70);margin-top:6px}
+
+/* settings sheet */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:30;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.show{opacity:1;pointer-events:auto}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);z-index:31;background:rgba(13,15,23,.92);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);border-left:1px solid var(--line);padding:26px 24px;overflow:auto;transform:translateX(100%);transition:transform .45s var(--spring)}
+.sheet.show{transform:none}
+.sheet h2{font-size:20px;letter-spacing:-.02em;margin-bottom:4px}
+.sheet p.help{font-size:12.5px;color:var(--fg-50);margin-bottom:18px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-50);margin-bottom:6px}
+.field input,.field select{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;color:var(--fg);font:inherit;font-size:14px;padding:11px 12px}
+.field select option{background:#12141F}
+.field small{display:block;font-size:11.5px;color:var(--fg-50);margin-top:5px;line-height:1.4}
+.field small a{color:var(--blue-l)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.btn{border-radius:12px;padding:10px 14px;font-size:13.5px;font-weight:600;border:1px solid var(--line);background:var(--panel);transition:transform .1s ease-out,background .2s}
+.btn:hover{background:var(--panel-2)}.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--fg);color:#0B0D14;border-color:transparent}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:rgba(20,22,32,.95);border:1px solid var(--line);color:var(--fg);padding:10px 16px;border-radius:999px;font-size:13px;z-index:40;opacity:0;transition:opacity .3s,transform .3s var(--spring);pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.err{border-color:rgba(242,107,107,.4);background:rgba(242,107,107,.08);color:#FFB0B0}
+
+@media(max-width:1100px){.stage{grid-template-columns:1fr 1fr}.facts{grid-column:1/-1;position:static;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
+@media(max-width:760px){.stage{grid-template-columns:1fr;padding:84px 16px 32px}.transcript{min-height:40vh}.bar{padding:12px 16px}.brand span.t{display:none}}
+@media(prefers-reduced-motion:reduce){.bub,.sheet,.scrim,.toast{transition:none}.pill.live .dot{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<header class="bar">
+  <div class="brand"><img src="code-ox-logo.svg" alt="Code-Ox"><span class="x">×</span><b>Madeline</b><span class="x">·</span><span class="t">AIKA voice agent · live demo</span></div>
+  <div class="right">
+    <span class="pill" id="connpill"><span class="dot"></span><span id="conntext">Not configured</span></span>
+    <button class="iconbtn" id="openSettings" title="Settings" aria-label="Settings">⚙︎</button>
+  </div>
+</header>
+
+<main class="stage">
+  <!-- LEFT: controls -->
+  <section>
+    <div class="eyebrow">Debt collection · outbound reminder</div>
+    <h1>Talk to Sara, Madeline's AI collector.</h1>
+    <p class="lead">Pick a sample customer and start the call. You are the customer. Sara verifies you, discusses the balance, and writes the outcome to the CRM panel on the right as it happens.</p>
+
+    <div class="call">
+      <div class="startrow">
+        <div class="sel"><select id="customer" aria-label="Sample customer"></select></div>
+        <button class="startbtn" id="startbtn"><span id="starticon">▶</span><span id="startlabel">Start call</span></button>
+      </div>
+      <div class="live">
+        <button class="mutebtn" id="mutebtn" title="Mute microphone" aria-label="Mute microphone">🎙</button>
+        <div class="meter" id="meter"><span class="t" id="timer">0:00</span></div>
+      </div>
+      <div class="state" id="state"><b>Ready.</b> Pick a customer and start the call.</div>
+      <div class="mic" id="mic">Mic permission: not requested yet</div>
+    </div>
+
+    <div class="cust" id="cust"></div>
+  </section>
+
+  <!-- CENTRE: transcript -->
+  <section class="transcript" id="transcript">
+    <div class="empty" id="empty"><span class="ar">السلام عليكم، معك سارة من شركة مدلين</span>Press <b>Start call</b> and speak in Arabic or English. Sara detects the language and replies in kind.</div>
+  </section>
+
+  <!-- RIGHT: facts + CRM -->
+  <aside class="facts">
+    <div class="fact"><div class="k">Use case</div><div class="v">Payment reminder &amp; promise-to-pay</div><div class="s">Banks · insurers · corporate portfolios</div></div>
+    <div class="fact"><div class="k">Behaviour</div><div class="v">Verify first <small id="latency">· target &lt; 1s</small></div><div class="s">No balance disclosed before identity check</div></div>
+    <div class="fact"><div class="k">Voice &amp; language</div><div class="v" id="voicefact">Sara · Vapi Layla</div><div class="s" id="langfact">Saudi Arabic · English · auto-detect · switch on request</div></div>
+    <div class="fact crm">
+      <div class="k"><span>CRM record</span><em id="crmts">no call yet</em></div>
+      <div class="f">
+        <span>status</span><b id="f-status">—</b>
+        <span>sub_status</span><b id="f-sub">—</b>
+        <span>promised</span><b id="f-ptp">—</b>
+        <span>callback</span><b id="f-cb">—</b>
+        <span>reason</span><b id="f-reason">—</b>
+        <span>payment_link</span><b id="f-link">—</b>
+        <span>documentation</span><b id="f-doc">—</b>
+      </div>
+      <div class="log" id="log"></div>
+    </div>
+    <div class="fact handoff" id="handoff"><div class="k">Transfer to human · screen-pop</div><p id="handofftext"></p></div>
+    <div class="fact"><div class="k">Compliance</div><div class="chips"><span class="chip">Recording disclosed</span><span class="chip">Calling hours</span><span class="chip">Attempt limits</span><span class="chip">PDPL · KSA data</span><span class="chip">No pressure language</span></div></div>
+  </aside>
+</main>
+
+<!-- settings -->
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="sheet" aria-label="Settings">
+  <h2>Connect to Vapi</h2>
+  <p class="help">Keys stay in this browser only. The public key is designed for client-side use; never paste the private key here.</p>
+  <div class="field"><label for="pk">Vapi public key</label><input id="pk" type="password" autocomplete="off" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"><small>Dashboard → Organization settings → API Keys → <b>Public key</b>. <a href="https://dashboard.vapi.ai/org/api-keys" target="_blank" rel="noopener">Open ↗</a></small></div>
+  <div class="field"><label for="aid">Assistant ID (optional)</label><input id="aid" type="text" autocomplete="off" placeholder="leave empty to use the built-in Sara configuration"><small>Empty = the page sends the full Sara assistant inline (transient). Paste an ID to use an assistant saved in your dashboard; customer details are passed as variables.</small></div>
+  <div class="field"><label for="voice">Voice</label><select id="voice">
+    <option value="vapi-layla">Vapi · Layla v2 (female, auto language)</option>
+    <option value="vapi-savannah">Vapi · Savannah v2 (female, auto language)</option>
+    <option value="vapi-elliot">Vapi · Elliot v2 (male, auto language)</option>
+    <option value="11labs-sarah">ElevenLabs · Sarah · turbo v2.5 multilingual</option>
+    <option value="11labs-custom">ElevenLabs · custom voice ID (Arabic voice)</option>
+  </select><small>Pick an Arabic-native ElevenLabs voice for the best Najdi delivery; paste its ID below.</small></div>
+  <div class="field" id="customVoiceWrap" style="display:none"><label for="voiceid">ElevenLabs voice ID</label><input id="voiceid" type="text" autocomplete="off" placeholder="e.g. 21m00Tcm4TlvDq8ikWAM"></div>
+  <div class="field"><label for="stt">Transcriber</label><select id="stt">
+    <option value="11labs-scribe">ElevenLabs Scribe v2 realtime · auto AR/EN</option>
+    <option value="openai">OpenAI gpt-4o-transcribe · auto language</option>
+    <option value="gladia">Gladia Solaria · AR + EN code-switching</option>
+    <option value="deepgram">Deepgram Nova-3 · multi</option>
+  </select></div>
+  <div class="field"><label for="llm">Model</label><select id="llm">
+    <option value="gpt-4o">OpenAI gpt-4o</option>
+    <option value="gpt-4.1">OpenAI gpt-4.1</option>
+    <option value="gpt-4o-mini">OpenAI gpt-4o-mini (fastest)</option>
+  </select></div>
+  <div class="btnrow">
+    <button class="btn primary" id="save">Save</button>
+    <button class="btn" id="copyjson">Copy assistant JSON</button>
+    <button class="btn" id="copycurl">Copy create-assistant cURL</button>
+  </div>
+  <p class="help" style="margin-top:18px">To run a real call the page needs microphone access, so open it over <code>http://localhost</code> or https (not from a file path in some browsers). Quick way: <code>npx serve</code> in this folder.</p>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== Sara — assistant definition ===================== */
+const CUSTOMERS = [
+  {id:'abdullah', label:'عبدالله الحربي — credit card · SAR 3,450 (Arabic)', name:'عبدالله الحربي', nameEn:'Abdullah Al-Harbi', lang:'ar', phone:'+966 5• ••• ••12', customerId:'MD-48213', client:'Bank A', product:'بطاقة ائتمانية', productEn:'credit card', balance:3450, due:'1 October 2026', dueAr:'١ أكتوبر', idLast4:'8213', notes:'Requested callback on 28 Sep; no payment since.',
+   hint:{t:'Try saying', ar:'"الراتب ينزل يوم العاشر، أقدر أدفع يومها"', en:'Expected path: verify → promise to pay on the 10th → payment link sent.'}},
+  {id:'sarah', label:'Sarah Thompson — personal loan · SAR 1,200 (English)', name:'Sarah Thompson', nameEn:'Sarah Thompson', lang:'en', phone:'+966 5• ••• ••87', customerId:'MD-51902', client:'Bank B', product:'personal loan instalment', productEn:'personal loan instalment', balance:1200, due:'22 September 2026', dueAr:'٢٢ سبتمبر', idLast4:'4471', notes:'First contact. Instalment 12 days overdue.',
+   hint:{t:'Try saying', ar:'"I already paid this on Monday, this is wrong" · or · "Can you call me back tomorrow at 5?"', en:'Expected path: dispute → captured and escalated to a human · or callback booked.'}},
+  {id:'fahad', label:'فهد العتيبي — insurance premium · SAR 860 (Arabic)', name:'فهد العتيبي', nameEn:'Fahad Al-Otaibi', lang:'ar', phone:'+966 5• ••• ••05', customerId:'MD-60377', client:'Insurer C', product:'قسط تأمين', productEn:'insurance premium', balance:860, due:'28 September 2026', dueAr:'٢٨ سبتمبر', idLast4:'0921', notes:'Two no-answer attempts this week.',
+   hint:{t:'Try saying', ar:'"الرقم غلط، ما أعرف أحد بهالاسم" · أو · "ما راح أدفع، الخدمة سيئة"', en:'Expected path: wrong number → record marked, call ends · or refusal → reason captured, options offered.'}}
+];
+
+function systemPrompt(c){
+  return `You are "Sara" (سارة), the AI collections assistant of Madeline Company (شركة مدلين لتحصيل الديون), a licensed debt collection agency in Riyadh, Saudi Arabia. You are making an OUTBOUND reminder call on behalf of a client (${c.client}) about an overdue ${c.productEn}.
+
+# Customer record (from the CRM — do not reveal any of it before identity is verified)
+- Name: ${c.nameEn} (${c.name})
+- Customer ID: ${c.customerId}
+- Outstanding balance: SAR ${c.balance.toLocaleString('en-US')}
+- Due date: ${c.due}
+- Last 4 digits of national ID / iqama: ${c.idLast4}
+- Previous notes: ${c.notes}
+- Preferred language on file: ${c.lang==='ar'?'Arabic':'English'}
+
+# Voice style
+- You are speaking on a phone call. Keep every turn short: one or two sentences, then stop and listen. Never read lists.
+- Tone: professional, warm, calm, respectful. Never threaten, pressure, shame or raise urgency artificially. Never mention legal action unless the customer asks what happens next; then say the account may be referred for further follow-up per the client's policy.
+- Language: start in the preferred language on file ({{language}}) and STAY in it for the whole call. Switch only if the customer explicitly asks for the other language, or replies with two or more full sentences in it. Never switch because of a single word, a filler ("uh", "okay", "يعني"), a name, a number, or an unclear or mis-transcribed fragment — if unsure, keep the current language. When speaking Arabic, use natural Saudi colloquial (Najdi register, e.g. "حياك الله", "تمام", "أبشر"); if the customer uses Hejazi or MSA, mirror them. When speaking English, use clear, polite English only — do not mix in Arabic. Say amounts naturally ("ثلاثة آلاف وأربعمية وخمسين ريال" / "three thousand four hundred and fifty riyals") and repeat key numbers back once.
+
+# Turn-taking rules (important)
+- Never repeat a sentence you have already said. If you were interrupted, do NOT restart your previous sentence; respond only to what the customer just said, then continue from where you left off in one short sentence.
+- Speech arrives in fragments. If the customer's reply is incomplete (for example "my ID is…" or a single digit), say nothing more than a short prompt like "تفضل" / "go ahead" and wait. Combine digits spoken in pieces ("8 2 1 3", "eighty-two thirteen") before judging the match. Do not re-ask a question the customer is already answering.
+- Ask one question per turn. Once a question is answered, move forward; never re-confirm what was already confirmed.
+- Pronunciation: say "riyals" (never "reals"); say "Iqama" as "ih-KAH-ma" and in Arabic "الإقامة".
+
+# Call flow
+1. GREETING: You already greeted. If they confirm they are ${c.nameEn}, proceed. If they are someone else, do not disclose anything; ask when ${c.nameEn} is reachable or mark wrong number.
+2. VERIFY: Ask for the last four digits of their national ID or Iqama (residency permit). Correct value: ${c.idLast4}. Only after a match may you mention the client, product or balance. If it does not match after two tries, politely say you cannot continue, call record_call_outcome with status "Answered", sub_status "Escalated", reason "identity not verified", then end the call.
+3. PURPOSE: State that you are calling about the outstanding SAR ${c.balance.toLocaleString('en-US')} for the ${c.productEn} with ${c.client}, due ${c.due}. Ask when they can settle it.
+4. RESOLVE — options you may offer, in this order: (a) pay today via a payment link sent to their mobile; (b) a promise to pay on a specific date within 14 days; (c) if they say they cannot pay in full, up to 3 monthly instalments of equal amounts. You may not waive fees or discount the balance; if asked, say you will note the request for the client to review.
+5. OUTCOME — call the tool record_call_outcome EXACTLY ONCE as soon as the outcome is clear, before your closing sentence:
+   - Agrees to pay → status "Answered", sub_status "Agreed to Pay", promised_amount, promised_date. Then call send_payment_link and tell them the link is on its way via WhatsApp/SMS.
+   - Asks to be called back → status "Answered", sub_status "Requested Callback", callback_time (date and time they gave).
+   - Refuses → status "Answered", sub_status "Refused Payment", reason in their words. Offer the options once; do not argue.
+   - Disputes the debt or the amount → status "Answered", sub_status "Disputed", reason with what exactly they dispute. Do not press for payment. Say a specialist will review and contact them, then call escalate_to_human with the dispute summary.
+   - Asks for a human agent at any point → call escalate_to_human, then record_call_outcome with status "Transferred to Human".
+   - Wrong number / not the customer → status "Wrong Number"; apologise and end.
+6. CLOSING: Thank them, confirm any next step and date in one sentence, say goodbye, then call the endCall tool.
+
+# Hard rules
+- Never invent information that is not in the customer record. If asked something you do not know (exact fees, statement details, how to log into the bank), say the client's statement has the detail or that a specialist will follow up.
+- If the customer is distressed, abusive or mentions hardship such as job loss or illness, stay calm, do not continue collection pressure, record sub_status "Escalated" with the reason, and offer a human follow-up.
+- Do not mention that you are an AI unless asked directly; if asked, say yes, you are Madeline's automated assistant, and offer a human agent.
+- Keep the whole call under four minutes.`;
+}
+function firstMessage(c){
+  return c.lang==='ar'
+    ? `السلام عليكم، معك سارة المساعدة الذكية من شركة مدلين. المكالمة مسجلة لضمان الجودة. هل أتكلم مع ${c.name}؟`
+    : `Hello, this is Sara, the virtual assistant from Madeline Company. This call is recorded for quality purposes. Am I speaking with ${c.nameEn}?`;
+}
+const TOOLS = [
+  {type:'function', async:true, function:{name:'record_call_outcome', description:'Write the outcome of this call to the CRM. Call exactly once when the outcome is clear.', parameters:{type:'object', properties:{
+    status:{type:'string', enum:['Answered','No Answer','Busy','Wrong Number','Transferred to Human'], description:'Main disposition'},
+    sub_status:{type:'string', enum:['Agreed to Pay','Requested Callback','Disputed','Refused Payment','Escalated','None'], description:'Sub-status'},
+    promised_amount:{type:'number', description:'Amount in SAR the customer promised, if any'},
+    promised_date:{type:'string', description:'Date the customer promised to pay, e.g. 2026-10-10'},
+    callback_time:{type:'string', description:'Requested callback date/time, if any'},
+    reason:{type:'string', description:'Customer\'s reason for refusal, dispute details, or escalation reason'},
+    summary:{type:'string', description:'One-sentence summary of the call in English for the agent'}
+  }, required:['status','sub_status','summary']}}},
+  {type:'function', async:true, function:{name:'send_payment_link', description:'Send a secure payment link to the customer by WhatsApp and SMS.', parameters:{type:'object', properties:{amount:{type:'number'}, channel:{type:'string', enum:['whatsapp','sms','both']}}, required:['amount']}}},
+  {type:'function', async:true, function:{name:'escalate_to_human', description:'Hand the call to a human collector with context.', parameters:{type:'object', properties:{reason:{type:'string'}, context_summary:{type:'string', description:'What happened so far, for the agent screen-pop'}, sentiment:{type:'string', enum:['calm','frustrated','angry','distressed']}}, required:['reason','context_summary']}}},
+  {type:'endCall'}
+];
+const VOICES = {
+  'vapi-layla':  ()=>({provider:'vapi', voiceId:'Layla', version:'2', language:'auto'}),
+  'vapi-savannah':()=>({provider:'vapi', voiceId:'Savannah', version:'2', language:'auto'}),
+  'vapi-elliot': ()=>({provider:'vapi', voiceId:'Elliot', version:'2', language:'auto'}),
+  '11labs-sarah':()=>({provider:'11labs', voiceId:'sarah', model:'eleven_turbo_v2_5', stability:0.5, similarityBoost:0.75}),
+  '11labs-custom':(id)=>({provider:'11labs', voiceId:id||'sarah', model:'eleven_multilingual_v2', stability:0.5, similarityBoost:0.75})
+};
+const STT = {
+  '11labs-scribe': ()=>({provider:'11labs', model:'scribe_v2_realtime', silenceThresholdSeconds:1.0, minSilenceDurationMs:600, minSpeechDurationMs:150, fallbackPlan:{transcribers:[{provider:'openai', model:'gpt-4o-transcribe'}]}}),
+  'openai':        ()=>({provider:'openai', model:'gpt-4o-transcribe'}),
+  'gladia':        ()=>({provider:'gladia', model:'solaria-1', languageBehaviour:'automatic multiple languages', languages:['ar','en']}),
+  'deepgram':      ()=>({provider:'deepgram', model:'nova-3', language:'multi', smartFormat:true})
+};
+function buildAssistant(c, cfg){
+  return {
+    name:'Sara — Madeline Collections',
+    firstMessage: firstMessage(c),
+    firstMessageMode:'assistant-speaks-first',
+    transcriber: STT[cfg.stt](),
+    model:{provider:'openai', model:cfg.llm, temperature:0.3, maxTokens:220, messages:[{role:'system', content:systemPrompt(c)}], tools:TOOLS},
+    voice: VOICES[cfg.voice](cfg.voiceId),
+    clientMessages:['transcript','tool-calls','speech-update','status-update','conversation-update','model-output'],
+    maxDurationSeconds:300,
+    silenceTimeoutSeconds:20,
+    backgroundSound:'off',
+    endCallMessage: c.lang==='ar' ? 'شكراً لوقتك، في أمان الله.' : 'Thank you for your time. Goodbye.',
+    startSpeakingPlan:{waitSeconds:0.8, transcriptionEndpointingPlan:{onPunctuationSeconds:0.5, onNoPunctuationSeconds:1.5, onNumberSeconds:1.2}},
+    stopSpeakingPlan:{numWords:3, voiceSeconds:0.4, backoffSeconds:1.5,
+      acknowledgementPhrases:['i understand','i see','i got it','okay','ok','sure','alright','got it','yeah','yes','uh-huh','mm-hmm','ايوه','أيوه','نعم','تمام','اوكي','أوكي','طيب','اها','إيه','ماشي','ان شاء الله','إن شاء الله'],
+      interruptionPhrases:['stop','wait','hold on','no','not','actually','but','enough','لا','انتظر','انتظري','لحظة','بس','خلاص','توقفي','ثانية','مهلاً']}
+  };
+}
+/* Template version (with {{variables}}) for saving a reusable assistant in the dashboard */
+function buildTemplateAssistant(cfg){
+  const t = {name:'{{customer_name_en}}', nameEn:'{{customer_name_en}}', client:'{{client}}', productEn:'{{product}}', balance:0, due:'{{due_date}}', idLast4:'{{id_last4}}', notes:'{{notes}}', lang:'ar', customerId:'{{customer_id}}'};
+  const a = buildAssistant(t, cfg);
+  a.model.messages[0].content = a.model.messages[0].content
+    .replace('Name: {{customer_name_en}} ({{customer_name_en}})','Name: {{customer_name_en}} ({{customer_name_ar}})')
+    .replace('Outstanding balance: SAR 0','Outstanding balance: SAR {{balance}}')
+    .replace("Correct value: {{id_last4}}","Correct value: {{id_last4}}")
+    .replace('outstanding SAR 0 for','outstanding SAR {{balance}} for')
+    .replace('Preferred language on file: Arabic','Preferred language on file: {{language}}');
+  a.firstMessage = '{{first_message}}';
+  a.analysisPlan = {
+    summaryPlan:{enabled:true, messages:[{role:'system', content:'Summarise this debt collection call in 3 short lines for a human collector: outcome, any commitment with amount and date, and anything the agent must follow up.'}]},
+    structuredDataPlan:{enabled:true, schema:{type:'object', properties:{status:{type:'string', enum:['Answered','No Answer','Busy','Wrong Number','Transferred to Human']}, sub_status:{type:'string', enum:['Agreed to Pay','Requested Callback','Disputed','Refused Payment','Escalated','None']}, promised_amount:{type:'number'}, promised_date:{type:'string'}, callback_time:{type:'string'}, reason:{type:'string'}, language_used:{type:'string'}, identity_verified:{type:'boolean'}}, required:['status','sub_status','identity_verified']}}
+  };
+  return a;
+}
+function variableValues(c){
+  return {customer_name_en:c.nameEn, customer_name_ar:c.name, client:c.client, product:c.productEn, due_date:c.due, id_last4:c.idLast4, notes:c.notes, customer_id:c.customerId, balance:c.balance.toLocaleString('en-US'), language:c.lang==='ar'?'Arabic':'English', first_message:firstMessage(c)};
+}
+
+/* ===================== UI ===================== */
+const $=id=>document.getElementById(id);
+/* Madeline org defaults — public key (safe client-side) and the saved "Sara — Madeline Collections" assistant.
+   Clear the Assistant ID in settings to run the inline configuration from this file instead. */
+const DEFAULTS = { pk:'44972efc-03c2-4d2f-95c8-488e40c926ae', aid:'684fb868-a207-469a-b993-13238147921d' };
+const cfg = loadCfg();
+function loadCfg(){ let s={}; try{ s=JSON.parse(localStorage.getItem('aika-demo-cfg')||'{}'); }catch(e){} return Object.assign({pk:DEFAULTS.pk,aid:DEFAULTS.aid,voice:'vapi-layla',voiceId:'',stt:'11labs-scribe',llm:'gpt-4o'}, s); }
+function saveCfg(){ try{ localStorage.setItem('aika-demo-cfg', JSON.stringify(cfg)); }catch(e){} }
+
+// customers
+CUSTOMERS.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.label;$('customer').appendChild(o);});
+function currentCustomer(){ return CUSTOMERS.find(c=>c.id===$('customer').value)||CUSTOMERS[0]; }
+function renderCustomer(){
+  const c=currentCustomer();
+  $('cust').innerHTML = `<div class="k">Sample customer record · demo data</div>
+    <div class="row"><span>name</span><b class="${c.lang==='ar'?'ar':''}">${c.name}</b></div>
+    <div class="row"><span>customer_id</span><b>${c.customerId}</b></div>
+    <div class="row"><span>client · product</span><b>${c.client} · ${c.productEn}</b></div>
+    <div class="row"><span>outstanding_balance</span><b>SAR ${c.balance.toLocaleString('en-US')}</b></div>
+    <div class="row"><span>due_date</span><b>${c.due}</b></div>
+    <div class="row"><span>id_last4 (say this to verify)</span><b>${c.idLast4}</b></div>
+    <div class="row"><span>previous_notes</span><b style="max-width:60%">${c.notes}</b></div>
+    <div class="hint"><em>${c.hint.t}</em><span class="${c.lang==='ar'?'ar':''}">${c.hint.ar}</span><div style="margin-top:4px;color:var(--fg-50)">${c.hint.en}</div></div>`;
+}
+$('customer').addEventListener('change', renderCustomer); renderCustomer();
+
+// settings
+function fillSettings(){ $('pk').value=cfg.pk; $('aid').value=cfg.aid; $('voice').value=cfg.voice; $('voiceid').value=cfg.voiceId; $('stt').value=cfg.stt; $('llm').value=cfg.llm; $('customVoiceWrap').style.display = cfg.voice==='11labs-custom'?'block':'none'; updateFacts(); updateConn(); }
+$('voice').addEventListener('change', e=>{ $('customVoiceWrap').style.display = e.target.value==='11labs-custom'?'block':'none'; });
+function readSettings(){ cfg.pk=$('pk').value.trim(); cfg.aid=$('aid').value.trim(); cfg.voice=$('voice').value; cfg.voiceId=$('voiceid').value.trim(); cfg.stt=$('stt').value; cfg.llm=$('llm').value; saveCfg(); fillSettings(); }
+$('save').addEventListener('click', ()=>{ readSettings(); closeSheet(); toast('Saved in this browser'); });
+function openSheet(){ $('sheet').classList.add('show'); $('scrim').classList.add('show'); }
+function closeSheet(){ $('sheet').classList.remove('show'); $('scrim').classList.remove('show'); }
+$('openSettings').addEventListener('click', openSheet); $('scrim').addEventListener('click', closeSheet);
+function updateFacts(){
+  const names={'vapi-layla':'Sara · Vapi Layla','vapi-savannah':'Sara · Vapi Savannah','vapi-elliot':'Sara · Vapi Elliot','11labs-sarah':'Sara · ElevenLabs Sarah','11labs-custom':'Sara · ElevenLabs custom'};
+  $('voicefact').textContent=names[cfg.voice]||'Sara';
+  const stt={'11labs-scribe':'ElevenLabs Scribe','openai':'OpenAI transcribe','gladia':'Gladia Solaria','deepgram':'Deepgram Nova-3'};
+  $('langfact').textContent=`Saudi Arabic · English · ${stt[cfg.stt]} · ${cfg.llm}`;
+}
+function updateConn(){
+  const p=$('connpill'); p.className='pill';
+  if(!cfg.pk){ $('conntext').textContent='Add public key'; p.classList.add('warn'); }
+  else { $('conntext').textContent = cfg.aid?'Vapi · saved assistant':'Vapi · inline Sara'; p.classList.add('ok'); }
+}
+function toast(msg, isErr){ const t=$('toast'); t.textContent=msg; t.className='toast show'+(isErr?' err':''); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'), 3200); }
+async function copy(text, label){ try{ await navigator.clipboard.writeText(text); toast(label+' copied'); }catch(e){ toast('Copy failed — select and copy manually', true); } }
+$('copyjson').addEventListener('click', ()=>{ readSettings(); copy(JSON.stringify(buildTemplateAssistant(cfg), null, 2), 'Assistant JSON'); });
+$('copycurl').addEventListener('click', ()=>{ readSettings(); const j=JSON.stringify(buildTemplateAssistant(cfg)); copy(`curl -X POST https://api.vapi.ai/assistant -H "Authorization: Bearer $VAPI_PRIVATE_KEY" -H "Content-Type: application/json" -d '${j.replace(/'/g,"'\\''")}'`, 'cURL command'); });
+fillSettings();
+
+// ambient backdrop (slow, large, low-frequency drift)
+(function(){
+  const cv=$('sky'), ctx=cv.getContext('2d'); let w,h,t=0; const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const blobs=[{x:.2,y:.3,r:.55,c:'59,108,246',a:.22},{x:.8,y:.2,r:.5,c:'185,166,203',a:.16},{x:.6,y:.85,r:.6,c:'59,108,246',a:.12},{x:.1,y:.9,r:.45,c:'185,166,203',a:.1}];
+  function size(){ w=cv.width=innerWidth*devicePixelRatio; h=cv.height=innerHeight*devicePixelRatio; }
+  addEventListener('resize', size); size();
+  function draw(){
+    ctx.clearRect(0,0,w,h); ctx.fillStyle='#07080D'; ctx.fillRect(0,0,w,h);
+    blobs.forEach((b,i)=>{ const x=(b.x+Math.sin(t*.00011+i)*0.06)*w, y=(b.y+Math.cos(t*.00009+i*1.7)*0.05)*h, r=b.r*Math.max(w,h)*0.5;
+      const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,`rgba(${b.c},${b.a*(0.9+0.1*Math.sin(t*.0004+i))})`); g.addColorStop(1,`rgba(${b.c},0)`); ctx.fillStyle=g; ctx.fillRect(0,0,w,h); });
+    if(!reduce){ t+=16; requestAnimationFrame(draw); }
+  }
+  draw();
+})();
+
+/* ===================== Vapi call ===================== */
+let vapi=null, inCall=false, muted=false, t0=0, tick=null, partialEl=null, VapiCtor=null;
+const meter=$('meter'); for(let i=0;i<28;i++){ const b=document.createElement('i'); meter.insertBefore(b, $('timer')); }
+const bars=[...meter.querySelectorAll('i')];
+function setState(html){ $('state').innerHTML=html; }
+function setTimer(){ const s=Math.floor((Date.now()-t0)/1000); $('timer').textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+function addBubble(role, text, partial){
+  $('empty').style.display='none';
+  if(role==='sys'){ const b=document.createElement('div'); b.className='bub sys'; b.textContent=text; $('transcript').appendChild(b); requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add('show'))); scrollBottom(); return b; }
+  if(partial){
+    if(!partialEl || partialEl.dataset.role!==role){ partialEl=document.createElement('div'); partialEl.className='bub '+role+' partial'; partialEl.dataset.role=role; partialEl.innerHTML=`<span class="who">${role==='assistant'?'Sara · AIKA':'You · customer'}</span><span class="txt"></span>`; $('transcript').appendChild(partialEl); requestAnimationFrame(()=>requestAnimationFrame(()=>partialEl.classList.add('show'))); }
+    partialEl.querySelector('.txt').textContent=text; scrollBottom(); return partialEl;
+  }
+  let b = (partialEl && partialEl.dataset.role===role) ? partialEl : null;
+  if(!b){ b=document.createElement('div'); b.className='bub '+role; b.innerHTML=`<span class="who">${role==='assistant'?'Sara · AIKA':'You · customer'}</span><span class="txt"></span>`; $('transcript').appendChild(b); requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add('show'))); }
+  b.classList.remove('partial'); b.querySelector('.txt').textContent=text; partialEl=null; scrollBottom(); return b;
+}
+function scrollBottom(){ window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}); }
+function crm(field, value){ const el=$('f-'+field); if(!el) return; el.textContent=value; el.classList.add('new'); $('crmts').textContent='updated '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+function log(msg){ const d=document.createElement('div'); d.innerHTML=`<b>${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}</b> ${msg}`; $('log').prepend(d); }
+function resetPanels(){ ['status','sub','ptp','cb','reason','link','doc'].forEach(f=>{ const el=$('f-'+f); el.textContent='—'; el.classList.remove('new'); }); $('log').innerHTML=''; $('handoff').classList.remove('show'); $('crmts').textContent='call in progress'; $('transcript').querySelectorAll('.bub').forEach(b=>b.remove()); partialEl=null; }
+function handleTool(name, args){
+  args = typeof args==='string' ? safeJSON(args) : (args||{});
+  if(name==='record_call_outcome'){
+    crm('status', args.status||'—'); crm('sub', args.sub_status||'—');
+    if(args.promised_amount||args.promised_date) crm('ptp', `${args.promised_amount?('SAR '+Number(args.promised_amount).toLocaleString('en-US')):''}${args.promised_date?' · '+args.promised_date:''}`);
+    if(args.callback_time) crm('cb', args.callback_time);
+    if(args.reason) crm('reason', args.reason);
+    log(`record_call_outcome → ${args.status} / ${args.sub_status}${args.summary?' — '+args.summary:''}`);
+  } else if(name==='send_payment_link'){
+    crm('link', `Sent · ${args.channel||'WhatsApp + SMS'} · SAR ${Number(args.amount||0).toLocaleString('en-US')}`); log(`send_payment_link → SAR ${args.amount} via ${args.channel||'both'}`);
+  } else if(name==='escalate_to_human'){
+    $('handoff').classList.add('show'); $('handofftext').innerHTML=`<b>Reason:</b> ${args.reason||'—'}<br><b>Sentiment:</b> ${args.sentiment||'—'}<br><b>Context:</b> ${args.context_summary||'—'}`; log(`escalate_to_human → ${args.reason}`);
+  } else { log(`${name} → ${JSON.stringify(args)}`); }
+}
+function safeJSON(s){ try{ return JSON.parse(s); }catch(e){ return {raw:s}; } }
+
+async function loadSDK(){
+  if(VapiCtor) return VapiCtor;
+  const urls=['https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.7.1/+esm','https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/+esm','https://esm.sh/@vapi-ai/web'];
+  let lastErr;
+  for(const u of urls){
+    try{
+      const m=await import(u);
+      // CommonJS interop: the class may sit at default, default.default, or Vapi
+      const cands=[m.default, m.default&&m.default.default, m.Vapi, m.default&&m.default.Vapi, m];
+      const C=cands.find(c=>typeof c==='function' && c.prototype && typeof c.prototype.start==='function');
+      if(C){ VapiCtor=C; return C; }
+      lastErr=new Error('SDK loaded from '+u+' but no Vapi class found');
+    }catch(e){ lastErr=e; }
+  }
+  throw lastErr||new Error('Could not load the Vapi Web SDK');
+}
+async function startCall(){
+  if(!cfg.pk){ openSheet(); toast('Paste your Vapi public key first', true); return; }
+  const c=currentCustomer();
+  $('startbtn').disabled=true; setState('<b>Connecting…</b> loading SDK and requesting microphone');
+  try{
+    const V=await loadSDK();
+    if(!vapi){ vapi=new V(cfg.pk); wire(); }
+    try{ const s=await navigator.mediaDevices.getUserMedia({audio:true}); s.getTracks().forEach(t=>t.stop()); $('mic').textContent='Mic permission ✓'; $('mic').className='mic ok'; }
+    catch(e){ $('mic').textContent='Mic permission denied — allow the microphone in the address bar'; $('mic').className='mic'; throw e; }
+    resetPanels(); addBubble('sys', `Dialling ${c.phone} · caller ID Madeline · ${c.lang==='ar'?'Arabic':'English'} first message`);
+    if(cfg.aid){ await vapi.start(cfg.aid, {variableValues: variableValues(c), firstMessage: firstMessage(c)}); }
+    else { await vapi.start(buildAssistant(c, cfg)); }
+  }catch(e){
+    console.error(e); setState(`<b style="color:#FFB0B0">Could not start.</b> ${String(e.message||e).slice(0,160)}`); $('startbtn').disabled=false; toast('Call failed to start — see status line', true);
+  }
+}
+function wire(){
+  vapi.on('call-start', ()=>{ inCall=true; t0=Date.now(); tick=setInterval(setTimer,500); $('startbtn').classList.add('busy'); $('starticon').textContent='■'; $('startlabel').textContent='End call'; $('startbtn').disabled=false; $('connpill').className='pill live'; $('conntext').textContent='Live call'; setState('<b>Connected.</b> Sara is greeting you — reply as the customer.'); });
+  vapi.on('call-end', ()=>{ inCall=false; clearInterval(tick); $('startbtn').classList.remove('busy'); $('starticon').textContent='▶'; $('startlabel').textContent='Start call'; $('startbtn').disabled=false; updateConn(); setState('<b>Call ended.</b> Transcript, summary and recording are written to the CRM record.'); crm('doc','transcript · summary · recording ✓'); addBubble('sys', `Call ended · ${$('timer').textContent} · documentation saved`); bars.forEach(b=>b.style.height='12%'); if(muted){ muted=false; $('mutebtn').classList.remove('on'); } });
+  vapi.on('speech-start', ()=>setState('<b>Sara is speaking.</b> You can interrupt her naturally.'));
+  vapi.on('speech-end', ()=>setState('<b>Listening…</b>'));
+  vapi.on('volume-level', v=>{ bars.forEach((b,i)=>{ const k=Math.sin(i/bars.length*Math.PI); b.style.height=(12+Math.min(1,v*3)*k*80*(0.6+Math.random()*0.4))+'%'; }); });
+  vapi.on('message', m=>{
+    if(m.type==='transcript'){ addBubble(m.role, m.transcript, m.transcriptType==='partial'); }
+    else if(m.type==='tool-calls'){ (m.toolCallList||[]).forEach(tc=>{ const fn=tc.function||tc; handleTool(fn.name||tc.name, fn.arguments||tc.arguments||tc.parameters); }); }
+    else if(m.type==='function-call'){ handleTool(m.functionCall?.name, m.functionCall?.parameters); }
+    else if(m.type==='status-update' && m.status==='ended'){ if(m.endedReason) addBubble('sys', 'ended: '+m.endedReason); }
+  });
+  vapi.on('error', e=>{ console.error(e); const msg=e?.error?.message||e?.message||e?.errorMsg||JSON.stringify(e).slice(0,200); setState(`<b style="color:#FFB0B0">Error.</b> ${msg}`); toast('Vapi error — see status line', true); });
+}
+$('startbtn').addEventListener('click', ()=>{ if(inCall){ vapi.stop(); } else startCall(); });
+$('mutebtn').addEventListener('click', ()=>{ if(!vapi||!inCall) return; muted=!muted; vapi.setMuted(muted); $('mutebtn').classList.toggle('on', muted); $('mutebtn').textContent=muted?'🔇':'🎙'; });
+addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
+</script>
+</body>
+</html>
