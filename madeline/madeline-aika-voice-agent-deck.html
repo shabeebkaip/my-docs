@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Madeline × Code-Ox — AI Voice Agent for Collections</title>
+<title>Madeline × Code-Ox — AI Voice &amp; Chat Agents for Collections</title>
 <style>
 :root{
   --bg:#07080D; --bg-2:#0D0F17; --bg-3:#12141F;
@@ -129,6 +129,20 @@ ul.list li strong{color:var(--ink)}
 .mutebtn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);display:grid;place-items:center;font-size:14px;cursor:pointer;flex-shrink:0;transition:transform .1s ease-out,background .2s}
 .mutebtn.on{background:var(--rose);border-color:transparent}
 .mutebtn:active{transform:scale(.95)}
+.mutebtn.open{background:var(--mint);border-color:transparent;color:#06301c;box-shadow:0 0 0 6px rgba(61,214,140,.22)}
+.ptt{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;letter-spacing:.02em;border-radius:999px;padding:5px 10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:var(--ink-70);cursor:pointer;white-space:nowrap;user-select:none}
+.ptt.on{border-color:rgba(61,214,140,.45);color:#9FF0C6}
+.ptt i{width:7px;height:7px;border-radius:50%;background:var(--ink-30)}
+.ptt.on i{background:var(--mint)}
+.gate{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--ink-50,var(--fg-50))}
+.gate .ptt{padding:5px 10px}
+.gate input[type=range]{width:120px;accent-color:#7DA0FF}
+.lvl{position:relative;width:110px;height:8px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.lvl i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#3DD68C,#7DA0FF);border-radius:99px;transition:width .05s linear}
+.lvl.open i{background:linear-gradient(90deg,#3DD68C,#9FF0C6)}
+.lvl b{position:absolute;top:-3px;width:2px;height:14px;background:#F2B544;border-radius:2px}
+.gate .st{font-family:var(--mono);font-variant-numeric:tabular-nums;min-width:52px}
+
 .p-time{font-family:var(--mono);font-size:12.5px;color:var(--ink-70);font-variant-numeric:tabular-nums}
 .p-state{font-size:12.5px;color:var(--ink-50);line-height:1.35}
 .p-state b{color:var(--ink-70)}
@@ -457,7 +471,94 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
 .su{padding:10px 11px;border-radius:12px;border:1px solid rgba(21,19,26,.09);background:rgba(255,255,255,.6)}
 .su b{display:block;font-size:12.5px;letter-spacing:-.005em;margin-bottom:2px}
 .su span{font-size:11px;color:var(--ink-50);line-height:1.35;display:block}
+
+/* ---------- chat-agent slides ---------- */
+.reach{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px;align-items:stretch}
+.reach .pane{border-radius:var(--r);padding:22px 24px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);position:relative}
+.light .reach .pane{background:#fff;border-color:rgba(21,19,26,.09);box-shadow:0 14px 30px -24px rgba(21,19,26,.22)}
+.reach .pane h3{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-50);margin-bottom:14px}
+.reach .pane.msg{background:linear-gradient(160deg,rgba(61,214,140,.12),rgba(59,108,246,.06));border-color:rgba(61,214,140,.35)}
+.light .reach .pane.msg{background:linear-gradient(160deg,rgba(61,214,140,.10),#fff);border-color:rgba(23,138,85,.35)}
+.reach .pane.msg h3{color:#178A55}
+.notif{display:flex;align-items:center;gap:12px;border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);margin-bottom:10px}
+.light .notif{background:rgba(21,19,26,.04);border-color:rgba(21,19,26,.08)}
+.notif .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:16px;flex-shrink:0;background:rgba(255,255,255,.08)}
+.light .notif .ic{background:#fff;border:1px solid rgba(21,19,26,.08)}
+.notif .ic.red{background:rgba(242,107,107,.18)}.notif .ic.green{background:rgba(61,214,140,.18)}
+.notif b{display:block;font-size:13.5px}.notif span{font-size:12px;color:var(--ink-50)}
+.notif .rt{margin-left:auto;font-size:11px;font-family:var(--mono);color:var(--ink-50);white-space:nowrap}
+.notif .rt.ok{color:#178A55}.light .notif .rt.ok{color:#178A55}
+.reach .why{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.reach .big{font-size:15.5px;line-height:1.4;margin-top:14px;color:var(--ink)}
+.reach .big em{font-style:normal;color:#F26B6B;font-weight:700}
+.reach .pane.msg .big em{color:#178A55}
+/* platform hub diagram */
+.hub{position:relative;margin-top:8px;width:100%;aspect-ratio:16/7.2;max-height:56vh}
+.hub svg{width:100%;height:100%;overflow:visible}
+.hub text{fill:var(--ink);font-family:var(--sans);font-weight:650;font-size:14px;letter-spacing:-.01em}
+.hub text.s{fill:var(--ink-50);font-weight:500;font-size:11px}
+.hub text.c{font-size:20px}
+.hub .node{fill:rgba(255,255,255,.05);stroke:rgba(255,255,255,.14)}
+.hub .node.admin{fill:rgba(59,108,246,.16);stroke:rgba(125,160,255,.6)}
+.hub .node.voice{fill:rgba(125,160,255,.10);stroke:rgba(125,160,255,.45)}
+.hub .node.chat{fill:rgba(61,214,140,.10);stroke:rgba(61,214,140,.5)}
+.hub .node.human{fill:rgba(242,181,68,.10);stroke:rgba(242,181,68,.5)}
+.hub .node.crm{fill:rgba(185,166,203,.12);stroke:rgba(185,166,203,.55)}
+.hub .link{fill:none;stroke:rgba(255,255,255,.14);stroke-width:1.5}
+.hub .flow{fill:none;stroke:url(#fl2);stroke-width:2;stroke-dasharray:6 14;stroke-linecap:round;animation:dash 2.4s linear infinite;opacity:.9}
+.hub .flow.rev{animation-direction:reverse}
+.hub .lbl{fill:var(--ink-50);font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.hub .pill{fill:rgba(255,255,255,.06);stroke:rgba(255,255,255,.12)}
+.light .hub .node{fill:#fff;stroke:rgba(21,19,26,.14)}
+.light .hub .pill{fill:rgba(21,19,26,.035);stroke:rgba(21,19,26,.12)}
+.light .hub .link{stroke:rgba(21,19,26,.14)}
+.light .hub .flow{stroke:#3B6CF6;opacity:.7}
+/* chat agent cards */
+.chatgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+.chatgrid .card{padding:16px 18px}
+.chatgrid .card h3{font-size:14.5px;margin:8px 0 4px}
+.chatgrid .card p{font-size:12.8px}
+.chatgrid .ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(61,214,140,.12);border:1px solid rgba(61,214,140,.3);font-size:14px}
+.channels{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.channels .chip{padding:7px 13px;font-size:12.5px}
+/* follow-up journey swimlanes */
+.journey{margin-top:22px;display:grid;grid-template-columns:110px repeat(5,1fr);gap:8px 10px;align-items:stretch}
+.journey .t{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-50);text-transform:uppercase;padding:0 0 6px;border-bottom:1px solid rgba(255,255,255,.1)}
+.light .journey .t{border-color:rgba(21,19,26,.12)}
+.journey .lane{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-50);display:flex;align-items:center;gap:8px;padding-right:6px}
+.journey .lane i{width:9px;height:9px;border-radius:50%}
+.journey .lane.v i{background:var(--blue-l)}.journey .lane.c i{background:var(--mint)}.journey .lane.h i{background:var(--amber)}
+.journey .ev{border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.4;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);min-height:64px}
+.light .journey .ev{background:#fff;border-color:rgba(21,19,26,.09)}
+.journey .ev b{display:block;font-size:12.5px;margin-bottom:2px}
+.journey .ev.v{border-color:rgba(125,160,255,.4);background:rgba(59,108,246,.1)}
+.journey .ev.c{border-color:rgba(61,214,140,.45);background:rgba(61,214,140,.08)}
+.journey .ev.h{border-color:rgba(242,181,68,.45);background:rgba(242,181,68,.08)}
+.journey .ev.x{border-style:dashed;color:var(--ink-50)}
+.journey .ev.paid{border-color:rgba(61,214,140,.7);background:rgba(61,214,140,.18);font-weight:650}
+.journey .empty{border:0;background:transparent}
+.journey .arrow{display:flex;align-items:center;justify-content:center;color:var(--ink-30);font-size:18px}
+.jnote{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px}
+@media(max-width:980px){.reach,.chatgrid{grid-template-columns:1fr 1fr}.journey{grid-template-columns:90px repeat(5,minmax(120px,1fr));overflow-x:auto}.hub{aspect-ratio:auto;max-height:none}}
+@media(max-width:600px){.reach,.chatgrid{grid-template-columns:1fr}}
+
 @media(max-width:980px){.meet{grid-template-columns:1fr}.suite{grid-template-columns:1fr 1fr}}
+
+/* chat-agent product slide */
+.meet-orb.core.chatorb{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;position:relative;background:linear-gradient(145deg,#1FB873,#3B6CF6);box-shadow:0 22px 44px -24px rgba(31,184,115,.65)}
+.meet-orb.core.chatorb::before,.meet-orb.core.chatorb::after{content:"";position:absolute;inset:-2px;border-radius:50%;border:2px solid rgba(31,184,115,.45);animation:ring 2.4s cubic-bezier(.22,1,.36,1) infinite}
+.meet-orb.core.chatorb::after{animation-delay:1.2s}
+.meet-orb.core.chatorb .td{animation:tdots 1.4s ease-in-out infinite}
+.meet-orb.core.chatorb .td2{animation-delay:.2s}.meet-orb.core.chatorb .td3{animation-delay:.4s}
+@keyframes tdots{0%,100%{opacity:.35;transform:translateY(0)}50%{opacity:1;transform:translateY(-2px)}}
+.meet-tag.g{color:#178A55}
+.cap-i.g{color:#178A55;background:rgba(31,184,115,.10);border-color:rgba(31,184,115,.22)}
+.meet-mvp.g b{color:#178A55;font-size:22px}
+.coll{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.coll .su b{display:block}
+@media(prefers-reduced-motion:reduce){.meet-orb.core.chatorb::before,.meet-orb.core.chatorb::after,.meet-orb.core.chatorb .td{animation:none}}
+@media(max-width:980px){.coll{grid-template-columns:1fr 1fr}}
+
 
 @media(max-width:980px){.tel{grid-template-columns:1fr}.tw{height:34px}.tw i{width:2px;height:100%;background:repeating-linear-gradient(180deg,var(--blue-l) 0 8px,transparent 8px 16px)}.inc{grid-template-columns:1fr}.inc-arrow{transform:rotate(90deg);height:34px}}
 @media(prefers-reduced-motion:reduce){.tw i{animation:none}}
@@ -486,7 +587,7 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
 
 <div class="progress" id="progress"></div>
 <nav class="nav">
-  <div class="brand"><img src="code-ox-logo.svg" alt="Code-Ox"><span class="x">×</span><span class="mad">Madeline</span><span class="x">·</span><span>AI Voice Agent</span></div>
+  <div class="brand"><img src="code-ox-logo.svg" alt="Code-Ox"><span class="x">×</span><span class="mad">Madeline</span><span class="x">·</span><span>AI Voice &amp; Chat Agents</span></div>
   <div class="counter" id="counter">01 / 16</div>
 </nav>
 <div class="hint"><kbd>↓</kbd><kbd>→</kbd> next slide</div>
@@ -505,7 +606,7 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
       <p class="sub rv" style="margin-top:22px">Code-Ox's AI voice agent — proposed as Madeline's outbound calling layer: fluent Saudi Arabic and English, connected live to your CRM, handing complex calls to your people with full context.</p>
       <div class="rv" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><div class="poc-badge" style="margin-top:22px"><b>2</b>A working proof of concept in two weeks — on your own call flows.</div><a class="site-btn" href="https://code-ox.com/sa/en/ai-solutions" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3.2 2.8 14.8 0 18M12 3c-2.8 3.2-2.8 14.8 0 18"/></svg><span>Visit Our Website</span></a></div>
       <div class="cover-meta rv">
-        <div><b>Solution proposal</b>AI Voice Agent for debt collection</div>
+        <div><b>Solution proposal</b>AI voice &amp; chat agents for debt collection</div>
         <div><b>Prepared for</b>Madeline Group · Riyadh</div>
         <div><b>By</b>Code-Ox Technologies · October 2026</div>
       </div>
@@ -521,8 +622,9 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
           <div class="sel"><select id="pcust" aria-label="Sample customer"></select></div>
           <button class="startbtn" id="pbtn"><span id="picon">▶</span><span id="plabel">Start call</span></button>
         </div>
-        <div class="p-sub"><button class="mutebtn" id="pmute" title="Mute microphone" aria-label="Mute microphone">🎙</button><span class="p-time" id="ptime">0:00</span><span class="p-state" id="pstate">You are the customer. Sara greets you, verifies you, and discusses the balance.</span></div>
+        <div class="p-sub"><button class="mutebtn" id="pmute" title="Hold to talk" aria-label="Hold to talk">🎙</button><button class="ptt" id="pptt" type="button" title="Push-to-talk: mic opens only while you hold the mic button or the T key"><i></i>Push to talk</button><span class="p-time" id="ptime">0:00</span><span class="p-state" id="pstate">You are the customer. Sara greets you, verifies you, and discusses the balance.</span></div>
         <div class="p-script" id="pscript"></div>
+        <div class="gate" id="gate"><button class="ptt on" id="gatebtn" type="button" title="Only send audio when a voice is close to the mic"><i></i>Noise gate</button><input type="range" id="gatethr" min="-60" max="-20" value="-40" step="1" title="Sensitivity: move right if Sara misses you, left if she hears the room"><span class="lvl" id="gatelvl"><i></i><b style="left:50%"></b></span><span class="st" id="gatest">closed</span></div>
         <p class="p-cap" id="pcap"><span class="ar">السلام عليكم، معك سارة المساعدة الذكية من شركة مدلين…</span><small>Press Start call — needs a microphone and this page served over http (Live Server is fine).</small></p>
         <div class="p-crm" id="pcrm"></div>
       </div>
@@ -581,6 +683,153 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
         <div class="row"><b>Language</b><span>Saudi, Najdi, Hejazi, MSA and English — detected automatically</span></div>
         <div class="row"><b>Reporting</b><span>Live dashboards per portfolio and per client</span></div>
       </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 3b · CALLS ALONE DON'T REACH -->
+<section class="slide top dense cream light" id="s3b">
+  <div class="glow"></div>
+  <div class="inner">
+    <div class="eyebrow rv">Why a voice agent alone is not enough</div>
+    <h2 class="rv">Most customers won't pick up an unknown number. Everyone checks their messages.</h2>
+    <p class="sub rv">Reminder calls compete with spam. A customer who is busy, driving, or simply wary lets it ring — and has no reason to call back. A message waits for them, gets opened, and tells us when it was read.</p>
+    <div class="reach rv">
+      <div class="pane">
+        <h3>A call from a number they don't know</h3>
+        <div class="notif"><div class="ic red">📵</div><div><b>Missed call · +966 11 ···</b><span>Unknown · 10:42</span></div><span class="rt">declined</span></div>
+        <div class="notif"><div class="ic red">📵</div><div><b>Missed call · +966 11 ···</b><span>Unknown · 14:15</span></div><span class="rt">no answer</span></div>
+        <div class="notif"><div class="ic">🔕</div><div><b>Silenced</b><span>"Silence unknown callers" is on</span></div><span class="rt">never rang</span></div>
+        <div class="why"><span class="chip"><span class="dot"></span>Unknown number</span><span class="chip"><span class="dot"></span>Spam fatigue</span><span class="chip"><span class="dot"></span>Busy or driving</span><span class="chip"><span class="dot"></span>No reason to call back</span></div>
+        <p class="big">Outcome: <em>three attempts, zero conversations</em> — and no idea whether the customer even noticed.</p>
+      </div>
+      <div class="pane msg">
+        <h3>A message on a channel they already use</h3>
+        <div class="notif"><div class="ic green">💬</div><div><b>WhatsApp · Madeline</b><span class="ar" style="display:block">عبدالله، حاولنا الاتصال بك بخصوص حسابك. تقدر تسدد من هنا →</span></div><span class="rt ok">✓✓ read 10:44</span></div>
+        <div class="notif"><div class="ic green">✉︎</div><div><b>SMS · Madeline</b><span>Secure payment link · valid 48h</span></div><span class="rt ok">delivered</span></div>
+        <div class="why"><span class="chip mint"><span class="dot"></span>Opened within minutes</span><span class="chip mint"><span class="dot"></span>Read receipt = proof</span><span class="chip mint"><span class="dot"></span>Reply when convenient</span><span class="chip mint"><span class="dot"></span>Pay with one tap</span></div>
+        <p class="big">Outcome: <em>we know it was seen</em>, the customer can act in ten seconds, and the conversation continues in the thread.</p>
+      </div>
+    </div>
+    <p class="small rv" style="margin-top:12px">Phone notifications shown are illustrations. Message channels are subject to opt-in and platform rules (WhatsApp Business templates, SMS sender registration).</p>
+  </div>
+</section>
+
+<!-- 3c · THE PLATFORM -->
+<section class="slide top dense" id="s3c">
+  <div class="glow"></div>
+  <div class="inner">
+    <div class="eyebrow rv">What we are proposing</div>
+    <h2 class="rv">Not a voice bot — a collections ecosystem.</h2>
+    <p class="sub rv">One admin system decides who to contact, when, and on which channel. The voice agent calls. The chat agent messages and converts. Your collectors take what needs a person. Everything writes to the same customer record.</p>
+    <div class="hub rv">
+      <svg viewBox="0 0 1280 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Collections ecosystem diagram">
+        <defs><linearGradient id="fl2" x1="0" x2="1"><stop offset="0" stop-color="#7DA0FF"/><stop offset="1" stop-color="#3DD68C"/></linearGradient>
+          <filter id="sh2" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity=".4"/></filter></defs>
+        <!-- links -->
+        <path class="link" d="M640 250 L300 365"/><path class="link" d="M640 250 L640 380"/><path class="link" d="M640 250 L980 365"/>
+        <path class="link" d="M640 110 V150"/>
+        <path class="link" d="M300 470 C 300 540, 640 540, 640 470"/><path class="link" d="M980 470 C 980 540, 640 540, 640 470"/>
+        <path class="flow" d="M640 250 L300 365"/><path class="flow" d="M640 250 L640 380"/><path class="flow" d="M640 250 L980 365"/>
+        <path class="flow rev" d="M640 110 V150"/>
+        <path class="flow rev" d="M300 470 C 300 540, 640 540, 640 470"/><path class="flow" d="M980 470 C 980 540, 640 540, 640 470"/>
+        <!-- CRM top -->
+        <g filter="url(#sh2)"><rect class="node crm" x="500" y="50" width="280" height="60" rx="18"/></g>
+        <text x="640" y="76" text-anchor="middle">Madeline CRM · one customer record</text>
+        <text x="640" y="96" text-anchor="middle" class="s">every call, message, promise and payment lands here</text>
+        <!-- Admin hub -->
+        <g filter="url(#sh2)"><rect class="node admin" x="400" y="150" width="480" height="100" rx="26"/></g>
+        <text x="640" y="185" text-anchor="middle" class="c">Admin system</text>
+        <text x="640" y="206" text-anchor="middle" class="s">campaigns · channel rules · retries · calling hours · outcomes · dashboards · client portal</text>
+        <g><rect class="pill" x="420" y="218" width="100" height="22" rx="8"/><text x="470" y="233" text-anchor="middle" class="s">who to contact</text>
+           <rect class="pill" x="530" y="218" width="100" height="22" rx="8"/><text x="580" y="233" text-anchor="middle" class="s">when</text>
+           <rect class="pill" x="640" y="218" width="100" height="22" rx="8"/><text x="690" y="233" text-anchor="middle" class="s">which channel</text>
+           <rect class="pill" x="750" y="218" width="110" height="22" rx="8"/><text x="805" y="233" text-anchor="middle" class="s">what happened</text></g>
+        <!-- Voice -->
+        <g filter="url(#sh2)"><rect class="node voice" x="150" y="365" width="300" height="105" rx="22"/></g>
+        <text x="300" y="398" text-anchor="middle" class="c" style="font-size:17px">Voice agent</text>
+        <text x="300" y="420" text-anchor="middle" class="s">outbound reminders · verification · negotiation</text>
+        <text x="300" y="438" text-anchor="middle" class="s">Arabic &amp; English · warm transfer to humans</text>
+        <text x="300" y="458" text-anchor="middle" class="lbl">reaches those who answer</text>
+        <!-- Chat -->
+        <g filter="url(#sh2)"><rect class="node chat" x="490" y="365" width="300" height="105" rx="22"/></g>
+        <text x="640" y="398" text-anchor="middle" class="c" style="font-size:17px">Chat agent</text>
+        <text x="640" y="420" text-anchor="middle" class="s">WhatsApp · SMS</text>
+        <text x="640" y="438" text-anchor="middle" class="s">follow-ups · payment links · promises · documents</text>
+        <text x="640" y="458" text-anchor="middle" class="lbl">reaches everyone · converts</text>
+        <!-- Humans -->
+        <g filter="url(#sh2)"><rect class="node human" x="830" y="365" width="300" height="105" rx="22"/></g>
+        <text x="980" y="398" text-anchor="middle" class="c" style="font-size:17px">Human collectors</text>
+        <text x="980" y="420" text-anchor="middle" class="s">disputes · hardship · high-value negotiation</text>
+        <text x="980" y="438" text-anchor="middle" class="s">one inbox for calls and chats · full context</text>
+        <text x="980" y="458" text-anchor="middle" class="lbl">handles what needs a person</text>
+        <!-- link labels -->
+        <text x="455" y="300" text-anchor="middle" class="lbl">call</text>
+        <text x="665" y="320" text-anchor="middle" class="lbl">message</text>
+        <text x="830" y="300" text-anchor="middle" class="lbl">hand-off</text>
+        <text x="640" y="540" text-anchor="middle" class="lbl">no answer → message · agreed on call → link in chat · dispute → human</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- 3d · THE CHAT AGENT -->
+<section class="slide top dense cream light" id="s3d">
+  <div class="glow"></div>
+  <div class="inner">
+    <div class="eyebrow rv">The chat agent</div>
+    <h2 class="rv">Where the payment actually happens.</h2>
+    <p class="sub rv">Chat is the channel people answer, and the one where an action is a single tap. The chat agent runs the same verified, rule-bound conversation as the voice agent — in writing, at the customer's pace, with a payment link in the thread.</p>
+    <div class="chatgrid stagger">
+      <div class="card"><div class="ico">📵</div><h3>Picks up where the call failed</h3><p>No answer or voicemail → a message within minutes: who we are, why we called, and a secure link. No more "three attempts, nothing".</p></div>
+      <div class="card"><div class="ico">🪪</div><h3>Verifies before it discloses</h3><p>Identity check in chat (last digits of ID, OTP) before any balance or client name is shown — same rule as the call.</p></div>
+      <div class="card"><div class="ico">💳</div><h3>Collects the payment</h3><p>Payment link or SADAD reference in the thread; confirmation back to the customer and to the CRM the moment it clears.</p></div>
+      <div class="card"><div class="ico">📅</div><h3>Captures promises &amp; instalments</h3><p>Agrees a date, offers the allowed instalment plan, confirms it in writing — a record the customer can scroll back to.</p></div>
+      <div class="card"><div class="ico">⏰</div><h3>Reminds before it's due</h3><p>Day-before and day-of reminders on the promise date; nudges if a link was opened but not paid.</p></div>
+      <div class="card"><div class="ico">💬</div><h3>Answers questions, 24/7</h3><p>Balance, due date, how to pay, who the client is — in Arabic or English, from the approved FAQ, any hour.</p></div>
+      <div class="card"><div class="ico">📎</div><h3>Collects documents</h3><p>Proof of payment, a dispute letter, an updated phone number — attached to the case automatically.</p></div>
+      <div class="card"><div class="ico">👤</div><h3>Hands over with context</h3><p>Disputes, hardship or anger go to a human in the same thread; the collector sees the whole conversation.</p></div>
+    </div>
+    <div class="channels rv">
+      <span class="chip mint"><span class="dot"></span>WhatsApp Business</span><span class="chip"><span class="dot"></span>SMS</span><span class="chip lilac"><span class="dot"></span>Delivered · read · clicked · paid — measured per message</span>
+    </div>
+  </div>
+</section>
+
+<!-- 3e · VOICE + CHAT JOURNEY -->
+<section class="slide top dense" id="s3e">
+  <div class="glow"></div>
+  <div class="inner">
+    <div class="eyebrow rv">Voice and chat together</div>
+    <h2 class="rv">One customer, one journey — the channel changes, the record doesn't.</h2>
+    <p class="sub rv">The admin system runs the sequence. Every step is either an automatic action or a hand-off, and each one is logged against the same account.</p>
+    <div class="journey rv">
+      <div class="t"></div><div class="t">Day 0 · 10:40</div><div class="t">+2 min</div><div class="t">Day 0–1</div><div class="t">Promise day − 1</div><div class="t">Promise day</div>
+      <div class="lane v"><i></i>Voice</div>
+      <div class="ev v"><b>Reminder call</b>Verify → balance → options. Answered: agrees to pay on the 10th.</div>
+      <div class="ev v x"><b>No answer / busy</b>Logged · retry scheduled by rule</div>
+      <div class="ev empty"></div>
+      <div class="ev v x"><b>Callback if requested</b>At the time the customer chose</div>
+      <div class="ev empty"></div>
+      <div class="lane c"><i></i>Chat</div>
+      <div class="ev c"><b>Confirmation in writing</b>"As agreed: SAR 3,450 on 10 Oct" + payment link</div>
+      <div class="ev c"><b>"We tried to reach you"</b>WhatsApp/SMS with secure link · read receipt</div>
+      <div class="ev c"><b>Customer replies</b>Verify in chat → pay now, promise a date, or choose instalments</div>
+      <div class="ev c"><b>Reminder</b>"Your payment of SAR 3,450 is due tomorrow" · link</div>
+      <div class="ev c paid"><b>Paid ✓</b>Confirmation to customer · CRM closed · client report updated</div>
+      <div class="lane h"><i></i>Human</div>
+      <div class="ev empty"></div>
+      <div class="ev empty"></div>
+      <div class="ev h"><b>Dispute or hardship</b>Same thread handed to a collector with the full history</div>
+      <div class="ev empty"></div>
+      <div class="ev h x"><b>Not paid</b>Escalation rule: second promise, field visit, or legal — by client policy</div>
+    </div>
+    <div class="jnote rv">
+      <span class="chip"><span class="dot"></span>Every message and call: one timeline per customer</span>
+      <span class="chip mint"><span class="dot"></span>Payment can close at any step</span>
+      <span class="chip amber"><span class="dot"></span>Humans only where the rules say so</span>
+      <span class="chip lilac"><span class="dot"></span>Attempt limits and calling hours apply across both channels</span>
     </div>
   </div>
 </section>
@@ -981,38 +1230,38 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
   <div class="glow"></div>
   <div class="inner">
     <div class="eyebrow rv">Scope</div>
-    <h2 class="rv">Start with the five must-haves. Grow into the ecosystem.</h2>
+    <h2 class="rv">Start with voice plus chat follow-ups. Grow into the full ecosystem.</h2>
     <div class="scope stagger">
       <div class="col mvp">
-        <div class="ph">Phase 1 · MVP</div>
-        <h3>Automated outbound calling</h3>
+        <div class="ph">Phase 1 · MVP — recommended</div>
+        <h3>Voice agent + chat follow-ups</h3>
         <ul class="list">
-          <li><strong>Outbound campaigns</strong> in Saudi Arabic and English with auto-detection and switching.</li>
-          <li><strong>Real-time CRM integration</strong> over REST: fetch before, update status and results after.</li>
-          <li><strong>Human hand-off</strong> — live transfer to available agents with screen-pop context.</li>
-          <li><strong>Automatic documentation</strong> — transcript, summary, recording link, disposition, updated status.</li>
-          <li><strong>Natural conversation &amp; fallback logic</strong> — low latency, defined fallback scripts, escalation rules.</li>
-          <li>All nine call scenarios · retry rules · calling-hours guardrails · management dashboard.</li>
+          <li><strong>Outbound voice campaigns</strong> in Saudi Arabic and English with auto-detection and switching; all nine call scenarios.</li>
+          <li><strong>Chat follow-ups by outcome</strong> — no answer → WhatsApp/SMS "we tried to reach you" with secure link; agreed to pay → written confirmation + link; promise-date reminders.</li>
+          <li><strong>Real-time CRM integration</strong> over REST: fetch before, write disposition, transcript, summary, recording and messages after.</li>
+          <li><strong>Human hand-off</strong> — live transfer from the call, with screen-pop context.</li>
+          <li><strong>Admin system v1</strong> — campaign rules, retries, calling hours, attempt limits across channels, management dashboard.</li>
         </ul>
       </div>
       <div class="col">
-        <div class="ph">Phase 2 · Next</div>
-        <h3>Smarter follow-through</h3>
+        <div class="ph">Phase 2 · Two-way chat agent</div>
+        <h3>Conversations that convert</h3>
         <ul class="list">
-          <li><strong>WhatsApp / SMS follow-ups</strong> triggered by disposition — payment link, promise reminder, callback confirmation.</li>
-          <li><strong>Real-time sentiment analysis</strong> feeding hand-off decisions and QA.</li>
-          <li><strong>Inbound handling</strong> — customers calling back reach the voice agent first, verified and routed.</li>
+          <li><strong>Chat agent on WhatsApp Business API</strong> — verification in chat, FAQs, promise and instalment negotiation, document capture, 24/7 Arabic/English.</li>
+          <li><strong>Payment inside the thread</strong> — link/SADAD, instant confirmation to customer and CRM.</li>
+          <li><strong>Two-way SMS</strong> — alongside WhatsApp; inbound calls answered by the voice agent.</li>
+          <li><strong>Unified human inbox</strong> — collectors handle chat hand-offs and calls from one screen.</li>
           <li><strong>Client reporting portal</strong> for banks and insurers.</li>
         </ul>
       </div>
       <div class="col">
         <div class="ph">Phase 3 · Ecosystem</div>
-        <h3>From calls to collections platform</h3>
+        <h3>From agents to collections platform</h3>
         <ul class="list">
-          <li><strong>AIWA</strong> — Code-Ox's WhatsApp agent for two-way negotiation, document capture and instalment acceptance.</li>
-          <li><strong>In-call payment</strong> via SADAD / card link with instant confirmation.</li>
-          <li><strong>Propensity-to-pay scoring</strong> to prioritise who the voice agent calls first and who goes straight to a human.</li>
-          <li><strong>Odoo collections suite</strong> — case lifecycle, field visits, commissions, HR, accounting — if Madeline wants one system end-to-end.</li>
+          <li><strong>Channel intelligence</strong> — propensity-to-pay scoring and best-channel / best-time selection per customer.</li>
+          <li><strong>Real-time sentiment analysis</strong> feeding hand-off decisions and QA.</li>
+          <li><strong>In-call payment</strong> with instant confirmation.</li>
+          <li><strong>Odoo collections suite</strong> — case lifecycle, field visits, commissions, HR, accounting — one system end-to-end.</li>
         </ul>
       </div>
     </div>
@@ -1081,6 +1330,37 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
   </div>
 </section>
 
+
+<!-- 15c · MEET THE CHAT AGENT (from code-ox.com) -->
+<section class="slide cream light" id="s15c">
+  <div class="glow"></div>
+  <div class="inner">
+    <div class="eyebrow rv">From code-ox.com · AI Solutions</div>
+    <div class="meet">
+      <div class="meet-l rv">
+        <div class="meet-id"><div class="core chatorb meet-orb"><svg viewBox="0 0 48 48" width="40" height="40" fill="none" aria-hidden="true"><path d="M24 8c-9.4 0-17 6.5-17 14.5 0 4.3 2.2 8.1 5.7 10.8L11 40l8.4-4.3c1.5.3 3 .5 4.6.5 9.4 0 17-6.5 17-14.5S33.4 8 24 8z" fill="#fff"/><circle cx="17" cy="22.5" r="2.2" fill="#1FB873" class="td td1"/><circle cx="24" cy="22.5" r="2.2" fill="#1FB873" class="td td2"/><circle cx="31" cy="22.5" r="2.2" fill="#1FB873" class="td td3"/></svg></div><div><h2 style="margin:0">AI Chat Agent</h2><div class="meet-tag g">by Code-Ox · AI WhatsApp Agent</div></div></div>
+        <p class="meet-q">“Conversational AI integrated with WhatsApp Business API for automated customer engagement, order processing, support, and marketing campaigns at scale.”</p>
+        <div class="meet-uses"><span class="small">Deployed for</span><span class="chip">E-commerce</span><span class="chip">Restaurants</span><span class="chip">Retail</span><span class="chip">Services</span><span class="chip mint"><span class="dot"></span>Collections — Madeline</span></div>
+        <div class="meet-mvp g"><b>Same engine</b><span>Retrained for collections: reminders, payment links, promise capture and reminders — in the customer's WhatsApp or SMS, in Arabic and English.</span></div>
+        <a class="cta meet-cta" href="https://code-ox.com/sa/en/ai-solutions" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3.2 2.8 14.8 0 18M12 3c-2.8 3.2-2.8 14.8 0 18"/></svg><span>Visit Our Website</span></a>
+      </div>
+      <div class="meet-r">
+        <div class="k rv" style="font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-50);margin-bottom:10px">Capabilities</div>
+        <div class="caps stagger">
+          <div class="cap"><span class="cap-i g"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M9 10h6M9 13.5h4"/></svg></span><span>WhatsApp Business API integration</span></div>
+          <div class="cap"><span class="cap-i g"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16l-1.5 9h-13z"/><path d="M8 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM16 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM4 6 3 3"/></svg></span><span>Automated order taking and processing</span></div>
+          <div class="cap"><span class="cap-i g"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h3l6 4V6l-6 4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></span><span>Broadcast campaigns and promotions</span></div>
+          <div class="cap"><span class="cap-i g"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 16 5-5 4 4 3-3 6 5"/><circle cx="16" cy="9" r="1.5"/></svg></span><span>Rich media support (images, videos, PDFs)</span></div>
+          <div class="cap"><span class="cap-i g"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 14h3"/></svg></span><span>Payment gateway integration</span></div>
+        </div>
+        <div class="k rv" style="font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-50);margin:18px 0 10px">What it does for Madeline</div>
+        <div class="coll stagger"><div class="su"><b>Call failed → message</b><span>"We tried to reach you" with a secure link, within minutes</span></div><div class="su"><b>Payment in the thread</b><span>Link or SADAD, confirmed to customer and CRM</span></div><div class="su"><b>Promise &amp; reminders</b><span>Date agreed in writing, reminder the day before</span></div><div class="su"><b>Documents &amp; disputes</b><span>Proof of payment attached; disputes handed to a person</span></div><div class="su"><b>Read receipts</b><span>Delivered · read · clicked · paid, per message</span></div></div>
+        <p class="small rv" style="margin-top:14px">Serving clients across Saudi Arabia, UAE, Kuwait, Qatar and India · Offices in Riyadh, Dubai, Kuwait and Kerala · Odoo Silver Partner</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 16 · CLOSE -->
 <section class="slide" id="s16">
   <div class="glow"></div>
@@ -1135,6 +1415,41 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
   });
 
 
+
+  // ---- clean microphone: browser noise suppression + high-pass + noise gate ----
+  // Sara only receives audio while the input level is above the gate threshold (a voice close to the mic).
+  const CleanMic=(function(){
+    let ctx, gate, analyser, dest, raw, timer, open=false, lastAbove=0, enabled=true, threshDb=-40, levelDb=-90, onLevel=null;
+    const HOLD_MS=380;
+    async function create(){
+      if(dest) return dest.stream.getAudioTracks()[0];
+      raw=await navigator.mediaDevices.getUserMedia({audio:{noiseSuppression:true, echoCancellation:true, autoGainControl:true, channelCount:1}});
+      const AC=window.AudioContext||window.webkitAudioContext; ctx=new AC();
+      const src=ctx.createMediaStreamSource(raw);
+      const hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=110;
+      analyser=ctx.createAnalyser(); analyser.fftSize=1024; analyser.smoothingTimeConstant=0;
+      gate=ctx.createGain(); gate.gain.value=enabled?0:1;
+      dest=ctx.createMediaStreamDestination();
+      src.connect(hp); hp.connect(analyser); hp.connect(gate); gate.connect(dest);
+      const buf=new Float32Array(analyser.fftSize);
+      timer=setInterval(()=>{
+        analyser.getFloatTimeDomainData(buf); let s=0; for(let i=0;i<buf.length;i++) s+=buf[i]*buf[i];
+        levelDb=20*Math.log10(Math.sqrt(s/buf.length)+1e-7);
+        const now=performance.now();
+        if(enabled){
+          if(levelDb>threshDb){ lastAbove=now; if(!open){ open=true; gate.gain.setTargetAtTime(1, ctx.currentTime, 0.008); } }
+          else if(open && now-lastAbove>HOLD_MS){ open=false; gate.gain.setTargetAtTime(0, ctx.currentTime, 0.06); }
+        }
+        if(onLevel) onLevel(levelDb, open||!enabled);
+      }, 25);
+      return dest.stream.getAudioTracks()[0];
+    }
+    function setEnabled(v){ enabled=v; if(gate){ if(!v){ open=true; gate.gain.setTargetAtTime(1, ctx.currentTime, 0.01); } else { open=false; gate.gain.setTargetAtTime(0, ctx.currentTime, 0.01); } } }
+    function setThreshold(db){ threshDb=db; }
+    function resume(){ if(ctx&&ctx.state==='suspended') ctx.resume(); }
+    return {create, setEnabled, setThreshold, resume, set onLevel(f){onLevel=f;}, get threshold(){return threshDb;}, get enabled(){return enabled;}};
+  })();
+
   // ---- live Vapi call (cover) ----
   (function(){
     const PK='44972efc-03c2-4d2f-95c8-488e40c926ae', AID='684fb868-a207-469a-b993-13238147921d';
@@ -1167,7 +1482,10 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
       ];
       scriptEl.innerHTML=`<div class="h">Test script — you play the customer<span>sample data only</span></div><ol>${steps.map((s,i)=>`<li><i>0${i+1}</i><div><b>${s[0]}:</b> ${s[1]}</div></li>`).join('')}</ol>`;
     }
-    sel.addEventListener('change',()=>{ const c=cur(); renderScript(c); state.innerHTML=`This is a <b>test call</b> with a sample customer — follow the script below.`; });
+    const capHint=cap.querySelector('small')?cap.querySelector('small').outerHTML:'';
+    sel.addEventListener('change',()=>{ const c=cur(); renderScript(c); state.innerHTML=`This is a <b>test call</b> with a sample customer — follow the script below.`;
+      if(!wrap.classList.contains('live')) cap.innerHTML=`<span class="${c.lang==='ar'?'ar':'ln'}">${firstMessage(c)}</span>${capHint}`; });
+    sel.value='sarah';
     sel.dispatchEvent(new Event('change'));
     let V=null, vapi=null, inCall=false, muted=false, t0=0, tick=null, partial=null;
     const fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
@@ -1178,8 +1496,8 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
       else if(name==='send_payment_link'){ crm.innerHTML+=`<span class="chip mint"><span class="dot"></span>Payment link sent · ${args.channel||'WhatsApp + SMS'}</span>`; }
       else if(name==='escalate_to_human'){ crm.innerHTML+=`<span class="chip amber"><span class="dot"></span>Transfer to human · ${args.reason||''}</span>`; } }
     function wire(){
-      vapi.on('call-start',()=>{ inCall=true; t0=Date.now(); tick=setInterval(()=>time.textContent=fmt(Math.floor((Date.now()-t0)/1000)),500); wrap.classList.remove('idle'); wrap.classList.add('live'); btn.classList.add('busy'); icon.textContent='■'; label.textContent='End call'; btn.disabled=false; chip.textContent='Live call · recording'; state.innerHTML='<b>Connected.</b> Sara is greeting you — answer as the customer.'; });
-      vapi.on('call-end',()=>{ inCall=false; clearInterval(tick); wrap.classList.remove('live'); wrap.classList.add('idle'); btn.classList.remove('busy'); icon.textContent='▶'; label.textContent='Start call'; btn.disabled=false; chip.textContent='Live call · Sara on Vapi'; state.innerHTML='<b>Call ended.</b> Transcript, summary and recording are saved to the call record.'; crm.innerHTML+='<span class="chip"><span class="dot"></span>Documented ✓</span>'; bars.forEach(b=>b.style.height='14%'); if(muted){muted=false;mute.classList.remove('on');mute.textContent='🎙';} });
+      vapi.on('call-start',()=>{ inCall=true; t0=Date.now(); tick=setInterval(()=>time.textContent=fmt(Math.floor((Date.now()-t0)/1000)),500); wrap.classList.remove('idle'); wrap.classList.add('live'); btn.classList.add('busy'); icon.textContent='■'; label.textContent='End call'; btn.disabled=false; chip.textContent='Live call · recording'; state.innerHTML='<b>Connected.</b> Sara is greeting you — answer as the customer.'; setTimeout(()=>{ if(ptt){ setMic(false); state.innerHTML='<b>Connected · push to talk.</b> Hold 🎙 or <b>T</b> while you speak; release to let Sara answer.'; } },150); });
+      vapi.on('call-end',()=>{ inCall=false; clearInterval(tick); wrap.classList.remove('live'); wrap.classList.add('idle'); btn.classList.remove('busy'); icon.textContent='▶'; label.textContent='Start call'; btn.disabled=false; chip.textContent='Live call · Sara on Vapi'; state.innerHTML='<b>Call ended.</b> Transcript, summary and recording are saved to the call record.'; crm.innerHTML+='<span class="chip"><span class="dot"></span>Documented ✓</span>'; bars.forEach(b=>b.style.height='14%'); muted=false; talking=false; mute.classList.remove('on','open'); mute.textContent='🎙'; });
       vapi.on('speech-start',()=>state.innerHTML='<b>Sara is speaking.</b> You can interrupt her naturally.');
       vapi.on('speech-end',()=>state.innerHTML='<b>Listening…</b>');
       vapi.on('volume-level',v=>bars.forEach((b,i)=>{const k=Math.sin(i/bars.length*Math.PI); b.style.height=(12+Math.min(1,v*3)*k*84*(0.6+Math.random()*0.4))+'%';}));
@@ -1188,14 +1506,39 @@ body.on-light .hint kbd{border-color:rgba(21,19,26,.2);color:rgba(21,19,26,.7)}
     }
     async function start(){
       const c=cur(); btn.disabled=true; state.innerHTML='<b>Connecting…</b> loading SDK and requesting the microphone';
-      try{ const C=await sdk(); if(!vapi){ vapi=new C(PK); wire(); }
-        try{ const st=await navigator.mediaDevices.getUserMedia({audio:true}); st.getTracks().forEach(t=>t.stop()); }catch(e){ throw new Error('Microphone blocked — allow it in the address bar (page must be on http/https).'); }
+      try{ const C=await sdk();
+        let track=null; try{ track=await CleanMic.create(); CleanMic.resume(); }catch(e){ throw new Error('Microphone blocked — allow it in the address bar (page must be on http/https).'); }
+        if(window.__gateLevel){ CleanMic.onLevel=window.__gateLevel; }
+        if(!vapi){ vapi=new C(PK, undefined, undefined, {audioSource: track}); wire(); }
         crm.innerHTML=''; caption('assistant', c.lang==='ar'?'…':'…');
         await vapi.start(AID,{variableValues:vars(c), firstMessage:firstMessage(c)});
       }catch(e){ console.error(e); btn.disabled=false; state.innerHTML=`<b style="color:#FFB0B0">Could not start.</b> ${String(e.message||e).slice(0,160)}`; }
     }
+
+    // noise-gate UI
+    (function(){ const gb=document.getElementById('gatebtn'), thr=document.getElementById('gatethr'), lvl=document.getElementById('gatelvl'), st=document.getElementById('gatest'); if(!gb) return;
+      const mark=lvl.querySelector('b'); const pos=db=>Math.max(0,Math.min(100,(db+60)/40*100));
+      mark.style.left=pos(parseFloat(thr.value))+'%';
+      gb.addEventListener('click',()=>{ const on=!CleanMic.enabled; CleanMic.setEnabled(on); gb.classList.toggle('on',on); thr.disabled=!on; });
+      thr.addEventListener('input',()=>{ CleanMic.setThreshold(parseFloat(thr.value)); mark.style.left=pos(parseFloat(thr.value))+'%'; });
+      window.__gateLevel=(db,open)=>{ lvl.querySelector('i').style.width=pos(db)+'%'; lvl.classList.toggle('open',open); st.textContent=CleanMic.enabled?(open?'open':'closed'):'bypass'; };
+    })();
+
     btn.addEventListener('click',()=>{ if(inCall) vapi.stop(); else start(); });
-    mute.addEventListener('click',()=>{ if(!vapi||!inCall) return; muted=!muted; vapi.setMuted(muted); mute.classList.toggle('on',muted); mute.textContent=muted?'🔇':'🎙'; });
+    // ---- push-to-talk: in a noisy room the mic is closed unless you hold the mic button or the T key ----
+    const pttBtn=document.getElementById('pptt'); let ptt=false, talking=false;
+    function setMic(open){ if(!vapi||!inCall) return; muted=!open; try{ vapi.setMuted(muted); }catch(e){} mute.classList.toggle('open',open&&ptt); mute.classList.toggle('on',muted&&!ptt); mute.textContent=open?'🎙':(ptt?'🎙':'🔇'); }
+    function applyPtt(){ pttBtn.classList.toggle('on',ptt); mute.title=ptt?'Hold to talk (or hold T)':'Mute microphone'; if(inCall){ setMic(!ptt); } state.innerHTML = ptt ? '<b>Push to talk is on.</b> Hold the 🎙 button or the <b>T</b> key while you speak; release to let Sara answer.' : state.innerHTML; }
+    pttBtn.addEventListener('click',()=>{ ptt=!ptt; applyPtt(); });
+    const down=e=>{ if(!inCall) return; if(ptt){ if(!talking){ talking=true; setMic(true); } } };
+    const up=e=>{ if(!inCall) return; if(ptt){ talking=false; setMic(false); } };
+    mute.addEventListener('pointerdown',e=>{ if(ptt){ e.preventDefault(); mute.setPointerCapture(e.pointerId); down(); } });
+    mute.addEventListener('pointerup',e=>{ if(ptt){ up(); } });
+    mute.addEventListener('pointercancel',up); mute.addEventListener('lostpointercapture',up);
+    mute.addEventListener('click',()=>{ if(ptt||!vapi||!inCall) return; muted=!muted; vapi.setMuted(muted); mute.classList.toggle('on',muted); mute.textContent=muted?'🔇':'🎙'; });
+    addEventListener('keydown',e=>{ if(e.key==='t'||e.key==='T'){ if(e.repeat||e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA') return; down(e); } });
+    addEventListener('keyup',e=>{ if(e.key==='t'||e.key==='T') up(e); });
+    addEventListener('blur',()=>up());
     new IntersectionObserver(es=>es.forEach(x=>{ if(!x.isIntersecting && inCall) { /* keep the call running; the presenter may be navigating slides */ } }),{threshold:.2}).observe(wrap);
   })();
 

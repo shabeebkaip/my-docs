@@ -65,6 +65,20 @@ h1{font-size:clamp(30px,3.4vw,46px);line-height:1.04;letter-spacing:-.03em;font-
 .mutebtn{width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;font-size:18px;transition:transform .1s ease-out,background .2s}
 .mutebtn.on{background:var(--rose);border-color:transparent}
 .mutebtn:active{transform:scale(.95)}
+.mutebtn.open{background:var(--mint);border-color:transparent;color:#06301c;box-shadow:0 0 0 6px rgba(61,214,140,.22)}
+.ptt{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;border-radius:999px;padding:7px 12px;border:1px solid var(--line);background:var(--panel);color:var(--fg-70);cursor:pointer;white-space:nowrap;user-select:none}
+.ptt.on{border-color:rgba(61,214,140,.45);color:#9FF0C6}
+.ptt i{width:7px;height:7px;border-radius:50%;background:var(--fg-30)}
+.ptt.on i{background:var(--mint)}
+.gate{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--fg-50)}
+.gate .ptt{padding:5px 10px}
+.gate input[type=range]{width:120px;accent-color:#7DA0FF}
+.lvl{position:relative;width:110px;height:8px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.lvl i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#3DD68C,#7DA0FF);border-radius:99px;transition:width .05s linear}
+.lvl.open i{background:linear-gradient(90deg,#3DD68C,#9FF0C6)}
+.lvl b{position:absolute;top:-3px;width:2px;height:14px;background:#F2B544;border-radius:2px}
+.gate .st{font-family:var(--mono);font-variant-numeric:tabular-nums;min-width:52px}
+
 .meter{flex:1;height:52px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);display:flex;align-items:center;gap:3px;padding:0 20px;overflow:hidden}
 .meter i{flex:1;max-width:4px;height:12%;border-radius:99px;background:linear-gradient(180deg,var(--blue-l),var(--lilac));transition:height .12s ease-out;opacity:.9}
 .meter .t{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums;margin-left:14px;color:var(--fg)}
@@ -177,6 +191,8 @@ h1{font-size:clamp(30px,3.4vw,46px);line-height:1.04;letter-spacing:-.03em;font-
       </div>
       <div class="state" id="state"><b>Ready.</b> Pick a customer and start the call.</div>
       <div class="mic" id="mic">Mic permission: not requested yet</div>
+      <div class="gate" id="gate"><button class="ptt on" id="gatebtn" type="button" title="Only send audio when a voice is close to the mic"><i></i>Noise gate</button><input type="range" id="gatethr" min="-60" max="-20" value="-40" step="1" title="Sensitivity: move right if Sara misses you, left if she hears the room"><span class="lvl" id="gatelvl"><i></i><b style="left:50%"></b></span><span class="st" id="gatest">closed</span></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="ptt" id="pttbtn" type="button" title="Mic opens only while you hold the mic button or the T key"><i></i>Push to talk</button><span class="small" id="ptthint">Optional: hold 🎙 or <b>T</b> to open the mic only while you speak.</span></div>
     </div>
 
     <div class="cust" id="cust"></div>
@@ -438,6 +454,41 @@ fillSettings();
 })();
 
 /* ===================== Vapi call ===================== */
+
+  // ---- clean microphone: browser noise suppression + high-pass + noise gate ----
+  // Sara only receives audio while the input level is above the gate threshold (a voice close to the mic).
+  const CleanMic=(function(){
+    let ctx, gate, analyser, dest, raw, timer, open=false, lastAbove=0, enabled=true, threshDb=-40, levelDb=-90, onLevel=null;
+    const HOLD_MS=380;
+    async function create(){
+      if(dest) return dest.stream.getAudioTracks()[0];
+      raw=await navigator.mediaDevices.getUserMedia({audio:{noiseSuppression:true, echoCancellation:true, autoGainControl:true, channelCount:1}});
+      const AC=window.AudioContext||window.webkitAudioContext; ctx=new AC();
+      const src=ctx.createMediaStreamSource(raw);
+      const hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=110;
+      analyser=ctx.createAnalyser(); analyser.fftSize=1024; analyser.smoothingTimeConstant=0;
+      gate=ctx.createGain(); gate.gain.value=enabled?0:1;
+      dest=ctx.createMediaStreamDestination();
+      src.connect(hp); hp.connect(analyser); hp.connect(gate); gate.connect(dest);
+      const buf=new Float32Array(analyser.fftSize);
+      timer=setInterval(()=>{
+        analyser.getFloatTimeDomainData(buf); let s=0; for(let i=0;i<buf.length;i++) s+=buf[i]*buf[i];
+        levelDb=20*Math.log10(Math.sqrt(s/buf.length)+1e-7);
+        const now=performance.now();
+        if(enabled){
+          if(levelDb>threshDb){ lastAbove=now; if(!open){ open=true; gate.gain.setTargetAtTime(1, ctx.currentTime, 0.008); } }
+          else if(open && now-lastAbove>HOLD_MS){ open=false; gate.gain.setTargetAtTime(0, ctx.currentTime, 0.06); }
+        }
+        if(onLevel) onLevel(levelDb, open||!enabled);
+      }, 25);
+      return dest.stream.getAudioTracks()[0];
+    }
+    function setEnabled(v){ enabled=v; if(gate){ if(!v){ open=true; gate.gain.setTargetAtTime(1, ctx.currentTime, 0.01); } else { open=false; gate.gain.setTargetAtTime(0, ctx.currentTime, 0.01); } } }
+    function setThreshold(db){ threshDb=db; }
+    function resume(){ if(ctx&&ctx.state==='suspended') ctx.resume(); }
+    return {create, setEnabled, setThreshold, resume, set onLevel(f){onLevel=f;}, get threshold(){return threshDb;}, get enabled(){return enabled;}};
+  })();
+
 let vapi=null, inCall=false, muted=false, t0=0, tick=null, partialEl=null, VapiCtor=null;
 const meter=$('meter'); for(let i=0;i<28;i++){ const b=document.createElement('i'); meter.insertBefore(b, $('timer')); }
 const bars=[...meter.querySelectorAll('i')];
@@ -496,9 +547,10 @@ async function startCall(){
   $('startbtn').disabled=true; setState('<b>Connecting…</b> loading SDK and requesting microphone');
   try{
     const V=await loadSDK();
-    if(!vapi){ vapi=new V(cfg.pk); wire(); }
-    try{ const s=await navigator.mediaDevices.getUserMedia({audio:true}); s.getTracks().forEach(t=>t.stop()); $('mic').textContent='Mic permission ✓'; $('mic').className='mic ok'; }
+    let track=null;
+    try{ track=await CleanMic.create(); CleanMic.resume(); if(window.__gateLevel) CleanMic.onLevel=window.__gateLevel; $('mic').textContent='Mic permission ✓ · noise suppression + gate active'; $('mic').className='mic ok'; }
     catch(e){ $('mic').textContent='Mic permission denied — allow the microphone in the address bar'; $('mic').className='mic'; throw e; }
+    if(!vapi){ vapi=new V(cfg.pk, undefined, undefined, {audioSource: track}); wire(); }
     resetPanels(); addBubble('sys', `Dialling ${c.phone} · caller ID Madeline · ${c.lang==='ar'?'Arabic':'English'} first message`);
     if(cfg.aid){ await vapi.start(cfg.aid, {variableValues: variableValues(c), firstMessage: firstMessage(c)}); }
     else { await vapi.start(buildAssistant(c, cfg)); }
@@ -507,8 +559,8 @@ async function startCall(){
   }
 }
 function wire(){
-  vapi.on('call-start', ()=>{ inCall=true; t0=Date.now(); tick=setInterval(setTimer,500); $('startbtn').classList.add('busy'); $('starticon').textContent='■'; $('startlabel').textContent='End call'; $('startbtn').disabled=false; $('connpill').className='pill live'; $('conntext').textContent='Live call'; setState('<b>Connected.</b> Sara is greeting you — reply as the customer.'); });
-  vapi.on('call-end', ()=>{ inCall=false; clearInterval(tick); $('startbtn').classList.remove('busy'); $('starticon').textContent='▶'; $('startlabel').textContent='Start call'; $('startbtn').disabled=false; updateConn(); setState('<b>Call ended.</b> Transcript, summary and recording are written to the CRM record.'); crm('doc','transcript · summary · recording ✓'); addBubble('sys', `Call ended · ${$('timer').textContent} · documentation saved`); bars.forEach(b=>b.style.height='12%'); if(muted){ muted=false; $('mutebtn').classList.remove('on'); } });
+  vapi.on('call-start', ()=>{ inCall=true; t0=Date.now(); tick=setInterval(setTimer,500); $('startbtn').classList.add('busy'); $('starticon').textContent='■'; $('startlabel').textContent='End call'; $('startbtn').disabled=false; $('connpill').className='pill live'; $('conntext').textContent='Live call'; setState('<b>Connected.</b> Sara is greeting you — reply as the customer.'); setTimeout(()=>{ if(ptt){ setMic(false); setState('<b>Connected · push to talk.</b> Hold 🎙 or <b>T</b> while you speak; release to let Sara answer.'); } },150); });
+  vapi.on('call-end', ()=>{ inCall=false; clearInterval(tick); $('startbtn').classList.remove('busy'); $('starticon').textContent='▶'; $('startlabel').textContent='Start call'; $('startbtn').disabled=false; updateConn(); setState('<b>Call ended.</b> Transcript, summary and recording are written to the CRM record.'); crm('doc','transcript · summary · recording ✓'); addBubble('sys', `Call ended · ${$('timer').textContent} · documentation saved`); bars.forEach(b=>b.style.height='12%'); muted=false; talking=false; mb.classList.remove('on','open'); mb.textContent='🎙'; });
   vapi.on('speech-start', ()=>setState('<b>Sara is speaking.</b> You can interrupt her naturally.'));
   vapi.on('speech-end', ()=>setState('<b>Listening…</b>'));
   vapi.on('volume-level', v=>{ bars.forEach((b,i)=>{ const k=Math.sin(i/bars.length*Math.PI); b.style.height=(12+Math.min(1,v*3)*k*80*(0.6+Math.random()*0.4))+'%'; }); });
@@ -520,8 +572,29 @@ function wire(){
   });
   vapi.on('error', e=>{ console.error(e); const msg=e?.error?.message||e?.message||e?.errorMsg||JSON.stringify(e).slice(0,200); setState(`<b style="color:#FFB0B0">Error.</b> ${msg}`); toast('Vapi error — see status line', true); });
 }
+
+    // noise-gate UI
+    (function(){ const gb=document.getElementById('gatebtn'), thr=document.getElementById('gatethr'), lvl=document.getElementById('gatelvl'), st=document.getElementById('gatest'); if(!gb) return;
+      const mark=lvl.querySelector('b'); const pos=db=>Math.max(0,Math.min(100,(db+60)/40*100));
+      mark.style.left=pos(parseFloat(thr.value))+'%';
+      gb.addEventListener('click',()=>{ const on=!CleanMic.enabled; CleanMic.setEnabled(on); gb.classList.toggle('on',on); thr.disabled=!on; });
+      thr.addEventListener('input',()=>{ CleanMic.setThreshold(parseFloat(thr.value)); mark.style.left=pos(parseFloat(thr.value))+'%'; });
+      window.__gateLevel=(db,open)=>{ lvl.querySelector('i').style.width=pos(db)+'%'; lvl.classList.toggle('open',open); st.textContent=CleanMic.enabled?(open?'open':'closed'):'bypass'; };
+    })();
+
 $('startbtn').addEventListener('click', ()=>{ if(inCall){ vapi.stop(); } else startCall(); });
-$('mutebtn').addEventListener('click', ()=>{ if(!vapi||!inCall) return; muted=!muted; vapi.setMuted(muted); $('mutebtn').classList.toggle('on', muted); $('mutebtn').textContent=muted?'🔇':'🎙'; });
+// ---- push-to-talk ----
+let ptt=false, talking=false; const mb=$('mutebtn');
+function setMic(open){ if(!vapi||!inCall) return; muted=!open; try{ vapi.setMuted(muted); }catch(e){} mb.classList.toggle('open',open&&ptt); mb.classList.toggle('on',muted&&!ptt); mb.textContent=open?'🎙':(ptt?'🎙':'🔇'); }
+$('pttbtn').addEventListener('click',()=>{ ptt=!ptt; $('pttbtn').classList.toggle('on',ptt); mb.title=ptt?'Hold to talk (or hold T)':'Mute microphone'; if(inCall) setMic(!ptt); $('ptthint').innerHTML = ptt ? 'Noisy room? Keep this on: hold 🎙 or <b>T</b> while you speak.' : 'Open mic: Sara hears everything, including people nearby.'; });
+const pttDown=()=>{ if(inCall&&ptt&&!talking){ talking=true; setMic(true); } };
+const pttUp=()=>{ if(inCall&&ptt){ talking=false; setMic(false); } };
+mb.addEventListener('pointerdown',e=>{ if(ptt){ e.preventDefault(); mb.setPointerCapture(e.pointerId); pttDown(); } });
+mb.addEventListener('pointerup',()=>{ if(ptt) pttUp(); }); mb.addEventListener('pointercancel',pttUp); mb.addEventListener('lostpointercapture',pttUp);
+mb.addEventListener('click', ()=>{ if(ptt||!vapi||!inCall) return; muted=!muted; vapi.setMuted(muted); mb.classList.toggle('on', muted); mb.textContent=muted?'🔇':'🎙'; });
+addEventListener('keydown',e=>{ if((e.key==='t'||e.key==='T') && !e.repeat && !['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)) pttDown(); });
+addEventListener('keyup',e=>{ if(e.key==='t'||e.key==='T') pttUp(); });
+addEventListener('blur',pttUp);
 addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
 </script>
 </body>
