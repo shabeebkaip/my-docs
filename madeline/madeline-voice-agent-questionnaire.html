@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madeline × Code-Ox — Voice Agent Technical Questionnaire</title>
+<style>
+:root{
+  --ink:#15131A; --ink-70:rgba(21,19,26,.72); --ink-55:rgba(21,19,26,.55); --ink-35:rgba(21,19,26,.35); --line:rgba(21,19,26,.1);
+  --bg:#F6F3EE; --card:#fff; --blue:#3B6CF6; --blue-d:#2F5BE0; --lilac:#8E7AB5; --amber:#B07800; --amber-bg:#FDF4DF; --mint:#178A55; --mint-bg:#E6F6EE;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;padding:0 16px 60px}
+.wrap{max-width:920px;margin:0 auto}
+
+/* header */
+.hero{background:#07080D;color:#F3F4F8;border-radius:0 0 22px 22px;padding:28px 40px 34px;margin:0 -16px 28px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 380px at 90% 0%,rgba(59,108,246,.35),transparent 65%),radial-gradient(500px 360px at 0% 100%,rgba(185,166,203,.25),transparent 65%);pointer-events:none}
+.hero>*{position:relative}
+.hero-in{max-width:920px;margin:0 auto}
+.brands{display:flex;align-items:center;gap:16px;margin-bottom:30px}
+.brands img.cx{height:20px;filter:brightness(0) invert(1)}
+.brands img.md{height:42px;margin:-6px 0}
+.brands .x{color:rgba(243,244,248,.35)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#7DA0FF;margin-bottom:12px}
+h1{font-size:clamp(30px,4.6vw,46px);line-height:1.05;letter-spacing:-.03em;font-weight:700;max-width:18ch;margin-bottom:14px}
+.hero p{font-size:16px;color:rgba(243,244,248,.72);max-width:62ch;line-height:1.55}
+.meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:22px;font-size:12.5px;color:rgba(243,244,248,.5)}
+.meta b{display:block;color:#F3F4F8;font-size:13.5px;font-weight:600}
+
+/* intro cards */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.how div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.how b{display:block;font-size:14px;margin-bottom:4px;letter-spacing:-.01em}
+.how span{font-size:13px;color:var(--ink-70)}
+.legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--ink-55);margin-bottom:22px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.tag.poc{background:var(--mint-bg);color:var(--mint)}
+.tag.live{background:#EEF1FB;color:var(--blue-d)}
+.tag.key{background:var(--amber-bg);color:var(--amber)}
+
+/* sections */
+.sec{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 28px 10px;margin-bottom:18px}
+.sec-h{display:flex;align-items:flex-start;gap:14px;margin-bottom:6px}
+.sec-n{flex:0 0 34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:#fff;font-weight:700;font-size:14px}
+.sec-h h2{font-size:21px;letter-spacing:-.02em;line-height:1.2}
+.sec-h p{font-size:13.5px;color:var(--ink-55);margin-top:3px}
+.q{padding:16px 0 18px;border-top:1px solid var(--line);break-inside:avoid}
+.sec-h + .q{border-top:none}
+.q-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.q-t{font-weight:650;font-size:15px;letter-spacing:-.005em}
+.q-t i{font-style:normal;font-size:12px;color:var(--blue-d);margin-right:8px;font-weight:700;letter-spacing:.02em}
+.q-tags{display:flex;gap:5px;flex-shrink:0}
+.why{font-size:12.5px;color:var(--ink-55);margin:3px 0 10px 32px}
+.ans{margin-left:32px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.opts label{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;border:1px solid var(--line);border-radius:10px;padding:7px 11px;cursor:pointer;background:#FBFAF8;transition:border-color .15s,background .15s}
+.opts label:hover{border-color:rgba(59,108,246,.4)}
+.opts input{accent-color:var(--blue)}
+.opts label:has(input:checked){border-color:var(--blue);background:#EEF2FE}
+textarea,input[type=text]{width:100%;font:inherit;font-size:14px;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:#FBFAF8;resize:vertical}
+textarea{min-height:64px}
+textarea:focus,input[type=text]:focus{outline:2px solid rgba(59,108,246,.35);outline-offset:1px;border-color:var(--blue);background:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.contact-row{display:grid;grid-template-columns:1.1fr 1fr 1.3fr;gap:8px;margin-bottom:8px}
+.sub-l{font-size:12px;font-weight:600;color:var(--ink-55);margin:6px 0 4px}
+
+/* poc checklist */
+.poc-box{background:linear-gradient(170deg,#EAF7F0,#fff 70%);border:1px solid rgba(23,138,85,.25);border-radius:20px;padding:24px 28px;margin-bottom:18px}
+.poc-box h2{font-size:20px;letter-spacing:-.02em;margin-bottom:4px}
+.poc-box p{font-size:13.5px;color:var(--ink-70);margin-bottom:12px}
+.poc-box ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}
+.poc-box li{font-size:13.5px;display:grid;grid-template-columns:22px 1fr;gap:6px}
+.poc-box li b{color:var(--mint);font-family:var(--mono);font-size:12px;padding-top:1px}
+
+/* footer */
+.foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;background:#07080D;color:#F3F4F8;border-radius:20px;padding:22px 28px;margin-top:26px}
+.foot .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(243,244,248,.45);margin-bottom:6px}
+.foot b{font-size:15px}
+.foot .c{font-size:13px;color:rgba(243,244,248,.7);margin-top:4px}
+.foot img{height:22px;filter:brightness(0) invert(1);opacity:.6}
+.actions{position:fixed;right:20px;bottom:20px;display:flex;gap:8px;z-index:10}
+.btn{font:inherit;font-size:13.5px;font-weight:600;border-radius:999px;padding:10px 18px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 10px 24px -14px rgba(21,19,26,.35)}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn:active{transform:scale(.97)}
+.saved{font-size:12px;color:var(--ink-55);align-self:center;background:#fff;border-radius:999px;padding:6px 12px;border:1px solid var(--line);opacity:0;transition:opacity .3s}
+.saved.on{opacity:1}
+
+@media(max-width:720px){.how,.poc-box ol,.grid2,.contact-row{grid-template-columns:1fr}.ans,.why{margin-left:0}.hero{padding:24px 22px 28px}.sec{padding:22px 18px 8px}}
+@media print{
+  body{background:#fff;padding:0}
+  .actions{display:none}
+  .hero,.foot{-webkit-print-color-adjust:exact;print-color-adjust:exact;border-radius:0}
+  .sec,.poc-box,.how div{border-color:#ddd}
+  textarea{min-height:46px}
+  @page{size:A4;margin:14mm}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="brands"><img class="cx" src="code-ox-logo.svg" alt="Code-Ox"><span class="x">×</span><img class="md" src="madeline-logo.webp" alt="Madeline"></div>
+    <div class="eyebrow">AI Voice Agent · Technical questionnaire</div>
+    <h1>What we need to know to build your voice agent.</h1>
+    <p>Your phone setup, your customer data, and how your collectors work today. Answer what you can — <strong style="color:#F3F4F8">“Not sure” is a perfectly good answer</strong>; we will work it out together with your IT team or telecom provider.</p>
+    <div class="meta">
+      <div><b>Prepared for</b>Madeline Group · Riyadh</div>
+      <div><b>Prepared by</b>Code-Ox Technologies</div>
+      <div><b>Date</b>5 October 2026</div>
+      <div><b>Time to complete</b>About 30 minutes</div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="how">
+    <div><b>1 · Fill it in here</b><span>Type directly into this page. Your answers save automatically in this browser.</span></div>
+    <div><b>2 · Share it with your team</b><span>Section 2 is best answered by whoever manages your phones or PBX.</span></div>
+    <div><b>3 · Send it back</b><span>Click “Save as PDF” and email the file to us. Attach any documents you mention.</span></div>
+  </div>
+
+  <div class="legend">Each question is marked:
+    <span class="tag poc">POC</span> needed for the 2-week proof of concept
+    <span class="tag live">Go-live</span> needed before going live
+    <span class="tag key">Key</span> most important
+  </div>
+
+  <div class="poc-box">
+    <h2>Just want to start the 2-week POC? These 8 answers are enough.</h2>
+    <p>The proof of concept runs on a test line, so your phone system is not needed yet. Answer the questions marked <span class="tag poc">POC</span> first.</p>
+    <ol>
+      <li><b>01</b><span>One portfolio to test on (Q 24)</span></li>
+      <li><b>02</b><span>Your current call script (Q 25)</span></li>
+      <li><b>03</b><span>How you verify a customer (Q 26)</span></li>
+      <li><b>04</b><span>What the agent may offer (Q 27)</span></li>
+      <li><b>05</b><span>Your call statuses (Q 21)</span></li>
+      <li><b>06</b><span>20 anonymised sample customers (Q 20)</span></li>
+      <li><b>07</b><span>Language and voice preference (Q 31)</span></li>
+      <li><b>08</b><span>Who on your team will test it (Q 1–3)</span></li>
+    </ol>
+  </div>
+
+  <!-- 1 CONTACTS -->
+  <section class="sec">
+    <div class="sec-h"><div class="sec-n">1</div><div><h2>Your team</h2><p>So we know who to ask about each part of the project.</p></div></div>
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q1</i>Project owner — who makes decisions on this project?</div><div class="q-tags"><span class="tag poc">POC</span></div></div>
+      <div class="ans"><div class="contact-row"><input type="text" placeholder="Name" data-k="q1n"><input type="text" placeholder="Role" data-k="q1r"><input type="text" placeholder="Email / mobile" data-k="q1c"></div></div></div>
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q2</i>IT / telephony contact — who manages your phones, PBX or network?</div><div class="q-tags"><span class="tag live">Go-live</span><span class="tag key">Key</span></div></div>
+      <div class="ans"><div class="contact-row"><input type="text" placeholder="Name" data-k="q2n"><input type="text" placeholder="Role / company (if outsourced)" data-k="q2r"><input type="text" placeholder="Email / mobile" data-k="q2c"></div></div></div>
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q3</i>Collections operations — who runs the collectors day to day?</div><div class="q-tags"><span class="tag poc">POC</span></div></div>
+      <div class="ans"><div class="contact-row"><input type="text" placeholder="Name" data-k="q3n"><input type="text" placeholder="Role" data-k="q3r"><input type="text" placeholder="Email / mobile" data-k="q3c"></div></div></div>
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q4</i>Compliance / legal — who approves scripts and data handling?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="contact-row"><input type="text" placeholder="Name" data-k="q4n"><input type="text" placeholder="Role" data-k="q4r"><input type="text" placeholder="Email / mobile" data-k="q4c"></div></div></div>
+  </section>
+
+  <!-- 2 TELEPHONY -->
+  <section class="sec">
+    <div class="sec-h"><div class="sec-n">2</div><div><h2>Phone lines &amp; telephony</h2><p>How calls reach the voice agent. Please share this section with your IT or telephony contact.</p></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q5</i>How do your collectors make calls today?</div><div class="q-tags"><span class="tag live">Go-live</span><span class="tag key">Key</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="checkbox" data-k="q5a">Desk phones on an office phone system (PBX)</label>
+        <label><input type="checkbox" data-k="q5b">Software phone on the computer</label>
+        <label><input type="checkbox" data-k="q5c">Call-centre / dialler software</label>
+        <label><input type="checkbox" data-k="q5d">Company mobile phones</label>
+        <label><input type="checkbox" data-k="q5e">Not sure</label></div>
+        <input type="text" placeholder="Other / details" data-k="q5o"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q6</i>Do you have a SIP trunk for your business lines?</div><div class="q-tags"><span class="tag live">Go-live</span><span class="tag key">Key</span></div></div>
+      <div class="why">A SIP trunk is a phone line delivered over the internet instead of copper lines. It is the simplest way to connect the voice agent. If you don’t have one, your provider can usually add one.</div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q6" data-k="q6" value="Yes">Yes</label>
+        <label><input type="radio" name="q6" data-k="q6" value="No">No — traditional lines (ISDN / analog)</label>
+        <label><input type="radio" name="q6" data-k="q6" value="Not sure">Not sure</label></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q7</i>Which telecom provider supplies your business phone lines?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><input type="text" placeholder="Provider name, account manager contact if available" data-k="q7"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q8</i>Do you have a PBX or contact-centre system? Which one?</div><div class="q-tags"><span class="tag live">Go-live</span><span class="tag key">Key</span></div></div>
+      <div class="why">For example Avaya, Cisco, 3CX, Yeastar, Grandstream, Genesys or a cloud contact centre. The brand tells us exactly how the connection is set up.</div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q8" data-k="q8" value="On-premise">Yes — in our office</label>
+        <label><input type="radio" name="q8" data-k="q8" value="Cloud">Yes — cloud-hosted</label>
+        <label><input type="radio" name="q8" data-k="q8" value="None">No PBX</label>
+        <label><input type="radio" name="q8" data-k="q8" value="Not sure">Not sure</label></div>
+        <div class="grid2"><input type="text" placeholder="Brand / model / version" data-k="q8b"><input type="text" placeholder="Managed by (in-house or vendor name)" data-k="q8m"></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q9</i>Which number should customers see when the voice agent calls?</div><div class="q-tags"><span class="tag live">Go-live</span><span class="tag key">Key</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q9" data-k="q9" value="Existing">Our existing main number</label>
+        <label><input type="radio" name="q9" data-k="q9" value="New">A new dedicated number</label>
+        <label><input type="radio" name="q9" data-k="q9" value="Unified">Our unified number (9200…)</label>
+        <label><input type="radio" name="q9" data-k="q9" value="Not sure">Not sure</label></div>
+        <input type="text" placeholder="Number(s), if known" data-k="q9n"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q10</i>When a customer calls that number back, what should happen?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q10" data-k="q10" value="Agent">The voice agent answers</label>
+        <label><input type="radio" name="q10" data-k="q10" value="Human">Goes to our collectors</label>
+        <label><input type="radio" name="q10" data-k="q10" value="Hours">Voice agent after hours, collectors in working hours</label>
+        <label><input type="radio" name="q10" data-k="q10" value="Not sure">Not sure</label></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q11</i>How many calls should the voice agent make at the same time?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="why">Your line or PBX licence sets a maximum number of simultaneous calls. Please share both, if known.</div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q11" data-k="q11" value="5">Up to 5</label>
+        <label><input type="radio" name="q11" data-k="q11" value="10">10</label>
+        <label><input type="radio" name="q11" data-k="q11" value="20">20</label>
+        <label><input type="radio" name="q11" data-k="q11" value="50+">50+</label>
+        <label><input type="radio" name="q11" data-k="q11" value="Not sure">Not sure</label></div>
+        <input type="text" placeholder="Current line / licence limit, if known" data-k="q11l"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q12</i>Can your IT team (or PBX vendor) connect an external system to your phones?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="why">For example by adding a SIP route or extension. Please also tell us about firewall rules, IP whitelisting or VPN requirements.</div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q12" data-k="q12" value="Yes">Yes</label>
+        <label><input type="radio" name="q12" data-k="q12" value="Vendor">Only through our vendor</label>
+        <label><input type="radio" name="q12" data-k="q12" value="Not sure">Not sure</label></div>
+        <textarea placeholder="Security requirements, approvals needed, lead time" data-k="q12d"></textarea></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q13</i>When the voice agent hands a call to a person, where should it go?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="checkbox" data-k="q13a">A queue / group of collectors</label>
+        <label><input type="checkbox" data-k="q13b">The collector who owns the account</label>
+        <label><input type="checkbox" data-k="q13c">A supervisor</label>
+        <label><input type="checkbox" data-k="q13d">Collectors’ mobile numbers</label></div>
+        <input type="text" placeholder="Collector working hours, number of collectors, any desk software they use" data-k="q13o"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q14</i>Do you record calls today? Where are recordings kept, and for how long?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><input type="text" placeholder="e.g. PBX recorder, 2 years, on-premise server" data-k="q14"></div></div>
+  </section>
+
+  <!-- 3 CRM & DATA -->
+  <section class="sec">
+    <div class="sec-h"><div class="sec-n">3</div><div><h2>Customer data &amp; CRM</h2><p>Where the voice agent reads who to call and writes back what happened.</p></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q15</i>Which system holds your customer accounts?</div><div class="q-tags"><span class="tag live">Go-live</span><span class="tag key">Key</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q15" data-k="q15" value="Vendor">A collections / CRM product</label>
+        <label><input type="radio" name="q15" data-k="q15" value="In-house">Built in-house</label>
+        <label><input type="radio" name="q15" data-k="q15" value="Excel">Excel / shared files</label>
+        <label><input type="radio" name="q15" data-k="q15" value="Not sure">Not sure</label></div>
+        <div class="grid2"><input type="text" placeholder="System name &amp; vendor" data-k="q15n"><input type="text" placeholder="Cloud or on our servers?" data-k="q15h"></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q16</i>Does that system have an API, and is there a test environment?</div><div class="q-tags"><span class="tag live">Go-live</span><span class="tag key">Key</span></div></div>
+      <div class="why">An API lets the voice agent read and update accounts live. If there is no API, Code-Ox can work with scheduled file exports, or provide a collections workspace on Odoo.</div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q16" data-k="q16" value="API">Yes — API with documentation</label>
+        <label><input type="radio" name="q16" data-k="q16" value="Files">No API — but we can export / import files</label>
+        <label><input type="radio" name="q16" data-k="q16" value="DB">Database access only</label>
+        <label><input type="radio" name="q16" data-k="q16" value="Not sure">Not sure</label></div>
+        <input type="text" placeholder="Test / sandbox environment available? Who can give access?" data-k="q16t"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q17</i>Which customer details are available for each account?</div><div class="q-tags"><span class="tag poc">POC</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="checkbox" data-k="q17a">Name (Arabic / English)</label>
+        <label><input type="checkbox" data-k="q17b">More than one phone number</label>
+        <label><input type="checkbox" data-k="q17c">National ID / Iqama</label>
+        <label><input type="checkbox" data-k="q17d">Outstanding balance</label>
+        <label><input type="checkbox" data-k="q17e">Due date / days overdue</label>
+        <label><input type="checkbox" data-k="q17f">Product &amp; client (bank)</label>
+        <label><input type="checkbox" data-k="q17g">Previous notes / history</label>
+        <label><input type="checkbox" data-k="q17h">Preferred language</label>
+        <label><input type="checkbox" data-k="q17i">Past promises to pay</label></div>
+        <input type="text" placeholder="Anything else" data-k="q17o"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q18</i>How many accounts and calls are we talking about?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="grid2"><input type="text" placeholder="Active accounts" data-k="q18a"><input type="text" placeholder="Calls per day today" data-k="q18b"><input type="text" placeholder="Number of collectors" data-k="q18c"><input type="text" placeholder="Number of client portfolios" data-k="q18d"></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q19</i>Do any of your clients (banks, insurers) have rules about AI calls, outsourcing or where data is stored?</div><div class="q-tags"><span class="tag live">Go-live</span><span class="tag key">Key</span></div></div>
+      <div class="ans"><textarea placeholder="Client names can be anonymised — e.g. “Bank A requires data to stay in KSA”" data-k="q19"></textarea></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q20</i>Can you share about 20 anonymised sample accounts for the POC?</div><div class="q-tags"><span class="tag poc">POC</span></div></div>
+      <div class="why">Real structure, fake details — names and numbers changed. This lets us test every scenario without touching real customer data.</div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q20" data-k="q20" value="Yes">Yes</label>
+        <label><input type="radio" name="q20" data-k="q20" value="Help">Yes, with help preparing it</label>
+        <label><input type="radio" name="q20" data-k="q20" value="No">No — please create sample data</label></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q21</i>What call statuses and sub-statuses do you use today?</div><div class="q-tags"><span class="tag poc">POC</span></div></div>
+      <div class="why">The voice agent will write exactly the statuses your reports already use.</div>
+      <div class="ans"><textarea placeholder="e.g. Answered · No Answer · Busy · Wrong Number — Agreed to Pay · Requested Callback · Disputed… (or attach the list)" data-k="q21"></textarea></div></div>
+  </section>
+
+  <!-- 4 CALL FLOWS -->
+  <section class="sec">
+    <div class="sec-h"><div class="sec-n">4</div><div><h2>The conversation</h2><p>What the voice agent says, what it may offer, and when it hands over to a person.</p></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q22</i>What calling rules apply?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="grid2"><input type="text" placeholder="Calling hours (e.g. 9:00–20:00)" data-k="q22a"><input type="text" placeholder="Days not to call" data-k="q22b"><input type="text" placeholder="Max attempts per day / week" data-k="q22c"><input type="text" placeholder="Ramadan / holiday hours" data-k="q22d"></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q23</i>If the call reaches voicemail, what should happen?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q23" data-k="q23" value="Hang up">Hang up and retry later</label>
+        <label><input type="radio" name="q23" data-k="q23" value="Message">Leave a short, neutral message</label>
+        <label><input type="radio" name="q23" data-k="q23" value="Not sure">Not sure</label></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q24</i>Which portfolio should we start with?</div><div class="q-tags"><span class="tag poc">POC</span><span class="tag key">Key</span></div></div>
+      <div class="ans"><input type="text" placeholder="Client / product (e.g. credit cards), days overdue, typical balance range" data-k="q24"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q25</i>Please share your current call script (Arabic and/or English).</div><div class="q-tags"><span class="tag poc">POC</span></div></div>
+      <div class="why">Including any statements that must be said word for word, such as the recording notice or company introduction.</div>
+      <div class="ans"><textarea placeholder="Paste here or attach the document" data-k="q25"></textarea></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q26</i>How do you confirm you are speaking to the right person?</div><div class="q-tags"><span class="tag poc">POC</span><span class="tag key">Key</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="checkbox" data-k="q26a">Last 4 digits of ID / Iqama</label>
+        <label><input type="checkbox" data-k="q26b">Date of birth</label>
+        <label><input type="checkbox" data-k="q26c">Account / card number digits</label>
+        <label><input type="checkbox" data-k="q26d">Full name only</label></div>
+        <input type="text" placeholder="What may be said before verification? What if a family member answers?" data-k="q26o"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q27</i>What is the voice agent allowed to offer?</div><div class="q-tags"><span class="tag poc">POC</span><span class="tag key">Key</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="checkbox" data-k="q27a">Full payment now</label>
+        <label><input type="checkbox" data-k="q27b">Promise to pay by a date</label>
+        <label><input type="checkbox" data-k="q27c">Partial payment</label>
+        <label><input type="checkbox" data-k="q27d">Instalments</label>
+        <label><input type="checkbox" data-k="q27e">Discount / settlement</label></div>
+        <div class="grid2"><input type="text" placeholder="Max days for a promise to pay" data-k="q27f"><input type="text" placeholder="Max number of instalments / minimum amount" data-k="q27g"></div>
+        <input type="text" style="margin-top:8px" placeholder="Anything that needs a human’s approval (e.g. discounts)" data-k="q27h"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q28</i>When must the call go to a person straight away?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="checkbox" data-k="q28a">Customer disputes the debt</label>
+        <label><input type="checkbox" data-k="q28b">Financial hardship</label>
+        <label><input type="checkbox" data-k="q28c">Complaint</label>
+        <label><input type="checkbox" data-k="q28d">Mentions lawyer / legal action</label>
+        <label><input type="checkbox" data-k="q28e">Vulnerable or distressed customer</label>
+        <label><input type="checkbox" data-k="q28f">Asks for a human</label></div>
+        <input type="text" placeholder="Other triggers" data-k="q28o"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q29</i>Can you share some anonymised recordings of good calls?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="why">20–50 recordings help tune the voice agent to how your best collectors speak to customers.</div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q29" data-k="q29" value="Yes">Yes</label>
+        <label><input type="radio" name="q29" data-k="q29" value="Approval">Needs approval</label>
+        <label><input type="radio" name="q29" data-k="q29" value="No">No</label></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q30</i>What questions do customers ask most often?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><textarea placeholder="e.g. “Why is the amount different?”, “Can I pay at the branch?” — and how your team answers them" data-k="q30"></textarea></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q31</i>Language and voice preferences</div><div class="q-tags"><span class="tag poc">POC</span></div></div>
+      <div class="ans"><div class="grid2"><input type="text" placeholder="Share of calls in Arabic vs English (e.g. 85 / 15)" data-k="q31a"><input type="text" placeholder="Dialect (e.g. Najdi, Hejazi, formal Arabic)" data-k="q31b"></div>
+        <div class="opts" style="margin-top:8px">
+        <label><input type="radio" name="q31v" data-k="q31v" value="Female">Female voice</label>
+        <label><input type="radio" name="q31v" data-k="q31v" value="Male">Male voice</label>
+        <label><input type="radio" name="q31v" data-k="q31v" value="Both">Both — depends on portfolio</label></div>
+        <input type="text" placeholder="Agent name customers will hear (e.g. “Sara”)" data-k="q31n"></div></div>
+  </section>
+
+  <!-- 5 PAYMENTS & MESSAGING -->
+  <section class="sec">
+    <div class="sec-h"><div class="sec-n">5</div><div><h2>Payments &amp; messaging</h2><p>So the voice agent can send a payment link and confirm when it is paid.</p></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q32</i>How do customers pay today?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="checkbox" data-k="q32a">SADAD</label>
+        <label><input type="checkbox" data-k="q32b">Bank transfer</label>
+        <label><input type="checkbox" data-k="q32c">Payment link (card / mada)</label>
+        <label><input type="checkbox" data-k="q32d">Directly to the client (bank)</label></div>
+        <input type="text" placeholder="Payment provider / biller name" data-k="q32o"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q33</i>How do you find out that a customer has paid?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><input type="text" placeholder="e.g. daily report from the client, payment provider notification, manual check" data-k="q33"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q34</i>Do you send SMS or WhatsApp messages to customers?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="checkbox" data-k="q34a">SMS with a registered sender name</label>
+        <label><input type="checkbox" data-k="q34b">WhatsApp Business account</label>
+        <label><input type="checkbox" data-k="q34c">Neither yet</label></div>
+        <input type="text" placeholder="SMS provider / WhatsApp number" data-k="q34o"></div></div>
+  </section>
+
+  <!-- 6 COMPLIANCE & SECURITY -->
+  <section class="sec">
+    <div class="sec-h"><div class="sec-n">6</div><div><h2>Compliance &amp; security</h2><p>So the voice agent follows the same rules your collectors do.</p></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q35</i>Which licences and regulations apply to your collection calls?</div><div class="q-tags"><span class="tag live">Go-live</span><span class="tag key">Key</span></div></div>
+      <div class="ans"><textarea placeholder="e.g. licensing authority, conduct rules, any internal code of conduct (attach if available)" data-k="q35"></textarea></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q36</i>Must customer data and recordings stay inside Saudi Arabia?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="radio" name="q36" data-k="q36" value="KSA only">Yes — KSA only</label>
+        <label><input type="radio" name="q36" data-k="q36" value="Approved cloud">Approved cloud regions are fine</label>
+        <label><input type="radio" name="q36" data-k="q36" value="Not sure">Not sure</label></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q37</i>Is there a vendor security review, NDA or onboarding process we should start?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><input type="text" placeholder="Process, documents required, expected time" data-k="q37"></div></div>
+  </section>
+
+  <!-- 7 SUCCESS -->
+  <section class="sec">
+    <div class="sec-h"><div class="sec-n">7</div><div><h2>Results &amp; timing</h2><p>How we will both know the voice agent is working.</p></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q38</i>Which numbers do you report to your clients today?</div><div class="q-tags"><span class="tag live">Go-live</span></div></div>
+      <div class="ans"><div class="opts">
+        <label><input type="checkbox" data-k="q38a">Contact rate</label>
+        <label><input type="checkbox" data-k="q38b">Promise-to-pay rate</label>
+        <label><input type="checkbox" data-k="q38c">Promises kept</label>
+        <label><input type="checkbox" data-k="q38d">Amount collected</label>
+        <label><input type="checkbox" data-k="q38e">Calls per collector</label></div>
+        <input type="text" placeholder="Current figures, if you can share them — this becomes the baseline" data-k="q38o"></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q39</i>What would make the pilot a success for you?</div><div class="q-tags"><span class="tag poc">POC</span></div></div>
+      <div class="ans"><textarea placeholder="e.g. “Reach 2× more customers per day with the same promise-to-pay rate”" data-k="q39"></textarea></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q40</i>When would you like to start, and who signs off?</div><div class="q-tags"><span class="tag poc">POC</span></div></div>
+      <div class="ans"><div class="grid2"><input type="text" placeholder="Preferred POC start date" data-k="q40a"><input type="text" placeholder="Who approves going ahead" data-k="q40b"></div></div></div>
+
+    <div class="q"><div class="q-top"><div class="q-t"><i>Q41</i>Anything else we should know?</div></div>
+      <div class="ans"><textarea placeholder="Concerns, past experience with automation, systems we have not asked about…" data-k="q41"></textarea></div></div>
+  </section>
+
+  <div class="foot">
+    <div>
+      <div class="k">Questions while filling this in?</div>
+      <b>Shabeeb K — Code-Ox Technologies</b>
+      <div class="c">shabeeb.k@code-ox.com &nbsp;·&nbsp; +966 53 571 6437 &nbsp;·&nbsp; code-ox.com</div>
+    </div>
+    <img src="code-ox-logo.svg" alt="Code-Ox">
+  </div>
+</main>
+
+<div class="actions"><span class="saved" id="saved">Saved in this browser</span><button class="btn" id="clear">Clear</button><button class="btn primary" onclick="window.print()">Save as PDF</button></div>
+
+<script>
+(function(){
+  const KEY='madeline-voice-agent-questionnaire-v1';
+  let data={}; try{ data=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  const els=[...document.querySelectorAll('[data-k]')];
+  els.forEach(el=>{
+    const k=el.dataset.k;
+    if(el.type==='radio'){ if(data[k]===el.value) el.checked=true; }
+    else if(el.type==='checkbox'){ el.checked=!!data[k]; }
+    else if(data[k]!=null){ el.value=data[k]; }
+  });
+  const flag=document.getElementById('saved'); let t;
+  function save(el){
+    const k=el.dataset.k;
+    data[k]=el.type==='checkbox'?el.checked:el.value;
+    try{ localStorage.setItem(KEY,JSON.stringify(data)); flag.classList.add('on'); clearTimeout(t); t=setTimeout(()=>flag.classList.remove('on'),1200);}catch(e){}
+  }
+  els.forEach(el=>el.addEventListener(el.type==='radio'||el.type==='checkbox'?'change':'input',()=>save(el)));
+  const clear=document.getElementById('clear'); let armed=false;
+  clear.addEventListener('click',()=>{
+    if(!armed){ armed=true; clear.textContent='Click again to clear'; setTimeout(()=>{armed=false;clear.textContent='Clear';},2500); return; }
+    try{ localStorage.removeItem(KEY);}catch(e){}
+    data={}; els.forEach(el=>{ if(el.type==='radio'||el.type==='checkbox') el.checked=false; else el.value=''; });
+    armed=false; clear.textContent='Clear';
+  });
+})();
+</script>
+</body>
+</html>
