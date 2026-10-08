@@ -1,0 +1,414 @@
+<title>الفحص الصحي لموقع iwanfirm</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  /* تخطيط: تقرير بعمود واحد، ترويسة ثابتة، بطاقات تقييم، صفوف نتائج بشريط خطورة، جدول إجراءات — باتجاه RTL */
+  :root{
+    --bg:#f6f5f2; --surface:#ffffff; --surface-2:#efece6; --fg:#1b1a18; --muted:#6c6861;
+    --border:#e4e0d8; --accent:#355b7d; --accent-soft:#e9f0f6;
+    --good:#2e8b57; --good-bg:#e7f3ec; --good-br:#bfe0cd;
+    --warn:#b4791a; --warn-bg:#f8efda; --warn-br:#ecd6a6;
+    --crit:#b23b2e; --crit-bg:#f8e7e3; --crit-br:#eec6bf;
+    --info:#355b7d; --info-bg:#e9f0f6;
+    --font-display:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;
+    --font-body:'IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+    --maxw:880px;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#131519; --surface:#1c1e23; --surface-2:#23262d; --fg:#ebe9e3; --muted:#9a968e;
+    --border:#2d3038; --accent:#82b2d8; --accent-soft:#1c2a36;
+    --good:#5fc08a; --good-bg:#15271d; --good-br:#2a4636;
+    --warn:#e0a94a; --warn-bg:#2a2112; --warn-br:#4a3c1e;
+    --crit:#e8776a; --crit-bg:#2c1916; --crit-br:#4d2b25;
+    --info:#82b2d8; --info-bg:#1c2a36;
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#131519; --surface:#1c1e23; --surface-2:#23262d; --fg:#ebe9e3; --muted:#9a968e;
+    --border:#2d3038; --accent:#82b2d8; --accent-soft:#1c2a36;
+    --good:#5fc08a; --good-bg:#15271d; --good-br:#2a4636;
+    --warn:#e0a94a; --warn-bg:#2a2112; --warn-br:#4a3c1e;
+    --crit:#e8776a; --crit-bg:#2c1916; --crit-br:#4d2b25;
+    --info:#82b2d8; --info-bg:#1c2a36;
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-body);line-height:1.75;
+    font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:20px;padding-block:0}
+  h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.3;margin:0}
+  p{margin:0}
+  a{color:var(--accent)}
+  .ltr{direction:ltr;unicode-bidi:isolate;font-family:var(--font-mono)}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  header.top{border-bottom:1px solid var(--border);background:var(--surface)}
+  .eyebrow{font-size:12px;color:var(--muted);font-weight:700}
+  .brandbar{height:4px;background:linear-gradient(90deg,#9a7a2e 30%,var(--accent))}
+  .head-inner{padding-block:22px 24px;display:flex;flex-direction:column;gap:14px}
+  .site-id{display:flex;flex-direction:column;gap:3px}
+  .site-id h1{font-size:30px;font-weight:700;direction:ltr;text-align:start;font-family:var(--font-mono)}
+  .site-sub{color:var(--muted);font-size:14px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:12.5px;color:var(--muted)}
+  .meta-row b{color:var(--fg);font-weight:600}
+  .verdict-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+    padding:5px 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2)}
+  .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .d-good{background:var(--good)} .d-warn{background:var(--warn)} .d-crit{background:var(--crit)}
+
+  .theme-btn{position:absolute;top:14px;inset-inline-end:16px;font:inherit;font-size:12px;color:var(--muted);
+    background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:5px 13px;cursor:pointer;font-family:var(--font-body)}
+  .theme-btn:hover{color:var(--fg)}
+
+  section{padding-block:30px;border-bottom:1px solid var(--border)}
+  .sec-label{font-size:12.5px;color:var(--accent);font-weight:700;margin-bottom:6px}
+  h2{font-size:23px;font-weight:700;margin-bottom:14px}
+  h3{font-size:15.5px;font-family:var(--font-body);font-weight:700;margin:22px 0 10px}
+
+  .lede{font-size:16px;line-height:1.75}
+  .lede.first{font-family:var(--font-display);font-size:18.5px;line-height:1.6;margin-bottom:14px;font-weight:500}
+  .summary-pts{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+  .spt{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);
+    border-radius:10px;padding:13px 15px}
+  .spt .n{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--accent);flex:0 0 auto;
+    width:26px;height:26px;display:grid;place-items:center;background:var(--accent-soft);border-radius:7px;margin-top:3px}
+  .spt p{font-size:14.5px}
+  .spt b{font-weight:700}
+
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+  .tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;
+    display:flex;flex-direction:column;gap:7px;min-width:0}
+  .tile .label{font-size:12px;color:var(--muted);font-weight:700}
+  .tile .status{font-family:var(--font-display);font-size:19px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .tile .desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+  .findings{display:flex;flex-direction:column;gap:10px}
+  .find{display:grid;grid-template-columns:auto 1fr;background:var(--surface);border:1px solid var(--border);
+    border-radius:10px;overflow:hidden}
+  .find .stripe{width:5px}
+  .s-good .stripe{background:var(--good)} .s-low .stripe{background:var(--muted)}
+  .s-med .stripe{background:var(--warn)} .s-high .stripe{background:var(--crit)}
+  .find-body{padding:13px 16px;min-width:0}
+  .find-head{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:5px}
+  .find-head .ttl{font-weight:700;font-size:14.5px}
+  .pill{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;border:1px solid}
+  .p-good{color:var(--good);background:var(--good-bg);border-color:var(--good-br)}
+  .p-low{color:var(--muted);background:var(--surface-2);border-color:var(--border)}
+  .p-med{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-br)}
+  .p-high{color:var(--crit);background:var(--crit-bg);border-color:var(--crit-br)}
+  .find-body p{font-size:14px;color:var(--fg)}
+  .find-body .fix{font-size:13.5px;color:var(--muted);margin-top:6px}
+  .find-body .fix b{color:var(--fg);font-weight:700}
+
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .metric{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px}
+  .metric .v{font-family:var(--font-mono);font-size:22px;font-weight:600;direction:ltr;unicode-bidi:isolate;text-align:start}
+  .metric .k{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .metric.flag .v{color:var(--crit)} .metric.ok .v{color:var(--good)}
+
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+  th,td{text-align:start;padding:11px 13px;border-bottom:1px solid var(--border);vertical-align:top}
+  th{font-size:12px;color:var(--muted);font-weight:700;background:var(--surface-2)}
+  tr:last-child td{border-bottom:none}
+  td .pr{font-family:var(--font-mono);font-weight:700}
+  .pr-1{color:var(--crit)} .pr-2{color:var(--warn)} .pr-3{color:var(--muted)}
+  .tag{font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:5px;background:var(--surface-2);border:1px solid var(--border);white-space:nowrap}
+
+  .callout{background:var(--accent-soft);border:1px solid var(--border);border-inline-start:4px solid var(--accent);
+    border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+  .callout h3{margin:0;font-family:var(--font-display);font-size:17.5px;font-weight:700}
+  .callout ul{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+  .note{font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 14px}
+
+  ul.clean{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+  ul.clean li::marker{color:var(--accent)}
+
+  footer{padding-block:26px 40px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:8px}
+  footer b{color:var(--fg)}
+
+  @media (max-width:640px){
+    .tiles{grid-template-columns:1fr}
+    .metrics{grid-template-columns:repeat(2,1fr)}
+    .site-id h1{font-size:25px}
+    .lede.first{font-size:17px}
+  }
+</style>
+
+<div dir="rtl">
+  <div class="brandbar"></div>
+  <header class="top" style="position:relative">
+    <button class="theme-btn" id="themeBtn" type="button">المظهر</button>
+    <div class="wrap head-inner">
+      <div class="eyebrow">فحص صحة الموقع &middot; إعداد شركة Code-Ox Technologies</div>
+      <div class="site-id">
+        <h1>iwanfirm.com</h1>
+        <div class="site-sub">شركة إيوان الحكمة للمحاماة &middot; جدة، المملكة العربية السعودية</div>
+      </div>
+      <div class="meta-row">
+        <span>تاريخ الفحص: <b>7 أكتوبر 2026</b></span>
+        <span>المنصّة: <b>ووردبريس</b> (قالب Blocksy)</span>
+        <span>الاستضافة: <b>NameCheap</b> &middot; LiteSpeed</span>
+      </div>
+      <div class="verdict-chips">
+        <span class="chip"><span class="dot d-good"></span>الموقع غير مخترَق / لا برمجيات خبيثة</span>
+        <span class="chip"><span class="dot d-warn"></span>تحصين الأمان ضعيف</span>
+        <span class="chip"><span class="dot d-crit"></span>بطء في استجابة الخادم</span>
+        <span class="chip"><span class="dot d-warn"></span>ثغرات في تحسين محركات البحث</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- الملخص التنفيذي -->
+    <section>
+      <div class="sec-label">الملخّص التنفيذي</div>
+      <h2>الخلاصة باختصار</h2>
+      <p class="lede first">نبدأ بالخبر الجيّد: الموقع <b>غير مخترَق</b>. لم نعثر على أي برمجيات خبيثة أو محتوى تطفّلي مزروع أو تشويه للصفحات، كما أن الموقع غير محظور من Google أو أي جهة أمنية معروفة. الاتصال آمن، وهناك حماية فعّالة ضد الهجمات الآلية.</p>
+      <p class="lede">لكن هناك ثلاثة أمور تستحقّ المعالجة. لا شيء منها طارئ، غير أن معالجتها ستجعل الموقع أكثر أمانًا وأسرع وأسهل ظهورًا في نتائج Google — ومعظم الإصلاحات عالية الأثر سريعة التنفيذ.</p>
+      <div class="summary-pts">
+        <div class="spt"><span class="n">1</span><p><b>تحصين الأمان ضعيف.</b> الموقع نظيف، لكنه يفتقر إلى إعدادات الحماية القياسية التي ينبغي توفّرها في أي موقع حديث. هذا لا يعني أنه مخترَق، بل يعني أن «الأقفال» يمكن أن تكون أقوى.</p></div>
+        <div class="spt"><span class="n">2</span><p><b>بطء في الاستجابة.</b> يستغرق الخادم نحو 2.2 ثانية لمجرّد البدء في تحميل الصفحة، بينما المستهدف أقل من نصف ثانية. والسبب الأرجح أن التخزين المؤقت للصفحات غير مُفعّل.</p></div>
+        <div class="spt"><span class="n">3</span><p><b>نقص في أساسيات تحسين محركات البحث.</b> الأساس التقني سليم، لكن بعض الأساسيات (العنوان الرئيسي للصفحة، العنوان والوصف، بيانات النشاط المحلي) تحدّ من ترتيب الموقع في Google.</p></div>
+      </div>
+    </section>
+
+    <!-- نظرة سريعة -->
+    <section>
+      <div class="sec-label">نظرة سريعة</div>
+      <h2>ثلاثة مجالات، ثلاثة أحكام</h2>
+      <div class="tiles">
+        <div class="tile">
+          <span class="label">الأمان</span>
+          <span class="status"><span class="dot d-warn"></span>نظيف، لكنه غير محصّن</span>
+          <span class="desc">لا برمجيات خبيثة واتصال آمن (HTTPS)، لكن تغيب كل ترويسات الأمان القياسية (التقييم الخارجي: F)، مع تحصينات في ووردبريس بحاجة إلى تأكيد.</span>
+        </div>
+        <div class="tile">
+          <span class="label">الأداء</span>
+          <span class="status"><span class="dot d-crit"></span>بطيء</span>
+          <span class="desc">استجابة الخادم ~2.2 ثانية هي العائق الأساسي. الضغط وبروتوكول HTTP/2 مفعّلان، أما التخزين المؤقت وتحسين الصور فغير مفعّلين.</span>
+        </div>
+        <div class="tile">
+          <span class="label">تحسين محركات البحث</span>
+          <span class="status"><span class="dot d-warn"></span>مقبول</span>
+          <span class="desc">الموقع قابل للفهرسة، مع خريطة موقع ووسم canonical ووسوم المشاركة — لكن بلا عنوان رئيسي (H1)، وعنوان ووصف ضعيفين، وبلا بيانات نشاط محلي.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- الأمان -->
+    <section>
+      <div class="sec-label">01 &middot; الأمان</div>
+      <h2>هل الموقع مخترَق؟ لا. هل يمكن تحصينه؟ نعم.</h2>
+
+      <h3>ما الذي يعمل بشكل جيّد</h3>
+      <div class="findings">
+        <div class="find s-good"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">لا برمجيات خبيثة &middot; غير محظور</span><span class="pill p-good">ناجح</span></div>
+          <p>أظهر فحص خارجي للبرمجيات الخبيثة (Sucuri بتاريخ 7 أكتوبر 2026) نتيجة نظيفة — لا شيفرات خبيثة ولا محتوى تطفّلي ولا تشويه للصفحات. والنطاق غير مُدرَج في قوائم الحظر لدى Google Safe Browsing أو غيرها من الجهات. التقييم الإجمالي لدى الجهة الخارجية: <b>B</b>.</p>
+        </div></div>
+        <div class="find s-good"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">اتصال آمن (HTTPS/TLS)</span><span class="pill p-good">ناجح</span></div>
+          <p>شهادة SSL صالحة (صادرة عن SSL.com وسارية حتى 23 أبريل 2027)، تُقدَّم عبر HTTP/2 دون أي محتوى غير آمن (mixed content). تقييم إعداد TLS: A.</p>
+        </div></div>
+        <div class="find s-good"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">حماية فعّالة ضد الروبوتات</span><span class="pill p-good">ناجح</span></div>
+          <p>يعرض جدار حماية على مستوى الاستضافة (BitNinja) صفحة تحقّق («One moment, please…») للزوّار الآليين، ما يحجب معظم أدوات الفحص وهجمات تخمين كلمات المرور — بل إنه حجب أجزاءً من فحصنا الآلي، وهذه علامة إيجابية.</p>
+        </div></div>
+      </div>
+
+      <h3>ما يحتاج إلى معالجة</h3>
+      <div class="findings">
+        <div class="find s-med"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">غياب ترويسات الأمان</span><span class="pill p-med">متوسّط</span></div>
+          <p>يحصل الموقع على تقدير <b>F</b> في securityheaders.com: جميع ترويسات الحماية القياسية الست غائبة — HSTS و Content-Security-Policy و X-Frame-Options و X-Content-Type-Options و Referrer-Policy و Permissions-Policy. غيابها يجعل الموقع أكثر عرضة لهجمات انتحال الإطار (Clickjacking) وهجمات نوع المحتوى وخفض مستوى التشفير.</p>
+          <p class="fix"><b>الحل:</b> إضافة الترويسات عبر LiteSpeed/‎.htaccess أو إضافة أمان في ووردبريس أو طبقة Cloudflare. ينقل التقدير من F نحو A دون أي تغيير ظاهر للمستخدم.</p>
+        </div></div>
+        <div class="find s-med"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">تحصين الدخول والحسابات (بحاجة إلى تأكيد)</span><span class="pill p-med">متوسّط</span></div>
+          <p>تعذّر اختبار نقاط الهجوم المعتادة في ووردبريس بالكامل من الخارج (صفحة الدخول، XML-RPC، وعرض المستخدمين عبر REST API) لأن جدار الحماية اعترض الفحوصات. ينبغي تأكيدها وإحكامها.</p>
+          <p class="fix"><b>الحل:</b> تفعيل التحقّق بخطوتين وكلمات مرور قوية لجميع المدراء، وتقييد محاولات الدخول، وتعطيل XML-RPC إن لم يكن مستخدَمًا، وحجب حصر أسماء المستخدمين. يُفضَّل التحقّق عبر صلاحية الدخول إلى لوحة التحكم (انظر أدناه).</p>
+        </div></div>
+        <div class="find s-med"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">لا توجد قواعد جدار حماية على مستوى التطبيق</span><span class="pill p-med">متوسّط</span></div>
+          <p>تتوفّر حماية ضد الروبوتات على مستوى الاستضافة، لكن لا يوجد جدار حماية للتطبيق يفلتر الطلبات الواردة إلى ووردبريس نفسه.</p>
+          <p class="fix"><b>الحل:</b> يضيف جدار حماية سحابي / CDN (مثل Cloudflare) تصفيةً للطلبات، والترويسات الناقصة، وتحسينًا للسرعة في خطوة واحدة.</p>
+        </div></div>
+        <div class="find s-low"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">الكشف عن إصدارات البرمجيات</span><span class="pill p-low">منخفض</span></div>
+          <p>تُعلن الصفحات علنًا عن إصدار ووردبريس وبرمجيات الخادم المستخدمة (يشير وسم generator إلى WordPress 7.1.3)، ما يسهّل على المهاجمين تحديد بصمة الموقع. كما أن الإصدار المُعلَن مرتفع على نحو غير معتاد — يُستحسن التأكّد من صحّته وتحديثه بالكامل.</p>
+          <p class="fix"><b>الحل:</b> إزالة وسم generator، وإبقاء نواة ووردبريس وقالب Blocksy وجميع الإضافات على أحدث الإصدارات المرقّعة.</p>
+        </div></div>
+        <div class="find s-low"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">نموذج التواصل (Forminator)</span><span class="pill p-low">منخفض</span></div>
+          <p>يعمل نموذج التواصل عبر إضافة Forminator — وهي هدف شائع للرسائل المزعجة ومحاولات الاختراق. وتحتاج إضافات النماذج إلى تحديث دائم وحماية.</p>
+          <p class="fix"><b>الحل:</b> التأكّد من تفعيل حماية CAPTCHA أو honeypot ضد الرسائل المزعجة، وإبقاء Forminator محدّثًا.</p>
+        </div></div>
+        <div class="find s-low"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">عدم تفعيل OCSP stapling</span><span class="pill p-low">منخفض</span></div>
+          <p>تحسين بسيط في TLS يسرّع التحقّق من الشهادة، وهو معطّل حاليًا.</p>
+          <p class="fix"><b>الحل:</b> تفعيل OCSP stapling في الخادم (ضبط اختياري بسيط).</p>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- الأداء -->
+    <section>
+      <div class="sec-label">02 &middot; الأداء</div>
+      <h2>الموقع بطيء في بدء التحميل</h2>
+      <div class="metrics">
+        <div class="metric flag"><div class="v">2.2s</div><div class="k">زمن استجابة الخادم (TTFB) — المستهدف أقل من 0.6 ثانية</div></div>
+        <div class="metric"><div class="v">~2.7s</div><div class="k">زمن تحميل الصفحة كاملًا (في الاختبار)</div></div>
+        <div class="metric"><div class="v">~1.1MB</div><div class="k">حجم الصفحة الرئيسية</div></div>
+        <div class="metric"><div class="v">29</div><div class="k">عدد الطلبات عند التحميل</div></div>
+      </div>
+      <p class="lede" style="font-size:15px">المشكلة الأبرز هي زمن استجابة الخادم البالغ ~2.2 ثانية. على خادم LiteSpeed مع تفعيل التخزين المؤقت، يُفترض أن تُرجَع الصفحة في أقل من 0.2 ثانية — لذا فالسبب الأرجح أن التخزين المؤقت للصفحات غير مُفعّل. وقد يرى الزوّار لأول مرة صفحة التحقّق «One moment, please…» للحظات، ما يزيد وقت الانتظار.</p>
+
+      <h3>ما الذي يعمل بشكل جيّد</h3>
+      <ul class="clean">
+        <li>ضغط GZIP مُفعّل (تُرسَل الصفحات مضغوطة).</li>
+        <li>استخدام بروتوكول HTTP/2 الحديث.</li>
+        <li>قالب حديث جيّد الصيانة (Blocksy) وإصدار jQuery محدّث.</li>
+      </ul>
+
+      <h3>ما الذي يُبطئه</h3>
+      <div class="findings">
+        <div class="find s-high"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">غياب التخزين المؤقت للصفحات</span><span class="pill p-high">أثر عالٍ</span></div>
+          <p>زمن الاستجابة البالغ 2.2 ثانية يشير إلى إعادة بناء كل صفحة من الصفر عند كل زيارة.</p>
+          <p class="fix"><b>الحل:</b> تفعيل <b>LiteSpeed Cache</b> (مجاني ومصمَّم لهذا الخادم تحديدًا). هذا هو المكسب الأكبر — ويُتوقّع أن يخفّض زمن الاستجابة إلى أقل من نصف ثانية بوضوح.</p>
+        </div></div>
+        <div class="find s-med"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">صور غير مُحسَّنة</span><span class="pill p-med">متوسّط</span></div>
+          <p>صور فريق العمل بأحجامها الكاملة ومرفوعة مباشرةً من واتساب، دون تصغير أو تقديمها بصيغة حديثة (WebP).</p>
+          <p class="fix"><b>الحل:</b> ضغط الصور وتحويلها إلى WebP، وتقديمها بحجم العرض، وتفعيل التحميل الكسول (lazy-load).</p>
+        </div></div>
+        <div class="find s-med"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">ملفات CSS/JS كثيرة ومنفصلة</span><span class="pill p-med">متوسّط</span></div>
+          <p>تحمّل الصفحة الرئيسية نحو 11 ملف تنسيق و16 ملفًا برمجيًا، يعيق بعضها عرض الصفحة.</p>
+          <p class="fix"><b>الحل:</b> دمج وتصغير وتأجيل ملفات CSS/JS غير الأساسية — ويمكن لـ LiteSpeed Cache القيام بذلك تلقائيًا.</p>
+        </div></div>
+        <div class="find s-low"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">لا توجد شبكة توصيل محتوى (CDN)</span><span class="pill p-low">منخفض</span></div>
+          <p>يُقدَّم المحتوى من خادم واحد، فينتظر الزوّار البعيدون وقتًا أطول.</p>
+          <p class="fix"><b>الحل:</b> تضيف شبكة CDN مثل Cloudflare سرعةً عالمية، كما توفّر الترويسات الأمنية الناقصة وجدار الحماية في خطوة واحدة.</p>
+        </div></div>
+      </div>
+      <p class="note" style="margin-top:16px">ملاحظة: تعذّر الحصول على درجة Google PageSpeed (Lighthouse) لأن خدمة الاختبار العامة من Google كانت تحدّ من الطلبات وقت الفحص. الأرقام أعلاه مستخرجة من قياس زمن تحميل الصفحة الفعلي في المتصفح.</p>
+    </section>
+
+    <!-- تحسين محركات البحث -->
+    <section>
+      <div class="sec-label">03 &middot; تحسين محركات البحث</div>
+      <h2>أساس جيّد، مع بعض الثغرات المهمّة</h2>
+
+      <h3>ما يحتاج إلى إصلاح</h3>
+      <div class="findings">
+        <div class="find s-high"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">لا يوجد عنوان رئيسي (H1) في الصفحة الرئيسية</span><span class="pill p-high">عالٍ</span></div>
+          <p>تحتوي الصفحة الرئيسية على 19 عنوانًا فرعيًا دون أي عنوان رئيسي H1 — وهو إشارة أساسية يعتمد عليها Google لفهم الصفحة.</p>
+          <p class="fix"><b>الحل:</b> إضافة عنوان H1 واحد واضح وغنيّ بالكلمات المفتاحية، مثل جملة تُعرّف الشركة كمكتب محاماة في جدة.</p>
+        </div></div>
+        <div class="find s-med"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">عنوان ووصف ضعيفان للصفحة</span><span class="pill p-med">متوسّط</span></div>
+          <p>عنوان الصفحة الرئيسية هو عمليًا «الرئيسية — [اسم الشركة]»، والوصف التعريفي ثلاث كلمات فقط. ولا يتضمّن أيٌّ منهما عبارات البحث التي يستخدمها العملاء (مثل محاماة / محامي / جدة).</p>
+          <p class="fix"><b>الحل:</b> إعادة صياغة العنوان ليشمل مجال العمل والمدينة، وكتابة وصف بنحو 150 حرفًا مع دعوة واضحة لاتخاذ إجراء.</p>
+        </div></div>
+        <div class="find s-med"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">لا توجد بيانات منظَّمة للنشاط المحلي</span><span class="pill p-med">متوسّط</span></div>
+          <p>لا توجد بيانات schema من نوع LegalService/LocalBusiness تُعرّف Google باسم الشركة وعنوانها وهاتفها وموقعها وساعات عملها — وهي مهمة لظهور مكتب محاماة محلي في نتائج الخرائط والنتائج المحلية.</p>
+          <p class="fix"><b>الحل:</b> إضافة بيانات LegalService المنظَّمة (مع العنوان الكامل والإحداثيات الجغرافية) وإنشاء/توثيق ملف Google Business Profile.</p>
+        </div></div>
+        <div class="find s-low"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">صور بلا نص بديل (alt)</span><span class="pill p-low">منخفض</span></div>
+          <p>6 من أصل 9 صور في الصفحة الرئيسية بلا نص بديل، ما يضرّ ببحث الصور وبإمكانية الوصول.</p>
+          <p class="fix"><b>الحل:</b> إضافة نص بديل وصفي لكل الصور.</p>
+        </div></div>
+        <div class="find s-low"><div class="stripe"></div><div class="find-body">
+          <div class="find-head"><span class="ttl">محتوى ضئيل</span><span class="pill p-low">منخفض</span></div>
+          <p>قسما المدوّنة والأخبار موجودان لكنهما فارغان، فلا يملك الموقع محتوًى كافيًا قابلًا للفهرسة للترتيب عليه.</p>
+          <p class="fix"><b>الحل:</b> نشر مقالات حول الأسئلة القانونية الشائعة لبناء المرجعية الموضوعية وجذب زيارات البحث.</p>
+        </div></div>
+      </div>
+
+      <h3>ما الذي يعمل بشكل جيّد</h3>
+      <ul class="clean">
+        <li>الموقع مفتوح لمحركات البحث (قابل للفهرسة)، مع ملف robots.txt سليم وخريطة موقع XML جاهزة.</li>
+        <li>وسم canonical ووسوم المشاركة الاجتماعية (Open Graph / Twitter) مُهيّأة.</li>
+        <li>توجد إضافة SEO فعّالة تولّد إطار البيانات الوصفية.</li>
+        <li>الموقع متجاوب مع الجوّال.</li>
+        <li>اللغتان العربية والإنجليزية معلَنتان — وإن وُجدت نسخة إنجليزية كاملة، تُضاف وسوم hreflang لربطهما.</li>
+      </ul>
+    </section>
+
+    <!-- خطة العمل -->
+    <section>
+      <div class="sec-label">خطة العمل</div>
+      <h2>ما الذي يجب فعله، بالترتيب</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>الإجراء</th><th>المجال</th><th>الجهد</th><th>الأثر</th></tr></thead>
+          <tbody>
+            <tr><td><span class="pr pr-1">P1</span></td><td>تفعيل LiteSpeed Cache (تخزين مؤقت للصفحات)</td><td><span class="tag">الأداء</span></td><td>منخفض</td><td>عالٍ</td></tr>
+            <tr><td><span class="pr pr-1">P1</span></td><td>إضافة ترويسات الأمان الست الناقصة</td><td><span class="tag">الأمان</span></td><td>منخفض</td><td>عالٍ</td></tr>
+            <tr><td><span class="pr pr-1">P1</span></td><td>إضافة عنوان H1 + إعادة صياغة العنوان والوصف</td><td><span class="tag">SEO</span></td><td>منخفض</td><td>عالٍ</td></tr>
+            <tr><td><span class="pr pr-2">P2</span></td><td>تحسين الصور (WebP، تصغير، lazy-load) + نص بديل</td><td><span class="tag">الأداء / SEO</span></td><td>متوسّط</td><td>متوسّط</td></tr>
+            <tr><td><span class="pr pr-2">P2</span></td><td>دمج / تصغير / تأجيل ملفات CSS و JS</td><td><span class="tag">الأداء</span></td><td>منخفض</td><td>متوسّط</td></tr>
+            <tr><td><span class="pr pr-2">P2</span></td><td>إضافة بيانات LegalService + Google Business Profile</td><td><span class="tag">SEO</span></td><td>متوسّط</td><td>متوسّط</td></tr>
+            <tr><td><span class="pr pr-2">P2</span></td><td>تحديث البرمجيات وإخفاء إصداراتها؛ تأكيد CAPTCHA للنموذج</td><td><span class="tag">الأمان</span></td><td>منخفض</td><td>متوسّط</td></tr>
+            <tr><td><span class="pr pr-3">P3</span></td><td>إضافة CDN (Cloudflare) — سرعة + جدار حماية + ترويسات</td><td><span class="tag">الأداء / الأمان</span></td><td>متوسّط</td><td>متوسّط</td></tr>
+            <tr><td><span class="pr pr-3">P3</span></td><td>تحصين دخول ووردبريس (2FA، تقييد المحاولات، XML-RPC، حصر المستخدمين)</td><td><span class="tag">الأمان</span></td><td>متوسّط</td><td>متوسّط</td></tr>
+            <tr><td><span class="pr pr-3">P3</span></td><td>نشر محتوى المدوّنة/الأخبار؛ إضافة hreflang عند وجود نسخة إنجليزية</td><td><span class="tag">SEO</span></td><td>مستمر</td><td>متوسّط</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- الخطوة التالية -->
+    <section>
+      <div class="sec-label">الخطوة التالية</div>
+      <h2>لمراجعة كاملة، اطلب صلاحية الدخول إلى لوحة تحكم ووردبريس</h2>
+      <div class="callout">
+        <h3>لماذا نحتاج بيانات الدخول الإدارية</h3>
+        <p style="font-size:14px">أُجري هذا الفحص بالكامل من الخارج. وهناك فحوصات مهمّة لا يمكن إجراؤها إلا من داخل لوحة تحكم ووردبريس — كما أن حماية الموقع ضد الروبوتات تحجب عمدًا الفحص الخارجي العميق (وهذا أمر جيّد، لكنه يحدّ من عمق الفحص من الخارج). وبصلاحية دخول إدارية مؤقتة، يمكننا التحقّق وإعداد تقرير عن:</p>
+        <ul>
+          <li>الإصدارات الدقيقة لووردبريس والقالب والإضافات — وما إذا كان أيٌّ منها يحمل ثغرات معروفة أو مهجورًا.</li>
+          <li>جميع حسابات المستخدمين وأدوارها (لاستبعاد أي حساب مدير مشبوه أو غير مستخدَم).</li>
+          <li>إعدادات أمان الدخول — هل التحقّق بخطوتين وتقييد المحاولات مفعّلان.</li>
+          <li>حالة النسخ الاحتياطي وسلامة الملفات (هل توجد نسخة احتياطية حديثة تعمل؟).</li>
+          <li>إعدادات إضافات التخزين المؤقت والأمان وتحسين محركات البحث — لتطبيق الإصلاحات على نحو صحيح.</li>
+          <li>التحديثات المعلّقة وصحة قاعدة البيانات والموقع عمومًا.</li>
+        </ul>
+        <p style="font-size:13.5px;color:var(--muted)">نوصي بمشاركة الصلاحية بأمان: حساب مدير مخصّص للمراجعة مع تفعيل التحقّق بخطوتين، وتغيير كلمة المرور فور انتهاء المراجعة.</p>
+      </div>
+    </section>
+
+    <footer>
+      <div><b>المنهجية.</b> تستند النتائج إلى فحص مباشر للموقع في المتصفح (زمن الاستجابة، الترويسات، بنية الصفحة ومواردها)، وإلى securityheaders.com و Sucuri SiteCheck وفحوصات robots.txt وخريطة الموقع، بتاريخ 7 أكتوبر 2026.</div>
+      <div><b>حدود الفحص.</b> حجب جدار الحماية ضد الروبوتات الفحصَ الآلي لبعض النقاط الداخلية؛ والبنود الموسومة بـ«بحاجة إلى تأكيد» يُفضَّل التحقّق منها بصلاحية الدخول الإدارية.</div>
+      <div>إعداد: شركة Code-Ox Technologies.</div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  (function(){
+    var btn=document.getElementById('themeBtn');
+    var root=document.documentElement;
+    function cur(){
+      var a=root.getAttribute('data-theme');
+      if(a) return a;
+      return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+    }
+    try{var saved=localStorage.getItem('iwan-theme-ar'); if(saved) root.setAttribute('data-theme',saved);}catch(e){}
+    btn.addEventListener('click',function(){
+      var next=cur()==='dark'?'light':'dark';
+      root.setAttribute('data-theme',next);
+      try{localStorage.setItem('iwan-theme-ar',next);}catch(e){}
+    });
+  })();
+</script>

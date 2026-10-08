@@ -1,0 +1,418 @@
+<title>iwanfirm.com Health Check</title>
+<style>
+  /* Layout: single-column report, sticky header, score tiles, severity-striped finding rows, action table */
+  :root{
+    --bg:#f6f5f2; --surface:#ffffff; --surface-2:#efece6; --fg:#1b1a18; --muted:#6c6861;
+    --border:#e4e0d8; --accent:#355b7d; --accent-soft:#e9f0f6;
+    --good:#2e8b57; --good-bg:#e7f3ec; --good-br:#bfe0cd;
+    --warn:#b4791a; --warn-bg:#f8efda; --warn-br:#ecd6a6;
+    --crit:#b23b2e; --crit-bg:#f8e7e3; --crit-br:#eec6bf;
+    --info:#355b7d; --info-bg:#e9f0f6;
+    --font-display:'Spectral',Georgia,'Times New Roman',serif;
+    --font-body:'IBM Plex Sans',system-ui,'Segoe UI',Tahoma,Arial,sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,'Cascadia Code',monospace;
+    --maxw:880px;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#131519; --surface:#1c1e23; --surface-2:#23262d; --fg:#ebe9e3; --muted:#9a968e;
+    --border:#2d3038; --accent:#82b2d8; --accent-soft:#1c2a36;
+    --good:#5fc08a; --good-bg:#15271d; --good-br:#2a4636;
+    --warn:#e0a94a; --warn-bg:#2a2112; --warn-br:#4a3c1e;
+    --crit:#e8776a; --crit-bg:#2c1916; --crit-br:#4d2b25;
+    --info:#82b2d8; --info-bg:#1c2a36;
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#131519; --surface:#1c1e23; --surface-2:#23262d; --fg:#ebe9e3; --muted:#9a968e;
+    --border:#2d3038; --accent:#82b2d8; --accent-soft:#1c2a36;
+    --good:#5fc08a; --good-bg:#15271d; --good-br:#2a4636;
+    --warn:#e0a94a; --warn-bg:#2a2112; --warn-br:#4a3c1e;
+    --crit:#e8776a; --crit-bg:#2c1916; --crit-br:#4d2b25;
+    --info:#82b2d8; --info-bg:#1c2a36;
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-body);line-height:1.6;
+    font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:20px;padding-block:0}
+  h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.2;margin:0}
+  p{margin:0}
+  a{color:var(--accent)}
+  .mono{font-family:var(--font-mono)}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  /* Header */
+  header.top{border-bottom:1px solid var(--border);background:var(--surface)}
+  .eyebrow{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .brandbar{height:4px;background:linear-gradient(90deg,var(--accent),#9a7a2e 70%)}
+  .head-inner{padding-block:22px 24px;display:flex;flex-direction:column;gap:14px}
+  .site-id{display:flex;flex-direction:column;gap:3px}
+  .site-id h1{font-size:30px;font-weight:600}
+  .site-sub{color:var(--muted);font-size:14px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--muted)}
+  .meta-row b{color:var(--fg);font-weight:600}
+  .verdict-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+    padding:5px 11px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2)}
+  .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .d-good{background:var(--good)} .d-warn{background:var(--warn)} .d-crit{background:var(--crit)}
+
+  .theme-btn{position:absolute;top:14px;right:16px;font:inherit;font-size:12px;color:var(--muted);
+    background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:5px 12px;cursor:pointer}
+  .theme-btn:hover{color:var(--fg)}
+
+  section{padding-block:30px;border-bottom:1px solid var(--border)}
+  .sec-label{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px}
+  h2{font-size:22px;font-weight:600;margin-bottom:14px}
+  h3{font-size:15px;font-family:var(--font-body);font-weight:700;letter-spacing:.02em;margin:22px 0 10px}
+
+  /* Executive summary */
+  .lede{font-size:16.5px;line-height:1.65}
+  .lede.first{font-family:var(--font-display);font-size:19px;line-height:1.45;margin-bottom:14px}
+  .summary-pts{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+  .spt{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);
+    border-radius:10px;padding:13px 15px}
+  .spt .n{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--accent);flex:0 0 auto;
+    width:26px;height:26px;display:grid;place-items:center;background:var(--accent-soft);border-radius:7px;margin-top:1px}
+  .spt p{font-size:14.5px}
+  .spt b{font-weight:600}
+
+  /* Score tiles */
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+  .tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;
+    display:flex;flex-direction:column;gap:7px;min-width:0}
+  .tile .label{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .tile .status{font-family:var(--font-display);font-size:19px;font-weight:600;display:flex;align-items:center;gap:8px}
+  .tile .desc{font-size:13px;color:var(--muted);line-height:1.45}
+
+  /* Finding rows */
+  .findings{display:flex;flex-direction:column;gap:10px}
+  .find{display:grid;grid-template-columns:auto 1fr;gap:0;background:var(--surface);border:1px solid var(--border);
+    border-radius:10px;overflow:hidden}
+  .find .stripe{width:5px}
+  .s-good .stripe{background:var(--good)} .s-low .stripe{background:var(--muted)}
+  .s-med .stripe{background:var(--warn)} .s-high .stripe{background:var(--crit)}
+  .find-body{padding:13px 16px;min-width:0}
+  .find-head{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:5px}
+  .find-head .ttl{font-weight:700;font-size:14.5px}
+  .pill{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid}
+  .p-good{color:var(--good);background:var(--good-bg);border-color:var(--good-br)}
+  .p-low{color:var(--muted);background:var(--surface-2);border-color:var(--border)}
+  .p-med{color:var(--warn);background:var(--warn-bg);border-color:var(--warn-br)}
+  .p-high{color:var(--crit);background:var(--crit-bg);border-color:var(--crit-br)}
+  .find-body p{font-size:14px;color:var(--fg)}
+  .find-body .fix{font-size:13.5px;color:var(--muted);margin-top:6px}
+  .find-body .fix b{color:var(--fg);font-weight:600}
+
+  /* Metric strip */
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .metric{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px}
+  .metric .v{font-family:var(--font-mono);font-size:22px;font-weight:600;letter-spacing:-.01em}
+  .metric .k{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.3}
+  .metric.flag .v{color:var(--crit)} .metric.ok .v{color:var(--good)}
+
+  /* Table */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+  th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--border);vertical-align:top}
+  th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--surface-2)}
+  tr:last-child td{border-bottom:none}
+  td .pr{font-family:var(--font-mono);font-weight:600}
+  .pr-1{color:var(--crit)} .pr-2{color:var(--warn)} .pr-3{color:var(--muted)}
+  .tag{font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;background:var(--surface-2);border:1px solid var(--border);white-space:nowrap}
+
+  /* Callout */
+  .callout{background:var(--accent-soft);border:1px solid var(--border);border-left:4px solid var(--accent);
+    border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+  .callout h3{margin:0;font-family:var(--font-display);font-size:17px;font-weight:600}
+  .callout ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:14px}
+  .note{font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 14px}
+
+  ul.clean{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+  ul.clean li::marker{color:var(--accent)}
+
+  footer{padding-block:26px 40px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:8px}
+  footer b{color:var(--fg)}
+
+  @media (max-width:640px){
+    .tiles{grid-template-columns:1fr}
+    .metrics{grid-template-columns:repeat(2,1fr)}
+    .site-id h1{font-size:25px}
+    .lede.first{font-size:17px}
+  }
+</style>
+
+<div class="brandbar"></div>
+<header class="top" style="position:relative">
+  <button class="theme-btn" id="themeBtn" type="button">Theme</button>
+  <div class="wrap head-inner">
+    <div class="eyebrow">Website Health Check &middot; Prepared by Code-Ox Technologies</div>
+    <div class="site-id">
+      <h1 class="mono">iwanfirm.com</h1>
+      <div class="site-sub">Iwan Al-Hikma Law Firm &mdash; شركة إيوان الحكمة للمحاماة &middot; Jeddah, KSA</div>
+    </div>
+    <div class="meta-row">
+      <span>Scanned <b>7 October 2026</b></span>
+      <span>Platform <b>WordPress</b> (Blocksy theme)</span>
+      <span>Host <b>NameCheap</b> &middot; LiteSpeed</span>
+    </div>
+    <div class="verdict-chips">
+      <span class="chip"><span class="dot d-good"></span>Not hacked / no malware</span>
+      <span class="chip"><span class="dot d-warn"></span>Security hardening weak</span>
+      <span class="chip"><span class="dot d-crit"></span>Slow server response</span>
+      <span class="chip"><span class="dot d-warn"></span>SEO gaps</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- EXEC SUMMARY -->
+  <section>
+    <div class="sec-label">Executive summary</div>
+    <h2>The short version</h2>
+    <p class="lede first">Good news first: the website is <b>not hacked</b>. No malware, injected spam, or defacement was found, and the site is not blocked by Google or any major security vendor. The connection is secure, and there is active protection against automated attacks.</p>
+    <p class="lede">There are, however, three things worth fixing. None are emergencies, but addressing them will make the site noticeably safer, faster, and easier to find on Google &mdash; and most of the high-impact fixes are quick.</p>
+    <div class="summary-pts">
+      <div class="spt"><span class="n">1</span><p><b>Security hardening is weak.</b> The site is clean, but it is missing standard protective settings that every modern website should have. This doesn't mean it's compromised &mdash; it means the "locks" could be stronger.</p></div>
+      <div class="spt"><span class="n">2</span><p><b>It is slow to respond.</b> The server takes about 2.2 seconds just to begin loading a page, where under half a second is the target. The most likely cause is that page caching isn't switched on.</p></div>
+      <div class="spt"><span class="n">3</span><p><b>Some SEO essentials are missing.</b> The technical foundation is solid, but a few basics (page heading, title, description, local business details) are holding back its Google ranking.</p></div>
+    </div>
+  </section>
+
+  <!-- SCORECARD -->
+  <section>
+    <div class="sec-label">At a glance</div>
+    <h2>Three areas, three verdicts</h2>
+    <div class="tiles">
+      <div class="tile">
+        <span class="label">Security</span>
+        <span class="status"><span class="dot d-warn"></span>Clean, under-hardened</span>
+        <span class="desc">No malware and valid HTTPS, but missing all standard security headers (external grade: F) and some WordPress hardening to confirm.</span>
+      </div>
+      <div class="tile">
+        <span class="label">Performance</span>
+        <span class="status"><span class="dot d-crit"></span>Slow</span>
+        <span class="desc">~2.2s server response is the main bottleneck. Compression and HTTP/2 are on; caching and image optimization are not.</span>
+      </div>
+      <div class="tile">
+        <span class="label">SEO</span>
+        <span class="status"><span class="dot d-warn"></span>Fair</span>
+        <span class="desc">Indexable, with sitemap, canonical and social tags in place &mdash; but no H1, a weak title/description, and no local-business data.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section>
+    <div class="sec-label">01 &middot; Security</div>
+    <h2>Is the site compromised? No. Could it be hardened? Yes.</h2>
+
+    <h3>What's working well</h3>
+    <div class="findings">
+      <div class="find s-good"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">No malware &middot; not blocklisted</span><span class="pill p-good">Pass</span></div>
+        <p>An external malware scan (Sucuri, 7 Oct 2026) came back clean &mdash; no malicious code, spam injection, or defacement. The domain is not flagged by Google Safe Browsing or other vendor blocklists. Overall third-party rating: <b>B</b>.</p>
+      </div></div>
+      <div class="find s-good"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Secure connection (HTTPS/TLS)</span><span class="pill p-good">Pass</span></div>
+        <p>Valid SSL certificate (issued by SSL.com, valid until <span class="tnum">23 Apr 2027</span>), served over HTTP/2 with no insecure "mixed content". TLS configuration rated A.</p>
+      </div></div>
+      <div class="find s-good"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Active bot protection</span><span class="pill p-good">Pass</span></div>
+        <p>A host-level firewall (BitNinja) presents a "One moment, please…" verification to automated visitors, which blocks most scanners and brute-force bots &mdash; it even blocked parts of our own automated scan, which is a good sign.</p>
+      </div></div>
+    </div>
+
+    <h3>Needs attention</h3>
+    <div class="findings">
+      <div class="find s-med"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Missing security headers</span><span class="pill p-med">Medium</span></div>
+        <p>The site scores an <b>F</b> on securityheaders.com: all six standard protective headers are absent &mdash; HSTS, Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy and Permissions-Policy. Their absence leaves the site more exposed to clickjacking, content-type attacks, and HTTPS downgrade.</p>
+        <p class="fix"><b>Fix:</b> add the headers via LiteSpeed/.htaccess, a WordPress security plugin, or a Cloudflare layer. Moves the grade from F toward A with no visible change for users.</p>
+      </div></div>
+      <div class="find s-med"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Login &amp; account hardening (to confirm)</span><span class="pill p-med">Medium</span></div>
+        <p>Standard WordPress attack surfaces (the login page, XML-RPC, and REST-API user listing) could not be fully tested from outside because the bot firewall intercepted the checks. These should be confirmed and locked down.</p>
+        <p class="fix"><b>Fix:</b> enforce two-factor authentication and strong passwords for all admins, limit login attempts, disable XML-RPC if unused, and block user-enumeration. Best verified with admin access (see below).</p>
+      </div></div>
+      <div class="find s-med"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">No application-level firewall rules</span><span class="pill p-med">Medium</span></div>
+        <p>Bot protection exists at the host, but there's no application firewall / Content-Security-Policy filtering requests to the WordPress app itself.</p>
+        <p class="fix"><b>Fix:</b> a cloud WAF/CDN (e.g. Cloudflare) adds request filtering, the missing headers, and a speed boost in one step.</p>
+      </div></div>
+      <div class="find s-low"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Software version disclosure</span><span class="pill p-low">Low</span></div>
+        <p>The pages publicly advertise the WordPress and server software in use (the generator tag reports WordPress 7.1.3), which helps attackers fingerprint the site. The reported version is also unusually high &mdash; worth confirming it is genuine and fully patched.</p>
+        <p class="fix"><b>Fix:</b> remove the generator meta tag and keep WordPress core, the Blocksy theme, and all plugins on their latest patched versions.</p>
+      </div></div>
+      <div class="find s-low"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Contact form (Forminator)</span><span class="pill p-low">Low</span></div>
+        <p>The contact form runs on the Forminator plugin &mdash; a common target for spam and probing. Form plugins need to be kept current and protected.</p>
+        <p class="fix"><b>Fix:</b> ensure CAPTCHA or honeypot spam protection is enabled and keep Forminator updated.</p>
+      </div></div>
+      <div class="find s-low"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">OCSP stapling not enabled</span><span class="pill p-low">Low</span></div>
+        <p>A minor TLS optimization that speeds up certificate validation is switched off.</p>
+        <p class="fix"><b>Fix:</b> enable OCSP stapling at the server (small, optional tuning).</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- PERFORMANCE -->
+  <section>
+    <div class="sec-label">02 &middot; Performance</div>
+    <h2>The site is slow to start loading</h2>
+    <div class="metrics">
+      <div class="metric flag"><div class="v tnum">2.2s</div><div class="k">Server response (TTFB) &mdash; target &lt;0.6s</div></div>
+      <div class="metric"><div class="v tnum">~2.7s</div><div class="k">Full page load (in test)</div></div>
+      <div class="metric"><div class="v tnum">~1.1MB</div><div class="k">Homepage weight</div></div>
+      <div class="metric"><div class="v tnum">29</div><div class="k">Requests on load</div></div>
+    </div>
+    <p class="lede" style="font-size:15px">The headline issue is the <b>~2.2 second server response time</b>. On a LiteSpeed server with caching enabled, a page should return in under 0.2s &mdash; so the most likely cause is that full-page caching isn't active. First-time visitors may also briefly see the "One moment, please…" verification screen, which adds to the wait.</p>
+
+    <h3>What's working well</h3>
+    <ul class="clean">
+      <li>GZIP compression is enabled (pages are sent compressed).</li>
+      <li>Modern HTTP/2 protocol is in use.</li>
+      <li>A current, well-maintained theme (Blocksy) and up-to-date jQuery.</li>
+    </ul>
+
+    <h3>What's slowing it down</h3>
+    <div class="findings">
+      <div class="find s-high"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">No full-page caching</span><span class="pill p-high">High impact</span></div>
+        <p>The 2.2s response suggests each page is being rebuilt from scratch on every visit.</p>
+        <p class="fix"><b>Fix:</b> enable <b>LiteSpeed Cache</b> (free, built for this exact server). This is the single biggest win &mdash; it should cut response time to well under half a second.</p>
+      </div></div>
+      <div class="find s-med"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Unoptimized images</span><span class="pill p-med">Medium</span></div>
+        <p>Team photos are full-size images uploaded directly from WhatsApp, not resized or served in a modern format (WebP).</p>
+        <p class="fix"><b>Fix:</b> compress and convert images to WebP, serve them at display size, and enable lazy-loading.</p>
+      </div></div>
+      <div class="find s-med"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Many separate CSS/JS files</span><span class="pill p-med">Medium</span></div>
+        <p>The homepage loads roughly 11 stylesheets and 16 scripts, several of which block the page from rendering.</p>
+        <p class="fix"><b>Fix:</b> combine, minify and defer non-essential CSS/JS &mdash; LiteSpeed Cache can do this automatically.</p>
+      </div></div>
+      <div class="find s-low"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">No CDN</span><span class="pill p-low">Low</span></div>
+        <p>Content is served from a single origin, so distant visitors wait longer.</p>
+        <p class="fix"><b>Fix:</b> a CDN such as Cloudflare improves global speed and also delivers the missing security headers and firewall in one move.</p>
+      </div></div>
+    </div>
+    <p class="note" style="margin-top:16px">Note: a Google PageSpeed (Lighthouse) score could not be captured &mdash; Google's public testing service was rate-limiting requests at scan time. The figures above are from real-page load timing measured in the browser.</p>
+  </section>
+
+  <!-- SEO -->
+  <section>
+    <div class="sec-label">03 &middot; SEO</div>
+    <h2>Good foundation, a few key gaps</h2>
+
+    <h3>Needs fixing</h3>
+    <div class="findings">
+      <div class="find s-high"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">No main heading (H1) on the homepage</span><span class="pill p-high">High</span></div>
+        <p>The homepage has 19 sub-headings but no top-level H1 &mdash; a core signal Google uses to understand the page.</p>
+        <p class="fix"><b>Fix:</b> add one clear, keyword-rich H1, e.g. a line naming the firm as a law firm in Jeddah.</p>
+      </div></div>
+      <div class="find s-med"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Weak page title &amp; description</span><span class="pill p-med">Medium</span></div>
+        <p>The homepage title is effectively just "Home &mdash; [firm name]", and the meta description is only three words. Neither contains the search terms clients would use (e.g. محاماة / محامي / جدة).</p>
+        <p class="fix"><b>Fix:</b> rewrite the title to include the practice and city, and write a ~150-character description with a clear call to action.</p>
+      </div></div>
+      <div class="find s-med"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">No local-business structured data</span><span class="pill p-med">Medium</span></div>
+        <p>There's no LegalService/LocalBusiness schema telling Google the firm's name, address, phone, location and hours &mdash; important for a local law firm to appear in map and local results.</p>
+        <p class="fix"><b>Fix:</b> add LegalService schema (with full address + geo-coordinates) and set up / verify a Google Business Profile.</p>
+      </div></div>
+      <div class="find s-low"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Images missing alt text</span><span class="pill p-low">Low</span></div>
+        <p>6 of 9 homepage images have no alt text, which hurts image search and accessibility.</p>
+        <p class="fix"><b>Fix:</b> add descriptive alt text to all images.</p>
+      </div></div>
+      <div class="find s-low"><div class="stripe"></div><div class="find-body">
+        <div class="find-head"><span class="ttl">Thin content</span><span class="pill p-low">Low</span></div>
+        <p>The blog and news sections are present but empty, so the site has little indexable content to rank for.</p>
+        <p class="fix"><b>Fix:</b> publish articles on common legal questions to build topical authority and capture search traffic.</p>
+      </div></div>
+    </div>
+
+    <h3>Working well</h3>
+    <ul class="clean">
+      <li>Open to search engines (indexable), with a correct robots.txt and an XML sitemap already in place.</li>
+      <li>Canonical tag and Open Graph / Twitter social-sharing tags are configured.</li>
+      <li>An SEO plugin is active and generating the metadata framework.</li>
+      <li>The site is mobile-responsive.</li>
+      <li>Arabic and English locales are declared &mdash; if a full English version exists, add hreflang tags to link them.</li>
+    </ul>
+  </section>
+
+  <!-- ACTION PLAN -->
+  <section>
+    <div class="sec-label">Action plan</div>
+    <h2>What to do, in order</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Action</th><th>Area</th><th>Effort</th><th>Impact</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pr pr-1">P1</span></td><td>Enable LiteSpeed Cache (full-page caching)</td><td><span class="tag">Performance</span></td><td>Low</td><td>High</td></tr>
+          <tr><td><span class="pr pr-1">P1</span></td><td>Add the six missing security headers</td><td><span class="tag">Security</span></td><td>Low</td><td>High</td></tr>
+          <tr><td><span class="pr pr-1">P1</span></td><td>Add an H1 + rewrite title &amp; meta description</td><td><span class="tag">SEO</span></td><td>Low</td><td>High</td></tr>
+          <tr><td><span class="pr pr-2">P2</span></td><td>Optimize images (WebP, resize, lazy-load) + add alt text</td><td><span class="tag">Perf / SEO</span></td><td>Medium</td><td>Medium</td></tr>
+          <tr><td><span class="pr pr-2">P2</span></td><td>Combine / minify / defer CSS &amp; JS</td><td><span class="tag">Performance</span></td><td>Low</td><td>Medium</td></tr>
+          <tr><td><span class="pr pr-2">P2</span></td><td>Add LegalService schema + Google Business Profile</td><td><span class="tag">SEO</span></td><td>Medium</td><td>Medium</td></tr>
+          <tr><td><span class="pr pr-2">P2</span></td><td>Update &amp; hide software versions; confirm form CAPTCHA</td><td><span class="tag">Security</span></td><td>Low</td><td>Medium</td></tr>
+          <tr><td><span class="pr pr-3">P3</span></td><td>Add a CDN (Cloudflare) &mdash; speed + firewall + headers</td><td><span class="tag">Perf / Security</span></td><td>Medium</td><td>Medium</td></tr>
+          <tr><td><span class="pr pr-3">P3</span></td><td>Harden WordPress login (2FA, limit attempts, XML-RPC, user enum)</td><td><span class="tag">Security</span></td><td>Medium</td><td>Medium</td></tr>
+          <tr><td><span class="pr pr-3">P3</span></td><td>Publish blog/news content; add hreflang if English site exists</td><td><span class="tag">SEO</span></td><td>Ongoing</td><td>Medium</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- DEEPER REVIEW / CREDENTIALS -->
+  <section>
+    <div class="sec-label">Next step</div>
+    <h2>For a complete review, request WordPress admin access</h2>
+    <div class="callout">
+      <h3>Why we need admin credentials</h3>
+      <p style="font-size:14px">This audit was done entirely from the outside. Several important checks can only be made from inside the WordPress dashboard &mdash; and the site's bot protection deliberately blocks external probing (a good thing, but it limits how deep an outside scan can go). With a temporary admin login, we can verify and report on:</p>
+      <ul>
+        <li>Exact WordPress, theme and plugin versions &mdash; and whether any have known vulnerabilities or are abandoned.</li>
+        <li>All user accounts and their roles (to rule out any rogue or unused admin accounts).</li>
+        <li>Login security settings &mdash; whether two-factor and login-attempt limits are in place.</li>
+        <li>Backup status and file integrity (is there a working, recent backup?).</li>
+        <li>Caching, security and SEO plugin configuration &mdash; so fixes can be applied correctly.</li>
+        <li>Pending updates and overall database/site health.</li>
+      </ul>
+      <p style="font-size:13.5px;color:var(--muted)">We recommend sharing access securely: a dedicated admin account created for the review, with two-factor enabled, and the password changed once the review is complete.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div><b>Methodology.</b> Findings are based on in-browser inspection of the live site (response timing, headers, page structure and resources), securityheaders.com, Sucuri SiteCheck, and robots.txt / sitemap checks, on 7 October 2026.</div>
+    <div><b>Limitation.</b> The site's bot-protection firewall blocked automated probing of some internal endpoints; items marked "to confirm" are best verified with admin access.</div>
+    <div>Prepared by Code-Ox Technologies.</div>
+  </footer>
+
+</main>
+
+<script>
+  (function(){
+    var btn=document.getElementById('themeBtn');
+    var root=document.documentElement;
+    function cur(){
+      var a=root.getAttribute('data-theme');
+      if(a) return a;
+      return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+    }
+    try{var saved=localStorage.getItem('iwan-theme'); if(saved) root.setAttribute('data-theme',saved);}catch(e){}
+    btn.addEventListener('click',function(){
+      var next=cur()==='dark'?'light':'dark';
+      root.setAttribute('data-theme',next);
+      try{localStorage.setItem('iwan-theme',next);}catch(e){}
+    });
+  })();
+</script>
