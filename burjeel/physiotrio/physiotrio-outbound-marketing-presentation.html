@@ -3,454 +3,210 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhysioTrio — Outbound Marketing Module</title>
+<title>PhysioTrio — Patient Follow-Up Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --void:#05050a;
-  --void-2:#0b0b16;
-  --void-3:#12121f;
-  --line: rgba(255,255,255,0.07);
-  --line-soft: rgba(255,255,255,0.04);
-  --cream:#f2f0eb;
-  --ink:#05050a;
-  --ink-soft: rgba(5,5,10,0.62);
-  --ink-faint: rgba(5,5,10,0.4);
-  --txt: rgba(242,240,235,0.92);
-  --txt-soft: rgba(242,240,235,0.62);
-  --txt-faint: rgba(242,240,235,0.4);
-  --blue:#1a56ff;
-  --teal:#00c9a7;
-  --purple:#8b5cf6;
-  --amber:#f59e0b;
-  --pink:#ec4899;
-  --red:#ef4444;
-  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Helvetica, Arial, sans-serif;
-  --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-  --font-mono: ui-monospace, 'SF Mono', 'Menlo', 'Cascadia Code', monospace;
-  --ease: cubic-bezier(.16,1,.3,1);
+  --purple:#880772; --purple-2:#A8389A; --purple-soft:rgba(136,7,114,0.08);
+  --green:#4CAF50; --green-d:#388E3C; --green-soft:rgba(76,175,80,0.10);
+  --navy:#0B162C; --text:#1A1A2E; --slate:#374151; --gray:#6B7280;
+  --white:#FFFFFF; --cool:#F8FAFC; --mint:#F6FDF9; --pale:#F1F5F9; --border:#E5E7EB;
+  --forest:#0F2B1F; --forest-m:#4B7563;
+  --font:'Plus Jakarta Sans','Plus Jakarta Sans Fallback',sans-serif;
+  --font-ar:'Cairo','Cairo Fallback',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{margin:0;font-family:var(--font-body);background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5;}
+body{margin:0;font-family:var(--font);background:var(--white);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.55;}
 img,svg{max-width:100%;display:block;}
-.ic{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
-.wrap{max-width:1220px;margin:0 auto;padding:0 32px;}
-@media (max-width:640px){ .wrap{padding:0 20px;} }
+.ic{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.wrap{max-width:1300px;margin:0 auto;padding:0 48px;}
+@media (max-width:640px){ .wrap{padding:0 16px;} }
+[lang="ar"]{font-family:var(--font-ar);letter-spacing:0;}
 
-/* ---------- chrome ---------- */
-#progress{position:fixed;top:0;left:0;height:3px;background:var(--blue);z-index:100;width:0%;box-shadow:0 0 10px var(--blue);}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 28px;z-index:90;background:rgba(5,5,10,0.82);backdrop-filter:blur(20px) saturate(160%);border-bottom:1px solid var(--line);}
-.brand{display:flex;align-items:center;gap:9px;color:var(--txt);text-decoration:none;}
-.brand-mark{width:8px;height:8px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);}
-.brand-word{font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:-0.01em;}
-.brand-sub{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;color:var(--txt-faint);text-transform:uppercase;margin-left:6px;}
-.nav-links{display:flex;gap:24px;list-style:none;margin:0;padding:0;}
-.nav-links a{color:var(--txt-soft);text-decoration:none;font-size:13px;font-weight:500;transition:color 160ms;}
-.nav-links a:hover{color:var(--txt);}
-@media (max-width:900px){ .nav-links{display:none;} }
-.nav-cta{display:flex;align-items:center;gap:10px;background:var(--blue);color:#fff;border:none;border-radius:100px;
-  padding:9px 18px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
-  cursor:pointer;transition:transform 160ms var(--ease), box-shadow 160ms var(--ease);}
-.nav-cta:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(26,86,255,0.35);}
+/* chrome */
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--purple);z-index:100;width:0%;}
+.topbar{position:fixed;top:0;left:0;right:0;height:72px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;z-index:90;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.brand img{height:52px;width:auto;}
+.brand-sub{font-size:10px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--gray);border-left:1px solid var(--border);padding-left:12px;}
+.nav-links{display:flex;gap:26px;list-style:none;margin:0;padding:0;}
+.nav-links a{color:var(--slate);text-decoration:none;font-size:13px;font-weight:600;}
+.nav-links a:hover{color:var(--purple);}
+@media (max-width:980px){ .nav-links{display:none;} }
+@media (max-width:520px){ .brand-sub{display:none;} }
+.nav-cta{background:var(--purple);color:#fff;border:none;border-radius:6px;padding:10px 16px;font:600 12px/1 var(--font);cursor:pointer;}
+.nav-cta:hover{background:var(--purple-2);}
 
-#drawer-overlay{position:fixed;inset:0;background:rgba(2,2,5,0.6);opacity:0;pointer-events:none;transition:opacity 220ms var(--ease);z-index:95;}
+#drawer-overlay{position:fixed;inset:0;background:rgba(11,22,44,0.35);opacity:0;pointer-events:none;transition:opacity 220ms var(--ease);z-index:95;}
 #drawer-overlay.open{opacity:1;pointer-events:auto;}
-#drawer{position:fixed;top:0;right:0;bottom:0;width:min(380px,88vw);background:var(--void-2);border-left:1px solid var(--line);
-  z-index:96;transform:translateX(100%);transition:transform 320ms var(--ease);overflow-y:auto;padding:88px 0 40px;}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(380px,88vw);background:#fff;border-left:1px solid var(--border);
+  z-index:96;transform:translateX(100%);transition:transform 320ms var(--ease);overflow-y:auto;padding:84px 0 40px;}
 #drawer.open{transform:translateX(0);}
-.drawer-close{position:absolute;top:22px;right:24px;background:none;border:none;color:var(--txt-soft);font-size:22px;cursor:pointer;line-height:1;}
+.drawer-close{position:absolute;top:20px;right:22px;background:none;border:none;color:var(--gray);font-size:24px;cursor:pointer;line-height:1;}
+.drawer-group{font-size:10px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--green-d);padding:18px 26px 8px;}
 .drawer-list{list-style:none;margin:0;padding:0 12px;}
-.drawer-list a{display:flex;gap:14px;align-items:baseline;padding:10px 16px;border-radius:10px;text-decoration:none;
-  color:var(--txt-soft);font-size:13.5px;transition:background 140ms, color 140ms;}
-.drawer-list a:hover, .drawer-list a.active{background:rgba(26,86,255,0.1);color:var(--txt);}
-.drawer-list a.active{color:#6d94ff;}
-.drawer-list .num{font-family:var(--font-mono);font-size:10.5px;color:var(--txt-faint);min-width:20px;}
-.drawer-group{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt-faint);
-  padding:20px 26px 8px;}
+.drawer-list a{display:flex;gap:14px;align-items:baseline;padding:9px 14px;border-radius:8px;text-decoration:none;color:var(--slate);font-size:13.5px;font-weight:500;}
+.drawer-list a:hover,.drawer-list a.active{background:var(--purple-soft);color:var(--purple);}
+.drawer-list .num{font-size:11px;font-weight:700;color:var(--gray);min-width:20px;}
 
 #jumpctl{position:fixed;right:22px;bottom:22px;display:flex;flex-direction:column;gap:8px;z-index:80;}
-.jumpbtn{width:40px;height:40px;border-radius:50%;background:rgba(5,5,10,0.85);backdrop-filter:blur(12px);
-  border:1px solid var(--line);color:#6d94ff;display:flex;align-items:center;justify-content:center;cursor:pointer;
-  transition:transform 140ms var(--ease), border-color 140ms;}
-.jumpbtn:hover{border-color:var(--blue);transform:translateY(-2px);}
+.jumpbtn{width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid var(--border);color:var(--purple);font-size:16px;cursor:pointer;}
+.jumpbtn:hover{border-color:var(--purple);}
 @media (max-width:640px){ #jumpctl{display:none;} }
 
-/* ---------- section shell ---------- */
-.sec{padding:110px 0;position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center;}
-.sec > .wrap{width:100%;}
-.sec.dark{background:var(--void);color:var(--txt);}
-.sec.cream{background:var(--cream);color:var(--ink);}
-@media (max-width:640px){ .sec{padding:72px 0;} }
-.sec-index{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;position:absolute;top:34px;right:32px;color:var(--txt-faint);}
-.cream .sec-index{color:var(--ink-faint);}
+/* sections */
+.sec{padding:112px 0 72px;position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center;background:var(--white);}
+.sec > .wrap{width:100%;position:relative;z-index:1;}
+.sec.cool{background:var(--cool);} .sec.mint{background:var(--mint);}
+.sec.navy{background:var(--navy);color:#fff;}
+@media (max-width:640px){ .sec{padding:92px 0 56px;} .sec-index{right:16px;} }
+.sec-index{position:absolute;top:-34px;right:48px;font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--gray);}
+.pattern{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M18 13v10M13 18h10' stroke='%230B162C' stroke-opacity='0.045' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");}
 
-.eyebrow{font:700 11.5px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--blue);
-  margin:0 0 20px;display:flex;align-items:center;gap:10px;}
-.eyebrow::before{content:'';width:22px;height:1px;background:var(--blue);}
-h2.headline{font-family:var(--font-display);font-weight:800;font-size:clamp(2rem,4vw,3.1rem);line-height:1.06;
-  letter-spacing:-0.025em;margin:0 0 20px;max-width:820px;}
-h2.headline em, h1 em{font-style:normal;font-family:var(--font-serif);font-weight:400;font-style:italic;color:var(--txt-faint);}
-.cream h2.headline em{color:var(--ink-faint);}
-h3.subhead{font-family:var(--font-display);font-weight:800;font-size:clamp(1.1rem,2vw,1.4rem);letter-spacing:-0.015em;margin:0 0 12px;}
-.lede{font-size:1.05rem;line-height:1.68;max-width:640px;color:var(--txt-soft);}
-.cream .lede{color:var(--ink-soft);}
-.section-head{margin-bottom:52px;}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:2.2px;text-transform:uppercase;color:var(--purple);margin:0 0 16px;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:'';width:22px;height:2px;border-radius:2px;background:var(--green);}
+.eyebrow.green{color:var(--green-d);}
+h1,h2.headline{color:var(--navy);font-weight:800;letter-spacing:-0.02em;}
+h2.headline{font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.15;margin:0 0 16px;max-width:860px;}
+h2.headline span,h1 span{color:var(--purple);}
+.lede{font-size:1.02rem;line-height:1.7;color:var(--slate);max-width:720px;margin:0;}
+.section-head{margin-bottom:38px;}
+.src{font-size:11px;color:var(--gray);margin-top:16px;}
 
-.tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;letter-spacing:.07em;
-  text-transform:uppercase;padding:5px 11px;border-radius:100px;line-height:1;white-space:nowrap;font-weight:700;}
-.tag-mvp{background:rgba(26,86,255,0.1);color:#6d94ff;border:1px solid rgba(26,86,255,0.3);}
-.cream .tag-mvp{color:#1a56ff;background:rgba(26,86,255,0.07);}
-.tag-future{background:rgba(139,92,246,0.1);color:#b39bfb;border:1px solid rgba(139,92,246,0.3);}
-.cream .tag-future{color:#7c4ee8;background:rgba(139,92,246,0.07);}
-.tag-assumption{background:transparent;border:1px dashed var(--txt-faint);color:var(--txt-faint);font-style:italic;font-weight:500;}
-.cream .tag-assumption{border-color:var(--ink-faint);color:var(--ink-faint);}
-.tag-example{background:transparent;border:1px dotted var(--txt-faint);color:var(--txt-soft);font-weight:500;}
-.cream .tag-example{color:var(--ink-soft);border-color:var(--ink-faint);}
-.tag-open{background:rgba(239,68,68,0.1);color:#f38a8a;border:1px solid rgba(239,68,68,0.3);}
-
-/* ---------- blobs ---------- */
-.blob{position:absolute;border-radius:50%;pointer-events:none;filter:blur(70px);z-index:0;}
-
-/* ---------- grids/cards ---------- */
+/* grids & cards */
 .grid{display:grid;gap:18px;}
-.grid-2{grid-template-columns:repeat(2,1fr);}
-.grid-3{grid-template-columns:repeat(3,1fr);}
-.grid-4{grid-template-columns:repeat(4,1fr);}
-@media (max-width:900px){ .grid-3,.grid-4{grid-template-columns:repeat(2,1fr);} }
+.grid-2{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(3,1fr);} .grid-4{grid-template-columns:repeat(4,1fr);}
+@media (max-width:980px){ .grid-3,.grid-4{grid-template-columns:repeat(2,1fr);} }
 @media (max-width:640px){ .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;} }
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:0 1px 2px rgba(11,22,44,0.04);}
+.card h4{color:var(--navy);font-size:1rem;font-weight:800;margin:0 0 6px;}
+.card p{margin:0;font-size:.875rem;color:var(--gray);line-height:1.6;}
+.card .icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px;}
+.i-p{background:var(--purple-soft);color:var(--purple);} .i-g{background:var(--green-soft);color:var(--green-d);}
+.card.accent-p{border-top:3px solid var(--purple);} .card.accent-g{border-top:3px solid var(--green);}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:4px 10px;border-radius:100px;line-height:1.2;}
+.b-p{background:var(--purple-soft);color:var(--purple);} .b-g{background:var(--green-soft);color:var(--green-d);}
+.b-n{background:var(--pale);color:var(--slate);} .b-line{border:1px dashed var(--gray);color:var(--gray);}
+.check{list-style:none;margin:12px 0 0;padding:0;}
+.check li{display:flex;gap:10px;padding:7px 0;font-size:.875rem;color:var(--slate);border-bottom:1px solid var(--border);}
+.check li:last-child{border-bottom:none;}
+.check .ck{flex:0 0 auto;color:var(--green-d);font-weight:800;}
+.check .x{flex:0 0 auto;color:var(--purple);font-weight:800;}
+.note{border-left:3px solid var(--purple);background:var(--purple-soft);border-radius:0 10px 10px 0;padding:13px 18px;font-size:.86rem;color:var(--navy);margin-top:20px;}
+.note.g{border-left-color:var(--green);background:var(--green-soft);}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+@media (max-width:980px){ .facts{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:560px){ .facts{grid-template-columns:1fr;} }
+.fact .k{font-size:10px;font-weight:800;letter-spacing:2.2px;text-transform:uppercase;color:var(--green-d);margin-bottom:6px;}
+.fact .v{font-size:1.05rem;font-weight:800;color:var(--navy);line-height:1.3;}
+.fact p{margin:6px 0 0;font-size:.84rem;color:var(--gray);}
 
-.card{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:16px;padding:26px;position:relative;
-  overflow:hidden;transition:transform 220ms var(--ease), border-color 220ms;}
-.cream .card{background:#fff;border-color:rgba(5,5,10,0.08);}
-.card:hover{transform:translateY(-3px);}
-.card .icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:18px;}
-.card h4{font-family:var(--font-display);font-size:1.02rem;font-weight:800;margin:0 0 8px;letter-spacing:-0.01em;}
-.card p{margin:0;font-size:.88rem;color:var(--txt-soft);line-height:1.6;}
-.cream .card p{color:var(--ink-soft);}
-.card .ghost{position:absolute;bottom:-14px;right:-10px;width:110px;height:110px;opacity:.08;z-index:0;}
-.card > *{position:relative;z-index:1;}
-.card.top-accent{border-top-width:3px;border-top-style:solid;}
-.card.mini{padding:18px;}
-.card.mini h4{font-size:.86rem;margin-bottom:5px;}
-.card.mini p{font-size:.78rem;}
-.card.mini .icon{width:32px;height:32px;border-radius:9px;margin-bottom:12px;}
-.card.mini.border-red{border-color:var(--line);border-top-color:var(--red);}
-.cream .card.mini.border-red{border-color:rgba(5,5,10,0.08);border-top-color:var(--red);}
-.card.mini.border-teal{border-color:var(--line);border-top-color:var(--teal);}
-.cream .card.mini.border-teal{border-color:rgba(5,5,10,0.08);border-top-color:var(--teal);}
-
-/* ---------- stat line (market-size callouts) ---------- */
-.statline{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:36px;padding-top:28px;border-top:1px solid rgba(5,5,10,0.08);}
-.dark .statline{border-color:var(--line);}
-@media (max-width:900px){ .statline{grid-template-columns:repeat(2,1fr);} }
-@media (max-width:640px){ .statline{grid-template-columns:1fr;} }
-.stat .n{font-family:var(--font-display);font-weight:900;font-size:1.9rem;letter-spacing:-0.02em;color:var(--blue);line-height:1.1;}
-.stat .l{font-size:.8rem;color:var(--ink-soft);margin-top:6px;line-height:1.4;}
-.dark .stat .l{color:var(--txt-soft);}
-
-/* accent utility classes */
-.accent-blue{color:#6d94ff;} .cream .accent-blue{color:var(--blue);}
-.accent-teal{color:#4fe0c4;} .cream .accent-teal{color:#0aa88b;}
-.accent-purple{color:#b39bfb;} .cream .accent-purple{color:#7c4ee8;}
-.accent-amber{color:#ffc266;} .cream .accent-amber{color:#c9790a;}
-.accent-pink{color:#ff9ac4;} .cream .accent-pink{color:#d6317f;}
-.accent-red{color:#ff9494;} .cream .accent-red{color:#d63333;}
-.bg-blue{background:rgba(26,86,255,0.1);} .bg-teal{background:rgba(0,201,167,0.1);} .bg-purple{background:rgba(139,92,246,0.1);}
-.bg-amber{background:rgba(245,158,11,0.1);} .bg-pink{background:rgba(236,72,153,0.1);} .bg-red{background:rgba(239,68,68,0.1);}
-.border-blue{border-color:var(--blue);} .border-teal{border-color:var(--teal);} .border-purple{border-color:var(--purple);}
-.border-amber{border-color:var(--amber);} .border-pink{border-color:var(--pink);} .border-red{border-color:var(--red);}
-
-/* ---------- pill clusters ---------- */
-.pill-group{margin-bottom:26px;}
-.pill-group-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.pill-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.pill-group-label{font-family:var(--font-mono);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--txt);white-space:nowrap;}
-.cream .pill-group-label{color:var(--ink);}
-.pill-group-line{flex:1;height:1px;background:var(--line);}
-.cream .pill-group-line{background:rgba(5,5,10,0.09);}
-.pill-row{display:flex;flex-wrap:wrap;gap:8px;}
-.pill{font-family:var(--font-mono);font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid;}
-
-/* ---------- flow row ---------- */
-.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-top:8px;}
-.flow-node{flex:1 1 160px;background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:150px;}
-.cream .flow-node{background:#fff;border-color:rgba(5,5,10,0.08);}
-.flow-node .t{font-family:var(--font-display);font-weight:800;font-size:.95rem;margin-bottom:4px;}
-.flow-node .d{font-size:.8rem;color:var(--txt-soft);}
-.cream .flow-node .d{color:var(--ink-soft);}
-.flow-node .fic{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
-.flow-node .fic svg{width:15px;height:15px;}
-.flow-arrow{flex:0 0 38px;display:flex;align-items:center;justify-content:center;color:var(--blue);}
-@media (max-width:760px){ .flow{flex-direction:column;} .flow-arrow{transform:rotate(90deg);height:22px;} }
-
-/* ---------- step list (journeys) — continuous connected process ---------- */
-.steps{position:relative;margin-top:14px;}
-.steps::before{content:'';position:absolute;left:16px;top:6px;bottom:6px;width:2px;
-  background:linear-gradient(var(--blue),rgba(26,86,255,0.12));z-index:0;}
-.cream .steps::before{background:linear-gradient(var(--blue),rgba(26,86,255,0.22));}
-.step{display:flex;gap:18px;padding:16px 0;position:relative;z-index:1;}
-.step-badge{flex:0 0 34px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-mono);font-size:12.5px;font-weight:800;background:#132347;color:#6d94ff;
-  box-shadow:0 0 0 6px var(--void);}
-.cream .step-badge{background:#e4eaff;color:var(--blue);box-shadow:0 0 0 6px var(--cream);}
-.step-badge.teal{background:#0f2b26;color:#4fe0c4;}
-.cream .step-badge.teal{background:#dcf4ee;color:#0aa88b;}
-.step h4{font-family:var(--font-display);font-size:.98rem;font-weight:800;margin:0 0 5px;}
-.step p{margin:0;font-size:.86rem;color:var(--txt-soft);line-height:1.6;max-width:620px;}
-.cream .step p{color:var(--ink-soft);}
-
-/* ---------- table ---------- */
-.tblwrap{overflow-x:auto;margin-top:8px;border-radius:14px;border:1px solid var(--line);}
-.cream .tblwrap{border-color:rgba(5,5,10,0.08);}
-table.cmp{border-collapse:collapse;width:100%;min-width:600px;background:rgba(255,255,255,0.02);}
-.cream table.cmp{background:#fff;}
-table.cmp th, table.cmp td{padding:13px 18px;text-align:left;font-size:.86rem;border-bottom:1px solid var(--line);vertical-align:top;}
-.cream table.cmp th, .cream table.cmp td{border-color:rgba(5,5,10,0.08);}
-table.cmp th{font-family:var(--font-mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--txt-faint);}
-.cream table.cmp th{color:var(--ink-faint);}
-table.cmp tr:last-child td{border-bottom:none;}
-table.cmp td.hi{color:#6d94ff;font-weight:800;}
-.cream table.cmp td.hi{color:var(--blue);}
-
-/* ---------- double blind / paired cards ---------- */
-.blind{display:flex;align-items:center;gap:18px;margin-top:22px;flex-wrap:wrap;}
-.blind-card{flex:1 1 200px;background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:14px;padding:20px;
-  text-align:center;min-width:170px;}
-.cream .blind-card{background:#fff;border-color:rgba(5,5,10,0.08);}
-.blind-mid{flex:0 0 auto;text-align:center;color:#6d94ff;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.06em;
-  text-transform:uppercase;padding:0 6px;}
-
-/* ---------- hub diagram ---------- */
-.hub{position:relative;width:100%;max-width:480px;aspect-ratio:1;margin:0 auto;}
-.hub-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:128px;height:128px;border-radius:50%;
-  background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3;
-  box-shadow:0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px var(--line);}
-.cream .hub-center{background:var(--cream);box-shadow:0 8px 32px rgba(5,5,10,0.12), 0 0 0 1px rgba(5,5,10,0.06);}
-.hub-center b{font-family:var(--font-display);font-weight:900;font-size:.85rem;letter-spacing:-0.01em;color:var(--txt);}
-.cream .hub-center b{color:var(--ink);}
-.hub-center span{font-family:var(--font-mono);font-size:8px;color:var(--txt-faint);letter-spacing:.06em;margin-top:2px;text-align:center;}
-.cream .hub-center span{color:var(--ink-faint);}
-.hub-node{position:absolute;width:104px;transform:translate(-50%,-50%);text-align:center;z-index:2;}
-.hub-node .dot{width:44px;height:44px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;
-  background:var(--void-2);color:#fff;box-shadow:0 6px 20px rgba(0,0,0,0.3);border:1px solid var(--line);}
-.cream .hub-node .dot{background:#fff;box-shadow:0 6px 20px rgba(5,5,10,0.14);border-color:rgba(5,5,10,0.08);}
-.hub-node .lbl{font-family:var(--font-mono);font-size:9.5px;font-weight:700;color:var(--txt);line-height:1.3;}
-.cream .hub-node .lbl{color:var(--ink);}
-.hub-svg{position:absolute;inset:0;z-index:1;}
-
-/* ---------- hero console mockup ---------- */
-.console{position:relative;background:var(--void-2);border:1px solid var(--line);border-radius:18px;overflow:hidden;
-  box-shadow:0 30px 80px -20px rgba(26,86,255,0.28), 0 0 0 1px rgba(255,255,255,0.03) inset;}
-.console-head{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(5,5,10,0.5);
-  border-bottom:1px solid var(--line);}
-.console-head .l{display:flex;align-items:center;gap:8px;}
-.console-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue);}
-.console-title{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;color:var(--txt-soft);}
-.console-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;color:#6d94ff;}
-.console-tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;}
-.console-tabs span{flex:1;padding:10px 8px;text-align:center;font-size:11.5px;font-weight:600;color:var(--txt-faint);
-  border-bottom:2px solid transparent;white-space:nowrap;}
-.console-tabs span.on{color:var(--txt);border-color:var(--blue);background:rgba(26,86,255,0.05);}
-.console-body{padding:16px 18px 18px;}
-.console-row-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.console-row-head .l{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;color:var(--txt-faint);text-transform:uppercase;}
-.console-row-head .r{font-family:var(--font-mono);font-size:10px;color:var(--teal);background:rgba(0,201,167,0.1);
-  border:1px solid rgba(0,201,167,0.25);border-radius:100px;padding:3px 9px;}
-.chead{display:grid;grid-template-columns:1.6fr .8fr 1fr 1.1fr;gap:4px;font-family:var(--font-mono);font-size:9px;
-  letter-spacing:.06em;text-transform:uppercase;color:var(--txt-faint);padding:0 6px 6px;}
-.crow{display:grid;grid-template-columns:1.6fr .8fr 1fr 1.1fr;gap:4px;align-items:center;padding:9px 6px;border-radius:9px;
-  background:rgba(255,255,255,0.02);margin-bottom:5px;font-size:.75rem;}
-.crow .name{font-weight:700;color:var(--txt);}
-.crow .score{font-family:var(--font-mono);font-weight:800;color:#6d94ff;}
-.crow .status{font-family:var(--font-mono);font-size:9.5px;padding:3px 8px;border-radius:100px;justify-self:start;font-weight:700;}
-.console-foot{border-top:1px solid var(--line);padding-top:10px;font-family:var(--font-mono);font-size:10px;color:var(--txt-faint);}
-.console-tabs span{cursor:pointer;}
-.console-panel{display:none;}
-.console-panel.on{display:block;}
-.arow{display:flex;align-items:flex-start;gap:9px;padding:9px 6px;border-radius:9px;background:rgba(255,255,255,0.02);margin-bottom:5px;font-size:.75rem;}
-.arow .n{flex:0 0 18px;height:18px;border-radius:50%;background:rgba(26,86,255,0.16);color:#6d94ff;font-family:var(--font-mono);font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;}
-.arow .t{color:var(--txt);line-height:1.5;}
-.chat-bubble{border-radius:11px;padding:9px 12px;font-size:.76rem;line-height:1.5;margin-bottom:8px;max-width:88%;}
-.chat-bubble.q{background:rgba(26,86,255,0.14);color:var(--txt);margin-left:auto;}
-.chat-bubble.a{background:rgba(255,255,255,0.04);color:var(--txt-soft);}
-.chat-input{display:flex;align-items:center;gap:8px;border:1px dashed var(--line);border-radius:100px;padding:8px 8px 8px 14px;margin-top:6px;}
-.chat-input span{flex:1;font-size:.72rem;color:var(--txt-faint);}
-.chat-input .go{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;}
-
-/* ---------- terminal checklist card (roadmap / pricing / swot) ---------- */
-.term{background:var(--void-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;height:100%;display:flex;flex-direction:column;}
-.cream .term{background:#fff;border-color:rgba(5,5,10,0.08);}
-.term-head{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);background:rgba(255,255,255,0.02);}
-.cream .term-head{border-color:rgba(5,5,10,0.08);}
-.term-dot{width:7px;height:7px;border-radius:50%;}
-.term-title{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;flex:1;}
-.term-count{font-family:var(--font-mono);font-size:9.5px;color:var(--txt-faint);}
-.cream .term-count{color:var(--ink-faint);}
-.term-body{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1;}
-.term-row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:9px;background:rgba(255,255,255,0.02);
-  border:1px solid var(--line-soft);}
-.cream .term-row{background:rgba(5,5,10,0.02);border-color:rgba(5,5,10,0.05);}
-.term-row .chk{width:16px;height:16px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.term-row .chk.solid{background:currentColor;}
-.term-row .chk.solid svg{width:9px;height:9px;stroke:var(--void);stroke-width:3;}
-.cream .term-row .chk.solid svg{stroke:#fff;}
-.term-row .chk.outline{border:1.5px solid var(--txt-faint);}
-.term-row span.lbl{font-size:.8rem;color:var(--txt-soft);flex:1;}
-.cream .term-row span.lbl{color:var(--ink-soft);}
-.term-row.dim span.lbl{color:var(--txt-faint);}
-.cream .term-row.dim span.lbl{color:var(--ink-faint);}
-.term-price{padding:16px;text-align:center;border-bottom:1px solid var(--line);}
-.cream .term-price{border-color:rgba(5,5,10,0.08);}
-.term-price .amt{font-family:var(--font-display);font-weight:900;font-size:1.5rem;letter-spacing:-0.02em;}
-.term-price .per{font-family:var(--font-mono);font-size:10px;color:var(--txt-faint);margin-top:2px;}
-.cream .term-price .per{color:var(--ink-faint);}
-
-/* ---------- misc ---------- */
-.divider{height:1px;background:var(--line);margin:36px 0;}
-.cream .divider{background:rgba(5,5,10,0.08);}
-.note{border-left:3px solid var(--blue);background:rgba(26,86,255,0.06);border-radius:0 12px 12px 0;padding:15px 20px;
-  font-size:.86rem;color:#6d94ff;margin-top:20px;}
-.cream .note{background:rgba(26,86,255,0.05);color:#1a56ff;}
-.note.critical{border-left-color:var(--red);background:rgba(239,68,68,0.08);color:#ff9494;}
-.cream .note.critical{background:rgba(239,68,68,0.06);color:#c62828;}
-.note.good{border-left-color:var(--teal);background:rgba(0,201,167,0.08);color:#4fe0c4;}
-.cream .note.good{background:rgba(0,201,167,0.06);color:#0aa88b;}
-.checklist{list-style:none;margin:14px 0 0;padding:0;}
-.checklist li{display:flex;gap:10px;padding:8px 0;font-size:.86rem;color:var(--txt-soft);border-bottom:1px solid var(--line);}
-.cream .checklist li{color:var(--ink-soft);border-color:rgba(5,5,10,0.08);}
-.checklist li:last-child{border-bottom:none;}
-.checklist .ck{color:var(--blue);flex:0 0 auto;}
-
-/* ---------- risk/opportunity example cards ---------- */
-.rocard{border-radius:16px;padding:24px;border:1px solid;}
-.rocard.risk{background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.25);}
-.rocard.opp{background:rgba(0,201,167,0.06);border-color:rgba(0,201,167,0.25);}
-.rocard .rlabel{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:10px;display:block;}
-.rocard.risk .rlabel{color:#ff9494;}
-.rocard.opp .rlabel{color:#4fe0c4;}
-.rocard p{margin:0;font-size:.92rem;line-height:1.6;color:var(--txt-soft);}
-.cream .rocard p{color:var(--ink-soft);}
-
-/* ---------- pulse quote ---------- */
-.pulse-quote{max-width:760px;margin:0 auto;text-align:center;}
-.pulse-quote .big{font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:clamp(1.5rem,3vw,2.3rem);
-  line-height:1.4;color:var(--ink);margin:0 0 26px;}
-.pulse-quote p{font-size:1rem;line-height:1.75;color:var(--ink-soft);}
-
-/* ---------- ticker ---------- */
-.ticker-wrap{position:relative;background:var(--void-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  padding:16px 0;overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);}
-.ticker-track{display:flex;width:max-content;animation:tick 32s linear infinite;}
-.ticker-track span{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--txt-faint);padding:0 26px;white-space:nowrap;border-right:1px solid var(--line);}
-@keyframes tick{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
-
-/* ---------- hero ---------- */
-.hero{min-height:94vh;display:flex;align-items:center;padding-top:80px;}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:2;}
-@media (max-width:960px){ .hero-grid{grid-template-columns:1fr;} }
-.hero h1{font-family:var(--font-display);font-weight:900;font-size:clamp(2.3rem,5.4vw,4.1rem);line-height:1.04;
-  letter-spacing:-0.03em;margin:0 0 22px;}
-.hero p.sub{font-size:1.05rem;line-height:1.65;color:var(--txt-soft);max-width:520px;margin:0 0 30px;}
-.hero .meta-row{display:flex;gap:26px;flex-wrap:wrap;margin-top:24px;}
-.hero .meta{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--txt-faint);}
-.hero .meta b{display:block;color:var(--txt);font-family:var(--font-body);font-size:13.5px;letter-spacing:0;text-transform:none;
-  margin-top:4px;font-weight:700;}
-.btn{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
-  padding:14px 26px;border-radius:100px;text-decoration:none;display:inline-block;transition:transform 140ms var(--ease), box-shadow 140ms;}
-.btn-blue{background:var(--blue);color:#fff;}
-.btn-blue:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(26,86,255,0.4);}
-.btn-line{border:1px solid var(--line);color:var(--txt);}
-.btn-line:hover{border-color:var(--blue);}
+/* hero */
+.hero{min-height:100vh;}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;}
+@media (max-width:1020px){ .hero-grid{grid-template-columns:1fr;} }
+.hero h1{font-size:clamp(2.3rem,5vw,3.9rem);line-height:1.05;margin:0 0 20px;}
+.hero .sub{font-size:1.04rem;line-height:1.7;color:var(--slate);max-width:560px;margin:0 0 28px;}
+.btn{display:inline-block;font:700 14px/1 var(--font);padding:14px 22px;border-radius:6px;text-decoration:none;}
+.btn-p{background:var(--purple);color:#fff;} .btn-p:hover{background:var(--purple-2);}
+.btn-o{border:1px solid var(--border);color:var(--navy);background:#fff;} .btn-o:hover{border-color:var(--purple);color:var(--purple);}
 .cta-row{display:flex;gap:12px;flex-wrap:wrap;}
-.scroll-cue{position:absolute;bottom:28px;left:32px;display:flex;align-items:center;gap:8px;color:var(--txt-faint);
-  font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;z-index:2;}
-.scroll-cue .ln{width:26px;height:1px;background:var(--blue);}
+.meta-row{display:flex;gap:28px;flex-wrap:wrap;margin-top:28px;}
+.meta{font-size:10px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--gray);}
+.meta b{display:block;margin-top:5px;font-size:13.5px;letter-spacing:0;text-transform:none;color:var(--navy);font-weight:700;}
 
-/* ---------- closing ---------- */
-.closing{background:var(--void);color:var(--txt);padding:130px 0 100px;text-align:center;}
-.closing h2{font-family:var(--font-display);font-size:clamp(2rem,4.4vw,3.3rem);font-weight:900;letter-spacing:-.025em;
-  max-width:740px;margin:0 auto 24px;line-height:1.1;}
-.closing p{max-width:540px;margin:0 auto 36px;color:var(--txt-soft);font-size:1.02rem;line-height:1.65;}
+/* console mockup */
+.console{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 12px 40px -18px rgba(11,22,44,0.18);}
+.console-head{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:var(--cool);border-bottom:1px solid var(--border);}
+.console-title{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--navy);display:flex;align-items:center;gap:8px;}
+.console-title::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--green);}
+.console-tabs{display:flex;border-bottom:1px solid var(--border);}
+.console-tabs span{flex:1;padding:11px 8px;text-align:center;font-size:12px;font-weight:700;color:var(--gray);border-bottom:2px solid transparent;cursor:pointer;}
+.console-tabs span.on{color:var(--purple);border-color:var(--purple);background:var(--purple-soft);}
+.console-body{padding:16px 18px 14px;}
+.console-panel{display:none;} .console-panel.on{display:block;}
+.qrow{display:grid;grid-template-columns:1.5fr 1fr 1.1fr;gap:8px;align-items:center;padding:10px 10px;border-radius:10px;background:var(--cool);margin-bottom:6px;font-size:.8rem;color:var(--slate);}
+.qhead{display:grid;grid-template-columns:1.5fr 1fr 1.1fr;gap:8px;padding:0 10px 6px;font-size:9.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gray);}
+.qrow b{color:var(--navy);}
+.bubble{border-radius:12px;padding:10px 13px;font-size:.82rem;line-height:1.55;margin-bottom:8px;max-width:90%;}
+.bubble.out{background:var(--mint);border:1px solid rgba(76,175,80,0.25);color:var(--forest);}
+.bubble.in{background:var(--purple-soft);color:var(--navy);margin-left:auto;}
+.bubble.sys{background:var(--pale);color:var(--slate);font-size:.76rem;max-width:100%;}
+.bubble[dir="rtl"]{margin-left:auto;margin-right:0;text-align:right;font-size:.92rem;}
+.bubble.in[dir="rtl"]{margin-left:0;margin-right:auto;}
+.console-foot{border-top:1px solid var(--border);padding-top:10px;margin-top:6px;font-size:10.5px;color:var(--gray);}
+.mock-label{font-size:9.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--purple);}
 
-/* ---------- footer ---------- */
-footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px 0 0;}
-.foot-grid{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:32px;padding-bottom:44px;border-bottom:1px solid var(--line);}
-@media (max-width:900px){ .foot-grid{grid-template-columns:repeat(2,1fr);} }
-@media (max-width:560px){ .foot-grid{grid-template-columns:1fr;} }
-.foot-col-title{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--txt);
-  font-weight:700;margin-bottom:14px;}
-.foot-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
-.foot-col a{color:var(--txt-faint);text-decoration:none;font-size:12.5px;}
-.foot-col a:hover{color:var(--txt-soft);}
-.foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:22px 0;font-family:var(--font-mono);
-  font-size:11px;color:var(--txt-faint);}
-.ghost-word{width:100%;overflow:hidden;position:relative;height:clamp(60px,16vw,220px);}
-.ghost-word span{position:absolute;left:50%;bottom:0;transform:translateX(-50%) translateY(20%);white-space:nowrap;
-  font-family:var(--font-display);font-weight:900;letter-spacing:-0.04em;font-size:clamp(4rem,18vw,18rem);
-  color:rgba(255,255,255,0.04);}
+/* steps */
+.steps{position:relative;}
+.steps::before{content:'';position:absolute;left:17px;top:8px;bottom:8px;width:2px;background:var(--border);}
+.step{display:flex;gap:16px;padding:9px 0;position:relative;}
+.step-badge{flex:0 0 36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;background:#fff;border:2px solid var(--purple);color:var(--purple);position:relative;z-index:1;}
+.step-badge.g{border-color:var(--green);color:var(--green-d);}
+.step-badge.n{border-color:var(--gray);color:var(--gray);}
+.step h4{margin:0 0 3px;font-size:.95rem;font-weight:800;color:var(--navy);}
+.step p{margin:0;font-size:.85rem;color:var(--gray);line-height:1.55;}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;}
+@media (max-width:980px){ .split{grid-template-columns:1fr;gap:28px;} }
 
-/* ---------- reveal ---------- */
-.reveal{opacity:0;transform:translateY(14px);transition:opacity 560ms var(--ease), transform 560ms var(--ease);}
+/* funnel */
+.funnel{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px;}
+@media (max-width:980px){ .funnel{grid-template-columns:repeat(3,1fr);} }
+@media (max-width:560px){ .funnel{grid-template-columns:repeat(2,1fr);} }
+.fstage{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 12px;position:relative;}
+.fstage .n{font-size:1.5rem;font-weight:800;color:var(--navy);line-height:1;}
+.fstage .l{font-size:11.5px;font-weight:600;color:var(--slate);margin-top:8px;line-height:1.35;}
+.fstage .bar{height:4px;border-radius:4px;background:var(--pale);margin-top:12px;overflow:hidden;}
+.fstage .bar i{display:block;height:100%;background:var(--purple);}
+.fstage.last{border-color:var(--green);background:var(--mint);}
+.fstage.last .bar i{background:var(--green);}
+
+/* table */
+.tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;background:#fff;}
+table.m{border-collapse:collapse;width:100%;min-width:760px;}
+table.m th,table.m td{padding:12px 16px;text-align:left;font-size:.84rem;border-bottom:1px solid var(--border);vertical-align:top;color:var(--slate);}
+table.m th{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--gray);background:var(--cool);}
+table.m tr:last-child td{border-bottom:none;}
+table.m td b{color:var(--navy);}
+
+/* pills */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;}
+.pill{font-size:12px;font-weight:600;padding:6px 12px;border-radius:100px;border:1px solid;}
+.pill.g{border-color:rgba(76,175,80,0.4);color:var(--green-d);background:#fff;}
+.pill.p{border-color:rgba(136,7,114,0.3);color:var(--purple);background:#fff;}
+
+/* closing */
+.closing{text-align:center;}
+.closing h2{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-0.02em;margin:0 auto 18px;max-width:780px;line-height:1.12;color:#fff;}
+.closing p{max-width:600px;margin:0 auto 30px;color:rgba(255,255,255,0.78);font-size:1.02rem;line-height:1.7;}
+.ask{display:inline-block;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);border-radius:16px;padding:20px 26px;text-align:left;margin-bottom:30px;max-width:640px;}
+.ask .k{font-size:10px;font-weight:800;letter-spacing:2.2px;text-transform:uppercase;color:var(--green);margin-bottom:8px;}
+.ask div{color:#fff;font-size:.95rem;line-height:1.6;}
+.closing .btn-o{background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);}
+.contact{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.9;margin-top:28px;}
+.contact a{color:#fff;text-decoration:none;}
+
+/* footer */
+footer.foot{background:#fff;border-top:1px solid var(--border);padding:36px 0;}
+.foot-row{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
+.foot-row .l{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+.foot-row img.cx{height:20px;width:auto;}
+.foot-row span{font-size:12px;color:var(--gray);}
+
+.reveal{opacity:0;transform:translateY(12px);transition:opacity 520ms var(--ease),transform 520ms var(--ease);}
 .reveal.in{opacity:1;transform:none;}
-
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto;}
-  .reveal{transition:opacity 200ms linear;transform:none;}
-  .ticker-track{animation:none;}
-  *{transition-duration:0.001ms !important; animation-duration:0.001ms !important;}
-}
-
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} .reveal{opacity:1;transform:none;transition:none;} }
 @media print{
-  #progress,.topbar,#drawer,#drawer-overlay,#jumpctl,.scroll-cue,.ticker-wrap{display:none !important;}
-  body{background:#fff;}
-  .sec{padding:30px 0;page-break-inside:avoid;}
-  .sec.dark{background:#fff;color:#05050a;}
-  .dark .card,.card,.flow-node,.term{background:#fff;border-color:#ddd;color:#05050a;}
-  .lede,.step p,.card p{color:#333 !important;}
-  h1,h2,h3,h4{color:#05050a !important;}
-  .hero{min-height:auto;}
-  a{color:inherit;text-decoration:none;}
-  .ghost-word{display:none;}
+  #progress,.topbar,#drawer,#drawer-overlay,#jumpctl{display:none !important;}
+  .sec{min-height:auto;padding:36px 0;page-break-inside:avoid;}
+  .reveal{opacity:1;transform:none;}
 }
-/* ---------- deck-specific ---------- */
-.track-label{font-family:var(--font-mono);font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
-.chan-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
-.chan-head .icon{margin:0;}
-.chan-head .k{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-faint);}
-.cream .chan-head .k{color:var(--ink-faint);}
-.logo-chip{display:inline-flex;align-items:center;gap:14px;background:#fff;border-radius:14px;padding:10px 16px;}
-.logo-chip img{height:22px;width:auto;}
-.foot-col li{color:var(--txt-faint);font-size:12.5px;}
-.logo-chip span{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
-.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;position:relative;}
-@media (max-width:900px){ .loop{grid-template-columns:repeat(2,1fr);} }
-@media (max-width:560px){ .loop{grid-template-columns:1fr;} }
-.loop .card .big{font-family:var(--font-display);font-weight:900;font-size:2.2rem;letter-spacing:-0.03em;line-height:1;margin-bottom:14px;}
-.usecase .ch{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
-.usecase .out{margin-top:14px;padding-top:12px;border-top:1px solid rgba(5,5,10,0.08);font-size:.8rem;color:var(--ink-soft);}
-.dark .usecase .out{border-color:var(--line);color:var(--txt-soft);}
-.usecase .out b{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;color:#0aa88b;}
-.dark .usecase .out b{color:#4fe0c4;}
-.tag-wa{background:rgba(0,201,167,0.1);color:#0aa88b;border:1px solid rgba(0,201,167,0.3);}
-.dark .tag-wa{color:#4fe0c4;}
-.tag-call{background:rgba(139,92,246,0.1);color:#7c4ee8;border:1px solid rgba(139,92,246,0.3);}
-.dark .tag-call{color:#b39bfb;}
-.split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
-@media (max-width:960px){ .split{grid-template-columns:1fr;} }
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
-.kpi{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:10px;padding:10px;}
-.kpi .v{font-family:var(--font-display);font-weight:900;font-size:1.05rem;color:var(--txt);}
-.kpi .k{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--txt-faint);margin-top:3px;}
-.contact-line{font-family:var(--font-mono);font-size:12px;color:var(--txt-soft);line-height:1.9;}
-.sec.tight{padding:84px 0;}
-.tight .section-head{margin-bottom:34px;}
-.usecase{padding:22px;}
-.usecase .out{margin-top:12px;padding-top:10px;}
-.contact-line a{color:var(--txt);text-decoration:none;}
 </style>
 </head>
 <body>
@@ -460,72 +216,63 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
 <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5z"/></symbol>
 <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 8.5a3 3 0 1 1 3 3"/><path d="M21.5 20a5.5 5.5 0 0 0-4.4-5.4"/></symbol>
 <symbol id="i-message" viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/></symbol>
-<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/></symbol>
-<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5z"/><path d="M2 13l10 5 10-5"/></symbol>
-<symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
 <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></symbol>
 <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M12 20V4M20 20v-7"/></symbol>
-<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></symbol>
 <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
-<symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.6 6 6.4.6-4.8 4.3 1.4 6.3L12 17l-5.6 3.2 1.4-6.3-4.8-4.3L9.4 9z"/></symbol>
-<symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17 9 11 13 15 21 7"/><path d="M21 12V7h-5"/></symbol>
 <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M4 12h4l2 3h4l2-3h4"/><rect x="3" y="5" width="18" height="14" rx="2"/></symbol>
-<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></symbol>
-<symbol id="i-split" viewBox="0 0 24 24"><path d="M6 3v6a6 6 0 0 0 6 6h0a6 6 0 0 1 6 6M18 3v6a6 6 0 0 1-6 6"/></symbol>
-<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 17-5-5-9 8"/></symbol>
-<symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></symbol>
 <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9C.3 8 1.6 4 5.5 4 8 4 10 5.5 12 8c2-2.5 4-4 6.5-4 3.9 0 5.2 4 3.5 8-2.5 4.4-10 9-10 9z"/></symbol>
-<symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
-<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></symbol>
+<symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+<symbol id="i-steth" viewBox="0 0 24 24"><path d="M6 3v6a5 5 0 0 0 10 0V3"/><path d="M11 14v2a5 5 0 0 0 10 0v-2"/><circle cx="21" cy="12" r="2"/></symbol>
 </svg>
 
 <div id="progress"></div>
 
 <header class="topbar">
   <a href="#cover" class="brand">
-    <span class="brand-mark"></span>
-    <span class="brand-word">PHYSIOTRIO</span>
-    <span class="brand-sub">Outbound Marketing</span>
+    <img src="physiotrio-logo-full.png" alt="PhysioTrio by Burjeel Arabia">
+    <span class="brand-sub">Patient Follow-Up</span>
   </a>
   <ul class="nav-links">
-    <li><a href="#channels">Channels</a></li>
-    <li><a href="#dashboard">Dashboard</a></li>
-    <li><a href="#usecases">Campaigns</a></li>
-    <li><a href="#nixpend">Nixpend</a></li>
-    <li><a href="#questions">Open Questions</a></li>
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="#whatsapp">Channels</a></li>
+    <li><a href="#dashboard">Measurement</a></li>
+    <li><a href="#data">Nixpend</a></li>
+    <li><a href="#pilot">Pilot</a></li>
   </ul>
   <button class="nav-cta" id="drawerBtn">Sections · 15</button>
 </header>
 
 <div id="drawer-overlay"></div>
 <nav id="drawer">
-  <button class="drawer-close" id="drawerClose">&times;</button>
-  <div class="drawer-group">Why &amp; What</div>
+  <button class="drawer-close" id="drawerClose" aria-label="Close">&times;</button>
+  <div class="drawer-group">Context</div>
   <ul class="drawer-list">
-    <li><a href="#cover"><span class="num">00</span>Opening</a></li>
-    <li><a href="#why"><span class="num">01</span>Why Outbound, Why Now</a></li>
-    <li><a href="#channels"><span class="num">02</span>Two Channels, One Patient List</a></li>
-    <li><a href="#flow"><span class="num">03</span>How a Campaign Runs</a></li>
+    <li><a href="#cover"><span class="num">00</span>Recovery &amp; everyday life</a></li>
+    <li><a href="#care-model"><span class="num">01</span>PhysioTrio today</a></li>
+    <li><a href="#opportunities"><span class="num">02</span>Opportunities between visits</a></li>
+    <li><a href="#journey"><span class="num">03</span>One patient journey</a></li>
   </ul>
-  <div class="drawer-group">The Module</div>
+  <div class="drawer-group">How it works</div>
   <ul class="drawer-list">
-    <li><a href="#whatsapp"><span class="num">04</span>WhatsApp Campaigns</a></li>
-    <li><a href="#calling"><span class="num">05</span>AI Outbound Calling</a></li>
-    <li><a href="#builtin"><span class="num">06</span>Built In Across Both</a></li>
-    <li><a href="#dashboard"><span class="num">07</span>One Dashboard</a></li>
-    <li><a href="#retarget"><span class="num">08</span>Retargeting Loop</a></li>
+    <li><a href="#whatsapp"><span class="num">04</span>WhatsApp assistance</a></li>
+    <li><a href="#calls"><span class="num">05</span>Transparent AI calls</a></li>
+    <li><a href="#ownership"><span class="num">06</span>Follow-up &amp; staff ownership</a></li>
+    <li><a href="#dashboard"><span class="num">07</span>Dashboard &amp; measurement</a></li>
+    <li><a href="#learning"><span class="num">08</span>Learning without over-contacting</a></li>
   </ul>
   <div class="drawer-group">For PhysioTrio</div>
   <ul class="drawer-list">
-    <li><a href="#usecases"><span class="num">09</span>PhysioTrio Campaigns</a></li>
-    <li><a href="#nixpend"><span class="num">10</span>Nixpend Integration</a></li>
-    <li><a href="#trust"><span class="num">11</span>Patient Trust &amp; Compliance</a></li>
+    <li><a href="#matrix"><span class="num">09</span>Campaigns by branch</a></li>
+    <li><a href="#data"><span class="num">10</span>Nixpend &amp; data approach</a></li>
+    <li><a href="#trust"><span class="num">11</span>Trust, privacy &amp; clinical boundaries</a></li>
   </ul>
-  <div class="drawer-group">Next</div>
+  <div class="drawer-group">Decisions</div>
   <ul class="drawer-list">
-    <li><a href="#questions"><span class="num">12</span>Open Questions</a></li>
-    <li><a href="#next"><span class="num">13</span>Next Steps</a></li>
+    <li><a href="#decisions"><span class="num">12</span>Decisions needed</a></li>
+    <li><a href="#pilot"><span class="num">13</span>Pilot &amp; next steps</a></li>
     <li><a href="#closing"><span class="num">14</span>Closing</a></li>
   </ul>
 </nav>
@@ -538,479 +285,394 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
 <main>
 
 <!-- 00 COVER -->
-<section class="sec dark hero" id="cover">
-  <div class="blob" style="width:640px;height:640px;top:-220px;right:-200px;background:radial-gradient(circle,rgba(26,86,255,0.28),transparent 70%);"></div>
-  <div class="blob" style="width:480px;height:480px;bottom:-180px;left:-160px;background:radial-gradient(circle,rgba(0,201,167,0.14),transparent 70%);"></div>
+<section class="sec hero" id="cover">
+  <div class="pattern"></div>
   <div class="wrap hero-grid">
-    <div>
-      <p class="eyebrow">Outbound Marketing Module · WhatsApp + AI Calling</p>
-      <h1>Bring every patient <em>back</em> to complete their recovery.</h1>
-      <p class="sub">An outbound campaign engine for PhysioTrio. It reaches your existing patients on WhatsApp and by AI phone call, follows up on its own, and reports results in plain numbers, all from one dashboard and fed by your patient list in Nixpend.</p>
+    <div class="reveal">
+      <p class="eyebrow">Patient Follow-Up Module · Proposal Presentation</p>
+      <h1>Recovery happens in everyday life, <span>between visits too.</span></h1>
+      <p class="sub">PhysioTrio restores movement and confidence in the clinic. This module helps your team stay in touch between appointments: convenient WhatsApp messages and an optional AI call help eligible patients arrange the follow-up their care team has planned, with reception confirming every booking.</p>
       <div class="cta-row">
-        <a href="#channels" class="btn btn-blue">Explore the Module</a>
-        <a href="#questions" class="btn btn-line">Open Questions</a>
+        <a href="#journey" class="btn btn-p">See a patient journey</a>
+        <a href="#decisions" class="btn btn-o">Decisions needed</a>
       </div>
       <div class="meta-row">
         <div class="meta">Prepared for<b>PhysioTrio · Burjeel Arabia</b></div>
-        <div class="meta">Document type<b>Module Presentation</b></div>
-        <div class="meta">Stage<b>Pre-financial proposal</b></div>
+        <div class="meta">Document<b>Module presentation</b></div>
+        <div class="meta">Stage<b>Before financial proposal</b></div>
       </div>
     </div>
-    <div class="console reveal">
-      <div class="console-head">
-        <div class="l"><span class="console-dot"></span><span class="console-title">PHYSIOTRIO · OUTBOUND</span></div>
-        <span class="console-tag">ILLUSTRATIVE MOCKUP</span>
-      </div>
+    <div class="console reveal" aria-label="Illustrative mockup">
+      <div class="console-head"><span class="console-title">Follow-up · Riyadh branch</span><span class="mock-label">Illustrative mockup</span></div>
       <div class="console-tabs">
-        <span class="on" data-tab="campaigns">Campaigns</span><span data-tab="calls">Calls</span><span data-tab="replies">Replies</span>
+        <span class="on" data-tab="queue">Reception queue</span><span data-tab="wa">WhatsApp</span><span data-tab="ar">Arabic</span>
       </div>
       <div class="console-body">
-        <div class="console-panel on" data-panel="campaigns">
-          <div class="console-row-head"><span class="l">Active this week</span><span class="r">4 campaigns</span></div>
-          <div class="chead"><span>Campaign</span><span>Channel</span><span>Status</span><span>Result</span></div>
-          <div class="crow"><span class="name">Complete your plan</span><span>WhatsApp</span><span class="status" style="background:rgba(0,201,167,0.12);color:#4fe0c4;">Sent</span><span class="score">Replies in</span></div>
-          <div class="crow"><span class="name">Post-session check-in</span><span>Call</span><span class="status" style="background:rgba(26,86,255,0.14);color:#6d94ff;">Running</span><span class="score">Calling</span></div>
-          <div class="crow"><span class="name">Lapsed patient win-back</span><span>Both</span><span class="status" style="background:rgba(245,158,11,0.12);color:#ffc266;">Scheduled</span><span class="score">Sun 9:00</span></div>
-          <div class="crow"><span class="name">Home-visit service launch</span><span>WhatsApp</span><span class="status" style="background:rgba(0,201,167,0.12);color:#4fe0c4;">Sent</span><span class="score">Replies in</span></div>
-          <div class="console-foot">Illustrative only. Live figures come from PhysioTrio's own campaigns.</div>
+        <div class="console-panel on" data-panel="queue">
+          <div class="qhead"><span>Patient</span><span>Source</span><span>Status</span></div>
+          <div class="qrow"><b>Patient A</b><span>WhatsApp reply</span><span class="badge b-p">Booking requested</span></div>
+          <div class="qrow"><b>Patient B</b><span>AI call</span><span class="badge b-n">Callback requested</span></div>
+          <div class="qrow"><b>Patient C</b><span>WhatsApp reply</span><span class="badge b-g">Confirmed by reception</span></div>
+          <div class="qrow"><b>Patient D</b><span>WhatsApp</span><span class="badge b-line">Opted out</span></div>
+          <div class="console-foot">Names and statuses are placeholders. Reception confirms every booking in the clinic system.</div>
         </div>
-        <div class="console-panel" data-panel="calls">
-          <div class="console-row-head"><span class="l">Call outcomes</span><span class="r">logged automatically</span></div>
-          <div class="arow"><span class="n">1</span><span class="t"><b>Interested</b> · wants to book the next session, booking request sent to reception</span></div>
-          <div class="arow"><span class="n">2</span><span class="t"><b>Call back later</b> · retry set for this evening</span></div>
-          <div class="arow"><span class="n">3</span><span class="t"><b>Asked for WhatsApp</b> · branch location and timings sent after the call</span></div>
-          <div class="arow"><span class="n">4</span><span class="t"><b>Not now</b> · moved to next month's segment</span></div>
-          <div class="console-foot">Every outcome becomes the next step, with no manual notes.</div>
+        <div class="console-panel" data-panel="wa">
+          <div class="bubble out">Hello [first name], this is PhysioTrio [branch]. Would you like help arranging a follow-up appointment? Our team can check a suitable time for you.</div>
+          <div class="bubble in">Yes please, evenings are better for me.</div>
+          <div class="bubble out">Thank you. I've passed your request and preference to our reception team, who will contact you to confirm a time.</div>
+          <div class="console-foot">Illustrative conversation. No availability is offered unless a verified scheduling connection exists.</div>
         </div>
-        <div class="console-panel" data-panel="replies">
-          <div class="console-row-head"><span class="l">WhatsApp replies</span><span class="r">hot lead</span></div>
-          <div class="chat-bubble a">Hi Sara, you have 4 sessions left in your recovery plan. Shall we book your next one at the Riyadh branch?</div>
-          <div class="chat-bubble q">Yes, is Thursday evening available?</div>
-          <div class="chat-bubble a">Thursday 6:30 pm is open. I've passed your request to reception to confirm.</div>
-          <div class="console-foot">Optional AI reply agent. Without it, replies go to the team inbox.</div>
+        <div class="console-panel" data-panel="ar">
+          <div class="bubble out" dir="rtl" lang="ar">مرحباً [الاسم]، معك فيزيوتريو [الفرع]. هل ترغب في المساعدة لترتيب موعد متابعة؟ يسعد فريقنا التحقق من وقت مناسب لك.</div>
+          <div class="bubble in" dir="rtl" lang="ar">نعم، المساء أنسب لي.</div>
+          <div class="bubble out" dir="rtl" lang="ar">شكراً لك. تم إرسال طلبك إلى فريق الاستقبال، وسيتواصلون معك لتأكيد الموعد.</div>
+          <div class="console-foot">Illustrative Arabic example, shown right to left.</div>
         </div>
       </div>
     </div>
   </div>
-  <div class="scroll-cue"><span class="ln"></span><span>Scroll to explore</span></div>
 </section>
 
-<div class="ticker-wrap">
-  <div class="ticker-track">
-    <span>WhatsApp Campaigns</span><span>AI Outbound Calling</span><span>Arabic + English</span><span>Nixpend Patient Segments</span>
-    <span>Automatic Follow-Ups</span><span>Opt-Out Respected</span><span>One Dashboard</span><span>Retargeting Every Round</span>
-    <span>WhatsApp Campaigns</span><span>AI Outbound Calling</span><span>Arabic + English</span><span>Nixpend Patient Segments</span>
-    <span>Automatic Follow-Ups</span><span>Opt-Out Respected</span><span>One Dashboard</span><span>Retargeting Every Round</span>
-  </div>
-</div>
-
-<!-- 01 WHY -->
-<section class="sec cream" id="why">
+<!-- 01 CARE MODEL -->
+<section class="sec cool" id="care-model">
   <div class="wrap">
     <span class="sec-index">01 / 14</span>
     <div class="section-head reveal">
-      <p class="eyebrow">Why Outbound, Why Now</p>
-      <h2 class="headline">Recovery happens over many sessions. <em>Patients</em> drift between them.</h2>
-      <p class="lede">physiotrio.sa and its WhatsApp assistant already serve patients who come to PhysioTrio. Outbound reaches the patients PhysioTrio already knows, at the right moment in their care, without the front desk working the phones for days.</p>
+      <p class="eyebrow">PhysioTrio today</p>
+      <h2 class="headline">A specialist care model built on <span>structured plans</span> and personal care.</h2>
+      <p class="lede">Outreach has to fit how PhysioTrio already works: clinics in two cities, specialist programs that run over several sessions, home care that routes by city, and patients served in Arabic and English.</p>
     </div>
-    <div class="grid grid-4 reveal">
-      <div class="card top-accent border-blue"><div class="icon bg-blue accent-blue"><svg class="ic"><use href="#i-calendar"/></svg></div>
-        <h4>Plans left unfinished</h4><p>A patient feels better after a few sessions and stops coming before the plan is complete.</p></div>
-      <div class="card top-accent border-amber"><div class="icon bg-amber accent-amber"><svg class="ic"><use href="#i-clock"/></svg></div>
-        <h4>Patients who go quiet</h4><p>Past patients who could benefit from a review or maintenance session are never contacted again.</p></div>
-      <div class="card top-accent border-purple"><div class="icon bg-purple accent-purple"><svg class="ic"><use href="#i-phone"/></svg></div>
-        <h4>Phone time is expensive</h4><p>Reminder and follow-up calls take hours of staff time that is better spent with patients in the clinic.</p></div>
-      <div class="card top-accent border-teal"><div class="icon bg-teal accent-teal"><svg class="ic"><use href="#i-pin"/></svg></div>
-        <h4>New services need an audience</h4><p>Home visits, new specialties and new branches launch to the patients who already trust PhysioTrio.</p></div>
+    <div class="facts reveal">
+      <div class="card"><div class="fact"><div class="k">Branches</div><div class="v">Riyadh (Al Olaya) and Makkah (Al Zaher)</div><p>Dammam is listed as coming soon.</p></div></div>
+      <div class="card"><div class="fact"><div class="k">Specialties</div><div class="v">Sports, musculoskeletal, neuro, paediatric, geriatric, women's health</div><p>Plus manual and device-based therapy.</p></div></div>
+      <div class="card"><div class="fact"><div class="k">Programs</div><div class="v">Multi-session programs and packages</div><p>For example ACL and knee rehabilitation, with Tabby and Tamara instalments.</p></div></div>
+      <div class="card"><div class="fact"><div class="k">Home care</div><div class="v">Makkah by PhysioTrio, Riyadh through Vitality</div><p>Both under the Burjeel Arabia umbrella.</p></div></div>
     </div>
+    <div class="grid grid-3 reveal" style="margin-top:18px;">
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-calendar"/></svg></div><h4>Online booking already exists</h4><p>The website offers online booking synced with the clinic system. Outreach should lead patients back into that process, not around it.</p></div>
+      <div class="card accent-p"><div class="icon i-p"><svg class="ic"><use href="#i-message"/></svg></div><h4>WhatsApp is already a contact channel</h4><p>Patients can already message PhysioTrio. The module adds planned, consent-based follow-up to that relationship.</p></div>
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-users"/></svg></div><h4>Bilingual care</h4><p>Care in Arabic and English across branches, so every message and call follows the patient's preferred language.</p></div>
+    </div>
+    <p class="src">Source: physiotrio.sa public pages, reviewed 12 October 2026. Details to be confirmed with the PhysioTrio team.</p>
   </div>
 </section>
 
-<!-- 02 CHANNELS -->
-<section class="sec dark" id="channels">
+<!-- 02 OPPORTUNITIES -->
+<section class="sec" id="opportunities">
   <div class="wrap">
     <span class="sec-index">02 / 14</span>
     <div class="section-head reveal">
-      <p class="eyebrow">Two Channels, One Patient List</p>
-      <h2 class="headline">Some patients reply in seconds. <em>Others</em> need a call.</h2>
-      <p class="lede">Run either channel on its own, or use both together so a call picks up where an unread message left off.</p>
+      <p class="eyebrow">Opportunities between visits</p>
+      <h2 class="headline">Four hypotheses <span>to test with your own data</span>, not assumptions.</h2>
+      <p class="lede">We have not seen PhysioTrio's appointment data. Each opportunity below is a question to check during discovery before anything is built around it.</p>
     </div>
     <div class="grid grid-2 reveal">
-      <div class="card top-accent border-teal">
-        <div class="chan-head"><div class="icon bg-teal accent-teal"><svg class="ic"><use href="#i-message"/></svg></div><div><div class="k">Channel 01</div><h4 style="margin:0;">WhatsApp campaigns</h4></div></div>
-        <p>Broadcasts that send themselves, with an optional AI reply agent.</p>
-        <ul class="checklist">
-          <li><span class="ck" style="color:var(--teal);">✓</span>Approved templates sent to thousands of patients from one screen</li>
-          <li><span class="ck" style="color:var(--teal);">✓</span>Segments by branch, service, last visit or remaining sessions</li>
-          <li><span class="ck" style="color:var(--teal);">✓</span>Personalised with name, branch and plan details</li>
-          <li><span class="ck" style="color:var(--teal);">✓</span>Automatic reminder when there is no reply</li>
-        </ul>
-      </div>
-      <div class="card top-accent border-purple">
-        <div class="chan-head"><div class="icon bg-purple accent-purple"><svg class="ic"><use href="#i-phone"/></svg></div><div><div class="k">Channel 02</div><h4 style="margin:0;">AI outbound calling</h4></div></div>
-        <p>A natural voice agent that calls so your team does not have to.</p>
-        <ul class="checklist">
-          <li><span class="ck" style="color:var(--purple);">✓</span>Upload or select a list, and the agent dials through it</li>
-          <li><span class="ck" style="color:var(--purple);">✓</span>Arabic and English, tuned to sound local</li>
-          <li><span class="ck" style="color:var(--purple);">✓</span>Real conversations: answers questions and confirms interest</li>
-          <li><span class="ck" style="color:var(--purple);">✓</span>Every outcome logged, with WhatsApp follow-up after the call</li>
-        </ul>
-      </div>
+      <div class="card accent-p"><span class="badge b-line">Hypothesis</span><h4 style="margin-top:12px;">Missed appointments are not always rebooked</h4><p>Some patients who miss an appointment may not reschedule on their own.</p><ul class="check"><li><span class="ck">?</span>Check: share of missed appointments rebooked within 14 days</li></ul></div>
+      <div class="card accent-g"><span class="badge b-line">Hypothesis</span><h4 style="margin-top:12px;">Some active plans have gaps</h4><p>Patients with a current clinician-approved plan may go longer between visits than intended.</p><ul class="check"><li><span class="ck">?</span>Check: active plans with no upcoming appointment</li></ul></div>
+      <div class="card accent-g"><span class="badge b-line">Hypothesis</span><h4 style="margin-top:12px;">Callback requests wait during busy hours</h4><p>People who ask for booking help may wait while reception handles walk-ins and calls.</p><ul class="check"><li><span class="ck">?</span>Check: time from request to first contact</li></ul></div>
+      <div class="card accent-p"><span class="badge b-line">Hypothesis</span><h4 style="margin-top:12px;">Home-care routing is not always clear</h4><p>Patients may not know that Makkah home care is PhysioTrio and Riyadh home care is Vitality.</p><ul class="check"><li><span class="ck">?</span>Check: home-care enquiries by city and where they end up</li></ul></div>
     </div>
   </div>
 </section>
 
-<!-- 03 FLOW -->
-<section class="sec cream" id="flow">
+<!-- 03 JOURNEY -->
+<section class="sec mint" id="journey">
   <div class="wrap">
     <span class="sec-index">03 / 14</span>
-    <div class="section-head reveal">
-      <p class="eyebrow">How a Campaign Runs</p>
-      <h2 class="headline">From patient list to booked session, <em>on its own</em>.</h2>
-      <p class="lede">An example: a "complete your plan" campaign for patients who have stopped mid-plan.</p>
+    <div class="split">
+      <div class="reveal">
+        <p class="eyebrow green">One patient journey</p>
+        <h2 class="headline">A missed appointment, <span>handled with care</span>.</h2>
+        <p class="lede">A patient on a current, clinician-approved plan misses a session. The patient has agreed to receive messages. Here is what happens, and where it stops.</p>
+        <div class="note g">Who is eligible is set with the clinical team. Discharged, paused, expired or opted-out patients are excluded before anything is sent.</div>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><span class="step-badge">1</span><div><h4>Eligibility check</h4><p>Missed appointment, active plan, consent on file, preferred language known.</p></div></div>
+        <div class="step"><span class="step-badge">2</span><div><h4>One WhatsApp message</h4><p>A neutral, approved template offering help to rearrange. No clinical details.</p></div></div>
+        <div class="step"><span class="step-badge g">3</span><div><h4>Patient replies "yes"</h4><p>Preference captured, such as evenings, and a booking request is created for reception.</p></div></div>
+        <div class="step"><span class="step-badge g">4</span><div><h4>Reception confirms</h4><p>Reception books the slot in the clinic system and the patient receives a confirmation.</p></div></div>
+        <div class="step"><span class="step-badge n">↺</span><div><h4>If there is no reply</h4><p>Optionally, one clearly identified AI call after an agreed interval. No answer means no further contact in this cycle.</p></div></div>
+        <div class="step"><span class="step-badge g">✓</span><div><h4>Measured by attendance</h4><p>Success is the attended appointment, not the message or the call.</p></div></div>
+      </div>
     </div>
-    <div class="flow reveal">
-      <div class="flow-node"><div class="fic bg-blue accent-blue"><svg class="ic"><use href="#i-database"/></svg></div><div class="t">Patient list</div><div class="d">Pulled from Nixpend: branch, service, last visit</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node"><div class="fic bg-amber accent-amber"><svg class="ic"><use href="#i-users"/></svg></div><div class="t">Segment</div><div class="d">No visit in 14 days, sessions still remaining</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node"><div class="fic bg-teal accent-teal"><svg class="ic"><use href="#i-message"/></svg></div><div class="t">WhatsApp</div><div class="d">Personal message with a booking button</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node"><div class="fic bg-purple accent-purple"><svg class="ic"><use href="#i-phone"/></svg></div><div class="t">AI call</div><div class="d">No reply in 3 days? A friendly call follows</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node"><div class="fic bg-pink accent-pink"><svg class="ic"><use href="#i-calendar"/></svg></div><div class="t">Booking request</div><div class="d">Interested patients passed to reception</div></div>
-    </div>
-    <p class="note">Timings, segments and wording are set by PhysioTrio per campaign. The example values are illustrative.</p>
   </div>
 </section>
 
 <!-- 04 WHATSAPP -->
-<section class="sec dark" id="whatsapp">
+<section class="sec" id="whatsapp">
   <div class="wrap">
     <span class="sec-index">04 / 14</span>
-    <div class="section-head reveal">
-      <p class="eyebrow" style="color:var(--teal);">WhatsApp Campaigns</p>
-      <h2 class="headline">Send on their own. <em>Add</em> a reply agent when you want one.</h2>
-    </div>
-    <div class="grid grid-3 reveal">
-      <div class="card top-accent border-teal"><div class="icon bg-teal accent-teal"><svg class="ic"><use href="#i-message"/></svg></div>
-        <h4>Campaign broadcasts</h4><p>Reminders, seasonal offers, new services and health tips sent to thousands of patients with Meta-approved templates.</p></div>
-      <div class="card top-accent border-blue"><div class="icon bg-blue accent-blue"><svg class="ic"><use href="#i-users"/></svg></div>
-        <h4>Patient segments</h4><p>Target by branch, service line, language, last visit, or how a patient last engaged, so the right list gets the right message.</p></div>
-      <div class="card top-accent border-amber"><div class="icon bg-amber accent-amber"><svg class="ic"><use href="#i-star"/></svg></div>
-        <h4>Personalised at scale</h4><p>Each message carries the patient's name, branch and next step, while still going out as one campaign.</p></div>
-      <div class="card top-accent border-purple"><div class="icon bg-purple accent-purple"><svg class="ic"><use href="#i-zap"/></svg></div>
-        <h4>Optional AI reply agent</h4><p>Turn it on and every reply is answered instantly. Leave it off and replies go to your team's inbox.</p></div>
-      <div class="card top-accent border-pink"><div class="icon bg-pink accent-pink"><svg class="ic"><use href="#i-repeat"/></svg></div>
-        <h4>Automatic follow-ups</h4><p>No reply after a set time triggers a gentle reminder, so interested patients are not lost in a busy inbox.</p></div>
-      <div class="card top-accent border-red"><div class="icon bg-red accent-red"><svg class="ic"><use href="#i-image"/></svg></div>
-        <h4>Rich media</h4><p>Images, short exercise videos, documents and quick-reply buttons, in the formats WhatsApp supports.</p></div>
+    <div class="split">
+      <div class="reveal">
+        <p class="eyebrow">WhatsApp</p>
+        <h2 class="headline">Convenient <span>administrative help</span>, on the app patients already use.</h2>
+        <ul class="check">
+          <li><span class="ck">✓</span>Meta-approved templates, with wording signed off by PhysioTrio</li>
+          <li><span class="ck">✓</span>Neutral previews: branch name and next step only, nothing about the condition</li>
+          <li><span class="ck">✓</span>Sent in the patient's preferred language, Arabic or English</li>
+          <li><span class="ck">✓</span>Replies go to a shared team inbox; an AI assistant for admin questions is optional</li>
+          <li><span class="ck">✓</span>"Stop" or a similar reply removes the patient from all future campaigns</li>
+          <li><span class="ck">✓</span>Any request for a person, or any clinical question, is handed to the team</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <div class="grid grid-2">
+          <div class="card"><span class="badge b-g">Core</span><h4 style="margin-top:12px;">Campaign messages</h4><p>Scheduled sends to an eligible audience, with one follow-up reminder at most.</p></div>
+          <div class="card"><span class="badge b-g">Core</span><h4 style="margin-top:12px;">Team inbox</h4><p>Every reply in one place, assigned to reception at the right branch.</p></div>
+          <div class="card"><span class="badge b-p">Optional</span><h4 style="margin-top:12px;">AI reply assistant</h4><p>Answers timings, location, language and callback questions, and identifies itself as automated.</p></div>
+          <div class="card"><span class="badge b-n">Later phase</span><h4 style="margin-top:12px;">Rich media</h4><p>Approved images or short education videos, once the pilot is reviewed.</p></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- 05 CALLING -->
-<section class="sec cream" id="calling">
+<!-- 05 CALLS -->
+<section class="sec cool" id="calls">
   <div class="wrap">
     <span class="sec-index">05 / 14</span>
-    <div class="section-head reveal">
-      <p class="eyebrow" style="color:#7c4ee8;">AI Outbound Calling</p>
-      <h2 class="headline">A voice that calls, so your team <em>does not have to</em>.</h2>
-    </div>
-    <div class="grid grid-3 reveal">
-      <div class="card top-accent border-purple"><div class="icon bg-purple accent-purple"><svg class="ic"><use href="#i-phone"/></svg></div>
-        <h4>Automated call campaigns</h4><p>Select a segment and the voice agent dials through it, delivering the same clear message to every patient.</p></div>
-      <div class="card top-accent border-blue"><div class="icon bg-blue accent-blue"><svg class="ic"><use href="#i-globe"/></svg></div>
-        <h4>Speaks the patient's language</h4><p>Natural Arabic and English voices, so the call sounds like a person, not a recording.</p></div>
-      <div class="card top-accent border-teal"><div class="icon bg-teal accent-teal"><svg class="ic"><use href="#i-message"/></svg></div>
-        <h4>Real conversations</h4><p>Patients can ask about timings, branches or home visits. The agent answers, confirms interest and captures the details.</p></div>
-      <div class="card top-accent border-amber"><div class="icon bg-amber accent-amber"><svg class="ic"><use href="#i-check"/></svg></div>
-        <h4>Every outcome logged</h4><p>Interested, call back later, wrong number or not now. Each result is recorded for the next step.</p></div>
-      <div class="card top-accent border-pink"><div class="icon bg-pink accent-pink"><svg class="ic"><use href="#i-repeat"/></svg></div>
-        <h4>Warm handoff to WhatsApp</h4><p>An interested patient receives a WhatsApp message straight after the call, with location and booking details.</p></div>
-      <div class="card top-accent border-red"><div class="icon bg-red accent-red"><svg class="ic"><use href="#i-clock"/></svg></div>
-        <h4>Calling windows &amp; retries</h4><p>Calls are placed only within agreed hours, and unanswered numbers are retried on a set schedule.</p></div>
+    <div class="split">
+      <div class="reveal">
+        <p class="eyebrow">AI calls · optional channel</p>
+        <h2 class="headline">A <span>transparent</span>, helpful call for patients who prefer the phone.</h2>
+        <p class="lede">The call says it is an automated assistant from the first sentence and always offers a person. It handles administration only.</p>
+        <div class="grid grid-2" style="margin-top:22px;">
+          <div class="card accent-g"><h4>It does</h4><ul class="check"><li><span class="ck">✓</span>Ask if it is a good time</li><li><span class="ck">✓</span>Answer timings and location</li><li><span class="ck">✓</span>Capture booking interest or a callback</li><li><span class="ck">✓</span>Log the outcome</li></ul></div>
+          <div class="card accent-p"><h4>It never</h4><ul class="check"><li><span class="x">✕</span>Diagnoses or advises on symptoms</li><li><span class="x">✕</span>Prescribes exercises</li><li><span class="x">✕</span>Decides treatment is needed</li><li><span class="x">✕</span>Claims a slot or confirms a booking</li></ul></div>
+        </div>
+      </div>
+      <div class="console reveal">
+        <div class="console-head"><span class="console-title">Call opening · English</span><span class="mock-label">Illustrative script</span></div>
+        <div class="console-body">
+          <div class="bubble out">Hello, this is PhysioTrio's automated assistant, calling for the Makkah branch team. Is now a good time to talk for a minute?</div>
+          <div class="bubble in">Yes, go ahead.</div>
+          <div class="bubble out">Thank you. We're calling to see if you'd like help arranging a follow-up appointment. If you would prefer to speak with a member of our team, I can arrange a call back.</div>
+          <div class="bubble in">I have a question about my exercises.</div>
+          <div class="bubble out">I'm not able to answer clinical questions, but I'll pass this to your care team so a therapist can call you back.</div>
+          <div class="bubble sys">Outcome logged: <b>callback requested · clinical question → care team</b></div>
+          <div class="console-foot">Calls only within agreed hours, with a set limit on attempts per patient.</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- 06 BUILT IN -->
-<section class="sec dark" id="builtin">
+<!-- 06 OWNERSHIP -->
+<section class="sec" id="ownership">
   <div class="wrap">
     <span class="sec-index">06 / 14</span>
     <div class="section-head reveal">
-      <p class="eyebrow">Across Both Channels</p>
-      <h2 class="headline">Everything a campaign needs, <em>built in</em>.</h2>
-      <p class="lede">The same planning, timing and measurement tools work whether you send WhatsApp messages, place calls, or both at once.</p>
+      <p class="eyebrow">Coordinated follow-up</p>
+      <h2 class="headline">Every reply has <span>an owner</span>.</h2>
+      <p class="lede">The module starts the conversation. People at PhysioTrio decide and confirm. Each step has a named owner, agreed before the pilot starts.</p>
     </div>
     <div class="grid grid-4 reveal">
-      <div class="card mini"><div class="icon bg-blue accent-blue"><svg class="ic"><use href="#i-calendar"/></svg></div><h4>Scheduling</h4><p>Pick the send time, or line up a sequence in advance and let it run.</p></div>
-      <div class="card mini"><div class="icon bg-teal accent-teal"><svg class="ic"><use href="#i-users"/></svg></div><h4>Lists &amp; segments</h4><p>Reusable audiences from Nixpend data or an uploaded list.</p></div>
-      <div class="card mini"><div class="icon bg-purple accent-purple"><svg class="ic"><use href="#i-split"/></svg></div><h4>Message testing</h4><p>Try two versions on a small group, then send the better one to everyone.</p></div>
-      <div class="card mini"><div class="icon bg-amber accent-amber"><svg class="ic"><use href="#i-zap"/></svg></div><h4>Triggered sends</h4><p>A missed appointment, a plan gap or a date can start a campaign on its own.</p></div>
-      <div class="card mini"><div class="icon bg-red accent-red"><svg class="ic"><use href="#i-shield"/></svg></div><h4>Opt-out respected</h4><p>Patients who ask to stop are removed automatically, on both channels.</p></div>
-      <div class="card mini"><div class="icon bg-pink accent-pink"><svg class="ic"><use href="#i-globe"/></svg></div><h4>Arabic + English</h4><p>Each patient reached in their preferred language within one campaign.</p></div>
-      <div class="card mini"><div class="icon bg-teal accent-teal"><svg class="ic"><use href="#i-image"/></svg></div><h4>Rich WhatsApp media</h4><p>Images, videos, documents and quick-reply buttons.</p></div>
-      <div class="card mini"><div class="icon bg-blue accent-blue"><svg class="ic"><use href="#i-chart"/></svg></div><h4>Live results</h4><p>Delivery, replies and interest per message and per call, as it runs.</p></div>
+      <div class="card accent-p"><div class="icon i-p"><svg class="ic"><use href="#i-message"/></svg></div><h4>The module</h4><p>Sends approved messages and calls, captures interest and preferences, and creates booking or callback requests.</p></div>
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-inbox"/></svg></div><h4>Reception</h4><p>Works the request queue per branch, checks capacity, books in the clinic system and confirms with the patient.</p></div>
+      <div class="card accent-p"><div class="icon i-p"><svg class="ic"><use href="#i-steth"/></svg></div><h4>Care team</h4><p>Defines who is eligible and answers any clinical question under an approved protocol.</p></div>
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-users"/></svg></div><h4>Operations &amp; marketing</h4><p>Approve message wording, audiences, contact limits and the campaign calendar.</p></div>
     </div>
+    <div class="note">Contact limits are set per patient across both channels. An unread message never triggers repeated calls.</div>
   </div>
 </section>
 
 <!-- 07 DASHBOARD -->
-<section class="sec cream" id="dashboard">
+<section class="sec mint" id="dashboard">
   <div class="wrap">
     <span class="sec-index">07 / 14</span>
-    <div class="split">
-      <div class="reveal">
-        <p class="eyebrow">The Control Room</p>
-        <h2 class="headline">One dashboard for <em>every</em> campaign.</h2>
-        <p class="lede">Plan, launch and measure WhatsApp and calling campaigns in one place. See what was sent, who engaged and what to do next, without a spreadsheet.</p>
-        <ul class="checklist" style="max-width:520px;">
-          <li><span class="ck">●</span><div><b>Per-campaign reporting</b>: each campaign has its own numbers, so you can see exactly what worked</div></li>
-          <li><span class="ck">●</span><div><b>Shared team inbox</b>: replies from every campaign land in one place for the team</div></li>
-          <li><span class="ck">●</span><div><b>Interest scoring</b>: responses sorted hot, warm and cold, so the best leads are handled first</div></li>
-          <li><span class="ck">●</span><div><b>Notifications</b>: alerts on WhatsApp, by email and in the portal when a hot reply arrives</div></li>
-          <li><span class="ck">●</span><div><b>Branch view</b>: results by branch, service line and campaign</div></li>
-        </ul>
-      </div>
-      <div class="console reveal">
-        <div class="console-head">
-          <div class="l"><span class="console-dot"></span><span class="console-title">OUTBOUND · CAMPAIGNS</span></div>
-          <span class="console-tag">ILLUSTRATIVE</span>
-        </div>
-        <div class="console-body">
-          <div class="kpis">
-            <div class="kpi"><div class="v">—</div><div class="k">Messages delivered</div></div>
-            <div class="kpi"><div class="v">—</div><div class="k">Calls completed</div></div>
-            <div class="kpi"><div class="v">—</div><div class="k">Replies &amp; interest</div></div>
-            <div class="kpi"><div class="v">—</div><div class="k">Booking requests</div></div>
-          </div>
-          <div class="chead"><span>Campaign</span><span>Channel</span><span>Status</span><span>Engaged</span></div>
-          <div class="crow"><span class="name">Complete your plan</span><span>WhatsApp</span><span class="status" style="background:rgba(0,201,167,0.12);color:#4fe0c4;">Sent</span><span class="score">Hot · 12</span></div>
-          <div class="crow"><span class="name">Post-session check-in</span><span>Call</span><span class="status" style="background:rgba(26,86,255,0.14);color:#6d94ff;">Running</span><span class="score">Warm · 8</span></div>
-          <div class="crow"><span class="name">Win-back, 6 months</span><span>Both</span><span class="status" style="background:rgba(245,158,11,0.12);color:#ffc266;">Scheduled</span><span class="score">—</span></div>
-          <div class="console-foot">Mockup only. The live dashboard is tailored to PhysioTrio's setup.</div>
-        </div>
-      </div>
+    <div class="section-head reveal">
+      <p class="eyebrow green">Dashboard &amp; measurement</p>
+      <h2 class="headline">Measure appointments attended, <span>not messages sent</span>.</h2>
+      <p class="lede">The dashboard follows each campaign from eligible audience to attended appointment, alongside measures of service quality. Figures appear once the pilot runs.</p>
     </div>
+    <div class="funnel reveal">
+      <div class="fstage"><div class="n">—</div><div class="l">Eligible audience</div><div class="bar"><i style="width:100%"></i></div></div>
+      <div class="fstage"><div class="n">—</div><div class="l">Reached</div><div class="bar"><i style="width:82%"></i></div></div>
+      <div class="fstage"><div class="n">—</div><div class="l">Interested</div><div class="bar"><i style="width:55%"></i></div></div>
+      <div class="fstage"><div class="n">—</div><div class="l">Booking requested</div><div class="bar"><i style="width:42%"></i></div></div>
+      <div class="fstage"><div class="n">—</div><div class="l">Confirmed</div><div class="bar"><i style="width:34%"></i></div></div>
+      <div class="fstage last"><div class="n">—</div><div class="l">Attended</div><div class="bar"><i style="width:28%"></i></div></div>
+    </div>
+    <div class="grid grid-4 reveal">
+      <div class="card"><h4>Reception handling time</h4><p>Time from request to confirmed booking.</p></div>
+      <div class="card"><h4>Capacity used</h4><p>Appointments filled that would otherwise stay empty.</p></div>
+      <div class="card"><h4>Opt-outs &amp; complaints</h4><p>Tracked per campaign and reviewed every cycle.</p></div>
+      <div class="card"><h4>Value, counted once</h4><p>Prepaid sessions used are reported apart from new revenue and new package sales.</p></div>
+    </div>
+    <p class="src">Illustrative mockup. Bar widths show the shape of a funnel only; they are not forecasts.</p>
   </div>
 </section>
 
-<!-- 08 RETARGET -->
-<section class="sec dark" id="retarget">
+<!-- 08 LEARNING -->
+<section class="sec" id="learning">
   <div class="wrap">
     <span class="sec-index">08 / 14</span>
     <div class="section-head reveal">
-      <p class="eyebrow">Smarter Every Send</p>
-      <h2 class="headline">Retargeting that <em>improves</em> each round.</h2>
-      <p class="lede">Not everyone opens the first message or answers the first call. The dashboard shows exactly who did, so the next campaign reaches the right patients and wastes nothing.</p>
+      <p class="eyebrow">Learning from results</p>
+      <h2 class="headline">Improve carefully, <span>without over-contacting</span> patients.</h2>
+      <p class="lede">Each cycle is reviewed before the next one runs. Changes are kept small, so it is clear what made a difference.</p>
     </div>
-    <div class="loop reveal">
-      <div class="card top-accent border-blue"><div class="big accent-blue">01</div><h4>Send</h4><p>A WhatsApp or call campaign goes out to the chosen segment.</p></div>
-      <div class="card top-accent border-teal"><div class="big accent-teal">02</div><h4>Measure</h4><p>See who received it, who read it, who replied and who answered the call.</p></div>
-      <div class="card top-accent border-purple"><div class="big accent-purple">03</div><h4>Re-segment</h4><p>Build a new list from those who engaged, or those who did not, in one click.</p></div>
-      <div class="card top-accent border-amber"><div class="big accent-amber">04</div><h4>Re-send</h4><p>Reach that group again with a message made for them, and lift results each round.</p></div>
+    <div class="grid grid-3 reveal">
+      <div class="card accent-p"><div class="icon i-p"><svg class="ic"><use href="#i-chart"/></svg></div><h4>Compare against a baseline</h4><p>Results are compared with the period before, or with a similar group not contacted, before any expansion.</p></div>
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-clock"/></svg></div><h4>Frequency caps</h4><p>A maximum number of contacts per patient per month, across WhatsApp and calls combined.</p></div>
+      <div class="card accent-p"><div class="icon i-p"><svg class="ic"><use href="#i-stop"/></svg></div><h4>Clear stop rules</h4><p>Opt-out, a booked appointment, discharge or no response ends the sequence for that patient.</p></div>
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-search"/></svg></div><h4>Re-check eligibility</h4><p>Audiences are rebuilt from current data each cycle, never reused from an old list.</p></div>
+      <div class="card accent-p"><div class="icon i-p"><svg class="ic"><use href="#i-message"/></svg></div><h4>One change at a time</h4><p>Test one wording or timing change per cycle, on a small group first.</p></div>
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-heart"/></svg></div><h4>Patient feedback counts</h4><p>Opt-outs and complaints are reviewed alongside bookings, with equal weight.</p></div>
     </div>
   </div>
 </section>
 
-<!-- 09 USE CASES -->
-<section class="sec tight cream" id="usecases">
+<!-- 09 MATRIX -->
+<section class="sec cool" id="matrix">
   <div class="wrap">
     <span class="sec-index">09 / 14</span>
     <div class="section-head reveal">
-      <p class="eyebrow">PhysioTrio Campaigns · final list agreed with your team</p>
-      <h2 class="headline">Six campaigns PhysioTrio could <em>run first</em>.</h2>
+      <p class="eyebrow">Campaigns by branch</p>
+      <h2 class="headline">Six possible campaigns, <span>prioritised for a pilot</span>.</h2>
+      <p class="lede">The final selection is made with the operations and clinical teams.</p>
     </div>
-    <div class="grid grid-3 reveal">
-      <div class="card usecase"><div class="ch"><span class="tag tag-wa">WhatsApp</span><span class="tag tag-call">Call</span></div>
-        <h4>Complete your plan</h4><p>Patients with sessions remaining and no visit for a set number of days get a WhatsApp reminder, then a friendly call if they do not reply.</p>
-        <div class="out"><b>Aim</b>More patients finish the plan their therapist prescribed.</div></div>
-      <div class="card usecase"><div class="ch"><span class="tag tag-call">Call</span></div>
-        <h4>Post-session check-in</h4><p>A short call after the first sessions asks how the patient is feeling and offers to book the next visit.</p>
-        <div class="out"><b>Aim</b>Patients feel looked after, and early drop-off is caught in time.</div></div>
-      <div class="card usecase"><div class="ch"><span class="tag tag-wa">WhatsApp</span><span class="tag tag-call">Call</span></div>
-        <h4>Win back past patients</h4><p>Patients not seen in six months or more are invited for a review or maintenance session at their branch.</p>
-        <div class="out"><b>Aim</b>Patients who have gone quiet come back without days of staff phone calls.</div></div>
-      <div class="card usecase"><div class="ch"><span class="tag tag-wa">WhatsApp</span></div>
-        <h4>Appointment reminders &amp; no-shows</h4><p>A reminder before each appointment, and a rebooking message to anyone who missed one.</p>
-        <div class="out"><b>Aim</b>Fewer empty slots in the therapists' day.</div></div>
-      <div class="card usecase"><div class="ch"><span class="tag tag-wa">WhatsApp</span></div>
-        <h4>New service or branch launch</h4><p>Home visits, a new specialty or a new branch announced to the patients who live nearby.</p>
-        <div class="out"><b>Aim</b>New services start with a warm audience from day one.</div></div>
-      <div class="card usecase"><div class="ch"><span class="tag tag-wa">WhatsApp</span></div>
-        <h4>Seasonal &amp; awareness campaigns</h4><p>Ramadan posture and back care, sports-season injury screening, or workplace ergonomics tips.</p>
-        <div class="out"><b>Aim</b>PhysioTrio stays front of mind between episodes of care.</div></div>
+    <div class="tblwrap reveal">
+      <table class="m">
+        <thead><tr><th>Campaign</th><th>Who is eligible</th><th>Channel</th><th>Branch &amp; routing</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr><td><b>Missed-appointment support</b></td><td>Missed an appointment that is still appropriate to rebook</td><td>WhatsApp, optional call</td><td>Patient's own branch</td><td><span class="badge b-p">Pilot candidate</span></td></tr>
+          <tr><td><b>Requested follow-up</b></td><td>Asked for booking help or a callback</td><td>WhatsApp or call</td><td>Branch that received the request</td><td><span class="badge b-p">Pilot candidate</span></td></tr>
+          <tr><td><b>Active-plan continuity</b></td><td>Current clinician-approved plan with an appointment gap; excludes discharged, paused, expired or opted-out</td><td>WhatsApp</td><td>Patient's own branch</td><td><span class="badge b-g">Phase 2</span></td></tr>
+          <tr><td><b>Home-care awareness</b></td><td>Patients for whom home care is relevant</td><td>WhatsApp</td><td>Makkah → PhysioTrio home care · Riyadh → Vitality</td><td><span class="badge b-g">Phase 2</span></td></tr>
+          <tr><td><b>Past-patient invitations</b></td><td>Former patients, optional assessment invitation; no implied need for treatment</td><td>WhatsApp</td><td>Nearest branch</td><td><span class="badge b-n">Later</span></td></tr>
+          <tr><td><b>Service &amp; seasonal education</b></td><td>Opted-in patients; sports, workplace or family topics with a clear next step</td><td>WhatsApp</td><td>All branches</td><td><span class="badge b-n">Later</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
 
-<!-- 10 NIXPEND -->
-<section class="sec tight dark" id="nixpend">
+<!-- 10 DATA -->
+<section class="sec" id="data">
   <div class="wrap">
     <span class="sec-index">10 / 14</span>
     <div class="section-head reveal">
-      <p class="eyebrow">Nixpend Integration</p>
-      <h2 class="headline">Segments built from the patient list you <em>already have</em>.</h2>
-      <p class="lede">The module reads patient and visit data from Nixpend HMS, so campaigns target the right patients without manual exports. It uses only what outreach needs. Clinical details stay in Nixpend.</p>
+      <p class="eyebrow">Nixpend &amp; data approach</p>
+      <h2 class="headline">Use the minimum data, <span>confirm access first</span>, keep a fallback.</h2>
+      <p class="lede">Nixpend as the source system is a premise to confirm with PhysioTrio and Nixpend. Nothing is assumed to be connected until permissions and fields are verified.</p>
     </div>
-    <div class="flow reveal">
-      <div class="flow-node"><div class="fic bg-blue accent-blue"><svg class="ic"><use href="#i-database"/></svg></div><div class="t">Nixpend HMS</div><div class="d">Patients, appointments and visit history per branch</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node"><div class="fic bg-teal accent-teal"><svg class="ic"><use href="#i-repeat"/></svg></div><div class="t">Regular sync</div><div class="d">Contact and visit fields read through Nixpend's API</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node"><div class="fic bg-purple accent-purple"><svg class="ic"><use href="#i-users"/></svg></div><div class="t">Segments</div><div class="d">Ready-made and custom audiences in the dashboard</div></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node"><div class="fic bg-amber accent-amber"><svg class="ic"><use href="#i-inbox"/></svg></div><div class="t">Booking requests</div><div class="d">Interested patients passed to reception to book in Nixpend</div></div>
+    <div class="grid grid-3 reveal">
+      <div class="card accent-p"><h4>Proposed fields</h4><p style="margin-bottom:12px;">Only what outreach needs:</p>
+        <div class="pill-row"><span class="pill p">First name</span><span class="pill p">Mobile</span><span class="pill p">Language</span><span class="pill p">Branch</span><span class="pill p">Appointment status</span><span class="pill p">Plan status</span><span class="pill p">Consent &amp; opt-out</span></div>
+        <p style="margin-top:12px;">Even appointment and plan status can be sensitive, so access is restricted and logged.</p></div>
+      <div class="card accent-g"><h4>Fallback: authorised export</h4><p>Until an API is confirmed, PhysioTrio can export an approved patient list on a schedule and upload it to the dashboard. This is a working fallback, not a completed integration.</p>
+        <div class="note g" style="margin-top:14px;">Bookings are always confirmed by reception. No automatic write-back to the clinic system is assumed.</div></div>
+      <div class="card accent-p"><h4>To confirm</h4><ul class="check">
+        <li><span class="x">●</span>API permissions and terms from Nixpend</li>
+        <li><span class="x">●</span>Which fields are available</li>
+        <li><span class="x">●</span>Where marketing consent is recorded</li>
+        <li><span class="x">●</span>Sync frequency</li>
+        <li><span class="x">●</span>Read access to appointments</li>
+        <li><span class="x">●</span>Whether write-back is possible later</li></ul></div>
     </div>
-    <div class="grid grid-2 reveal" style="margin-top:34px;">
-      <div class="pill-group" style="margin:0;">
-        <div class="pill-group-head"><span class="pill-dot" style="background:var(--teal);"></span><span class="pill-group-label">Data used for outreach</span><span class="pill-group-line"></span></div>
-        <div class="pill-row">
-          <span class="pill" style="border-color:rgba(0,201,167,0.3);color:#4fe0c4;">Name</span>
-          <span class="pill" style="border-color:rgba(0,201,167,0.3);color:#4fe0c4;">Mobile number</span>
-          <span class="pill" style="border-color:rgba(0,201,167,0.3);color:#4fe0c4;">Preferred language</span>
-          <span class="pill" style="border-color:rgba(0,201,167,0.3);color:#4fe0c4;">Branch</span>
-          <span class="pill" style="border-color:rgba(0,201,167,0.3);color:#4fe0c4;">Service line</span>
-          <span class="pill" style="border-color:rgba(0,201,167,0.3);color:#4fe0c4;">Last visit date</span>
-          <span class="pill" style="border-color:rgba(0,201,167,0.3);color:#4fe0c4;">Upcoming / missed appointments</span>
-          <span class="pill" style="border-color:rgba(0,201,167,0.3);color:#4fe0c4;">Sessions completed / remaining</span>
-          <span class="pill" style="border-color:rgba(0,201,167,0.3);color:#4fe0c4;">Marketing consent</span>
-        </div>
-      </div>
-      <div class="pill-group" style="margin:0;">
-        <div class="pill-group-head"><span class="pill-dot" style="background:var(--red);"></span><span class="pill-group-label">Stays in Nixpend</span><span class="pill-group-line"></span></div>
-        <div class="pill-row">
-          <span class="pill" style="border-color:rgba(239,68,68,0.3);color:#ff9494;">Diagnosis</span>
-          <span class="pill" style="border-color:rgba(239,68,68,0.3);color:#ff9494;">Clinical notes</span>
-          <span class="pill" style="border-color:rgba(239,68,68,0.3);color:#ff9494;">Treatment details</span>
-          <span class="pill" style="border-color:rgba(239,68,68,0.3);color:#ff9494;">Reports &amp; imaging</span>
-          <span class="pill" style="border-color:rgba(239,68,68,0.3);color:#ff9494;">Insurance &amp; payments</span>
-        </div>
-      </div>
-    </div>
-    <p class="note critical">Depends on Nixpend providing API access to these fields. Until it is confirmed, campaigns can run from a regular patient-list export uploaded to the dashboard.</p>
   </div>
 </section>
 
 <!-- 11 TRUST -->
-<section class="sec tight cream" id="trust">
+<section class="sec mint" id="trust">
   <div class="wrap">
     <span class="sec-index">11 / 14</span>
     <div class="section-head reveal">
-      <p class="eyebrow">Patient Trust &amp; Compliance</p>
-      <h2 class="headline">Outreach that feels like care, <em>not</em> spam.</h2>
-      <p class="lede">Healthcare outreach has to protect patient trust. These rules are built into every campaign.</p>
+      <p class="eyebrow green">Trust, privacy &amp; clinical boundaries</p>
+      <h2 class="headline">Outreach that patients <span>can trust</span>.</h2>
+      <p class="lede">These principles are proposed as design rules. Legal and platform requirements are verified with PhysioTrio before launch; no compliance certification is claimed.</p>
     </div>
     <div class="grid grid-3 reveal">
-      <div class="card top-accent border-blue"><div class="icon bg-blue accent-blue"><svg class="ic"><use href="#i-check"/></svg></div>
-        <h4>Consent first</h4><p>Only patients who have agreed to receive messages are contacted, in line with Saudi PDPL and WhatsApp's business policy.</p></div>
-      <div class="card top-accent border-red"><div class="icon bg-red accent-red"><svg class="ic"><use href="#i-shield"/></svg></div>
-        <h4>One-tap opt-out</h4><p>A patient who asks to stop, by message or on a call, is removed from every future campaign automatically.</p></div>
-      <div class="card top-accent border-teal"><div class="icon bg-teal accent-teal"><svg class="ic"><use href="#i-lock"/></svg></div>
-        <h4>No clinical details in messages</h4><p>Messages and calls mention sessions and appointments, never diagnosis or treatment details.</p></div>
-      <div class="card top-accent border-amber"><div class="icon bg-amber accent-amber"><svg class="ic"><use href="#i-clock"/></svg></div>
-        <h4>Respectful timing</h4><p>Calls and messages go out only within agreed hours, with limits on how often one patient is contacted.</p></div>
-      <div class="card top-accent border-purple"><div class="icon bg-purple accent-purple"><svg class="ic"><use href="#i-message"/></svg></div>
-        <h4>Approved templates</h4><p>Every WhatsApp campaign message uses a template approved by Meta and signed off by PhysioTrio.</p></div>
-      <div class="card top-accent border-pink"><div class="icon bg-pink accent-pink"><svg class="ic"><use href="#i-users"/></svg></div>
-        <h4>Human handoff</h4><p>Any patient who wants a person, or raises a clinical question, is passed to the PhysioTrio team.</p></div>
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-check"/></svg></div><h4>Consent &amp; choice</h4><p>Only patients who have agreed to be contacted, with a simple way to stop at any time.</p></div>
+      <div class="card accent-p"><div class="icon i-p"><svg class="ic"><use href="#i-person"/></svg></div><h4>Honest about AI</h4><p>Automated messages and calls identify themselves and always offer a person.</p></div>
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-steth"/></svg></div><h4>Clinical boundaries</h4><p>Symptoms and clinical questions go to the care team. The AI does not diagnose, prescribe or decide treatment.</p></div>
+      <div class="card accent-p"><div class="icon i-p"><svg class="ic"><use href="#i-lock"/></svg></div><h4>Privacy in every preview</h4><p>No diagnosis, women's health or other sensitive details in message previews, or on calls before the recipient is verified.</p></div>
+      <div class="card accent-g"><div class="icon i-g"><svg class="ic"><use href="#i-clock"/></svg></div><h4>Respectful contact</h4><p>Agreed hours and contact limits, with no repeated calls driven by an unread message.</p></div>
+      <div class="card accent-p"><div class="icon i-p"><svg class="ic"><use href="#i-shield"/></svg></div><h4>Data handling</h4><p>Minimum fields, restricted access and hosting arrangements reviewed against Saudi PDPL with PhysioTrio.</p></div>
     </div>
   </div>
 </section>
 
-<!-- 12 OPEN QUESTIONS -->
-<section class="sec dark" id="questions">
+<!-- 12 DECISIONS -->
+<section class="sec" id="decisions">
   <div class="wrap">
     <span class="sec-index">12 / 14</span>
     <div class="section-head reveal">
-      <p class="eyebrow">Open Questions</p>
-      <h2 class="headline">What we need to confirm before the <em>financial proposal</em>.</h2>
+      <p class="eyebrow">Decisions needed from PhysioTrio</p>
+      <h2 class="headline">What we need to agree <span>before the financial proposal</span>.</h2>
     </div>
     <div class="grid grid-2 reveal">
-      <div>
-        <div class="track-label" style="margin-bottom:10px;color:#6d94ff;">Nixpend &amp; patient data</div>
-        <ul class="checklist">
-          <li><span class="ck" style="color:var(--red);">●</span>Can Nixpend provide API access to patient contact, appointment and visit fields, and on what terms?</li>
-          <li><span class="ck" style="color:var(--red);">●</span>Is marketing consent recorded for existing patients today, and where?</li>
-          <li><span class="ck" style="color:var(--red);">●</span>Which branches are in scope at launch: Riyadh and Makkah, and Dammam when it opens?</li>
-        </ul>
-      </div>
-      <div>
-        <div class="track-label" style="margin-bottom:10px;color:#4fe0c4;">Channels &amp; volumes</div>
-        <ul class="checklist">
-          <li><span class="ck" style="color:var(--red);">●</span>Use the existing PhysioTrio WhatsApp number, or a dedicated number for campaigns?</li>
-          <li><span class="ck" style="color:var(--red);">●</span>Which phone number should calls show as the caller ID?</li>
-          <li><span class="ck" style="color:var(--red);">●</span>Expected monthly volume: patients messaged and patients called</li>
-          <li><span class="ck" style="color:var(--red);">●</span>Who handles hot leads and booking requests: reception, call centre or each branch?</li>
-        </ul>
-      </div>
+      <div class="card accent-p"><h4>Data &amp; systems</h4><ul class="check">
+        <li><span class="x">●</span>Is Nixpend the system of record, and can it provide API access to the fields above?</li>
+        <li><span class="x">●</span>How and where is patient consent for messages recorded today?</li>
+        <li><span class="x">●</span>Is an authorised export acceptable for the pilot?</li></ul></div>
+      <div class="card accent-g"><h4>Channels</h4><ul class="check">
+        <li><span class="x">●</span>Existing PhysioTrio WhatsApp number, or a dedicated one?</li>
+        <li><span class="x">●</span>Include AI calls in the pilot, or WhatsApp only first?</li>
+        <li><span class="x">●</span>Which number appears as caller ID?</li></ul></div>
+      <div class="card accent-g"><h4>People &amp; process</h4><ul class="check">
+        <li><span class="x">●</span>Who owns the request queue at each branch?</li>
+        <li><span class="x">●</span>The clinical protocol for questions raised during outreach</li>
+        <li><span class="x">●</span>Who approves message wording and audiences?</li></ul></div>
+      <div class="card accent-p"><h4>Pilot</h4><ul class="check">
+        <li><span class="x">●</span>Pilot branch: Riyadh or Makkah?</li>
+        <li><span class="x">●</span>Pilot campaign and its eligibility rules</li>
+        <li><span class="x">●</span>Success criteria and the comparison baseline</li></ul></div>
     </div>
-    <p class="note">WhatsApp message charges from Meta and telecom call charges are usage costs. They will be listed separately in the financial proposal.</p>
   </div>
 </section>
 
-<!-- 13 NEXT STEPS -->
-<section class="sec cream" id="next">
+<!-- 13 PILOT -->
+<section class="sec cool" id="pilot">
   <div class="wrap">
     <span class="sec-index">13 / 14</span>
-    <div class="section-head reveal">
-      <p class="eyebrow">Recommended Next Steps</p>
-      <h2 class="headline">From this presentation to the <em>first campaign</em>.</h2>
-    </div>
-    <div class="grid grid-4 reveal">
-      <div class="card top-accent border-blue"><div class="eyebrow" style="margin-bottom:10px;">Step 01</div><h4>Walkthrough</h4><p>A short session to review the module and the campaigns PhysioTrio wants first.</p></div>
-      <div class="card top-accent border-blue"><div class="eyebrow" style="margin-bottom:10px;">Step 02</div><h4>Confirm the open questions</h4><p>Nixpend access, numbers, volumes and who handles booking requests.</p></div>
-      <div class="card top-accent border-blue"><div class="eyebrow" style="margin-bottom:10px;">Step 03</div><h4>Financial proposal</h4><p>A separate document with set-up, monthly plan and usage rates.</p></div>
-      <div class="card top-accent border-blue"><div class="eyebrow" style="margin-bottom:10px;">Step 04</div><h4>Pilot campaign</h4><p>Start with one branch and one campaign, measure, then scale.</p></div>
+    <div class="split">
+      <div class="reveal">
+        <p class="eyebrow">Pilot &amp; next steps</p>
+        <h2 class="headline">Start small: <span>one branch, one campaign</span>.</h2>
+        <p class="lede">A focused pilot shows whether outreach improves attended appointments and patient experience before any wider rollout.</p>
+        <div class="card" style="margin-top:22px;"><h4>Pilot definition</h4><ul class="check">
+          <li><span class="ck">✓</span>Audience and eligibility rules agreed with the clinical team</li>
+          <li><span class="ck">✓</span>Approved message and call wording</li>
+          <li><span class="ck">✓</span>Contact limits and stop rules</li>
+          <li><span class="ck">✓</span>Reception owner, staff handoff and capacity check</li>
+          <li><span class="ck">✓</span>Success criteria against a baseline or comparison group</li></ul></div>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><span class="step-badge">1</span><div><h4>Walkthrough &amp; discovery</h4><p>Review this module with operations and the clinical team, and agree the decisions on the previous page.</p></div></div>
+        <div class="step"><span class="step-badge">2</span><div><h4>Data check</h4><p>Confirm Nixpend access or the export fallback, and test the hypotheses with real figures.</p></div></div>
+        <div class="step"><span class="step-badge">3</span><div><h4>Financial proposal</h4><p>A separate document with set-up, running costs and usage charges, based on the agreed scope.</p></div></div>
+        <div class="step"><span class="step-badge g">4</span><div><h4>Run the pilot</h4><p>One branch and one campaign, reviewed cycle by cycle.</p></div></div>
+        <div class="step"><span class="step-badge g">5</span><div><h4>Review &amp; decide</h4><p>Compare results with the baseline, then decide together whether and how to expand.</p></div></div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- 14 CLOSING -->
-<section class="sec closing" id="closing">
-  <div class="blob" style="width:600px;height:600px;top:-260px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(26,86,255,0.18),transparent 70%);"></div>
-  <div class="wrap" style="position:relative;z-index:2;">
-    <span class="sec-index" style="position:static;display:block;margin-bottom:18px;">14 / 14</span>
-    <h2>Your patient list is your best marketing channel.</h2>
-    <p>Every patient reminded, every plan followed through, and every new service launched to people who already trust PhysioTrio, run from one dashboard.</p>
-    <div class="cta-row" style="justify-content:center;margin-bottom:40px;">
-      <a href="#cover" class="btn btn-blue">Back to Top</a>
-      <a href="#questions" class="btn btn-line">Review Open Questions</a>
+<section class="sec navy closing" id="closing">
+  <div class="wrap">
+    <span class="sec-index" style="color:rgba(255,255,255,0.5);">14 / 14</span>
+    <h2>Care that continues between visits.</h2>
+    <p>Helping patients arrange the follow-up their care team has planned, in their language, with a person always one step away.</p>
+    <div class="ask"><div class="k">Decision requested</div><div>Choose the pilot branch and campaign, and nominate the owners for reception, clinical questions and message approval. We will then prepare the financial proposal.</div></div>
+    <div class="cta-row" style="justify-content:center;">
+      <a href="#decisions" class="btn btn-p">Review decisions</a>
+      <a href="#cover" class="btn btn-o">Back to start</a>
     </div>
-    <div class="contact-line">
-      Shabeeb K · Head of Operations<br>
+    <div class="contact">
+      Shabeeb K · Head of Operations, Code-ox<br>
       <a href="mailto:shabeeb.k@code-ox.com">shabeeb.k@code-ox.com</a> · <a href="tel:+966535716437">+966 535 716 437</a> · <a href="https://code-ox.com">code-ox.com</a>
     </div>
   </div>
 </section>
 
 <footer class="foot">
-  <div class="wrap">
-    <div class="foot-grid">
-      <div>
-        <div class="logo-chip" style="margin-bottom:14px;"><img src="code-ox-logo.svg" alt="Code-ox"></div>
-        <p style="font-size:12.5px;line-height:1.6;color:var(--txt-faint);max-width:240px;">Outbound Marketing Module for PhysioTrio. WhatsApp campaigns and AI calling from one dashboard.</p>
-      </div>
-      <div class="foot-col"><div class="foot-col-title">Module</div><ul>
-        <li><a href="#channels">Channels</a></li><li><a href="#whatsapp">WhatsApp</a></li><li><a href="#calling">AI Calling</a></li><li><a href="#dashboard">Dashboard</a></li>
-      </ul></div>
-      <div class="foot-col"><div class="foot-col-title">For PhysioTrio</div><ul>
-        <li><a href="#usecases">Campaigns</a></li><li><a href="#nixpend">Nixpend</a></li><li><a href="#trust">Compliance</a></li>
-      </ul></div>
-      <div class="foot-col"><div class="foot-col-title">Next</div><ul>
-        <li><a href="#questions">Open Questions</a></li><li><a href="#next">Next Steps</a></li>
-      </ul></div>
-      <div class="foot-col"><div class="foot-col-title">Document</div><ul>
-        <li>Module Presentation</li><li>October 2026</li><li>Financial proposal to follow</li>
-      </ul></div>
-    </div>
-    <div class="foot-bottom">
-      <span>PhysioTrio · Outbound Marketing Module</span>
-      <span>Dashboard and console views are illustrative mockups</span>
-    </div>
+  <div class="wrap foot-row">
+    <div class="l"><img class="cx" src="code-ox-logo.svg" alt="Code-ox"><span>Patient Follow-Up Module · prepared for PhysioTrio, October 2026</span></div>
+    <span>Conversations, dashboards and figures shown are illustrative mockups.</span>
   </div>
-  <div class="ghost-word"><span>PHYSIOTRIO</span></div>
 </footer>
 
 </main>
@@ -1020,30 +682,27 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
   var progress = document.getElementById('progress');
   function onScroll(){
     var h = document.documentElement;
-    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    progress.style.width = pct + '%';
+    progress.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
   }
   document.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
 
-  var consoleTabs = document.querySelectorAll('.console-tabs span');
-  var consolePanels = document.querySelectorAll('.console-panel');
-  consoleTabs.forEach(function(tab){
-    tab.addEventListener('click', function(){
-      var key = tab.getAttribute('data-tab');
-      consoleTabs.forEach(function(t){ t.classList.toggle('on', t === tab); });
-      consolePanels.forEach(function(p){ p.classList.toggle('on', p.getAttribute('data-panel') === key); });
+  document.querySelectorAll('.console').forEach(function(c){
+    var tabs = c.querySelectorAll('.console-tabs span'), panels = c.querySelectorAll('.console-panel');
+    tabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        var key = tab.getAttribute('data-tab');
+        tabs.forEach(function(t){ t.classList.toggle('on', t === tab); });
+        panels.forEach(function(p){ p.classList.toggle('on', p.getAttribute('data-panel') === key); });
+      });
     });
   });
 
-  var drawer = document.getElementById('drawer');
-  var overlay = document.getElementById('drawer-overlay');
-  var openBtn = document.getElementById('drawerBtn');
-  var closeBtn = document.getElementById('drawerClose');
+  var drawer = document.getElementById('drawer'), overlay = document.getElementById('drawer-overlay');
   function openDrawer(){ drawer.classList.add('open'); overlay.classList.add('open'); }
   function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('open'); }
-  openBtn.addEventListener('click', openDrawer);
-  closeBtn.addEventListener('click', closeDrawer);
+  document.getElementById('drawerBtn').addEventListener('click', openDrawer);
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
   overlay.addEventListener('click', closeDrawer);
   drawer.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeDrawer); });
 
@@ -1051,34 +710,23 @@ footer.foot{background:var(--void);border-top:1px solid var(--line);padding:64px
   var links = Array.prototype.slice.call(document.querySelectorAll('#drawer a'));
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
-      if(e.isIntersecting){
-        var id = e.target.id;
-        links.forEach(function(l){ l.classList.toggle('active', l.getAttribute('href') === '#'+id); });
-      }
+      if(e.isIntersecting){ links.forEach(function(l){ l.classList.toggle('active', l.getAttribute('href') === '#'+e.target.id); }); }
     });
   }, {rootMargin:'-45% 0px -50% 0px'});
   sections.forEach(function(s){ io.observe(s); });
 
-  var reveals = document.querySelectorAll('.reveal');
   var rio = new IntersectionObserver(function(entries){
     entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); rio.unobserve(e.target); } });
   }, {threshold:0.12});
-  reveals.forEach(function(r){ rio.observe(r); });
+  document.querySelectorAll('.reveal').forEach(function(r){ rio.observe(r); });
 
   function currentIndex(){
-    var mid = window.scrollY + window.innerHeight*0.3;
-    var idx = 0;
+    var mid = window.scrollY + window.innerHeight*0.3, idx = 0;
     sections.forEach(function(s,i){ if(s.offsetTop <= mid) idx = i; });
     return idx;
   }
-  document.getElementById('jumpDown').addEventListener('click', function(){
-    var i = Math.min(currentIndex()+1, sections.length-1);
-    sections[i].scrollIntoView({behavior:'smooth'});
-  });
-  document.getElementById('jumpUp').addEventListener('click', function(){
-    var i = Math.max(currentIndex()-1, 0);
-    sections[i].scrollIntoView({behavior:'smooth'});
-  });
+  document.getElementById('jumpDown').addEventListener('click', function(){ sections[Math.min(currentIndex()+1, sections.length-1)].scrollIntoView({behavior:'smooth'}); });
+  document.getElementById('jumpUp').addEventListener('click', function(){ sections[Math.max(currentIndex()-1, 0)].scrollIntoView({behavior:'smooth'}); });
 })();
 </script>
 </body>
