@@ -1,0 +1,316 @@
+<title>PhysioTrio Outbound Margins</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column, summary first (package verdicts), then the levers, the ledger, and the risks. */
+:root{
+  --bg:#F6F7F9; --surface:#FFFFFF; --ink:#0B162C; --ink2:#3A4659; --muted:#6B7486; --line:#E3E6EC;
+  --profit:#2E8B3E; --profit-soft:#E7F4E9;
+  --meta:#880772; --meta-soft:#F6E6F2;
+  --ai:#4A6CD4; --server:#C98A1B; --staff:#8A93A3;
+  --warn:#B4541A; --warn-soft:#FBEEE4;
+  --display:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0C1220; --surface:#141C2E; --ink:#EEF1F6; --ink2:#C3CAD6; --muted:#8D96A8; --line:#263049;
+  --profit:#5CC46D; --profit-soft:#173322; --meta:#D65BBE; --meta-soft:#3A1734;
+  --ai:#7E9BF0; --server:#E3AB4A; --staff:#7A8396; --warn:#EE9460; --warn-soft:#3A2416; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0C1220; --surface:#141C2E; --ink:#EEF1F6; --ink2:#C3CAD6; --muted:#8D96A8; --line:#263049;
+  --profit:#5CC46D; --profit-soft:#173322; --meta:#D65BBE; --meta-soft:#3A1734;
+  --ai:#7E9BF0; --server:#E3AB4A; --staff:#7A8396; --warn:#EE9460; --warn-soft:#3A2416; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:44px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-0.015em}
+h1{font-size:clamp(28px,4vw,40px);font-weight:800;line-height:1.1}
+h2{font-size:22px;font-weight:800}
+h3{font-size:16px;font-weight:700}
+p{margin:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+section{display:flex;flex-direction:column;gap:16px;min-width:0}
+.sec-intro{color:var(--ink2);max-width:68ch}
+
+/* header */
+.head{display:flex;flex-direction:column;gap:14px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:12.5px;font-weight:600;color:var(--ink2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+.verdict{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.verdict div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.verdict .k{font-size:12.5px;color:var(--muted);font-weight:600}
+.verdict .v{font-size:22px;font-weight:800}
+.verdict .v.zero{color:var(--warn)}
+.verdict .v.good{color:var(--profit)}
+
+/* package cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.card .nm{font-weight:800;font-size:16px}
+.card .pk{font-size:12px;color:var(--muted);font-weight:600}
+.card .rev{font-size:13px;color:var(--muted)}
+.card .profit{font-size:28px;font-weight:700;color:var(--profit);line-height:1.1}
+.card .margin{font-size:13px;color:var(--ink2)}
+.card .after{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+.stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--line)}
+.stack span{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--ink2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* levers */
+.levers{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px 22px}
+.lv{display:flex;flex-direction:column;gap:6px;min-width:0}
+.lv label{font-size:13px;font-weight:700;color:var(--ink)}
+.lv .hint{font-size:12px;color:var(--muted);line-height:1.45}
+.lv input[type=number]{font-family:var(--mono);font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+.lv input[type=range]{width:100%;accent-color:var(--meta)}
+.lv .rv{font-family:var(--mono);font-size:14px;font-weight:600}
+.toggle{display:flex;gap:6px;flex-wrap:wrap}
+.toggle button{font:inherit;font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink2);cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--meta);outline-offset:2px}
+.reset{align-self:flex-start;font:inherit;font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink2);cursor:pointer}
+
+/* tables */
+.tw{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th,td{padding:10px 14px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:12.5px;color:var(--muted);font-weight:700;background:var(--bg)}
+tbody tr:last-child td{border-bottom:none}
+tr.sum td{font-weight:800}
+tr.sum td.p{color:var(--profit)}
+td.c{color:var(--ink2)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:8px}
+
+/* unit */
+.unit{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.u{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.u .row{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.u .row b{font-weight:700}
+.u .m{color:var(--profit);font-weight:700}
+
+/* hidden charges */
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.grp{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.grp h3{display:flex;align-items:center;gap:8px}
+.grp ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.grp li{display:flex;flex-direction:column;gap:3px;padding-top:10px;border-top:1px solid var(--line)}
+.grp li:first-child{border-top:none;padding-top:0}
+.grp li b{font-size:14px}
+.grp li span{font-size:13.5px;color:var(--ink2);line-height:1.5}
+.grp li em{font-style:normal;font-size:12.5px;color:var(--profit);font-weight:600}
+.sev{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:auto}
+.sev.h{background:var(--warn-soft);color:var(--warn)}
+.sev.m{background:var(--meta-soft);color:var(--meta)}
+
+.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.cmp{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.cmp .big{font-size:24px;font-weight:800}
+.cmp ul{margin:0;padding-left:18px;color:var(--ink2);font-size:14px;display:flex;flex-direction:column;gap:4px}
+
+.note{background:var(--warn-soft);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--ink2)}
+.note b{color:var(--ink)}
+.src{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.src a{color:var(--ink2)}
+@media (prefers-reduced-motion:no-preference){.stack span{transition:width .35s ease}}
+</style>
+
+<div class="wrap">
+
+  <header class="head">
+    <h1>PhysioTrio outbound marketing: what we keep from each package</h1>
+    <p class="sec-intro">If Code-ox builds and runs the WhatsApp campaign module itself and sells at the quoted prices, these are the margins after Meta, AI and server costs. Every figure below recalculates when you change an assumption.</p>
+    <div class="meta-row">
+      <span class="tag">Internal · Code-ox team</span>
+      <span class="tag">Prices from quotation CX-PT-2026-001</span>
+      <span class="tag">Rates checked 15 Oct 2026</span>
+      <span class="tag">SAR, excluding VAT · USD at 3.75</span>
+    </div>
+    <div class="verdict">
+      <div><span class="k">Reselling Bafar at the same price</span><span class="v zero num">SAR 0</span><span class="muted" style="font-size:13px">Our margin today on CX-PT-2026-001</span></div>
+      <div><span class="k">Building it ourselves, monthly plans</span><span class="v good num" id="vA">—</span><span class="muted" style="font-size:13px">Margin range across Starter to Scale</span></div>
+      <div><span class="k">Building it ourselves, annual licence</span><span class="v good num" id="vB">—</span><span class="muted" style="font-size:13px">Profit per year, before staff time</span></div>
+      <div><span class="k">Biggest cost</span><span class="v num" style="color:var(--meta)">Meta</span><span class="muted" style="font-size:13px">Marketing messages are ~65–75% of running cost</span></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Profit by package</h2>
+    <p class="sec-intro">Monthly for Package A, yearly for Package B. The bar shows where each riyal of revenue goes.</p>
+    <div class="legend">
+      <span><i style="background:var(--meta)"></i>Meta messages</span>
+      <span><i style="background:var(--ai)"></i>AI replies</span>
+      <span><i style="background:var(--server)"></i>Server</span>
+      <span><i style="background:var(--staff)"></i>Staff time</span>
+      <span><i style="background:var(--profit)"></i>Profit</span>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section>
+    <h2>Assumptions you can change</h2>
+    <p class="sec-intro">Defaults are the researched rates. Staff time is a team estimate, so set it to what we actually expect.</p>
+    <div class="levers">
+      <div class="lv"><label for="mkt">Meta marketing rate, SAR per message</label><input id="mkt" type="number" step="0.001" min="0"><span class="hint">Saudi rate from 1 Oct 2026: $0.0576 = SAR 0.216 (was $0.0501).</span></div>
+      <div class="lv"><label id="svcl">Meta charge on service replies</label><div class="toggle" role="group" aria-labelledby="svcl"><button type="button" id="svc0" aria-pressed="true">Free</button><button type="button" id="svc1" aria-pressed="false">SAR 0.040</button></div><span class="hint">Resellers report billing from 1 Oct 2026 at the utility rate ($0.0107). Meta's own page still says free.</span></div>
+      <div class="lv"><label for="ai">AI cost, SAR per reply</label><input id="ai" type="number" step="0.001" min="0"><span class="hint">Claude Sonnet 5.5 estimate ≈ 0.012; budgeted 0.02 for Arabic tokens and extra calls. Haiku 5.5 ≈ 0.001.</span></div>
+      <div class="lv"><label for="srv">Server, SAR per month</label><input id="srv" type="number" step="50" min="0"><span class="hint">Dedicated Saudi-region stack (Google Cloud Dammam): app VM, database, backups, monitoring.</span></div>
+      <div class="lv"><label for="use">Share of bundle actually sent</label><input id="use" type="range" min="40" max="100" step="5"><span class="rv num" id="usev"></span><span class="hint">Meta bills only delivered messages. 100% is the worst case for cost.</span></div>
+      <div class="lv"><label for="sd">Support staff days per month</label><input id="sd" type="number" step="0.5" min="0"><span class="hint">Monitoring, template approvals, client questions.</span></div>
+      <div class="lv"><label for="dc">Staff cost, SAR per day</label><input id="dc" type="number" step="50" min="0"><span class="hint">Our internal cost, not the sell rate.</span></div>
+      <div class="lv"><label for="su">Set-up staff days</label><input id="su" type="number" step="1" min="0"><span class="hint">Meta verification, 10 templates, AI set-up, training, first campaign, hypercare.</span></div>
+      <button class="reset" type="button" id="reset">Reset to defaults</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>The ledger</h2>
+    <div class="tw"><table id="ledger"></table></div>
+    <p class="muted" style="font-size:13px" id="setupline"></p>
+  </section>
+
+  <section>
+    <h2>Margin on each extra message</h2>
+    <div class="unit" id="unit"></div>
+  </section>
+
+  <section>
+    <h2>Hidden charges</h2>
+    <p class="sec-intro">Costs that are easy to miss when pricing. The two marked high can move the margin by several points on their own.</p>
+    <div class="groups">
+      <div class="grp">
+        <h3><span class="dot" style="background:var(--meta)"></span>Meta and WhatsApp</h3>
+        <ol>
+          <li><b>Marketing rate rises <span class="sev h">High</span></b><span>Saudi marketing went from $0.0501 to $0.0576 on 1 Oct 2026, +15%. Meta revises rates quarterly.</span><em>Keep the "prices follow Meta's rates" clause in every quotation.</em></li>
+          <li><b>Service replies now billed <span class="sev h">High</span></b><span>Reported from 1 Oct 2026 at about SAR 0.04 each. Up to SAR 2,000 a year on the annual licence.</span><em>Confirm on our Meta billing in the first month.</em></li>
+          <li><b>Provider fees if not direct <span class="sev m">Medium</span></b><span>360dialog, Twilio and similar charge per number or add a markup per message. Package B allows 5 numbers.</span><em>Connect to Meta's Cloud API directly.</em></li>
+          <li><b>Tests and retries count</b><span>Meta bills every delivered message, including test sends and failover retries that land.</span></li>
+          <li><b>Blocked or low-quality number</b><span>Patient reports can restrict a number; replacing it costs a SIM, re-verification and time.</span></li>
+        </ol>
+      </div>
+      <div class="grp">
+        <h3><span class="dot" style="background:var(--ai)"></span>AI</h3>
+        <ol>
+          <li><b>Arabic uses more tokens</b><span>Roughly 1.5–2× the tokens of English. Long conversations add more history to every reply.</span><em>Cache the campaign brief; cap history length.</em></li>
+          <li><b>More than one call per reply</b><span>Intent check, hand-over summary and opt-out detection each add a call.</span></li>
+          <li><b>Model choice</b><span>Sonnet 5.5 costs about 12× Haiku 5.5 per reply. Quality in Arabic decides which one we can use.</span></li>
+        </ol>
+      </div>
+      <div class="grp">
+        <h3><span class="dot" style="background:var(--server)"></span>Hosting</h3>
+        <ol>
+          <li><b>Saudi region costs more</b><span>Dammam is about 30% dearer than Doha for the same machine. Each client gets a dedicated environment.</span></li>
+          <li><b>Disk, backups, logs, monitoring</b><span>SSD about $0.27 per GB a month, plus backup storage and log retention.</span></li>
+          <li><b>Staging, SSL, domain, alerts</b><span>Small items that recur every month.</span></li>
+        </ol>
+      </div>
+      <div class="grp">
+        <h3><span class="dot" style="background:var(--staff)"></span>Tax, cash and people</h3>
+        <ol>
+          <li><b>Withholding tax on foreign providers <span class="sev m">Medium</span></b><span>5–15% on payments to Meta Ireland and Anthropic.</span><em>Check with our accountant before pricing.</em></li>
+          <li><b>Reverse-charge VAT</b><span>15% on the same foreign services. Recoverable, but it ties up cash.</span></li>
+          <li><b>Card fees on USD billing</b><span>About 2–3% when paying by card in USD. Meta offers SAR billing since 1 Apr 2026.</span></li>
+          <li><b>Rollover on Package A</b><span>Unused messages carry over, so paid messages remain a liability.</span></li>
+          <li><b>Meta bills before we invoice</b><span>If a bundle is used early in the month, Meta charges us before the next invoice.</span></li>
+          <li><b>Staff time and the build itself</b><span>Set-up, hypercare, support and maintenance, plus the one-time cost of building the platform.</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Resell or build</h2>
+    <div class="compare">
+      <div class="cmp"><h3>Resell Bafar at the same price</h3><span class="big num" style="color:var(--warn)">SAR 0</span><ul><li>No build cost, live in 3 weeks</li><li>Meta price rises pass through Bafar</li><li>Platform and IP stay with Bafar</li></ul></div>
+      <div class="cmp"><h3>Resell Bafar with a markup</h3><span class="big num" id="mk">—</span><ul><li>Margin is whatever we add on top</li><li>Same speed and low risk</li><li>PhysioTrio's price goes up</li></ul></div>
+      <div class="cmp"><h3>Build and run it ourselves</h3><span class="big num" style="color:var(--profit)" id="bd">—</span><ul><li>Margin shown above, per client</li><li>Needs the one-time build investment</li><li>Reusable for Vitality and other clients</li></ul></div>
+    </div>
+    <p class="note"><b>Before deciding:</b> the build cost is not in these numbers. Divide it by the profit per client per year to see how many clients it takes to pay back.</p>
+  </section>
+
+  <section>
+    <h2>Sources</h2>
+    <div class="src">
+      <a href="https://www.purands.com/whatsapp-pricing/saudi-arabia">Purands: WhatsApp API pricing in Saudi Arabia, 2026</a>
+      <a href="https://otobiz.ai/blog/whatsapp-business-api-pricing">Otobiz: UAE and Saudi WhatsApp rates</a>
+      <a href="https://modeer360.com/en/blog/whatsapp-api-pricing-2026">Modeer 360: WhatsApp API pricing 2026</a>
+      <a href="https://www.nonito.io/whatsapp-business-api-pricing">Nonito: rates by country, October 2026</a>
+      <a href="https://help.getdarwin.ai/en/articles/16516839-whatsapp-business-platform-pricing-changes-service-messages-billed-starting-october-2026">Darwin AI: service messages billed from October 2026</a>
+      <a href="https://www.aichat.com/blog/whatsapp-business-pricing-changes-2026">aichat: WhatsApp pricing changes from 1 October 2026</a>
+      <a href="https://developers.facebook.com/docs/whatsapp/pricing">Meta: WhatsApp Business Platform pricing</a>
+      <a href="https://platform.claude.com/docs/en/about-claude/pricing">Anthropic: Claude API pricing</a>
+      <a href="https://gcloud-compute.com/e2-standard-2.html">gcloud-compute.com: e2-standard-2 regional prices</a>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var D={mkt:0.216,svc:0,ai:0.02,srv:900,use:100,sd:1,dc:800,su:8};
+  var S=Object.assign({},D);
+  var PK=[
+    {id:'st',pk:'Package A',nm:'Starter',per:'month',rev:3190,m:5000,s:2500,months:1},
+    {id:'gr',pk:'Package A',nm:'Growth',per:'month',rev:5280,m:10000,s:5000,months:1},
+    {id:'sc',pk:'Package A',nm:'Scale',per:'month',rev:11000,m:25000,s:12500,months:1},
+    {id:'an',pk:'Package B',nm:'Annual licence',per:'year',rev:57200,m:100000,s:50000,months:12}
+  ];
+  var EX=[{nm:'Starter',m:0.35,s:0.22},{nm:'Growth',m:0.34,s:0.21},{nm:'Scale and annual',m:0.32,s:0.20}];
+  function f(n){return Math.round(n).toLocaleString('en-US')}
+  function f2(n){return n.toFixed(3).replace(/0$/,'')}
+  function calc(p){
+    var u=S.use/100;
+    var meta=p.m*S.mkt*u+p.s*S.svc*u;
+    var ai=p.s*S.ai*u;
+    var srv=S.srv*p.months;
+    var staff=S.sd*S.dc*p.months;
+    var pre=p.rev-meta-ai-srv;
+    return {meta:meta,ai:ai,srv:srv,staff:staff,pre:pre,post:pre-staff,mp:pre/p.rev*100,mpost:(pre-staff)/p.rev*100};
+  }
+  function pct(x,t){return Math.max(0,x/t*100).toFixed(2)+'%'}
+  function render(){
+    var cards='',rows='',margins=[];
+    PK.forEach(function(p){
+      var c=calc(p);
+      if(p.months===1) margins.push(c.mp);
+      var profitW=Math.max(0,c.post);
+      cards+='<div class="card"><div class="top"><span class="nm">'+p.nm+'</span><span class="pk">'+p.pk+'</span></div>'+
+        '<div class="rev">Revenue <span class="num">SAR '+f(p.rev)+'</span> per '+p.per+'</div>'+
+        '<div><div class="profit num">SAR '+f(c.pre)+'</div><div class="margin">profit per '+p.per+' before staff · <b class="num">'+c.mp.toFixed(0)+'%</b> margin</div></div>'+
+        '<div class="stack" aria-hidden="true"><span style="width:'+pct(c.meta,p.rev)+';background:var(--meta)"></span><span style="width:'+pct(c.ai,p.rev)+';background:var(--ai)"></span><span style="width:'+pct(c.srv,p.rev)+';background:var(--server)"></span><span style="width:'+pct(c.staff,p.rev)+';background:var(--staff)"></span><span style="width:'+pct(profitW,p.rev)+';background:var(--profit)"></span></div>'+
+        '<div class="after">After staff time: <b class="num">SAR '+f(c.post)+'</b> · <span class="num">'+c.mpost.toFixed(0)+'%</span></div></div>';
+      rows+='<tr><td><b>'+p.nm+'</b> <span class="muted">('+p.per+')</span></td><td class="num">'+f(p.rev)+'</td><td class="num c">'+f(c.meta)+'</td><td class="num c">'+f(c.ai)+'</td><td class="num c">'+f(c.srv)+'</td><td class="num p" style="color:var(--profit);font-weight:700">'+f(c.pre)+'</td><td class="num c">'+f(c.staff)+'</td><td class="num" style="font-weight:700">'+f(c.post)+'</td><td class="num">'+c.mpost.toFixed(0)+'%</td></tr>';
+    });
+    document.getElementById('cards').innerHTML=cards;
+    document.getElementById('ledger').innerHTML='<thead><tr><th>Package</th><th>Revenue</th><th><span class="dot" style="background:var(--meta)"></span>Meta</th><th><span class="dot" style="background:var(--ai)"></span>AI</th><th><span class="dot" style="background:var(--server)"></span>Server</th><th>Profit before staff</th><th><span class="dot" style="background:var(--staff)"></span>Staff</th><th>Profit after staff</th><th>Margin</th></tr></thead><tbody>'+rows+'</tbody>';
+    var setupCost=S.su*S.dc, setupP=13200-setupCost;
+    document.getElementById('setupline').innerHTML='Package A set-up fee: SAR 13,200 one-time, against '+S.su+' staff days (SAR '+f(setupCost)+') = <b class="num">SAR '+f(setupP)+'</b> profit. On Package B, set-up is included, so those staff days come out of the first year: <b class="num">SAR '+f(calc(PK[3]).post-setupCost)+'</b> in year one.';
+    var lo=Math.min.apply(null,margins),hi=Math.max.apply(null,margins);
+    document.getElementById('vA').textContent=lo.toFixed(0)+'–'+hi.toFixed(0)+'%';
+    document.getElementById('vB').textContent='SAR '+f(calc(PK[3]).pre);
+    document.getElementById('bd').textContent=lo.toFixed(0)+'–'+Math.max(hi,calc(PK[3]).mp).toFixed(0)+'%';
+    document.getElementById('mk').textContent='e.g. 20% = SAR '+f(57200*0.2)+'/yr';
+    var mc=S.mkt, sc=S.svc+S.ai, u='';
+    EX.forEach(function(e){
+      u+='<div class="u"><h3>'+e.nm+'</h3><div class="row"><span>Marketing: sell <b class="num">'+e.m.toFixed(2)+'</b>, cost <span class="num">'+f2(mc)+'</span></span><span class="m num">+'+(e.m-mc).toFixed(3)+'</span></div><div class="row"><span>Service: sell <b class="num">'+e.s.toFixed(2)+'</b>, cost <span class="num">'+f2(sc)+'</span></span><span class="m num">+'+(e.s-sc).toFixed(3)+'</span></div></div>';
+    });
+    document.getElementById('unit').innerHTML=u;
+    document.getElementById('usev').textContent=S.use+'%';
+  }
+  function bind(){
+    ['mkt','ai','srv','sd','dc','su'].forEach(function(k){var el=document.getElementById(k);el.value=S[k];el.oninput=function(){var v=parseFloat(el.value);S[k]=isNaN(v)?0:v;render()}});
+    var use=document.getElementById('use');use.value=S.use;use.oninput=function(){S.use=+use.value;render()};
+    var b0=document.getElementById('svc0'),b1=document.getElementById('svc1');
+    function setSvc(v){S.svc=v;b0.setAttribute('aria-pressed',v===0);b1.setAttribute('aria-pressed',v!==0);render()}
+    b0.onclick=function(){setSvc(0)};b1.onclick=function(){setSvc(0.04)};
+    b0.setAttribute('aria-pressed',S.svc===0);b1.setAttribute('aria-pressed',S.svc!==0);
+    document.getElementById('reset').onclick=function(){S=Object.assign({},D);bind();render()};
+  }
+  bind();render();
+})();
+</script>
