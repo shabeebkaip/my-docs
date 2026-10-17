@@ -1,0 +1,287 @@
+<title>KSA Client Pipeline</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column — header, money summary, status counts, then one table per status, data notes last. */
+:root{
+  --bg:#f5f6f3; --surface:#ffffff; --ink:#14202b; --muted:#5d6871; --line:#dfe3df; --accent:#0e6b66;
+  --won:#1d7a46; --won-bg:#e3f2e8; --open:#2a5bb8; --open-bg:#e6edfa; --talk:#7a4fb0; --talk-bg:#efe8f8;
+  --lead:#55626d; --lead-bg:#eceff1; --hold:#a86a06; --hold-bg:#fbf0db; --lost:#b0372f; --lost-bg:#f8e4e2;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Manrope", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10171d; --surface:#172129; --ink:#e7ecee; --muted:#9aa6ae; --line:#2a3741; --accent:#4fc1b8;
+  --won:#6fd39a; --won-bg:#173826; --open:#8fb2f5; --open-bg:#1b2b48; --talk:#c3a3ef; --talk-bg:#2d2240;
+  --lead:#aab6bf; --lead-bg:#24303a; --hold:#f0bd5e; --hold-bg:#3a2d12; --lost:#f08d85; --lost-bg:#3d1f1d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10171d; --surface:#172129; --ink:#e7ecee; --muted:#9aa6ae; --line:#2a3741; --accent:#4fc1b8;
+  --won:#6fd39a; --won-bg:#173826; --open:#8fb2f5; --open-bg:#1b2b48; --talk:#c3a3ef; --talk-bg:#2d2240;
+  --lead:#aab6bf; --lead-bg:#24303a; --hold:#f0bd5e; --hold-bg:#3a2d12; --lost:#f08d85; --lost-bg:#3d1f1d; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-block:32px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:36px}
+header{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:20px}
+.logo{background:#fff;border-radius:6px;padding:6px 10px;display:inline-flex}
+.logo img{height:30px;display:block}
+h1{font:700 clamp(28px,4.4vw,42px)/1.05 var(--display);margin:14px 0 6px;text-wrap:balance;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0;max-width:62ch}
+.meta{font:500 12px/1.6 var(--mono);color:var(--muted);text-align:right}
+.meta b{color:var(--ink);font-weight:500}
+h2{font:700 22px/1.2 var(--display);margin:0;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+h2 small{font:500 13px var(--body);color:var(--muted)}
+.label{font:600 11px/1 var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.money{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.money div{background:var(--surface);padding:18px 20px;display:grid;gap:8px;align-content:start}
+.money strong{font:600 26px/1.1 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.money strong i{font-style:normal;font-size:14px;color:var(--muted);margin-right:4px}
+.money p{margin:0;font-size:13px;color:var(--muted)}
+.counts{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13px var(--body);padding:7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .n{font:500 12px var(--mono)}
+.dot{width:9px;height:9px;border-radius:50%;background:currentColor}
+section.group{display:grid;gap:12px}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;min-width:860px}
+th{font:600 11px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.c{font-weight:700;min-width:180px}
+td.c span{display:block;font-weight:500;color:var(--muted);font-size:13px}
+td.v{font:500 14px/1.5 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+td.v small{display:block;color:var(--muted);font-size:12px}
+th.r{text-align:right}
+td.city,td.own{white-space:nowrap;color:var(--muted);font-size:14px}
+td.n{color:var(--muted);font-size:13px;max-width:360px}
+.src{font:500 11px var(--mono);border:1px solid var(--line);border-radius:4px;padding:1px 5px;white-space:nowrap;color:var(--muted)}
+.pill{font:700 11px var(--body);letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px;white-space:nowrap}
+.won{color:var(--won)} .pill.won{background:var(--won-bg)}
+.open{color:var(--open)} .pill.open{background:var(--open-bg)}
+.talk{color:var(--talk)} .pill.talk{background:var(--talk-bg)}
+.lead{color:var(--lead)} .pill.lead{background:var(--lead-bg)}
+.hold{color:var(--hold)} .pill.hold{background:var(--hold-bg)}
+.lost{color:var(--lost)} .pill.lost{background:var(--lost-bg)}
+.gtotal{font:500 13px var(--mono);color:var(--muted)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.notes div{min-width:0}
+.notes h3{font:700 16px var(--display);margin:0 0 8px}
+.notes ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px;display:grid;gap:6px}
+.notes b{color:var(--ink);font-weight:600}
+footer{border-top:1px solid var(--line);padding-top:16px;display:flex;flex-wrap:wrap;gap:8px 24px;color:var(--muted);font-size:13px}
+footer b{color:var(--ink)}
+@media (max-width:640px){.meta{text-align:left}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <span class="logo"><img alt="Code-OX" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQwIiBoZWlnaHQ9IjQ0IiB2aWV3Qm94PSIwIDAgMTQwIDQ0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KPHJlY3Qgd2lkdGg9IjE0MCIgaGVpZ2h0PSI0NCIgZmlsbD0idXJsKCNwYXR0ZXJuMF85NDdfNzUxKSIvPgo8ZGVmcz4KPHBhdHRlcm4gaWQ9InBhdHRlcm4wXzk0N183NTEiIHBhdHRlcm5Db250ZW50VW5pdHM9Im9iamVjdEJvdW5kaW5nQm94IiB3aWR0aD0iMSIgaGVpZ2h0PSIxIj4KPHVzZSB4bGluazpocmVmPSIjaW1hZ2UwXzk0N183NTEiIHRyYW5zZm9ybT0ibWF0cml4KDAuMDAzMzQzNDcgMCAwIDAuMDEwNjM4MyAtMC4wMDE1MTk3NiAwKSIvPgo8L3BhdHRlcm4+CjxpbWFnZSBpZD0iaW1hZ2UwXzk0N183NTEiIHdpZHRoPSIzMDAiIGhlaWdodD0iOTQiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHhsaW5rOmhyZWY9ImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBU3dBQUFCZUNBWUFBQUNaNENrTEFBQUFBWE5TUjBJQXJzNGM2UUFBRklkSlJFRlVlRjd0WGMxcUhNY1ducFlEdGtLdXBRUUNNeUlRbXp5QTVYM2dhcDRnOGlxN1dBT0JRT0JpYTJkczdNZ2hPSXNrV1BJbWtCODB0dUtNSnpGWWZnTEw1QUVpcjdPd0RVRWprb1dsT003MHpIUlAzLzc2VnV2MmpMcTdUbFgvVG5JYWhIOVVYWDNxTzZlK09uWHFWSlZSNFljUllBUVlnUWxCd0pnUU9WbE1Sb0FSWUFRcVRGaHNCSXdBSXpBeENEQmhUWXlxV0ZCR2dCRmd3bUliWUFRWWdZbEJnQWxyWWxURmdqSUNqQUFURnRzQUk4QUlUQXdDVEZnVG95b1dsQkZnQkppdzJBWVlBVVpnWWhCZ3dwb1lWYkdnakFBandJVEZOc0FJTUFJVGd3QVQxc1NvaWdWbEJCZ0JKaXkyQVVhQUVaZ1lCSml3SmtaVkxDZ2p3QWd3WWJFTk1BS013TVFnd0lRMU1hcGlRUmtCUm9BSmkyMkFFV0FFSmdZQkpxeUpVUlVMeWdnd0FreFliQU9NQUNNd01RZ3dZVTJNcWxoUVJvQVJZTUppRzJBRUdJR0pRWUFKYTJKVXhZSXlBb3dBRXhiYkFDUEFDRXdNQWt4WUU2TXFGcFFSWUFTWXNOZ0dHSUYvQUFJYkd4c0x0bTJmc3l4ckZzM3Q5L3RySDM3NDRXWVptdDdwZEJZcWxjcEhobUhNTzQ2elhhbFVtclZhN1dhWWJKa1IxdVBIajJlUEhUdjJUcVZTZ1RBbnhNZng5NnllaDdWYUxaWDZkM2QzUGJrZHg1a1h3a0orcncyR1lld0pVUEhQSnk3SW05MXU5K0hKa3lmM2tqYXMwK21zUUhGSjY0bDYzekNNYmNkeDl0QUd0MzFianVQY3I5VnFUN0w2WHJCZVlPcml0aWh3VEVWUFNlU3UxV3FaMlg2VVhNUStzU1hlOTJ5cldxM2VUOUpPdkh2Nzl1MmxTcVd5YmxsV3hiYnRDdjRjRG9mNCsrYkxMNy9jYURRYWlXMVhWOFpPcDdQdTlpUElOLzZBdEJyai81bXEwcUNRNmVucHM4SXc4emJLUklTMXM3T3pPRFUxZFZZUWxUY0txVHd3THBCQXRWcGRVM2t2V0Racndnb2RzUXdESXhySWF5MEw4dXAwT21jTncxaDFIRWNaVTEwY0tlL2xTVmk3dTd2bmt2UUoySlk3ZUc1R2VSMXg3VzIxV2ljTXczZzhHQXg4a3ZMKzdQZjczcCtXWlczUHpNelVpeUN0R0xMeW05U28xV3JOWVB0U0k2d1NHS1lXWWZudXFQQUVLYll1S3dPUFpVWEh1SW9nckxIR3JKaW11WmFHdHlnR3J3Y0JMMVdHVzY2L3o0T3cwQ2RnQzRFWlJxSTJDZzk1MloxSitGNll0TDY3ZCsrdTl2dDlFS2JuV1FVOUxQeGJlRnZiM1c2M2NlblNKUXhlbVQ5VTIwQjdYUS96ZEtxRUJjL0VNSXpyYVNrbEFWcEtoTlhwZERERmd6dWFpU2NJc0MzTGFyenh4aHRrSXlnQllmbFQzbFczUTEvVjFjV3Z2LzQ2LzlKTEw0R3NTdVZWQmR1VEpXR2gvVWVPSExtWFlaL1lzbTE3bVdKYmQrN2N3UUQ2Wm95SDVYdGNlN1p0MTdNbUxTcForYm9hMTFNaUQwdTR1cXU2aHAzeWUyVEN5cmxESFhKcm85cGRCc0lLeU5ZMFRYTloxZHZDUUdBWXhzOWxKaXUwTVN2QzZuUTZYcndvWmRzK1ZKMklwWjZSZVZ2dGR0dUJWeFhuWWZreHJjRmdzRGNjRHM5Y3ZueVo3TUdwdEZPejM5V0RiZFFtTE1MOFU2VXRhWlFsRVZaZUJqWGl4aHJHYXJWYVhaWTFzbVNFQlc4TFU0VTZsYlJVUjA4WkhsbitQZ3ZDMnQzZHZlNHVhcHpQVXU2UXVtTUh4RHQzN2lDZ1BrUHdzQTZtaTRaaE5LNWN1VElTTzByYUprMnl3bWRQQm1PcnlvUlZZcU9VRXRiT3pzNTVNWDFOaXIvTys2R3JIc0dLeWtaWWtBMGp1V1ZaZGNyMG80enlSeWtxYmNJcWNnREhnc25jM0Z3b1ViYmI3YVp0MjFnSWk0eGhCVHdzcjR3Z3Q4YTFhOWRTSVMwNENlaDNHbDczVXpmbzdtY1llS3BVSnF3aUZTTmhpVmpDS3NLekNwRTNsclRLMnVFcG5wWVl5QjVyR0tVTytTZCtKMDNDS2ttZkNQVzBXcTNXZ21FWUQxUThMRXdoVGRPRXg5WDg0b3N2RHFVV3FJQ2ZwTjg1anJNOE56YzNFbkpTSXF5ZG5aMVZ3ekRPS1FpOFg2bFV2T1YrMjdhM0thTzBRdDNrb2lJSStqUDVoZjhWZklpbFpIVFc4VGlCcUE5SmJsaHdRTkIrUnFGdWNreExvVTVTVWNTWHhLb2RqQmc1VVcrU1h2eGZvYTFhclZhUEtxL2d2U0tZRCtMT0pmOUxvWDFhUlRVNjVMN2pPRnRJVlFqckUyTzJoWHhBOG1QYjl1bXdQbmI3OW0wdnZ5OXFsVERNd3dKcGdlUXN5MnF1cnE1cWtWYVNLVEp5Qk9mbTVtQ2pJdytac0JRVkE2SmFOVTF6bFJyL0lHdEZzYUJHRUJnWnRraExJSFVva1F3SWR4dy9WT0lhQ1NRcU5pbTE0a0tuTUdZcWNVVjZpRzVpS0FMdGZxSnRtSXo3dG0wdkZEVm9wUVphb0NLUkV2T0FXTGR5bnhDMkJROEQ2UkhTUndUaVQ0Zlo3dmZmZjk4Y0RBWm5RVVJqZVZnSC8vWlRIbndQeXk4SFluMzk5ZGZyS3lzcjVBVFRoRjduVGRNMHo0ZHhCNG13Vk54OU1HT3YxMXNxbXFoODdlN3U3dDRUU1hzeWhUOTFGYk9vMjZHQTBkR2pSekZ5bnBKOUNCbnlicDdXU1VLNVhJb29Ua1ZEeWJiVDZUaHh3b2E1OTdrMExzT1B1SGxXanltcEM0N2pQT3IxZWd1NmZRSmUxOVRVVkpOb1c1R2U4SzFidDVZc3kvSXkza1hTcUJleml2T3drR0NLSDVEV0w3LzhVdC9hMm9vbExjRVY2OFErRjZhZG15N2hobVcrZTJWSmhFV2RDc1lGL3pLMG04aXFxU05nVW9NS0N1QjZkQWhVU2tmRXNuVmc0VzFoTkpkNWlZYzZCR1hLbldiTXFBaGJHdittd2hRNHRnTlMyeUs4TFlSWC9rMTRKOUtELy9iYmI1Y2N4MWtQWkxwVFBLeEt0OXZGWjU4OGYvNzh6STgvL2hpYVc1akNndHpWV3EwR2p6L3lrUktXU0xERVNDSjdwQitUVlpEMjd6dWREdHoxMk1UUU5NbktsNTlDV25EZnU5M3VTZDFSTjIyc1VKOEN3WitabTVzNzJEaExlRSs2Z3B0RmU3S3FVMkhHa1FwWkJkdmhKbXB2RXp5dDJIamoxMTkvalkzUW01Wmx6U2g0V0pWZXI0Y2Y1R3JWeDBsTHBDM0FzNG9MQzhTcGhCVGJwUkFXeFdOSVhURkpqWTNRaWZDSmZkTTBUMlJCR3U3M2tYd25HdzNMU1BLVXhNZVJLUzBCNjc4VllWR20wQmdJWFZMWDdieVI1aTg4TFhnNHNyaGpMQUY4OWRWWDg1WmxiZlg3L1psQXJPb2c5UUdyaE1IL2g0Y0ZjZ05wV1phMTk5dHZ2eTMvOU5OUFh0cERnaHdycnc4NmpyTVVIQUFUZVZodU52c3p5VkwxVTlNMDU3UG85RWxJaStMbHVDdUJtUVcvaFdFaGNCODN4U3BWTE12SGUyZG5CNnVqc1N0VXdSVXB5cFRRM2FQNGF0bHNSTmUrQ0xHcnpBWkNCVTlZNmtSY3YzNGRPVTVZclR3RmNoS3JndDZmL2lwaElJYmxlMWhleWdQSTY4V0xGL1ZXcTRWY1BjU0pkYlpoS1MvRXhIcFlZcDhnOWtRbGR1VjBqVVAzUFJuUlJpMmI2bjR2N0QzS1NEeWV5WnZtOTNYcklvWUJScnhEV2REZGpaZVd6cHZVd1VjSEc1M3Z5TjZSRGNnSU9iZ25oN3dxcTJkOWZYMzIyYk5uOExST3hhd1NlakdzZ0ljRjBscis1cHR2RUlEWDNZYWt0Y2dsSXl4WjN0V2hURlFaUUhuOG5qTGk1MEVVRlBlOWJNRjNYeitFRGpHeWs1NFlXOG5NbzgzRHJ2QU5RckE5bHhrSGtUaEplSU8wZnYvOWQ2UTl2T05udXNkNVdMMWVyL0hsbDE4Q0RpMnlTaEkzamlVc21ldGI0czRXZXhCZVZ2R0ZDQzlMRmdNc1pYeUhFSmRDY3cvMmVSRTZzZ2NQenNheUxPdW1idnBJWHNRVTlSMUNiRkk2RlV1ckRZUkJRc21yL2VTVFQ3eHRQQ0Y1V0o2SE5SZ012SGpUWjU5OWhuQkJaT3FCcEgwUFRkTmMxQTBQeUFnck5yY21Lck0yTFlYbzFpT0x3ZVNaZmtHWVZwY3lqaVZpSmQ3RzJSZzlISXpneEppZHJrcWozc3VkN0dVSnN1NWdPTEtDbW5hRGcvVVJRZzdLK0Z5OWVuVjFNQmljRy9ldyt2MysvdlBuenhkdTNMaUJuUzY2WkpXWXpCTVJWbGx6YXdpaklNbFZUc3ZZWlBHZHZ3dU9oQTZVRnFSK1Bjb2RNcWtBWmRJbHdRdld3dWZqano5ZSt2UFBQOWNEcTRTUDNuNzc3Zi9VNi9VYkNkSVdFcE9WNTZISHVMN0lYNHJjZHBEbnRFclZ5Sml3VkJFTEx5K0xZNDJIQkJTei9kTVFVcXRESnZud0pCRlcySW1kMUxaZnZIaHhxZC92NDdUU0orKysrKzQ3YjczMUZvNXAxazNUSU9WWVVXVFRKaXhzRGs3cjBnZUtvQ3BsWkVhVjl4SzdtMFh1bmZvWTFZYXlUcTBKSHRPaEdJa0lCaU5QU0pZeHI2TFNVa3dKQ1lIdS9WcXRwck84cjQyRnpOYVRlTzhYTDE2Y2YvLzk5LzgxUFQxOWk3SUZLYUlScVpGVklnK0xDWXR1WTdMRmk3OFRZU2xrZ2RNQmpDNlo2NkFwSXl4cUtrRWFEZmZyeUpLd0xseTRjR0pwYWVuNDhlUEhieEd5NjZPYVZRN0NTdUp1cHFtd3NMcDRTcGdPd2pwVHd1bnA2VHd2bnNpVnNJQnFsZ1NocWpWWkRDdEoyT2JDaFFzTHcrSHdubW1hbUJKaVZlOStBdExDNlNmYWR3UUVjWW1jRW9wVm4yZHhJQ1p4TjFXVm8xS2VDVXNGcmVpeXFqZ1NwcERwQ1BiL1drcEhXSG1HRzJTRXBUc0xRdndLRzZTUjhZNU05MTZ2dC8zZWUrK0J0TlprT3lCaUZDdzljWmRpSElsV0NjczZsWm13dElaU0p0L0NlR1M3QllKYm0zS2VDdnEyblR0aHlYS2Y4a3hySUp5aW9velA1Y3VYdldQRXgvY1M5dnY5dmIyOXZmcU5HemR3N3B2ME5KSUk4dEc2MklUa1lRbjNOelpZWE5idEZyS1JQcy9wckd4YXBUc0tVa2FqSkdVSW96ZXFWMDRjUlE3Y2NEaHNUbXJpcUd3d2RERkpaZm1lb2p0WlRwaHEvL1FUUjZQMkV2NzExMTk3L1g2L3ZyYTJoalBhVlU0ZVBtZ081Ymp0dUxZbjNacFR5cVRIa20zTndkSE1Jd2ZwQnhWUzR0MENzUm42NC9FUnd2UVJ6YzQxLzQzUzZWWEx5REw2OHpvMlNMWUFJTnBGeHZ2VFR6OXREb2ZEcy80eHluR25OU1RkbWlNdWhNVVZaYVJUZmNrZUZpRkxHM1dsdWdxZ2FrQlI1VHVkaml4TE8vYk1vRFRra0hsNjRoc2oxeGlsOGQya2RSQTdBMjkramdaYWFVdU1qcjRJSittU1VpekU1dWNIbG1YTnE1eldnS3ZBeEg1Q3lxR1BoNXFvY2hzVG1iREV0RkRXOForWXBubGFkMitRanJJbzd4Q21ZcG1PK01TWVRpbmpWNFRPZ09OSERpNDhvSGkwWlYyZ29kalNlQmxaSEN0ckw0czRYWmRPVFVGVysvdjdENGJENGJ3NEJwbDZIbGJsanovK3dON0MwOTk5OTEzbHlKRWpPUHROT2U5T2g3UlNPY0FQTjRCVXE5VXpPc3JQNmgyS1VyTTBMTXBwcDZveGhxeXdDdFpMdkd4a2hHZ0pXQ3NIZi9Ob3ErNDNLSjV6MGxoTmxHekVnUkEzUGNmdWFjUUJmcVpwM25QamlTZUlaN3FQbkljRkQydHpjL1BnQUQ5ZDBoTHRKTS9TS0lTRitJdjBpT1E4TnhSVERZMFNWOG5Dc0lnM2htUjZ5QnNWb3pHeWl0Mk81WmNkN3d6L05NSlMyT2lkeWxLK2o3dkNtZW14QXdUSWFqZ2NZaG80NjVNVjFjTjY4ZUxGUHE2SXUzdjM3c2gxOWlsc3l5S1JscFN3eExSUWRrU0tqMm1xQ3RMcGREb2RNRTNTSXBJVnhNdzh6cUdDbjhMdHZJYzZ3ejl0U2doY1pjSDNBUGFKbC9KUmx3Slp4WVk2Y0FtRmJkdlhoOE9oUjFZcVo3cTdoL1poa0YySXU0UkM0ZWFvc0xqV2FyVmFYWTZ6V3hKaEtZd29PTzlvczl2dE5zb1MweUlzUTN2NDZNeW54OGp4aERncWxySkJ0RlN4S3pkNyt5TzNMYkczbFFUYXl0ZDhDVEJrZTBSOXpKS3NpcUVPTVNEZzVOL0kxZWFBZmlLOUsvK2FMNDE3Q1pGQSttZ3dHQ3cybTAzcHloNHhmaHpGUzdGT0Q0bXdoSmRGdVp6Z29QTzdaenpqSXRXMW9vbExZek11dkVsNFAxTEYrQ1Bmc1dQSHpybUVkNTU2cnJVc3ZxRGlHU1VwNis1eFJBSWdpSXJTRWZDcHlFQXVKUkJ0V1ZaOVV2T3Z3bkFtVElWSFhzUGhoZDF1OXlxMVR3amJ4V0JDUFg4S2w3WE9oOW51eHNiR3luQTQvTWcvQmxueFhzSkgxV3AxUWZFaVZlcXNMQXphTGRNMHoyaGZwT3JYcU1xYzRpWmEvNnI2UjBVWksyWEtFb0thZDUyNGV5SGt0Z3Zlb3lCNGJrQWR0K0hBbzhKVjJndFVvaExmSU0zVmt4QlIxTHZpRm14YzlBcVpJVHVWcUZCbGJGeEVZWW9FZ2dUeGtRYUVMSEJJczA3aUlzVTRjY0d1MEMrd3duNWdXMkltYzhxMXUzbWhuOWdyNnNiYkVYZFZQY2dLSktWeDgvUDkxMTU3YlVtRnJIeTVGR3dpbExScXRWcDkvQmRrRHl0QVdwVHJxOUswQ1dwZHNSMUt4N0NvSDFZb0Y3dlVURmw5VXZoV2FrVXBaM0JyZUxLcHlhZFRVWnBwRnFvRHVZNjhoSGRDQjhKV3E0WEJDUnZTRDFJV0ZHNSt2dm41NTU5VHZidFFFUlAydTBOeFhtWENTbUUxZ0lDOVZoSHAwamxoNzVYV2h5a3ZVVzdwS1NsaGthOWlLcW44b2VwSms3RHdnWUpKSzNJQnA5MXVOeDNIT1l1a1VCVVB5N0tzcTlldVhhUEdOV083Z0VoQXh4UlJOVmZyMEU0YVpjS0NaSUswbWdsMmJsUDZ1R29aS1dFSnd5TEg0bFFGaUNrdlRlSVRzc1ZlbnBHaVBLU3FLSjVWc0tJU0QyYUgycHMyWWVFREJRMklzU0dHZHJ1OTU2NEt6cWg0V01peHVuTGxpcGRqbGRZandqSTZDYVlqTzBHMENNdHZSRUVLaXNLUVJGaUNHQkFiUUF4QmxmRjE5RWVPV1pYTVE3bHBtdVo1YW9EWUIyWlNwb1paRUZiT0F5TEo4MjIzMnc3SWl1aGhvYzd6YVpPVmJ4c2dyYW1wS1RnNmlLTlNuNUZWNlVTRUpVYVZSYXgrRUs3T3BncW9XNDVNV1BpQVlIeklMYnRPWGxlZXAxamRjWStSSGttd2k2dXNKSVNGbGFiVldxMm1QUjFJTUpycVlxMzhYbGFFNWR1V1JzZFVhY05EWVZ2U2hRc0ZEMnQvTUJnc1hMcDBDY2RiWi9hb2V1SGpla3BNV0dpWldOM0FPVG40eWNOckNRTlVpYkFDSGdHQ2tyZ3dWb1gxNHhRS29zSUppOG91ZGRHRWhkMEt2VjV2UmRXckNnTkQxVEF6NnlFUkZXZEpXQUhiUXZnQnhCOTVucjlpdTBGVXNDM3lJRWlNWVQzdGRydUxXWk9WMzFiQkY1amh4RG9MWVNlbXBrSllRVUdPSGowS0plRzhuTFFJZ0twVExjSUtHaGVXa25YamNnRFhUUk5vOW5xOXBtNkhMNGl3bm1LSkhWNXlGcWtHWXBWSWEwYy9WZkU2NWZJZ0xGOHVzYnlQTkJJZGJ4NlhsM29wTmpxRFlLdlZPdUVHM1I5SHhiQUdnOEdqMmRuWmhVYWpnVU1PY24wSUN4V0h3aW1wRWxhd3RTS1c0ZVg3dUoxaEZybEtHWk5ZSXNJS3lpNVdOWUo1U2lPR0JuSVNPV1o3TUNUVE5EZDFTV29NczZ5RDd2RCt2R21FSUNsMEF1bTBJZzBySHNOVXArT21JY1pCSFhrUzF0aUF2aUR5OS93Y3VDQVdtSTU3VXpMay83bjVjbHR6YzNQd1JCSTlQL3p3dzFLdjEvUHVHUXptWWRtMi9mQ1ZWMTVaTElLc0FtU08yVTNZWVlDaEMxV1pFVllpaFBsbFJvQVJTQldCalkwTlhDcHgzcmJ0QmN1eXRqRmdmZkRCQi9COEMzK3dZOEJ4SEJ6TjdGMlJoaEJORkZFellSV3VMaGFBRVdBRXFBZ3dZVkdSNG5LTUFDTlFPQUpNV0lXcmdBVmdCQmdCS2dKTVdGU2t1Qndqd0FnVWpnQVRWdUVxWUFFWUFVYUFpZ0FURmhVcExzY0lNQUtGSThDRVZiZ0tXQUJHZ0JHZ0lzQ0VSVVdLeXpFQ2pFRGhDREJoRmE0Q0ZvQVJZQVNvQ0RCaFVaSGljb3dBSTFBNEFreFloYXVBQldBRUdBRXFBa3hZVktTNEhDUEFDQlNPQUJOVzRTcGdBUmdCUm9DS0FCTVdGU2t1eHdnd0FvVWp3SVJWdUFwWUFFYUFFYUFpd0lSRlJZckxNUUtNUU9FSU1HRVZyZ0lXZ0JGZ0JLZ0lNR0ZSa2VKeWpBQWpVRGdDVEZpRnE0QUZZQVFZQVNvQ1RGaFVwTGdjSThBSUZJNEFFMWJoS21BQkdBRkdnSW9BRXhZVktTN0hDREFDaFNQQWhGVzRDbGdBUm9BUm9DTEFoRVZGaXNzeEFveEE0UWo4RjIvbGJVQU52d2s0QUFBQUFFbEZUa1N1UW1DQyIvPgo8L2RlZnM+Cjwvc3ZnPgo="></span>
+      <h1>KSA Client Pipeline</h1>
+      <p class="sub">Every Saudi Arabia client and lead, with expected revenue and current status. Merged from the Odoo CRM (erp.code-ox.com) and the proposal files in our docs workspace.</p>
+    </div>
+    <div class="meta">As of <b>17 Oct 2026</b><br>All amounts <b>SAR, excl. VAT</b><br>USD converted at 3.75</div>
+  </header>
+
+  <section class="group" aria-label="Revenue summary">
+    <div class="money" id="money"></div>
+  </section>
+
+  <section class="group" aria-label="Filter by status">
+    <span class="label">Filter by status</span>
+    <div class="counts" id="counts"></div>
+  </section>
+
+  <div id="groups" style="display:grid;gap:36px"></div>
+
+  <section class="notes">
+    <div>
+      <h3>How to read the numbers</h3>
+      <ul>
+        <li><b>One-time</b> is project fees. <b>Recurring</b> is retainers and licences shown per year (monthly × 12).</li>
+        <li>AMC and Odoo licence costs are listed in the notes but left out of totals.</li>
+        <li>Where the CRM and the latest proposal disagree, the table uses the latest proposal and the note gives the CRM figure.</li>
+        <li>TAHAKOM (a partner's tender, SAR 3.6M scope) and Al Qalam (location unconfirmed) are shown but left out of totals.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Not yet in the CRM</h3>
+      <ul>
+        <li>Proposals in our docs with no CRM record: <b>Vitality app, PhysioTrio app, PhysioTrio outbound, WeCare ERP, Nabdha AI, NEXORA, Laoth, FranchiseMe, Platin Hotel, Address Builders, Rawand, SkillVera, Abjad</b>.</li>
+        <li>CRM values that are behind the latest proposal: <b>Qaf Coffee</b> (30k vs 50k), <b>SAUFICO</b> (20k vs 21k), <b>Alamco</b> (25k vs 24k), <b>NADEC</b> (0 vs 22k).</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Outside Saudi Arabia (excluded)</h3>
+      <ul>
+        <li><b>Karavan / KeralaKart</b>, Canada: Shopify store, USD 1,700. Lost.</li>
+        <li><b>Benchy Office Furniture</b>, India: website, INR 82,500. Proposal sent.</li>
+        <li><b>Apparel Group</b>, UAE: AI retail pitch. Lost.</li>
+        <li><b>Aljanoub Coffee Roastery</b>, Qatar: new lead.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>Prepared by <b>Shabeeb K</b>, Head of Operations, Code-OX</span>
+    <span>shabeeb.k@code-ox.com</span>
+    <span>+966 53 571 6437</span>
+  </footer>
+</div>
+
+<script>
+// one = one-time fee, mo = monthly, yr = annual licence/retainer, x = shown but excluded from totals
+const D = [
+  // WON
+  {s:'won',c:'Tara Holding Company',p:'Odoo 18 to 19 upgrade + Urban Eats aggregator hub',city:'Al Khobar',one:34950,o:'Raghib',src:'CRM + Docs',n:'PO TH P00008 dated 14 Oct 2026. Paid in 3 milestones. AMC 20%/yr after 6 months of free support.'},
+  {s:'won',c:'Burjeel · Vitality',p:'Website',city:'Riyadh',one:18000,o:'Shabeeb',src:'CRM + Docs',n:'Delivered and signed off.'},
+  {s:'won',c:'Burjeel · Vitality',p:'AI voice + WhatsApp agents',city:'Riyadh',yr:63000,o:'Shabeeb',src:'CRM + Docs',n:'Annual licence, SAR 5,250/month under the MSA. MSA effective date still blank.'},
+  {s:'won',c:'Burjeel · PhysioTrio',p:'Website + booking management',city:'Riyadh',one:20000,o:'Shabeeb',src:'CRM + Docs',n:'Delivered. Quote file shows SAR 21,500 plus an SLA at SAR 3,000/month; CRM records SAR 20,000.'},
+  {s:'won',c:'RIC Medical',p:'Digital marketing retainer',city:'Riyadh',yr:72000,o:'Shabeeb',src:'CRM + Docs',n:'12-month contract from 5 May 2026, rising from SAR 5,000 to 8,000/month. Ad budget extra.'},
+  {s:'won',c:'Jethur',p:'Website revamp + SEO & LinkedIn retainer',city:'Riyadh',one:6000,mo:3937.5,o:'Shabeeb',src:'CRM + Docs',n:'Contract from 1 Jul 2026 (USD 1,600 + USD 1,050/month).'},
+  {s:'won',c:'Angel Hands Beauty Centre',p:'Odoo 19 POS, CRM, loyalty + WhatsApp',city:'Riyadh',one:18000,o:'Shabeeb',src:'CRM + Docs',n:'Contract signed 25 Jun 2026. In delivery.'},
+  {s:'won',c:'Elie Catering',p:'IT department support',city:'Riyadh',one:5000,o:'Shabeeb',src:'CRM'},
+  {s:'won',c:'Bznx',p:'Website',city:'KSA',one:3500,o:'Raghib',src:'CRM'},
+  {s:'won',c:'Bznx',p:'Marketing retainer',city:'KSA',mo:3000,o:'Shabeeb',src:'CRM'},
+  {s:'won',c:'Movico',p:'Website development',city:'KSA',one:2700,o:'Shabeeb',src:'CRM'},
+  {s:'won',c:'SkillVera',p:'App support retainer, 30 hrs/month',city:'Riyadh',one:8438,o:'—',src:'Docs',n:'Client chose the Essential plan on 16 Sep 2026: SAR 2,813/month for a 3-month term.'},
+  {s:'won',c:'WeCare Technology',p:'Website hours',city:'Riyadh',one:1053.75,o:'—',src:'Docs',n:'Invoiced 25 Jun 2026 (INV-WCT-2026-002).'},
+  {s:'won',c:'Abjad',p:'Platform development',city:'KSA',o:'—',src:'Docs',n:'In delivery. Fee not recorded in the docs or the CRM.'},
+  // OPEN — proposal sent
+  {s:'open',c:'Qaf Coffee',p:'Odoo 19 POS for 17 branches + upgrade',city:'Al Khobar',one:50000,o:'Raghib',src:'CRM + Docs',n:'Final fee in proposal of 14 Oct. AMC SAR 20,000/yr. CRM still shows SAR 30,000.'},
+  {s:'open',c:'Burjeel · Vitality',p:'Mobile app',city:'Riyadh',one:46000,o:'Shabeeb',src:'Docs',n:'AMC SAR 5,000/yr. Sent 13 Oct 2026.'},
+  {s:'open',c:'Burjeel · PhysioTrio',p:'Mobile app',city:'Riyadh',one:47500,o:'Shabeeb',src:'Docs',n:'AMC SAR 7,125/yr.'},
+  {s:'open',c:'Burjeel · PhysioTrio',p:'Outbound marketing, Package B',city:'Riyadh',yr:57200,o:'Shabeeb',src:'Docs',n:'Sent 15 Oct 2026. Package A (set-up + monthly) also offered.'},
+  {s:'open',c:'Nabdha AI',p:'AI business-intelligence platform, v1',city:'KSA',one:55000,o:'—',src:'Docs',n:'AMC SAR 10,000/yr.'},
+  {s:'open',c:'NEXORA',p:'B2B AI marketplace, phase 1',city:'KSA',one:33325,o:'—',src:'Docs'},
+  {s:'open',c:'Alamco Spaceworks',p:'Odoo 19 ERP, 5 users',city:'KSA',one:24000,o:'Raghib',src:'CRM + Docs',n:'Licences about SAR 5,738/yr extra. CRM shows SAR 25,000.'},
+  {s:'open',c:'WeCare Technology',p:'Full Odoo ERP',city:'Riyadh',one:22000,o:'Shabeeb',src:'Docs',n:'Rev 2 sent 11 Oct with 4 options, SAR 16,000 to 22,000.'},
+  {s:'open',c:'NADEC',p:'Website redesign (RFP)',city:'Riyadh',one:22000,o:'Shabeeb',src:'CRM + Docs',n:'Umbraco CMS offered as an option.'},
+  {s:'open',c:'Saudi Fiberglass Factory (SAUFICO)',p:'Odoo 19 ERP, 4 users',city:'Dammam',one:21000,o:'Raghib',src:'CRM + Docs',n:'Licences about SAR 3,672 in year 1. CRM shows SAR 20,000.'},
+  {s:'open',c:'Rawand Trading + PCabins',p:'Digital marketing, both brands',city:'Riyadh',one:10500,o:'—',src:'Docs',n:'SAR 3,500/month, 3-month term. Sent Jun 2026, no update since.'},
+  {s:'open',c:'FranchiseMe',p:'Odoo CRM',city:'KSA',one:10000,o:'—',src:'Docs',n:'Quoted SAR 9,000 to 10,000.'},
+  {s:'open',c:'Address Builders',p:'Bilingual Shopify store',city:'Riyadh',one:9000,o:'—',src:'Docs'},
+  {s:'open',c:'Adiba Maison Jewellery',p:'Odoo CRM + Inventory + WhatsApp',city:'Riyadh',one:8000,o:'Raghib',src:'CRM + Docs',n:'Add-on options: WhatsApp bot SAR 10,000, AI agent SAR 24,000.'},
+  {s:'open',c:'Platin Hotel',p:'Website redesign',city:'KSA',one:8000,o:'—',src:'Docs'},
+  {s:'open',c:'Laoth Advanced Trading',p:'Odoo full ERP, 2 users',city:'KSA',one:6000,o:'—',src:'Docs',n:'Sent Aug 2026.'},
+  {s:'open',c:'Jethur',p:'LinkedIn Sales Engine add-on',city:'Riyadh',mo:1500,o:'Shabeeb',src:'CRM + Docs',n:'Add-on contract drafted 5 Sep 2026.'},
+  {s:'open',c:'Alternative Rebar Plant',p:'Odoo rescue / re-implementation',city:'Dammam',o:'Raghib',src:'CRM + Docs',n:'Technical proposal sent, no price yet.'},
+  {s:'open',c:'TAHAKOM (via partner)',p:'FMOC automation & AI, tender',city:'Riyadh',one:3619440,x:1,o:'—',src:'Docs',n:'Our scope inside a partner’s tender submission. Not in totals.'},
+  {s:'open',c:'Al Qalam Learning',p:'School app, phase 1',city:'Unconfirmed',one:33325,x:1,o:'—',src:'Docs',n:'Location unclear; an earlier quote was in INR. Not in totals.'},
+  // IN DISCUSSION — demo, discovery, pitched without a price
+  {s:'talk',c:'Souq Al Sayed',p:'ERP',city:'KSA',one:450000,o:'Raghib',src:'CRM',n:'Under discussion since Apr 2026. No proposal file in our docs.'},
+  {s:'talk',c:'Hyper Al Wafa & Nesto',p:'—',city:'KSA',o:'Raghib',src:'CRM',n:'Under discussion.'},
+  {s:'talk',c:'WeCare Technology',p:'Procurement AI automation',city:'Riyadh',o:'Shabeeb',src:'CRM',n:'Demo requested.'},
+  {s:'talk',c:'Alliant Co',p:'—',city:'KSA',o:'Raghib',src:'CRM',n:'Demo requested.'},
+  {s:'talk',c:'Basmat Al Ma’mar',p:'Odoo',city:'KSA',o:'Raghib',src:'CRM',n:'Demo requested.'},
+  {s:'talk',c:'Madeline Group',p:'Voice agent, 2-week POC',city:'Riyadh',o:'—',src:'Docs',n:'Deck and live demo sent. No pricing yet.'},
+  {s:'talk',c:'KFMC',p:'Network monitoring advisory',city:'Riyadh',o:'—',src:'Docs',n:'Requirements and vendor comparison sent. Awaiting decision.'},
+  {s:'talk',c:'SpectTech',p:'Vision AI, 5,000 cameras',city:'KSA',o:'—',src:'Docs',n:'Technical clarification submitted.'},
+  {s:'talk',c:'Al Athaib',p:'Odoo 19 Enterprise',city:'KSA',o:'—',src:'Docs',n:'Requirements document done. No price yet.'},
+  {s:'talk',c:'FAD International (femi9)',p:'Saudi Post National Address integration',city:'KSA',o:'—',src:'Docs',n:'Capability brief sent under WeCare branding.'},
+  {s:'talk',c:'Elie Catering',p:'90-day marketing plan',city:'Riyadh',o:'—',src:'Docs',n:'Plan shared. No price yet.'},
+  {s:'talk',c:'PATIQ',p:'Social / traffic growth strategy',city:'Riyadh',o:'—',src:'Docs',n:'Strategy shared. No price yet.'},
+  {s:'talk',c:'Iwan Al-Hikma Law Firm',p:'Website health check',city:'Jeddah',o:'—',src:'Docs',n:'Audit shared Oct 2026.'},
+  {s:'talk',c:'ATHRI (SGM)',p:'Investor and platform decks',city:'Riyadh',o:'—',src:'Docs',n:'Deck work. No fee recorded.'},
+  {s:'talk',c:'PrintTrack prospect',p:'Printer-fleet monitoring POC',city:'Riyadh / Jeddah / Khobar',o:'—',src:'Docs',n:'POC presentation, Oct 2026. Client name not in file.'},
+  // NEW LEADS
+  ...[
+    ['Golden Energy Solutions Factory','KSA'],['Beta United Industrial (ethanol)','Dammam'],['Binzagr Industry & Maintenance (BFIM)','Jubail'],
+    ['Saudi Fal','Dammam'],['Saeed Ahmed Al Mahroos & Sons (Taj)','Dammam'],['Saudi Filters Industry','Dammam'],['Reda Fire Equipment','Dammam'],
+    ['Eram Holding · Dar As Siha','Al Khobar'],['Yousef Ahmed Kanoo','Dammam'],['National Food Co · Charts Coffee','Dammam'],
+    ['Intelligent Energy Services','Dammam'],['Alomar Furniture','Riyadh'],['Sinnara Sammak','KSA'],['Masdar Co','KSA'],['Fit House','KSA'],
+    ['Chicken Industry','KSA'],['Brown (branch)','KSA'],['Tony Vayiz salon','KSA'],['Nass Coffee','KSA'],['Raihaden Laundry','KSA'],['Wareed Labs','KSA'],
+    ['Al Rayan Kitchen Equipment','KSA','Live on Odoo since Jan 2026; may need support later.'],['Al Qased Elevators','KSA','Newly implemented; contact later.'],
+    ['Abbar Trading','KSA','Odoo.'],['Baby Fitaihi','KSA','Odoo.'],['Motmainna Medical','KSA','Looking for a technology partner.'],
+    ['Burj Al Injaz','KSA','Inventory management.'],['GBNTC','Al Khobar','Biometrics for Odoo.'],['Elm University','Riyadh']
+  ].map(([c,city,n])=>({s:'lead',c,p:'Odoo / ERP enquiry',city,o:'Raghib',src:'CRM',n})),
+  {s:'lead',c:'Incas',p:'Fit-out trading',city:'KSA',o:'Shabeeb',src:'CRM'},
+  {s:'lead',c:'Ibrahim (perfume brand)',p:'E-commerce website',city:'KSA',o:'Shabeeb',src:'CRM'},
+  {s:'lead',c:'Tariq Al Oud',p:'—',city:'KSA',o:'Shabeeb',src:'CRM'},
+  {s:'lead',c:'United Pharma Trading',p:'—',city:'KSA',o:'Shabeeb',src:'CRM'},
+  // HOLD
+  {s:'hold',c:'LULU Group',p:'—',city:'KSA',o:'Raghib',src:'CRM'},
+  {s:'hold',c:'Soulboul',p:'Mobile application',city:'KSA',o:'Raghib',src:'CRM'},
+  {s:'hold',c:'Tiffinz',p:'Food subscription',city:'KSA',o:'Raghib',src:'CRM'},
+  {s:'hold',c:'MCAT',p:'Software department',city:'KSA',o:'Raghib',src:'CRM'},
+  {s:'hold',c:'YRG Fashion',p:'—',city:'KSA',o:'Raghib',src:'CRM'},
+  {s:'hold',c:'Malafna (Win Ventures)',p:'—',city:'KSA',o:'Raghib',src:'CRM'},
+  {s:'hold',c:'HB Group · Canton',p:'Chinese restaurant',city:'KSA',o:'Raghib',src:'CRM'},
+  // LOST
+  {s:'lost',c:'KGM Abdullah Al-Bazie Motors',p:'Odoo 19 ERP',city:'Riyadh',one:60000,o:'Mubaris',src:'CRM + Docs',n:'Quoted USD 16,000.'},
+  {s:'lost',c:'Nexoksa (Abu Nawaf)',p:'Application',city:'KSA',one:45000,o:'Raghib',src:'CRM'},
+  {s:'lost',c:'Fitbox',p:'Application',city:'KSA',one:30000,o:'Raghib',src:'CRM'},
+  {s:'lost',c:'Al-Saber Car Company',p:'Website, SEO & LinkedIn',city:'Riyadh',one:22500,mo:10000,o:'Raghib',src:'CRM + Docs'},
+  {s:'lost',c:'Midtown Street',p:'—',city:'KSA',one:16000,o:'Raghib',src:'CRM'},
+  {s:'lost',c:'WeCare Technology',p:'Isuzu opportunity',city:'Riyadh',one:10000,o:'Shabeeb',src:'CRM'},
+  {s:'lost',c:'Mena Tech',p:'Fix current Odoo implementation',city:'KSA',one:6000,o:'Raghib',src:'CRM'},
+  {s:'lost',c:'Metals and Steels',p:'ERP',city:'KSA',o:'Raghib',src:'CRM',n:'Reason: too expensive.'},
+  {s:'lost',c:'Root Al Khaleej',p:'Odoo',city:'KSA',o:'Raghib',src:'CRM'},
+  {s:'lost',c:'Abdul Mohsin Ar Rusais & Sons',p:'—',city:'KSA',o:'Raghib',src:'CRM'},
+  {s:'lost',c:'Thahir',p:'Hardware system',city:'KSA',o:'Raghib',src:'CRM'},
+  {s:'lost',c:'Fresh House',p:'Odoo diet-management system',city:'KSA',o:'Thayif',src:'CRM + Docs',n:'Pitch deck sent; closed as lost 7 Oct.'},
+  {s:'lost',c:'Sriram Dosa Corner',p:'—',city:'KSA',o:'Shabeeb',src:'CRM'},
+];
+
+const S = {
+  won:{t:'Won',d:'Signed, paid or in delivery'},
+  open:{t:'Proposal sent',d:'Priced proposal with the client'},
+  talk:{t:'In discussion',d:'Demo, discovery or pitched without a price'},
+  lead:{t:'New lead',d:'No proposal yet'},
+  hold:{t:'On hold',d:'Client paused'},
+  lost:{t:'Lost',d:'Closed without a deal'},
+};
+const f = n => Math.round(n).toLocaleString('en-US');
+const yrOf = r => (r.mo||0)*12 + (r.yr||0);
+const sum = (rows,k) => rows.filter(r=>!r.x).reduce((a,r)=>a+(k==='one'?(r.one||0):yrOf(r)),0);
+const by = s => D.filter(r=>r.s===s);
+
+function val(r){
+  const parts=[];
+  if(r.one) parts.push(f(r.one)+'<small>one-time</small>');
+  if(r.mo) parts.push(f(r.mo)+'<small>per month</small>');
+  if(r.yr) parts.push(f(r.yr)+'<small>per year</small>');
+  return parts.join('') || '<span style="color:var(--muted)">—</span>';
+}
+
+const pipeOne = sum(by('open'),'one') + sum(by('talk'),'one');
+document.getElementById('money').innerHTML = [
+  ['Won · one-time', sum(by('won'),'one'), by('won').length+' deals signed or in delivery'],
+  ['Won · recurring', sum(by('won'),'yr'), 'per year: Vitality agents, RIC, Jethur, Bznx'],
+  ['Open pipeline · one-time', pipeOne, 'proposals sent + in discussion (Souq Al Sayed SAR 450k is the largest)'],
+  ['Open pipeline · recurring', sum(by('open'),'yr'), 'per year: PhysioTrio outbound, Jethur add-on'],
+  ['Lost · one-time', sum(by('lost'),'one'), by('lost').length+' deals closed lost'],
+].map(([l,v,p])=>`<div><span class="label">${l}</span><strong><i>SAR</i>${f(v)}</strong><p>${p}</p></div>`).join('');
+
+let filter = null;
+function render(){
+  document.getElementById('counts').innerHTML =
+    `<button class="chip" id="f-all" aria-pressed="${filter===null}" data-s="">All <span class="n">${D.length}</span></button>` +
+    Object.keys(S).map(s=>`<button class="chip" id="f-${s}" aria-pressed="${filter===s}" data-s="${s}"><span class="dot ${s}"></span>${S[s].t} <span class="n">${by(s).length}</span></button>`).join('');
+  document.getElementById('groups').innerHTML = Object.keys(S).filter(s=>!filter||filter===s).map(s=>{
+    const rows = by(s), one=sum(rows,'one'), yr=sum(rows,'yr');
+    const tot = [one?'SAR '+f(one)+' one-time':'', yr?'SAR '+f(yr)+'/yr recurring':''].filter(Boolean).join(' · ');
+    return `<section class="group">
+      <h2><span class="pill ${s}">${S[s].t}</span> ${rows.length} ${rows.length===1?'deal':'deals'} <small>${S[s].d}</small></h2>
+      ${tot?`<div class="gtotal">${tot}</div>`:''}
+      <div class="tbl"><table>
+        <thead><tr><th>Client / project</th><th>City</th><th class="r">Expected revenue (SAR)</th><th>Owner</th><th>Source</th><th>Notes</th></tr></thead>
+        <tbody>${rows.map(r=>`<tr>
+          <td class="c">${r.c}<span>${r.p}</span></td>
+          <td class="city">${r.city}</td>
+          <td class="v">${val(r)}</td>
+          <td class="own">${r.o}</td>
+          <td><span class="src">${r.src}</span></td>
+          <td class="n">${r.n||''}</td></tr>`).join('')}</tbody>
+      </table></div></section>`;
+  }).join('');
+}
+document.getElementById('counts').addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b) return;
+  filter = b.dataset.s || null; render();
+});
+render();
+</script>
